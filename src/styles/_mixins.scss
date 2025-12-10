@@ -1,0 +1,21 @@
+// _mixins.scss - responsive helpers and utilities
+
+@import './variables';
+
+@mixin desktop {
+  @media (min-width: $break-laptop) { @content; }
+}
+
+@mixin tablet {
+  @media (min-width: $break-tablet) and (max-width: calc($break-laptop - 1px)) { @content; }
+}
+
+@mixin mobile {
+  @media (max-width: calc($break-tablet - 1px)) { @content; }
+}
+
+@mixin fluid-font($desktop, $tablet, $mobile) {
+  font-size: $mobile;
+  @include tablet { font-size: $tablet; }
+  @include desktop { font-size: $desktop; }
+}

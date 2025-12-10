@@ -1,0 +1,84 @@
+// _variables.scss - central theme & responsive tokens
+
+// ----- Breakpoints -----
+$break-desktop: 1200px;
+$break-laptop: 992px;
+$break-tablet: 768px;
+$break-mobile: 480px;
+
+// ----- Colors -----
+$color-sky: #7ec8ff;          // menus - sky blue when closed
+$color-dark-blue: #0b4da0;    // menus - dark blue when opened
+$color-header-footer: #dff2ff; // light blue for header/footer background
+$color-white: #ffffff;
+$color-black: #000000;
+$color-light-gray: #f1f1f1;
+$color-note-gray: #efefef;
+$color-border: #d0d7df;
+$color-cancel: #d3d3d3;
+
+// Errors
+$color-error-dark: #a60000;
+$color-error-light: #ffd6d6;
+$color-error-header: #ff4d4d;
+
+// Status colors
+$status-active: #28a745;
+$status-inactive: #6c757d;
+$status-approved: #0b8a3e;
+$status-rejected: #d12b2b;
+$status-pending: #f0ad4e;
+$status-expired: #888888;
+$status-purchased: #0b5394;
+$status-yet: #6f42c1;
+
+// Mandatory star
+$color-mandatory: #d12b2b;
+
+// Icon color for dark or light backgrounds
+$icon-on-dark: $color-white;
+$icon-on-light: $color-black;
+
+// Buttons
+$btn-bg-primary: $color-dark-blue;
+$btn-text-primary: $color-white;
+$btn-bg-cancel: $color-cancel;
+$btn-text-cancel: $color-black;
+$btn-error: $color-error-header;
+
+// ----- Typography -----
+$font-family-base: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 22px;
+$font-size-xxl: 28px;
+
+// Page header sizes (responsive)
+$page-header-desktop: 28px;
+$page-header-tablet: 22px;
+$page-header-mobile: 18px;
+
+// Spacing
+$sp-xs: 4px;
+$sp-sm: 8px;
+$sp: 12px;
+$sp-md: 16px;
+$sp-lg: 24px;
+$sp-xl: 32px;
+
+// Inputs
+$input-padding-desktop: 12px;
+$input-padding-mobile: 10px;
+$input-border-radius: 6px;
+
+// Menu widths
+$menu-width-expanded: 260px;
+$menu-width-icons: 72px;
+
+// z-index
+$z-header: 1000;
+$z-menu-overlay: 1100;
+$z-user-dropdown: 1200;

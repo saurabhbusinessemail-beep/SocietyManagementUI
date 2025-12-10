@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  show = false;
   title = 'SocietyManagementUI';
 }
