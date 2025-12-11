@@ -41,12 +41,13 @@
             <p class="note" *ngIf="countdown > 0" >Time remaining: {{ countdown | timeFormat }}</p>
 
 
-            <button class="btn primary login-btn" type="submit" [disabled]="otpForm.invalid || isLoading">
-                {{ isLoading ? 'Verifying…' : 'Verify OTP' }}
+            <button class="btn login-btn" [ngClass]="{'primary': countdown > 0 && !otpForm.invalid, 'cancel': !countdown || otpForm.invalid}"
+                type="submit" [disabled]="otpForm.invalid || isVerifying" [disabled]="!countdown">
+                {{ isVerifying ? 'Verifying…' : 'Verify OTP' }}
             </button>
 
 
-            <button class="btn login-btn" [ngClass]="{'primary': countdown == 0, 'cancel': countdown > 0}" type="button" (click)="resendOtp()" [disabled]="countdown > 0">
+            <button class="btn login-btn" [ngClass]="{'primary': !countdown, 'cancel': countdown > 0}" type="button" (click)="resendOtp()" [disabled]="countdown > 0">
                 Resend OTP
             </button>
 

@@ -12,9 +12,11 @@ export class LoginComponent {
   otpForm: FormGroup;
   step: 'login' | 'otp' = 'login';
   isLoading = false;
+  isVerifying = false;
 
 
-  countdown = 320;
+  countDownTimer = 300;
+  countdown = this.countDownTimer;
   countdownInterval: any;
 
 
@@ -48,7 +50,7 @@ export class LoginComponent {
 
 
   startCountdown() {
-    this.countdown = 320;
+    this.countdown = this.countDownTimer;
     clearInterval(this.countdownInterval);
 
 
@@ -74,13 +76,13 @@ export class LoginComponent {
     if (this.otpForm.invalid) return;
 
 
-    this.isLoading = true;
+    this.isVerifying = true;
     this.otpError = false;
 
 
     // Fake API call
     of(false).pipe(delay(1200)).subscribe((success) => {
-      this.isLoading = false;
+      this.isVerifying = false;
 
 
       if (!success) {
