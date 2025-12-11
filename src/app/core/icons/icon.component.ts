@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-icon',
-  template: `<span class="app-icon" [innerHTML]="svg"></span>`,
+  template: `<span class="app-icon" [innerHTML]="svg" [style.color]="color"></span>`,
   styles: [`
     .app-icon {
       display: inline-flex;
@@ -20,6 +20,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class IconComponent implements OnInit {
   @Input() name!: string;
+  @Input() color: string = '';
   svg: SafeHtml | null = null;
 
   constructor(private iconService: IconsService, private sanitizer: DomSanitizer) {}

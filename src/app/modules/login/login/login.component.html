@@ -1,0 +1,57 @@
+<div *ngIf="step === 'login'" class="login-container">
+    <div class="login-card">
+        <h1 class="page-header">Login</h1>
+
+
+        <form class="login-form" (ngSubmit)="sendOtp()" [formGroup]="loginForm">
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" class="input" formControlName="phone" placeholder="Enter phone number" />
+            </div>
+
+
+            <button type="submit" class="btn primary login-btn" [disabled]="loginForm.invalid || isLoading">
+                {{ isLoading ? 'Sending…' : 'Send OTP' }}
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+
+<!-- ===================== OTP SCREEN ===================== -->
+<div *ngIf="step === 'otp'" class="login-container">
+    <div class="login-card">
+        <button class="btn primary" (click)="resetToLogin()">
+            <app-icon name="arrow-left" color="white"></app-icon>
+        </button>
+
+
+        <p class="section-header">OTP sent to {{ loginForm.value.phone }}</p>
+
+
+        <form class="login-form" (ngSubmit)="verifyOtp()" [formGroup]="otpForm">
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+                <input id="otp" class="input" formControlName="otp" maxlength="6" placeholder="Enter 6-digit OTP" />
+            </div>
+
+
+            <p class="note" *ngIf="countdown > 0" >Time remaining: {{ countdown | timeFormat }}</p>
+
+
+            <button class="btn primary login-btn" type="submit" [disabled]="otpForm.invalid || isLoading">
+                {{ isLoading ? 'Verifying…' : 'Verify OTP' }}
+            </button>
+
+
+            <button class="btn login-btn" [ngClass]="{'primary': countdown == 0, 'cancel': countdown > 0}" type="button" (click)="resendOtp()" [disabled]="countdown > 0">
+                Resend OTP
+            </button>
+
+
+            <p *ngIf="otpError" class="error-message">OTP verification failed. Try again.</p>
+        </form>
+    </div>
+</div>
