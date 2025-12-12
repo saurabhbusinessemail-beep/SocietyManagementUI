@@ -1,0 +1,16 @@
+.app-body {
+    padding: 24px;
+    margin-left: 260px;
+    transition: margin 0.18s;
+}
+@media(max-width: 991px) {
+    .app-body {
+        margin-left: 72px;
+    }
+}
+@media(max-width: 767px) {
+    .app-body {
+        margin-left: 0;
+        padding-top: 80px;
+    }
+}

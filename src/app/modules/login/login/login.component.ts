@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent {
   otpError = false;
 
 
-  constructor(private fb: FormBuilder, private loginService: LoginService) {
+  constructor(private fb: FormBuilder, private loginService: LoginService, private router: Router) {
     this.loginForm = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
@@ -43,10 +44,15 @@ export class LoginComponent {
     this.isLoading = true;
     this.loginService.sendOTP(this.loginForm.value.phone)
       .pipe(take(1))
-      .subscribe(() => {
-        this.isLoading = false;
-        this.step = 'otp';
-        this.startCountdown();
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.step = 'otp';
+          this.startCountdown();
+        },
+        error: err => {
+          this.isLoading = false;
+        }
       });
   }
 
@@ -84,20 +90,26 @@ export class LoginComponent {
 
     this.loginService.verifyOTP(this.loginForm.value.phone, this.otpForm.value.otp)
       .pipe(take(1))
-      .subscribe((response) => {
-        this.isVerifying = false;
+      .subscribe({
+        next: (response) => {
+          this.isVerifying = false;
 
 
-        if (!response.success) {
+          if (!response.success) {
+            this.otpError = true;
+            return;
+          }
+
+          if (response?.token) {
+            this.loginService.saveTokenToStorage(response.token);
+            this.getAndSaveProfile();
+          }
+
+        },
+        error: err => {
+          this.isVerifying = false;
           this.otpError = true;
-          return;
         }
-
-        if (response?.token) {
-          this.loginService.saveTokenToStorage(response.token);
-          this.getAndSaveProfile();
-        }
-
       });
   }
 
@@ -117,6 +129,7 @@ export class LoginComponent {
 
         if (response?.user) {
           this.loginService.saveProfileToStorage(response.user);
+          this.router.navigateByUrl('/dashboard');
         }
 
       })

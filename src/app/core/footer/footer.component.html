@@ -1,0 +1,12 @@
+<footer class="app-footer">
+    <div class="left">© {{ curYear }} My App</div>
+    <div class="center">
+        <ng-container *ngFor="let c of config">
+            <a [href]="c.url" target="_blank" class="footer-item">
+                <span class="icon">{{ c.icon }}</span>
+                <span class="label">{{ c.label }}</span>
+            </a>
+        </ng-container>
+    </div>
+    <div class="right"></div>
+</footer>

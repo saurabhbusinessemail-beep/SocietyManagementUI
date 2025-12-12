@@ -1,0 +1,22 @@
+<header class="app-header header-root">
+    <div class="left">
+        <button class="icon menu-icon" aria-label="menu" (click)="onMenuClick()">
+            <!-- simple 3-line icon -->
+            <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+                <rect y="0" width="20" height="2"></rect>
+                <rect y="7" width="20" height="2"></rect>
+                <rect y="14" width="20" height="2"></rect>
+            </svg>
+        </button>
+    </div>
+
+    <div class="center">
+        <select class="input center-dropdown" [value]="selected" (change)="onSelectChange($any($event.target).value)">
+            <option *ngFor="let opt of dropdownOptions" [value]="opt">{{ opt }}</option>
+        </select>
+    </div>
+
+    <div class="right">
+        <app-user-icon></app-user-icon>
+    </div>
+</header>

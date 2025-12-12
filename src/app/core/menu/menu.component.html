@@ -1,0 +1,21 @@
+<nav class="app-menu" [attr.data-mode]="mode" [class.open]="open">
+    <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
+    <div class="menu-inner">
+        <div class="brand">
+            <div class="brand-icon">{{ open ? '🌐' : '🌐' }}</div>
+            <div class="brand-text" *ngIf="open">My App</div>
+        </div>
+
+        <ul class="menu-list">
+            <li *ngFor="let m of menuItems" class="menu-item">
+                <a [routerLink]="m.route" (click)="closeOverlay()">
+                    <span class="icon-box">{{ m.icon }}</span>
+                    <span class="label" *ngIf="open">{{ m.label }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- overlay backdrop for tablet/mobile when open -->
+    <div class="backdrop" *ngIf="open && mode !== 'desktop'" (click)="closeOverlay()"></div>
+</nav>

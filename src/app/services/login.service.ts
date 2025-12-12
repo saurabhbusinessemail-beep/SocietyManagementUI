@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,7 @@ export class LoginService {
 
     private baseUrl = `${environment.apiBaseUrl}/auth`;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private router: Router) { }
 
     // --------------------------------------------------------
     // STEP 1: SEND OTP
@@ -51,6 +52,8 @@ export class LoginService {
     // --------------------------------------------------------
     logout() {
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('my_profile');
+        this.router.navigateByUrl('/login');
     }
 
     // --------------------------------------------------------

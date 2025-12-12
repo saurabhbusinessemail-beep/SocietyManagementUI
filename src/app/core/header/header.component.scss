@@ -1,0 +1,52 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.header-root {
+    padding: $sp-sm $sp-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $sp-lg;
+
+    .left {
+        display: flex;
+        align-items: center;
+    }
+    .center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+    .right {
+        display: flex;
+        align-items: center;
+        gap: $sp-sm;
+    }
+
+    .menu-icon svg rect {
+        fill: $icon-on-light;
+    }
+
+    // responsive icon color depending on header background
+    @include mobile {
+        .menu-icon svg rect {
+            fill: $icon-on-light;
+        }
+        .center {
+            display: none;
+        }; // center dropdown optional on mobile
+    }
+
+    @include tablet {
+        .center {
+            display: block;
+            width: 60%;
+        }
+    }
+
+    @include desktop {
+        .center {
+            width: 40%;
+        }
+    }
+}

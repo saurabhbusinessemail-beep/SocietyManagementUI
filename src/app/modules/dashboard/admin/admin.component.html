@@ -1,0 +1,12 @@
+<app-header (toggleMenu)="menu.toggleMenu()"></app-header>
+
+<app-menu #menu></app-menu>
+
+<app-body>
+  Test Body
+</app-body>
+
+<app-footer [config]="[
+  { icon: '🔗', label: 'Docs', url: 'https://example.com/docs' },
+  { icon: '🐛', label: 'Report', url: 'https://example.com/report' }
+]"></app-footer>

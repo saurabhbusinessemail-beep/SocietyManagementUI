@@ -1,0 +1,19 @@
+@import '../../../styles/variables';
+
+.app-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .center {
+        display: flex;
+        gap: $sp-md;
+        align-items: center;
+    }
+    .footer-item {
+        text-decoration: none;
+        color: $color-black;
+        display: flex;
+        gap: $sp-sm;
+        align-items: center;
+    }
+}

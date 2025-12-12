@@ -1,0 +1,14 @@
+<div class="user-root" style="position:relative;">
+    <button class="icon user-btn" (click)="toggle()">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="3"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+        </svg>
+    </button>
+
+    <div class="user-dropdown" *ngIf="open">
+        <ul>
+            <li><button class="btn" (click)="logout()">Logout</button></li>
+        </ul>
+    </div>
+</div>

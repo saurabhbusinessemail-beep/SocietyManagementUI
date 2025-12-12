@@ -1,0 +1,134 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.app-menu {
+    position: relative;
+    transition: width 0.18s;
+    z-index: $z-menu-overlay;
+
+    // desktop expanded by default
+    &[data-mode='desktop'] {
+        width: $menu-width-expanded;
+        .menu-inner {
+            background: $color-dark-blue;
+            color: $color-white;
+            height: 100vh;
+            padding: $sp-lg;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .brand-text {
+            color: $color-white;
+            font-weight: 700;
+            margin-left: $sp-sm;
+        }
+        .menu-item a {
+            color: $color-white;
+            text-decoration: none;
+            padding: $sp-sm;
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            border-radius: 6px;
+        }
+        .menu-item a:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .icon-box {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    // tablet: icons visible only, overlay when open
+    &[data-mode='tablet'] {
+        width: $menu-width-icons;
+        .menu-inner {
+            background: $color-sky;
+            height: 100vh;
+            padding: $sp-sm;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .menu-item .label {
+            display: none;
+        }
+        &.open {
+            // when open, show overlay panel
+            .menu-inner {
+                width: $menu-width-expanded;
+                background: $color-dark-blue;
+                color: $color-white;
+            }
+            .menu-item .label {
+                display: inline-block;
+            }
+            .backdrop {
+                display: block;
+            }
+        }
+    }
+
+    // mobile: hidden by default; opens as dropdown/drawer
+    &[data-mode='mobile'] {
+        width: 0;
+        .menu-inner {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            transform: translateY(-100%);
+            transition: transform 0.18s;
+        }
+        &.open {
+            .menu-inner {
+                transform: translateY(0);
+                background: $color-dark-blue;
+                color: $color-white;
+                padding: $sp-lg;
+            }
+            .backdrop {
+                display: block;
+            }
+        }
+    }
+
+    .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+    }
+
+    // menu item visuals for sky (closed icon state)
+    .menu-inner {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            margin-bottom: $sp-lg;
+            .brand-icon {
+                font-size: 20px;
+            }
+        }
+        .menu-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: $sp-sm;
+        }
+        .menu-item a {
+            color: $icon-on-light;
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+        }
+    }
+}
