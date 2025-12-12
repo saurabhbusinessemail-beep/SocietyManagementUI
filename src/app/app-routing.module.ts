@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(module => module.DashboardModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./modules/page-not-found/page-not-found.module').then(module => module.PageNotFoundModule)
   }
 ];
 

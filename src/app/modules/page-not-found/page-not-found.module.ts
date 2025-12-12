@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DashboardRoutingModule } from './dashboard-routing.module';
-import { AdminComponent } from './admin/admin.component';
+import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
+import { PageNotFoundComponent } from './page-not-found.component';
 import { LayoutModule } from '../../core/layout/layout.module';
 
 
 @NgModule({
   declarations: [
-    AdminComponent
+    PageNotFoundComponent
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule,
+    PageNotFoundRoutingModule,
     LayoutModule
   ]
 })
-export class DashboardModule { }
+export class PageNotFoundModule { }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
+import { MenuService } from '../../../services/menu.service';
 
 @Component({
   selector: 'app-login',
@@ -116,20 +117,14 @@ export class LoginComponent {
   getAndSaveProfile() {
     this.isVerifying = true;
 
-    this.loginService.getProfile()
+    this.loginService.loadProfile()
       .pipe(take(1))
-      .subscribe(response => {
+      .subscribe((response: any) => {
         this.isVerifying = false;
 
-
-        if (!response.success) {
+        if (!response || !response.success) {
           this.otpError = true;
           return;
-        }
-
-        if (response?.user) {
-          this.loginService.saveProfileToStorage(response.user);
-          this.router.navigateByUrl('/dashboard');
         }
 
       })

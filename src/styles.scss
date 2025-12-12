@@ -58,6 +58,10 @@ body {
     background: $btn-error;
     color: $color-white;
   }
+  &.only-content {
+    background: transparent;
+    color: inherit;
+  }
 }
 
 // Input style

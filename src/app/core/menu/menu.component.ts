@@ -1,4 +1,5 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { IMenu } from '../../interfaces';
 
 type Mode = 'desktop' | 'tablet' | 'mobile';
 
@@ -9,14 +10,14 @@ type Mode = 'desktop' | 'tablet' | 'mobile';
 })
 export class MenuComponent implements OnInit {
   @Input() initialOpen = true;
+  @Input() menuItems: IMenu[] = []
   mode: Mode = 'desktop';
   open = true; // expanded state (desktop) or overlay open
 
-  menuItems = [
-    { icon: '🏠', label: 'Home', route: '/' },
-    { icon: '📁', label: 'Files', route: '/files' },
-    { icon: '⚙️', label: 'Settings', route: '/settings' }
-  ];
+  // menuItems: IMenu[] = [
+  //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/', submenus: [], createdOn: new Date(), craetedByUserId: '' },
+  //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/temp', submenus: [], createdOn: new Date(), craetedByUserId: '' },
+  // ];
 
   constructor() { }
 

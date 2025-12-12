@@ -14,7 +14,7 @@ export class IconsService {
   }
 
   private preloadIcons() {
-    const iconList = ['menu-icon', 'logout-icon', 'arrow-down', 'user-icon', 'arrow-left'];
+    const iconList = ['menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left'];
 
     iconList.forEach((icon, index) => {
       this.http.get(`assets/icons/${icon}.svg`, { responseType: 'text' })
@@ -36,14 +36,18 @@ export class IconsService {
     return new Observable(observer => {
       let retryCount = 0;
       const checkIcon = () => {
+        console.log('checkIcon')
         const svg = this.icons.get(name);
         if (svg) {
           observer.next(svg);
           observer.complete();
         } else {
           retryCount++;
-          if (retryCount < 10)
-          setTimeout(checkIcon, 20); // Retry until icon is loaded
+          if (retryCount < 10) setTimeout(checkIcon, 20); // Retry until icon is loaded
+          else {
+            observer.next(this.icons.get('block-icon') ?? '');
+            observer.complete();
+          }
         }
       };
       checkIcon();

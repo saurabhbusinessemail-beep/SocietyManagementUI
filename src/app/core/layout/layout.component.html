@@ -1,0 +1,21 @@
+<div class="layout-container">
+
+    <!-- HEADER -->
+    <app-header (toggleMenu)="menu.toggleMenu()"></app-header>
+
+    <div class="layout-main">
+
+        <!-- LEFT MENU -->
+        <app-menu #menu [menuItems]="menuService.userMenus.value"></app-menu>
+
+        <!-- BODY AREA (scrollable only here) -->
+        <div class="layout-body">
+            <ng-content></ng-content>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <app-footer></app-footer>
+
+</div>

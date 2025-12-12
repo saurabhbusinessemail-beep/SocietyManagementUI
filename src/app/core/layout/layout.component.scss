@@ -1,0 +1,37 @@
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden;
+}
+
+app-header {
+    flex: 0 0 auto; /* fixed height */
+    z-index: 1000;
+}
+
+app-footer {
+    flex: 0 0 auto; /* fixed height */
+    z-index: 1000;
+}
+
+.layout-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden; /* prevent outer scroll */
+}
+
+// app-menu {
+//     width: 240px;
+//     flex-shrink: 0;
+//     background: #1c1c1c;
+//     color: white;
+//     height: 100%;
+// }
+
+.layout-body {
+    flex: 1;
+    overflow-y: auto; /* only this scrolls */
+    background: #f4f4f4;
+    padding: 16px;
+}
