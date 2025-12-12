@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { delay, of } from 'rxjs';
+import { take } from 'rxjs';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent {
   otpError = false;
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private loginService: LoginService) {
     this.loginForm = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
@@ -35,17 +36,18 @@ export class LoginComponent {
   }
 
 
-  // Fake send OTP
   sendOtp() {
     if (this.loginForm.invalid) return;
 
 
     this.isLoading = true;
-    of(true).pipe(delay(1500)).subscribe(() => {
-      this.isLoading = false;
-      this.step = 'otp';
-      this.startCountdown();
-    });
+    this.loginService.sendOTP(this.loginForm.value.phone)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.isLoading = false;
+        this.step = 'otp';
+        this.startCountdown();
+      });
   }
 
 
@@ -80,25 +82,52 @@ export class LoginComponent {
     this.otpError = false;
 
 
-    // Fake API call
-    of(false).pipe(delay(1200)).subscribe((success) => {
-      this.isVerifying = false;
+    this.loginService.verifyOTP(this.loginForm.value.phone, this.otpForm.value.otp)
+      .pipe(take(1))
+      .subscribe((response) => {
+        this.isVerifying = false;
 
 
-      if (!success) {
-        this.otpError = true;
-        return;
-      }
+        if (!response.success) {
+          this.otpError = true;
+          return;
+        }
+
+        if (response?.token) {
+          this.loginService.saveTokenToStorage(response.token);
+          this.getAndSaveProfile();
+        }
+
+      });
+  }
+
+  getAndSaveProfile() {
+    this.isVerifying = true;
+
+    this.loginService.getProfile()
+      .pipe(take(1))
+      .subscribe(response => {
+        this.isVerifying = false;
 
 
-      alert('Login successful!');
-    });
+        if (!response.success) {
+          this.otpError = true;
+          return;
+        }
+
+        if (response?.user) {
+          this.loginService.saveProfileToStorage(response.user);
+        }
+
+      })
   }
 
 
   resetToLogin() {
     this.step = 'login';
     this.otpError = false;
+    this.isLoading = false;
+    this.isVerifying = false;
     clearInterval(this.countdownInterval);
   }
 }

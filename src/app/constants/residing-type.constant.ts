@@ -1,11 +1,11 @@
 export enum ResidingTypes {
     'Self',
     'Tenant',
-    'Vaccant'
+    'Vacant'
 }
 
 export const ResidingTypeList = [
     ResidingTypes.Self,
     ResidingTypes.Tenant,
-    ResidingTypes.Vaccant
+    ResidingTypes.Vacant
 ]
