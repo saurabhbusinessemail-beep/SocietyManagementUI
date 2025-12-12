@@ -36,7 +36,6 @@ export class IconsService {
     return new Observable(observer => {
       let retryCount = 0;
       const checkIcon = () => {
-        console.log('checkIcon')
         const svg = this.icons.get(name);
         if (svg) {
           observer.next(svg);

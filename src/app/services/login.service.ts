@@ -28,13 +28,6 @@ export class LoginService {
     // --------------------------------------------------------
     verifyOTP(phoneNumber: string, otp: string): Observable<any> {
         return this.http.post(`${this.baseUrl}/verify-otp`, { phoneNumber, otp })
-        // .pipe(
-        //     tap((res: any) => {
-        //         if (res?.token) {
-        //             localStorage.setItem('auth_token', res.token);
-        //         }
-        //     })
-        // );
     }
 
     // --------------------------------------------------------
