@@ -38,6 +38,7 @@ $color-mandatory: #d12b2b;
 // Icon color for dark or light backgrounds
 $icon-on-dark: $color-white;
 $icon-on-light: $color-black;
+$icon-on-light-highlight: $color-dark-blue;
 
 // Buttons
 $btn-bg-primary: $color-dark-blue;
@@ -76,7 +77,7 @@ $input-border-radius: 6px;
 
 // Menu widths
 $menu-width-expanded: 260px;
-$menu-width-icons: 72px;
+$menu-width-icons: 45px;
 
 // z-index
 $z-header: 1000;

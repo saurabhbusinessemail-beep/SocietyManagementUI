@@ -16,7 +16,7 @@
             color: $color-white;
             height: 100vh;
             padding: $sp-lg;
-            position: fixed;
+            position: relative;
             left: 0;
             top: 0;
             display: flex;
@@ -51,14 +51,16 @@
 
     // tablet: icons visible only, overlay when open
     &[data-mode='tablet'] {
-        width: $menu-width-icons;
+        width: calc($menu-width-icons + env(scrollbar-width));
         .menu-inner {
-            background: $color-sky;
-            height: 100vh;
+            background: $color-dark-blue;
             padding: $sp-sm;
-            position: fixed;
+            position: relative;
             left: 0;
             top: 0;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
         }
         .menu-item .label {
             display: none;
@@ -95,6 +97,8 @@
             display: flex;
             flex-direction: column;
             max-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         &.open {
             .menu-inner {
@@ -139,6 +143,8 @@
             flex-direction: column;
             gap: $sp-sm;
             overflow-y: auto;
+            flex: 1 auto;
+            padding-bottom: 200px;
         }
         .menu-item a {
             color: $icon-on-dark;

@@ -14,7 +14,10 @@ export class IconsService {
   }
 
   private preloadIcons() {
-    const iconList = ['menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left'];
+    const iconList = [
+      'menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left',
+      'society-icon'
+    ];
 
     iconList.forEach((icon, index) => {
       this.http.get(`assets/icons/${icon}.svg`, { responseType: 'text' })

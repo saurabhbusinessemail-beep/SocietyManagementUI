@@ -5,11 +5,11 @@
 
     <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
     <div class="menu-inner">
-        <div class="brand">
+        <div class="brand" (click)="toggleMenu()">
             <div class="brand-icon">{{ open ? '🌐' : '🌐' }}</div>
-            <div class="brand-text" *ngIf="open">My App</div>
+            <div class="brand-text" *ngIf="open">Menu</div>
             <div class="menu-close" *ngIf="open"> 
-                <button class="btn only-content" (click)="closeOverlay()" *ngIf="open && mode !== 'desktop'">
+                <button class="btn only-content" *ngIf="open && mode !== 'desktop'">
                     <app-icon name="close" color="white"></app-icon>
                 </button>
             </div>
