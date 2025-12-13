@@ -16,7 +16,7 @@ export class IconsService {
   private preloadIcons() {
     const iconList = [
       'menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left',
-      'society-icon'
+      'society-icon', 'dashboard'
     ];
 
     iconList.forEach((icon, index) => {

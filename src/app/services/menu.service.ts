@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IMenu } from '../interfaces';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,12 @@ import { IMenu } from '../interfaces';
 export class MenuService {
 
   userMenus = new BehaviorSubject<IMenu[]>([]);
+  selectedMenu = new BehaviorSubject<IMenu | undefined>(undefined);
 
-  constructor() { }
+  constructor(private router: Router) { }
+
+  selectAndLoadMenu(menu: IMenu) {
+    this.selectedMenu.next(menu);
+    this.router.navigateByUrl(menu.relativePath ?? '');
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { IMenu } from '../../interfaces';
+import { MenuService } from '../../services/menu.service';
 
 type Mode = 'desktop' | 'tablet' | 'mobile';
 
@@ -19,7 +20,7 @@ export class MenuComponent implements OnInit {
   //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/temp', submenus: [], createdOn: new Date(), craetedByUserId: '' },
   // ];
 
-  constructor() { }
+  constructor(public menuService: MenuService) { }
 
   ngOnInit(): void {
     this.evaluateMode();
@@ -42,7 +43,11 @@ export class MenuComponent implements OnInit {
     this.open = !this.open;
   }
 
-  closeOverlay() {
+  closeOverlay(menu?: IMenu) {
     if (this.mode !== 'desktop') this.open = false;
+
+    if (menu) {
+      this.menuService.selectAndLoadMenu(menu);
+    }
   }
 }

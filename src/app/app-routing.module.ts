@@ -20,6 +20,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'society',
+    loadChildren: () => import('./modules/society/society.module').then(module => module.SocietyModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: () => import('./modules/page-not-found/page-not-found.module').then(module => module.PageNotFoundModule)
   }

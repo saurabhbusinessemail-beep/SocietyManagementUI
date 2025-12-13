@@ -17,10 +17,10 @@
 
         <ul class="menu-list">
             <li *ngFor="let m of menuItems" class="menu-item">
-                <a [routerLink]="m.relativePath" (click)="closeOverlay()">
+                <div (click)="closeOverlay(m)"  [ngClass]="{ 'active': menuService.selectedMenu.value?.menuId === m.menuId}">
                     <app-icon [name]="m.icon ?? ''" color="white"></app-icon>
                     <span class="label" *ngIf="open">{{ m.menuName }}</span>
-                </a>
+                </div>
             </li>
         </ul>
     </div>

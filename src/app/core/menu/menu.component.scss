@@ -28,7 +28,7 @@
             font-weight: 700;
             margin-left: $sp-sm;
         }
-        .menu-item a {
+        .menu-item div {
             color: $color-white;
             text-decoration: none;
             padding: $sp-sm;
@@ -146,11 +146,16 @@
             flex: 1 auto;
             padding-bottom: 200px;
         }
-        .menu-item a {
+        .menu-item div {
             color: $icon-on-dark;
             display: flex;
             align-items: center;
             gap: $sp-sm;
+            cursor: pointer;
+
+            &.active {
+                color: $color-border-highlight;
+            }
         }
     }
 }
