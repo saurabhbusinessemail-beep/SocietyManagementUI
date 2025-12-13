@@ -1,0 +1,36 @@
+<div class="ui-control" [class.invalid]="invalid" [class.disabled]="disabled">
+
+    <!-- Label -->
+    <label *ngIf="config?.label" class="ui-label">
+        {{ config?.label }}
+        <span *ngIf="required" class="required">*</span>
+    </label>
+
+    <!-- Radio List -->
+    <div class="radio-group" [class.horizontal]="direction === 'horizontal'">
+        <label class="radio-item" *ngFor="let option of options; trackBy: trackByValue">
+            <input type="radio" [checked]="value === option.value" [disabled]="disabled" (change)="onSelect(option.value)" />
+
+            <span class="radio-control"></span>
+
+            <span class="radio-label">
+                {{ option.label }}
+            </span>
+        </label>
+    </div>
+
+    <!-- Help Text -->
+    <div *ngIf="config?.helpText" class="ui-help">
+        {{ config?.helpText }}
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="invalid" class="ui-error">
+        <ng-container *ngFor="let key of errorKeys">
+            <span *ngIf="errors?.[key]">
+                {{ config?.errorMessages?.[key] || 'Invalid value' }}
+            </span>
+        </ng-container>
+    </div>
+
+</div>

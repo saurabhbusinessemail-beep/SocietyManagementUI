@@ -20,6 +20,14 @@
         [lgColumns]="4">
       </ui-search-box>
 
+      <ui-radio-list formControlName="status" [config]="radioConfig" label="Status" helpText="Select current status"
+        [options]="radioOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-radio-list>
+
+      <ui-radio-list formControlName="statusH" [config]="radioConfig" label="Status" helpText="Select current status" direction="horizontal"
+        [options]="radioOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-radio-list>
+
     </ui-form-layout>
 
   </form>

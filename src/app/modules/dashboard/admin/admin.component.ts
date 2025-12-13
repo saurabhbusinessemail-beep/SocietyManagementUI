@@ -61,6 +61,18 @@ export class AdminComponent {
     }
   };
 
+  radioConfig: IUIControlConfig = {
+    id: 'radio',
+    label: 'Radio',
+    placeholder: 'Search Option',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Radio is required'
+    }
+  };
+
   roleOptions: IUIDropdownOption[] = [
     { label: 'Admin', value: 'ADMIN' },
     { label: 'Manager', value: 'MANAGER' },
@@ -75,12 +87,19 @@ export class AdminComponent {
     { label: 'Pooja Singh', value: 'USR_005' }
   ];
 
+  radioOptions: IUIDropdownOption[] = [
+    { label: 'Active', value: 'ACTIVE' },
+    { label: 'Inactive', value: 'INACTIVE' }
+  ];
+
   fb = new FormGroup({
-    userName: new FormControl('Hello'),
+    userName: new FormControl({ value: 'Hello', disabled: true }),
     textName: new FormControl('Hello'),
-    role: new FormControl(''),
-    user: new FormControl<IUIDropdownOption | undefined>(undefined)
+    role: new FormControl({ value: '', disabled: false }),
+    user: new FormControl<IUIDropdownOption | undefined>({ value: undefined, disabled: false }),
+    status: new FormControl({ value: undefined, disabled: false }),
+    statusH: new FormControl({ value: undefined, disabled: false })
   })
 
-  onUserSearch(text: string) {}
+  onUserSearch(text: string) { }
 }

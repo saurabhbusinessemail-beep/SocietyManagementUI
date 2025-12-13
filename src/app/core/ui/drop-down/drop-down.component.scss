@@ -30,7 +30,7 @@
 
         &:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--primary-color, $btn-bg-primary);
         }
     }
 

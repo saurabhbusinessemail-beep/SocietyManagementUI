@@ -1,0 +1,98 @@
+@import '../../../../styles/variables';
+
+.ui-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+
+    .ui-label {
+        font-size: small;
+        font-weight: 500;
+
+
+        .required {
+            color: $color-error-header;
+            margin-left: 2px;
+        }
+    }
+
+    &.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .ui-help {
+        font-size: x-small;
+        color: $color-help-text;
+    }
+
+
+    &.invalid .ui-input {
+        border-color: $color-error-dark;
+    }
+
+
+    .ui-error {
+        font-size: x-small;
+        color: $color-error-dark;
+    }
+}
+
+/* Radio group */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &.horizontal {
+        flex-direction: row;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+}
+
+/* Single radio */
+.radio-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Hide native radio safely */
+.radio-item input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Custom radio circle */
+.radio-control {
+    width: 16px;
+    height: 16px;
+    min-width: 16px; /* IMPORTANT */
+    border-radius: 50%;
+    border: 2px solid var(--border-color, $color-border);
+    background: $color-white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+    &::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $btn-bg-primary;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+    }
+}
+
+/* Checked state */
+.radio-item input:checked + .radio-control::after {
+    opacity: 1;
+}

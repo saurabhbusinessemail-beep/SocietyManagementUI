@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { IconModule } from '../icons/icon.module';
+import { RadioListComponent } from './radio-list/radio-list.component';
 
 
 
@@ -12,11 +13,12 @@ import { IconModule } from '../icons/icon.module';
   declarations: [
     TextBoxComponent,
     DropDownComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    RadioListComponent
   ],
   imports: [
     CommonModule, FormsModule, IconModule
   ],
-  exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent]
+  exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent, RadioListComponent]
 })
 export class UiModule { }

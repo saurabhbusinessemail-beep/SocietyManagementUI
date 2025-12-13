@@ -1,4 +1,4 @@
-<div class="ui-control">
+<div class="ui-control" [class.disabled]="disabled" [class.invalid]="invalid" [ngClass]="config?.cssClass">
 
     <!-- Label -->
     <label *ngIf="config?.label" class="ui-label">
@@ -7,8 +7,8 @@
     </label>
 
     <div class="input-wrapper">
-        <input type="text" #inputEl [placeholder]="placeholder" [value]="searchText"
-            (input)="onInput(inputEl.value)" (focus)="isOpen = !!searchText" />
+        <input type="text" #inputEl class="ui-input" [placeholder]="placeholder" [value]="searchText"
+            (input)="onInput(inputEl.value)" (focus)="isOpen = !!searchText" [disabled]="disabled" />
 
         <!-- Search icon -->
         <span class="icon search" *ngIf="!searchText">

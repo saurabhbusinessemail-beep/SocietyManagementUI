@@ -15,6 +15,11 @@
         }
     }
 
+
+    &.invalid .ui-input {
+        border-color: $color-error-dark;
+    }
+
     .ui-help {
         font-size: x-small;
         color: $color-help-text;
@@ -32,6 +37,11 @@
 
     input {
         width: 100%;
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary-color, $btn-bg-primary);
+        }
     }
 
     .icon {
