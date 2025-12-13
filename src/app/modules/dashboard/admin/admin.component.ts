@@ -49,15 +49,38 @@ export class AdminComponent {
     }
   };
 
+  userSearchConfig: IUIControlConfig = {
+    id: 'user',
+    label: 'User',
+    placeholder: 'Search User',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'User is required'
+    }
+  };
+
   roleOptions: IUIDropdownOption[] = [
     { label: 'Admin', value: 'ADMIN' },
     { label: 'Manager', value: 'MANAGER' },
     { label: 'User', value: 'USER' }
   ];
 
+  filteredUsers: IUIDropdownOption[] = [
+    { label: 'Saurabh Kumar', value: 'USR_001' },
+    { label: 'Amit Sharma', value: 'USR_002' },
+    { label: 'Neha Verma', value: 'USR_003' },
+    { label: 'Rohit Mehta', value: 'USR_004' },
+    { label: 'Pooja Singh', value: 'USR_005' }
+  ];
+
   fb = new FormGroup({
     userName: new FormControl('Hello'),
     textName: new FormControl('Hello'),
-    role: new FormControl('')
+    role: new FormControl(''),
+    user: new FormControl<IUIDropdownOption | undefined>(undefined)
   })
+
+  onUserSearch(text: string) {}
 }

@@ -1,0 +1,73 @@
+@import '../../../../styles/variables';
+
+.ui-control {
+    position: relative;
+    width: 100%;
+
+    .ui-label {
+        font-size: small;
+        font-weight: 500;
+
+
+        .required {
+            color: $color-error-header;
+            margin-left: 2px;
+        }
+    }
+
+    .ui-help {
+        font-size: x-small;
+        color: $color-help-text;
+    }
+
+
+    .ui-error {
+        font-size: x-small;
+        color: $color-error-dark;
+    }
+}
+
+.input-wrapper {
+    position: relative;
+
+    input {
+        width: 100%;
+    }
+
+    .icon {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--icon-muted);
+
+        &.clear:hover {
+            color: var(--danger);
+        }
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+
+    .option {
+        padding: 0.6rem 0.75rem;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--hover-bg);
+        }
+    }
+}

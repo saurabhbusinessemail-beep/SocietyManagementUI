@@ -1,0 +1,48 @@
+<div class="ui-control">
+
+    <!-- Label -->
+    <label *ngIf="config?.label" class="ui-label">
+        {{ config?.label }}
+        <span *ngIf="required" class="required">*</span>
+    </label>
+
+    <div class="input-wrapper">
+        <input type="text" #inputEl [placeholder]="placeholder" [value]="searchText"
+            (input)="onInput(inputEl.value)" (focus)="isOpen = !!searchText" />
+
+        <!-- Search icon -->
+        <span class="icon search" *ngIf="!searchText">
+            <app-icon name="search"></app-icon>
+        </span>
+
+        <!-- Clear icon -->
+        <span class="icon clear" *ngIf="searchText" (click)="clear()">
+            <app-icon name="clear"></app-icon>
+        </span>
+    </div>
+
+    <!-- Dropdown -->
+    <div class="dropdown" *ngIf="isOpen && options?.length">
+        <div class="option" *ngFor="let option of options; trackBy: trackByValue" (click)="onSelect(option)">
+            {{ option.label }}
+        </div>
+    </div>
+
+    
+
+    <!-- Help text -->
+    <div *ngIf="config?.helpText" class="ui-help">
+        {{ config?.helpText }}
+    </div>
+
+
+    <!-- Errors -->
+    <div *ngIf="invalid" class="ui-error">
+        <ng-container *ngFor="let key of errorKeys">
+            <span *ngIf="errors?.[key]">
+                {{ config?.errorMessages?.[key] || 'Invalid value' }}
+            </span>
+        </ng-container>
+    </div>
+
+</div>

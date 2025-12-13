@@ -3,20 +3,22 @@
 
     <ui-form-layout [formGroup]="fb">
 
-      <div [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-        <ui-text-box formControlName="userName" [config]="usernameConfig">
-        </ui-text-box>
-      </div>
+      <ui-text-box formControlName="userName" [config]="usernameConfig" [smColumns]="12" [mdColumns]="6"
+        [lgColumns]="4">
+      </ui-text-box>
 
-      <div [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-        <ui-text-box formControlName="textName" [config]="textNameConfig">
-        </ui-text-box>
-      </div>
+      <ui-text-box formControlName="textName" [config]="textNameConfig" [smColumns]="12" [mdColumns]="6"
+        [lgColumns]="4">
+      </ui-text-box>
 
-      <div [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-        <ui-drop-down formControlName="role" [config]="roleConfig" [options]="roleOptions" placeholder="Select role">
-        </ui-drop-down>
-      </div>
+      <ui-drop-down formControlName="role" [config]="roleConfig" [options]="roleOptions" placeholder="Select role"
+        [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-drop-down>
+
+      <ui-search-box formControlName="user" [config]="userSearchConfig" [options]="filteredUsers"
+        placeholder="Search user" (searchChange)="onUserSearch($event)" [smColumns]="12" [mdColumns]="6"
+        [lgColumns]="4">
+      </ui-search-box>
 
     </ui-form-layout>
 
