@@ -1,0 +1,36 @@
+<div class="ui-control ui-dropdown" [class.disabled]="disabled" [class.invalid]="invalid" [ngClass]="config?.cssClass">
+
+    <!-- Label -->
+    <label *ngIf="config?.label" class="ui-label">
+        {{ config?.label }}
+        <span *ngIf="required" class="required">*</span>
+    </label>
+
+    <!-- Select -->
+    <select #selectEl class="ui-select" [disabled]="disabled" [value]="value" (change)="onSelect(selectEl.value)"
+        (blur)="onTouched()">
+
+        <option *ngIf="placeholder" value="" disabled
+            [selected]="value === null || value === undefined || value === ''">
+            {{ placeholder }}
+        </option>
+
+        <option *ngFor="let opt of options; trackBy: trackByValue" [value]="opt.value" [disabled]="opt.disabled">
+            {{ opt.label }}
+        </option>
+
+    </select>
+
+    <!-- Help text -->
+    <div *ngIf="config?.helpText" class="ui-help">
+        {{ config?.helpText }}
+    </div>
+
+    <!-- Errors -->
+    <div *ngIf="invalid" class="ui-error">
+        <span *ngFor="let key of errorKeys">
+            {{ config?.errorMessages?.[key] || 'Invalid value' }}
+        </span>
+    </div>
+
+</div>

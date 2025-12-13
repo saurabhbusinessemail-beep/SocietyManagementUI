@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 
 @Component({
   selector: 'app-admin',
@@ -7,7 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrl: './admin.component.scss'
 })
 export class AdminComponent {
-  
+
   usernameConfig = {
     id: 'username',
     label: 'Username',
@@ -25,6 +26,7 @@ export class AdminComponent {
     id: 'textName',
     label: 'Text Name',
     placeholder: 'Enter username',
+    helpText: 'Some Help',
     validations: [
       { name: 'required', validator: Validators.required },
       { name: 'minlength', validator: Validators.minLength(3) }
@@ -35,8 +37,27 @@ export class AdminComponent {
     }
   };
 
+  roleConfig: IUIControlConfig = {
+    id: 'role',
+    label: 'Role',
+    placeholder: 'Select role',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Role is required'
+    }
+  };
+
+  roleOptions: IUIDropdownOption[] = [
+    { label: 'Admin', value: 'ADMIN' },
+    { label: 'Manager', value: 'MANAGER' },
+    { label: 'User', value: 'USER' }
+  ];
+
   fb = new FormGroup({
     userName: new FormControl('Hello'),
-    textName: new FormControl('Hello')
+    textName: new FormControl('Hello'),
+    role: new FormControl('')
   })
 }

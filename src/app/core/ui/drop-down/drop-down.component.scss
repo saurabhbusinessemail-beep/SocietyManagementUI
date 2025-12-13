@@ -1,36 +1,32 @@
 @import '../../../../styles/variables';
 
-.ui-text-box {
+.ui-dropdown {
     display: flex;
     flex-direction: column;
     gap: $sp-xs;
-
 
     &.disabled {
         opacity: 0.6;
         pointer-events: none;
     }
 
-
     .ui-label {
-        font-size: small;
+        font-size: 13px;
         font-weight: 500;
 
-
         .required {
-            color: $color-error-header;
+            color: $color-error-header;;
             margin-left: 2px;
         }
     }
 
-
-    .ui-input {
+    .ui-select {
         height: 40px;
         padding: 0 $input-padding-desktop;
         border-radius: $input-border-radius;
         border: 1px solid var(--border-color, $color-border);
-        font-size: small;
-
+        font-size: 14px;
+        background-color: $color-white;
 
         &:focus {
             outline: none;
@@ -38,20 +34,20 @@
         }
     }
 
-
-    &.invalid .ui-input {
+    &.invalid .ui-select {
         border-color: $color-error-dark;
     }
 
-
     .ui-help {
-        font-size: x-small;
+        font-size: 12px;
         color: $color-help-text;
     }
 
-
     .ui-error {
-        font-size: x-small;
+        font-size: 12px;
         color: $color-error-dark;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
     }
 }

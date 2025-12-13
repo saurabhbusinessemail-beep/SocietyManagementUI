@@ -1,14 +1,14 @@
 import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { UIFormControlAdapter } from './ui-form-control-adapter';
-import { UIControlConfig } from '../interfaces';
+import { IUIControlConfig } from '../interfaces';
 
 @Directive()
 export abstract class UIBaseFormControl<T>
     extends UIFormControlAdapter<T>
     implements OnChanges {
 
-    @Input() config?: UIControlConfig;
+    @Input() config?: IUIControlConfig;
 
     get required(): boolean {
         return this.config?.validations?.some(v => v.name === 'required') ?? false;

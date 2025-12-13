@@ -1,7 +1,7 @@
 import { ValidatorFn } from "@angular/forms";
 import { ControlOrientation, ControlSize } from "../../types";
 
-export interface UIControlConfig {
+export interface IUIControlConfig {
     id: string;
 
     label?: string;

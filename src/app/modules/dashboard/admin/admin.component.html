@@ -13,6 +13,11 @@
         </ui-text-box>
       </div>
 
+      <div [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+        <ui-drop-down formControlName="role" [config]="roleConfig" [options]="roleOptions" placeholder="Select role">
+        </ui-drop-down>
+      </div>
+
     </ui-form-layout>
 
   </form>

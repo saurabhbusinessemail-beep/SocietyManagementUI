@@ -18,7 +18,7 @@ export * from './society-feature.interface';
 export * from './society.interface';
 export * from './state.interface';
 export * from './ui/ui-control-config.interface';
-export * from './ui/ui-option.interface';
+export * from './ui/ui-drop-down-option.interface';
 export * from './user-roles';
 export * from './user.interface';
 export * from './vehicle.interface';
