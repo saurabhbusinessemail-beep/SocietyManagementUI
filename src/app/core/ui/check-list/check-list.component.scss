@@ -1,0 +1,103 @@
+@import '../../../../styles/variables';
+
+.ui-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+
+    &.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+
+.ui-label {
+    font-weight: 500;
+    font-size: small;
+
+    .required {
+        color: $color-error-header;
+        margin-left: 2px;
+    }
+}
+
+
+.ui-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+
+    &.horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}
+
+
+.ui-check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+
+
+    input {
+        display: none;
+    }
+
+
+    .custom-box {
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--border-color, $color-border);
+        border-radius: 4px;
+        position: relative;
+        background-color: $color-white;
+
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 0;
+            width: 6px;
+            height: 12px;
+            border: solid var(--primary-color, $btn-bg-primary);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+    }
+
+
+    input:checked + .custom-box::after {
+        opacity: 1;
+    }
+
+
+    .option-label {
+        font-size: small;
+    }
+
+
+    &.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+
+.ui-help {
+    font-size: x-small;
+    color: $color-help-text;
+}
+
+.ui-error {
+    font-size: x-small;
+    color: $color-error-dark;
+}

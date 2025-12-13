@@ -11,7 +11,7 @@
     }
 
     .ui-label {
-        font-size: 13px;
+        font-size: small;
         font-weight: 500;
 
         .required {
@@ -25,7 +25,7 @@
         padding: 0 $input-padding-desktop;
         border-radius: $input-border-radius;
         border: 1px solid var(--border-color, $color-border);
-        font-size: 14px;
+        font-size: small;
         background-color: $color-white;
 
         &:focus {
@@ -39,15 +39,12 @@
     }
 
     .ui-help {
-        font-size: 12px;
+        font-size: x-small;
         color: $color-help-text;
     }
 
     .ui-error {
-        font-size: 12px;
+        font-size: x-small;
         color: $color-error-dark;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
     }
 }

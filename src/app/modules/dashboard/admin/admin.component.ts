@@ -73,6 +73,19 @@ export class AdminComponent {
     }
   };
 
+  permissionConfig: IUIControlConfig = {
+    id: 'permission',
+    label: 'Permission',
+    placeholder: 'Search Option',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Radio is required'
+    },
+    helpText: 'Some Help'
+  };
+
   roleOptions: IUIDropdownOption[] = [
     { label: 'Admin', value: 'ADMIN' },
     { label: 'Manager', value: 'MANAGER' },
@@ -92,13 +105,21 @@ export class AdminComponent {
     { label: 'Inactive', value: 'INACTIVE' }
   ];
 
+  permissionOptions: IUIDropdownOption[] = [
+    { label: 'Read', value: 'read' },
+    { label: 'Write', value: 'write' },
+    { label: 'Delete', value: 'delete' }
+  ];
+
   fb = new FormGroup({
     userName: new FormControl({ value: 'Hello', disabled: true }),
     textName: new FormControl('Hello'),
     role: new FormControl({ value: '', disabled: false }),
     user: new FormControl<IUIDropdownOption | undefined>({ value: undefined, disabled: false }),
     status: new FormControl({ value: undefined, disabled: false }),
-    statusH: new FormControl({ value: undefined, disabled: false })
+    statusH: new FormControl({ value: undefined, disabled: false }),
+    permissions: new FormControl({ value: undefined, disabled: false }),
+    permissionsH: new FormControl({ value: undefined, disabled: false })
   })
 
   onUserSearch(text: string) { }

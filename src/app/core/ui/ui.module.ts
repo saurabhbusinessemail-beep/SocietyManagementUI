@@ -6,6 +6,7 @@ import { DropDownComponent } from './drop-down/drop-down.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { IconModule } from '../icons/icon.module';
 import { RadioListComponent } from './radio-list/radio-list.component';
+import { CheckListComponent } from './check-list/check-list.component';
 
 
 
@@ -14,11 +15,12 @@ import { RadioListComponent } from './radio-list/radio-list.component';
     TextBoxComponent,
     DropDownComponent,
     SearchBoxComponent,
-    RadioListComponent
+    RadioListComponent,
+    CheckListComponent
   ],
   imports: [
     CommonModule, FormsModule, IconModule
   ],
-  exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent, RadioListComponent]
+  exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent, RadioListComponent, CheckListComponent]
 })
 export class UiModule { }

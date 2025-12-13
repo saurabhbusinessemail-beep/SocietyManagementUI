@@ -24,9 +24,18 @@
         [options]="radioOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
       </ui-radio-list>
 
-      <ui-radio-list formControlName="statusH" [config]="radioConfig" label="Status" helpText="Select current status" direction="horizontal"
-        [options]="radioOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      <ui-radio-list formControlName="statusH" [config]="radioConfig" label="Status" helpText="Select current status"
+        direction="horizontal" [options]="radioOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
       </ui-radio-list>
+
+      <ui-checklist formControlName="permissions" [config]="permissionConfig" [options]="permissionOptions"
+        helpText="You can select multiple options" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-checklist>
+
+      <ui-checklist formControlName="permissionsH" [config]="permissionConfig" [options]="permissionOptions"
+        direction="horizontal" helpText="You can select multiple options" [smColumns]="12" [mdColumns]="6"
+        [lgColumns]="4">
+      </ui-checklist>
 
     </ui-form-layout>
 
