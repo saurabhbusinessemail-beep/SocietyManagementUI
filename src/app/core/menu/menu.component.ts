@@ -1,8 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { IMenu } from '../../interfaces';
 import { MenuService } from '../../services/menu.service';
-
-type Mode = 'desktop' | 'tablet' | 'mobile';
+import { Mode } from '../../types';
 
 @Component({
   selector: 'app-menu',

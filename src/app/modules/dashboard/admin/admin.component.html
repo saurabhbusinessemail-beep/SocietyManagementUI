@@ -1,3 +1,19 @@
 <app-layout>
-  Test Data
+  <form [formGroup]="fb">
+
+    <ui-form-layout [formGroup]="fb">
+
+      <div [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+        <ui-text-box formControlName="userName" [config]="usernameConfig">
+        </ui-text-box>
+      </div>
+
+      <div [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+        <ui-text-box formControlName="textName" [config]="textNameConfig">
+        </ui-text-box>
+      </div>
+
+    </ui-form-layout>
+
+  </form>
 </app-layout>

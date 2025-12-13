@@ -1,9 +1,10 @@
 @import './styles/variables';
 @import './styles/mixins';
+@import './styles/grid';
 
 // Base resets
 * { box-sizing: border-box; }
-html, body, app-root { height: 100%; }
+html, body, app-root { height: 100%; margin: 0px; }
 body {
   font-family: $font-family-base;
   font-size: $font-size-base;
@@ -11,6 +12,12 @@ body {
   background: #ffffff;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+@include tablet {
+  * {
+    scrollbar-width: none;
+  }
 }
 
 // Utility

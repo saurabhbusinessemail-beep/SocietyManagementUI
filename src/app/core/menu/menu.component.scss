@@ -31,7 +31,6 @@
         .menu-item div {
             color: $color-white;
             text-decoration: none;
-            padding: $sp-sm;
             display: flex;
             align-items: center;
             gap: $sp-sm;
@@ -126,9 +125,10 @@
             display: flex;
             align-items: center;
             gap: $sp-sm;
-            margin-bottom: $sp-lg;
+            margin-bottom: $sp-md;
             .brand-icon {
                 font-size: 20px;
+                padding: $sp-sm;
             }
 
             .menu-close {
@@ -151,6 +151,7 @@
             display: flex;
             align-items: center;
             gap: $sp-sm;
+            padding: $sp-sm;
             cursor: pointer;
 
             &.active {

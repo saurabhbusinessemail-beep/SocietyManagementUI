@@ -6,7 +6,7 @@
     <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
     <div class="menu-inner">
         <div class="brand" (click)="toggleMenu()">
-            <div class="brand-icon">{{ open ? '🌐' : '🌐' }}</div>
+            <div class="brand-icon"><app-icon name="icon" color="white"></app-icon></div>
             <div class="brand-text" *ngIf="open">Menu</div>
             <div class="menu-close" *ngIf="open"> 
                 <button class="btn only-content" *ngIf="open && mode !== 'desktop'">
@@ -18,7 +18,7 @@
         <ul class="menu-list">
             <li *ngFor="let m of menuItems" class="menu-item">
                 <div (click)="closeOverlay(m)"  [ngClass]="{ 'active': menuService.selectedMenu.value?.menuId === m.menuId}">
-                    <app-icon [name]="m.icon ?? ''" color="white"></app-icon>
+                    <app-icon [name]="m.icon ?? ''" [color]="menuService.selectedMenu.value?.menuId === m.menuId ? '#05ff01' : 'white'"></app-icon>
                     <span class="label" *ngIf="open">{{ m.menuName }}</span>
                 </div>
             </li>

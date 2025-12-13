@@ -1,6 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-
-type Mode = 'desktop' | 'tablet' | 'mobile';
+import { Mode } from '../../types';
 
 @Component({
   selector: 'app-header',
