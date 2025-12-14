@@ -86,6 +86,11 @@ export class AdminComponent {
     helpText: 'Some Help'
   };
 
+  settingTabsConfig: IUIControlConfig = {
+    id: 'settingsTab',
+    label: 'Setting Tabs'
+  };
+
   roleOptions: IUIDropdownOption[] = [
     { label: 'Admin', value: 'ADMIN' },
     { label: 'Manager', value: 'MANAGER' },
@@ -111,6 +116,21 @@ export class AdminComponent {
     { label: 'Delete', value: 'delete' }
   ];
 
+  tabsOptions: IUIDropdownOption[] = [
+    {
+      value: 'profile',
+      label: 'Profile'
+    },
+    {
+      value: 'security',
+      label: 'Security'
+    },
+    {
+      value: 'notifications',
+      label: 'Notifications'
+    }
+  ];
+
   fb = new FormGroup({
     userName: new FormControl({ value: 'Hello', disabled: true }),
     textName: new FormControl('Hello'),
@@ -119,7 +139,8 @@ export class AdminComponent {
     status: new FormControl({ value: undefined, disabled: false }),
     statusH: new FormControl({ value: undefined, disabled: false }),
     permissions: new FormControl({ value: undefined, disabled: false }),
-    permissionsH: new FormControl({ value: undefined, disabled: false })
+    permissionsH: new FormControl({ value: undefined, disabled: false }),
+    settingsTab: new FormControl({ value: 'profile', disabled: false }),
   })
 
   onUserSearch(text: string) { }

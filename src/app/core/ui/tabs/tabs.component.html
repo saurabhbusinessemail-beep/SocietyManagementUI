@@ -1,0 +1,52 @@
+<div class="ui-control" [class.disabled]="disabled">
+
+
+    <!-- Label -->
+    <label *ngIf="config?.label" class="ui-label">
+        {{ config?.label }}
+        <span *ngIf="required" class="required">*</span>
+    </label>
+
+
+    <!-- Tabs Wrapper -->
+    <div class="ui-tabs" [class.vertical]="direction === 'vertical'" [style.height]="height || null">
+
+        <div class="ui-tab-headers">
+            <button type="button" class="ui-tab" *ngFor="let tab of tabs" [class.active]="isActive(tab.value)"
+                [disabled]="tab.disabled || disabled" (click)="selectTab(tab.value)">
+                {{ tab.label }}
+            </button>
+        </div>
+
+        <div class="ui-tab-body">
+
+            <!-- Parent controls -->
+            <ng-content *ngIf="!manageContent"></ng-content>
+
+            <!-- Tabs control -->
+            <ng-container *ngIf="manageContent && activeContent">
+                <ng-container *ngTemplateOutlet="activeContent.template">
+                </ng-container>
+            </ng-container>
+
+        </div>
+    </div>
+
+
+    <!-- Help -->
+    <div *ngIf="config?.helpText" class="ui-help">
+        {{ config?.helpText }}
+    </div>
+
+
+    <!-- Errors -->
+    <div *ngIf="invalid" class="ui-error">
+        <ng-container *ngFor="let key of errorKeys">
+            <span *ngIf="errors?.[key]">
+                {{ config?.errorMessages?.[key] || 'Invalid value' }}
+            </span>
+        </ng-container>
+    </div>
+
+
+</div>

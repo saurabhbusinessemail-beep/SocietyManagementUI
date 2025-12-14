@@ -37,6 +37,40 @@
         [lgColumns]="4">
       </ui-checklist>
 
+      <ui-tabs [config]="settingTabsConfig" [tabs]="tabsOptions" formControlName="settingsTab" direction="vertical" height="100px" [smColumns]="12"
+        [mdColumns]="12" [lgColumns]="6">
+
+        <ng-template uiTab="profile">
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+          <h3>Profile</h3>
+          <p>Update your personal information.</p>
+        </ng-template>
+
+        <ng-template uiTab="security">
+          <h3>Security</h3>
+          <p>Change password and manage sessions.</p>
+        </ng-template>
+
+        <ng-template uiTab="notifications">
+          <h3>Notifications</h3>
+          <p>Email and push notification preferences.</p>
+        </ng-template>
+
+      </ui-tabs>
+
     </ui-form-layout>
 
   </form>

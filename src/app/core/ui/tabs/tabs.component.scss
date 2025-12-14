@@ -1,0 +1,93 @@
+@import '../../../../styles/variables';
+
+.ui-control {
+    &.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+
+    .ui-label {
+        font-size: small;
+        font-weight: 500;
+
+
+        .required {
+            color: $color-error-header;
+            margin-left: 2px;
+        }
+    }
+
+
+    .ui-help {
+        font-size: x-small;
+        color: $color-help-text;
+    }
+
+
+    .ui-error {
+        font-size: x-small;
+        color: $color-error-dark;
+    }
+}
+
+.ui-tabs {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+
+    &.vertical {
+        flex-direction: row;
+    }
+}
+
+
+.ui-tab-headers {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+
+    .vertical & {
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-width: 160px;
+    }
+}
+
+
+.ui-tab {
+    padding: $sp-sm $sp-md;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    // color: $color-dark-blue;
+    white-space: nowrap;
+
+
+    &:hover {
+        color: $color-sky;
+    }
+
+
+    &.active {
+        color: $color-dark-blue;
+        border-bottom: 2px solid $color-dark-blue;
+
+
+        .vertical & {
+            border-bottom: none;
+            border-right: 2px solid $color-dark-blue;
+            margin-right: $sp-sm;
+        }
+    }
+}
+
+
+.ui-tab-body {
+    flex: 1;
+    overflow: auto;
+    padding: var(--ui-spacing-md);
+}
