@@ -1,0 +1,24 @@
+<div class="ui-control" [class.vertical]="direction === 'vertical'">
+
+    <!-- LABEL (exact same logic as textbox) -->
+    <label *ngIf="config?.label" class="ui-label">
+
+        {{ config?.label }}
+
+        <span *ngIf="required" class="ui-required">
+            *
+        </span>
+
+        <ng-container *ngIf="((direction === 'horizontal' && !revertColonShow) || (direction === 'vertical' && revertColonShow))">
+            :
+        </ng-container>
+    </label>
+
+    <!-- VALUE -->
+    <div class="ui-value" [ngClass]="'type-' + valueType">
+
+        {{ displayValue ?? '-' }}
+
+    </div>
+
+</div>

@@ -34,11 +34,19 @@
 
       <ui-checklist formControlName="permissionsH" [config]="permissionConfig" [options]="permissionOptions"
         direction="horizontal" helpText="You can select multiple options" [smColumns]="12" [mdColumns]="6"
-        [lgColumns]="4">
+        [lgColumns]="8">
       </ui-checklist>
 
-      <ui-tabs [config]="settingTabsConfig" [tabs]="tabsOptions" formControlName="settingsTab" direction="vertical" height="100px" [smColumns]="12"
-        [mdColumns]="12" [lgColumns]="6">
+      <ui-label formControlName="type" [config]="typeLabelConfig" [smColumns]="12" [mdColumns]="6"
+        [lgColumns]="3">
+      </ui-label>
+
+      <ui-label  valueText="active" [config]="typeLabelConfig" direction="vertical" valueType="expired" [smColumns]="12" [mdColumns]="6"
+        [lgColumns]="3">
+      </ui-label>
+
+      <ui-tabs [config]="settingTabsConfig" [tabs]="tabsOptions" formControlName="settingsTab" direction="vertical"
+        height="100px" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
         <ng-template uiTab="profile">
           <h3>Profile</h3>

@@ -9,6 +9,7 @@ import { RadioListComponent } from './radio-list/radio-list.component';
 import { CheckListComponent } from './check-list/check-list.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { UITabContentDirective } from './tabs/ui-tab-directive';
+import { LabelComponent } from './label/label.component';
 
 
 
@@ -20,12 +21,13 @@ import { UITabContentDirective } from './tabs/ui-tab-directive';
     RadioListComponent,
     CheckListComponent,
     TabsComponent,
-    UITabContentDirective
+    UITabContentDirective,
+    LabelComponent
   ],
   imports: [
     CommonModule, FormsModule, IconModule
   ],
   exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent, RadioListComponent, CheckListComponent, TabsComponent,
-    UITabContentDirective]
+    UITabContentDirective, LabelComponent]
 })
 export class UiModule { }

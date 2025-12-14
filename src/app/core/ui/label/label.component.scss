@@ -1,0 +1,30 @@
+@import '../../../../styles/variables';
+
+.ui-control {
+  display: flex;
+  gap: $sp-xs;
+  
+  &.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ui-label-value {
+    display: flex;
+    align-items: center;
+  }
+    
+  .ui-value {
+    font-weight: 500;
+  
+    &.type-default   { color: $color-black; }
+    &.type-info      { color: $color-help-text; }
+    &.type-help      { color: $color-help-text; }
+    &.type-active    { color: $status-active; }
+    &.type-inactive  { color: $status-inactive; }
+    &.type-rejected,
+    &.type-error     { color: $status-rejected; }
+    &.type-expired   { color: $status-yet; }
+    &.type-pending   { color: $status-pending; }
+  }  
+}

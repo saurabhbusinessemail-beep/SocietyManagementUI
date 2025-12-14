@@ -91,6 +91,11 @@ export class AdminComponent {
     label: 'Setting Tabs'
   };
 
+  typeLabelConfig: IUIControlConfig = {
+    id: 'type',
+    label: 'Type Label'
+  };
+
   roleOptions: IUIDropdownOption[] = [
     { label: 'Admin', value: 'ADMIN' },
     { label: 'Manager', value: 'MANAGER' },
@@ -141,6 +146,7 @@ export class AdminComponent {
     permissions: new FormControl({ value: undefined, disabled: false }),
     permissionsH: new FormControl({ value: undefined, disabled: false }),
     settingsTab: new FormControl({ value: 'profile', disabled: false }),
+    type: new FormControl('avctive'),
   })
 
   onUserSearch(text: string) { }
