@@ -3,6 +3,21 @@
 
     <ui-form-layout [formGroup]="fb">
 
+      <ui-button label="Click Me" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
+      </ui-button>
+
+      <ui-button label="Click Me Click Me Click Me" type="cancel" [allowWrapText]="true" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
+      </ui-button>
+
+      <ui-button label="Click Me Click Me Click Me" type="error" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
+      </ui-button>
+
+      <ui-button label="Click Me Click Me Click Me" type="only-content" [smColumns]="2" [mdColumns]="2" [lgColumns]="2">
+      </ui-button>
+
+      <ui-button label="Click Me" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+      </ui-button>
+
       <ui-text-box formControlName="userName" [config]="usernameConfig" [smColumns]="12" [mdColumns]="6"
         [lgColumns]="4">
       </ui-text-box>
@@ -37,12 +52,11 @@
         [lgColumns]="8">
       </ui-checklist>
 
-      <ui-label formControlName="type" [config]="typeLabelConfig" [smColumns]="12" [mdColumns]="6"
-        [lgColumns]="3">
+      <ui-label formControlName="type" [config]="typeLabelConfig" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
       </ui-label>
 
-      <ui-label  valueText="active" [config]="typeLabelConfig" direction="vertical" valueType="expired" [smColumns]="12" [mdColumns]="6"
-        [lgColumns]="3">
+      <ui-label valueText="active" [config]="typeLabelConfig" direction="vertical" valueType="expired" [smColumns]="12"
+        [mdColumns]="6" [lgColumns]="3">
       </ui-label>
 
       <ui-tabs [config]="settingTabsConfig" [tabs]="tabsOptions" formControlName="settingsTab" direction="vertical"

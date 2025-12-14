@@ -1,0 +1,28 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.btn {
+    justify-content: flex-start;
+
+    @include mobile {
+        max-width: 50vw;
+    }
+
+    @include tablet {
+        max-width: 40vw;
+    }
+
+    @include desktop {
+        max-width: 100%;
+    }
+
+    &.wrap-text {
+        white-space: wrap;
+    }
+
+    &.one-line-text {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}

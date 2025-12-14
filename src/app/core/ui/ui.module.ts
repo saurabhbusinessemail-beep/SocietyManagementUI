@@ -10,6 +10,8 @@ import { CheckListComponent } from './check-list/check-list.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { UITabContentDirective } from './tabs/ui-tab-directive';
 import { LabelComponent } from './label/label.component';
+import { ButtonComponent } from './button/button.component';
+import {MatRippleModule} from '@angular/material/core';
 
 
 
@@ -22,12 +24,13 @@ import { LabelComponent } from './label/label.component';
     CheckListComponent,
     TabsComponent,
     UITabContentDirective,
-    LabelComponent
+    LabelComponent,
+    ButtonComponent
   ],
   imports: [
-    CommonModule, FormsModule, IconModule
+    CommonModule, FormsModule, IconModule, MatRippleModule
   ],
   exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent, RadioListComponent, CheckListComponent, TabsComponent,
-    UITabContentDirective, LabelComponent]
+    UITabContentDirective, LabelComponent, ButtonComponent]
 })
 export class UiModule { }

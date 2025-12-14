@@ -50,9 +50,23 @@ body {
   align-items: center;
   justify-content: center;
   padding: $sp-sm $sp-md;
-  border-radius: 6px;
+  
   cursor: pointer;
-  border: none;
+  border: solid 1px var(--primary-color, $color-black);
+
+  @include mobile {
+    border-radius: $btn-border-radius-sm;
+  }
+
+  @include tablet {
+    border-radius: $btn-border-radius-md;
+  }
+
+  @include desktop {
+    border-radius: $btn-border-radius-lg;
+  }
+
+
   &.primary {
     background: $btn-bg-primary;
     color: $btn-text-primary;
@@ -125,3 +139,6 @@ body {
     }
   }
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
