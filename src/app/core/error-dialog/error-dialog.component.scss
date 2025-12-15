@@ -1,0 +1,25 @@
+@import '../../../styles/variables';
+
+.error-dialog {
+    padding: $sp-lg;
+    min-width: 280px;
+
+
+    .title {
+        margin: 0 0 $sp-sm;
+        font-size: 1.2rem;
+        color: $color-dark-blue;
+    }
+
+
+    .message {
+        margin-bottom: $sp-md;
+        color: $color-help-text;
+    }
+
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

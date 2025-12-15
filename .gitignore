@@ -7,6 +7,7 @@
 /bazel-out
 
 # Node
+/android
 /node_modules
 /.angular
 /.vscode

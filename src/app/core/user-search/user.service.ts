@@ -14,6 +14,6 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     searchUsers(searchString: string): Observable<IPagedResponse<IUser>> {
-        return this.http.get<IPagedResponse<IUser>>(`${this.baseUrl}//search/${searchString}`);
+        return this.http.get<IPagedResponse<IUser>>(`${this.baseUrl}/search/${searchString}`);
     }
 }

@@ -1,5 +1,4 @@
 export const environment = {
-    production: true,
-    apiBaseUrl: 'http://localhost:3000',
-  };
-  
+  production: true,
+  apiBaseUrl: 'https://society-management-be.vercel.app/api/v1',
+};
