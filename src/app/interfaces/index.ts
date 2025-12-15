@@ -1,3 +1,5 @@
+export * from './BE-RESPONSE-FORMAT.interface';
+
 export * from './building.interface';
 export * from './complaint.interface';
 export * from './country.intrerface';

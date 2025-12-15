@@ -2,6 +2,7 @@ import { Directive, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { UIFormControlAdapter } from './ui-form-control-adapter';
 import { IUIControlConfig } from '../interfaces';
+import { Subject } from 'rxjs';
 
 @Directive()
 export abstract class UIBaseFormControl<T>
@@ -9,6 +10,8 @@ export abstract class UIBaseFormControl<T>
     implements OnChanges {
 
     @Input() config?: IUIControlConfig;
+
+    protected isComponentActive  = new Subject<void>();
 
     get required(): boolean {
         return this.config?.validations?.some(v => v.name === 'required') ?? false;

@@ -4,6 +4,7 @@ import { Observable, of, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
+import { IBEResponseFormat, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -19,32 +20,32 @@ export class LoginService {
     // --------------------------------------------------------
     // STEP 1: SEND OTP
     // --------------------------------------------------------
-    sendOTP(phoneNumber: string): Observable<any> {
-        return this.http.post(`${this.baseUrl}/request-otp`, { phoneNumber });
+    sendOTP(phoneNumber: string): Observable<IBEResponseFormat> {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/request-otp`, { phoneNumber });
     }
 
     // --------------------------------------------------------
     // STEP 2: VERIFY OTP + RECEIVE TOKEN
     // --------------------------------------------------------
-    verifyOTP(phoneNumber: string, otp: string): Observable<any> {
-        return this.http.post(`${this.baseUrl}/verify-otp`, { phoneNumber, otp })
+    verifyOTP(phoneNumber: string, otp: string): Observable<IOTPVerificationResponse> {
+        return this.http.post<IOTPVerificationResponse>(`${this.baseUrl}/verify-otp`, { phoneNumber, otp })
     }
 
     // --------------------------------------------------------
     // GET LOGGED-IN USER INFO
     // --------------------------------------------------------
-    getProfile(): Observable<any> {
+    getProfile(): Observable<IMyProfileResponse | IBEResponseFormat> {
         const token = localStorage.getItem('auth_token');
         if (!token) {
             this.logout();
-            return of({ success: false });
+            return of<IBEResponseFormat>({ success: false });
         }
 
         const headers = new HttpHeaders({
             Authorization: token || ''
         });
 
-        return this.http.get(`${this.baseUrl}/me`, { headers })
+        return this.http.get<IMyProfileResponse>(`${this.baseUrl}/me`, { headers })
             .pipe(tap((response: any) =>
                 response && response.success && response?.menus ? this.menuService.userMenus.next(response.menus) : null));
     }
@@ -64,9 +65,9 @@ export class LoginService {
                             return;
                         }
 
-                        if (response?.user) {
+                        if ('user' in response) {
                             this.saveProfileToStorage(response.user);
-                            
+
                             if (this.menuService.userMenus.value.length > 0 && !this.menuService.selectedMenu.value)
                                 this.menuService.selectAndLoadMenu(this.menuService.userMenus.value[0]);
 

@@ -6,6 +6,7 @@ import { AdminComponent } from './admin/admin.component';
 import { LayoutModule } from '../../core/layout/layout.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '../../core/ui/ui.module';
+import { UserSearchModule } from '../../core/user-search/user-search.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { UiModule } from '../../core/ui/ui.module';
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    UiModule
+    UiModule,
+    UserSearchModule
   ]
 })
 export class DashboardModule { }
