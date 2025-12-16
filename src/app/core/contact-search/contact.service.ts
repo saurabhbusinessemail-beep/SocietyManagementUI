@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, from, map, of, switchMap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Observable, catchError, from, map, of, switchMap, take } from 'rxjs';
 import { PlatformUtil } from '../../utils/platform.util';
 import { ContactPayload, Contacts, GetContactsResult } from '@capacitor-community/contacts';
 
@@ -10,39 +9,42 @@ import { ContactPayload, Contacts, GetContactsResult } from '@capacitor-communit
 })
 export class ContactService {
 
+    private permissionGranted = false;
     private readonly ASSET_PATH = '/assets/samplePhoneContacts/contacts.json';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.ensurePermission().pipe(take(1)).subscribe();
+    }
 
-    // searchUsers(searchString: string): Observable<ContactPayload[]> {
-    //     return this.http.get<ContactPayload[]>(`/assets/samplePhoneContacts/contacts.json`);
-    // }
+    private ensurePermission(): Observable<boolean> {
 
-    /* ---------------------------------------------
-   * PUBLIC API
-   * ------------------------------------------- */
+        if (this.permissionGranted) {
+            return of(true);
+        }
+
+        return from(Contacts.requestPermissions()).pipe(
+            map(result => {
+                this.permissionGranted = result.contacts === 'granted';
+                return this.permissionGranted;
+            }),
+            catchError(err => {
+                alert('Permission error');
+                return of(false);
+            })
+        );
+    }
 
     getContacts(): Observable<ContactPayload[]> {
 
-        // ✅ DEV ONLY (localhost)
         if (PlatformUtil.isLocalhost()) {
             return this.getContactsFromAsset();
         }
 
-        // ❌ deployed web / tablet
         if (!PlatformUtil.isNativeMobile()) {
             return of([]);
-            // throw new Error('');
         }
 
-        // ✅ native mobile app
-        return this.ensurePermission$().pipe(
-            switchMap(allowed =>
-                allowed
-                    ? this.getContactsFromDevice()
-                    : of([])
-            )
-        );
+        return this.getContactsFromDevice()
     }
 
     searchContacts(searchText: string): Observable<ContactPayload[]> {
@@ -55,32 +57,6 @@ export class ContactService {
         );
     }
 
-    /* ---------------------------------------------
-     * PERMISSIONS
-     * ------------------------------------------- */
-
-    private ensurePermission$(): Observable<boolean> {
-        return from(Contacts.checkPermissions()).pipe(
-            switchMap(status => {
-
-                if (status.contacts === 'granted') {
-                    return of(true);
-                }
-
-                if (status.contacts === 'denied') {
-                    return of(false); // ❌ never ask again
-                }
-
-                return from(Contacts.requestPermissions()).pipe(
-                    map(result => result.contacts === 'granted')
-                );
-            })
-        );
-    }
-
-    /* ---------------------------------------------
-     * DEVICE CONTACTS
-     * ------------------------------------------- */
 
     private getContactsFromDevice(): Observable<ContactPayload[]> {
         return from(
@@ -91,21 +67,16 @@ export class ContactService {
                     emails: true
                 }
             })
-        ).pipe(map(c => c.contacts));
+        ).pipe(map(c => {
+            return c.contacts
+        }));
     }
 
-    /* ---------------------------------------------
-     * ASSET CONTACTS (DEV ONLY)
-     * ------------------------------------------- */
 
     private getContactsFromAsset(): Observable<ContactPayload[]> {
         return this.http.get<GetContactsResult>(this.ASSET_PATH)
             .pipe(map(c => c.contacts));
     }
-
-    /* ---------------------------------------------
-     * SEARCH HELPERS
-     * ------------------------------------------- */
 
     private matchesSearch(
         contact: ContactPayload,

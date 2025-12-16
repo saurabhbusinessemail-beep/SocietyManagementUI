@@ -61,7 +61,7 @@ export class ContactSearchComponent implements OnInit, OnDestroy {
       debounceTime(100),
       distinctUntilChanged(),
       takeUntil(this.isComponentActive),
-      filter(txt => !!txt),
+      filter(txt => txt !== undefined && txt !== ''),
       switchMap(searchString => {
         this.filteredContacts = [];
         this.contacts = [];
@@ -104,6 +104,9 @@ export class ContactSearchComponent implements OnInit, OnDestroy {
               });
               return arr;
             }, [] as IUIDropdownOption[]);
+        },
+        error: err => {
+          alert('Error while getting contacts ' + JSON.stringify(err));
         }
       });
   }
