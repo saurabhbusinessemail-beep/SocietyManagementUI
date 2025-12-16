@@ -13,6 +13,8 @@ export class ContactService {
     private readonly ASSET_PATH = '/assets/samplePhoneContacts/contacts.json';
 
     constructor(private http: HttpClient) {
+        if (PlatformUtil.isLocalhost() || !PlatformUtil.isNativeMobile()) return;
+        
         this.ensurePermission().pipe(take(1)).subscribe();
     }
 

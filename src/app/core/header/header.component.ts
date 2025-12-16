@@ -7,6 +7,9 @@ import { Mode } from '../../types';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+  
+  @Input() title: string = '';
+  @Input() hideMoreActions: boolean = false;
   @Input() showSocietyFilter = false;
   @Output() toggleMenu = new EventEmitter<void>();
   

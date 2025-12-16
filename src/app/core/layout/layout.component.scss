@@ -1,3 +1,6 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
 .layout-container {
     display: flex;
     flex-direction: column;
@@ -20,14 +23,6 @@ app-footer {
     display: flex;
     overflow: hidden; /* prevent outer scroll */
 }
-
-// app-menu {
-//     width: 240px;
-//     flex-shrink: 0;
-//     background: #1c1c1c;
-//     color: white;
-//     height: 100%;
-// }
 
 .layout-body {
     flex: 1;

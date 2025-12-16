@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +15,7 @@ export class IconsService {
   private preloadIcons() {
     const iconList = [
       'menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left',
-      'society-icon', 'dashboard', 'search', 'clear'
+      'society-icon', 'dashboard', 'search', 'clear', 'more-vert'
     ];
 
     iconList.forEach((icon, index) => {

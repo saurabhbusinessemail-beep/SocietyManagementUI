@@ -8,7 +8,10 @@ import { MenuService } from '../../services/menu.service';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
+  
   @Input() menuItems: IMenu[] = [];
+  @Input() title: string = '';
+  @Input() hideMoreActions: boolean = false;
 
   constructor(public menuService: MenuService) {}
 }

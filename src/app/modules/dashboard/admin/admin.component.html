@@ -1,4 +1,10 @@
-<app-layout>
+<app-layout title="Admin Dashboard">
+
+  <ng-container moreActions>
+    <button class="btn"> More Action </button>
+  </ng-container>
+
+
   <form [formGroup]="fb">
 
     <ui-form-layout [formGroup]="fb">
@@ -12,7 +18,8 @@
       <ui-button label="Click Me" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
       </ui-button>
 
-      <ui-button label="Click Me Click Me Click Me" type="cancel" [allowWrapText]="true" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
+      <ui-button label="Click Me Click Me Click Me" type="cancel" [allowWrapText]="true" [smColumns]="1" [mdColumns]="1"
+        [lgColumns]="1">
       </ui-button>
 
       <ui-button label="Click Me Click Me Click Me" type="error" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
