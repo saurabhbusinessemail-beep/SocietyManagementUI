@@ -11,6 +11,10 @@ export class MenuService {
   userMenus = new BehaviorSubject<IMenu[]>([]);
   selectedMenu = new BehaviorSubject<IMenu | undefined>(undefined);
 
+  get pageTitle(): string {
+    return this.selectedMenu.value?.menuName ?? ''
+  }
+
   constructor(private router: Router) { }
 
   selectAndLoadMenu(menu: IMenu) {
