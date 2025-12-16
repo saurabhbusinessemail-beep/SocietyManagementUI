@@ -19,7 +19,8 @@
         <div *ngIf="title" class="title">
             {{ title }}
         </div>
-        <select class="input center-dropdown" [value]="selected" (change)="onSelectChange($any($event.target).value)" *ngIf="showSocietyFilter">
+        <select class="input center-dropdown" [value]="selected" (change)="onSelectChange($any($event.target).value)"
+            *ngIf="showSocietyFilter">
             <option *ngFor="let opt of dropdownOptions" [value]="opt">{{ opt }}</option>
         </select>
     </div>

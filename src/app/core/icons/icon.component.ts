@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-icon',
-  template: `<span class="app-icon" [innerHTML]="svg" [style.color]="color"></span>`,
+  template: `<span class="app-icon" [innerHTML]="svg" [style.color]="color" [style.height.px]="sizeValue" [style.width.px]="sizeValue"></span>`,
   styles: [`
     .app-icon {
       display: inline-flex;
@@ -19,9 +19,19 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   `]
 })
 export class IconComponent implements OnInit {
+  
   @Input() name!: string;
+  @Input() size: 'sm' | 'md' | 'lg' = 'lg';
   @Input() color: string = '';
   svg: SafeHtml | null = null;
+
+  get sizeValue(): number {
+    switch(this.size) {
+      case 'sm': return 10;
+      case 'md': return 16;
+      default: return 24;
+    }
+  }
 
   constructor(private iconService: IconsService, private sanitizer: DomSanitizer) {}
 
