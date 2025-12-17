@@ -4,6 +4,7 @@ export * from './district.constant';
 export * from './flat-type.contant';
 export * from './notification-approval-status.constants';
 export * from './notification-type.constant';
+export * from './permissions.contants'
 export * from './residing-type.constant';
 export * from './state.constant';
 export * from './vehicle-type.constant';

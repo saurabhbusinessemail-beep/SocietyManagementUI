@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
 import { ISociety } from '../../../interfaces';
+import { MenuService } from '../../../services/menu.service';
+import { PERMISSIONS } from '../../../constants';
 
 @Component({
   selector: 'app-society-list',
@@ -14,7 +16,11 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   socities: ISociety[] = [];
 
-  constructor(private router: Router, private societyService: SocietyService) { }
+  get canAddSociety(): boolean {
+    return this.menuService.hasPermission(PERMISSIONS.society_add);
+  }
+
+  constructor(private router: Router, private societyService: SocietyService, private menuService: MenuService) { }
 
   ngOnInit(): void {
     this.loadSocities();

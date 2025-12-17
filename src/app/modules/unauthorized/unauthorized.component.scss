@@ -1,0 +1,29 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+/* copied from page-not-found styles */
+.page-not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    .content {
+        text-align: center;
+
+        h1 {
+            font-size: 96px;
+            color: $color-dark-blue;
+        }
+
+        h2 {
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-top: 12px;
+            color: $color-note-gray;
+        }
+    }
+}

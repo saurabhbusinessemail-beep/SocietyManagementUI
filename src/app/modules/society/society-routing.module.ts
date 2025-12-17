@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { SocietyListComponent } from './society-list/society-list.component';
 import { AddSocietyComponent } from './add-society/add-society.component';
 import { SocietyDetailsComponent } from './society-details/society-details.component';
+import { PermissionGuard } from '../../guard/permission.guard';
+import { PERMISSIONS } from '../../constants';
 
 const routes: Routes = [
   {
@@ -12,11 +14,15 @@ const routes: Routes = [
   },
   {
     path: 'list',
-    component: SocietyListComponent
+    canActivate: [PermissionGuard],
+    component: SocietyListComponent,
+    data: { permission: PERMISSIONS.society_view }
   },
   {
     path: 'add',
-    component: AddSocietyComponent
+    canActivate: [PermissionGuard],
+    component: AddSocietyComponent,
+    data: { permission: PERMISSIONS.society_add }
   },
   {
     path: 'details/:id',

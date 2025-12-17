@@ -37,4 +37,15 @@ export class MenuService {
       this.selectedMenu.next(matchedMenu);
     }
   }
+
+  hasPermission(permission: string): boolean {
+    const menu = this.selectedMenu.value;
+    if (!menu || !menu.submenus?.length) {
+      return false;
+    }
+
+    return menu.submenus.some(submenu =>
+      submenu.permissions?.includes(permission)
+    );
+  }
 }
