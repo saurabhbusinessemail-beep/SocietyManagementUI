@@ -7,7 +7,7 @@
     </label>
 
     <div class="input-wrapper">
-        <input type="text" #inputEl class="ui-input" [placeholder]="placeholder" [value]="searchText"
+        <input type="text" #inputEl class="ui-input" [placeholder]="config?.placeholder" [value]="searchText"
             (input)="onInput(inputEl.value)" (focus)="isOpen = !!searchText" [disabled]="disabled" />
 
         <!-- Search icon -->

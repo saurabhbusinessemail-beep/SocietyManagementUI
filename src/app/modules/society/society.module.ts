@@ -7,6 +7,7 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { AddSocietyComponent } from './add-society/add-society.component';
 import { DirectiveModule } from '../../directives/directive.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -19,6 +20,8 @@ import { DirectiveModule } from '../../directives/directive.module';
   imports: [
     CommonModule,
     SocietyRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     LayoutModule,
     UiModule,
     DirectiveModule

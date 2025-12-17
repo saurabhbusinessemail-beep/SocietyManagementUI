@@ -47,7 +47,7 @@
       </ui-drop-down>
 
       <ui-search-box formControlName="user" [config]="userSearchConfig" [options]="filteredUsers"
-        placeholder="Search user" (searchChange)="onUserSearch($event)" [smColumns]="12" [mdColumns]="6"
+        (searchChange)="onUserSearch($event)" [smColumns]="12" [mdColumns]="6"
         [lgColumns]="4">
       </ui-search-box>
 

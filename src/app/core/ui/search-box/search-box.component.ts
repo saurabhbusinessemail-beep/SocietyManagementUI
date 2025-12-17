@@ -14,7 +14,6 @@ export class SearchBoxComponent
   implements OnInit, OnDestroy {
 
   @Input() options: IUIDropdownOption[] = [];
-  @Input() placeholder = 'Search';
 
   @Output() searchChange = new EventEmitter<string>();
 

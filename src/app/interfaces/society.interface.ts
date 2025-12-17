@@ -1,12 +1,11 @@
-import { IDefaultFields } from "./";
+import { IDefaultFields, UILocationResult } from "./";
 
 export interface ISociety extends IDefaultFields {
-    societyId: string;
+    _id: string;
     societyName: string;
-    gpsLocation?: string;
-    district: string;
-    city: string;
-    state: string;
-    country: string;
+    gpsLocation: UILocationResult;
     numberOfBuildings: number;
+
+    settings?: any;
+    buildingIds?: string[];
 }

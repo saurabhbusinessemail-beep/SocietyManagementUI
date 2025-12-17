@@ -1,4 +1,51 @@
 <app-layout>
-    <app-location-search [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-    </app-location-search>
+
+    <form [formGroup]="fb">
+
+        <ui-form-layout>
+
+            <ui-text-box formControlName="societyName" [config]="societyNameConfig" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="8">
+            </ui-text-box>
+
+            <ui-location-search formControlName="gpsLocation" [config]="locationSearchConfig" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="8">
+            </ui-location-search>
+
+            <div class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+                <ui-checklist [formControl]="isMultipleBuildings" [config]="multiBuildingConfig"
+                    [options]="multiBuildingOptions" helpText="You can select multiple options" [smColumns]="12"
+                    [mdColumns]="4" [lgColumns]="3">
+                </ui-checklist>
+
+
+                <ui-text-box formControlName="numberOfBuildings" [config]="buildingCountConfig" type="number"
+                    [smColumns]="12" [mdColumns]="8" [lgColumns]="5">
+                </ui-text-box>
+            </div>
+
+            <div class="flex ui-form-layout flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="8">
+
+                <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                    (clicked)="cancel()">
+                </ui-button>
+
+
+                <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                    (clicked)="save()">
+                </ui-button>
+            </div>
+
+            <div class="flex flex-center" *ngIf="errorMessage" [smColumns]="12" [mdColumns]="12" [lgColumns]="8">
+                <ui-label [valueText]="errorMessage" valueType="error">
+                </ui-label>
+            </div>
+
+        </ui-form-layout>
+    </form>
+
+    {{ fb.invalid }}
+
+    <pre>{{ fb.value | json}}</pre>
 </app-layout>

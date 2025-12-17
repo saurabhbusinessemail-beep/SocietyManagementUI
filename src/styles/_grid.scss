@@ -14,7 +14,7 @@
 
 /* Small screens (mobile) */
 @include mobile {
-    @for $i from 1 through 12 {
+    @for $i from 0 through 12 {
         .ui-col-sm-#{$i} {
             grid-column: span $i;
         }
@@ -23,7 +23,7 @@
 
 /* Medium screens (tablet) */
 @include tablet {
-    @for $i from 1 through 12 {
+    @for $i from 0 through 12 {
         .ui-col-md-#{$i} {
             grid-column: span $i;
         }
@@ -32,7 +32,7 @@
 
 /* Large screens (desktop) */
 @include desktop {
-    @for $i from 1 through 12 {
+    @for $i from 0 through 12 {
         .ui-col-lg-#{$i} {
             grid-column: span $i;
         }
