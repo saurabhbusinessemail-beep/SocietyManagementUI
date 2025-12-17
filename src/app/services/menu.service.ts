@@ -21,4 +21,20 @@ export class MenuService {
     this.selectedMenu.next(menu);
     this.router.navigateByUrl(menu.relativePath ?? '');
   }
+
+  syncSelectedMenuWithCurrentUrl() {
+    const currentUrl = this.router.url.split('?')[0];
+
+    const menus = this.userMenus.value;
+
+    const matchedMenu =
+      menus.find(m => m.relativePath === currentUrl) ||
+      menus.find(m =>
+        m.submenus?.some(sm => sm.relativePath === currentUrl)
+      );
+
+    if (matchedMenu) {
+      this.selectedMenu.next(matchedMenu);
+    }
+  }
 }

@@ -46,8 +46,12 @@ export class LoginService {
         });
 
         return this.http.get<IMyProfileResponse>(`${this.baseUrl}/me`, { headers })
-            .pipe(tap((response: any) =>
-                response && response.success && response?.menus ? this.menuService.userMenus.next(response.menus) : null));
+            .pipe(tap((response: any) => {
+                if (response && response.success && response?.menus) {
+                    this.menuService.userMenus.next(response.menus);
+                    this.menuService.syncSelectedMenuWithCurrentUrl();
+                }
+            }));
     }
 
 
