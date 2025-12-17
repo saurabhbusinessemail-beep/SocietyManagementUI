@@ -13,8 +13,8 @@
 
 
 <ng-template #society let-society="society">
-  <div class="society-card">
-    <div class="society-main">
+  <ui-card>
+    <ng-container card-main>
       <a class="society-name" routerLink="../detail">
         {{ society.societyName }}
       </a>
@@ -27,11 +27,11 @@
       <div class="society-address">
         {{ society.gpsLocation.address }}
       </div>
-    </div>
+    </ng-container>
 
-    <div class="society-icon">
+    <ng-container card-icon>
       <app-icon name="location-color"></app-icon>
-    </div>
-  </div>
+    </ng-container>
+  </ui-card>
 
 </ng-template>

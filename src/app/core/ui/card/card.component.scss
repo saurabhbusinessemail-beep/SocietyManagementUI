@@ -1,0 +1,54 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+:host {
+    display: block;
+  }
+  
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  
+    background: $color-white;
+    border-radius: 14px;
+    padding: 16px 18px;
+    border: 1px solid $color-light-gray;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: $sp;
+  
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .card-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: $color-header-footer;
+  
+    @include mobile {
+      align-self: flex-end;
+      margin-bottom: auto;
+      margin-top: auto;
+    }
+  
+    app-icon {
+      transform: scale(1.1);
+    }
+  }
+  
