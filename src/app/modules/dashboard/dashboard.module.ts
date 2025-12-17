@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '../../core/ui/ui.module';
 import { UserSearchModule } from '../../core/user-search/user-search.module';
 import { ContactSearchModule } from '../../core/contact-search/contact-search.module';
+import { LocationSearchModule } from '../../core/location-search/location-search.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ContactSearchModule } from '../../core/contact-search/contact-search.mo
     ReactiveFormsModule,
     UiModule,
     UserSearchModule,
-    ContactSearchModule
+    ContactSearchModule,
+    LocationSearchModule
   ]
 })
 export class DashboardModule { }

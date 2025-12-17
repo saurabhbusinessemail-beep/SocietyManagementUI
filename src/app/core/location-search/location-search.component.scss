@@ -1,0 +1,74 @@
+/* Main container */
+.ui-search-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 44px;
+
+    padding: 0 10px;
+    gap: 8px;
+
+    background-color: #ffffff;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-within {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+    }
+
+    &[aria-disabled='true'] {
+        background-color: #f9fafb;
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+/* Input field */
+.ui-search-box input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+
+    font-size: 14px;
+    color: #101828;
+
+    &::placeholder {
+        color: #98a2b3;
+    }
+}
+
+/* Icon buttons (GPS & clear) */
+.ui-search-box button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 16px;
+    line-height: 1;
+
+    color: #667085;
+
+    border-radius: 50%;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background-color: #f2f4f7;
+        color: #4f46e5;
+    }
+
+    &:active {
+        background-color: #e4e7ec;
+    }
+}
