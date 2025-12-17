@@ -67,11 +67,6 @@ export class LoginService {
 
                         if ('user' in response) {
                             this.saveProfileToStorage(response.user);
-
-                            if (this.menuService.userMenus.value.length > 0 && !this.menuService.selectedMenu.value)
-                                this.menuService.selectAndLoadMenu(this.menuService.userMenus.value[0]);
-
-                            this.router.navigateByUrl('/dashboard');
                             observer.next(response);
                             observer.complete();
                         }

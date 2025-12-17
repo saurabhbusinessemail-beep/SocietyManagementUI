@@ -127,6 +127,8 @@ export class LoginComponent {
           return;
         }
 
+        this.router.navigateByUrl('/dashboard');
+
       })
   }
 

@@ -28,7 +28,7 @@ export class IconsService {
             console.error(`%cFailed to load icon: ${icon}`, 'color:red', err);
           },
           complete: () => {
-            console.log('%cCompleted:', 'color:blue', icon);
+            // console.log('%cCompleted:', 'color:blue', icon);
           }
         });
     });
