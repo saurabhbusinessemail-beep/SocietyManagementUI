@@ -78,6 +78,8 @@
 
     @include mobile {
         align-self: flex-end;
+        margin-bottom: auto;
+        margin-top: auto;
     }
 
     app-icon {
