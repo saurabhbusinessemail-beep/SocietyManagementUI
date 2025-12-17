@@ -8,6 +8,7 @@ import { UiModule } from '../../core/ui/ui.module';
 import { AddSocietyComponent } from './add-society/add-society.component';
 import { DirectiveModule } from '../../directives/directive.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IconModule } from '../../core/icons/icon.module';
 
 
 
@@ -24,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     LayoutModule,
     UiModule,
+    IconModule,
     DirectiveModule
   ]
 })

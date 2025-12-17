@@ -1,0 +1,86 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.society-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $sp;
+
+    background: $color-white;
+    border-radius: $sp;
+    padding: $sp $sp-md;
+    border: 1px solid $color-light-gray;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: $sp;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.society-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.society-name {
+    color: $color-dark-blue;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
+
+    @include fluid-font(18px, 16px, 15px);
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.society-meta {
+    display: flex;
+    gap: 18px;
+    color: $color-black;
+    opacity: 0.85;
+
+    @include fluid-font(14px, 13px, 12px);
+
+    @include mobile {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+}
+
+.society-address {
+    color: $color-note-gray;
+    line-height: 1.4;
+    max-width: 520px;
+
+    @include fluid-font(14px, 13px, 12px);
+
+    @include desktop {
+        max-width: 680px;
+    }
+}
+
+.society-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: $color-header-footer;
+
+    @include mobile {
+        align-self: flex-end;
+    }
+
+    app-icon {
+        transform: scale(1.1);
+    }
+}

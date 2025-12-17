@@ -1,4 +1,5 @@
-<button [ngClass]="getbuttonClasses()" [attr.routerLink]="routerLink ? routerLink : null" matRipple (click)="clicked.emit()">
+<button [ngClass]="getbuttonClasses()" [attr.routerLink]="routerLink ? routerLink : null" matRipple
+    (click)="clicked.emit()" [disabled]="disable ?? disabled">
     {{ label | uppercase }}
     <ng-content></ng-content>
 </button>

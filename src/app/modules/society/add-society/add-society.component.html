@@ -33,7 +33,7 @@
 
 
                 <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
-                    (clicked)="save()">
+                    (clicked)="save()" [disable]="fb.invalid">
                 </ui-button>
             </div>
 
@@ -44,8 +44,4 @@
 
         </ui-form-layout>
     </form>
-
-    {{ fb.invalid }}
-
-    <pre>{{ fb.value | json}}</pre>
 </app-layout>

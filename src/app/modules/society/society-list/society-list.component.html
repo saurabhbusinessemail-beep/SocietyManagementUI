@@ -1,10 +1,37 @@
 <app-layout>
 
-    <ng-container moreActions>
-        <ui-button label="Add Society" type="primary" routerLink="../add" [smColumns]="1" [mdColumns]="1"
-        [lgColumns]="1">
-      </ui-button>
-    </ng-container>
+  <ng-container moreActions>
+    <ui-button label="Add Society" type="primary" routerLink="../add" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
+    </ui-button>
+  </ng-container>
 
-    <p>society-list works!</p>
+  <ng-container *ngFor="let s of socities">
+    <ng-template [ngTemplateOutlet]="society" [ngTemplateOutletContext]="{society: s}">
+    </ng-template>
+  </ng-container>
 </app-layout>
+
+
+<ng-template #society let-society="society">
+  <div class="society-card">
+    <div class="society-main">
+      <a class="society-name" routerLink="../detail">
+        {{ society.societyName }}
+      </a>
+
+      <div class="society-meta">
+        <span><strong>Buildings:</strong> {{ society.numberOfBuildings }}</span>
+        <span><strong>Flats:</strong> --</span>
+      </div>
+
+      <div class="society-address">
+        {{ society.gpsLocation.address }}
+      </div>
+    </div>
+
+    <div class="society-icon">
+      <app-icon name="location-color"></app-icon>
+    </div>
+  </div>
+
+</ng-template>

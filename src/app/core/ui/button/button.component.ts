@@ -11,6 +11,7 @@ export class ButtonComponent extends UIBaseFormControl<void> {
   @Input() type: 'primary' | 'cancel' | 'error' | 'only-content' = 'primary';
   @Input() label: string = 'Click';
   @Input() allowWrapText = false;
+  @Input() disable?: boolean;
   @Input() routerLink?: string | any[];
 
   @Output() clicked = new EventEmitter<void>();

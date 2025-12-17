@@ -8,4 +8,5 @@ export interface ISociety extends IDefaultFields {
 
     settings?: any;
     buildingIds?: string[];
+    flatIds?: string[];
 }

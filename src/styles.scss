@@ -3,146 +3,189 @@
 @import './styles/grid';
 
 // Base resets
-* { box-sizing: border-box; }
-html, body, app-root { height: 100%; margin: 0px; }
+* {
+    box-sizing: border-box;
+}
+html,
+body,
+app-root {
+    height: 100%;
+    margin: 0;
+}
 body {
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  color: $color-black;
-  background: #ffffff;
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    color: $color-black;
+    background: #ffffff;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
 @include tablet {
-  * {
-    scrollbar-width: none;
-  }
+    * {
+        scrollbar-width: none;
+    }
 }
 
 // Utility
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}
 
-.flex { display: flex; }
-.flex-end { justify-content: flex-end; }
-.flex-center { justify-content: center; }
+.flex {
+    display: flex;
+}
+.flex-end {
+    justify-content: flex-end;
+}
+.flex-center {
+    justify-content: center;
+}
 
 // header/footer shared background
-.app-header, .app-footer {
-  background: $color-header-footer;
-  color: $color-black;
-  padding: $sp-sm $sp-lg;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.app-header,
+.app-footer {
+    background: $color-header-footer;
+    color: $color-black;
+    padding: $sp-sm $sp-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 // Icon style helper
 .icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
 }
 
 // Buttons
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: $sp-sm $sp-md;
-  
-  cursor: pointer;
-  border: solid 1px var(--primary-color, $color-black);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $sp-sm $sp-md;
 
-  @include mobile {
-    border-radius: $btn-border-radius-sm;
-  }
+    cursor: pointer;
+    border: solid 1px var(--primary-color, $color-black);
 
-  @include tablet {
-    border-radius: $btn-border-radius-md;
-  }
+    &:disabled {
+        background: $color-note-gray !important;
+        color: $status-inactive !important;
+        cursor: not-allowed !important;
+    }
 
-  @include desktop {
-    border-radius: $btn-border-radius-lg;
-  }
+    @include mobile {
+        border-radius: $btn-border-radius-sm;
+    }
+
+    @include tablet {
+        border-radius: $btn-border-radius-md;
+    }
+
+    @include desktop {
+        border-radius: $btn-border-radius-lg;
+    }
 
 
-  &.primary {
-    background: $btn-bg-primary;
-    color: $btn-text-primary;
-  }
-  &.cancel {
-    background: $btn-bg-cancel;
-    color: $btn-text-cancel;
-  }
-  &.error {
-    background: $btn-error;
-    color: $color-white;
-  }
-  &.only-content {
-    background: transparent;
-    color: inherit;
-  }
+    &.primary {
+        background: $btn-bg-primary;
+        color: $btn-text-primary;
+    }
+    &.cancel {
+        background: $btn-bg-cancel;
+        color: $btn-text-cancel;
+    }
+    &.error {
+        background: $btn-error;
+        color: $color-white;
+    }
+    &.only-content {
+        background: transparent;
+        color: inherit;
+    }
 }
 
 // Input style
-.input, input, select, textarea {
-  padding: $input-padding-desktop;
-  border: 1px solid $color-border;
-  border-radius: $input-border-radius;
-  background: $color-white;
-  &:disabled {
-    background: $color-note-gray;
-    color: $status-inactive;
-    cursor: not-allowed;
-  }
+.input,
+input,
+select,
+textarea {
+    padding: $input-padding-desktop;
+    border: 1px solid $color-border;
+    border-radius: $input-border-radius;
+    background: $color-white;
+    &:disabled {
+        background: $color-note-gray;
+        color: $status-inactive;
+        cursor: not-allowed;
+    }
 }
 
 // Page header
 .page-header {
-  color: $color-black;
-  margin: $sp-lg 0 $sp-md 0;
-  font-weight: 600;
-  &.optional { color: $status-inactive; font-weight: 500; }
-  @include mobile {
-    font-size: $page-header-mobile;
-  }
-  @include tablet {
-    font-size: $page-header-tablet;
-  }
-  @include desktop {
-    font-size: $page-header-desktop;
-  }
+    color: $color-black;
+    margin: $sp-lg 0 $sp-md 0;
+    font-weight: 600;
+    &.optional {
+        color: $status-inactive;
+        font-weight: 500;
+    }
+    @include mobile {
+        font-size: $page-header-mobile;
+    }
+    @include tablet {
+        font-size: $page-header-tablet;
+    }
+    @include desktop {
+        font-size: $page-header-desktop;
+    }
 }
 
 // Section headers and note messages
-.section-header { color: $color-light-gray; font-weight: 600; margin-bottom: $sp-sm; }
-.note { background: $color-note-gray; padding: $sp; border-radius: 6px; color: #333; }
+.section-header {
+    color: $color-light-gray;
+    font-weight: 600;
+    margin-bottom: $sp-sm;
+}
+.note {
+    background: $color-note-gray;
+    padding: $sp;
+    border-radius: 6px;
+    color: #333;
+}
 
 // Tabs (div-based)
 .tabs {
-  display: flex;
-  gap: $sp-sm;
-  .tab {
-    padding: $sp-sm $sp-md;
-    border-radius: 6px 6px 0 0;
-    cursor: pointer;
-    border: 1px solid $color-border;
-    border-bottom: none;
-    &.active {
-      background: $color-dark-blue;
-      color: $color-white;
+    display: flex;
+    gap: $sp-sm;
+    .tab {
+        padding: $sp-sm $sp-md;
+        border-radius: 6px 6px 0 0;
+        cursor: pointer;
+        border: 1px solid $color-border;
+        border-bottom: none;
+        &.active {
+            background: $color-dark-blue;
+            color: $color-white;
+        }
+        &.inactive {
+            background: $color-sky;
+            color: $color-black;
+        }
     }
-    &.inactive {
-      background: $color-sky;
-      color: $color-black;
-    }
-  }
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
