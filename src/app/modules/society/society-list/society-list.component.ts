@@ -31,7 +31,6 @@ export class SocietyListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: socities => {
-          console.log('socities = ', socities)
           this.socities = socities;
         },
         error: () => console.log('Error while getting socities')

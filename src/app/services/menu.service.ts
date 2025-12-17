@@ -24,6 +24,7 @@ export class MenuService {
 
   syncSelectedMenuWithCurrentUrl() {
     const currentUrl = this.router.url.split('?')[0];
+    console.log('currentUrl = ', this.router.url)
 
     const menus = this.userMenus.value;
 
@@ -39,13 +40,13 @@ export class MenuService {
   }
 
   hasPermission(permission: string): boolean {
-    const menu = this.selectedMenu.value;
-    if (!menu || !menu.submenus?.length) {
+    const menus = this.userMenus.value;
+    if (!menus?.length) {
       return false;
     }
 
-    return menu.submenus.some(submenu =>
+    return menus.some(menu => menu.submenus.some(submenu =>
       submenu.permissions?.includes(permission)
-    );
+    ));
   }
 }
