@@ -4,18 +4,24 @@ import { CommonModule } from '@angular/common';
 import { SocietyRoutingModule } from './society-routing.module';
 import { SocietyListComponent } from './society-list/society-list.component';
 import { LayoutModule } from '../../core/layout/layout.module';
+import { UiModule } from '../../core/ui/ui.module';
+import { AddSocietyComponent } from './add-society/add-society.component';
+import { DirectiveModule } from '../../directives/directive.module';
 
 
 
 @NgModule({
   declarations: [
   
-    SocietyListComponent
+    SocietyListComponent,
+        AddSocietyComponent
   ],
   imports: [
     CommonModule,
     SocietyRoutingModule,
-    LayoutModule
+    LayoutModule,
+    UiModule,
+    DirectiveModule
   ]
 })
 export class SocietyModule { }

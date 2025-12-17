@@ -1,21 +1,20 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { IUIControlConfig, IUIDropdownOption, IUser } from '../../interfaces';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, Self } from '@angular/core';
+import { FormControl, NgControl, Validators } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil } from 'rxjs';
+import { IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { UserService } from './user.service';
+import { UIBaseFormControl } from '../../../directives';
 
 @Component({
-  selector: 'app-user-search',
+  selector: 'ui-user-search',
   templateUrl: './user-search.component.html',
   styleUrl: './user-search.component.scss'
 })
-export class UserSearchComponent implements OnInit, OnDestroy {
+export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> implements OnInit, OnDestroy {
 
-  @Input() required = false;
   @Output() selectionChange = new EventEmitter<IUser>();
 
   private search$ = new Subject<string>();
-  private isComponentActive = new Subject<void>();
 
   userSearchConfig: IUIControlConfig = {
     id: 'user',
@@ -26,7 +25,9 @@ export class UserSearchComponent implements OnInit, OnDestroy {
   users: IUser[] = [];
   filteredUsers: IUIDropdownOption[] = [];
 
-  constructor(private userService: UserService){}
+  constructor(private userService: UserService, @Optional() @Self() ngControl: NgControl){
+    super(ngControl);
+  }
 
   ngOnInit(): void {
     let userSearchConfig: IUIControlConfig = {
@@ -47,7 +48,7 @@ export class UserSearchComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.userSearchConfig = userSearchConfig;
+    this.userSearchConfig = this.config ?? userSearchConfig;
     this.subscribeToSearchChange();
     this.subscribeToUserSelection();
   }
@@ -89,6 +90,7 @@ export class UserSearchComponent implements OnInit, OnDestroy {
       next: selectedUser => {
         const user = this.users.find(u => u._id === selectedUser);
         if (user) this.selectionChange.emit(user);
+        this.updateValue(user);
       }
     })
   }

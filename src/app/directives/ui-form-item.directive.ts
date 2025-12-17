@@ -3,7 +3,7 @@ import { Directive, Input, HostBinding } from '@angular/core';
 @Directive({
   selector: '[smColumns],[mdColumns],[lgColumns]'
 })
-export class UIFormItemDirective {
+export class UIFormDirective {
 
   @Input() smColumns = 12;
   @Input() mdColumns = 12;

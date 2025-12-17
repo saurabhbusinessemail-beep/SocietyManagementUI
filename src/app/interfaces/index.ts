@@ -11,7 +11,7 @@ export * from './flat.interface';
 export * from './gate-entry-log.interface';
 export * from './gate-pass.interface';
 export * from './gates.interface';
-export * from './location-result .interface';
+export * from './ui/location-result .interface';
 export * from './menu.interface';
 export * from './notification.interface';
 export * from './parking.interface';

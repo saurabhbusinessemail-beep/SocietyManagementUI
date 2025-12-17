@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SocietyListComponent } from './society-list/society-list.component';
+import { AddSocietyComponent } from './add-society/add-society.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'list',
     component: SocietyListComponent
+  },
+  {
+    path: 'add',
+    component: AddSocietyComponent
   }
 ];
 

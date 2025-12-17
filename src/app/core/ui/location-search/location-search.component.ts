@@ -1,18 +1,17 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { UILocationResult } from '../../interfaces';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Optional, Output, Self, ViewChild } from '@angular/core';
 import { LocationSearchService } from './location-search.service';
+import { UILocationResult } from '../../../interfaces';
+import { UIBaseFormControl } from '../../../directives';
+import { NgControl } from '@angular/forms';
 
 declare const google: any;
 
 @Component({
-  selector: 'app-location-search',
+  selector: 'ui-location-search',
   templateUrl: './location-search.component.html',
   styleUrl: './location-search.component.scss'
 })
-export class LocationSearchComponent implements OnInit {
-
-  @Input() placeholder = 'Search location';
-  @Input() disabled = false;
+export class LocationSearchComponent extends UIBaseFormControl<UILocationResult | undefined> implements OnInit {
 
   @ViewChild('locationInput', { static: true })
   locationInput!: ElementRef<HTMLInputElement>;
@@ -20,10 +19,11 @@ export class LocationSearchComponent implements OnInit {
   @Output()
   locationSelect = new EventEmitter<UILocationResult>();
 
-  value = '';
   private autocomplete!: google.maps.places.Autocomplete;
 
-  constructor(private mapsLoader: LocationSearchService) {}
+  constructor(private mapsLoader: LocationSearchService, @Optional() @Self() ngControl: NgControl) {
+    super(ngControl)
+  }
 
   async ngOnInit(): Promise<void> {
     await this.mapsLoader.load();
@@ -40,20 +40,24 @@ export class LocationSearchComponent implements OnInit {
       const place = this.autocomplete.getPlace();
       if (!place.geometry) return;
 
-      this.value = place.formatted_address ?? '';
+      const value = place.formatted_address ?? '';
+      // this.value = place.formatted_address ?? '';
+      this.locationInput.nativeElement.value = value;
 
-      this.locationSelect.emit({
-        address: this.value,
+      const location: UILocationResult = {
+        address: value,
         lat: place.geometry.location!.lat(),
         lng: place.geometry.location!.lng(),
         placeId: place.place_id ?? undefined,
         source: 'search'
-      });
+      }
+      this.locationSelect.emit(location);
+      this.updateValue(location);
     });
   }
 
   clear(): void {
-    this.value = '';
+    this.updateValue(undefined);
     this.locationInput.nativeElement.value = '';
   }
 
@@ -66,15 +70,18 @@ export class LocationSearchComponent implements OnInit {
       geocoder.geocode({ location: { lat, lng } }, (results: string | any[]) => {
         if (!results?.length) return;
 
-        this.value = results[0].formatted_address;
-        this.locationInput.nativeElement.value = this.value;
+        const value = results[0].formatted_address;
+        this.locationInput.nativeElement.value = value;
 
-        this.locationSelect.emit({
-          address: this.value,
+
+        const location: UILocationResult = {
+          address: value,
           lat,
           lng,
           source: 'current'
-        });
+        }
+        this.locationSelect.emit(location);
+        this.updateValue(location);
       });
     });
   }

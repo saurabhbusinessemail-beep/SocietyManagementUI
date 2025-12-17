@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
+import { IPhoneContactFlat, IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
 
 @Component({
   selector: 'app-admin',
@@ -58,6 +58,30 @@ export class AdminComponent {
     ],
     errorMessages: {
       required: 'User is required'
+    }
+  };
+
+  locationSearchConfig: IUIControlConfig = {
+    id: 'location',
+    label: 'Location',
+    placeholder: 'Search Location',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Location is required'
+    }
+  };
+
+  contactSearchConfig: IUIControlConfig = {
+    id: 'contact',
+    label: 'Contacts',
+    placeholder: 'Search Contact',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Contact is required'
     }
   };
 
@@ -137,8 +161,10 @@ export class AdminComponent {
   ];
 
   fb = new FormGroup({
+    location: new FormControl<UILocationResult | undefined>(undefined),
     userName: new FormControl({ value: 'Hello', disabled: true }),
     textName: new FormControl('Hello'),
+    contacts: new FormControl<IPhoneContactFlat | undefined>(undefined),
     role: new FormControl({ value: '', disabled: false }),
     user: new FormControl<IUIDropdownOption | undefined>({ value: undefined, disabled: false }),
     status: new FormControl({ value: undefined, disabled: false }),

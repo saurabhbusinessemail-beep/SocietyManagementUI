@@ -7,11 +7,11 @@ import { FormGroup } from '@angular/forms';
   styleUrl: './form-layout.component.scss'
 })
 export class FormLayoutComponent {
-  @Input() formGroup!: FormGroup | FormGroup[];
+  // @Input() formGroup!: FormGroup | FormGroup[];
 
-  get groups(): FormGroup[] {
-    return Array.isArray(this.formGroup)
-      ? this.formGroup
-      : [this.formGroup];
-  }
+  // get groups(): FormGroup[] {
+  //   return Array.isArray(this.formGroup)
+  //     ? this.formGroup
+  //     : [this.formGroup];
+  // }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TextBoxComponent } from './text-box/text-box.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { IconModule } from '../icons/icon.module';
@@ -11,7 +11,12 @@ import { TabsComponent } from './tabs/tabs.component';
 import { UITabContentDirective } from './tabs/ui-tab-directive';
 import { LabelComponent } from './label/label.component';
 import { ButtonComponent } from './button/button.component';
-import {MatRippleModule} from '@angular/material/core';
+import { MatRippleModule } from '@angular/material/core';
+import { UserIconComponent } from './user-icon/user-icon.component';
+import { UserSearchComponent } from './user-search/user-search.component';
+import { ContactSearchComponent } from './contact-search/contact-search.component';
+import { LocationSearchComponent } from './location-search/location-search.component';
+import { DirectiveModule } from '../../directives/directive.module';
 
 
 
@@ -25,12 +30,29 @@ import {MatRippleModule} from '@angular/material/core';
     TabsComponent,
     UITabContentDirective,
     LabelComponent,
-    ButtonComponent
+    ButtonComponent,
+    UserIconComponent,
+    UserSearchComponent,
+    ContactSearchComponent,
+    LocationSearchComponent
   ],
   imports: [
-    CommonModule, FormsModule, IconModule, MatRippleModule
+    CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
+    DirectiveModule
   ],
-  exports: [TextBoxComponent, DropDownComponent, SearchBoxComponent, RadioListComponent, CheckListComponent, TabsComponent,
-    UITabContentDirective, LabelComponent, ButtonComponent]
+  exports: [TextBoxComponent,
+    DropDownComponent,
+    SearchBoxComponent,
+    RadioListComponent,
+    CheckListComponent,
+    TabsComponent,
+    UITabContentDirective,
+    LabelComponent,
+    ButtonComponent,
+    UserIconComponent,
+    UserSearchComponent,
+    ContactSearchComponent,
+    LocationSearchComponent
+  ]
 })
 export class UiModule { }

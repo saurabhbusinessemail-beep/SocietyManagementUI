@@ -6,15 +6,13 @@ import { FooterModule } from '../footer/footer.module';
 import { HeaderModule } from '../header/header.module';
 import { MenuModule } from '../menu/menu.module';
 import { FormLayoutComponent } from './form-layout/form-layout.component';
-import { UIFormItemDirective } from './ui-form-item.directive';
 
 
 
 @NgModule({
   declarations: [
     LayoutComponent,
-    FormLayoutComponent,
-    UIFormItemDirective
+    FormLayoutComponent
   ],
   imports: [
     CommonModule,
@@ -23,6 +21,6 @@ import { UIFormItemDirective } from './ui-form-item.directive';
     FooterModule,
     BodyModule
   ],
-  exports: [LayoutComponent, FormLayoutComponent, UIFormItemDirective]
+  exports: [LayoutComponent, FormLayoutComponent]
 })
 export class LayoutModule { }

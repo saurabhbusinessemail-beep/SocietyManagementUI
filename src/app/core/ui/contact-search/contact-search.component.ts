@@ -1,21 +1,21 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { IPhoneContactFlat, IUIControlConfig, IUIDropdownOption } from '../../interfaces';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, Self } from '@angular/core';
+import { FormControl, NgControl, Validators } from '@angular/forms';
 import { BehaviorSubject, Subject, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil } from 'rxjs';
 import { ContactService } from './contact.service';
+import { IPhoneContactFlat, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
+import { UIBaseFormControl } from '../../../directives';
+
 
 @Component({
-  selector: 'app-contact-search',
+  selector: 'ui-contact-search',
   templateUrl: './contact-search.component.html',
   styleUrl: './contact-search.component.scss'
 })
-export class ContactSearchComponent implements OnInit, OnDestroy {
+export class ContactSearchComponent extends UIBaseFormControl<IPhoneContactFlat | undefined> implements OnInit, OnDestroy {
 
-  @Input() required = false;
   @Output() selectionChange = new EventEmitter<IPhoneContactFlat>();
 
   private search$ = new BehaviorSubject<string>('');
-  private isComponentActive = new Subject<void>();
 
   contactSearchConfig: IUIControlConfig = {
     id: 'contact',
@@ -26,7 +26,9 @@ export class ContactSearchComponent implements OnInit, OnDestroy {
   contacts: IPhoneContactFlat[] = [];
   filteredContacts: IUIDropdownOption[] = [];
 
-  constructor(private contactService: ContactService) { }
+  constructor(private contactService: ContactService, @Optional() @Self() ngControl: NgControl) {
+    super(ngControl);
+  }
 
   ngOnInit(): void {
     let contactSearchConfig: IUIControlConfig = {
@@ -47,7 +49,7 @@ export class ContactSearchComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.contactSearchConfig = contactSearchConfig;
+    this.contactSearchConfig = this.config ?? contactSearchConfig;
     this.subscribeToSearchChange();
     this.subscribeToContactSelection();
   }
@@ -117,6 +119,7 @@ export class ContactSearchComponent implements OnInit, OnDestroy {
         next: selectedContact => {
           const user = this.contacts.find(c => c.contactId === selectedContact);
           if (user) this.selectionChange.emit(user);
+          this.updateValue(user);
         }
       })
   }

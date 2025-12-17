@@ -7,16 +7,16 @@
 
   <form [formGroup]="fb">
 
-    <ui-form-layout [formGroup]="fb">
+    <ui-form-layout>
 
-      <app-location-search [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-      </app-location-search>
+      <ui-location-search formControlName="location" [config]="locationSearchConfig" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-location-search>
 
-      <app-contact-search [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-      </app-contact-search>
+      <ui-contact-search formControlName="contacts" [config]="contactSearchConfig" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-contact-search>
 
-      <app-user-search [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-      </app-user-search>
+      <ui-user-search formControlName="user" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+      </ui-user-search>
 
       <ui-button label="Click Me" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
       </ui-button>
@@ -112,4 +112,10 @@
     </ui-form-layout>
 
   </form>
+
+  <pre>
+    {{
+      fb.value | json
+    }}
+  </pre>
 </app-layout>

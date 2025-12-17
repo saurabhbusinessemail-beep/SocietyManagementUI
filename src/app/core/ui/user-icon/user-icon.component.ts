@@ -1,8 +1,8 @@
 import { Component, HostListener } from '@angular/core';
-import { LoginService } from '../../services/login.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
-  selector: 'app-user-icon',
+  selector: 'ui-user-icon',
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss']
 })

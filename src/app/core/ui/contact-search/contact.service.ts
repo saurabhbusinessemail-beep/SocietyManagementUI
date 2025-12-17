@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, from, map, of, switchMap, take } from 'rxjs';
-import { PlatformUtil } from '../../utils/platform.util';
+import { Observable, catchError, from, map, of, take } from 'rxjs';
 import { ContactPayload, Contacts, GetContactsResult } from '@capacitor-community/contacts';
+import { PlatformUtil } from '../../../utils/platform.util';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +14,7 @@ export class ContactService {
 
     constructor(private http: HttpClient) {
         if (PlatformUtil.isLocalhost() || !PlatformUtil.isNativeMobile()) return;
-        
+
         this.ensurePermission().pipe(take(1)).subscribe();
     }
 

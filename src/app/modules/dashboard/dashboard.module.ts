@@ -6,9 +6,7 @@ import { AdminComponent } from './admin/admin.component';
 import { LayoutModule } from '../../core/layout/layout.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '../../core/ui/ui.module';
-import { UserSearchModule } from '../../core/user-search/user-search.module';
-import { ContactSearchModule } from '../../core/contact-search/contact-search.module';
-import { LocationSearchModule } from '../../core/location-search/location-search.module';
+import { DirectiveModule } from '../../directives/directive.module';
 
 
 @NgModule({
@@ -22,9 +20,7 @@ import { LocationSearchModule } from '../../core/location-search/location-search
     FormsModule,
     ReactiveFormsModule,
     UiModule,
-    UserSearchModule,
-    ContactSearchModule,
-    LocationSearchModule
+    DirectiveModule
   ]
 })
 export class DashboardModule { }
