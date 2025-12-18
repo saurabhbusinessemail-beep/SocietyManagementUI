@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ISociety, IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
+import { IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
 import { countries } from '../../../constants';
 import { Subject, take, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 
 @Component({
@@ -75,7 +76,7 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
 
   errorMessage = '';
 
-  constructor(private router: Router, private societyService: SocietyService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService, private location: Location) { }
 
   ngOnInit() {
     this.isMultipleBuildings.valueChanges
@@ -89,6 +90,12 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(val => this.errorMessage = '');
     this.updateBuildingControl(false);
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.fb.get('societyId')?.setValue(id);
+      this.loadSocietyDetails(id);
+    }
   }
 
   updateBuildingControl(isMulti: boolean | null) {
@@ -100,8 +107,23 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     }
   }
 
+  loadSocietyDetails(id: string) {
+    this.societyService.getSociety(id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.fb.patchValue(response);
+          this.fb.get('gpsLocation')?.setValue(response.gpsLocation)
+          if (response.numberOfBuildings > 1) {
+            this.isMultipleBuildings.setValue([true])
+          }
+        },
+        error: err => console.log('Loading society details failed')
+      })
+  }
+
   cancel() {
-    this.router.navigateByUrl('/society');
+    this.location.back();
   }
 
   save() {
@@ -109,13 +131,42 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const payload = this.fb.value;
+
+    let payload = this.fb.value;
     if (!payload) return;
+
+    if (!payload.numberOfBuildings) {
+      payload['numberOfBuildings'] = 1;
+    }
+
+    if (this.fb.value.societyId) {
+      this.edit(payload);
+    } else {
+      this.add(payload);
+    }
+
+  }
+
+  add(payload: any) {
 
     this.societyService.createSociety(payload)
       .pipe(take(1))
       .subscribe({
-        next: response => this.router.navigateByUrl('/society'),
+        next: response => this.location.back(), // this.router.navigateByUrl('/society'),
+        error: err => {
+          this.errorMessage = 'Error while adding society';
+          console.log('error while adding society');
+        }
+      })
+  }
+
+  edit(payload: any) {
+
+    const id = this.fb.value.societyId ?? '';
+    this.societyService.updateSociety(id, payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => this.location.back(), // this.router.navigateByUrl('/society'),
         error: err => {
           this.errorMessage = 'Error while adding society';
           console.log('error while adding society');

@@ -25,6 +25,12 @@ const routes: Routes = [
     data: { permission: PERMISSIONS.society_add }
   },
   {
+    path: 'edit/:id',
+    canActivate: [PermissionGuard],
+    component: AddSocietyComponent,
+    data: { permission: PERMISSIONS.society_update }
+  },
+  {
     path: 'details/:id',
     component: SocietyDetailsComponent,
     data: { permission: PERMISSIONS.society_view }

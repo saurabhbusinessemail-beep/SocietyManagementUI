@@ -49,7 +49,6 @@ export class LoginService {
             .pipe(tap((response: any) => {
                 if (response && response.success && response?.menus) {
                     this.menuService.userMenus.next(response.menus);
-                    this.menuService.syncSelectedMenuWithCurrentUrl();
                 }
             }));
     }

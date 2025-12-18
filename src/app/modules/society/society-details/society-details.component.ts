@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { IBuilding, IComplaintStats, IFlat, IParking, ISociety, ISocietyFeature } from '../../../interfaces';
-import { FlatTypes } from '../../../constants';
+import { FlatTypes, PERMISSIONS } from '../../../constants';
 import { IFlatMember } from '../../../interfaces/flat-members.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SocietyService } from '../../../services/society.service';
+import { take } from 'rxjs';
+import { MenuService } from '../../../services/menu.service';
 
 @Component({
   selector: 'app-society-details',
@@ -10,17 +14,27 @@ import { IFlatMember } from '../../../interfaces/flat-members.interface';
 })
 export class SocietyDetailsComponent {
 
-  society!: ISociety;
+  society?: ISociety;
   buildings: IBuilding[] = [];
   flats: IFlat[] = [];
   parkings: IParking[] = [];
-  complaints!: IComplaintStats;
+  complaints?: IComplaintStats;
   features: ISocietyFeature[] = [];
   secretaries: IFlatMember[] = [];
 
+  get canUpdateSociety(): boolean {
+    return this.menuService.hasPermission(PERMISSIONS.society_update);
+  }
+
+  constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService,
+    private menuService: MenuService) { }
+
 
   ngOnInit(): void {
-    this.loadSociety();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.loadSociety(id);
+    }
   }
 
 
@@ -28,28 +42,22 @@ export class SocietyDetailsComponent {
   * Step 1: Load society basic info
   * (contains buildingIds & flatIds only)
   */
-  loadSociety(): void {
-    // 🔁 Replace with API call later
-    this.society = {
-      _id: '1',
-      societyName: 'Green Valley Society',
-      gpsLocation: { address: 'Address', lat: 0, lng: 0, source: 'search' },
-      numberOfBuildings: 1,
-      buildingIds: ['101', '102'],
-      flatIds: ['201', '202', '203', '204'],
-      createdOn: new Date(),
-      craetedByUserId: '',
-      // secretaryNames: ['Amit Shah', 'Neha Verma'],
-      // activeFeatures: ['CCTV', 'Lift', 'Power Backup']
-    } as ISociety;
-
-
-    if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
-    if (this.society.flatIds) this.loadFlats(this.society.flatIds);
-    this.loadComplaints(this.society._id);
-    this.loadParkings(this.society._id);
-    this.loadFeatures(this.society._id);
-    this.loadSecretaries(this.society._id);
+  loadSociety(societyId: string): void {
+    this.societyService.getSociety(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.society = response;
+          
+          if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
+          if (this.society.flatIds) this.loadFlats(this.society.flatIds);
+          this.loadComplaints(this.society._id);
+          this.loadParkings(this.society._id);
+          this.loadFeatures(this.society._id);
+          this.loadSecretaries(this.society._id);
+        },
+        error: err => console.log('Error while getting society details')
+      });
   }
 
 
@@ -119,9 +127,7 @@ export class SocietyDetailsComponent {
     ];
   }
 
-
-  /** Derived helpers */
-  get totalFlats(): number {
-    return this.flats.length;
+  gotoEditSociety() {
+    this.router.navigate(['/society/edit', this.society?._id]);
   }
 }

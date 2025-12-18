@@ -5,11 +5,12 @@
 
     <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
     <div class="menu-inner">
-        <div class="brand" (click)="toggleMenu()">
-            <div class="brand-icon"><app-icon name="icon" color="white"></app-icon></div>
-            <div class="brand-text" *ngIf="open">Menu</div>
-            <div class="menu-close" *ngIf="open"> 
-                <button class="btn only-content" *ngIf="open && mode !== 'desktop'">
+        <div class="brand" (click)="toggleMenu()" *ngIf="mode !== 'desktop'">
+            <div class="brand-icon">
+                <app-icon name="double-arrow-right" color="white" *ngIf="!this.open"></app-icon>
+            </div>
+            <div class="menu-close" *ngIf="open">
+                <button class="btn only-content" *ngIf="open">
                     <app-icon name="clear" color="white"></app-icon>
                 </button>
             </div>

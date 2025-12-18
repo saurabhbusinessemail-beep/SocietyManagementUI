@@ -3,6 +3,8 @@
 
 .society-header {
     margin-bottom: $sp-lg;
+    display: flex;
+    justify-content: space-between;
 
     .society-name {
         color: $color-dark-blue;

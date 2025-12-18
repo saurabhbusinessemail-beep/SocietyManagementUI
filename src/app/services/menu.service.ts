@@ -29,9 +29,9 @@ export class MenuService {
     const menus = this.userMenus.value;
 
     const matchedMenu =
-      menus.find(m => m.relativePath === currentUrl) ||
+      menus.find(m => currentUrl.startsWith(m.relativePath ?? '')) ||
       menus.find(m =>
-        m.submenus?.some(sm => sm.relativePath === currentUrl)
+        m.submenus?.some(sm => currentUrl.startsWith(sm.relativePath ?? ''))
       );
 
     if (matchedMenu) {

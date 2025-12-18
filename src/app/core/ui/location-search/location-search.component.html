@@ -10,7 +10,7 @@
 
     <!-- Input -->
     <div class="ui-search-box">
-        <input #locationInput type="text" [disabled]="disabled" />
+        <input #locationInput type="text" [disabled]="disabled" [value]="value?.address" />
 
         <button type="button" (click)="useCurrentLocation()">📍</button>
 
