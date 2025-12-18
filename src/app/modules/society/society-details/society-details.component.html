@@ -1,3 +1,91 @@
-<app-layout [hideMoreActions]="true">
-    <p>society-details works!</p>
+<app-layout>
+    <ui-form-layout>
+
+
+        <!-- Society Header -->
+        <div class="society-header" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <h2 class="society-name">{{ society.societyName }}</h2>
+        </div>
+
+
+        <!-- Secretaries -->
+        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+            <div class="card-header">
+                <span>Secretaries</span>
+                <ui-button label="Manage" type="only-content">
+                </ui-button>
+            </div>
+            <div class="list">
+                <ui-chip  *ngFor="let s of secretaries" [value]="s.memberName" [crossAction]="true">
+                </ui-chip>
+            </div>
+        </section>
+
+
+        <!-- Stats -->
+        <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+            <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                <label>Buildings</label>
+                <strong>{{ buildings.length }}</strong>
+                <ui-button label="Manage" type="only-content">
+                </ui-button>
+            </div>
+            <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                <label>Flats</label>
+                <strong>{{ totalFlats }}</strong>
+                <ui-button label="Manage" type="only-content">
+                </ui-button>
+            </div>
+        </section>
+
+
+        <!-- Buildings Table -->
+        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+            <div class="card-header">
+                <span>Buildings</span>
+                <ui-button label="Manage" type="only-content">
+                </ui-button>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>Building</th>
+                    <th>Parking Alloted</th>
+                </tr>
+                <tr *ngFor="let b of buildings">
+                    <td>{{ b.buildingNumber }}</td>
+                    <td>No</td>
+                </tr>
+            </table>
+        </section>
+
+
+        <!-- Complaints -->
+        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+            <div class="card-header">
+                <span>Complaints</span>
+                <ui-button label="Manage" type="only-content">
+                </ui-button>
+            </div>
+            <div class="complaints">
+                <div class="badge pending">Pending: {{ complaints.pending }}</div>
+                <div class="badge done">Completed: {{ complaints.completed }}</div>
+            </div>
+        </section>
+
+
+        <!-- Features -->
+        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+            <div class="card-header">
+                <span>Active Features</span>
+                <ui-button label="Manage" type="only-content">
+                </ui-button>
+            </div>
+            <div class="features">
+                <ui-chip  *ngFor="let f of features" [value]="f.featureKey">
+                </ui-chip>
+            </div>
+        </section>
+
+
+    </ui-form-layout>
 </app-layout>

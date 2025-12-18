@@ -26,7 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'details/:id',
-    component: SocietyDetailsComponent
+    component: SocietyDetailsComponent,
+    data: { permission: PERMISSIONS.society_view }
   }
 ];
 

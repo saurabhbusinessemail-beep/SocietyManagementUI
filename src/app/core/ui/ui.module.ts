@@ -19,6 +19,7 @@ import { LocationSearchComponent } from './location-search/location-search.compo
 import { DirectiveModule } from '../../directives/directive.module';
 import { GeoSearchComponent } from './geo-search/geo-search.component';
 import { CardComponent } from './card/card.component';
+import { ChipComponent } from './chip/chip.component';
 
 
 
@@ -38,7 +39,8 @@ import { CardComponent } from './card/card.component';
     ContactSearchComponent,
     LocationSearchComponent,
     GeoSearchComponent,
-    CardComponent
+    CardComponent,
+    ChipComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -58,7 +60,8 @@ import { CardComponent } from './card/card.component';
     ContactSearchComponent,
     LocationSearchComponent,
     GeoSearchComponent,
-    CardComponent
+    CardComponent,
+    ChipComponent
   ]
 })
 export class UiModule { }

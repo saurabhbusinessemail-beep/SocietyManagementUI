@@ -1,7 +1,7 @@
 import { IDefaultFields } from "./";
 
 export interface IParking extends IDefaultFields {
-    parkingId: string;
+    _id: string;
     parkingNumber: string;
-    flatId: string;
+    flatId?: string;
 }

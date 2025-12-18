@@ -1,7 +1,7 @@
 import { IDefaultFields } from "./";
 
 export interface IBuilding extends IDefaultFields {
-    buildingId: string;
+    _id: string;
     societyId: string;
     buildingNumber: string;
 }

@@ -2,7 +2,7 @@ import { FlatTypes, ResidingTypes } from "../constants";
 import { IDefaultFields } from "./";
 
 export interface IFlat extends IDefaultFields {
-    flatId: string;
+    _id: string;
     societyId: string;
     buildingId?: string;
     flatType: FlatTypes;

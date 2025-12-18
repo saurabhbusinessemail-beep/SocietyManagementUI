@@ -1,7 +1,8 @@
 import { IDefaultFields } from "./";
 
 export interface IFlatMember extends IDefaultFields {
-    flatMemberId: string;
+    _id: string;
+    isSecretary?: boolean;
     userId?: string;
     memberName: string;
     memberContactNumber: string;

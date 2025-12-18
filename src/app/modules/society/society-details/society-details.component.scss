@@ -1,0 +1,93 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.society-header {
+    margin-bottom: $sp-lg;
+
+    .society-name {
+        color: $color-dark-blue;
+        @include fluid-font(22px, 20px, 18px);
+    }
+}
+
+.card {
+    border-radius: $input-border-radius;
+    padding: $sp-md;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $sp;
+    color: $color-dark-blue;
+}
+
+section {
+    border: 1px solid #f1f1f1;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $sp-sm;
+}
+
+.stat {
+    padding: $sp-md;
+    border-radius: $input-border-radius;
+    display: flex;
+    gap: $sp-xs;
+    justify-content: space-around;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: $sp-sm;
+        border-bottom: 1px solid $color-light-gray;
+        text-align: left;
+    }
+}
+
+.complaints {
+    display: flex;
+    gap: $sp-md;
+}
+
+.badge {
+    padding: $sp-sm $sp-md;
+    border-radius: $input-border-radius;
+    &.pending {
+        background: $color-sky;
+    }
+    &.done {
+        background: $color-header-footer;
+    }
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $sp-sm;
+}
+
+@include desktop {
+    .stat {
+        justify-content: space-between;
+        align-items: center;
+
+        .btn.primary {
+            width: auto;
+            min-width: auto;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+@import '../../../../styles/variables';
+
+span {
+    background: $color-light-gray;
+    padding: $sp-sm $sp-sm;
+    border-radius: $input-border-radius;
+    display: flex;
+    gap: $sp-sm;
+
+    app-icon {
+        border-left: solid 1px $color-disable-background;
+        padding-left: $sp-xs;
+        display: flex;
+        cursor: pointer;
+
+        ::ng-deep {
+            .app-icon {
+                margin: auto !important;
+            }
+        }
+    }
+}
