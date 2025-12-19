@@ -25,13 +25,8 @@ export class MenuService {
   syncSelectedMenuWithCurrentUrl() {
     const currentUrl = this.router.url.split('?')[0];
     console.log('currentUrl = ', this.router.url)
-    console.log('menus = ', this.userMenus.value)
 
     const menus = this.userMenus.value;
-
-    menus.forEach(m => {
-      console.log('index = ', currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' '))
-    })
 
     const matchedMenu =
       menus.find(m => currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' ') === 1) ||
