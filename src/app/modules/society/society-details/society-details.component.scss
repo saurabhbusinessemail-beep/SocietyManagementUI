@@ -42,7 +42,12 @@ section {
     border-radius: $input-border-radius;
     display: flex;
     gap: $sp-xs;
-    justify-content: space-around;
+    justify-content: space-between;
+
+    label, strong, ui-button {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
 }
 
 .table {

@@ -25,13 +25,18 @@ export class MenuService {
   syncSelectedMenuWithCurrentUrl() {
     const currentUrl = this.router.url.split('?')[0];
     console.log('currentUrl = ', this.router.url)
+    console.log('menus = ', this.userMenus.value)
 
     const menus = this.userMenus.value;
 
+    menus.forEach(m => {
+      console.log('index = ', currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' '))
+    })
+
     const matchedMenu =
-      menus.find(m => currentUrl.startsWith(m.relativePath ?? '')) ||
+      menus.find(m => currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' ') === 1) ||
       menus.find(m =>
-        m.submenus?.some(sm => currentUrl.startsWith(sm.relativePath ?? ''))
+        m.submenus?.some(sm => currentUrl.indexOf(sm.relativePath.split('/')[1] ?? ' ') === 1)
       );
 
     if (matchedMenu) {

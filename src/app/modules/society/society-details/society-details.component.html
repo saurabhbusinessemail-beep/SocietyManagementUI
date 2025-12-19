@@ -17,11 +17,11 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Secretaries</span>
-                <ui-button label="Manage" type="only-content">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
                 </ui-button>
             </div>
             <div class="list">
-                <ui-chip  *ngFor="let s of secretaries" [value]="s.memberName" [crossAction]="true">
+                <ui-chip  *ngFor="let s of secretaries" [value]="s.memberName" [crossAction]="canUpdateSociety">
                 </ui-chip>
             </div>
         </section>
@@ -32,13 +32,13 @@
             <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <label>Buildings</label>
                 <strong>{{ buildings.length }}</strong>
-                <ui-button label="Manage" type="only-content">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
                 </ui-button>
             </div>
             <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <label>Flats</label>
                 <strong>{{ society?.numberOfBuildings }}</strong>
-                <ui-button label="Manage" type="only-content">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
                 </ui-button>
             </div>
         </section>
@@ -48,7 +48,7 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Parkings</span>
-                <ui-button label="Manage" type="only-content">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
                 </ui-button>
             </div>
             <table class="table">
@@ -68,7 +68,7 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Complaints</span>
-                <ui-button label="Manage" type="only-content">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
                 </ui-button>
             </div>
             <div class="complaints">
@@ -82,7 +82,7 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Active Features</span>
-                <ui-button label="Manage" type="only-content">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
                 </ui-button>
             </div>
             <div class="features">

@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
 
 
-        this.menuService.userMenus.pipe(take(1))
+        this.menuService.userMenus//.pipe(take(1))
           .subscribe(res => {
             this.menuService.syncSelectedMenuWithCurrentUrl();
           });

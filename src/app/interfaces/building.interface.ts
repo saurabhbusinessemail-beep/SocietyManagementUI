@@ -7,4 +7,5 @@ export interface IBuilding extends IDefaultFields {
     floors: number;
     totalFlats: number;
     secreataryId?: string;
+    flatIds?: string[];
 }
