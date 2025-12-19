@@ -6,6 +6,8 @@ export interface ISociety extends IDefaultFields {
     gpsLocation: UILocationResult;
     numberOfBuildings: number;
 
+    adminContact?: string;
+
     settings?: any;
     secreataryIds?: string[];
     buildingIds?: string[];
