@@ -2,6 +2,7 @@ export const PERMISSIONS = {
     society_view: "society.view",
     society_add: "society.add",
     society_update: "society.update",
+    society_delete: "society.society_delete",
     feature_manage: "feature.manage",
     building_view: "building.view",
     building_add: "building.add",
