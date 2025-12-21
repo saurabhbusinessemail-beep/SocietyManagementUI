@@ -1,7 +1,9 @@
+import { IUser } from "./";
+
 export interface IDefaultFields {
     createdOn: Date;
-    craetedByUserId: string;
+    craetedByUserId: string | IUser;
     modifiedOn?: Date;
-    modifiedByUserId?: string;
+    modifiedByUserId?: IUser;
     isDeleted?: boolean;
 }

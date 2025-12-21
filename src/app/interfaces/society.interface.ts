@@ -1,4 +1,4 @@
-import { IDefaultFields, UILocationResult } from "./";
+import { IDefaultFields, IUser, UILocationResult } from "./";
 
 export interface ISociety extends IDefaultFields {
     _id: string;
@@ -6,10 +6,8 @@ export interface ISociety extends IDefaultFields {
     gpsLocation: UILocationResult;
     numberOfBuildings: number;
 
-    adminContact?: string;
+    adminContacts: string[] | IUser[];
 
     settings?: any;
-    secreataryIds?: string[];
-    buildingIds?: string[];
-    flatIds?: string[];
+    secreataryIds: string[] | IUser[];
 }

@@ -1,11 +1,16 @@
 import { ComplaintTypes } from "../constants";
-import { IDefaultFields } from "./";
+import { IDefaultFields, IFlat, ISociety, IUser } from "./";
 
 export interface IComplaint extends IDefaultFields {
     _id: string;
-    message: string;
+    flatId: string | IFlat;
+    societyId: string | ISociety;
+    title: string;
+    description: string;
+    priority: 'low' | 'medium' | 'high' | 'urgent';
     complaintType: ComplaintTypes;
-    flatId?: string;
+    status: 'open'| 'in_progress'| 'resolved'| 'closed'| 'rejected',
+    assignedTo: string | IUser;
 }
 
 export interface IComplaintStats {

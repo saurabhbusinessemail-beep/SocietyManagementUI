@@ -1,12 +1,25 @@
-import { IDefaultFields } from "./";
+import { IDefaultFields, IFlat, IUser } from "./";
 
 export interface IGatePass extends IDefaultFields {
-    gatePassId: string;
-    gatePassNumber: string;
-    isVisitor?: boolean;
+    _id: string;
+    gatePassNumber?: string;
+    flatId?: string | IFlat;
+    visitorName: string;
+    visitorContact: string;
+    purpose?: string;
+    vehicleNumber?: string;
+    expectedIn?: Date;
+    expectedOut?: Date;
+    status: 'requested' | 'approved' | 'rejected' | 'cancelled' | 'expired' | 'completed';
+    approvedBy?: string | IUser;
+    history?: IGatePassHistory[];
+    
     expiryDate?: Date;
     OTP?: number;
-    flatId?: string;
-    vehicleNumber?: string;
-    notificationId?: string;
+}
+
+export interface IGatePassHistory extends IDefaultFields {
+    fromStatus: string;
+    toStatus: string;
+    note: string;
 }
