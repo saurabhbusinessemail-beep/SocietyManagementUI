@@ -4,7 +4,7 @@ import { Observable, of, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
-import { IBEResponseFormat, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
+import { IBEResponseFormat, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -34,11 +34,11 @@ export class LoginService {
     // --------------------------------------------------------
     // GET LOGGED-IN USER INFO
     // --------------------------------------------------------
-    getProfile(): Observable<IMyProfileResponse | IBEResponseFormat> {
+    getProfile(): Observable<IMyProfileResponse | null> {
         const token = localStorage.getItem('auth_token');
         if (!token) {
             this.logout();
-            return of<IBEResponseFormat>({ success: false });
+            return of<null>();
         }
 
         const headers = new HttpHeaders({
@@ -46,9 +46,9 @@ export class LoginService {
         });
 
         return this.http.get<IMyProfileResponse>(`${this.baseUrl}/me`, { headers })
-            .pipe(tap((response: any) => {
-                if (response && response.success && response?.menus) {
-                    this.menuService.userMenus.next(response.menus);
+            .pipe(tap(response => {
+                if (response && response.success && response.profile.allMenus) {
+                    this.menuService.userMenus.next(response.profile.allMenus);
                 }
             }));
     }
@@ -56,23 +56,21 @@ export class LoginService {
 
 
     loadProfile() {
-        return new Observable(observer => {
+        return new Observable<IMyProfileResponse | null>(observer => {
             this.getProfile()
                 .pipe(take(1))
                 .subscribe({
                     next: response => {
                         console.log('menu = ', this.menuService.userMenus.value)
-                        if (!response.success) {
+                        if (!response || !response.success) {
                             observer.next(null);
                             observer.complete();
                             return;
                         }
 
-                        if ('user' in response) {
-                            this.saveProfileToStorage(response.user);
-                            observer.next(response);
-                            observer.complete();
-                        }
+                        this.saveProfileToStorage(response.profile);
+                        observer.next(response);
+                        observer.complete();
 
                     }
                 })
@@ -100,7 +98,7 @@ export class LoginService {
         localStorage.setItem('auth_token', token);
     }
 
-    saveProfileToStorage(profile: Object) {
+    saveProfileToStorage(profile: IMyProfile) {
         localStorage.setItem('my_profile', JSON.stringify(profile));
     }
 }

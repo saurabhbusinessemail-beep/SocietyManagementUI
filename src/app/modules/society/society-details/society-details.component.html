@@ -21,7 +21,7 @@
                 </ui-button>
             </div>
             <div class="list">
-                <ui-chip  *ngFor="let s of secretaries" [value]="s.memberName" [crossAction]="canUpdateSociety">
+                <ui-chip  *ngFor="let s of secretaries" [value]="s.name" [crossAction]="canUpdateSociety">
                 </ui-chip>
             </div>
         </section>
@@ -86,8 +86,8 @@
                 </ui-button>
             </div>
             <div class="features">
-                <ui-chip  *ngFor="let f of features" [value]="f.featureKey">
-                </ui-chip>
+                <!-- <ui-chip  *ngFor="let f of features" [value]="f.featureKey">
+                </ui-chip> -->
             </div>
         </section>
 

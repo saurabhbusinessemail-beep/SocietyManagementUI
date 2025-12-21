@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IBuilding, IComplaintStats, IFlat, IParking, ISociety, ISocietyFeature } from '../../../interfaces';
+import { IBuilding, IComplaintStats, IFlat, IParking, ISociety } from '../../../interfaces';
 import { FlatTypes, PERMISSIONS } from '../../../constants';
 import { IFlatMember } from '../../../interfaces/flat-members.interface';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,11 +19,11 @@ export class SocietyDetailsComponent {
   flats: IFlat[] = [];
   parkings: IParking[] = [];
   complaints?: IComplaintStats;
-  features: ISocietyFeature[] = [];
+  // features: ISocietyFeature[] = [];
   secretaries: IFlatMember[] = [];
 
   get canUpdateSociety(): boolean {
-    return this.menuService.hasPermission(PERMISSIONS.society_update);
+    return true //this.menuService.hasPermission(PERMISSIONS.society_update);
   }
 
   constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService,
@@ -49,12 +49,12 @@ export class SocietyDetailsComponent {
         next: response => {
           this.society = response;
           
-          if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
-          if (this.society.flatIds) this.loadFlats(this.society.flatIds);
+          // if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
+          // if (this.society.flatIds) this.loadFlats(this.society.flatIds);
           this.loadComplaints(this.society._id);
           this.loadParkings(this.society._id);
-          this.loadFeatures(this.society._id);
-          this.loadSecretaries(this.society._id);
+          // this.loadFeatures(this.society._id);
+          // this.loadSecretaries(this.society._id);
         },
         error: err => console.log('Error while getting society details')
       });
@@ -104,28 +104,28 @@ export class SocietyDetailsComponent {
 
 
   /** Step 6: Features by society */
-  loadFeatures(societyId: string): void {
-    // 🔁 Replace with API call later
-    this.features = [
-      { _id: '1', societyId: '101', featureKey: 'asdasd' } as ISocietyFeature,
-      { _id: '2', societyId: '101', featureKey: '101' } as ISocietyFeature
-    ];
-  }
+  // loadFeatures(societyId: string): void {
+  //   // 🔁 Replace with API call later
+  //   this.features = [
+  //     { _id: '1', societyId: '101', featureKey: 'asdasd' } as ISocietyFeature,
+  //     { _id: '2', societyId: '101', featureKey: '101' } as ISocietyFeature
+  //   ];
+  // }
 
 
   /** Step 7: Secretary by society */
-  loadSecretaries(societyId: string): void {
-    // 🔁 Replace with API call later
-    this.secretaries = [
-      { _id: '1', memberName: 'name1', memberContactNumber: '567567' } as IFlatMember,
-      { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-      { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-      { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-      { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-      { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-      { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember
-    ];
-  }
+  // loadSecretaries(societyId: string): void {
+  //   // 🔁 Replace with API call later
+  //   this.secretaries = [
+  //     { _id: '1', memberName: 'name1', memberContactNumber: '567567' } as IFlatMember,
+  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
+  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
+  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
+  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
+  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
+  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember
+  //   ];
+  // }
 
   gotoEditSociety() {
     this.router.navigate(['/society/edit', this.society?._id]);

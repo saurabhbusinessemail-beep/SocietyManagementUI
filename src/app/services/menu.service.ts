@@ -29,24 +29,12 @@ export class MenuService {
     const menus = this.userMenus.value;
 
     const matchedMenu =
-      menus.find(m => currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' ') === 1) ||
-      menus.find(m =>
-        m.submenus?.some(sm => currentUrl.indexOf(sm.relativePath.split('/')[1] ?? ' ') === 1)
-      );
+      menus.find(m => currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' ') === 1)
 
     if (matchedMenu) {
       this.selectedMenu.next(matchedMenu);
+    } else {
+      this.selectAndLoadMenu(menus[0]);
     }
-  }
-
-  hasPermission(permission: string): boolean {
-    const menus = this.userMenus.value;
-    if (!menus?.length) {
-      return false;
-    }
-
-    return menus.some(menu => menu.submenus.some(submenu =>
-      submenu.permissions?.includes(permission)
-    ));
   }
 }

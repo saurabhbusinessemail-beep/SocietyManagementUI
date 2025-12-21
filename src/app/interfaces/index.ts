@@ -13,6 +13,7 @@ export * from './feature.interface';
 export * from './flat.interface';
 export * from './gate-pass.interface';
 export * from './menu.interface';
+export * from './my-profile.interface';
 export * from './notification.interface';
 export * from './parking.interface';
 export * from './society-role-menu.interface';

@@ -1,5 +1,4 @@
-import { IMenu } from "./menu.interface";
-import { IUser } from "./user.interface";
+import { IMyProfile } from "./my-profile.interface";
 
 export interface IBEResponseFormat {
     success: boolean;
@@ -20,7 +19,5 @@ export interface IPagedResponse<T> extends IBEResponseFormat {
 }
 
 export interface IMyProfileResponse extends IBEResponseFormat {
-    menus: IMenu[];
-    permissions: any[];
-    user: IUser;
+    profile: IMyProfile
 }

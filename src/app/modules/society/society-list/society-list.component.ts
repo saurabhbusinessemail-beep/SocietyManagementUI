@@ -17,7 +17,7 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   socities: ISociety[] = [];
 
   get canAddSociety(): boolean {
-    return this.menuService.hasPermission(PERMISSIONS.society_add);
+    return true; // this.menuService.hasPermission(PERMISSIONS.society_add);
   }
 
   constructor(private router: Router, private societyService: SocietyService, private menuService: MenuService) { }
