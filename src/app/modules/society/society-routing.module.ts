@@ -5,6 +5,7 @@ import { AddSocietyComponent } from './add-society/add-society.component';
 import { SocietyDetailsComponent } from './society-details/society-details.component';
 import { PermissionGuard } from '../../guard/permission.guard';
 import { PERMISSIONS } from '../../constants';
+import { SocietyManagersComponent } from './society-managers/society-managers.component';
 
 const routes: Routes = [
   {
@@ -28,12 +29,17 @@ const routes: Routes = [
     path: 'edit/:id',
     canActivate: [PermissionGuard],
     component: AddSocietyComponent,
-    data: { permission: PERMISSIONS.society_update }
+    data: { permission: PERMISSIONS.society_update, withId: 'societyId' }
   },
   {
     path: 'details/:id',
     component: SocietyDetailsComponent,
-    data: { permission: PERMISSIONS.society_view }
+    data: { permission: PERMISSIONS.society_view, withId: 'societyId' }
+  },
+  {
+    path: 'managers/:id',
+    component: SocietyManagersComponent,
+    data: { permission: PERMISSIONS.society_adminContact_view, withId: 'societyId' }
   }
 ];
 

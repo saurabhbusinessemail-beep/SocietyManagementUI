@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { MenuService } from '../services/menu.service';
-import { Observable, filter, map, of, take, tap } from 'rxjs';
+import { LoginService } from '../services/login.service';
 
 @Injectable({
     providedIn: 'root'
@@ -9,25 +8,20 @@ import { Observable, filter, map, of, take, tap } from 'rxjs';
 export class PermissionGuard implements CanActivate {
 
     constructor(
-        private menuService: MenuService,
+        private loginService: LoginService,
         private router: Router
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    canActivate(route: ActivatedRouteSnapshot): boolean {
         const requiredPermission = route.data['permission'] as string;
-        if (!requiredPermission) return of(true);
+        if (!requiredPermission) return true;
+        
+        const withId = route.data['withId'] as (string | undefined);
 
-        return this.menuService.userMenus.pipe(
-            filter(menus => menus.length > 0),
-            take(1),
-            map((m) => {
-                return true // this.menuService.hasPermission(requiredPermission)
-            }),
-            tap(hasAccess => {
-                if (!hasAccess) {
-                    this.router.navigate(['/unauthorized']);
-                }
-            })
-        );
+        const hasPermission = this.loginService.hasPermission(requiredPermission, withId);
+        if (!hasPermission)
+            this.router.navigate(['/unauthorized']);
+
+        return hasPermission;
     }
 }

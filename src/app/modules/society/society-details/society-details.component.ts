@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { IBuilding, IComplaintStats, IFlat, IParking, ISociety } from '../../../interfaces';
+import { IBuilding, IComplaintStats, IFlat, IParking, ISociety, IUser } from '../../../interfaces';
 import { FlatTypes, PERMISSIONS } from '../../../constants';
-import { IFlatMember } from '../../../interfaces/flat-members.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
-import { MenuService } from '../../../services/menu.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-society-details',
@@ -20,14 +19,22 @@ export class SocietyDetailsComponent {
   parkings: IParking[] = [];
   complaints?: IComplaintStats;
   // features: ISocietyFeature[] = [];
-  secretaries: IFlatMember[] = [];
+  managerIds: IUser[] = [];
 
   get canUpdateSociety(): boolean {
-    return true //this.menuService.hasPermission(PERMISSIONS.society_update);
+    return this.loginService.hasPermission(PERMISSIONS.society_update);
+  }
+
+  get canViewManager(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_view);
+  }
+
+  get canDeleteManager(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete);
   }
 
   constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService,
-    private menuService: MenuService) { }
+    private loginService: LoginService) { }
 
 
   ngOnInit(): void {
@@ -48,7 +55,14 @@ export class SocietyDetailsComponent {
       .subscribe({
         next: response => {
           this.society = response;
-          
+          const managerIds = this.society.managerIds;
+
+          this.managerIds = managerIds.reduce((arr: IUser[], s) => {
+            if (typeof s !== 'string') arr.push(s);
+            return arr;
+          }, [] as IUser[]);
+
+
           // if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
           // if (this.society.flatIds) this.loadFlats(this.society.flatIds);
           this.loadComplaints(this.society._id);
@@ -129,5 +143,19 @@ export class SocietyDetailsComponent {
 
   gotoEditSociety() {
     this.router.navigate(['/society/edit', this.society?._id]);
+  }
+
+  gotoSocietyManageers() {
+    this.router.navigate(['/society/managers', this.society?._id]);
+  }
+
+  async removeSecretary(user: IUser) {
+    if (!this.society) return;
+
+    this.societyService.deleteManager(this.society._id, user._id)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.loadSociety(this.society?._id ?? '');
+      });
   }
 }

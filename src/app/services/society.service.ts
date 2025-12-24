@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IPagedResponse, ISociety } from '../interfaces';
+import { IBEResponseFormat, IPagedResponse, ISociety } from '../interfaces';
 import { Observable } from 'rxjs';
 
 
@@ -20,8 +20,8 @@ export class SocietyService {
     }
 
     /* Get all societies */
-    getAllSocieties(): Observable<ISociety[]> {
-        return this.http.get<ISociety[]>(this.baseUrl);
+    getAllSocieties(): Observable<IPagedResponse<ISociety>> {
+        return this.http.get<IPagedResponse<ISociety>>(this.baseUrl);
     }
 
     /* Get society by ID */
@@ -54,5 +54,13 @@ export class SocietyService {
             `${this.baseUrl}/search`,
             { params }
         );
+    }
+
+    newManager(societyId: string, payload: any): Observable<IBEResponseFormat> {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers`, payload);
+    }
+
+    deleteManager(societyId: string, managerId: string): Observable<IBEResponseFormat> {
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers/${managerId}`);
     }
 }

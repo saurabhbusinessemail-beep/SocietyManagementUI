@@ -10,6 +10,7 @@ import { DirectiveModule } from '../../directives/directive.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconModule } from '../../core/icons/icon.module';
 import { SocietyDetailsComponent } from './society-details/society-details.component';
+import { SocietyManagersComponent } from './society-managers/society-managers.component';
 
 
 
@@ -18,7 +19,8 @@ import { SocietyDetailsComponent } from './society-details/society-details.compo
   
     SocietyListComponent,
         AddSocietyComponent,
-        SocietyDetailsComponent
+        SocietyDetailsComponent,
+        SocietyManagersComponent
   ],
   imports: [
     CommonModule,

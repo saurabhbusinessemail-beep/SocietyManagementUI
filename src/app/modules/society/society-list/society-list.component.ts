@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
 import { ISociety } from '../../../interfaces';
-import { MenuService } from '../../../services/menu.service';
 import { PERMISSIONS } from '../../../constants';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-society-list',
@@ -17,10 +16,10 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   socities: ISociety[] = [];
 
   get canAddSociety(): boolean {
-    return true; // this.menuService.hasPermission(PERMISSIONS.society_add);
+    return this.loginService.hasPermission(PERMISSIONS.society_add);
   }
 
-  constructor(private router: Router, private societyService: SocietyService, private menuService: MenuService) { }
+  constructor(private societyService: SocietyService, private loginService: LoginService) { }
 
   ngOnInit(): void {
     this.loadSocities();
@@ -30,8 +29,8 @@ export class SocietyListComponent implements OnInit, OnDestroy {
     this.societyService.getAllSocieties()
       .pipe(take(1))
       .subscribe({
-        next: socities => {
-          this.socities = socities;
+        next: response => {
+          this.socities = response.data ?? [];
         },
         error: () => console.log('Error while getting socities')
       });

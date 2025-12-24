@@ -10,12 +10,10 @@ export interface IOTPVerificationResponse extends IBEResponseFormat {
 }
 
 export interface IPagedResponse<T> extends IBEResponseFormat {
-    data: {
-        data: T[];
-        limit: number;
-        page: number;
-        total: number;
-    };
+    data: T[];
+    limit: number;
+    page: number;
+    total: number;
 }
 
 export interface IMyProfileResponse extends IBEResponseFormat {

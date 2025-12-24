@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from './menu.service';
 import { IBEResponseFormat, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
 
@@ -13,7 +13,12 @@ export class LoginService {
 
     private baseUrl = `${environment.apiBaseUrl}/auth`;
 
-    constructor(private http: HttpClient, private router: Router, private menuService: MenuService) {
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private menuService: MenuService,
+        private route: ActivatedRoute
+    ) {
         this.loadProfile().pipe(take(1)).subscribe();
     }
 
@@ -51,6 +56,21 @@ export class LoginService {
                     this.menuService.userMenus.next(response.profile.allMenus);
                 }
             }));
+    }
+
+    hasPermission(requiredPermission: string, withId: string | undefined = undefined): boolean {
+        const myProfile = this.getProfileFromStorage();
+        if (!myProfile) return false;
+
+        if (myProfile.user.role === 'admin') return true;
+
+        const id = this.route.snapshot.paramMap.get('id');
+
+        return myProfile.socities.some(s => {
+            return (!withId || s.societyId === id)
+                && s.societyRoles.some(sr =>
+                    sr.permissions.some(p => p === requiredPermission))
+        });
     }
 
 
@@ -100,5 +120,10 @@ export class LoginService {
 
     saveProfileToStorage(profile: IMyProfile) {
         localStorage.setItem('my_profile', JSON.stringify(profile));
+    }
+
+    getProfileFromStorage(): IMyProfile | undefined {
+        const profile = localStorage.getItem('my_profile');
+        return profile ? JSON.parse(profile) : undefined;
     }
 }

@@ -33,7 +33,7 @@ export class MenuService {
 
     if (matchedMenu) {
       this.selectedMenu.next(matchedMenu);
-    } else {
+    } else if (menus.length > 0) {
       this.selectAndLoadMenu(menus[0]);
     }
   }

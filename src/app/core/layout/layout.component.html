@@ -1,7 +1,7 @@
 <div class="layout-container">
 
     <!-- HEADER -->
-    <app-header (toggleMenu)="menu.toggleMenu()" [title]="menuService.pageTitle" [hideMoreActions]="hideMoreActions">
+    <app-header (toggleMenu)="menu.toggleMenu()" [title]="title ?? menuService.pageTitle" [hideMoreActions]="hideMoreActions">
         <ng-container moreActions>
             <ng-content select="[moreActions]"></ng-content>
         </ng-container>

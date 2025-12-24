@@ -9,5 +9,5 @@ export interface ISociety extends IDefaultFields {
     adminContacts: string[] | IUser[];
 
     settings?: any;
-    secreataryIds: string[] | IUser[];
+    managerIds: string[] | IUser[];
 }

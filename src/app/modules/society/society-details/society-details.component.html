@@ -1,4 +1,4 @@
-<app-layout>
+<app-layout [hideMoreActions]="true">
     <ui-form-layout>
 
 
@@ -9,7 +9,7 @@
             <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
                 <app-icon name="edit"></app-icon>
             </ui-button>
-            
+
         </div>
 
 
@@ -17,11 +17,13 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Secretaries</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
+                <ui-button label="Manage" type="only-content" *ngIf="canViewManager"
+                    (clicked)="gotoSocietyManageers()">
                 </ui-button>
             </div>
             <div class="list">
-                <ui-chip  *ngFor="let s of secretaries" [value]="s.name" [crossAction]="canUpdateSociety">
+                <ui-chip *ngFor="let s of managerIds" [value]="(s.name ?? '') + '' + s.phoneNumber"
+                    [crossAction]="canDeleteManager" (crossClicked)="removeSecretary(s)">
                 </ui-chip>
             </div>
         </section>

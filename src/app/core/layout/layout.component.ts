@@ -9,6 +9,7 @@ import { MenuService } from '../../services/menu.service';
 })
 export class LayoutComponent {
   
+  @Input() title?: string;
   @Input() menuItems: IMenu[] = [];
   @Input() hideMoreActions: boolean = false;
 

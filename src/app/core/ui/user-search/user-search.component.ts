@@ -73,8 +73,8 @@ export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> im
       next: users => {
         if (!users.success) return;
         
-        this.users = users.data.data;
-        this.filteredUsers = users.data.data.map(u => {
+        this.users = users.data;
+        this.filteredUsers = users.data.map(u => {
           return {
             label: (u.name ?? 'No Name') + ' - ' + u.phoneNumber,
             value: u._id,
