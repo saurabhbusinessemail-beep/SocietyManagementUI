@@ -64,11 +64,11 @@ export class SocietyManagersComponent implements OnDestroy {
   }
 
   get canAddSocietyManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_add);
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_add, 'id', this.society?._id);
   }
 
   get canDeleteSocietyManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete);
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete, 'id', this.society?._id);
   }
 
   constructor(

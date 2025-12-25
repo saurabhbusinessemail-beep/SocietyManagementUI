@@ -29,17 +29,19 @@ const routes: Routes = [
     path: 'edit/:id',
     canActivate: [PermissionGuard],
     component: AddSocietyComponent,
-    data: { permission: PERMISSIONS.society_update, withId: 'societyId' }
+    data: { permission: PERMISSIONS.society_update, withId: 'id' }
   },
   {
     path: 'details/:id',
+    canActivate: [PermissionGuard],
     component: SocietyDetailsComponent,
-    data: { permission: PERMISSIONS.society_view, withId: 'societyId' }
+    data: { permission: PERMISSIONS.society_view, withId: 'id' }
   },
   {
-    path: 'managers/:id',
+    path: ':id/managers',
+    canActivate: [PermissionGuard],
     component: SocietyManagersComponent,
-    data: { permission: PERMISSIONS.society_adminContact_view, withId: 'societyId' }
+    data: { permission: PERMISSIONS.society_adminContact_view, withId: 'id' }
   }
 ];
 

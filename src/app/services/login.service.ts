@@ -58,16 +58,18 @@ export class LoginService {
             }));
     }
 
-    hasPermission(requiredPermission: string, withId: string | undefined = undefined): boolean {
+    hasPermission(
+        requiredPermission: string,
+        withId: string | undefined = undefined,
+        idValue: string | null = null
+    ): boolean {
         const myProfile = this.getProfileFromStorage();
         if (!myProfile) return false;
 
         if (myProfile.user.role === 'admin') return true;
 
-        const id = this.route.snapshot.paramMap.get('id');
-
         return myProfile.socities.some(s => {
-            return (!withId || s.societyId === id)
+            return (!withId || s.societyId === idValue)
                 && s.societyRoles.some(sr =>
                     sr.permissions.some(p => p === requiredPermission))
         });

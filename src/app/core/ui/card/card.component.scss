@@ -17,6 +17,7 @@
     margin-bottom: $sp;
     height: 135px;
     flex-flow: wrap;
+    overflow: hidden;
 
     &:hover {
         transform: translateY(-2px);

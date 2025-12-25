@@ -22,15 +22,15 @@ export class SocietyDetailsComponent {
   managerIds: IUser[] = [];
 
   get canUpdateSociety(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_update);
+    return this.loginService.hasPermission(PERMISSIONS.society_update, 'id', this.society?._id);
   }
 
   get canViewManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_view);
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_view, 'id', this.society?._id);
   }
 
   get canDeleteManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete);
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete, 'id', this.society?._id);
   }
 
   constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService,
@@ -146,7 +146,7 @@ export class SocietyDetailsComponent {
   }
 
   gotoSocietyManageers() {
-    this.router.navigate(['/society/managers', this.society?._id]);
+    this.router.navigate(['/society', this.society?._id, 'managers']);
   }
 
   async removeSecretary(user: IUser) {

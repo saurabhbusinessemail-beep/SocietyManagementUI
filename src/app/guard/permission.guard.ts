@@ -17,8 +17,9 @@ export class PermissionGuard implements CanActivate {
         if (!requiredPermission) return true;
         
         const withId = route.data['withId'] as (string | undefined);
+        const routeParamId = route.paramMap.get(withId ?? 'id');
 
-        const hasPermission = this.loginService.hasPermission(requiredPermission, withId);
+        const hasPermission = this.loginService.hasPermission(requiredPermission, withId, routeParamId);
         if (!hasPermission)
             this.router.navigate(['/unauthorized']);
 
