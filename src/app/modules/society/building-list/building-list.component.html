@@ -58,6 +58,12 @@
                 [disable]="selectedBuildingId === building._id">
                 <div card-main>
                     {{ building.buildingNumber }} - <span class="floor-count"> {{ building.floors }} Floors</span>
+                    <span class="manager" *ngIf=" building.managerId">
+                        Manager: 
+                        <i>
+                            {{ building.managerId | userName: true }}
+                        </i>
+                    </span>
                 </div>
                 <div card-icon class="building-action">
                     <app-icon name="edit" *ngIf="canDeleteBuildings" (click)="resetBuildingForm(building)">

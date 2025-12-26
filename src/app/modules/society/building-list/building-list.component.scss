@@ -5,6 +5,13 @@
     color: $color-note-gray;
 }
 
+.manager {
+    color: $color-note-gray;
+    font-size: $font-size-sm;
+    padding-top: $sp-sm;
+    display: block;
+}
+
 .building-action {
     app-icon {
         padding: $sp;

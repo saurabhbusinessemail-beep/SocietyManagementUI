@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { TimeFormatPipe } from './time-format.pipe';
+import { UserNamePipe } from './user-name.pope';
 @NgModule({
-  declarations: [TimeFormatPipe],
-  exports: [TimeFormatPipe]
+  declarations: [TimeFormatPipe, UserNamePipe],
+  exports: [TimeFormatPipe, UserNamePipe]
 })
 export class PipeModule { }

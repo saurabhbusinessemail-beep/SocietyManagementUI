@@ -13,6 +13,7 @@ import { SocietyDetailsComponent } from './society-details/society-details.compo
 import { SocietyManagersComponent } from './society-managers/society-managers.component';
 import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
+import { PipeModule } from '../../pipes/pipes.module';
 
 
 
@@ -34,7 +35,8 @@ import { FlatListComponent } from './flat-list/flat-list.component';
     LayoutModule,
     UiModule,
     IconModule,
-    DirectiveModule
+    DirectiveModule,
+    PipeModule
   ]
 })
 export class SocietyModule { }
