@@ -1,0 +1,13 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.floor-count {
+    color: $color-note-gray;
+}
+
+.building-action {
+    app-icon {
+        padding: $sp;
+        cursor: pointer;
+    }
+}

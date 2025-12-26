@@ -17,8 +17,7 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Secretaries</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canViewManager"
-                    (clicked)="gotoSocietyManageers()">
+                <ui-button label="Manage" type="only-content" *ngIf="canViewManager" (clicked)="gotoSocietyManageers()">
                 </ui-button>
             </div>
             <div class="list">
@@ -33,14 +32,16 @@
         <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <label>Buildings</label>
-                <strong>{{ buildings.length }}</strong>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
+                <strong>{{ society?.numberOfBuildings }}</strong>
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoBuildingManager()"
+                    [disable]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
                 </ui-button>
             </div>
             <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <label>Flats</label>
-                <strong>{{ society?.numberOfBuildings }}</strong>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
+                <strong>{{ 0 }}</strong>
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" [disable]="!canViewFlats"
+                    (clicked)="gotoFlatManager()">
                 </ui-button>
             </div>
         </section>
@@ -58,10 +59,10 @@
                     <th>Building</th>
                     <th>Parking Alloted</th>
                 </tr>
-                <tr *ngFor="let b of buildings">
+                <!-- <tr *ngFor="let b of buildings">
                     <td>{{ b.buildingNumber }}</td>
                     <td>No</td>
-                </tr>
+                </tr> -->
             </table>
         </section>
 

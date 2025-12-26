@@ -4,6 +4,7 @@ import { Subject, take } from 'rxjs';
 import { ISociety } from '../../../interfaces';
 import { PERMISSIONS } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-society-list',
@@ -19,7 +20,7 @@ export class SocietyListComponent implements OnInit, OnDestroy {
     return this.loginService.hasPermission(PERMISSIONS.society_add);
   }
 
-  constructor(private societyService: SocietyService, private loginService: LoginService) { }
+  constructor(private societyService: SocietyService, private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadSocities();
@@ -34,6 +35,29 @@ export class SocietyListComponent implements OnInit, OnDestroy {
         },
         error: () => console.log('Error while getting socities')
       });
+  }
+
+  handleSocietyClick(society: ISociety) {
+    const profile = this.loginService.getProfileFromStorage();
+    if (!profile) return;
+
+    const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles
+    if (!societyRoles) return;
+
+    if (profile.user.role === 'admin') {
+      this.router.navigate(['../details', society._id]);
+    }
+
+    const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === 'manager');
+    const hasNonManagerialRole = societyRoles.some(sr => sr.name === 'owner' || sr.name === 'member' || sr.name === 'tenant');
+
+    if (hasManagerialRole && hasNonManagerialRole) {
+      // show menu dropdown
+    } else if (hasManagerialRole) {
+      this.router.navigate(['../details', society._id]);
+    } else if (hasNonManagerialRole) {
+      this.router.navigate(['../details', society._id]);
+    }
   }
 
   ngOnDestroy(): void {

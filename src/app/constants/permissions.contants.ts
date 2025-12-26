@@ -11,6 +11,7 @@ export const PERMISSIONS = {
     building_view: "building.view",
     building_add: "building.add",
     building_update: "building.update",
+    building_delete: "building.delete",
     flat_manage: "flat.manage",
     flat_view: "flat.view",
     flat_add: "flat.add",

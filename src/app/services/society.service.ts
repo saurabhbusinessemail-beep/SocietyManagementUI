@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IPagedResponse, ISociety } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IPagedResponse, ISociety } from '../interfaces';
 import { Observable } from 'rxjs';
 
 
@@ -14,6 +14,7 @@ export class SocietyService {
 
     constructor(private http: HttpClient) { }
 
+    /* SOCIETY */
     /* Create society */
     createSociety(payload: any): Observable<ISociety> {
         return this.http.post<ISociety>(this.baseUrl, payload);
@@ -56,11 +57,31 @@ export class SocietyService {
         );
     }
 
+
+    /* Manager */
     newManager(societyId: string, payload: any): Observable<IBEResponseFormat> {
         return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers`, payload);
     }
 
     deleteManager(societyId: string, managerId: string): Observable<IBEResponseFormat> {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers/${managerId}`);
+    }
+
+
+    /* Buildings */
+    getBuildings(societyId: string): Observable<IPagedResponse<IBuilding>> {
+        return this.http.get<IPagedResponse<IBuilding>>(`${this.baseUrl}/${societyId}/buildings`);
+    }
+
+    newBuilding(societyId: string, payload: any) {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings`, payload);
+    }
+
+    updateBuilding(societyId: string, buildingId: string, payload: any) {
+        return this.http.put<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings/${buildingId}`, payload);
+    }
+
+    deleteBuilding(societyId: string, buildingId: string) {
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings/${buildingId}`);
     }
 }

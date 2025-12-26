@@ -12,6 +12,7 @@ export * from './district.interface';
 export * from './feature.interface';
 export * from './flat.interface';
 export * from './gate-pass.interface';
+export * from './manager.interface';
 export * from './menu.interface';
 export * from './my-profile.interface';
 export * from './notification.interface';

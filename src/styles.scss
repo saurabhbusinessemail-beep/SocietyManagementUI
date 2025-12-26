@@ -41,6 +41,9 @@ body {
 .flex-center {
     justify-content: center;
 }
+.flex-gap {
+    gap: $sp;
+}
 
 // header/footer shared background
 .app-header,

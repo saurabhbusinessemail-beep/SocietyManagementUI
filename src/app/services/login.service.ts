@@ -60,8 +60,7 @@ export class LoginService {
 
     hasPermission(
         requiredPermission: string,
-        withId: string | undefined = undefined,
-        idValue: string | null = null
+        spcietyId: string | undefined = undefined
     ): boolean {
         const myProfile = this.getProfileFromStorage();
         if (!myProfile) return false;
@@ -69,7 +68,7 @@ export class LoginService {
         if (myProfile.user.role === 'admin') return true;
 
         return myProfile.socities.some(s => {
-            return (!withId || s.societyId === idValue)
+            return (!spcietyId || s.societyId === spcietyId)
                 && s.societyRoles.some(sr =>
                     sr.permissions.some(p => p === requiredPermission))
         });

@@ -1,0 +1,72 @@
+<app-layout [hideMoreActions]="true">
+    <form [formGroup]="fb">
+        <ui-form-layout>
+
+
+            <ui-text-box formControlName="buildingNumber" [config]="buildingNumberConfig" [smColumns]="12"
+                [mdColumns]="10" [lgColumns]="6">
+            </ui-text-box>
+
+            <ui-text-box formControlName="floors" type="number" [config]="floorsConfig" [smColumns]="12" [mdColumns]="2"
+                [lgColumns]="1">
+            </ui-text-box>
+
+            <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+                <ui-checklist class="flex-end" [formControl]="needManagerFormControl" [config]="needManagerConfig"
+                    [options]="needManagerOptions" direction="horizontal" [smColumns]="12" [mdColumns]="4"
+                    [lgColumns]="3">
+                </ui-checklist>
+
+                <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
+                    *ngIf="needManager" helpText="Select current status" direction="horizontal" [options]="radioOptions"
+                    [smColumns]="12" [mdColumns]="7" [lgColumns]="3">
+                </ui-radio-list>
+
+                <ui-contact-search [formControl]="contactSearchFormControl" [smColumns]="12" [mdColumns]="8"
+                    [lgColumns]="7" *ngIf="needManager && showContactSearch">
+                </ui-contact-search>
+
+                <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="7"
+                    *ngIf="needManager && showUserSearch">
+                </ui-user-search>
+
+            </section>
+
+            <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="7">
+
+                <ui-button label="Reset" type="only-content" (clicked)="resetBuildingForm()">
+                </ui-button>
+
+                <ui-button label="Save" type="primary" *ngIf="!selectedBuildingId" [isSubmit]="true"
+                    [disable]="fb.invalid || !canAddBuildings || pendingBuildingsToAdd === 0" (clicked)="addBuilding()">
+                </ui-button>
+
+                <ui-button label="Save" type="primary" *ngIf="selectedBuildingId" [isSubmit]="true"
+                    [disable]="fb.invalid || !canAddBuildings" (clicked)="editBuilding()">
+                </ui-button>
+
+            </section>
+
+            <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <ui-label [valueText]="pendingBuildingsToAdd" [config]="pendingBuildingsConfig" direction="vertical"
+                    [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                </ui-label>
+            </section>
+
+            <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let building of buildings"
+                [disable]="selectedBuildingId === building._id">
+                <div card-main>
+                    {{ building.buildingNumber }} - <span class="floor-count"> {{ building.floors }} Floors</span>
+                </div>
+                <div card-icon class="building-action">
+                    <app-icon name="edit" *ngIf="canDeleteBuildings" (click)="resetBuildingForm(building)">
+                    </app-icon>
+                    <app-icon class="delete" name="delete" color="#a60000" *ngIf="canDeleteBuildings"
+                        (click)="deleteBuilding(building)">
+                    </app-icon>
+                </div>
+            </ui-card>
+        </ui-form-layout>
+    </form>
+</app-layout>

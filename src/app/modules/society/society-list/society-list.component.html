@@ -19,7 +19,7 @@
 <ng-template #society let-society="society">
   <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
     <ng-container card-main>
-      <a class="society-name" [routerLink]="['../details', society._id]">
+      <a class="society-name" [routerLink]="['/society',society._id, 'details']">
         {{ society.societyName }}
       </a>
 

@@ -23,6 +23,10 @@
         transform: translateY(-2px);
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
     }
+
+    &.disabled {
+        background-color: $color-disable-background;
+    }
 }
 
 .card-main {
@@ -38,8 +42,8 @@
     justify-content: center;
     min-width: 44px;
     height: 44px;
-    border-radius: 50%;
-    background: $color-header-footer;
+    // border-radius: 50%;
+    // background: $color-header-footer;
 
     @include mobile {
         align-self: flex-end;

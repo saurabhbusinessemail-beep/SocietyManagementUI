@@ -16,10 +16,10 @@ export class PermissionGuard implements CanActivate {
         const requiredPermission = route.data['permission'] as string;
         if (!requiredPermission) return true;
         
-        const withId = route.data['withId'] as (string | undefined);
-        const routeParamId = route.paramMap.get(withId ?? 'id');
+        const checkSocietyId = route.data['checkSocietyId'] as (string | undefined);
+        const routeParamId = route.paramMap.get('id');
 
-        const hasPermission = this.loginService.hasPermission(requiredPermission, withId, routeParamId);
+        const hasPermission = this.loginService.hasPermission(requiredPermission, routeParamId ?? undefined);
         if (!hasPermission)
             this.router.navigate(['/unauthorized']);
 

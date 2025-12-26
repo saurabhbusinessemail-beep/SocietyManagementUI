@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
-import { IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
-import { ActivatedRoute } from '@angular/router';
+import { IManager, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,11 +8,6 @@ import { Location } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
 
-interface IManager {
-  _id?: string;
-  name: string;
-  phoneNumber: string;
-}
 
 @Component({
   selector: 'app-society-managers',
@@ -64,22 +59,25 @@ export class SocietyManagersComponent implements OnDestroy {
   }
 
   get canAddSocietyManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_add, 'id', this.society?._id);
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_add, this.society?._id);
   }
 
   get canDeleteSocietyManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete, 'id', this.society?._id);
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete, this.society?._id);
   }
 
   constructor(
     private route: ActivatedRoute,
     private societyService: SocietyService,
     private location: Location,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
+    if (!this.societyId) this.router.navigateByUrl('');
+    
     this.loadSocietyManagers(this.societyId);
     this.subscribeToRadioChange();
   }
@@ -103,7 +101,6 @@ export class SocietyManagersComponent implements OnDestroy {
         this.fb.reset();
         if (!user) return;
 
-        console.log('user = ', user)
         this.fb.patchValue({
           manager: {
             name: user.name ?? 'No Name',

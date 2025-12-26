@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconModule } from '../../core/icons/icon.module';
 import { SocietyDetailsComponent } from './society-details/society-details.component';
 import { SocietyManagersComponent } from './society-managers/society-managers.component';
+import { BuildingListComponent } from './building-list/building-list.component';
+import { FlatListComponent } from './flat-list/flat-list.component';
 
 
 
@@ -20,7 +22,9 @@ import { SocietyManagersComponent } from './society-managers/society-managers.co
     SocietyListComponent,
         AddSocietyComponent,
         SocietyDetailsComponent,
-        SocietyManagersComponent
+        SocietyManagersComponent,
+        BuildingListComponent,
+        FlatListComponent
   ],
   imports: [
     CommonModule,

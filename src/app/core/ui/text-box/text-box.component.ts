@@ -18,12 +18,8 @@ export class TextBoxComponent extends UIBaseFormControl<string> {
     label: 'Username',
     placeholder: 'Enter username',
     validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'minlength', validator: Validators.minLength(3) }
     ],
     errorMessages: {
-      required: 'Username is required',
-      minlength: 'Minimum 3 characters required'
     }
   };
 

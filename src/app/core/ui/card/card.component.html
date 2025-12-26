@@ -1,9 +1,11 @@
-<div class="card">
+<div class="card" [ngClass]="{
+    'disabled': disable
+}">
     <div class="card-main">
         <ng-content select="[card-main]"></ng-content>
     </div>
 
-    <div class="card-icon">
+    <div class="card-icon" *ngIf="!disable">
         <ng-content select="[card-icon]"></ng-content>
     </div>
 </div>

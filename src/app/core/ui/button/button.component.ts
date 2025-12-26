@@ -9,6 +9,7 @@ import { UIBaseFormControl } from '../../../directives';
 export class ButtonComponent extends UIBaseFormControl<void> {
 
   @Input() type: 'primary' | 'cancel' | 'error' | 'only-content' = 'primary';
+  @Input() isSubmit = false;
   @Input() label: string = 'Click';
   @Input() allowWrapText = false;
   @Input() disable?: boolean;
