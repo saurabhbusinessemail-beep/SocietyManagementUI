@@ -102,6 +102,10 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     return this.loginService.hasPermission(PERMISSIONS.building_add, this.societyId);
   }
 
+  get canUpdateBuildings(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.building_update, this.societyId);
+  }
+
   get canDeleteBuildings(): boolean {
     return this.loginService.hasPermission(PERMISSIONS.building_delete, this.societyId);
   }
