@@ -1,0 +1,8 @@
+@import '../../../../styles/variables';
+
+.flat-action {
+    app-icon {
+        padding: $sp;
+        cursor: pointer;
+    }
+}

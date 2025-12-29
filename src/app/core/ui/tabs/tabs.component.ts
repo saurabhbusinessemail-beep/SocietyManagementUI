@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, Output, QueryList } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, EventEmitter, Input, OnChanges, Output, QueryList, SimpleChanges } from '@angular/core';
 import { IUIDropdownOption } from '../../../interfaces';
 import { UIBaseFormControl } from '../../../directives';
 import { UITabContentDirective } from './ui-tab-directive';
@@ -6,13 +6,15 @@ import { UITabContentDirective } from './ui-tab-directive';
 @Component({
   selector: 'ui-tabs',
   templateUrl: './tabs.component.html',
-  styleUrl: './tabs.component.scss'
+  styleUrl: './tabs.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabsComponent extends UIBaseFormControl<string>
-  implements AfterContentInit {
+  implements OnChanges, AfterContentInit {
 
 
   @Input() tabs: IUIDropdownOption[] = [];
+  @Input() tab: string = '';
   @Input() direction: 'horizontal' | 'vertical' = 'horizontal';
   @Input() height?: string; // e.g. '300px', '100%'
   @Input() manageContent = true; // true = tabs handle content switching
@@ -25,6 +27,14 @@ export class TabsComponent extends UIBaseFormControl<string>
 
 
   activeContent?: UITabContentDirective;
+
+  override ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
+
+    if (changes['tab']) {
+      this.selectTab(this.tab);
+    }
+  }
 
   override writeValue(value: string): void {
     this.value = value || this.tabs[0]?.value;

@@ -86,6 +86,12 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     managerId: new FormControl<IManager | null>({ value: null, disabled: true }, [Validators.required])
   });
 
+  get pageTitle(): string | undefined {
+    if (!this.society) return;
+
+    return this.society.societyName + ' Building Manager'
+  }
+
   get showUserSearch(): boolean {
     return this.radioFormControl.value === 'user' ? true : false;
   }
@@ -226,6 +232,7 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.society = response;
+          if (this.society.numberOfBuildings <= 1) this.router.navigateByUrl('');
         }
       })
   }

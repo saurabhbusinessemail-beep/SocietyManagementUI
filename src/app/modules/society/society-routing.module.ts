@@ -10,6 +10,7 @@ import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 
 const routes: Routes = [
+  // Socities
   {
     path: '',
     pathMatch: 'full',
@@ -39,20 +40,38 @@ const routes: Routes = [
     component: SocietyDetailsComponent,
     data: { permission: PERMISSIONS.society_view, checkSocietyId: true }
   },
+
+  // Society Managers
   {
     path: ':id/managers',
     canActivate: [PermissionGuard],
     component: SocietyManagersComponent,
     data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
   },
+
+  // Buildings
   {
     path: ':id/buildings',
     canActivate: [PermissionGuard],
     component: BuildingListComponent,
     data: { permission: PERMISSIONS.building_view, checkSocietyId: true }
   },
+
+  // Flats
+  {
+    path: 'flats',
+    canActivate: [PermissionGuard],
+    component: FlatListComponent,
+    data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
+  },
   {
     path: ':id/flats',
+    canActivate: [PermissionGuard],
+    component: FlatListComponent,
+    data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
+  },
+  {
+    path: ':id/buildings/:buildingId/flats',
     canActivate: [PermissionGuard],
     component: FlatListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }

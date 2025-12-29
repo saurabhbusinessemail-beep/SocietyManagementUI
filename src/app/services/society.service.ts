@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IPagedResponse, ISociety } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, ISociety } from '../interfaces';
 import { Observable } from 'rxjs';
 
 
@@ -58,7 +58,7 @@ export class SocietyService {
     }
 
 
-    /* Manager */
+    /* MANAGER */
     newManager(societyId: string, payload: any): Observable<IBEResponseFormat> {
         return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers`, payload);
     }
@@ -68,20 +68,53 @@ export class SocietyService {
     }
 
 
-    /* Buildings */
+    /* BUILDINGS */
+    // Get one building
+    getBuilding(societyId: string, buildingId: string): Observable<IBuilding> {
+        return this.http.get<IBuilding>(`${this.baseUrl}/${societyId}/buildings/${buildingId}`);
+    }
+
+    // Get all buildings in society
     getBuildings(societyId: string): Observable<IPagedResponse<IBuilding>> {
         return this.http.get<IPagedResponse<IBuilding>>(`${this.baseUrl}/${societyId}/buildings`);
     }
 
+    // Add new building
     newBuilding(societyId: string, payload: any) {
         return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings`, payload);
     }
 
+    // Update building
     updateBuilding(societyId: string, buildingId: string, payload: any) {
         return this.http.put<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings/${buildingId}`, payload);
     }
 
+    // Delete building
     deleteBuilding(societyId: string, buildingId: string) {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings/${buildingId}`);
+    }
+
+    /* FLATS */
+    // Get all falts in a building or society
+    getFlats(societyId: string, buildingId?: string) {
+        if (!buildingId)
+            return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/flats`);
+        else
+            return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/flats`);
+    }
+
+    // Add One Flat
+    newFlat(societyId: string, payload: any) {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats`, payload);
+    }
+
+    // Add Flats in bulk
+    newFlats(societyId: string, payload: any[]) {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats/bulk`, payload);
+    }
+
+    // Delete flat
+    deleteFlat(societyId: string, flatId: string) {
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats/${flatId}`);
     }
 }

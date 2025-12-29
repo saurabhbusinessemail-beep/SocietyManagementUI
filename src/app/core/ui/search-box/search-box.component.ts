@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnDestroy, OnInit } from '@angu
 import { UIBaseFormControl } from '../../../directives';
 import { IUIDropdownOption } from '../../../interfaces';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ui-search-box',
@@ -27,7 +27,6 @@ export class SearchBoxComponent
     this.search$
       .pipe(
         debounceTime(300),
-        distinctUntilChanged(),
         takeUntil(this.isComponentActive)
       )
       .subscribe(value => {
