@@ -40,8 +40,7 @@
             <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <label>Flats</label>
                 <strong>{{ 0 }}</strong>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" [disable]="!canViewFlats"
-                    (clicked)="gotoFlatManager()">
+                <ui-button label="Manage" type="only-content" [disable]="!canViewFlats" (clicked)="gotoFlatManager()">
                 </ui-button>
             </div>
         </section>

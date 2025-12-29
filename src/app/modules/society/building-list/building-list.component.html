@@ -37,6 +37,9 @@
 
                 <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="7">
 
+                    <ui-button label="Manage Flats" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewFlats()">
+                    </ui-button>
+
                     <ui-button [label]="selectedBuildingId ? 'Cancel' : 'Reset'" type="only-content"
                         (clicked)="resetBuildingForm()">
                     </ui-button>

@@ -1,85 +1,93 @@
 <app-layout [hideMoreActions]="true" [title]="pageTitle">
     <form [formGroup]="fb">
         <ui-form-layout>
-
-            <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="10" [lgColumns]="5"
-                *ngIf="!society">
-            </ui-society-search>
-
-            <ui-label [valueText]="society.societyName" [config]="societyNameConfig" direction="horizontal"
-                valueType="info" [smColumns]="12" [mdColumns]="10" [lgColumns]="10" *ngIf="society">
-            </ui-label>
+            
+            <ng-container *ngIf="canAddFlat">
 
 
+                <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="10" [lgColumns]="5"
+                    *ngIf="!society">
+                </ui-society-search>
 
-            <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
-                placeholder="Select Building" [smColumns]="12" [mdColumns]="10" [lgColumns]="5">
-            </ui-drop-down>
-
-
-            <ng-container
-                *ngIf="(buildings.length > 0 && selectedBuilding) || selectedSociety?.numberOfBuildings === 1">
-                <ui-tabs [config]="addFlatTabsConfig" [tabs]="tabsOptions" (tabChange)="handleTabChange($event)"
-                    [(tab)]="selectedTab" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                </ui-tabs>
-
-
-                <ng-container formGroupName="autogenerateForm" *ngIf="selectedTab === 'autoGen'">
-
-                    <ui-text-box type="number" formControlName="fromFloor" [config]="fromFloorConfig" [smColumns]="6"
-                        [mdColumns]="5" [lgColumns]="2">
-                    </ui-text-box>
-
-                    <ui-text-box type="number" formControlName="toFloor" [config]="toFloorConfig" [smColumns]="6"
-                        [mdColumns]="5" [lgColumns]="2">
-                    </ui-text-box>
-                    <ui-text-box type="number" formControlName="startFlat" [config]="startFlatConfig" [smColumns]="6"
-                        [mdColumns]="5" [lgColumns]="2">
-                    </ui-text-box>
-                    <ui-text-box type="number" formControlName="endFlat" [config]="endFlatConfig" [smColumns]="6"
-                        [mdColumns]="5" [lgColumns]="2">
-                    </ui-text-box>
-
-                    <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
-                        [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="4"
-                        [lgColumns]="2">
-                    </ui-drop-down>
-
-                </ng-container>
-
-                <ng-container formGroupName="addFlats" *ngIf="selectedTab === 'addFlat'">
-
-                    <ui-text-box formControlName="flatNumber" [config]="flatNumberConfig" [smColumns]="6"
-                        [mdColumns]="4" [lgColumns]="4">
-                    </ui-text-box>
-                    <ui-text-box type="number" formControlName="floor" [config]="floorConfig" [smColumns]="6"
-                        [mdColumns]="2" [lgColumns]="2">
-                    </ui-text-box>
-
-                    <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
-                        [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="4"
-                        [lgColumns]="4">
-                    </ui-drop-down>
-
-                </ng-container>
-            </ng-container>
-
-            <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="10" [lgColumns]="10">
-                <ui-label [valueText]="errorMessage" [config]="{id: 'error'}" *ngIf="errorMessage" valueType="error"
-                    [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                <ui-label [valueText]="society.societyName" [config]="societyNameConfig" direction="horizontal"
+                    valueType="info" [smColumns]="12" [mdColumns]="10" [lgColumns]="10" *ngIf="society">
                 </ui-label>
 
-                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
-                    (clicked)="addFlat()">
-                </ui-button>
-            </section>
 
-            <ui-drop-down [formControl]="floorControl" [config]="floorFilterConfig" [options]="filterOptions"
-                [smColumns]="12" [mdColumns]="10" [lgColumns]="5">
-            </ui-drop-down>
+
+                <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
+                    placeholder="Select Building" [smColumns]="12" [mdColumns]="10" [lgColumns]="5">
+                </ui-drop-down>
+
+
+                <ng-container
+                    *ngIf="(buildings.length > 0 && selectedBuilding) || selectedSociety?.numberOfBuildings === 1">
+                    <ui-tabs [config]="addFlatTabsConfig" [tabs]="tabsOptions" (tabChange)="handleTabChange($event)"
+                        [(tab)]="selectedTab" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    </ui-tabs>
+
+
+                    <ng-container formGroupName="autogenerateForm" *ngIf="selectedTab === 'autoGen'">
+
+                        <ui-text-box type="number" formControlName="fromFloor" [config]="fromFloorConfig"
+                            [smColumns]="6" [mdColumns]="5" [lgColumns]="2">
+                        </ui-text-box>
+
+                        <ui-text-box type="number" formControlName="toFloor" [config]="toFloorConfig" [smColumns]="6"
+                            [mdColumns]="5" [lgColumns]="2">
+                        </ui-text-box>
+                        <ui-text-box type="number" formControlName="startFlat" [config]="startFlatConfig"
+                            [smColumns]="6" [mdColumns]="5" [lgColumns]="2">
+                        </ui-text-box>
+                        <ui-text-box type="number" formControlName="endFlat" [config]="endFlatConfig" [smColumns]="6"
+                            [mdColumns]="5" [lgColumns]="2">
+                        </ui-text-box>
+
+                        <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
+                            [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="4"
+                            [lgColumns]="2">
+                        </ui-drop-down>
+
+                    </ng-container>
+
+                    <ng-container formGroupName="addFlats" *ngIf="selectedTab === 'addFlat'">
+
+                        <ui-text-box formControlName="flatNumber" [config]="flatNumberConfig" [smColumns]="6"
+                            [mdColumns]="4" [lgColumns]="4">
+                        </ui-text-box>
+                        <ui-text-box type="number" formControlName="floor" [config]="floorConfig" [smColumns]="6"
+                            [mdColumns]="2" [lgColumns]="2">
+                        </ui-text-box>
+
+                        <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
+                            [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="4"
+                            [lgColumns]="4">
+                        </ui-drop-down>
+
+                    </ng-container>
+                </ng-container>
+
+                <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="10" [lgColumns]="10">
+                    <ui-label [valueText]="errorMessage" [config]="{id: 'error'}" *ngIf="errorMessage" valueType="error"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                    </ui-label>
+
+                    <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
+                        (clicked)="addFlat()">
+                    </ui-button>
+                </section>
+
+                <section class="fui-form-layout" [smColumns]="12" [mdColumns]="10" [lgColumns]="10">
+                    <ui-drop-down [formControl]="floorControl" [config]="floorFilterConfig" [options]="filterOptions"
+                        [smColumns]="12" [mdColumns]="10" [lgColumns]="5">
+                    </ui-drop-down>
+                </section>
+                
+            </ng-container>
 
             <ng-container *ngFor="let flat of flats">
-                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [disable]="selectedFlatId === flat._id" *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()">
+                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [disable]="selectedFlatId === flat._id"
+                    *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()">
                     <div card-main class="flex flex-gap">
                         <span class="note">
                             <b>{{ flat.floor }}:</b> {{ flat.flatNumber }}
@@ -88,11 +96,10 @@
                             {{ flat.flatType }}
                         </span>
                         <div>
-                            Floor {{ flat.floor }}
                         </div>
                     </div>
                     <div card-icon class="flat-action">
-                        <app-icon class="delete" name="delete" color="#a60000" (click)="deleteFlat(flat)">
+                        <app-icon class="delete" name="delete" color="#a60000" (click)="deleteFlat(flat)" *ngIf="canDeleteFlat">
                         </app-icon>
                     </div>
                 </ui-card>

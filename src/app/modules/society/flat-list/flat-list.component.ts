@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { IBuilding, IFlat, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
-import { FlatTypeList, FlatTypes } from '../../../constants';
+import { FlatTypeList, FlatTypes, PERMISSIONS } from '../../../constants';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-flat-list',
@@ -218,10 +219,19 @@ export class FlatListComponent implements OnInit, OnDestroy {
     });
   }
 
+  get canAddFlat() {
+    return this.loginService.hasPermission(PERMISSIONS.flat_add, this.societyId);
+  }
+
+  get canDeleteFlat() {
+    return this.loginService.hasPermission(PERMISSIONS.flat_delete, this.societyId);
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private societyService: SocietyService
+    private societyService: SocietyService,
+    private loginService: LoginService
   ) { }
 
   ngOnInit(): void {

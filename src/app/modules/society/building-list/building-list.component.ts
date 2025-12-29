@@ -122,6 +122,10 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       : false
   }
 
+  get canViewFlats(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.flat_view, this.societyId);
+  }
+
   get pendingBuildingsToAdd(): number {
     return (this.society?.numberOfBuildings ?? 0) - this.buildings.length;
   }
@@ -208,7 +212,6 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       ? null
       : existingBuilding.managerId;
 
-    console.log('managerId = ', managerId)
 
     this.needManagerFormControl.setValue(managerId ? [true] : []);
     this.radioFormControl.setValue('user');
@@ -294,6 +297,16 @@ export class BuildingListComponent implements OnInit, OnDestroy {
           this.resetBuildingForm();
         },
       })
+  }
+
+  gotoViewFlats() {
+    if (!this.societyId) return;
+
+    if (this.selectedBuildingId) {
+      this.router.navigate(['society', this.societyId, 'buildings', this.selectedBuildingId, 'flats']);
+    } else {
+      this.router.navigate(['society', this.societyId, 'flats']);
+    }
   }
 
   ngOnDestroy(): void {
