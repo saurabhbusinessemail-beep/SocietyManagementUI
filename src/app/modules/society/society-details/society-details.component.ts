@@ -40,6 +40,10 @@ export class SocietyDetailsComponent implements OnInit {
     return this.loginService.hasPermission(PERMISSIONS.flat_view, this.society?._id);
   }
 
+  get canViewParkings(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.parking_view, this.society?._id);
+  }
+
   constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService,
     private loginService: LoginService) { }
 
@@ -84,16 +88,6 @@ export class SocietyDetailsComponent implements OnInit {
   }
 
 
-  /** Step 2: Load buildings separately */
-  // loadBuildings(ids: string[]): void {
-  //   // 🔁 Replace with API call later
-  //   this.buildings = [
-  //     { _id: '101', buildingNumber: 'A Wing', societyId: '20' } as IBuilding,
-  //     { _id: '102', buildingNumber: 'B Wing', societyId: '16' } as IBuilding
-  //   ];
-  // }
-
-
   /** Step 3: Load flats separately */
   loadFlats(ids: string[]): void {
     // 🔁 Replace with API call later
@@ -124,32 +118,7 @@ export class SocietyDetailsComponent implements OnInit {
       { _id: '2', parkingNumber: 'BIKE', flatId: '101' } as IParking
     ];
   }
-
-
-  /** Step 6: Features by society */
-  // loadFeatures(societyId: string): void {
-  //   // 🔁 Replace with API call later
-  //   this.features = [
-  //     { _id: '1', societyId: '101', featureKey: 'asdasd' } as ISocietyFeature,
-  //     { _id: '2', societyId: '101', featureKey: '101' } as ISocietyFeature
-  //   ];
-  // }
-
-
-  /** Step 7: Secretary by society */
-  // loadSecretaries(societyId: string): void {
-  //   // 🔁 Replace with API call later
-  //   this.secretaries = [
-  //     { _id: '1', memberName: 'name1', memberContactNumber: '567567' } as IFlatMember,
-  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember,
-  //     { _id: '2', memberName: 'name2', memberContactNumber: '567567' } as IFlatMember
-  //   ];
-  // }
-
+  
   gotoEditSociety() {
     this.router.navigate(['/society', this.society?._id, 'edit']);
   }
@@ -164,6 +133,10 @@ export class SocietyDetailsComponent implements OnInit {
 
   gotoFlatManager() {
     this.router.navigate(['/society', this.society?._id, 'flats']);
+  }
+
+  gotoParkingManager() {
+    this.router.navigate(['/society', this.society?._id, 'parkings']);
   }
 
   async removeSecretary(user: IUser) {

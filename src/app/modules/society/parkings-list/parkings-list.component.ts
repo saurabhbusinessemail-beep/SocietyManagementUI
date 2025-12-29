@@ -1,0 +1,422 @@
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, take, takeUntil, Observable } from 'rxjs';
+import { FlatTypes, FlatTypeList, PERMISSIONS, VehicleTypes, VehicleTypeList } from '../../../constants';
+import { ISociety, IBuilding, IFlat, IUIControlConfig, IUIDropdownOption, IParking } from '../../../interfaces';
+import { LoginService } from '../../../services/login.service';
+import { SocietyService } from '../../../services/society.service';
+
+@Component({
+  selector: 'app-parkings-list',
+  templateUrl: './parkings-list.component.html',
+  styleUrl: './parkings-list.component.scss'
+})
+export class ParkingsListComponent implements OnInit, OnDestroy {
+
+  societyId?: string;
+  buildingId?: string;
+  society?: ISociety;
+  buildings: IBuilding[] = [];
+  building?: IBuilding;
+  flats: IFlat[] = [];
+  parkings: IParking[] = [];
+
+  @ViewChild('target') target!: ElementRef;
+
+  fb = new FormGroup({
+    _id: new FormControl<string | undefined>(''),
+    society: new FormControl<ISociety | null>(null, [Validators.required]),
+    building: new FormControl<string | null>(null, [Validators.required]),
+    parkingNumber: new FormControl<string | null>(null, [Validators.required]),
+    parkingType: new FormControl<string>('4W', [Validators.required]),
+    flatId: new FormControl<string | null>(null, [Validators.required]),
+  });
+
+  errorMessage: string = '';
+  isComponentActive = new Subject<void>();
+  societyNameConfig: IUIControlConfig = {
+    id: 'societyName',
+    label: 'Society Name'
+  };
+  buildingSelectorConfig: IUIControlConfig = {
+    id: 'building',
+    label: 'Building',
+    placeholder: 'Select Building',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Building is required',
+    }
+  };
+  parkingTypeSelectorConfig: IUIControlConfig = {
+    id: 'parkingType',
+    label: 'Parking Type',
+    placeholder: 'Select Parking Type',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Parking Type is required',
+    }
+  };
+  flatIdConfig: IUIControlConfig = {
+    id: 'flatId',
+    label: 'Flat',
+    placeholder: 'Select Flat',
+    validations: [
+      { name: 'required', validator: Validators.required },
+    ],
+    errorMessages: {
+      required: 'Flat is required',
+    }
+  };
+  parkingNumberConfig = {
+    id: 'parkingNumber',
+    label: 'Parking Number',
+    placeholder: 'Enter Parking Number',
+    validations: [
+      { name: 'required', validator: Validators.required },
+      { name: 'minlength', validator: Validators.minLength(2) }
+    ],
+    errorMessages: {
+      required: 'Parking Number is required',
+      minlength: 'Minimum 2 characters required'
+    }
+  };
+
+  defaultFilter: IUIDropdownOption = {
+    label: 'All',
+    value: ''
+  }
+
+  get selectedParkingId(): string | undefined {
+    return this.fb.get('_id')?.value ?? undefined;
+  }
+
+  get selectedBuildingId(): string | undefined {
+    return this.fb.get('building')?.value ?? undefined;
+  }
+
+  get selectedSociety(): ISociety | undefined {
+    return this.fb.get('society')?.value ?? undefined;
+  }
+
+  get selectedBuilding(): string | undefined {
+    return this.fb.get('building')?.value ?? undefined;
+  }
+
+  get pageTitle(): string | undefined {
+    if (!this.society) return 'Parkings Manager';
+
+    return this.society.societyName + ' Parkings Manager'
+  }
+
+  get buildingOptions(): IUIDropdownOption<string>[] {
+    return this.buildings.map(b => {
+      return {
+        label: b.buildingNumber,
+        value: b._id
+      } as IUIDropdownOption<string>
+    });
+  }
+
+  get parkingTypeOptions(): IUIDropdownOption<string>[] {
+    return VehicleTypeList.map(vt => ({
+      label: vt.name,
+      value: vt.vehicleTypeId
+    } as IUIDropdownOption))
+  }
+
+  get parkingFlatOptions(): IUIDropdownOption<string>[] {
+    return this.flats.map(f => ({
+      label: f.floor + ':' + f.flatNumber,
+      value: f._id
+    } as IUIDropdownOption))
+  }
+
+  get canAddParking() {
+    return this.loginService.hasPermission(PERMISSIONS.parking_add, this.societyId);
+  }
+
+  get canUpdateParking() {
+    return this.loginService.hasPermission(PERMISSIONS.parking_update, this.societyId);
+  }
+
+  get canDeleteParking() {
+    return this.loginService.hasPermission(PERMISSIONS.parking_delete, this.societyId);
+  }
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private societyService: SocietyService,
+    private loginService: LoginService
+  ) { }
+
+  ngOnInit(): void {
+    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.buildingId = this.route.snapshot.paramMap.get('buildingId')!;
+
+    if (this.societyId) {
+      this.loadSociety(this.societyId);
+
+      if (this.buildingId) {
+        this.loadBuilding(this.societyId, this.buildingId);
+      }
+
+    }
+
+    this.subscribeToChange();
+  }
+
+  loadSociety(societyId: string) {
+    this.societyService.getSociety(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.society = response;
+          this.fb.get('society')?.setValue(response);
+
+          if (this.society.numberOfBuildings > 1) {
+            this.loadSocietyBuildings(societyId);
+            this.fb.get('building')?.enable();
+            // this.subscribeToChange();
+          } else {
+            this.loadFlats(societyId);
+            this.loadParkings(societyId);
+            this.fb.get('building')?.disable();
+          }
+        }
+      })
+  }
+
+  loadSocietyBuildings(societyId: string) {
+
+    this.societyService.getBuildings(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.buildings = response.data;
+        }
+      })
+  }
+
+  loadBuilding(societyId: string, buildingId: string) {
+    this.societyService.getBuilding(societyId, buildingId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.building = response;
+          this.loadFlats(societyId, buildingId);
+          this.loadParkings(societyId, buildingId);
+          setTimeout(() => {
+            this.fb.get('building')?.setValue(response._id);
+            this.fb.get('building')?.disable();
+          });
+        }
+      })
+  }
+
+  loadFlats(societyId: string, buildingId?: string) {
+    this.societyService.getFlats(societyId, buildingId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.flats = response.data;
+        }
+      })
+  }
+
+  loadParkings(societyId: string, buildingId?: string) {
+    this.societyService.getParkings(societyId, buildingId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.parkings = response.data;
+        }
+      })
+  }
+
+  subscribeToChange() {
+    this.fb.get('society')?.valueChanges
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(society => {
+        this.buildings = [];
+        this.fb.get('building')?.reset();
+        this.flats = [];
+        this.parkings = [];
+        this.fb.get('building')?.enable();
+        if (!society) return;
+
+        if (society.numberOfBuildings > 1) {
+          this.loadSocietyBuildings(society._id);
+        }
+        else {
+          this.loadFlats(society._id);
+          this.loadParkings(society._id);
+          setTimeout(() => {
+            this.fb.get('building')?.disable();
+          });
+        }
+        this.cancelEditParking();
+      });
+
+    this.fb.get('building')?.valueChanges
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(buildingId => {
+        this.flats = [];
+        this.parkings = [];
+        if (!buildingId) return;
+
+        const building = this.buildings.find(b => b._id === buildingId);
+        if (!building) return;
+
+        const societyId = typeof building.societyId === 'string' ? building.societyId : building.societyId._id;
+        this.loadFlats(societyId, building._id);
+        this.loadParkings(societyId, building._id);
+        this.cancelEditParking();
+      });
+  }
+
+  addParking() {
+    if (this.fb.invalid || !this.societyId) return;
+
+    const formValue = this.fb.value;
+    const payload = {
+      parkingNumber: formValue.parkingNumber,
+      societyId: this.societyId,
+      buildingId: formValue.building,
+      flatId: formValue.flatId,
+      parkingType: formValue.parkingType
+    }
+    const existingParkings = this.findExistingParkingNumber([payload]);
+    if (existingParkings) {
+      this.errorMessage = `Parking ${existingParkings} already exists`;
+      return;
+    }
+
+    this.societyService.newParking(this.societyId, payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.loadParkings(this.societyId ?? '', formValue.building ?? undefined)
+          this.cancelEditParking();
+        }
+      })
+  }
+
+  generateParking() {
+    // Find flats with pending parkings
+    const flatsWithoutParking = this.flats.filter(f => !this.parkings.some(p => p.flatId === f._id));
+    if (flatsWithoutParking.length === 0) return;
+
+    const newParkings = flatsWithoutParking.map(f => {
+      return {
+        parkingNumber: f.floor + f.flatNumber,
+        societyId: this.societyId,
+        buildingId: f.buildingId,
+        flatId: f._id,
+        parkingType: '4W'
+      };
+    });
+
+    const existingParkings = this.findExistingParkingNumber(newParkings);
+    if (existingParkings) {
+      this.errorMessage = `Parking ${existingParkings} already exists`;
+      return;
+    }
+
+    this.societyService.newParkings(this.societyId ?? '', newParkings)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.loadParkings(this.societyId ?? '', this.selectedBuilding)
+          this.cancelEditParking();
+        }
+      })
+  }
+
+  updateParking() {
+    if (this.fb.invalid || !this.societyId) return;
+
+    const formValue = this.fb.value;
+
+    // check if new parking number already exists
+    if (this.parkings.some(p => p._id !== formValue._id && p.parkingNumber === formValue.parkingNumber)) {
+      this.errorMessage = 'Parking number already exists';
+      return;
+    }
+
+    const payload = {
+      _id: formValue._id,
+      parkingNumber: formValue.parkingNumber,
+      societyId: this.societyId,
+      buildingId: formValue.building,
+      flatId: formValue.flatId,
+      parkingType: formValue.parkingType
+    }
+    this.societyService.updateParking(this.societyId, formValue._id ?? '', payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.loadParkings(this.societyId ?? '', formValue.building ?? undefined);
+          this.cancelEditParking();
+        }
+      })
+  }
+
+  findExistingParkingNumber(parkings: any[]): string {
+    return parkings.filter(p => this.parkings.some(sp => sp.parkingNumber === p.parkingNumber))
+      .map(p => p.parkingNumber)
+      .join(', ');
+  }
+
+  deleteParking(parking: IParking) {
+    if (!this.societyId) return;
+
+    this.societyService.deleteParking(this.societyId, parking._id)
+      .pipe(take(1))
+      .subscribe({
+        next: (value) => {
+          this.loadParkings(this.societyId ?? '', this.fb.value.building ?? undefined);
+        },
+      })
+  }
+
+  editParking(parking: IParking) {
+    this.fb.get('_id')?.setValue(parking._id);
+    this.fb.get('parkingNumber')?.setValue(parking.parkingNumber);
+    this.fb.get('parkingType')?.setValue(parking.parkingType);
+    this.fb.get('flatId')?.setValue(typeof parking.flatId === 'string' ? parking.flatId : (parking.flatId?._id ?? ''))
+    this.scrollToElement();
+  }
+
+  cancelEditParking() {
+    this.fb.get('_id')?.reset();
+    this.fb.get('parkingNumber')?.reset();
+    this.fb.get('parkingType')?.reset();
+    this.fb.get('flatId')?.reset();
+  }
+
+  scrollToElement() {
+    this.target.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+
+  getFlatNumber(parking: IParking) {
+    return !parking.flatId || typeof parking.flatId === 'string' ? undefined : (parking.flatId.floor + ':' + parking.flatId.flatNumber)
+  }
+
+  getFlatType(parking: IParking) {
+    return VehicleTypeList.find(vt => vt.vehicleTypeId === parking.parkingType)?.name
+  }
+
+  ngOnDestroy(): void {
+    this.isComponentActive.next();
+    this.isComponentActive.complete();
+  }
+}

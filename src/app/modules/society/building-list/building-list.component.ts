@@ -309,6 +309,16 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     }
   }
 
+  gotoViewParkings() {
+    if (!this.societyId) return;
+
+    if (this.selectedBuildingId) {
+      this.router.navigate(['society', this.societyId, 'buildings', this.selectedBuildingId, 'parkings']);
+    } else {
+      this.router.navigate(['society', this.societyId, 'parkings']);
+    }
+  }
+
   ngOnDestroy(): void {
     this.isComponentActive.next();
     this.isComponentActive.complete();

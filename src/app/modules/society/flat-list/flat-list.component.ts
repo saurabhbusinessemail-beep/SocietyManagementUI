@@ -375,6 +375,11 @@ export class FlatListComponent implements OnInit, OnDestroy {
         flatType: formValue.addFlats?.flatType,
         floor: formValue.addFlats?.floor,
       };
+      const existingFlats = this.findExistingFlat([payload]);
+      if (existingFlats) {
+        this.errorMessage = `Flat ${existingFlats} already exists`;
+        return;
+      }
       obs = this.societyService.newFlat(payload.societyId, payload)
 
     } else if (this.selectedTab === 'autoGen') {
@@ -418,6 +423,8 @@ export class FlatListComponent implements OnInit, OnDestroy {
           const societyId = formValue.society?._id ?? '';
           const buildingId = formValue.building ?? undefined;
           this.loadFlats(societyId, buildingId);
+          this.fb.get('autogenerateForm')?.reset();
+          this.fb.get('addFlats')?.reset();
         }
       });
   }

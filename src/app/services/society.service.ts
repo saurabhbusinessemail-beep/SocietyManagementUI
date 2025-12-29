@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, ISociety } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety } from '../interfaces';
 import { Observable } from 'rxjs';
 
 
@@ -116,5 +116,33 @@ export class SocietyService {
     // Delete flat
     deleteFlat(societyId: string, flatId: string) {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats/${flatId}`);
+    }
+
+    /* Parking */
+    // Get all parking in a building or society
+    getParkings(societyId: string, buildingId?: string) {
+        if (!buildingId)
+            return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/parkings`);
+        else
+            return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/parkings`);
+    }
+
+    // Add One Parking
+    newParking(societyId: string, payload: any) {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/parkings`, payload);
+    }
+
+    // Add Parkings in bulk
+    newParkings(societyId: string, payload: any[]) {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/parkings/bulk`, payload);
+    }
+
+    updateParking(societyId: string, parkingId: string, payload: any) {
+        return this.http.put<IBEResponseFormat>(`${this.baseUrl}/${societyId}/parkings/${parkingId}`, payload);
+    }
+
+    // Delete Parkings
+    deleteParking(societyId: string, parkingId: string) {
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/parkings/${parkingId}`);
     }
 }

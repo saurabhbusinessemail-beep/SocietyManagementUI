@@ -35,6 +35,10 @@ body {
 .flex {
     display: flex;
 }
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
 .flex-end {
     justify-content: flex-end;
 }
@@ -158,10 +162,9 @@ textarea {
     margin-bottom: $sp-sm;
 }
 .note {
-    background: $color-note-gray;
     padding: $sp;
     border-radius: 6px;
-    color: #333;
+    color: $color-note-gray;
 }
 
 // Tabs (div-based)

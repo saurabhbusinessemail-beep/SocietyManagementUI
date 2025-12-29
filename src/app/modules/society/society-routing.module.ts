@@ -8,6 +8,7 @@ import { PERMISSIONS } from '../../constants';
 import { SocietyManagersComponent } from './society-managers/society-managers.component';
 import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
+import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 
 const routes: Routes = [
   // Socities
@@ -74,6 +75,26 @@ const routes: Routes = [
     path: ':id/buildings/:buildingId/flats',
     canActivate: [PermissionGuard],
     component: FlatListComponent,
+    data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
+  },
+
+  // Parkings
+  {
+    path: 'parkings',
+    canActivate: [PermissionGuard],
+    component: ParkingsListComponent,
+    data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
+  },
+  {
+    path: ':id/parkings',
+    canActivate: [PermissionGuard],
+    component: ParkingsListComponent,
+    data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
+  },
+  {
+    path: ':id/buildings/:buildingId/parkings',
+    canActivate: [PermissionGuard],
+    component: ParkingsListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
   }
 ];

@@ -14,6 +14,7 @@ import { SocietyManagersComponent } from './society-managers/society-managers.co
 import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 import { PipeModule } from '../../pipes/pipes.module';
+import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 
 
 
@@ -25,7 +26,8 @@ import { PipeModule } from '../../pipes/pipes.module';
         SocietyDetailsComponent,
         SocietyManagersComponent,
         BuildingListComponent,
-        FlatListComponent
+        FlatListComponent,
+        ParkingsListComponent
   ],
   imports: [
     CommonModule,

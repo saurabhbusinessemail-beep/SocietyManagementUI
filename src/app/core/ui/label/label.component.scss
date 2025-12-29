@@ -1,4 +1,5 @@
 @import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 .ui-control {
   display: flex;
@@ -16,6 +17,18 @@
     
   .ui-value {
     font-weight: 500;
+
+    @include mobile {
+      font-size: $font-size-xs;
+    }
+
+    @include tablet {
+      font-size: $font-size-sm;
+    }
+
+    @include desktop {
+      font-size: $font-size-base;
+    }
   
     &.type-default   { color: $color-black; }
     &.type-info      { color: $color-help-text; }

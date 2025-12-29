@@ -50,19 +50,9 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Parkings</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoParkingManager()">
                 </ui-button>
             </div>
-            <table class="table">
-                <tr>
-                    <th>Building</th>
-                    <th>Parking Alloted</th>
-                </tr>
-                <!-- <tr *ngFor="let b of buildings">
-                    <td>{{ b.buildingNumber }}</td>
-                    <td>No</td>
-                </tr> -->
-            </table>
         </section>
 
 
