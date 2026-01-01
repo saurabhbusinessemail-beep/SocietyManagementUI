@@ -7,11 +7,14 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
+import { UserComponent } from './user/user.component';
+import { IconModule } from '../../core/icons/icon.module';
 
 
 @NgModule({
   declarations: [
-    AdminComponent
+    AdminComponent,
+    UserComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +23,8 @@ import { DirectiveModule } from '../../directives/directive.module';
     FormsModule,
     ReactiveFormsModule,
     UiModule,
-    DirectiveModule
+    DirectiveModule,
+    IconModule
   ]
 })
 export class DashboardModule { }

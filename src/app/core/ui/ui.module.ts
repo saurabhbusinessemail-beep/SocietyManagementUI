@@ -11,7 +11,7 @@ import { TabsComponent } from './tabs/tabs.component';
 import { UITabContentDirective } from './tabs/ui-tab-directive';
 import { LabelComponent } from './label/label.component';
 import { ButtonComponent } from './button/button.component';
-import { MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { UserIconComponent } from './user-icon/user-icon.component';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { ContactSearchComponent } from './contact-search/contact-search.component';
@@ -21,7 +21,8 @@ import { GeoSearchComponent } from './geo-search/geo-search.component';
 import { CardComponent } from './card/card.component';
 import { ChipComponent } from './chip/chip.component';
 import { SocietySearchComponent } from './society-search/society-search.component';
-
+import { DateComponent } from './date/date.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
@@ -42,12 +43,14 @@ import { SocietySearchComponent } from './society-search/society-search.componen
     GeoSearchComponent,
     CardComponent,
     ChipComponent,
-    SocietySearchComponent
+    SocietySearchComponent,
+    DateComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
-    DirectiveModule
-  ],
+    DirectiveModule, MatDatepickerModule, MatNativeDateModule,
+    FormsModule
+],
   exports: [TextBoxComponent,
     DropDownComponent,
     SearchBoxComponent,
@@ -64,7 +67,9 @@ import { SocietySearchComponent } from './society-search/society-search.componen
     GeoSearchComponent,
     CardComponent,
     ChipComponent,
-    SocietySearchComponent
-  ]
+    SocietySearchComponent,
+    DateComponent
+  ],
+  providers: [MatDatepickerModule]
 })
 export class UiModule { }

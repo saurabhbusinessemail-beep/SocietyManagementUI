@@ -51,12 +51,10 @@ export class SocietyListComponent implements OnInit, OnDestroy {
     const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === 'manager');
     const hasNonManagerialRole = societyRoles.some(sr => sr.name === 'owner' || sr.name === 'member' || sr.name === 'tenant');
 
-    if (hasManagerialRole && hasNonManagerialRole) {
-      // show menu dropdown
-    } else if (hasManagerialRole) {
-      this.router.navigate(['../details', society._id]);
+    if (hasManagerialRole) {
+      this.router.navigate(['/society', society._id, 'details']);
     } else if (hasNonManagerialRole) {
-      this.router.navigate(['../details', society._id]);
+      this.router.navigate(['/myflats', society._id, 'list']);
     }
   }
 

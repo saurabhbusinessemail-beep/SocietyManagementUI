@@ -1,4 +1,4 @@
-<nav class="app-menu" [attr.data-mode]="mode" [class.open]="open">
+<nav class="app-menu" [attr.data-mode]="mode" [class.open]="open" *ngIf="menuItems.length > 0">
 
     <!-- overlay backdrop for tablet/mobile when open -->
     <div class="backdrop" *ngIf="open && mode !== 'desktop'" (click)="closeOverlay()"></div>

@@ -1,0 +1,105 @@
+<app-layout [hideMoreActions]="true" title="I Am">
+    <form [formGroup]="fb">
+        <ui-form-layout>
+
+            <ng-container *ngIf="!role">
+                <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+
+                <ui-card *ngFor="let r of roles" [smColumns]="12" [mdColumns]="4" [lgColumns]="2"
+                    (click)="setRole(r.role)">
+                    <div card-main>
+                        <b>{{ r.label }}</b>
+                    </div>
+                    <div card-icon>
+                        <app-icon [name]="r.icon"></app-icon>
+                    </div>
+                </ui-card>
+
+
+                <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+            </ng-container>
+
+
+            <ng-container *ngIf="role">
+
+                <!-- Society -->
+                <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+                <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+                </ui-society-search>
+                <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+
+
+                <!-- Buildings & Flats -->
+                <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12" *ngIf="!isSecurity">
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+                    <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
+                        [options]="buildingOptions" placeholder="Select Building" [smColumns]="12" [mdColumns]="6"
+                        [lgColumns]="3">
+                    </ui-drop-down>
+
+                    <ui-drop-down formControlName="flatId" [config]="flatIdConfig" [options]="parkingFlatOptions"
+                        placeholder="Select Flat" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                    </ui-drop-down>
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+                </section>
+
+                <!-- Residence Type -->
+                <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12" *ngIf="isOwner">
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+                    <ui-radio-list formControlName="residingType" [config]="residingTypeConfig" direction="horizontal"
+                        [options]="residingTypeOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                    </ui-radio-list>
+
+                    <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
+                        direction="horizontal" [options]="radioOptions" *ngIf="isResidingTypeTenant" [smColumns]="12"
+                        [mdColumns]="6" [lgColumns]="3">
+                    </ui-radio-list>
+                </section>
+
+                <!-- Tenant Form -->
+                <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+                    formGroupName="tenantForm" *ngIf="isResidingTypeTenant || isTenant">
+
+                    <!-- User / Contact Search -->
+                    <div class="no-mobile no-tablet" [lgColumns]="3" *ngIf="isResidingTypeTenant"></div>
+                    <ui-contact-search [formControl]="contactSearchFormControl" [smColumns]="12" [mdColumns]="12"
+                        [lgColumns]="6" *ngIf="showContactSearch && isResidingTypeTenant">
+                    </ui-contact-search>
+
+                    <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="12"
+                        [lgColumns]="6" *ngIf="showUserSearch && isResidingTypeTenant">
+                    </ui-user-search>
+                    <div class="no-mobile no-tablet" [lgColumns]="3" *ngIf="isResidingTypeTenant"></div>
+
+
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+                    <ui-date formControlName="leaseStart" [config]="leaseStartConfig" [smColumns]="12" [mdColumns]="4"
+                        [lgColumns]="2">
+                    </ui-date>
+                    <ui-date formControlName="leaseEnd" [config]="leaseEndConfig" [smColumns]="12" [mdColumns]="4"
+                        [lgColumns]="2">
+                    </ui-date>
+                    <ui-text-box formControlName="rentAmount" type="number" [config]="rentAmountConfig" [smColumns]="12"
+                        [mdColumns]="4" [lgColumns]="2">
+                    </ui-text-box>
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+
+                </section>
+
+                <!-- Action -->
+                <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="9">
+
+                    <ui-button label="Cancel" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
+                        (clicked)="reset()">
+                    </ui-button>
+
+                    <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" (clicked)="save()">
+                    </ui-button>
+
+                </section>
+
+            </ng-container>
+
+        </ui-form-layout>
+    </form>
+</app-layout>

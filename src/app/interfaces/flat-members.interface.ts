@@ -13,4 +13,10 @@ export interface IFlatMember extends IDefaultFields {
 
     isOwner: boolean;
     isTenant: boolean;
+
+    leaseStart?: Date;
+    leaseEnd?: Date;
+    rentAmount?: number;
+    documents: any;
+    status: 'active' | 'expired' | 'terminated'
 }

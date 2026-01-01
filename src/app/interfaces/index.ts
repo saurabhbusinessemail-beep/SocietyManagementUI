@@ -10,6 +10,7 @@ export * from './country.intrerface';
 export * from './default-fields.interface';
 export * from './district.interface';
 export * from './feature.interface';
+export * from './flat-members.interface';
 export * from './flat.interface';
 export * from './gate-pass.interface';
 export * from './manager.interface';

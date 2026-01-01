@@ -1,0 +1,36 @@
+<div class="ui-control ui-text-box" [class.disabled]="disabled" [class.invalid]="invalid" [ngClass]="config?.cssClass">
+
+
+    <!-- Label -->
+    <label *ngIf="config?.label" class="ui-label">
+        {{ config?.label }}
+        <span *ngIf="required" class="required">*</span>
+    </label>
+
+
+    <!-- Input -->
+    <div class="calendar-box">
+        <input #inputEl class="ui-input" [attr.placeholder]="config?.placeholder" [attr.autocomplete]="autocomplete"
+            [disabled]="disabled" [value]="value" (input)="onInput(inputEl.value)" (blur)="onTouched()"
+            [matDatepicker]="picker" />
+        <app-icon name="calendar" (click)="picker.open()"></app-icon>
+        <mat-datepicker #picker></mat-datepicker>
+    </div>
+
+    <!-- Help text -->
+    <div *ngIf="config?.helpText" class="ui-help">
+        {{ config?.helpText }}
+    </div>
+
+
+    <!-- Errors -->
+    <div *ngIf="invalid" class="ui-error">
+        <ng-container *ngFor="let key of errorKeys">
+            <span *ngIf="errors?.[key]">
+                {{ config?.errorMessages?.[key] || 'Invalid value' }}
+            </span>
+        </ng-container>
+    </div>
+
+
+</div>

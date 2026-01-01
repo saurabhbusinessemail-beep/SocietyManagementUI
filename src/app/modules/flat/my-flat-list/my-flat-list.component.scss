@@ -1,0 +1,15 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.flat-name {
+    color: $color-dark-blue;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
+
+    // @include fluid-font(18px, 16px, 15px);
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

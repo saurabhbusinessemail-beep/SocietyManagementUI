@@ -16,7 +16,8 @@ export class IconsService {
     const iconList = [
       'menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left',
       'society-icon', 'dashboard', 'search', 'clear', 'more-vert', 'account', 'down-arrow',
-      'location-color', 'edit', 'double-arrow-right', 'delete'
+      'location-color', 'edit', 'double-arrow-right', 'delete', 'home', 'security', 'tenant',
+      'calendar'
     ];
 
     iconList.forEach((icon, index) => {

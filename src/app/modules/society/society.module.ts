@@ -20,14 +20,13 @@ import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 
 @NgModule({
   declarations: [
-  
     SocietyListComponent,
-        AddSocietyComponent,
-        SocietyDetailsComponent,
-        SocietyManagersComponent,
-        BuildingListComponent,
-        FlatListComponent,
-        ParkingsListComponent
+    AddSocietyComponent,
+    SocietyDetailsComponent,
+    SocietyManagersComponent,
+    BuildingListComponent,
+    FlatListComponent,
+    ParkingsListComponent
   ],
   imports: [
     CommonModule,

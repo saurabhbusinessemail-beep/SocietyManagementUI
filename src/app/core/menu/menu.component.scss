@@ -5,6 +5,7 @@
     position: relative;
     transition: width 0.18s;
     z-index: $z-menu-overlay;
+    height: 100%;
 
     // desktop expanded by default
     &[data-mode='desktop'] {
@@ -121,6 +122,8 @@
 
     // menu item visuals for sky (closed icon state)
     .menu-inner {
+        height: 100%;
+        
         .brand {
             display: flex;
             align-items: center;

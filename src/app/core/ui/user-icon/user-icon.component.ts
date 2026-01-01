@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { LoginService } from '../../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ui-user-icon',
@@ -9,7 +10,7 @@ import { LoginService } from '../../../services/login.service';
 export class UserIconComponent {
   open = false;
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   toggle() { this.open = !this.open; }
 
@@ -24,5 +25,9 @@ export class UserIconComponent {
     // emit or route to logout (hook up from parent)
     console.log('logout clicked');
     this.loginService.logout();
+  }
+
+  gotoNew() {
+    this.router.navigateByUrl('/dashboard/user')
   }
 }

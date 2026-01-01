@@ -25,7 +25,7 @@ export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> im
   users: IUser[] = [];
   filteredUsers: IUIDropdownOption[] = [];
 
-  constructor(private userService: UserService, @Optional() @Self() ngControl: NgControl){
+  constructor(private userService: UserService, @Optional() @Self() ngControl: NgControl) {
     super(ngControl);
   }
 
@@ -51,6 +51,10 @@ export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> im
     this.userSearchConfig = this.config ?? userSearchConfig;
     this.subscribeToSearchChange();
     this.subscribeToUserSelection();
+    this.subscribeToDisableChange();
+
+    if (this.ngControl?.disabled && this.userSearchControl.enabled)
+      this.userSearchControl.disable();
   }
 
   onUserSearch(searchString: string) {
@@ -69,30 +73,41 @@ export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> im
         return this.userService.searchUsers(searchString).pipe(takeUntil(this.isComponentActive))
       })
     )
-    .subscribe({
-      next: users => {
-        if (!users.success) return;
-        
-        this.users = users.data;
-        this.filteredUsers = users.data.map(u => {
-          return {
-            label: (u.name ?? 'No Name') + ' - ' + u.phoneNumber,
-            value: u._id,
-          }
-        });
-      }
-    });
+      .subscribe({
+        next: users => {
+          if (!users.success) return;
+
+          this.users = users.data;
+          this.filteredUsers = users.data.map(u => {
+            return {
+              label: (u.name ?? 'No Name') + ' - ' + u.phoneNumber,
+              value: u._id,
+            }
+          });
+        }
+      });
   }
 
   subscribeToUserSelection() {
     this.userSearchControl.valueChanges.pipe(takeUntil(this.isComponentActive))
-    .subscribe({
-      next: selectedUser => {
-        const user = this.users.find(u => u._id === selectedUser);
-        if (user) this.selectionChange.emit(user);
-        this.updateValue(user);
-      }
-    })
+      .subscribe({
+        next: selectedUser => {
+          const user = this.users.find(u => u._id === selectedUser);
+          if (user) this.selectionChange.emit(user);
+          this.updateValue(user);
+        }
+      })
+  }
+
+  subscribeToDisableChange() {
+    this.ngControl.statusChanges
+      ?.pipe(takeUntil(this.isComponentActive))
+      .subscribe(status => {
+        if (this.ngControl?.disabled && this.userSearchControl.enabled)
+          this.userSearchControl.disable();
+        else if (this.ngControl?.enabled && this.userSearchControl.disabled)
+          this.userSearchControl.enable();
+      })
   }
 
   ngOnDestroy(): void {

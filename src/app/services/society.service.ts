@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember } from '../interfaces';
 import { Observable } from 'rxjs';
 
 
@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 export class SocietyService {
 
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
+    private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
     constructor(private http: HttpClient) { }
 
@@ -116,6 +117,13 @@ export class SocietyService {
     // Delete flat
     deleteFlat(societyId: string, flatId: string) {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats/${flatId}`);
+    }
+
+    myFlats(societyId?: string) {
+        if (!societyId)
+            return this.http.get<IFlatMember[]>(`${this.flatsBaseUrl}/myFlats`);
+        else
+            return this.http.get<IFlatMember[]>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
     }
 
     /* Parking */

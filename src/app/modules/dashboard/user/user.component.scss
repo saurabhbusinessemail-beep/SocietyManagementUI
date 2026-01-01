@@ -1,0 +1,14 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+@include mobile {
+    .no-mobile {
+        display: none;
+    }
+}
+
+@include tablet {
+    .no-tablet {
+        display: none;
+    }
+}

@@ -1,7 +1,7 @@
 export enum ResidingTypes {
-    'Self',
-    'Tenant',
-    'Vacant'
+    'Self' = 'Self',
+    'Tenant' = 'Tenant',
+    'Vacant' = 'Vacant'
 }
 
 export const ResidingTypeList = [
