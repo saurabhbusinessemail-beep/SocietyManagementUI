@@ -41,12 +41,12 @@ export class SocietyListComponent implements OnInit, OnDestroy {
     const profile = this.loginService.getProfileFromStorage();
     if (!profile) return;
 
+    if (profile.user.role === 'admin') {
+      this.router.navigate(['/society', society._id, 'details']);
+    }
+
     const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles
     if (!societyRoles) return;
-
-    if (profile.user.role === 'admin') {
-      this.router.navigate(['../details', society._id]);
-    }
 
     const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === 'manager');
     const hasNonManagerialRole = societyRoles.some(sr => sr.name === 'owner' || sr.name === 'member' || sr.name === 'tenant');

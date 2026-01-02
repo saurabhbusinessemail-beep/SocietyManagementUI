@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class UserIconComponent {
   open = false;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService) {}
 
   toggle() { this.open = !this.open; }
 
@@ -25,9 +25,5 @@ export class UserIconComponent {
     // emit or route to logout (hook up from parent)
     console.log('logout clicked');
     this.loginService.logout();
-  }
-
-  gotoNew() {
-    this.router.navigateByUrl('/dashboard/user')
   }
 }

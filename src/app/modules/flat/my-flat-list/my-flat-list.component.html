@@ -5,17 +5,21 @@
         <ng-container *ngFor="let flatMember of flatMembers">
             <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <ng-container card-main>
-                    <a class="flat-name">
-                        {{ getflat(flatMember)?.flatNumber }}
+                    <a class="flat-name" (click)="gotoFlatDetails(flatMember)">
+                        {{ getflat(flatMember)?.floor }}: {{ getflat(flatMember)?.flatNumber }}
                     </a>
 
-                    <div class="society-meta">
+                    <div class="flat-meta">
                         <span><strong>Society:</strong> {{ getSociety(flatMember)?.societyName }} </span>
+                    </div>
+
+                    <div class="flat-address">
+                        <span><strong>Residing:</strong> {{ flatMember.residingType }} </span>
                     </div>
                 </ng-container>
 
                 <ng-container card-icon>
-                    <!-- <app-icon name="location-color"></app-icon> -->
+                    {{ getflat(flatMember)?.flatType }}
                 </ng-container>
             </ui-card>
 

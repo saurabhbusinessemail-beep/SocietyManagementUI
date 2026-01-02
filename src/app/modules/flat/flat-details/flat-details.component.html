@@ -1,0 +1,28 @@
+<app-layout [hideMoreActions]="true" [title]="pageTitle">
+    <ui-form-layout>
+
+        <section class="flex flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+            <ui-button label="Complaints" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
+            </ui-button>
+
+        </section>
+
+        <ui-label [valueText]="getSociety()?.societyName" [config]="{id: '', label: 'Society'}" [smColumns]="12"
+            [mdColumns]="6" [lgColumns]="3">
+        </ui-label>
+
+        <ui-label [valueText]="getflat()?.flatNumber" [config]="{id: '', label: 'Flat Number'}" [smColumns]="12"
+            [mdColumns]="6" [lgColumns]="3">
+        </ui-label>
+
+        <ui-label [valueText]="this.flatMember?.residingType" [config]="{id: '', label: 'Residing'}" [smColumns]="12"
+            [mdColumns]="6" [lgColumns]="3">
+        </ui-label>
+
+        <ui-label [valueText]="getflat()?.flatType" [config]="{id: '', label: 'Flat Type'}" [smColumns]="12"
+            [mdColumns]="6" [lgColumns]="3">
+        </ui-label>
+
+    </ui-form-layout>
+</app-layout>

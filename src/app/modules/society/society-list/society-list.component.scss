@@ -20,8 +20,6 @@
     color: $color-black;
     opacity: 0.85;
 
-    @include fluid-font(14px, 13px, 12px);
-
     @include mobile {
         gap: 12px;
         flex-wrap: wrap;
@@ -32,8 +30,6 @@
     color: $color-note-gray;
     line-height: 1.4;
     max-width: 520px;
-
-    @include fluid-font(14px, 13px, 12px);
 
     @include desktop {
         max-width: 680px;

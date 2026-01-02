@@ -126,6 +126,10 @@ export class SocietyService {
             return this.http.get<IFlatMember[]>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
     }
 
+    getFlatMemberDetails(flatMemberId: string) {
+        return this.http.get<IFlatMember>(`${this.flatsBaseUrl}/myFlats/${flatMemberId}`);
+    }
+
     /* Parking */
     // Get all parking in a building or society
     getParkings(societyId: string, buildingId?: string) {

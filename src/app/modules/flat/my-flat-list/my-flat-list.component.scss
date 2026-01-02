@@ -13,3 +13,26 @@
         text-decoration: underline;
     }
 }
+
+
+.flat-meta {
+    display: flex;
+    gap: 18px;
+    color: $color-black;
+    opacity: 0.85;
+
+    @include mobile {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+}
+
+.flat-address {
+    color: $color-note-gray;
+    line-height: 1.4;
+    max-width: 520px;
+
+    @include desktop {
+        max-width: 680px;
+    }
+}

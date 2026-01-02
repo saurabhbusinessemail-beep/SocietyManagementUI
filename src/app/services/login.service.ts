@@ -4,7 +4,7 @@ import { Observable, of, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from './menu.service';
-import { IBEResponseFormat, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
+import { IBEResponseFormat, IMenu, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -53,7 +53,19 @@ export class LoginService {
         return this.http.get<IMyProfileResponse>(`${this.baseUrl}/me`, { headers })
             .pipe(tap(response => {
                 if (response && response.success && response.profile.allMenus) {
-                    this.menuService.userMenus.next(response.profile.allMenus);
+                    const allMenus: IMenu[] = [
+                        {
+                            _id: '',
+                            craetedByUserId: '',
+                            createdOn: new Date(),
+                            menuId: 'dashboard',
+                            menuName: 'Dashboard',
+                            icon: 'dashboard',
+                            relativePath: '/dashboard/user',
+                        },
+                        ...response.profile.allMenus
+                    ];
+                    this.menuService.userMenus.next(allMenus);
                 }
             }));
     }

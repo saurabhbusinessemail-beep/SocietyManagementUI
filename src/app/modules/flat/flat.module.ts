@@ -6,11 +6,13 @@ import { MyFlatListComponent } from './my-flat-list/my-flat-list.component';
 import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
+import { FlatDetailsComponent } from './flat-details/flat-details.component';
 
 
 @NgModule({
   declarations: [
-    MyFlatListComponent
+    MyFlatListComponent,
+    FlatDetailsComponent
   ],
   imports: [
     CommonModule,

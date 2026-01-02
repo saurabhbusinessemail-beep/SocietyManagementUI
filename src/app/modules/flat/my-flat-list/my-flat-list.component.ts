@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
 import { IFlat, IFlatMember, ISociety } from '../../../interfaces';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-flat-list',
@@ -16,10 +16,11 @@ export class MyFlatListComponent implements OnInit {
   flatMembers: IFlatMember[] = [];
 
   get pageTitle(): string {
-    return (this.society  ? this.society.societyName : 'My') + ' Flats';
+    return (this.society ? this.society.societyName : 'My') + ' Flats';
   }
 
-  constructor(private societyService: SocietyService, private route: ActivatedRoute,) { }
+  constructor(private societyService: SocietyService, private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
@@ -55,5 +56,9 @@ export class MyFlatListComponent implements OnInit {
 
   getSociety(flatMember: IFlatMember): ISociety | undefined {
     return typeof flatMember.societyId === 'string' ? undefined : flatMember.societyId;
+  }
+
+  gotoFlatDetails(flatMember: IFlatMember) {
+    this.router.navigate(['/myflats', 'details', flatMember._id]);
   }
 }

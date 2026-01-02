@@ -296,7 +296,7 @@ export class UserComponent implements OnInit, OnDestroy {
       societyId: formValue.society._id,
       flatId: formValue.flatId,
       userId: profile.user._id,
-      name: profile.user.name,
+      name: profile.user.name ?? 'No Name',
       contact: profile.user.phoneNumber,
       residingType: formValue.residingType,
       isOwner: true,
