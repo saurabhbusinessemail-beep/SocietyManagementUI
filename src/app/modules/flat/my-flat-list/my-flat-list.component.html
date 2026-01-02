@@ -13,6 +13,10 @@
                         <span><strong>Society:</strong> {{ getSociety(flatMember)?.societyName }} </span>
                     </div>
 
+                    <div class="flat-meta" *ngIf="hasBuilding(flatMember)">
+                        <span><strong>Building:</strong> {{ getBuilding(flatMember)?.buildingNumber }} </span>
+                    </div>
+
                     <div class="flat-address">
                         <span><strong>Residing:</strong> {{ flatMember.residingType }} </span>
                     </div>

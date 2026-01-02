@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
-import { IFlat, IFlatMember, ISociety } from '../../../interfaces';
+import { IBuilding, IFlat, IFlatMember, ISociety } from '../../../interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -52,6 +52,16 @@ export class MyFlatListComponent implements OnInit {
 
   getflat(flatMember: IFlatMember): IFlat | undefined {
     return typeof flatMember.flatId === 'string' ? undefined : flatMember.flatId;
+  }
+
+  hasBuilding(flatMember: IFlatMember): boolean {
+    const flat = this.getflat(flatMember);
+    return !flat || !flat.buildingId || typeof flat.buildingId === 'string' ? false : true;
+  }
+
+  getBuilding(flatMember: IFlatMember): IBuilding | undefined {
+    const flat = this.getflat(flatMember);
+    return !flat || !flat.buildingId || typeof flat.buildingId === 'string' ? undefined : flat.buildingId;
   }
 
   getSociety(flatMember: IFlatMember): ISociety | undefined {
