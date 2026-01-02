@@ -13,7 +13,7 @@ export class NewUserService {
 
     constructor(private http: HttpClient,) { }
 
-    joinAsOwner(payload: any): Observable<IOTPVerificationResponse> {
-        return this.http.post<IOTPVerificationResponse>(`${this.baseUrl}/owner`, payload);
+    newFlatMember(payload: any): Observable<IOTPVerificationResponse> {
+        return this.http.post<IOTPVerificationResponse>(`${this.baseUrl}/newFlatMember`, payload);
     }
 }

@@ -285,7 +285,7 @@ export class UserComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveOwner() {
+  getOwnerPayload() {
     const formValue = this.fb.getRawValue();
     const profile = this.loginService.getProfileFromStorage();
 
@@ -301,17 +301,54 @@ export class UserComponent implements OnInit, OnDestroy {
       residingType: formValue.residingType,
       isOwner: true,
     };
+    return payload;
+  }
 
-    if (formValue.residingType === ResidingTypes.Tenant) {
-      payload = {
-        ...payload,
-        leaseStart: formValue.tenantForm.leaseStart,
-        leaseEnd: formValue.tenantForm.leaseEnd,
-        rentAmount: formValue.tenantForm.rentAmount
-      }
+  getTenantPayload() {
+    const formValue = this.fb.getRawValue();
+    const profile = this.loginService.getProfileFromStorage();
+
+    if (!formValue.society || !formValue.flatId || !profile
+      || !formValue.residingType) return;
+
+    let selectedUser = {
+      userId: this.showUserSearch ? this.userSearchFormControl.value?._id : undefined,
+      name: this.showUserSearch ? this.userSearchFormControl.value?.name : this.contactSearchFormControl.value?.name,
+      contact: this.showUserSearch ? this.userSearchFormControl.value?.phoneNumber : this.contactSearchFormControl.value?.phoneNumber,
     }
 
-    this.newUserService.joinAsOwner(payload)
+    const userForPayload = !this.isTenant ? selectedUser : {
+      userId: profile.user._id,
+      name: profile.user.name ?? 'No Name',
+      contact: profile.user.phoneNumber
+    }
+
+    let ownerPayload: any = {
+      societyId: formValue.society._id,
+      flatId: formValue.flatId,
+      userId: userForPayload.userId,
+      name: userForPayload.name,
+      contact: userForPayload.contact,
+      residingType: formValue.residingType,
+      isTenant: true,
+      leaseStart: formValue.tenantForm.leaseStart,
+      leaseEnd: formValue.tenantForm.leaseEnd,
+      rentAmount: formValue.tenantForm.rentAmount
+    };
+    return ownerPayload;
+  }
+
+  saveOwner() {
+
+    let payload = this.getOwnerPayload();
+    if (!payload) return;
+
+    const formValue = this.fb.getRawValue();
+    if (formValue.residingType === ResidingTypes.Tenant) {
+      this.saveTenant();
+    }
+
+    this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
@@ -322,7 +359,20 @@ export class UserComponent implements OnInit, OnDestroy {
       });
   }
 
-  saveTenant() { }
+  saveTenant() {
+    let payload = this.getTenantPayload();
+    if (!payload) return;
+
+    this.newUserService.newFlatMember(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !response.token) return;
+
+          this.updateUserToken(response.token)
+        }
+      });
+  }
 
   saveSecurity() { }
 
