@@ -21,7 +21,7 @@ export class SocietySearchComponent extends UIBaseFormControl<ISociety | undefin
     label: 'Society',
     placeholder: 'Search Society',
   };
-  societiesSearchControl = new FormControl<string | undefined>(undefined);
+  societiesSearchControl = new FormControl<IUIDropdownOption | undefined>(undefined);
   societies: ISociety[] = [];
   filteredSocieties: IUIDropdownOption[] = [];
 
@@ -88,7 +88,7 @@ export class SocietySearchComponent extends UIBaseFormControl<ISociety | undefin
     this.societiesSearchControl.valueChanges.pipe(takeUntil(this.isComponentActive))
       .subscribe({
         next: selectedSociety => {
-          const user = this.societies.find(u => u._id === selectedSociety);
+          const user = this.societies.find(u => u._id === selectedSociety?.value);
           if (user) this.selectionChange.emit(user);
           this.updateValue(user);
         }

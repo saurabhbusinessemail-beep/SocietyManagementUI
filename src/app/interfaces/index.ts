@@ -18,6 +18,7 @@ export * from './menu.interface';
 export * from './my-profile.interface';
 export * from './notification.interface';
 export * from './parking.interface';
+export * from './security.interface';
 export * from './society-role-menu.interface';
 export * from './society-role.interface';
 export * from './society.interface';

@@ -31,6 +31,7 @@ export class MenuService {
     const matchedMenu =
       menus.find(m => currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' ') === 1)
 
+      console.log('this.selectedMenu = ', this.selectedMenu)
     if (matchedMenu) {
       this.selectedMenu.next(matchedMenu);
     } else if (menus.length > 0) {

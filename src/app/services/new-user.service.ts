@@ -16,4 +16,8 @@ export class NewUserService {
     newFlatMember(payload: any): Observable<IOTPVerificationResponse> {
         return this.http.post<IOTPVerificationResponse>(`${this.baseUrl}/newFlatMember`, payload);
     }
+
+    newSecurity(payload: any): Observable<IOTPVerificationResponse> {
+        return this.http.post<IOTPVerificationResponse>(`${this.baseUrl}/newSecurity`, payload);
+    }
 }

@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     if (isLoggedIn) {
       // ❌ Logged in user should NOT see login page
       if (url.startsWith('/login')) {
-        return this.router.createUrlTree(['/dashboard']);
+        return this.router.createUrlTree(['/']);
       }
 
       // ✅ Allow society, dashboard, other protected pages

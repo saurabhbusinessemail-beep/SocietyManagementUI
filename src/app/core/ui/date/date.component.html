@@ -11,7 +11,7 @@
     <!-- Input -->
     <div class="calendar-box">
         <input #inputEl class="ui-input" [attr.placeholder]="config?.placeholder" [attr.autocomplete]="autocomplete"
-            [disabled]="disabled" [value]="value" (input)="onInput(inputEl.value)" (blur)="onTouched()"
+            [disabled]="disabled" [value]="value" (dateChange)="onInput($event)" (blur)="onTouched()"
             [matDatepicker]="picker" />
         <app-icon name="calendar" (click)="picker.open()"></app-icon>
         <mat-datepicker #picker></mat-datepicker>

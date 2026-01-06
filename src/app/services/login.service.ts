@@ -54,6 +54,7 @@ export class LoginService {
             .pipe(tap(response => {
                 if (response && response.success && response.profile.allMenus) {
                     const allMenus: IMenu[] = [
+                        ...response.profile.allMenus,
                         {
                             _id: '',
                             craetedByUserId: '',
@@ -63,7 +64,6 @@ export class LoginService {
                             icon: 'dashboard',
                             relativePath: '/dashboard/user',
                         },
-                        ...response.profile.allMenus
                     ];
                     this.menuService.userMenus.next(allMenus);
                 }

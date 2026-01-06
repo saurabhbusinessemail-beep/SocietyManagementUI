@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { UIBaseFormControl } from '../../../directives';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'ui-date',
   templateUrl: './date.component.html',
   styleUrl: './date.component.scss'
 })
-export class DateComponent  extends UIBaseFormControl<string> {
+export class DateComponent extends UIBaseFormControl<Date | undefined> {
 
 
   @Input() autocomplete: string = 'off';
@@ -18,7 +19,7 @@ export class DateComponent  extends UIBaseFormControl<string> {
   };
 
 
-  onInput(value: string): void {
-    this.updateValue(value);
+  onInput(event: MatDatepickerInputEvent<Date>): void {
+    this.updateValue(event.value ?? undefined);
   }
 }

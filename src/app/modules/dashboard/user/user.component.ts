@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IBuilding, IFlat, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { Subject, take, takeUntil } from 'rxjs';
 import { SocietyService } from '../../../services/society.service';
@@ -36,13 +36,18 @@ export class UserComponent implements OnInit, OnDestroy {
   fb = new FormGroup({
     society: new FormControl<ISociety | null>(null, [Validators.required]),
     building: new FormControl<string | null>({ value: null, disabled: true }, [Validators.required]),
-    flatId: new FormControl<string | null>({ value: null, disabled: true }, [Validators.required]),
-    residingType: new FormControl<string | null>({ value: null, disabled: true }, [Validators.required]),
+    flatId: new FormControl<string | null>({ value: null, disabled: true }),
+    residingType: new FormControl<string | null>({ value: null, disabled: true }),
     tenantForm: new FormGroup({
       leaseStart: new FormControl<Date | null>({ value: null, disabled: true }),
       leaseEnd: new FormControl<Date | null>({ value: null, disabled: true }),
       rentAmount: new FormControl<number | null>({ value: null, disabled: true }),
     }),
+    securityForm: new FormGroup({
+      jobStart: new FormControl<Date | null>({ value: null, disabled: true }),
+      jobEnd: new FormControl<Date | null>({ value: null, disabled: true }),
+      salaryAmount: new FormControl<number | null>({ value: null, disabled: true }),
+    })
   });
   userSearchFormControl = new FormControl<IUser | null>({ value: null, disabled: true });
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>({ value: null, disabled: true });
@@ -107,6 +112,32 @@ export class UserComponent implements OnInit, OnDestroy {
     { label: 'By App User', value: 'user' },
     { label: 'By Contact', value: 'contact' }
   ];
+
+  jobStartConfig: IUIControlConfig = {
+    id: 'jobStart',
+    label: 'Job Start',
+    placeholder: 'Enter Job Start',
+    validations: [
+      {
+        name: 'required',
+        validator: Validators.required
+      }
+    ],
+    errorMessages: {
+      required: 'Job Start Date is required'
+    }
+
+  };
+  jobEndConfig: IUIControlConfig = {
+    id: 'jobEnd',
+    label: 'Lease End',
+    placeholder: 'Enter Job End'
+  };
+  salaryAmountConfig: IUIControlConfig = {
+    id: 'salaryAmount',
+    label: 'Salary Amount',
+    placeholder: 'Enter Salary Amount'
+  };
 
   isComponentActive = new Subject<void>();
 
@@ -174,11 +205,18 @@ export class UserComponent implements OnInit, OnDestroy {
         this.resetAndDisable('flatId');
         this.resetAndDisable('residingType');
         this.resetAndDisable('tenantForm');
+        this.resetAndDisable('securityForm');
+
         this.radioFormControl.disable();
         this.userSearchFormControl.disable();
         this.contactSearchFormControl.disable();
 
-        if (!society || this.isSecurity) return;
+        if (!society) return;
+
+        if (this.isSecurity) {
+          this.enable('securityForm');
+          return;
+        }
 
         if (society.numberOfBuildings > 1) {
           this.loadSocietyBuildings(society._id);
@@ -196,6 +234,8 @@ export class UserComponent implements OnInit, OnDestroy {
         this.resetAndDisable('flatId');
         this.resetAndDisable('residingType');
         this.resetAndDisable('tenantForm');
+        this.resetAndDisable('securityForm');
+
         this.radioFormControl.disable();
         this.userSearchFormControl.disable();
         this.contactSearchFormControl.disable();
@@ -211,6 +251,8 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe(flatId => {
         this.resetAndDisable('residingType');
         this.resetAndDisable('tenantForm');
+        this.resetAndDisable('securityForm');
+
         this.radioFormControl.disable();
         this.userSearchFormControl.disable();
         this.contactSearchFormControl.disable();
@@ -220,6 +262,9 @@ export class UserComponent implements OnInit, OnDestroy {
           this.enable('residingType');
         else if (this.isTenant)
           this.enable('tenantForm')
+        else if (this.isSecurity)
+          this.enable('securityForm')
+
       })
 
     this.fb.get('residingType')?.valueChanges
@@ -338,6 +383,22 @@ export class UserComponent implements OnInit, OnDestroy {
     return ownerPayload;
   }
 
+  generateSecurityPayload() {
+    const formValue = this.fb.getRawValue();
+    const profile = this.loginService.getProfileFromStorage();
+
+    if (!formValue.society || !profile) return;
+
+    const payload = {
+      societyId: formValue.society._id,
+      userId: profile.user._id,
+      jobStart: formValue.securityForm.jobStart,
+      jobEnd: formValue.securityForm.jobEnd,
+      salaryAmount: formValue.securityForm.salaryAmount
+    };
+    return payload;
+  }
+
   saveOwner() {
 
     let payload = this.getOwnerPayload();
@@ -374,7 +435,20 @@ export class UserComponent implements OnInit, OnDestroy {
       });
   }
 
-  saveSecurity() { }
+  saveSecurity() {
+    const payload = this.generateSecurityPayload();
+    if (!payload) return;
+
+    this.newUserService.newSecurity(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !response.token) return;
+
+          this.updateUserToken(response.token)
+        }
+      });
+  }
 
   updateUserToken(token: string) {
     this.loginService.saveTokenToStorage(token);

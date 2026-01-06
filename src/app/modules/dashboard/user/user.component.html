@@ -86,6 +86,25 @@
 
                 </section>
 
+                <!-- Security Form -->
+                <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+                    formGroupName="securityForm" *ngIf="isSecurity">
+
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+                    <ui-date formControlName="jobStart" [config]="jobStartConfig" [smColumns]="12" [mdColumns]="4"
+                        [lgColumns]="2">
+                    </ui-date>
+                    <ui-date formControlName="jobEnd" [config]="jobEndConfig" [smColumns]="12" [mdColumns]="4"
+                        [lgColumns]="2">
+                    </ui-date>
+                    <ui-text-box formControlName="salaryAmount" type="number" [config]="salaryAmountConfig"
+                        [smColumns]="12" [mdColumns]="4" [lgColumns]="2">
+                    </ui-text-box>
+                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+
+
+                </section>
+                
                 <!-- Action -->
                 <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="9">
 
@@ -93,7 +112,8 @@
                         (clicked)="reset()">
                     </ui-button>
 
-                    <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" (clicked)="save()">
+                    <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
+                        (clicked)="save()">
                     </ui-button>
 
                 </section>
