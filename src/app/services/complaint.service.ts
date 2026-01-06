@@ -29,10 +29,11 @@ export class ComplaintService {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${complaintId}`);
     }
 
-    getComplaints(societyId?: string, flatId?: string): Observable<IPagedResponse<IComplaint>> {
+    getComplaints(societyId?: string, flatId?: string, complaintType?: string): Observable<IPagedResponse<IComplaint>> {
         let payload = {};
         if (societyId) payload = { societyId };
         if (flatId) payload = { ...payload, flatId };
+        if (complaintType) payload = { ...payload, complaintType };
 
         return this.http.post<IPagedResponse<IComplaint>>(`${this.baseUrl}`, payload);
     }
@@ -45,7 +46,7 @@ export class ComplaintService {
     }
 
     changeStatus(complaintId: string, newStatus: string): Observable<IBEResponseFormat> {
-        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${complaintId}/changeStatus`, {newStatus});
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${complaintId}/changeStatus`, { newStatus });
     }
 
 }

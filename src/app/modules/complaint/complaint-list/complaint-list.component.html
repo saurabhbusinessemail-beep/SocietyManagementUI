@@ -9,12 +9,16 @@
     <ui-form-layout class="form-layout">
 
         <ui-select2 [formControl]="societiesSearchControl" [config]="societiesSearchConfig" [options]="societyOptions"
-            placeholder="Search Society" (searchChange)="onSocietySearch($event)" [smColumns]="12" [mdColumns]="12"
-            [lgColumns]="6">
+            placeholder="Search Society" (searchChange)="onSocietySearch($event)" [smColumns]="12" [mdColumns]="5"
+            [lgColumns]="5">
         </ui-select2>
 
         <ui-select2 [formControl]="flatControl" [config]="flatSearchConfig" [options]="flatOptions"
-            placeholder="Search Flat" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+            placeholder="Search Flat" [smColumns]="12" [mdColumns]="5" [lgColumns]="5">
+        </ui-select2>
+
+        <ui-select2 [formControl]="complaintTypeControl" [config]="complaintTypeConfig" [options]="complaintTypeOptions"
+            placeholder="Search Flat" [smColumns]="12" [mdColumns]="2" [lgColumns]="2">
         </ui-select2>
 
         <ng-container *ngFor="let complaint of complaints">
@@ -70,7 +74,7 @@
                         <!-- Owner submitted/approved/resolved to closed -->
                         <ui-button type="only-content" label="Close" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
                             class="closed" (clicked)="changeStatus(complaint, 'closed')"
-                            *ngIf="isStatusTransitionAllowed(complaint, 'closed') && !amIManagerOfSociety(complaint)">
+                            *ngIf="isStatusTransitionAllowed(complaint, 'closed') && isMyComplaint(complaint)">
                             <app-icon name="close" size="sm"></app-icon>
                         </ui-button>
                     </div>

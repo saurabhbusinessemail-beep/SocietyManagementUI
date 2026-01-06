@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from 'rxjs';
 import { SocietyService } from '../../../services/society.service';
 import { ComplaintService } from '../../../services/complaint.service';
+import { ComplaintTypes } from '../../../constants';
 
 @Component({
   selector: 'app-complaint-list',
@@ -19,6 +20,20 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   myProfile?: IMyProfile;
   societyOptions: IUIDropdownOption[] = [];
   flatOptions: IUIDropdownOption[] = [];
+  complaintTypeOptions: IUIDropdownOption[] = [
+    {
+      label: 'All',
+      value: undefined
+    },
+    {
+      label: 'Private',
+      value: 'Private'
+    },
+    {
+      label: 'Public',
+      value: 'Public'
+    }
+  ];
 
   isFlatMember: boolean = false;
 
@@ -27,6 +42,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
   societiesSearchControl = new FormControl<IUIDropdownOption | undefined>(undefined);
   flatControl = new FormControl<IUIDropdownOption | undefined>(undefined);
+  complaintTypeControl = new FormControl<IUIDropdownOption | undefined>(this.complaintTypeOptions[0]);
 
   societiesSearchConfig: IUIControlConfig = {
     id: 'society',
@@ -37,6 +53,10 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     id: 'flat',
     label: 'Flat',
     placeholder: 'Search Flat',
+  };
+  complaintTypeConfig: IUIControlConfig = {
+    id: 'complaintType',
+    label: 'Complaint Type',
   };
 
   constructor(
@@ -65,13 +85,26 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.amIAMember(this.myProfile)
+    this.amIAMember(this.myProfile);
+    this.subscribeToFlatTypeChange();
     this.subscribeToFlatSelection();
     this.subscribeToSocietySelection(this.myProfile);
     if (this.myProfile.user.role === 'admin')
       this.subscribeToSocietySearch();
     else
       this.loadMySocities(this.myProfile);
+  }
+
+  subscribeToFlatTypeChange() {
+    this.complaintTypeControl.valueChanges
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe({
+        next: complaintType => {
+          if (this.myProfile?.user.role === 'admin' && !this.societiesSearchControl.value && !this.flatControl.value) return;
+
+          this.loadComplaints();
+        }
+      });
   }
 
   amIAMember(myProfile: IMyProfile, sid?: string) {
@@ -86,12 +119,19 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   amIManagerOfSociety(complaint: IComplaint) {
     const societyId = typeof complaint.societyId === 'string' ? complaint.societyId : complaint.societyId._id;
 
-    if (!this.myProfile || !societyId) return false;
+    if (!this.myProfile) return false;
 
     return this.myProfile.socities
       .find(s => s.societyId === societyId)
       ?.societyRoles?.some(sr => ['manager', 'societyadmin'].includes(sr.name))
       ?? false;
+  }
+
+  isMyComplaint(complaint: IComplaint) {
+    const craetedByUserId = typeof complaint.craetedByUserId === 'string' ? complaint.craetedByUserId : complaint.craetedByUserId._id;
+    if (!this.myProfile) return false;
+
+    return this.myProfile.user._id === craetedByUserId;
   }
 
   loadMySocities(myProfile: IMyProfile) {
@@ -277,7 +317,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   }
 
   loadComplaints() {
-    this.complaintService.getComplaints(this.societiesSearchControl.value?.value, this.flatControl.value?.value)
+    this.complaintService.getComplaints(this.societiesSearchControl.value?.value, this.flatControl.value?.value, this.complaintTypeControl.value?.value)
       .pipe(take(1))
       .subscribe({
         next: response => {
