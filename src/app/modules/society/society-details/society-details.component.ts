@@ -139,6 +139,10 @@ export class SocietyDetailsComponent implements OnInit {
     this.router.navigate(['/society', this.society?._id, 'parkings']);
   }
 
+  gotoComplaints() {
+    this.router.navigate(['/complaints']);
+  }
+
   async removeSecretary(user: IUser) {
     if (!this.society) return;
 

@@ -6,6 +6,11 @@
     <div class="user-dropdown" *ngIf="open">
         <ul>
             <li><button class="btn only-content" (click)="logout()">Logout</button></li>
+            <li class="logged-in-user">
+                <ui-label [valueText]="myProfile?.user?.name ?? 'No Name' + ' ' + myProfile?.user?.phoneNumber"
+                    [config]="{id: ''}">
+                </ui-label>
+            </li>
         </ul>
     </div>
 </div>

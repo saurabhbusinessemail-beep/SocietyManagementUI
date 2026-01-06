@@ -1,0 +1,34 @@
+<div class="ui-control ui-text-box" [class.disabled]="disabled" [class.invalid]="invalid" [ngClass]="config?.cssClass">
+
+
+    <!-- Label -->
+    <label *ngIf="config?.label" class="ui-label">
+        {{ config?.label }}
+        <span *ngIf="required" class="required">*</span>
+    </label>
+
+
+    <!-- Input -->
+    <ng-select [items]="options" bindLabel="label" [ngModel]="value"
+        (change)="onInput($event)" (search)="onSearch($event)">
+    </ng-select>
+
+
+    <!-- Help text -->
+    <div *ngIf="config?.helpText" class="ui-help">
+        {{ config?.helpText }}
+    </div>
+
+
+    <!-- Errors -->
+    <div *ngIf="invalid" class="ui-error">
+        <ng-container *ngFor="let key of errorKeys">
+            <span *ngIf="errors?.[key]">
+                {{ config?.errorMessages?.[key] || 'Invalid value' }}
+            </span>
+        </ng-container>
+    </div>
+
+
+
+</div>

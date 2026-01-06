@@ -1,17 +1,37 @@
 @import '../../../../styles/variables';
 
-.user-root { .user-btn { background: transparent; border: none; cursor:pointer; } }
+.user-root {
+    .user-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+}
 .user-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 6px);
-  background: $color-white;
-  border: 1px solid $color-border;
-  padding: $sp-sm;
-  border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  z-index: $z-user-dropdown;
-  ul { margin: 0; padding: 0; list-style: none; }
-  li { margin-bottom: $sp-sm; }
-  li:last-child { margin-bottom: 0; }
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    background: $color-white;
+    border: 1px solid $color-border;
+    padding: $sp-sm;
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    z-index: $z-user-dropdown;
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    li {
+        margin-bottom: $sp-sm;
+        text-align: end;
+    }
+    li:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
+.logged-in-user{
+  white-space: nowrap;
 }

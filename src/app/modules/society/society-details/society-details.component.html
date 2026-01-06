@@ -60,7 +60,7 @@
         <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
             <div class="card-header">
                 <span>Complaints</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
+                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoComplaints()">
                 </ui-button>
             </div>
             <div class="complaints">

@@ -29,6 +29,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'complaints',
+    loadChildren: () => import('./modules/complaint/complaint.module').then(module => module.ComplaintModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'unauthorized',
     loadChildren: () => import('./modules/unauthorized/unauthorized.module').then(module => module.UnauthorizedModule)
   },

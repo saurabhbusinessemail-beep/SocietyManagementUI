@@ -23,7 +23,8 @@ import { ChipComponent } from './chip/chip.component';
 import { SocietySearchComponent } from './society-search/society-search.component';
 import { DateComponent } from './date/date.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
+import { Select2Component } from './select2/select2.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -44,13 +45,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     CardComponent,
     ChipComponent,
     SocietySearchComponent,
-    DateComponent
+    DateComponent,
+    Select2Component
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
     DirectiveModule, MatDatepickerModule, MatNativeDateModule,
-    FormsModule
-],
+    FormsModule, NgSelectModule
+  ],
   exports: [TextBoxComponent,
     DropDownComponent,
     SearchBoxComponent,
@@ -68,7 +70,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     CardComponent,
     ChipComponent,
     SocietySearchComponent,
-    DateComponent
+    DateComponent,
+    Select2Component,
   ],
   providers: [MatDatepickerModule]
 })

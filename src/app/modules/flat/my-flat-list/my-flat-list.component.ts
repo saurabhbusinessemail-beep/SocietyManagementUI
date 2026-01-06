@@ -45,7 +45,7 @@ export class MyFlatListComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.flatMembers = response;
+          this.flatMembers = response.data ?? [];
         }
       });
   }

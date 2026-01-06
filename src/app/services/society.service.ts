@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption } from '../interfaces';
 import { Observable } from 'rxjs';
 
 
@@ -14,6 +14,26 @@ export class SocietyService {
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
     constructor(private http: HttpClient) { }
+
+    // Converter
+    convertFlatMemberToDropdownOption(flatMember: IFlatMember, societyId?: string): IUIDropdownOption {
+        const buildingNumber = flatMember.flatId
+            && typeof flatMember.flatId !== 'string'
+            && flatMember.flatId.buildingId
+            && typeof flatMember.flatId.buildingId !== 'string'
+            ? flatMember.flatId.buildingId.buildingNumber + ': '
+            : '';
+
+        const societyName = !societyId && flatMember.societyId && typeof flatMember.societyId !== 'string' ? '-' + flatMember.societyId.societyName : '';
+
+        const flatNumber = typeof flatMember.flatId === 'string' ? 'No Flat Number' : (flatMember.flatId.floor + ':' + flatMember.flatId.flatNumber);
+
+
+        return {
+            label: buildingNumber + flatNumber + societyName,
+            value: typeof flatMember.flatId === 'string' ? '' : flatMember.flatId._id
+        } as IUIDropdownOption
+    }
 
     /* SOCIETY */
     /* Create society */
@@ -96,6 +116,11 @@ export class SocietyService {
     }
 
     /* FLATS */
+    // Get one Flat by Id
+    getFlat(flatId: string): Observable<IFlat> {
+        return this.http.get<IFlat>(`${this.flatsBaseUrl}/get/${flatId}`);
+    }
+
     // Get all falts in a building or society
     getFlats(societyId: string, buildingId?: string) {
         if (!buildingId)
@@ -121,9 +146,9 @@ export class SocietyService {
 
     myFlats(societyId?: string) {
         if (!societyId)
-            return this.http.get<IFlatMember[]>(`${this.flatsBaseUrl}/myFlats`);
+            return this.http.get<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myFlats`);
         else
-            return this.http.get<IFlatMember[]>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
+            return this.http.get<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
     }
 
     getFlatMemberDetails(flatMemberId: string) {

@@ -1,6 +1,6 @@
 <div class="card" [ngClass]="{
     'disabled': disable
-}">
+}" [style.height]="height">
     <div class="card-main">
         <ng-content select="[card-main]"></ng-content>
     </div>

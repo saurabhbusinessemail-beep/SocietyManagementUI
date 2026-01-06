@@ -1,0 +1,57 @@
+@import '../../../../styles/variables';
+
+.ui-text-box {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-xs;
+
+
+    &.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+
+    .ui-label {
+        font-size: small;
+        font-weight: 500;
+
+
+        .required {
+            color: $color-error-header;
+            margin-left: 2px;
+        }
+    }
+
+
+    .ui-input {
+        height: 40px;
+        padding: 0 $input-padding-desktop;
+        border-radius: $input-border-radius;
+        border: 1px solid var(--border-color, $color-border);
+        font-size: small;
+
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary-color, $btn-bg-primary);
+        }
+    }
+
+
+    &.invalid .ui-input {
+        border-color: $color-error-dark;
+    }
+
+
+    .ui-help {
+        font-size: x-small;
+        color: $color-help-text;
+    }
+
+
+    .ui-error {
+        font-size: x-small;
+        color: $color-error-dark;
+    }
+}

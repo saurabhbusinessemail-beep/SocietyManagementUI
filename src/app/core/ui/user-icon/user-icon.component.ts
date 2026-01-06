@@ -1,16 +1,23 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
+import { IMyProfile } from '../../../interfaces';
 
 @Component({
   selector: 'ui-user-icon',
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss']
 })
-export class UserIconComponent {
-  open = false;
+export class UserIconComponent implements OnInit {
 
-  constructor(private loginService: LoginService) {}
+  open = false;
+  myProfile?: IMyProfile;
+
+  constructor(private loginService: LoginService) { }
+
+  ngOnInit(): void {
+    this.myProfile = this.loginService.getProfileFromStorage();
+  }
 
   toggle() { this.open = !this.open; }
 

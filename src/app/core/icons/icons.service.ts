@@ -17,7 +17,7 @@ export class IconsService {
       'menu-icon', 'logout-icon', 'arrow-down', 'block-icon', 'user-icon', 'arrow-left',
       'society-icon', 'dashboard', 'search', 'clear', 'more-vert', 'account', 'down-arrow',
       'location-color', 'edit', 'double-arrow-right', 'delete', 'home', 'security', 'tenant',
-      'calendar'
+      'calendar', 'complaint', 'approve', 'reject'
     ];
 
     iconList.forEach((icon, index) => {

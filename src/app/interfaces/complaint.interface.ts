@@ -9,8 +9,8 @@ export interface IComplaint extends IDefaultFields {
     description: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
     complaintType: ComplaintTypes;
-    status: 'open'| 'in_progress'| 'resolved'| 'closed'| 'rejected',
-    assignedTo: string | IUser;
+    status: 'submitted' | 'approved' | 'in_progress' | 'resolved' | 'closed' | 'rejected',
+    assignedTo?: string | IUser;
 }
 
 export interface IComplaintStats {

@@ -27,6 +27,7 @@
     "@capacitor/core": "6.1.2",
     "@capacitor/ios": "6.1.2",
     "@googlemaps/js-api-loader": "^1.16.8",
+    "@ng-select/ng-select": "^12.0.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

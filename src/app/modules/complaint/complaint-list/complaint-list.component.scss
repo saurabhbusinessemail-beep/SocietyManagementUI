@@ -1,0 +1,179 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.form-layout {
+    ::ng-deep {
+        .card-main {
+            height: inherit;
+            max-width: calc(100% - 100px);
+        }
+        .card-icon {
+            height: inherit;
+            align-items: baseline;
+        }
+    }
+}
+
+.title {
+    color: $color-dark-blue;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subtitle {
+    color: $color-note-gray;
+    font-size: $font-size-xs;
+    margin-top: calc((-1 * $font-size-xs) + 5px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.society {
+    font-size: $font-size-xs;
+}
+
+.flat {
+    font-size: $font-size-xs;
+}
+
+.priority {
+    font-size: $font-size-xs;
+}
+
+.right-container {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-sm;
+
+    .date {
+        font-size: $font-size-xs;
+        text-align: end;
+        color: $color-note-gray
+    }
+
+    .stat {
+        padding: $sp-sm;
+        border-radius: 6px;
+        font-size: $font-size-xs;
+
+        .status {
+            padding: $sp-sm;
+            text-align: center;
+            border: solid 1px $color-note-gray;
+            border-top-right-radius: $btn-border-radius-sm;
+            border-top-left-radius: $btn-border-radius-sm;
+        }
+
+        .type {
+            font-size: calc($font-size-xs / 1.5);
+            padding: calc($sp-sm / 2);
+            text-align: center;
+            border-bottom-right-radius: $btn-border-radius-sm;
+            border-bottom-left-radius: $btn-border-radius-sm;
+            border: solid 1px $color-note-gray;
+            background-color: $color-disable-background;
+
+
+            &.Private {}
+
+            &.Public {
+                color: $color-white;
+            }
+        }
+    }
+}
+
+
+.submitted {
+    color: $status-active;
+    border-color: $status-active !important;
+}
+
+.approved {
+    color: $status-approved;
+    border-color: $status-approved !important;
+
+    ::ng-deep {
+        .btn {
+            color: $status-approved;
+            border-color: $status-approved !important;
+        }
+    }
+}
+
+.in_progress {
+    color: $status-pending;
+    border-color: $status-active !important;
+
+    ::ng-deep {
+        .btn {
+            color: $status-pending;
+            border-color: $status-pending !important;
+        }
+    }
+}
+
+.resolved {
+    color: $status-inactive;
+    border-color: $status-inactive !important;
+
+    ::ng-deep {
+        .btn {
+            color: $status-inactive;
+            border-color: $status-inactive !important;
+        }
+    }
+}
+
+.closed {
+    color: $status-expired;
+    border-color: $status-expired !important;
+
+    ::ng-deep {
+        .btn {
+            color: $status-expired;
+            border-color: $status-expired !important;
+        }
+    }
+}
+
+.rejected {
+    color: $status-rejected;
+    border-color: $status-rejected !important;
+
+    ::ng-deep {
+        .btn {
+            color: $status-rejected;
+            border-color: $status-rejected !important;
+        }
+    }
+}
+
+.action {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    gap: $sp-sm;
+
+    ::ng-deep {
+
+        @include mobile {
+            button {
+                font-size: $font-size-xs;
+                padding: $sp-sm;
+            }
+        }
+
+
+        @include tablet {
+            button {
+                font-size: $font-size-xs;
+                padding: $sp-sm;
+            }
+        }
+
+    }
+}

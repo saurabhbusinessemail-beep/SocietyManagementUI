@@ -79,7 +79,7 @@ body {
     padding: $sp-sm $sp-md;
 
     cursor: pointer;
-    border: solid 1px var(--primary-color, $color-black);
+    border: solid 1px $color-black;
 
     &:disabled {
         background: $color-disable-background !important;

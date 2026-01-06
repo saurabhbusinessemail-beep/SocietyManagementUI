@@ -1,0 +1,46 @@
+<app-layout>
+
+    <form [formGroup]="fb" class="layout-container">
+
+        <ui-form-layout>
+
+            <ui-select2 formControlName="flat" [config]="flatSearchConfig" [options]="flatOptions"
+                placeholder="Search Flat" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
+            </ui-select2>
+
+            <ui-text-box formControlName="title" [config]="titleConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="4">
+            </ui-text-box>
+
+            <ui-text-box formControlName="description" [config]="descriptionConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="4">
+            </ui-text-box>
+
+            <ui-tabs [config]="priorityTabsConfig" [tabs]="priorityOptions" formControlName="priority" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-tabs>
+
+            <ui-tabs [config]="complaintTypeTabsConfig" [tabs]="complaintTypeOptions" formControlName="complaintType"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-tabs>
+
+            <ui-label [config]="errorConfig" valueType="error" [valueText]="errorMessage" *ngIf="errorMessage"
+                [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            </ui-label>
+
+            <div class="flex ui-form-layout flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                    (clicked)="cancel()">
+                </ui-button>
+
+
+                <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                    (clicked)="save()" [disable]="fb.invalid">
+                </ui-button>
+            </div>
+
+        </ui-form-layout>
+
+    </form>
+
+</app-layout>
