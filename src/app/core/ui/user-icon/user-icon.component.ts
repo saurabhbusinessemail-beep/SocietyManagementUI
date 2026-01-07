@@ -11,12 +11,14 @@ import { IMyProfile } from '../../../interfaces';
 export class UserIconComponent implements OnInit {
 
   open = false;
-  myProfile?: IMyProfile;
+  
+  get myProfile(): IMyProfile | undefined {
+    return this.loginService.getProfileFromStorage()
+  }
 
   constructor(private loginService: LoginService) { }
 
   ngOnInit(): void {
-    this.myProfile = this.loginService.getProfileFromStorage();
   }
 
   toggle() { this.open = !this.open; }

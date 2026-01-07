@@ -22,7 +22,7 @@ export class MenuService {
     this.router.navigateByUrl(menu.relativePath ?? '');
   }
 
-  syncSelectedMenuWithCurrentUrl() {
+  syncSelectedMenuWithCurrentUrl(skipCurrentUrlMatch = false) {
     const currentUrl = this.router.url.split('?')[0];
     console.log('currentUrl = ', this.router.url)
 
@@ -31,9 +31,10 @@ export class MenuService {
     const matchedMenu =
       menus.find(m => currentUrl.indexOf((m.relativePath?.split('/')[1]) ?? ' ') === 1)
 
-      console.log('this.selectedMenu = ', this.selectedMenu)
-    if (matchedMenu) {
+    if (matchedMenu && !skipCurrentUrlMatch) {
       this.selectedMenu.next(matchedMenu);
+    } else if (menus.length > 1) {
+      this.selectAndLoadMenu(menus[1]);
     } else if (menus.length > 0) {
       this.selectAndLoadMenu(menus[0]);
     }

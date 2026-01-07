@@ -8,6 +8,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthTokenInterceptor } from './interceptors/auth-token.interceptor';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { UserNamePopupModule } from './core/user-name-popup/user-name-popup.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    IconModule
+    IconModule,
+    UserNamePopupModule
   ],
   providers: [
     provideAnimationsAsync(),

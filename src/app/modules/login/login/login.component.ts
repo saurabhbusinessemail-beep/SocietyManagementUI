@@ -117,6 +117,7 @@ export class LoginComponent {
   getAndSaveProfile() {
     this.isVerifying = true;
 
+    // this.router.navigateByUrl('/dashboard');
     this.loginService.loadProfile()
       .pipe(take(1))
       .subscribe((response: any) => {
@@ -127,7 +128,6 @@ export class LoginComponent {
           return;
         }
 
-        this.router.navigateByUrl('/');
 
       })
   }

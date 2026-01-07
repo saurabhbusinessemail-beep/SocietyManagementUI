@@ -54,7 +54,6 @@ export class LoginService {
             .pipe(tap(response => {
                 if (response && response.success && response.profile.allMenus) {
                     const allMenus: IMenu[] = [
-                        ...response.profile.allMenus,
                         {
                             _id: '',
                             craetedByUserId: '',
@@ -64,6 +63,7 @@ export class LoginService {
                             icon: 'dashboard',
                             relativePath: '/dashboard/user',
                         },
+                        ...response.profile.allMenus,
                     ];
                     this.menuService.userMenus.next(allMenus);
                 }
@@ -117,7 +117,7 @@ export class LoginService {
     logout() {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('my_profile');
-        this.router.navigateByUrl('/login');
+        this.router.navigateByUrl('/');
     }
 
     // --------------------------------------------------------

@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IBuilding, IFlat, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { Subject, take, takeUntil } from 'rxjs';
 import { SocietyService } from '../../../services/society.service';
 import { ResidingTypeList, ResidingTypes } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { NewUserService } from '../../../services/new-user.service';
-import { Router } from '@angular/router';
+import { MenuService } from '../../../services/menu.service';
 
 @Component({
   selector: 'app-user',
@@ -194,7 +194,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private loginService: LoginService,
     private newUserService: NewUserService,
-    private router: Router
+    private menuService: MenuService
   ) { }
 
   ngOnInit(): void {
@@ -460,6 +460,7 @@ export class UserComponent implements OnInit, OnDestroy {
           return;
         }
 
+        this.menuService.syncSelectedMenuWithCurrentUrl(true);
         // this.router.navigateByUrl('/dashboard');
 
       })

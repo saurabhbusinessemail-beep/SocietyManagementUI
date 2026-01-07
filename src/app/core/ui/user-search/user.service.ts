@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { IPagedResponse, IUser } from '../../../interfaces';
+import { IOTPVerificationResponse, IPagedResponse, IUser } from '../../../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -15,5 +15,9 @@ export class UserService {
 
     searchUsers(searchString: string): Observable<IPagedResponse<IUser>> {
         return this.http.get<IPagedResponse<IUser>>(`${this.baseUrl}/search/${searchString}`);
+    }
+
+    updateUserName(userName: string): Observable<IOTPVerificationResponse> {
+        return this.http.patch<IOTPVerificationResponse>(`${this.baseUrl}/updateName`, { userName });
     }
 }
