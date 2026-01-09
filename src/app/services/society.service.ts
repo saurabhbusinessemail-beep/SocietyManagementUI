@@ -35,6 +35,18 @@ export class SocietyService {
         } as IUIDropdownOption
     }
 
+    convertFlatToDropdownOption(flat: IFlat, societyId?: string): IUIDropdownOption {
+      const buildingNumber = flat.buildingId && typeof flat.buildingId !== 'string' ? flat.buildingId.buildingNumber + ': ' : '';
+      const societyName = !societyId && flat.societyId && typeof flat.societyId !== 'string' ? '-' + flat.societyId.societyName : '';
+      const flatNumber = flat.floor + ':' + flat.flatNumber;
+  
+      return {
+        label: buildingNumber + flatNumber + societyName,
+        value: flat._id
+      } as IUIDropdownOption
+    }
+  
+
     /* SOCIETY */
     /* Create society */
     createSociety(payload: any): Observable<ISociety> {

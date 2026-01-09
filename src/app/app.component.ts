@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from './services/menu.service';
 import { filter, take } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserNameInputPopupComponent } from './core/user-name-popup/user-name-input-popup.component';
@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private menuService: MenuService,
     private loginService: LoginService,
     private dialog: MatDialog,
@@ -39,6 +40,10 @@ export class AppComponent implements OnInit {
             this.checkAndAskForUserName();
           });
       })
+
+      setTimeout(() => {
+        this.menuService.syncSelectedMenuWithCurrentUrl(true);
+      }, 100);
   }
 
   checkAndAskForUserName() {

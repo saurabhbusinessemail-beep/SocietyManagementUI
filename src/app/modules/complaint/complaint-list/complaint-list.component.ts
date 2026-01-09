@@ -205,18 +205,6 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
       });
   }
-
-  convertFlatToDropdownOption(flat: IFlat, societyId?: string): IUIDropdownOption {
-    const buildingNumber = flat.buildingId && typeof flat.buildingId !== 'string' ? flat.buildingId.buildingNumber + ': ' : '';
-    const societyName = !societyId && flat.societyId && typeof flat.societyId !== 'string' ? '-' + flat.societyId.societyName : '';
-    const flatNumber = flat.floor + ':' + flat.flatNumber;
-
-    return {
-      label: buildingNumber + flatNumber + societyName,
-      value: flat._id
-    } as IUIDropdownOption
-  }
-
   async loadDefaultFlats(myProfile: IMyProfile) {
 
     const isAdmin = myProfile.user.role === 'admin';
@@ -283,7 +271,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
             return;
           }
 
-          const flatOptions = response.data.map(flat => this.convertFlatToDropdownOption(flat, this.societiesSearchControl.value?.value));
+          const flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.societiesSearchControl.value?.value));
           if (populate) {
             this.flatOptions = flatOptions;
             this.loadComplaints();

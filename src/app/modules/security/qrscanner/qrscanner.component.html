@@ -1,0 +1,24 @@
+<div class="qr-container">
+
+    <div class="actions">
+
+        <ui-form-layout>
+
+            <ui-button label="📷 Scan with Camera" (clicked)="startScan()" type="only-content" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-button>
+
+            <ui-button label="📁 Upload QR Image" (clicked)="upload()" type="only-content" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-button>
+
+        </ui-form-layout>
+
+    </div>
+
+    <div *ngIf="scannedData" class="result">
+        <strong>QR Result:</strong>
+        <p>{{ scannedData }}</p>
+    </div>
+
+</div>

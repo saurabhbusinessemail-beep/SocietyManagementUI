@@ -48,6 +48,9 @@ body {
 .flex-gap {
     gap: $sp;
 }
+.flex-wrap {
+    flex-wrap: wrap;
+}
 
 // header/footer shared background
 .app-header,
@@ -195,4 +198,23 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+@include mobile {
+    .no-mobile {
+        display: none;
+    }
+}
+
+@include tablet {
+    .no-tablet {
+        display: none;
+    }
+}
+
+@include desktop {
+    .no-desktop {
+        display: none;
+    }
 }

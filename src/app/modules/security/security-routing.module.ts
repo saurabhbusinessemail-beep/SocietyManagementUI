@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from './admin/admin.component';
-import { UserComponent } from './user/user.component';
+import { SecurityComponent } from './security/security.component';
 
 const routes: Routes = [
   {
@@ -10,12 +9,8 @@ const routes: Routes = [
     redirectTo: 'user'
   },
   {
-    path: 'admin',
-    component: AdminComponent
-  },
-  {
-    path: 'user',
-    component: UserComponent
+    path: 'dashboard',
+    component: SecurityComponent
   },
 ];
 
@@ -23,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DashboardRoutingModule { }
+export class SecurityRoutingModule { }

@@ -9,14 +9,12 @@ import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { UserComponent } from './user/user.component';
 import { IconModule } from '../../core/icons/icon.module';
-import { SecurityComponent } from './security/security.component';
 
 
 @NgModule({
   declarations: [
     AdminComponent,
-    UserComponent,
-    SecurityComponent
+    UserComponent
   ],
   imports: [
     CommonModule,

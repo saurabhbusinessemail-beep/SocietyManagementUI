@@ -1,0 +1,25 @@
+@import '../../../../styles/variables';
+
+.qr-container {
+    text-align: center;
+    padding: $sp;
+}
+
+video {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 12px;
+    background: black;
+}
+
+.actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.result {
+    margin-top: 16px;
+    word-break: break-all;
+}

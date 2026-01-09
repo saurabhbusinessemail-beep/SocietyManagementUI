@@ -1,0 +1,87 @@
+<app-layout [hideMoreActions]="true">
+
+    <form [formGroup]="entryForm">
+
+        <ui-form-layout>
+
+            <ui-tabs [config]="tabsConfig" [tabs]="tabsOptions" [formControl]="tabControl" height="100%"
+                [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+                <ng-template uiTab="entry">
+                    <br class="no-mobile">
+                    <br class="no-mobile">
+                    <ui-form-layout>
+
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+
+                        <!-- Society -->
+                        <ui-select2 formControlName="society" [config]="societyConfig" [options]="societyOptions"
+                            placeholder="" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                        </ui-select2>
+
+                        <!-- Flat -->
+                        <ui-select2 formControlName="flat" [config]="flatConfig" [options]="flatOptions" placeholder=""
+                            [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                        </ui-select2>
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+
+
+
+
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+                        <!-- Visitor Name -->
+                        <ui-text-box formControlName="visitorName" [config]="visitorNameConfig" [smColumns]="12"
+                            [mdColumns]="6" [lgColumns]="4">
+                        </ui-text-box>
+
+                        <!-- Visitor Contact -->
+                        <ui-text-box formControlName="visitorContact" [config]="visitorContactConfig" [smColumns]="12"
+                            [mdColumns]="6" [lgColumns]="4">
+                        </ui-text-box>
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+
+
+
+
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+                        <!-- Vehicle Number -->
+                        <ui-text-box formControlName="vehicleNumber" [config]="vehicleNumberConfig" [smColumns]="12"
+                            [mdColumns]="6" [lgColumns]="4">
+                        </ui-text-box>
+
+                        <!-- Purpose -->
+                        <ui-text-box formControlName="purpose" [config]="purposeConfig" [smColumns]="12" [mdColumns]="6"
+                            [lgColumns]="4">
+                        </ui-text-box>
+
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+
+
+
+                        <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
+                        <section class="flex flex-center flex-gap flex-wrap" [smColumns]="12" [mdColumns]="6"
+                            [lgColumns]="4">
+                            <ui-button label="Request Approval" type="only-content" [disable]="!isFlatSelected">
+                            </ui-button>
+                            <ui-button label="Self Approve" type="only-content">
+                            </ui-button>
+                        </section>
+                        <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
+
+                        <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
+                        <section class="flex flex-center flex-gap" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                            <ui-button label="Scan QR" type="only-content" (clicked)="scanQRCode()">
+                            </ui-button>
+                        </section>
+                        <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
+
+                    </ui-form-layout>
+                </ng-template>
+
+            </ui-tabs>
+
+        </ui-form-layout>
+
+    </form>
+
+</app-layout>
