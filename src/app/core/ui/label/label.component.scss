@@ -4,6 +4,18 @@
 .ui-control {
   display: flex;
   gap: $sp-xs;
+
+  @include mobile {
+    font-size: $font-size-xs;
+  }
+
+  @include tablet {
+    font-size: $font-size-sm;
+  }
+
+  @include desktop {
+    font-size: $font-size-base;
+  }
   
   &.vertical {
     flex-direction: column;
@@ -17,18 +29,6 @@
     
   .ui-value {
     font-weight: 500;
-
-    @include mobile {
-      font-size: $font-size-xs;
-    }
-
-    @include tablet {
-      font-size: $font-size-sm;
-    }
-
-    @include desktop {
-      font-size: $font-size-base;
-    }
   
     &.type-default   { color: $color-black; }
     &.type-info      { color: $color-help-text; }

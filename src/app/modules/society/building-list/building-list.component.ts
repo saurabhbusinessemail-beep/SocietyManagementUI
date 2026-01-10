@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IBuilding, IManager, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
+import { IBuilding, ISelectedUser, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -83,7 +83,7 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     buildingNumber: new FormControl<string>('', [Validators.required]),
     societyId: new FormControl<string>('', Validators.required),
     floors: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-    managerId: new FormControl<IManager | null>({ value: null, disabled: true }, [Validators.required])
+    managerId: new FormControl<ISelectedUser | null>({ value: null, disabled: true }, [Validators.required])
   });
 
   get pageTitle(): string | undefined {
@@ -222,7 +222,7 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       buildingNumber: existingBuilding?.buildingNumber ?? '',
       societyId: this.societyId,
       floors: existingBuilding?.floors ?? 1,
-      managerId: managerId as IManager
+      managerId: managerId as ISelectedUser
     });
     this.fb.markAsUntouched();
     this.fb.markAsPristine();

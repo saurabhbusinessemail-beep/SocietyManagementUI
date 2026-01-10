@@ -1,28 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SecurityRoutingModule } from './security-routing.module';
+import { GatePassRoutingModule } from './gate-pass-routing.module';
+import { GatePassListComponent } from './gate-pass-list/gate-pass-list.component';
+import { AddGatePassComponent } from './add-gate-pass/add-gate-pass.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
-import { SecurityComponent } from './security/security.component';
 import { DirectiveModule } from '../../directives/directive.module';
-import { QRScannerComponent } from './qrscanner/qrscanner.component';
+import { IconModule } from "../../core/icons/icon.module";
 
 
 @NgModule({
   declarations: [
-    SecurityComponent,
-    QRScannerComponent
+    GatePassListComponent,
+    AddGatePassComponent
   ],
   imports: [
     CommonModule,
-    SecurityRoutingModule,
+    GatePassRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     LayoutModule,
     UiModule,
-    DirectiveModule
-  ]
+    DirectiveModule,
+    IconModule
+]
 })
-export class SecurityModule { }
+export class GatePassModule { }

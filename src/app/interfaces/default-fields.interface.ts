@@ -2,7 +2,7 @@ import { IUser } from "./";
 
 export interface IDefaultFields {
     createdOn: Date;
-    craetedByUserId: string | IUser;
+    createdByUserId: string | IUser;
     modifiedOn?: Date;
     modifiedByUserId?: IUser;
     isDeleted?: boolean;

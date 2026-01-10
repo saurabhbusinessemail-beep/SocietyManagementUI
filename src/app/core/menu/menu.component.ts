@@ -15,8 +15,8 @@ export class MenuComponent implements OnInit {
   open = true; // expanded state (desktop) or overlay open
 
   // menuItems: IMenu[] = [
-  //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/', submenus: [], createdOn: new Date(), craetedByUserId: '' },
-  //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/temp', submenus: [], createdOn: new Date(), craetedByUserId: '' },
+  //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/', submenus: [], createdOn: new Date(), createdByUserId: '' },
+  //   { menuId: 'w', icon: 'home', menuName: 'Home', relativePath: '/temp', submenus: [], createdOn: new Date(), createdByUserId: '' },
   // ];
 
   constructor(public menuService: MenuService) { }

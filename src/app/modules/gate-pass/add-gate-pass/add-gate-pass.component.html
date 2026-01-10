@@ -1,0 +1,63 @@
+<app-layout [hideMoreActions]="true">
+
+    <form [formGroup]="fb">
+
+        <ui-form-layout>
+
+            <ui-select2 formControlName="flat" [config]="flatSearchConfig" [options]="flatOptions"
+                placeholder="Search Flat" [smColumns]="12" [mdColumns]="4" [lgColumns]="4">
+            </ui-select2>
+
+            <ui-date formControlName="expectedDate" [config]="expectedDateConfig" [smColumns]="12" [mdColumns]="4"
+                [lgColumns]="4">
+            </ui-date>
+
+            <ui-text-box formControlName="remarks" [config]="{id: '', label: 'Remarks'}" [smColumns]="12"
+                [mdColumns]="4" [lgColumns]="4">
+            </ui-text-box>
+
+            <div class="flex flex-space-between" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <ui-label [valueText]="getUsers.length" [config]="{id: '', label: 'Selected Users'}" [smColumns]="6"
+                    [mdColumns]="6" [lgColumns]="6">
+                </ui-label>
+
+                <ui-button label="Save" (clicked)="saveGatePass()" [disable]="fb.invalid">
+                </ui-button>
+            </div>
+
+            <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+                <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" direction="horizontal"
+                    [options]="radioOptions" [smColumns]="12" [mdColumns]="7" [lgColumns]="7">
+                </ui-radio-list>
+
+                <ui-contact-search [formControl]="contactSearchFormControl" *ngIf="showContactSearch" [smColumns]="12"
+                    [mdColumns]="8" [lgColumns]="7">
+                </ui-contact-search>
+                <ui-user-search [formControl]="userSearchFormControl" *ngIf="showUserSearch" [smColumns]="12"
+                    [mdColumns]="8" [lgColumns]="7">
+                </ui-user-search>
+
+
+                <ui-button label="Add" (clicked)="addUser()" [disable]="!selectedUser">
+                </ui-button>
+
+            </ui-form-layout>
+
+            <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let user of getUsers; let i = index">
+                <div card-main>
+                    <b>{{ user.name }} </b>
+                    <br>
+                    {{ user.phoneNumber }}
+                </div>
+                <div card-icon>
+                    <app-icon class="delete" name="delete" color="#a60000" (click)="removeUser(i)">
+                    </app-icon>
+                </div>
+            </ui-card>
+
+        </ui-form-layout>
+
+    </form>
+
+</app-layout>

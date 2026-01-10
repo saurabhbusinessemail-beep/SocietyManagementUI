@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { IManager, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
+import { ISelectedUser, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -28,7 +28,7 @@ export class SocietyManagersComponent implements OnDestroy {
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>(null);
   radioFormControl = new FormControl<string>('user');
   fb = new FormGroup({
-    manager: new FormControl<IManager | null>(null, [Validators.required])
+    manager: new FormControl<ISelectedUser | null>(null, [Validators.required])
   });
   radioConfig: IUIControlConfig = {
     id: 'radio',

@@ -128,10 +128,10 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   }
 
   isMyComplaint(complaint: IComplaint) {
-    const craetedByUserId = typeof complaint.craetedByUserId === 'string' ? complaint.craetedByUserId : complaint.craetedByUserId._id;
+    const createdByUserId = typeof complaint.createdByUserId === 'string' ? complaint.createdByUserId : complaint.createdByUserId._id;
     if (!this.myProfile) return false;
 
-    return this.myProfile.user._id === craetedByUserId;
+    return this.myProfile.user._id === createdByUserId;
   }
 
   loadMySocities(myProfile: IMyProfile) {

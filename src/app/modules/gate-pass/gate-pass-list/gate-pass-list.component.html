@@ -1,0 +1,39 @@
+<app-layout>
+
+    <ng-container moreActions>
+        <ui-button label="Add Pass" type="primary" routerLink="../add">
+        </ui-button>
+    </ng-container>
+
+    <ui-form-layout>
+        <ui-select2 [formControl]="societiesSearchControl" [config]="societiesSearchConfig" [options]="societyOptions"
+            placeholder="Search Society" [smColumns]="12" [mdColumns]="5" [lgColumns]="5">
+        </ui-select2>
+
+        <ui-select2 [formControl]="flatControl" [config]="flatSearchConfig" [options]="flatOptions"
+            placeholder="Search Flat" [smColumns]="12" [mdColumns]="5" [lgColumns]="5">
+        </ui-select2>
+
+
+        <ng-container *ngFor="let gatepass of gatepasses">
+
+            <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="180px">
+
+                <ng-container card-main>
+                    <b>OTP:</b> {{ gatepass.otp }}<br>
+                    <b>{{ getGatePassUser(gatepass)?.name }}: </b> {{ getGatePassUser(gatepass)?.phoneNumber }}<br>
+                    <b>Remarks: </b> {{ gatepass.remarks }}
+                </ng-container>
+
+                <div card-icon>
+                    <app-icon class="delete" name="delete" color="#a60000" (click)="deletePass(gatepass)">
+                    </app-icon>
+                </div>
+
+            </ui-card>
+
+        </ng-container>
+
+    </ui-form-layout>
+
+</app-layout>

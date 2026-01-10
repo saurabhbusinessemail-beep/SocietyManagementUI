@@ -34,8 +34,13 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'security',
-    loadChildren: () => import('./modules/security/security.module').then(module => module.SecurityModule),
+    path: 'gateentry',
+    loadChildren: () => import('./modules/gate-entry/gate-entry.module').then(module => module.GateEntryModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gatepass',
+    loadChildren: () => import('./modules/gate-pass/gate-pass.module').then(module => module.GatePassModule),
     canActivate: [AuthGuard]
   },
   {

@@ -8,8 +8,8 @@ export interface IGatePass extends IDefaultFields {
     societyId: string | ISociety;
     flatId: string | IFlat;
     isAssignedBySociety?: boolean;
-    OTP: number;
-    expectedDate?: Date;
-    userId?: string | IUser;
+    otp: number;
+    expectedDate: Date;
+    userId: string | IUser;
     remarks?: string;
 }

@@ -56,7 +56,7 @@ export class LoginService {
                     const allMenus: IMenu[] = [
                         {
                             _id: '',
-                            craetedByUserId: '',
+                            createdByUserId: '',
                             createdOn: new Date(),
                             menuId: 'dashboard',
                             menuName: 'Dashboard',
