@@ -9,5 +9,4 @@ export interface IFlat extends IDefaultFields {
     societyId: string | ISociety;
     flatType: FlatTypes;
     floor: number;
-    flatMemberId?: string | IFlatMember;
 }
