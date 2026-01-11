@@ -74,6 +74,10 @@ export class SecurityComponent implements OnInit, OnDestroy {
     purpose: new FormControl<string | null>(null)
   });
 
+  get isSocietySelected() {
+    return !!this.entryForm.get('society')?.value
+  }
+
   get isFlatSelected() {
     return !!this.entryForm.get('flat')?.value
   }

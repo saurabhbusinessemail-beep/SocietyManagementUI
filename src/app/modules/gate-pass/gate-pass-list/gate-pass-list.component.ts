@@ -4,6 +4,8 @@ import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Subject, debounceTime, take, takeUntil } from 'rxjs';
 import { GatePassService } from '../../../services/gate-pass.service';
 import { SocietyService } from '../../../services/society.service';
+import { MatDialog } from '@angular/material/dialog';
+import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
 
 @Component({
   selector: 'app-gate-pass-list',
@@ -35,7 +37,8 @@ export class GatePassListComponent implements OnInit, OnDestroy {
 
   constructor(
     private gatepassService: GatePassService,
-    private societyService: SocietyService
+    private societyService: SocietyService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -125,6 +128,36 @@ export class GatePassListComponent implements OnInit, OnDestroy {
 
         this.triggerSocietyLoad.next('');
       })
+  }
+
+  showQR(gatePass: IGatePass) {
+    let qrData = {};
+    let label = '';
+    let value = '';
+
+    if (gatePass.isAssignedBySociety) {
+      qrData = {
+        gatePassId: gatePass._id
+      }
+      label = 'Gate Pass'
+      value = gatePass._id;
+
+    } else {
+      qrData = {
+        otp: gatePass.otp,
+        societyId: typeof gatePass.societyId === 'string' ? gatePass.societyId : gatePass.societyId._id,
+        flatId: typeof gatePass.flatId === 'string' ? gatePass.flatId : gatePass.flatId._id
+      };
+      label = 'OTP';
+      value = gatePass.otp.toString();
+    }
+
+    this.dialog.open(QRViewerComponent, {
+      data: {
+        qrCodeString: JSON.stringify(qrData),
+        label, value
+      }
+    })
   }
 
   ngOnDestroy(): void {

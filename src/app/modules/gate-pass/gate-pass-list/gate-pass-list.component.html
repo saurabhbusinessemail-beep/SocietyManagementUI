@@ -33,9 +33,9 @@
 
                 </ng-container>
 
-                <div card-icon class="flex flex-end flex-gap flex-align-item">
+                <div card-icon class="flex flex-end flex-gap flex-align-item-center">
 
-                    <ui-button label="" type="only-content">
+                    <ui-button label="" type="only-content" (clicked)="showQR(gatepass)">
                         <app-icon name="qr-code"></app-icon>
                     </ui-button>
 

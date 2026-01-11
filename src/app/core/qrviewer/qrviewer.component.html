@@ -1,0 +1,25 @@
+<ui-form-layout class="qr-container">
+
+    <div class="flex flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        <ui-button label="" type="only-content" (clicked)="close()">
+            <app-icon name="clear" size="md">
+            </app-icon>
+        </ui-button>
+    </div>
+
+    <qrcode [qrdata]="data.qrCodeString" #qrCode [errorCorrectionLevel]="'H'" [smColumns]="12" [mdColumns]="12"
+        [lgColumns]="12">
+    </qrcode>
+
+    <div class="flex flex-space-between flex-gap flex-align-item-center" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        <ui-label [config]="{id: '', label: data.label}" [valueText]="data.value" [smColumns]="12" [mdColumns]="6"
+            [lgColumns]="6">
+        </ui-label>
+
+        <ui-button label="" type="only-content" (clicked)="downloadQRCode(qrCodeElement)">
+            <app-icon name="download" size="md">
+            </app-icon>
+        </ui-button>
+    </div>
+
+</ui-form-layout>

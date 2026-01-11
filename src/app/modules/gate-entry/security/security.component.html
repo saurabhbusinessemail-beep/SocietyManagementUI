@@ -69,11 +69,11 @@
 
 
                         <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
-                        <section class="flex flex-center flex-gap flex-wrap" [smColumns]="12" [mdColumns]="6"
-                            [lgColumns]="4">
-                            <ui-button label="Request Approval" type="only-content" [disable]="!isFlatSelected">
+                        <section class="flex flex-end flex-gap flex-wrap" [smColumns]="12" [mdColumns]="12"
+                            [lgColumns]="10">
+                            <ui-button label="Request Approval" type="only-content" [disable]="!isFlatSelected || !isSocietySelected">
                             </ui-button>
-                            <ui-button label="Self Approve" type="only-content" [disable]="isFlatSelected">
+                            <ui-button label="Self Approve" type="only-content" [disable]="isFlatSelected || !isSocietySelected">
                             </ui-button>
                         </section>
                         <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
