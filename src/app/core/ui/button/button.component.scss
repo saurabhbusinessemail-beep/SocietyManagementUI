@@ -3,6 +3,8 @@
 
 .btn {
     justify-content: flex-start;
+    gap: $sp;
+    line-height: 1;
 
 
     @include mobile {

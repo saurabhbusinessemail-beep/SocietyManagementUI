@@ -25,7 +25,8 @@ export class QRScannerComponent {
     const scannedText = await this.scan();
     if (!scannedText) return;
 
-    this.scannedData = scannedText
+    this.scannedData = scannedText;
+    this.closeDialog();
   }
 
   async scan(): Promise<string | null> {
@@ -54,6 +55,7 @@ export class QRScannerComponent {
       const scannedText = await this.readQRCode(image.webPath!);
       if (scannedText) {
         this.scannedData = scannedText;
+        this.closeDialog();
       }
     } catch (error: any) {
       this.scanError = 'No QR code found';
@@ -95,13 +97,7 @@ export class QRScannerComponent {
     });
   }
 
-  // validateScannedUser(scannedUser: IUser): string {
-  //   if (scannedUser.userId === this.userService.me?.userId)
-  //     return 'Invalid QR. You cannot add yourself.'
-  //   return '';
-  // }
-
-  createAndSaveConnection() {
+  closeDialog() {
 
     // const newUser = new ConnectedUser('client', this.scannedUser, this.socketService);
     this.dialogRef.close(this.scannedData);

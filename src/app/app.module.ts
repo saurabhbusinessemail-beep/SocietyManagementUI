@@ -12,7 +12,7 @@ import { UserNamePopupModule } from './core/user-name-popup/user-name-popup.modu
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

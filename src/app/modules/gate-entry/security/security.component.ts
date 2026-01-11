@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { QRScannerComponent } from '../qrscanner/qrscanner.component';
+import { OTPPopupComponent } from '../../../core/otppopup/otppopup.component';
 
 @Component({
   selector: 'app-security',
@@ -17,7 +18,16 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   societyConfig: IUIControlConfig = {
     id: 'society',
-    label: 'Society'
+    label: 'Society',
+    validations: [
+      {
+        name: 'required',
+        validator: Validators.required
+      }
+    ],
+    errorMessages: {
+      required: 'Society selection is required'
+    }
   };
   flatConfig: IUIControlConfig = {
     id: 'flat',
@@ -126,7 +136,19 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   scanQRCode() {
-    this.dialog.open(QRScannerComponent)
+    this.dialog.open(QRScannerComponent).afterClosed()
+      .pipe(take(1))
+      .subscribe(response => {
+        if (!response) return;
+      })
+  }
+
+  enterOTP() {
+    this.dialog.open(OTPPopupComponent).afterClosed()
+      .pipe(take(1))
+      .subscribe(response => {
+        if (!response) return;
+      })
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,15 @@
+<div class="layout-body">
+    <ui-form-layout>
+
+        <ui-text-box type="number" [formControl]="otpFormControl" [config]="otpConfig" [smColumns]="12" [mdColumns]="12"
+            [lgColumns]="12">
+        </ui-text-box>
+        <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+            <ui-button label="Save" [smColumns]="12" [mdColumns]="3" [lgColumns]="3" (clicked)="save()"
+                [disable]="otpFormControl.invalid">
+            </ui-button>
+
+        </section>
+    </ui-form-layout>
+</div>

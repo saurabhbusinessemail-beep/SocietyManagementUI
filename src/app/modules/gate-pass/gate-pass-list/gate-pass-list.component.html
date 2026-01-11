@@ -20,13 +20,26 @@
             <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="180px">
 
                 <ng-container card-main>
-                    <b>OTP:</b> {{ gatepass.otp }}<br>
-                    <b>{{ getGatePassUser(gatepass)?.name }}: </b> {{ getGatePassUser(gatepass)?.phoneNumber }}<br>
-                    <b>Remarks: </b> {{ gatepass.remarks }}
+
+                    <ui-label [config]="{id: '', label: getGatePassUser(gatepass)?.name}"
+                        [valueText]="getGatePassUser(gatepass)?.phoneNumber">
+                    </ui-label>
+
+                    <ui-label [config]="{id: '', label: 'OTP'}" [valueText]="gatepass.otp">
+                    </ui-label>
+
+                    <ui-label [config]="{id: '', label: 'Remarks'}" [valueText]="gatepass.remarks">
+                    </ui-label>
+
                 </ng-container>
 
-                <div card-icon>
-                    <app-icon class="delete" name="delete" color="#a60000" (click)="deletePass(gatepass)">
+                <div card-icon class="flex flex-end flex-gap flex-align-item">
+
+                    <ui-button label="" type="only-content">
+                        <app-icon name="qr-code"></app-icon>
+                    </ui-button>
+
+                    <app-icon class="delete" name="delete" color="#a60000" *ngIf="!gatepass.isAssignedBySociety" (click)="deletePass(gatepass)">
                     </app-icon>
                 </div>
 

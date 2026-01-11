@@ -10,6 +10,8 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { QRScannerComponent } from './qrscanner/qrscanner.component';
+import { IconModule } from '../../core/icons/icon.module';
+import { OTPPopupModule } from '../../core/otppopup/otppopup.module';
 
 
 @NgModule({
@@ -23,10 +25,13 @@ import { QRScannerComponent } from './qrscanner/qrscanner.component';
     CommonModule,
     GateEntryRoutingModule,
     FormsModule,
+    FormsModule,
     ReactiveFormsModule,
     LayoutModule,
     UiModule,
-    DirectiveModule
+    DirectiveModule,
+    IconModule,
+    OTPPopupModule
   ]
 })
 export class GateEntryModule { }
