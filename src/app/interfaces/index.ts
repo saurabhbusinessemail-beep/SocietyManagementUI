@@ -6,6 +6,7 @@ export * from './ui/ui-drop-down-option.interface';
 
 export * from './building.interface';
 export * from './complaint.interface';
+export * from './confirmation-popup-config.interface';
 export * from './country.intrerface';
 export * from './default-fields.interface';
 export * from './district.interface';

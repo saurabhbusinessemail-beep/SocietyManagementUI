@@ -1,8 +1,9 @@
 import { IMyProfile } from "./my-profile.interface";
 
-export interface IBEResponseFormat {
+export interface IBEResponseFormat<T = any> {
     success: boolean;
     message?: string;
+    data?: T;
 }
 
 export interface IOTPVerificationResponse extends IBEResponseFormat {

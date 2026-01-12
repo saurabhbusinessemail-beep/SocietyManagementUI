@@ -18,4 +18,6 @@ export class AddGateEntryComponent {
     vehicleNumber: new FormControl<string | undefined>(undefined),
     entryTime: new FormControl<Date | undefined>(undefined),
   });
+
+  
 }

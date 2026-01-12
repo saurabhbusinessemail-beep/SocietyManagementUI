@@ -8,16 +8,17 @@
                 [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
                 <ng-template uiTab="entry">
-                    <br >
+                    <br>
                     <br class="no-mobile">
                     <ui-form-layout>
-                        
+
                         <div class="no-mobile no-tablet" [lgColumns]="2"></div>
                         <section class="flex flex-gap" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
                             <ui-button label="Scan QR" type="only-content" (clicked)="scanQRCode()">
                                 <app-icon name="qr-code" size="md"></app-icon>
                             </ui-button>
-                            <ui-button label="Enter OTP" type="only-content" (clicked)="enterOTP()">
+                            <ui-button label="Enter OTP" type="only-content" (clicked)="enterOTP()"
+                                [disable]="!isSocietySelected">
                             </ui-button>
                         </section>
                         <div class="no-mobile" [mdColumns]="9" [lgColumns]="6"></div>
@@ -71,9 +72,11 @@
                         <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
                         <section class="flex flex-end flex-gap flex-wrap" [smColumns]="12" [mdColumns]="12"
                             [lgColumns]="10">
-                            <ui-button label="Request Approval" type="only-content" [disable]="!isFlatSelected || !isSocietySelected">
+                            <ui-button label="Request Approval" type="only-content"
+                                [disable]="!isFlatSelected || !isSocietySelected || entryForm.invalid">
                             </ui-button>
-                            <ui-button label="Self Approve" type="only-content" [disable]="isFlatSelected || !isSocietySelected">
+                            <ui-button label="Self Approve" type="only-content" (clicked)="selfApprove()"
+                                [disable]="isFlatSelected || !isSocietySelected || entryForm.invalid">
                             </ui-button>
                         </section>
                         <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>

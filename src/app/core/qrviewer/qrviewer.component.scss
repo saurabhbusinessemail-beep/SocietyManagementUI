@@ -3,5 +3,9 @@
 
 .qr-container {
     padding: $sp;
+
+    qrcode {
+        text-align: center;
+    }
 }
 

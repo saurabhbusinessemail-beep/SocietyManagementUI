@@ -58,6 +58,9 @@ body {
 .flex-wrap {
     flex-wrap: wrap;
 }
+.flex-auto {
+    flex: 1 auto;
+}
 
 // header/footer shared background
 .app-header,

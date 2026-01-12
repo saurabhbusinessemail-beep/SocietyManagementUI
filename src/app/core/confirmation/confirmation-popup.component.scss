@@ -1,0 +1,29 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+
+.confirmation-container {
+    min-width: 300px;
+    min-height: 300px;
+    max-width: 90%;
+    max-height: 50%;
+
+    .message {
+        padding: $sp-lg;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @include mobile {
+        .message { font-size: $font-size-lg; }
+    }
+
+    @include tablet {
+        .message { font-size: $font-size-xl; }
+    }
+
+    @include desktop {
+        .message { font-size: $font-size-xxl; }
+    }
+}

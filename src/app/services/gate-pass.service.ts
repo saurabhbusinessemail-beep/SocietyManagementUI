@@ -25,4 +25,13 @@ export class GatePassService {
     deleteGatePass(gatePassId: string): Observable<IBEResponseFormat> {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${gatePassId}`);
     }
+
+    validateOTP(otp: string, societyId: string, flatId?: string): Observable<IBEResponseFormat<IGatePass>> {
+        const payload = { otp, societyId, flatId };
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/validateOTP`, payload);
+    }
+
+    validateGatePass(gatePassId: string): Observable<IBEResponseFormat<IGatePass>> {
+        return this.http.get<IBEResponseFormat>(`${this.baseUrl}/validateGatePass/${gatePassId}`);
+    }
 }

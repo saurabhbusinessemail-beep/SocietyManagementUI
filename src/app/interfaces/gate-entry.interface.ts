@@ -1,8 +1,9 @@
-import { IDefaultFields, IFlat, IUser, IGatePass } from ".";
+import { IDefaultFields, IFlat, IUser, IGatePass, ISociety } from ".";
 
 export interface IGateEntry extends IDefaultFields {
     _id: string;
     gatePassId?: string | IGatePass;
+    societyId: string | ISociety;
     flatId?: string | IFlat;
     visitorName?: string;
     visitorContact?: string;

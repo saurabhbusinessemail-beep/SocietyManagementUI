@@ -21,7 +21,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class IconComponent implements OnInit {
   
   @Input() name!: string;
-  @Input() size: 'sm' | 'md' | 'lg' = 'lg';
+  @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl' = 'lg';
   @Input() color: string = '';
   svg: SafeHtml | null = null;
 
@@ -29,6 +29,9 @@ export class IconComponent implements OnInit {
     switch(this.size) {
       case 'sm': return 10;
       case 'md': return 16;
+      case 'xl': return 32;
+      case 'xxl': return 64;
+      case 'xxxl': return 120;
       default: return 24;
     }
   }

@@ -1,11 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
+import { IConfirmationPopupDataConfig, IGateEntry, IGatePass, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { QRScannerComponent } from '../qrscanner/qrscanner.component';
 import { OTPPopupComponent } from '../../../core/otppopup/otppopup.component';
+import { GatePassService } from '../../../services/gate-pass.service';
+import { DialogService } from '../../../services/dialog.service';
+import { GateEntryService } from '../../../services/gate-entry.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-security',
@@ -15,6 +19,7 @@ import { OTPPopupComponent } from '../../../core/otppopup/otppopup.component';
 export class SecurityComponent implements OnInit, OnDestroy {
 
   isComponentActive = new Subject<void>();
+  pendingExits: IGateEntry[] = [];
 
   societyConfig: IUIControlConfig = {
     id: 'society',
@@ -35,11 +40,29 @@ export class SecurityComponent implements OnInit, OnDestroy {
   };
   visitorNameConfig: IUIControlConfig = {
     id: 'visitorName',
-    label: 'Visitor Name'
+    label: 'Visitor Name',
+    validations: [
+      {
+        name: 'required',
+        validator: Validators.required
+      }
+    ],
+    errorMessages: {
+      required: 'Visitor\'s name is required'
+    }
   };
   visitorContactConfig: IUIControlConfig = {
     id: 'visitorContact',
-    label: 'Visitor Contact'
+    label: 'Visitor Contact',
+    validations: [
+      {
+        name: 'required',
+        validator: Validators.required
+      }
+    ],
+    errorMessages: {
+      required: 'Visitor\'s contact is required'
+    }
   };
   vehicleNumberConfig: IUIControlConfig = {
     id: 'vehicleNumber',
@@ -48,6 +71,17 @@ export class SecurityComponent implements OnInit, OnDestroy {
   purposeConfig: IUIControlConfig = {
     id: 'purpose',
     label: 'Purpose'
+  };
+
+  otpValidConfig: IConfirmationPopupDataConfig = {
+    icon: 'valid',
+    message: 'Valid Pass',
+    actionButtons: []
+  };
+  otpInvalidConfig: IConfirmationPopupDataConfig = {
+    icon: 'invalid',
+    message: 'Invalid Pass',
+    actionButtons: []
   };
 
   tabControl = new FormControl<string>('entry');
@@ -83,8 +117,12 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private loginService: LoginService,
     private societyService: SocietyService,
-    private dialog: MatDialog
+    private gatePassService: GatePassService,
+    private gateEntryService: GateEntryService,
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -104,12 +142,16 @@ export class SecurityComponent implements OnInit, OnDestroy {
             value: s._id
           } as IUIDropdownOption));
 
-          if (this.societyOptions.length > 0) {
-            this.entryForm.get('society')?.setValue(this.societyOptions[0])
-          }
+          this.loadDefaultSociety();
         },
         error: () => console.log('Error while getting socities')
       });
+  }
+
+  loadDefaultSociety() {
+    if (this.societyOptions.length > 0) {
+      this.entryForm.get('society')?.setValue(this.societyOptions[0])
+    }
   }
 
   subscribeToSocietyChange() {
@@ -144,6 +186,20 @@ export class SecurityComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(response => {
         if (!response) return;
+
+        try {
+          const payload = JSON.parse(response);
+
+          if (payload.otp) {
+            const { otp, societyId, flatId } = payload;
+            this.validateOTPAndCreateGateEntry(otp, societyId, flatId);
+
+          } else if (payload.gatePassId) {
+            this.validateGatePass(payload.gatePassId)
+          }
+        } catch {
+          console.log('Error while reading QR code`')
+        }
       })
   }
 
@@ -152,6 +208,113 @@ export class SecurityComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(response => {
         if (!response) return;
+
+        this.validateOTPAndCreateGateEntry(response);
+      })
+  }
+
+  validateOTPAndCreateGateEntry(otp: string, sid?: string, flatId?: string) {
+    const formValue = this.entryForm.value;
+    const societyId = sid ?? formValue.society?.value;
+    if (!societyId) return;
+
+    this.gatePassService.validateOTP(otp, societyId, flatId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          const confirmationPopupConfig = response.success ? this.otpValidConfig : this.otpInvalidConfig;
+          this.dialogService.showConfirmation(confirmationPopupConfig);
+
+          const data = response.data;
+          if (!data) return;
+
+          const payload = this.createPayloadFromGatePass(data);
+          this.saveGateEntry(payload);
+        }
+      });
+  }
+
+  validateGatePass(gatePassId: string) {
+    this.gatePassService.validateGatePass(gatePassId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          const confirmationPopupConfig = response.success ? this.otpValidConfig : this.otpInvalidConfig;
+          this.dialogService.showConfirmation(confirmationPopupConfig);
+
+          const data = response.data;
+          if (!data) return;
+
+          const payload = this.createPayloadFromGatePass(data);
+          this.saveGateEntry(payload);
+        }
+      });
+  }
+
+  createPayloadFromGatePass(gatePass: IGatePass): any {
+    return {
+      gatePassId: gatePass._id,
+      societyId: typeof gatePass.societyId === 'string' ? gatePass.societyId : gatePass.societyId._id,
+      flatId: typeof gatePass.flatId === 'string' ? gatePass.flatId : gatePass.flatId._id,
+      visitorName: typeof gatePass.userId === 'string' ? undefined : gatePass.userId.name,
+      visitorContact: typeof gatePass.userId === 'string' ? undefined : gatePass.userId.phoneNumber,
+      entryTime: new Date(),
+      status: 'approved',
+      approvedBy: typeof gatePass.userId === 'string' ? gatePass.userId : gatePass.userId._id
+    };
+  }
+
+  requestApproval() {
+    const myProfile = this.loginService.getProfileFromStorage();
+    if (!myProfile) return;
+
+    const formValue = this.entryForm.value;
+    const payload = {
+      societyId: formValue.society?.value,
+      flatId: formValue.flat?.value,
+      visitorName: formValue.visitorName,
+      visitorContact: formValue.visitorContact,
+      purpose: formValue.purpose,
+      vehicleNumber: formValue.vehicleNumber,
+      entryTime: new Date(),
+      status: 'requested'
+    };
+
+    this.saveGateEntry(payload);
+  }
+
+  selfApprove() {
+    const myProfile = this.loginService.getProfileFromStorage();
+    if (!myProfile) return;
+
+    const formValue = this.entryForm.value;
+    const payload = {
+      societyId: formValue.society?.value,
+      flatId: formValue.flat?.value,
+      visitorName: formValue.visitorName,
+      visitorContact: formValue.visitorContact,
+      purpose: formValue.purpose,
+      vehicleNumber: formValue.vehicleNumber,
+      entryTime: new Date(),
+      status: 'approved',
+      approvedBy: myProfile.user._id
+    };
+
+    this.saveGateEntry(payload);
+  }
+
+  saveGateEntry(payload: any) {
+    this.gateEntryService.newGateEntry(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !response.data) return;
+
+          this.pendingExits.push(response.data);
+
+          this.entryForm.reset();
+          this.loadDefaultSociety();
+        }
       })
   }
 

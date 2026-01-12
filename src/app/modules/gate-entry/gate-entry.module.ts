@@ -12,6 +12,7 @@ import { DirectiveModule } from '../../directives/directive.module';
 import { QRScannerComponent } from './qrscanner/qrscanner.component';
 import { IconModule } from '../../core/icons/icon.module';
 import { OTPPopupModule } from '../../core/otppopup/otppopup.module';
+import { ConfirmationPopupModule } from '../../core/confirmation/confirmation-popup.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { OTPPopupModule } from '../../core/otppopup/otppopup.module';
     UiModule,
     DirectiveModule,
     IconModule,
+    ConfirmationPopupModule,
     OTPPopupModule
   ]
 })

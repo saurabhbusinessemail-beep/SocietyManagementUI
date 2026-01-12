@@ -15,7 +15,6 @@ export class QRViewerComponent {
     private dialogRef: MatDialogRef<QRViewerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { qrCodeString: string; label: string; value: string; }
   ) {
-    console.log('data = ', data)
   }
 
   downloadQRCode(qrCodeElement: QRCodeComponent) {

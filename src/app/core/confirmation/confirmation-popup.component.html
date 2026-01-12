@@ -1,0 +1,23 @@
+<div class="flex-col confirmation-container">
+
+    <div class="flex flex-end">
+        <ui-button type="only-content" label="" (clicked)="close()">
+            <app-icon name="clear"></app-icon>
+        </ui-button>
+    </div>
+
+    <div class="flex flex-center flex-auto" *ngIf="data.icon">
+        <app-icon size="xxxl" [name]="data.icon"></app-icon>
+    </div>
+
+    <div class="flex flex-center flex-auto message">
+        <ui-label [valueText]="data.message">
+        </ui-label>
+    </div>
+
+    <div class="flex flex-space-between" *ngIf="data.actionButtons.length > 0">
+        <ng-container *ngFor="let action of data.actionButtons">
+            <ui-button [label]="action.label" [type]="action.type" (clicked)="action.onClick()"></ui-button>
+        </ng-container>
+    </div>
+</div>
