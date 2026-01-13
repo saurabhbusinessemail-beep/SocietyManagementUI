@@ -1,0 +1,14 @@
+<div class="flex-col log-container">
+    <div class="flex flex-end flex-gap">
+        <button (click)="clear()">Clear</button>
+        <button (click)="close()">Close</button>
+    </div>
+
+    <div class="flex-auto flex-col flex-gap">
+
+        <div class="logs" *ngFor="let log of ccs.logs" [ngClass]="log.method">
+            {{log.message | json}}
+        </div>
+
+    </div>
+</div>

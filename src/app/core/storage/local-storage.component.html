@@ -1,0 +1,16 @@
+<div class="flex-col storage-container">
+    <div class="flex flex-end flex-gap">
+        <button (click)="clear()">Clear</button>
+        <button (click)="close()">Close</button>
+    </div>
+
+    <div class="flex-auto flex-col flex-gap">
+
+        <div class="storage" *ngFor="let data of localStorageData">
+            <div class="key"> {{data.key}} </div>
+            <div class="data"> {{data.value| json}} </div>
+            <button (click)="remove(data.key)">Del</button>
+        </div>
+
+    </div>
+</div>

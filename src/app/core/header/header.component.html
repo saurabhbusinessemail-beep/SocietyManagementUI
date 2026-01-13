@@ -26,6 +26,8 @@
     </div>
 
     <div class="right">
+        <button (click)="showLogs()">Logs</button>
+        <button (click)="showStorage()">Storage</button>
         <ui-user-icon></ui-user-icon>
         <app-more-icon *ngIf="!hideMoreActions">
             <ng-content select="[moreActions]"></ng-content>

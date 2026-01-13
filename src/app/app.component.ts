@@ -7,6 +7,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserNameInputPopupComponent } from './core/user-name-popup/user-name-input-popup.component';
 import { UserService } from './core/ui/user-search/user.service';
 import { FcmTokenService } from './services/fcm-token.service';
+import { ConsoleCaptureService } from './services/console-capture.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit {
     private loginService: LoginService,
     private dialog: MatDialog,
     private userService: UserService,
-    private FcmTokenService: FcmTokenService
+    private FcmTokenService: FcmTokenService,
+    public consoleService: ConsoleCaptureService
   ) { }
 
   ngOnInit(): void {

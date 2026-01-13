@@ -21,6 +21,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
+                console.log(error)
                 let title = 'Unexpected Error';
                 let message = 'Something went wrong. Please try again.';
 

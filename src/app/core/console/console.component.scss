@@ -1,0 +1,23 @@
+.log-container {
+    padding: 12px;
+    font-size: 10px;
+}
+.logs {
+    border-bottom: solid 1px #a0a0a0;
+
+    &.log {
+        color: darkslateblue;
+    }
+
+    &.warn {
+        color: darkgoldenrod;
+    }
+
+    &.error {
+        color: brown;
+    }
+
+    &.info {
+        color: dimgray;
+    }
+}
