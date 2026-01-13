@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
-import { Router } from '@angular/router';
-import { MenuService } from '../../../services/menu.service';
+import { FcmTokenService } from '../../../services/fcm-token.service';
+import { UserService } from '../../../core/ui/user-search/user.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +26,12 @@ export class LoginComponent {
   otpError = false;
 
 
-  constructor(private fb: FormBuilder, private loginService: LoginService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService,
+    private userService: UserService,
+    private fcmTokenService: FcmTokenService
+  ) {
     this.loginForm = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
@@ -128,7 +133,11 @@ export class LoginComponent {
           return;
         }
 
+        const fcmToken = this.fcmTokenService.fcmToken;
+        if (!fcmToken) return;
 
+        this.userService.updateFCMToken(fcmToken)
+          .pipe(take(1)).subscribe();
       })
   }
 

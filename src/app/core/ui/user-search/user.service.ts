@@ -20,4 +20,8 @@ export class UserService {
     updateUserName(userName: string): Observable<IOTPVerificationResponse> {
         return this.http.patch<IOTPVerificationResponse>(`${this.baseUrl}/updateName`, { userName });
     }
+
+    updateFCMToken(fcmToken: string) {
+        return this.http.post<IOTPVerificationResponse>(`${this.baseUrl}/updateFCMToken`, { fcmToken });
+    }
 }
