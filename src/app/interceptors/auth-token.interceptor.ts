@@ -10,17 +10,21 @@ export class AuthTokenInterceptor implements HttpInterceptor {
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
 
-        const token = localStorage.getItem('auth_token'); // adjust key if needed
+        const token = localStorage.getItem('auth_token');
+        const fcmToken = localStorage.getItem('fcmToken');
 
         if (!token) {
             return next.handle(req);
         }
 
-        const authReq = req.clone({
-            setHeaders: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        let headers = req.headers
+            .set('Authorization', `Bearer ${token}`);
+
+        if (fcmToken) {
+            headers = headers.set('fcmToken', fcmToken);
+        }
+
+        const authReq = req.clone({ headers });
 
         return next.handle(authReq);
     }
