@@ -2,8 +2,11 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.saurabhkumarbusiness.societymanagement',
-  appName: 'society-management-nest-net',
-  webDir: 'dist/society-management-ui/browser'
+  appName: 'NestNet',
+  webDir: 'dist/society-management-ui/browser',
+  server: {
+    androidScheme: 'https'
+  },
 };
 
 export default config;
