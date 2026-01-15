@@ -210,6 +210,14 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+// .status {
+//     &--active {
+//         color: $status-active;
+//     }
+//     &--active-bg {
+//         background-color: $status-active;
+//     }
+// }
 
 @include mobile {
     .no-mobile {

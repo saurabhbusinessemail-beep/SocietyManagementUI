@@ -1,0 +1,24 @@
+<div class="card-container">
+
+    <!-- Header -->
+    <div class="card-header" [ngClass]="status">
+
+        <!-- Title -->
+        <div class="title">
+            {{ title }}
+        </div>
+
+        <div class="header-info" *ngIf="!hideHeaderInfo">
+            <ng-content select="[card-info]"></ng-content>
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        <ng-content select="[card-body]"></ng-content>
+    </div>
+
+    <div class="card-actions" *ngIf="!hideAction">
+        <ng-content select="[card-actions]"></ng-content>
+    </div>
+</div>

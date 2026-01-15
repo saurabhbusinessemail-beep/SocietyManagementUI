@@ -1,0 +1,57 @@
+<app-layout [hideMoreActions]="true">
+    <ui-form-layout>
+
+        <ui-select2 [formControl]="societiesSearchControl" [config]="societiesSearchConfig" [options]="societyOptions"
+            placeholder="Search Society" [smColumns]="12" [mdColumns]="5" [lgColumns]="5">
+        </ui-select2>
+
+        <ui-select2 [formControl]="flatControl" [config]="flatSearchConfig" [options]="flatOptions"
+            placeholder="Search Flat" [smColumns]="12" [mdColumns]="5" [lgColumns]="5">
+        </ui-select2>
+
+        <ui-date [formControl]="selectedDateControl" [config]="{id: '', label: 'Date'}" [smColumns]="12" [mdColumns]="2" [lgColumns]="2">
+        </ui-date>
+
+        <ng-container *ngFor="let gateEntry of gateEntries">
+
+            <app-card-v2 [title]="gateEntry.visitorName ?? ''" [status]="getGateEntryStatusColorName(gateEntry)"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+
+                <ng-container card-info>
+                    <ui-label valueText="{{gateEntry.status | uppercase}}" direction="horizontal"
+                        [valueType]="getGateEntryLabelType(gateEntry)">
+                    </ui-label>
+                </ng-container>
+
+                <ng-container card-body>
+
+                    <!-- Contact -->
+                    <ui-label [config]="{id: '', label: 'Contact'}" [valueText]="gateEntry.visitorContact"
+                        direction="vertical" valueType="info">
+                    </ui-label>
+
+                    <!-- Purpose -->
+                    <ui-label [config]="{id: '', label: 'Purpose'}" [valueText]="gateEntry.purpose" direction="vertical"
+                        valueType="info">
+                    </ui-label>
+
+                    <!-- Time -->
+                    <ui-label [config]="{id: '', label: 'Time'}" [valueText]="formatTime(gateEntry.createdOn)"
+                        direction="vertical" valueType="info">
+                    </ui-label>
+                </ng-container>
+
+                <ng-container card-actions *ngIf="gateEntry.status === 'requested'">
+                    <ui-button label="Approve" (clicked)="onApprove(gateEntry)">
+                    </ui-button>
+                    <ui-button label="Reject" type="error" (clicked)="onReject(gateEntry)">
+                    </ui-button>
+                </ng-container>
+
+            </app-card-v2>
+
+        </ng-container>
+
+    </ui-form-layout>
+
+</app-layout>

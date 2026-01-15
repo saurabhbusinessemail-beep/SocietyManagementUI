@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IConfirmationPopupDataConfig, IGateEntry, IGatePass, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
+import { IConfirmationPopupDataConfig, IFlat, IGateEntry, IGatePass, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,7 +19,7 @@ import { LoginService } from '../../../services/login.service';
 export class SecurityComponent implements OnInit, OnDestroy {
 
   isComponentActive = new Subject<void>();
-  pendingExits: IGateEntry[] = [];
+  pendingApprovals: IGateEntry[] = [];
 
   societyConfig: IUIControlConfig = {
     id: 'society',
@@ -130,6 +130,14 @@ export class SecurityComponent implements OnInit, OnDestroy {
     this.loadSocities();
   }
 
+  getGateEntrySociety(gateEntry: IGateEntry): ISociety | undefined {
+    return typeof gateEntry.societyId === 'string' ? undefined : gateEntry.societyId;
+  }
+
+  getGateEntryFlat(gateEntry: IGateEntry): IFlat | undefined {
+    return typeof gateEntry.flatId === 'string' ? undefined : gateEntry.flatId;
+  }
+
   loadSocities() {
     this.societyService.getAllSocieties()
       .pipe(take(1))
@@ -150,7 +158,8 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   loadDefaultSociety() {
     if (this.societyOptions.length > 0) {
-      this.entryForm.get('society')?.setValue(this.societyOptions[0])
+      this.entryForm.get('society')?.setValue(this.societyOptions[0]);
+      this.loadPendingApprovals();
     }
   }
 
@@ -179,6 +188,19 @@ export class SecurityComponent implements OnInit, OnDestroy {
         this.flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.entryForm.get('society')?.value?.value));
       });
 
+  }
+
+  loadPendingApprovals() {
+    const societyId = this.entryForm.get('society')?.value?.value;
+    this.gateEntryService.getApprovalPendingGateEntries(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.pendingApprovals = response.data;
+        }
+      });
   }
 
   scanQRCode() {
@@ -310,11 +332,12 @@ export class SecurityComponent implements OnInit, OnDestroy {
         next: response => {
           if (!response.success || !response.data) return;
 
-          this.pendingExits.push(response.data);
-
           this.entryForm.reset();
           this.loadDefaultSociety();
-        }
+        },
+        error: (err) => {
+          this.loadDefaultSociety();
+        },
       })
   }
 

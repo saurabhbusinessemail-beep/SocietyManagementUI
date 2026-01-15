@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './services/menu.service';
 import { filter, take } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
@@ -8,13 +8,15 @@ import { UserNameInputPopupComponent } from './core/user-name-popup/user-name-in
 import { UserService } from './core/ui/user-search/user.service';
 import { FcmTokenService } from './services/fcm-token.service';
 import { ConsoleCaptureService } from './services/console-capture.service';
+import { PushNotificationService } from './services/push-notification.service';
+import { ColdStartService } from './services/cold-start.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   show = false;
   title = 'SocietyManagementUI';
   dialogRef?: MatDialogRef<UserNameInputPopupComponent, any>
@@ -26,7 +28,9 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     private FcmTokenService: FcmTokenService,
-    public consoleService: ConsoleCaptureService
+    public consoleService: ConsoleCaptureService,
+    private pushNotificationService: PushNotificationService,
+    private coldStartService: ColdStartService
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +53,8 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       if (this.router.url === '/dashboard/user')
         this.menuService.syncSelectedMenuWithCurrentUrl(true);
+
+      this.pushNotificationService.initialize();
     }, 100);
   }
 
@@ -89,5 +95,23 @@ export class AppComponent implements OnInit {
         }
 
       })
+  }
+
+  private checkPendingNotifications() {
+    const pendingNotification = localStorage.getItem('pendingNotification');
+    if (pendingNotification) {
+      try {
+        const data = JSON.parse(pendingNotification);
+        this.coldStartService.setNotificationData(data);
+        localStorage.removeItem('pendingNotification');
+      } catch (error) {
+        console.error('Error parsing pending notification:', error);
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    // Clean up listeners when app is destroyed
+    this.pushNotificationService.removeAllListeners();
   }
 }

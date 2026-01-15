@@ -26,6 +26,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Select2Component } from './select2/select2.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CenterPopupComponent } from './center-popup/center-popup.component';
+import { CardV2Component } from './card-v2/card-v2.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { CenterPopupComponent } from './center-popup/center-popup.component';
     SocietySearchComponent,
     DateComponent,
     Select2Component,
-    CenterPopupComponent
+    CenterPopupComponent,
+    CardV2Component
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -75,6 +77,7 @@ import { CenterPopupComponent } from './center-popup/center-popup.component';
     DateComponent,
     Select2Component,
     CenterPopupComponent,
+    CardV2Component,
   ],
   providers: [MatDatepickerModule]
 })

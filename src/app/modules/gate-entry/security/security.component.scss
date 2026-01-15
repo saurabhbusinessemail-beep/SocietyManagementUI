@@ -1,2 +1,27 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
+
+.visitor-name {
+    color: $color-dark-blue;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
+
+    // @include fluid-font(18px, 16px, 15px);
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.visitor-meta {
+    display: flex;
+    gap: 18px;
+    color: $color-black;
+    opacity: 0.85;
+
+    @include mobile {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+}

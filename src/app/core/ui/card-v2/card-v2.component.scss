@@ -1,0 +1,126 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        background: linear-gradient(135deg, $color-dark-blue 0%, $color-sky 60%);
+
+        .title {
+            color: $color-header-footer;
+        }
+
+        &.active {
+            background: linear-gradient(135deg, $status-active 0%, $color-light-gray 80%);
+        }
+
+        &.inactive {
+            background: linear-gradient(135deg, $status-inactive 0%, $color-light-gray 80%);
+        }
+
+        &.approved {
+            background: linear-gradient(135deg, $status-approved 0%, $color-light-gray 80%);
+        }
+
+        &.rejected {
+            background: linear-gradient(135deg, $status-rejected 0%, $color-light-gray 80%);
+        }
+
+        &.pending {
+            background: linear-gradient(135deg, $status-pending 0%, $color-light-gray 80%);
+        }
+
+        &.expired {
+            background: linear-gradient(135deg, $status-expired 0%, $color-light-gray 80%);
+        }
+
+        &.purchased {
+            background: linear-gradient(135deg, $status-purchased 0%, $color-light-gray 80%);
+        }
+
+        &.yet {
+            background: linear-gradient(135deg, $status-yet 0%, $color-light-gray 80%);
+        }
+    }
+
+    .card-body {
+        display: grid;
+    }
+
+    .card-actions {
+        display: flex;
+        justify-content: end;
+        gap: $sp;
+    }
+}
+
+@include mobile {
+
+    .card-container {
+        border-radius: $btn-border-radius-sm;
+    }
+    .card-header {
+        border-top-left-radius: $btn-border-radius-sm;
+        border-top-right-radius: $btn-border-radius-sm;
+    }
+
+    .card-header,
+    .card-body,
+    .card-actions {
+        padding: $input-padding-mobile;
+    }
+
+    .card-body {
+        grid-template-columns: repeat(2, 1fr) !important;
+        row-gap: $sp-sm;
+    }
+}
+
+@include tablet {
+
+    .card-container {
+        border-radius: $btn-border-radius-md;
+    }
+    .card-header {
+        border-top-left-radius: $btn-border-radius-md;
+        border-top-right-radius: $btn-border-radius-md;
+    }
+
+    .card-header,
+    .card-body,
+    .card-actions {
+        padding: $input-padding-desktop;
+    }
+
+    .card-body {
+        grid-template-columns: repeat(2, 1fr) !important;
+        row-gap: $sp;
+    }
+}
+
+@include desktop {
+
+    .card-container {
+        border-radius: $btn-border-radius-lg;
+    }
+    .card-header {
+        border-top-left-radius: $btn-border-radius-lg;
+        border-top-right-radius: $btn-border-radius-lg;
+    }
+
+    .card-header,
+    .card-body,
+    .card-actions {
+        padding: $input-padding-desktop;
+    }
+
+    .card-body {
+        grid-template-columns: repeat(3, 1fr) !important;
+        row-gap: $sp-md;
+    }
+}

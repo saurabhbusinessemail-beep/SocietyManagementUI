@@ -66,18 +66,6 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     private complaintService: ComplaintService
   ) { }
 
-  getSociety(complaint: IComplaint): ISociety | undefined {
-    return typeof complaint.societyId === 'string' ? undefined : complaint.societyId
-  }
-
-  getFlat(complaint: IComplaint): IFlat | undefined {
-    return typeof complaint.flatId === 'string' ? undefined : complaint.flatId
-  }
-
-  isStatusTransitionAllowed(complaint: IComplaint, nextStatus: string): boolean {
-    return this.complaintService.isStatusTransitionAllowed(complaint.status, nextStatus);
-  }
-
   ngOnInit(): void {
     this.myProfile = this.loginService.getProfileFromStorage();
     if (!this.myProfile) {
@@ -93,6 +81,18 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
       this.subscribeToSocietySearch();
     else
       this.loadMySocities(this.myProfile);
+  }
+
+  getSociety(complaint: IComplaint): ISociety | undefined {
+    return typeof complaint.societyId === 'string' ? undefined : complaint.societyId
+  }
+
+  getFlat(complaint: IComplaint): IFlat | undefined {
+    return typeof complaint.flatId === 'string' ? undefined : complaint.flatId
+  }
+
+  isStatusTransitionAllowed(complaint: IComplaint, nextStatus: string): boolean {
+    return this.complaintService.isStatusTransitionAllowed(complaint.status, nextStatus);
   }
 
   subscribeToFlatTypeChange() {
@@ -185,6 +185,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     this.societiesSearchControl.valueChanges
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(selectedSociety => {
+        this.flatControl.reset();
 
         const isAdmin = myProfile.user.role === 'admin';
         if (this.myProfile) this.amIAMember(this.myProfile);

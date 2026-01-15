@@ -91,4 +91,23 @@
 
     </form>
 
+    <ui-form-layout>
+        <ng-container *ngFor="let gateEntry of pendingApprovals">
+            <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="80px">
+                <ng-container card-main>
+                    <a class="visitor-name">
+                        {{ gateEntry.visitorName }}
+                    </a>
+                    <div class="visitor-meta">
+                        <span>
+                            <strong>Flat:</strong>
+                            {{ getGateEntryFlat(gateEntry)?.flatNumber }}
+                            ({{ getGateEntryFlat(gateEntry)?.floor }})
+                        </span>
+                    </div>
+                </ng-container>
+            </ui-card>
+        </ng-container>
+    </ui-form-layout>
+
 </app-layout>

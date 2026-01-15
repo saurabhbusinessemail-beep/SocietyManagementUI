@@ -1,4 +1,5 @@
 import { IDefaultFields, IFlat, IUser, IGatePass, ISociety } from ".";
+import { GateEntryStatus } from "../types";
 
 export interface IGateEntry extends IDefaultFields {
     _id: string;
@@ -11,7 +12,7 @@ export interface IGateEntry extends IDefaultFields {
     vehicleNumber?: string;
     entryTime: Date;
     exitTime?: Date;
-    status: 'requested' | 'approved' | 'rejected' | 'cancelled' | 'expired' | 'completed';
+    status: GateEntryStatus;
     approvedBy?: string | IUser;
     history?: IGateEntryHistory[];
     

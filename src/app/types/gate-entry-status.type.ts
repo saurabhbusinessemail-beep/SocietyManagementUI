@@ -1,0 +1,1 @@
+export type GateEntryStatus = 'requested' | 'approved' | 'rejected' | 'cancelled' | 'expired' | 'completed';
