@@ -9,6 +9,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthTokenInterceptor } from './interceptors/auth-token.interceptor';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { UserNamePopupModule } from './core/user-name-popup/user-name-popup.module';
+import { PendingHttpInterceptor } from './interceptors/pending-http.interceptor';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,11 @@ import { UserNamePopupModule } from './core/user-name-popup/user-name-popup.modu
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: PendingHttpInterceptor,
       multi: true
     }
   ],

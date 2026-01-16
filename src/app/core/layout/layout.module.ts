@@ -6,6 +6,7 @@ import { FooterModule } from '../footer/footer.module';
 import { HeaderModule } from '../header/header.module';
 import { MenuModule } from '../menu/menu.module';
 import { FormLayoutComponent } from './form-layout/form-layout.component';
+import { DirectiveModule } from '../../directives/directive.module';
 
 
 
@@ -19,7 +20,8 @@ import { FormLayoutComponent } from './form-layout/form-layout.component';
     HeaderModule,
     MenuModule,
     FooterModule,
-    BodyModule
+    BodyModule,
+    DirectiveModule
   ],
   exports: [LayoutComponent, FormLayoutComponent]
 })

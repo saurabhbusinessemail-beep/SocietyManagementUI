@@ -13,7 +13,7 @@
         <app-menu #menu [menuItems]="menuService.userMenus.value"></app-menu>
 
         <!-- BODY AREA (scrollable only here) -->
-        <div class="layout-body">
+        <div class="layout-body" appLoadingOverlay [useHttpInterceptor]="true">
             <ng-content></ng-content>
         </div>
 
