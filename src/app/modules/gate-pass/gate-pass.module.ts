@@ -10,6 +10,7 @@ import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { IconModule } from "../../core/icons/icon.module";
 import { QRViewerModule } from '../../core/qrviewer/qrviewer.module';
+import { FilterModule } from '../../core/filter/filter.module';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { QRViewerModule } from '../../core/qrviewer/qrviewer.module';
     UiModule,
     DirectiveModule,
     IconModule,
-    QRViewerModule
+    QRViewerModule,
+    FilterModule
 ]
 })
 export class GatePassModule { }

@@ -26,7 +26,7 @@ export class SocietyService {
 
         const societyName = !societyId && flatMember.societyId && typeof flatMember.societyId !== 'string' ? '-' + flatMember.societyId.societyName : '';
 
-        const flatNumber = typeof flatMember.flatId === 'string' ? 'No Flat Number' : (flatMember.flatId.floor + ':' + flatMember.flatId.flatNumber);
+        const flatNumber = typeof flatMember.flatId === 'string' ? 'No Flat Number' : (flatMember.flatId.flatNumber + ` (Floor: ${flatMember.flatId.floor})`);
 
 
         return {
@@ -36,16 +36,16 @@ export class SocietyService {
     }
 
     convertFlatToDropdownOption(flat: IFlat, societyId?: string): IUIDropdownOption {
-      const buildingNumber = flat.buildingId && typeof flat.buildingId !== 'string' ? flat.buildingId.buildingNumber + ': ' : '';
-      const societyName = !societyId && flat.societyId && typeof flat.societyId !== 'string' ? '-' + flat.societyId.societyName : '';
-      const flatNumber = flat.floor + ':' + flat.flatNumber;
-  
-      return {
-        label: buildingNumber + flatNumber + societyName,
-        value: flat._id
-      } as IUIDropdownOption
+        const buildingNumber = flat.buildingId && typeof flat.buildingId !== 'string' ? flat.buildingId.buildingNumber + ': ' : '';
+        const societyName = !societyId && flat.societyId && typeof flat.societyId !== 'string' ? '-' + flat.societyId.societyName : '';
+        const flatNumber = flat.flatNumber + ` (Floor: ${flat.floor})`;
+
+        return {
+            label: buildingNumber + flatNumber + societyName,
+            value: flat._id
+        } as IUIDropdownOption
     }
-  
+
 
     /* SOCIETY */
     /* Create society */

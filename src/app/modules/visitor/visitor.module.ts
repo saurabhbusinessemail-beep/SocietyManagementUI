@@ -8,6 +8,7 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FilterModule } from '../../core/filter/filter.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DirectiveModule,
     IconModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FilterModule
   ]
 })
 export class VisitorModule { }

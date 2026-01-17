@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IGatePass, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
-import { FormControl } from '@angular/forms';
+import { IGatePass, IUser } from '../../../interfaces';
 import { BehaviorSubject, Subject, debounceTime, take, takeUntil } from 'rxjs';
 import { GatePassService } from '../../../services/gate-pass.service';
-import { SocietyService } from '../../../services/society.service';
 import { MatDialog } from '@angular/material/dialog';
 import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
+
+interface IGatePassFilter {
+  societyId?: string, flatId?: string
+}
 
 @Component({
   selector: 'app-gate-pass-list',
@@ -14,102 +16,26 @@ import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
 })
 export class GatePassListComponent implements OnInit, OnDestroy {
 
+  selectedFIlter: IGatePassFilter = {};
   isComponentActive = new Subject<void>();
   gatepasses: IGatePass[] = [];
-  triggerSocietyLoad = new BehaviorSubject<string>('');
-
-  societiesSearchControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  flatControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-
-  societyOptions: IUIDropdownOption[] = [];
-  flatOptions: IUIDropdownOption[] = [];
-
-  societiesSearchConfig: IUIControlConfig = {
-    id: 'society',
-    label: 'Society',
-    placeholder: 'Search Society',
-  };
-  flatSearchConfig: IUIControlConfig = {
-    id: 'flat',
-    label: 'Flat',
-    placeholder: 'Search Flat',
-  };
 
   constructor(
     private gatepassService: GatePassService,
-    private societyService: SocietyService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-
-    this.subscribeToFlatSelection();
-    this.subscribeToSocietySelection();
-    this.loadMySocities();
-    this.loadAllMyFlats();
-    this.triggerSocietyLoad
-      .pipe(takeUntil(this.isComponentActive), debounceTime(50))
-      .subscribe(() => this.loadGatePasses());
-
-    this.triggerSocietyLoad.next('');
   }
 
   getGatePassUser(gatePass: IGatePass): IUser | undefined {
     return gatePass.userId && typeof gatePass.userId !== 'string' ? gatePass.userId : undefined;
   }
 
-  loadMySocities() {
-    this.societyService.getAllSocieties()
-      .pipe(take(1))
-      .subscribe({
-        next: response => {
-          const socities = response.data;
-          this.societyOptions = socities.map(s => ({
-            label: s.societyName,
-            value: s._id
-          } as IUIDropdownOption));
-        }
-      });
-  }
-
-  loadAllMyFlats(societyId?: string) {
-    this.societyService.myFlats(societyId)
-      .pipe(take(1))
-      .subscribe(response => {
-        if (!response.success) return;
-
-        this.flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
-      });
-  }
-
-  subscribeToFlatSelection() {
-    this.flatControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(selectedFlat => {
-        this.triggerSocietyLoad.next('');
-      });
-  }
-
-  subscribeToSocietySelection() {
-    this.societiesSearchControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(selectedSociety => {
-        this.flatControl.reset();
-
-        if (selectedSociety) {
-          this.loadAllMyFlats(selectedSociety.value);
-
-        } else {
-          this.loadAllMyFlats();
-        }
-        this.triggerSocietyLoad.next('');
-
-      });
-  }
-
-  loadGatePasses() {
-    const societyId = this.societiesSearchControl.value?.value;
-    const flatId = this.flatControl.value?.value;
+  loadGatePasses(selectedFIlter: IGatePassFilter) {
+    this.selectedFIlter = selectedFIlter;
+    const societyId = selectedFIlter.societyId;
+    const flatId = selectedFIlter.flatId;
 
     this.gatepassService.getGattePasses(societyId, flatId)
       .pipe(take(1))
@@ -126,7 +52,7 @@ export class GatePassListComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         if (!response.success) return;
 
-        this.triggerSocietyLoad.next('');
+        this.loadGatePasses(this.selectedFIlter);
       })
   }
 

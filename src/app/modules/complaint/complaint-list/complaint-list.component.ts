@@ -3,10 +3,12 @@ import { IComplaint, IFlat, IMyProfile, ISociety, ISocietyRole, IUIControlConfig
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from 'rxjs';
-import { SocietyService } from '../../../services/society.service';
+import { Subject, take } from 'rxjs';
 import { ComplaintService } from '../../../services/complaint.service';
-import { ComplaintTypes } from '../../../constants';
+
+interface IComplaintFilter {
+  societyId?: string, flatId?: string, complaintType?: string
+}
 
 @Component({
   selector: 'app-complaint-list',
@@ -35,34 +37,23 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     }
   ];
 
+  selectedFIlter: IComplaintFilter = {};
   isFlatMember: boolean = false;
 
-  private search$ = new Subject<string>();
   protected isComponentActive = new Subject<void>();
 
-  societiesSearchControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  flatControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  complaintTypeControl = new FormControl<IUIDropdownOption | undefined>(this.complaintTypeOptions[0]);
+  complaintTypeControl = new FormControl<IUIDropdownOption | undefined | null>(this.complaintTypeOptions[0]);
 
-  societiesSearchConfig: IUIControlConfig = {
-    id: 'society',
-    label: 'Society',
-    placeholder: 'Search Society',
-  };
-  flatSearchConfig: IUIControlConfig = {
-    id: 'flat',
-    label: 'Flat',
-    placeholder: 'Search Flat',
-  };
-  complaintTypeConfig: IUIControlConfig = {
+  complaintTypeConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
     id: 'complaintType',
     label: 'Complaint Type',
+    formControl: this.complaintTypeControl,
+    dropDownOptions: this.complaintTypeOptions
   };
 
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private societyService: SocietyService,
     private complaintService: ComplaintService
   ) { }
 
@@ -72,15 +63,6 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/');
       return;
     }
-
-    this.amIAMember(this.myProfile);
-    this.subscribeToFlatTypeChange();
-    this.subscribeToFlatSelection();
-    this.subscribeToSocietySelection(this.myProfile);
-    if (this.myProfile.user.role === 'admin')
-      this.subscribeToSocietySearch();
-    else
-      this.loadMySocities(this.myProfile);
   }
 
   getSociety(complaint: IComplaint): ISociety | undefined {
@@ -93,27 +75,6 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
   isStatusTransitionAllowed(complaint: IComplaint, nextStatus: string): boolean {
     return this.complaintService.isStatusTransitionAllowed(complaint.status, nextStatus);
-  }
-
-  subscribeToFlatTypeChange() {
-    this.complaintTypeControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe({
-        next: complaintType => {
-          if (this.myProfile?.user.role === 'admin' && !this.societiesSearchControl.value && !this.flatControl.value) return;
-
-          this.loadComplaints();
-        }
-      });
-  }
-
-  amIAMember(myProfile: IMyProfile, sid?: string) {
-    const societyId = sid ?? this.societiesSearchControl.value?.value;
-
-    this.isFlatMember = myProfile.socities
-      .filter(s => !societyId || s.societyId === societyId)
-      .some(s => s?.societyRoles?.some(sr => ['owner', 'member', 'tenant'].includes(sr.name)))
-      ?? false;
   }
 
   amIManagerOfSociety(complaint: IComplaint) {
@@ -134,166 +95,9 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     return this.myProfile.user._id === createdByUserId;
   }
 
-  loadMySocities(myProfile: IMyProfile) {
-    this.societyService.getAllSocieties()
-      .pipe(take(1))
-      .subscribe({
-        next: response => {
-          const socities = response.data;
-          this.societyOptions = socities.map(s => ({
-            label: s.societyName,
-            value: s._id
-          } as IUIDropdownOption));
-
-          if (socities.length === 1) {
-            this.societiesSearchControl.setValue({ label: socities[0].societyName, value: socities[0]._id });
-          } else {
-            this.loadDefaultFlats(myProfile);
-          }
-        }
-      });
-  }
-
-  onSocietySearch(searchString: string) {
-    this.search$.next(searchString);
-  }
-
-  subscribeToSocietySearch() {
-    this.search$.pipe(
-      debounceTime(100),
-      distinctUntilChanged(),
-      takeUntil(this.isComponentActive),
-      switchMap(searchString => {
-        this.societyOptions = [];
-        return this.societyService.searchSocieties(searchString).pipe(takeUntil(this.isComponentActive))
-      })
-    )
-      .subscribe({
-        next: users => {
-          if (!users.success) return;
-
-          const socities = users.data;
-          this.societyOptions = socities.map(s => ({
-            label: s.societyName,
-            value: s._id
-          } as IUIDropdownOption));
-        }
-      });
-  }
-
-  subscribeToSocietySelection(myProfile: IMyProfile) {
-    this.societiesSearchControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(selectedSociety => {
-        this.flatControl.reset();
-
-        const isAdmin = myProfile.user.role === 'admin';
-        if (this.myProfile) this.amIAMember(this.myProfile);
-
-        if (selectedSociety) {
-          const isManager = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => ['manager', 'societyadmin'].includes(sr.name));
-          const isFlatMember = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => ['owner', 'member', 'tenant'].includes(sr.name));
-
-          // If I am society manager or admin then load all flats from society
-          if (isAdmin || isManager) this.loadSocietyFlats(selectedSociety.value)
-
-          // If I am society flat owner/tenanat/member load only flat I am related to
-          else if (isFlatMember) this.loadAllMyFlats(selectedSociety.value)
-
-        } else {
-          this.loadDefaultFlats(myProfile);
-        }
-
-      });
-  }
-  async loadDefaultFlats(myProfile: IMyProfile) {
-
-    const isAdmin = myProfile.user.role === 'admin';
-
-    const managerOfSocities = myProfile.socities.filter(s => s.societyRoles.some(sr => ['manager', 'societyadmin'].includes(sr.name)));
-    const isFlatMember = myProfile.socities.some(s => s.societyRoles.some(sr => ['owner', 'member', 'tenant'].includes(sr.name)));
-
-    // If I am admin then clear all flats and complaints list
-    if (isAdmin) {
-      this.flatOptions = [];
-      return;
-    }
-
-    // If I am society manager then show all flats of those society
-    let societyFlats: IUIDropdownOption<any>[] = [];
-    if (managerOfSocities.length > 0) {
-      const societyFlatsObs = managerOfSocities.map(s => this.loadSocietyFlats(s.societyId, false));
-      const societyFlatsArr = await Promise.all(societyFlatsObs);
-      societyFlatsArr.forEach(sf => sf.forEach(f => societyFlats.push(f)));
-    }
-
-
-    // If I am society flat owner/tenanat/member load all my flats
-    if (isFlatMember) {
-      const allFlats = await this.loadAllMyFlats(undefined, false);
-      allFlats.forEach(f => societyFlats.push(f));
-
-      this.flatOptions = societyFlats;
-    }
-
-    this.loadComplaints();
-  }
-
-  loadAllMyFlats(societyId?: string, populate = true): Promise<IUIDropdownOption<any>[]> {
-    return new Promise(resolve => {
-
-      this.societyService.myFlats(societyId)
-        .pipe(take(1))
-        .subscribe(response => {
-          if (!response.success) {
-            resolve([]);
-            return;
-          }
-
-          const flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
-          if (populate) {
-            this.flatOptions = flatOptions;
-            this.loadComplaints();
-          }
-          resolve(flatOptions);
-        });
-
-    });
-  }
-
-  loadSocietyFlats(societyId: string, populate = true): Promise<IUIDropdownOption<any>[]> {
-    return new Promise(resolve => {
-
-      this.societyService.getFlats(societyId)
-        .pipe(take(1))
-        .subscribe(response => {
-          if (!response.success) {
-            resolve([]);
-            return;
-          }
-
-          const flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.societiesSearchControl.value?.value));
-          if (populate) {
-            this.flatOptions = flatOptions;
-            this.loadComplaints();
-          }
-          resolve(flatOptions);
-        });
-
-    });
-  }
-
-  subscribeToFlatSelection() {
-    this.flatControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(selectedFlat => {
-        this.loadComplaints();
-      });
-  }
-
   async openAddComplaint() {
-    const societyId = this.societiesSearchControl.value?.value;
-    const flatId = this.flatControl.value?.value;
+    const societyId = this.selectedFIlter.societyId;
+    const flatId = this.selectedFIlter.flatId;
 
     if (societyId && flatId)
       this.router.navigate(['complaints', societyId, 'add', flatId]);
@@ -305,8 +109,10 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
       this.router.navigate(['complaints', 'add']);
   }
 
-  loadComplaints() {
-    this.complaintService.getComplaints(this.societiesSearchControl.value?.value, this.flatControl.value?.value, this.complaintTypeControl.value?.value)
+  loadComplaints(selectedFilter: IComplaintFilter) {
+    this.selectedFIlter = selectedFilter;
+    this.complaints = [];
+    this.complaintService.getComplaints(selectedFilter.societyId, selectedFilter.flatId, selectedFilter.complaintType)
       .pipe(take(1))
       .subscribe({
         next: response => {
@@ -322,7 +128,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: response => {
-          if (response.success) this.loadComplaints();
+          if (response.success) this.loadComplaints(this.selectedFIlter);
         }
       })
   }

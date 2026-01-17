@@ -1,0 +1,23 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.filter-container {
+    padding: $sp;
+    background-color: $color-light-gray;
+    border-radius: $btn-border-radius-lg;
+    border: solid 1px $color-border;
+    margin-bottom: $sp-md;
+
+    .selected-filter-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+        row-gap: $sp-sm;
+
+        ::ng-deep {
+            label {
+                border-left: solid 1px $color-sky;
+                padding-left: 5px;
+            }
+        }
+    }
+}

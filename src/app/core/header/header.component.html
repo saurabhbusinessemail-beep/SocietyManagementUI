@@ -3,7 +3,7 @@
         <img class="icon menu-icon" src="assets/logo.png" (click)="onMenuClick()">
     </div>
 
-    <div class="left" *ngIf="mode !== 'mobile' || title === ''">
+    <div class="left" *ngIf="windowServic.mode.value !== 'mobile' || title === ''" appLongTouch (longTouch)="showDevButtons = !showDevButtons">
         <div class="app-logo">
             <span class="logo-full">
                 <span class="n-bold">N</span>est <span class="n-bold">N</span>et
@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="center">
+    <div class="center" appLongTouch (longTouch)="showDevButtons = !showDevButtons">
         <div *ngIf="title" class="title">
             {{ title }}
         </div>
@@ -26,8 +26,8 @@
     </div>
 
     <div class="right">
-        <button (click)="showLogs()">Logs</button>
-        <button (click)="showStorage()">Storage</button>
+        <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
+        <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
         <ui-user-icon></ui-user-icon>
         <app-more-icon *ngIf="!hideMoreActions">
             <ng-content select="[moreActions]"></ng-content>

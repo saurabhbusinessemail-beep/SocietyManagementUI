@@ -32,6 +32,13 @@ body {
     display: none !important;
 }
 
+.full-h {
+    height: 100%;
+}
+.full-w {
+    width: 100%;
+}
+
 .flex {
     display: flex;
     padding: 1px;
@@ -60,6 +67,7 @@ body {
 }
 .flex-auto {
     flex: 1 auto;
+    overflow: auto;
 }
 
 // header/footer shared background

@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddComplaintComponent } from './add-complaint/add-complaint.component';
 import { PipeModule } from '../../pipes/pipes.module';
 import { IconModule } from '../../core/icons/icon.module';
+import { FilterModule } from '../../core/filter/filter.module';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { IconModule } from '../../core/icons/icon.module';
     FormsModule,
     ReactiveFormsModule,
     PipeModule,
-    IconModule
+    IconModule,
+    FilterModule
   ]
 })
 export class ComplaintModule { }

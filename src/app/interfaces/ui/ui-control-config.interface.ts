@@ -1,17 +1,21 @@
-import { ValidatorFn } from "@angular/forms";
+import { FormControl, ValidatorFn } from "@angular/forms";
 import { ControlOrientation, ControlSize } from "../../types";
+import { IUIDropdownOption } from "./ui-drop-down-option.interface";
 
-export interface IUIControlConfig {
+export interface IUIControlConfig<T = any> {
     id: string;
 
     label?: string;
     placeholder?: string;
     helpText?: string;
 
+    formControl?: FormControl<T>;
     validations?: UIValidationRule[];
     errorMessages?: {
         [validationKey: string]: string;
     };
+
+    dropDownOptions?: IUIDropdownOption[];
 
     orientation?: ControlOrientation;
     size?: ControlSize;

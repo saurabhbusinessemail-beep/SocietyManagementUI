@@ -1,11 +1,11 @@
-<nav class="app-menu" [attr.data-mode]="mode" [class.open]="open" *ngIf="menuItems.length > 0">
+<nav class="app-menu" [attr.data-mode]="windowService.mode.value" [class.open]="open" *ngIf="menuItems.length > 0">
 
     <!-- overlay backdrop for tablet/mobile when open -->
-    <div class="backdrop" *ngIf="open && mode !== 'desktop'" (click)="closeOverlay()"></div>
+    <div class="backdrop" *ngIf="open && windowService.mode.value !== 'desktop'" (click)="closeOverlay()"></div>
 
     <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
     <div class="menu-inner">
-        <div class="brand" (click)="toggleMenu()" *ngIf="mode !== 'desktop'">
+        <div class="brand" (click)="toggleMenu()" *ngIf="windowService.mode.value !== 'desktop'">
             <div class="brand-icon">
                 <app-icon name="double-arrow-right" color="white" *ngIf="!this.open"></app-icon>
             </div>
