@@ -49,7 +49,7 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
   }
 
   private updateCountdown(): void {
-    const createdTime = new Date(this.gateEntry.createdOn).getTime();
+    const createdTime = new Date(this.gateEntry.entryTime).getTime();
     const now = Date.now();
 
     const elapsedSeconds = Math.floor((now - createdTime) / 1000);

@@ -213,15 +213,20 @@ export class SecurityComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: response => {
-          if (!response.success) return;
+          if (!response.success || !response.data) return;
 
-          this.openGateEntryDetails(gateEntry);
+          gateEntry.entryTime = response.data.entryTime;
+          this.openGateEntryDetails(response.data);
+          this.loadPendingApprovals();
         }
       })
   }
 
   openGateEntryDetails(gateEntry: IGateEntry) {
-    this.dialog.open(GateEntryPopupComponent, { data: { gateEntry } })
+    this.dialog.open(GateEntryPopupComponent, { data: { gateEntry } }).afterClosed().pipe(take(1))
+      .subscribe(response => {
+        if (response && response.action === 'resend') this.resendNotification(gateEntry);
+      })
   }
 
   scanQRCode() {
