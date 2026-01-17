@@ -19,7 +19,7 @@ export class GateEntryService {
     }
 
     resendNotification(gateEntryId: string): Observable<IBEResponseFormat> {
-        return this.http.get<IBEResponseFormat>(`${this.baseUrl}/resendNotification${gateEntryId}`);
+        return this.http.get<IBEResponseFormat>(`${this.baseUrl}/resendNotification/${gateEntryId}`);
     }
 
     getAllMyGateEntries(societyId?: string, flatId?: string, status?: GateEntryStatus, createdOn?: Date): Observable<IPagedResponse<IGateEntry>> {

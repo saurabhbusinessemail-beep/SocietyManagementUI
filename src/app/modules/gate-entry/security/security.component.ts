@@ -10,6 +10,7 @@ import { GatePassService } from '../../../services/gate-pass.service';
 import { DialogService } from '../../../services/dialog.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { LoginService } from '../../../services/login.service';
+import { GateEntryPopupComponent } from '../../../core/ui/gate-entry-popup/gate-entry-popup.component';
 
 @Component({
   selector: 'app-security',
@@ -190,7 +191,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   }
 
-  loadPendingApprovals() {
+  loadPendingApprovals(openGateEntryId?: string) {
     const societyId = this.entryForm.get('society')?.value?.value;
     this.gateEntryService.getApprovalPendingGateEntries(societyId)
       .pipe(take(1))
@@ -199,6 +200,10 @@ export class SecurityComponent implements OnInit, OnDestroy {
           if (!response.success) return;
 
           this.pendingApprovals = response.data;
+          if (openGateEntryId) {
+            const gateEntry = this.pendingApprovals.find(ge => ge._id === openGateEntryId);
+            if (gateEntry) this.openGateEntryDetails(gateEntry)
+          }
         }
       });
   }
@@ -209,8 +214,14 @@ export class SecurityComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           if (!response.success) return;
+
+          this.openGateEntryDetails(gateEntry);
         }
       })
+  }
+
+  openGateEntryDetails(gateEntry: IGateEntry) {
+    this.dialog.open(GateEntryPopupComponent, { data: { gateEntry } })
   }
 
   scanQRCode() {
@@ -312,7 +323,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
       status: 'requested'
     };
 
-    this.saveGateEntry(payload);
+    this.saveGateEntry(payload, true);
   }
 
   selfApprove() {
@@ -335,7 +346,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
     this.saveGateEntry(payload);
   }
 
-  saveGateEntry(payload: any) {
+  saveGateEntry(payload: any, openAfterSave = false) {
     this.gateEntryService.newGateEntry(payload)
       .pipe(take(1))
       .subscribe({
@@ -343,10 +354,13 @@ export class SecurityComponent implements OnInit, OnDestroy {
           if (!response.success || !response.data) return;
 
           this.entryForm.reset();
-          this.loadDefaultSociety();
+          if (!openAfterSave)
+            this.loadPendingApprovals();
+          else
+            this.loadPendingApprovals(response.data._id);
         },
         error: (err) => {
-          this.loadDefaultSociety();
+          this.loadPendingApprovals();
         },
       })
   }

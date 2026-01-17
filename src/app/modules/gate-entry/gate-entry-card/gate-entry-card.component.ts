@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IGateEntry } from '../../../interfaces';
 
 @Component({
@@ -6,130 +6,53 @@ import { IGateEntry } from '../../../interfaces';
   templateUrl: './gate-entry-card.component.html',
   styleUrl: './gate-entry-card.component.scss'
 })
-export class GateEntryCardComponent {
-  @Input() gateEntry!: IGateEntry;
-  @Input() isActive: boolean = false;
+export class GateEntryCardComponent implements OnInit, OnDestroy {
+  @Input() gateEntry!: any;
 
-  @Output() cardClick = new EventEmitter<IGateEntry>();
-  @Output() resend = new EventEmitter<string>(); // Emits gateEntry ID
+  @Output() openDetails = new EventEmitter<void>();
+  @Output() resendRequest = new EventEmitter<void>();
 
-  remainingTime: string = '00:30';
-  isExpired: boolean = false;
-  timerClass: string = '';
-  private timerInterval: any;
-  private totalSeconds: number = 30;
-  private currentSeconds: number = 30;
-  
-  get Society() {
-    return this.gateEntry && typeof this.gateEntry.societyId !== 'string' ? this.gateEntry.societyId : undefined
-  }
-  
-  get Flat() {
-    return this.gateEntry && typeof this.gateEntry.flatId !== 'string' ? this.gateEntry.flatId : undefined
-  }
+  timeOutDelay = 30;
+  remainingSeconds = this.timeOutDelay;
+  isExpired = false;
 
-  ngOnInit() {
+  private timerId!: number;
+
+  ngOnInit(): void {
     this.startCountdown();
-    this.updateStatus();
   }
 
-  ngOnDestroy() {
-    this.clearTimer();
+  ngOnDestroy(): void {
+    clearInterval(this.timerId);
   }
 
-  private startCountdown() {
-    // Calculate initial time from createdOn timestamp
+  private startCountdown(): void {
+    this.updateCountdown();
+
+    this.timerId = window.setInterval(() => {
+      this.updateCountdown();
+    }, 1000);
+  }
+
+  private updateCountdown(): void {
     const createdTime = new Date(this.gateEntry.createdOn).getTime();
-    const now = new Date().getTime();
+    const now = Date.now();
+
     const elapsedSeconds = Math.floor((now - createdTime) / 1000);
+    const remaining = this.timeOutDelay - elapsedSeconds;
 
-    this.currentSeconds = Math.max(0, this.totalSeconds - elapsedSeconds);
-    this.updateTimerDisplay();
+    this.remainingSeconds = Math.max(remaining, 0);
+    this.isExpired = remaining <= 0;
 
-    if (this.currentSeconds > 0) {
-      this.timerInterval = setInterval(() => {
-        this.currentSeconds--;
-        this.updateTimerDisplay();
-        this.updateStatus();
-
-        if (this.currentSeconds <= 0) {
-          this.clearTimer();
-          this.isExpired = true;
-          this.onExpired();
-        }
-      }, 1000);
-    } else {
-      this.isExpired = true;
-      this.onExpired();
-    }
-  }
-
-  private updateTimerDisplay() {
-    const minutes = Math.floor(this.currentSeconds / 60);
-    const seconds = this.currentSeconds % 60;
-    this.remainingTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-    // Update timer class based on remaining time
-    if (this.currentSeconds <= 10) {
-      this.timerClass = 'expiring';
-    } else if (this.currentSeconds <= 0) {
-      this.timerClass = 'expired';
-    } else {
-      this.timerClass = '';
-    }
-  }
-
-  private updateStatus() {
-    if (this.currentSeconds <= 0) {
-      this.isExpired = true;
-    }
-  }
-
-  private onExpired() {
-    this.timerClass = 'expired';
-    this.remainingTime = '00:00';
-    // You might want to update the gateEntry status here
-    if (this.gateEntry.status !== 'expired') {
-      this.gateEntry.status = 'expired';
-    }
-  }
-
-  private clearTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-  }
-
-  onCardClick() {
-    this.cardClick.emit(this.gateEntry);
-  }
-
-  onResend(event: Event) {
-    event.stopPropagation(); // Prevent card click from firing
     if (this.isExpired) {
-      this.resend.emit(this.gateEntry._id);
-      // Reset timer if needed
-      this.resetTimer();
+      clearInterval(this.timerId);
     }
   }
 
-  private resetTimer() {
-    this.clearTimer();
-    this.currentSeconds = this.totalSeconds;
-    this.isExpired = false;
-    this.timerClass = '';
-    this.startCountdown();
-  }
+  onResendClick(event: MouseEvent): void {
+    event.stopPropagation();
 
-  // Helper method to get status class
-  getStatusClass(): string {
-    return `status-${this.gateEntry.status}`;
-  }
-
-  // Format time for display
-  formatTime(timeString: string): string {
-    const date = new Date(timeString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!this.isExpired) return;
+    this.resendRequest.emit();
   }
 }

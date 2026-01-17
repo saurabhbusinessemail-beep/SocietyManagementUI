@@ -1,32 +1,34 @@
-<div class="gate-notification-card" [class.expired]="isExpired" [class.active]="isActive" (click)="onCardClick()">
-
-    <div class="notification-status" [class]="'status-' + gateEntry?.status"></div>
-
-    <div class="notification-content">
-        <div class="notification-header">
-            <div class="visitor-name">{{ gateEntry?.visitorName }}</div>
-            <div class="countdown-timer" [class]="timerClass">
-                <i class="icon-clock"></i>
-                <span class="timer-value">{{ remainingTime }}</span>
+<div class="gate-entry-card" [class.expired]="isExpired" (click)="openDetails.emit()">
+    <!-- Header -->
+    <div class="gate-entry-header">
+        <div>
+            <div class="visitor-name">
+                {{ gateEntry.visitorName }}
+            </div>
+            <div class="flat-info">
+                Flat {{ gateEntry.flatId?.flatNumber }}
             </div>
         </div>
 
-        <div class="notification-details">
-            <div class="notification-detail-item flat-info">
-                <i class="icon-home"></i>
-                <span>
-                    {{ Flat?.flatNumber }}
-                    - {{ Society?.societyName }}
-                </span>
-            </div>
-            <div class="notification-detail-item">
-                <i class="icon-phone"></i>
-                <span>{{ gateEntry?.visitorContact }}</span>
-            </div>
+        <!-- Countdown -->
+        <div class="countdown" [class.expired]="isExpired">
+            {{ remainingSeconds }}s
         </div>
     </div>
 
-    <button class="resend-btn-icon" [disabled]="!isExpired" (click)="onResend($event)">
-        <i class="icon-refresh"></i>
-    </button>
+    <!-- Purpose -->
+    <div class="purpose">
+        {{ gateEntry.purpose }}
+    </div>
+
+    <!-- Footer -->
+    <div class="gate-entry-footer">
+        <span class="flat-info">
+            {{ gateEntry.societyId?.societyName }}
+        </span>
+
+        <button class="btn primary" [disabled]="!isExpired" (click)="onResendClick($event)">
+            <app-icon name="call"></app-icon>
+        </button>
+    </div>
 </div>

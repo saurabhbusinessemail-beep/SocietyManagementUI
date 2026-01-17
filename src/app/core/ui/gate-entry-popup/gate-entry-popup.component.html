@@ -1,102 +1,63 @@
-<div class="gate-modal-overlay" (click)="onOverlayClick($event)">
-    <div class="gate-modal" (click)="$event.stopPropagation()">
+<div class="gate-entry-popup">
+    <!-- Title -->
+    <div class="popup-title">
+        Visitor Entry Request
+    </div>
 
-        <div class="modal-header">
-            <div class="modal-title">
-                <div class="notification-status" [class]="'status-' + gateEntry?.status"></div>
-                <h3>Gate Entry Request</h3>
-            </div>
-            <button class="close-modal-btn" (click)="dialogRef.close()">
-                <i class="icon-close"></i>
-            </button>
+    <!-- Countdown -->
+    <div class="popup-countdown" [class.expired]="isExpired">
+        {{ remainingSeconds }} seconds remaining
+    </div>
+
+    <!-- Details -->
+    <div class="details">
+        <div class="detail-item">
+            <span class="detail-label">Visitor Name</span>
+            <span class="detail-value">{{ gateEntry.visitorName }}</span>
         </div>
 
-        <div class="modal-content">
-            <!-- Visitor Details -->
-            <div class="detail-section">
-                <h4 class="section-title">Visitor Details</h4>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Visitor Name</span>
-                        <span class="info-value highlight">{{ gateEntry?.visitorName }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Contact Number</span>
-                        <span class="info-value">{{ gateEntry?.visitorContact }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Purpose</span>
-                        <span class="info-value">{{ gateEntry?.purpose }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Property Details -->
-            <div class="detail-section">
-                <h4 class="section-title">Property Details</h4>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Society</span>
-                        <span class="info-value highlight">{{ Society?.societyName }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Flat Number</span>
-                        <span class="info-value highlight">{{ Flat?.flatNumber }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Flat Type</span>
-                        <span class="info-value">{{ Flat?.flatType }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Request Details -->
-            <div class="detail-section">
-                <h4 class="section-title">Request Details</h4>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Status</span>
-                        <span class="info-value status" [class]="gateEntry?.status">
-                            {{ gateEntry?.status | titlecase }}
-                        </span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Requested At</span>
-                        <span class="info-value">{{ gateEntry?.createdOn | date:'medium' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Entry Time</span>
-                        <span class="info-value">{{ gateEntry?.entryTime | date:'medium' }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vehicle info if available -->
-            <div *ngIf="gateEntry?.vehicleNumber" class="detail-section">
-                <h4 class="section-title">Vehicle Information</h4>
-                <div class="vehicle-info">
-                    <div class="info-item">
-                        <span class="info-label">Vehicle Number</span>
-                        <span class="info-value">{{ gateEntry?.vehicleNumber }}</span>
-                    </div>
-                </div>
-            </div>
+        <div class="detail-item">
+            <span class="detail-label">Contact</span>
+            <span class="detail-value">
+                {{ gateEntry.visitorContact || '—' }}
+            </span>
         </div>
 
-        <div class="modal-footer">
-            <div class="modal-timer">
-                <div class="countdown-timer" [class]="timerClass">
-                    <i class="icon-clock"></i>
-                    <span class="timer-value">{{ remainingTime }}</span>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="resend-btn-full" [disabled]="!isExpired" (click)="onResend()">
-                    <i class="icon-refresh"></i>
-                    Resend Notification
-                </button>
-            </div>
+        <div class="detail-item">
+            <span class="detail-label">Flat</span>
+            <span class="detail-value">
+                {{ Flat?.flatNumber }}
+            </span>
         </div>
 
+        <div class="detail-item">
+            <span class="detail-label">Floor</span>
+            <span class="detail-value">
+                {{ Flat?.floor }}
+            </span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Vehicle</span>
+            <span class="detail-value">
+                {{ gateEntry.vehicleNumber || 'N/A' }}
+            </span>
+        </div>
+
+        <div class="detail-item detail-purpose">
+            <span class="detail-label">Purpose</span>
+            <span class="detail-value">{{ gateEntry.purpose }}</span>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="popup-actions">
+        <button class="cancel-btn" (click)="close()">
+            Close
+        </button>
+
+        <button class="resend-btn-large" [disabled]="!isExpired" (click)="resendRequest()">
+            Resend Request
+        </button>
     </div>
 </div>
