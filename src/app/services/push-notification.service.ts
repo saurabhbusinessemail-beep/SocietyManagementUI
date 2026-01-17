@@ -1,8 +1,9 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, ApplicationRef } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { PushNotifications, Token, ActionPerformed, PushNotificationSchema } from '@capacitor/push-notifications';
 import { Router } from '@angular/router';
 import { Platform } from '@angular/cdk/platform';
+import { App } from '@capacitor/app';
 
 @Injectable({
     providedIn: 'root'
@@ -13,28 +14,28 @@ export class PushNotificationService {
     constructor(
         private router: Router,
         private ngZone: NgZone,
-        private platform: Platform
-    ) { }
+        private platform: Platform,
+        private appRef: ApplicationRef
+    ) {
+        // Check for launch notification when app starts
+        this.checkLaunchNotification();
+    }
 
     async initialize() {
-        // Only initialize once
         if (this.isInitialized) {
             return;
         }
 
-        // Check if running on a device with push support
         if (!Capacitor.isNativePlatform()) {
             console.log('Push notifications only work on native platforms');
             return;
         }
 
         try {
-            // Request permission for push notifications
             const permission = await PushNotifications.requestPermissions();
             if (permission.receive === 'granted') {
-                // Register for push notifications
                 await PushNotifications.register();
-                this.setupListeners();
+                this.setupCapacitorListeners();
                 this.isInitialized = true;
                 console.log('Push notifications initialized');
             } else {
@@ -45,11 +46,10 @@ export class PushNotificationService {
         }
     }
 
-    private setupListeners() {
-        // On successful registration, we can get the token
+    private setupCapacitorListeners() {
+        // On successful registration
         PushNotifications.addListener('registration', (token: Token) => {
             console.log('Push registration success, token:', token.value);
-            // Send this token to your backend server
             this.sendTokenToServer(token.value);
         });
 
@@ -59,73 +59,97 @@ export class PushNotificationService {
         });
 
         // Handle notifications when app is FOREGROUND
-        PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
-            console.log('Push received (foreground):', notification);
-            // You can show a custom notification UI here if needed
-        });
+        PushNotifications.addListener('pushNotificationReceived',
+            (notification: PushNotificationSchema) => {
+                console.log('Push received (foreground):', notification);
+                this.showInAppNotification(notification);
+            }
+        );
 
-        // Handle notification clicks - THIS IS WHAT YOU NEED
-        PushNotifications.addListener('pushNotificationActionPerformed', async (action: ActionPerformed) => {
-            console.log('Push action performed:', action);
-
-            // Run in Angular zone to ensure change detection
-            this.ngZone.run(() => {
-                this.handleNotificationClick(action.notification);
-            });
-        });
+        // Handle notification clicks when app is BACKGROUND or CLOSED
+        PushNotifications.addListener('pushNotificationActionPerformed',
+            (action: ActionPerformed) => {
+                console.log('Push action performed:', action);
+                this.handleNotification(action.notification);
+            }
+        );
     }
 
-    private handleNotificationClick(notification: PushNotificationSchema) {
-        console.log('Handling notification click:', notification);
+    private async checkLaunchNotification() {
+        // Check if app was launched from a notification
+        if (Capacitor.isNativePlatform()) {
+            const launchInfo = await App.getLaunchUrl();
+            console.log('App launch info:', launchInfo);
 
-        // Extract data from notification
-        const data = notification.data || {};
-        const notificationId = data.notificationId;
-        const type = data.type;
-        const gateEntryId = data.gateEntryId;
-
-        // Log the data for debugging
-        console.log('Notification data:', {
-            notificationId,
-            type,
-            gateEntryId,
-            allData: data
-        });
-
-        // Navigate based on notification type
-        if (type === 'GATE_PASS' && gateEntryId) {
-            // Navigate to gate entry page
-            this.router.navigate(['/visitors/list']);
-        } else if (notificationId) {
-            // Navigate to notifications page or specific notification
-            this.router.navigate(['/notifications', notificationId]);
-        } else {
-            // Default navigation if no specific data
-            this.router.navigate(['/home']);
+            // Check local storage for pending notification from Android
+            const pendingNotification = localStorage.getItem('pending_notification');
+            if (pendingNotification) {
+                try {
+                    const notification = JSON.parse(pendingNotification);
+                    setTimeout(() => {
+                        this.handleNotification(notification);
+                    }, 1000); // Small delay to ensure app is ready
+                    localStorage.removeItem('pending_notification');
+                } catch (error) {
+                    console.error('Error processing pending notification:', error);
+                }
+            }
         }
     }
 
-    private sendTokenToServer(token: string) {
-        // Implement your logic to send the token to your backend
-        console.log('Sending FCM token to server:', token);
-        // Example:
-        // this.http.post('/api/save-fcm-token', { token }).subscribe();
+    private handleNotification(notification: PushNotificationSchema) {
+        this.ngZone.run(() => {
+            console.log('Handling notification click:', notification);
+
+            const data = notification.data || {};
+            const notificationId = data.notificationId;
+            const type = data.type;
+            const gateEntryId = data.gateEntryId;
+
+            console.log('Notification data:', {
+                notificationId,
+                type,
+                gateEntryId,
+                allData: data
+            });
+
+            // Navigate based on notification type
+            if (type === 'GATE_PASS' && gateEntryId) {
+                this.router.navigate(['/visitors/list']);
+            } else if (notificationId) {
+                this.router.navigate(['/notifications', notificationId]);
+            } else {
+                this.router.navigate(['/home']);
+            }
+
+            // Force change detection
+            this.appRef.tick();
+        });
     }
 
-    // Clean up when service is destroyed
+    private showInAppNotification(notification: PushNotificationSchema) {
+        console.log('Show in-app notification:', notification);
+        // Show a toast or banner in your app
+    }
+
+    private sendTokenToServer(token: string) {
+        console.log('Sending FCM token to server:', token);
+        // Send to your backend
+        // Example: this.apiService.sendFcmToken(token).subscribe();
+    }
+
+    // Method to manually trigger notification handling (for testing)
+    triggerNotificationManually(data: any) {
+        const notification: PushNotificationSchema = {
+            title: data.title,
+            body: data.body,
+            data: data.data || {},
+            id: Date.now().toString()
+        };
+        this.handleNotification(notification);
+    }
+
     async removeAllListeners() {
         await PushNotifications.removeAllListeners();
-    }
-
-    // Get current notification settings
-    async getDeliveredNotifications() {
-        const notificationList = await PushNotifications.getDeliveredNotifications();
-        console.log('Delivered notifications:', notificationList);
-        return notificationList;
-    }
-
-    // Remove delivered notifications
-    async removeDeliveredNotifications() {
-        await PushNotifications.removeAllDeliveredNotifications();
     }
 }

@@ -13,6 +13,7 @@ import { QRScannerComponent } from './qrscanner/qrscanner.component';
 import { IconModule } from '../../core/icons/icon.module';
 import { OTPPopupModule } from '../../core/otppopup/otppopup.module';
 import { ConfirmationPopupModule } from '../../core/confirmation/confirmation-popup.module';
+import { GateEntryCardComponent } from './gate-entry-card/gate-entry-card.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ConfirmationPopupModule } from '../../core/confirmation/confirmation-po
     GateEntryListComponent,
     AddGateEntryComponent,
     SecurityComponent,
-    QRScannerComponent
+    QRScannerComponent,
+    GateEntryCardComponent
   ],
   imports: [
     CommonModule,

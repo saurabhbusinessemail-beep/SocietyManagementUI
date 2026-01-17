@@ -1,0 +1,32 @@
+<div class="gate-notification-card" [class.expired]="isExpired" [class.active]="isActive" (click)="onCardClick()">
+
+    <div class="notification-status" [class]="'status-' + gateEntry?.status"></div>
+
+    <div class="notification-content">
+        <div class="notification-header">
+            <div class="visitor-name">{{ gateEntry?.visitorName }}</div>
+            <div class="countdown-timer" [class]="timerClass">
+                <i class="icon-clock"></i>
+                <span class="timer-value">{{ remainingTime }}</span>
+            </div>
+        </div>
+
+        <div class="notification-details">
+            <div class="notification-detail-item flat-info">
+                <i class="icon-home"></i>
+                <span>
+                    {{ Flat?.flatNumber }}
+                    - {{ Society?.societyName }}
+                </span>
+            </div>
+            <div class="notification-detail-item">
+                <i class="icon-phone"></i>
+                <span>{{ gateEntry?.visitorContact }}</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="resend-btn-icon" [disabled]="!isExpired" (click)="onResend($event)">
+        <i class="icon-refresh"></i>
+    </button>
+</div>

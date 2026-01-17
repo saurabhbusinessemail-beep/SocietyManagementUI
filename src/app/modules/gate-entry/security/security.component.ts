@@ -203,6 +203,16 @@ export class SecurityComponent implements OnInit, OnDestroy {
       });
   }
 
+  resendNotification(gateEntry: IGateEntry) {
+    this.gateEntryService.resendNotification(gateEntry._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+        }
+      })
+  }
+
   scanQRCode() {
     this.dialog.open(QRScannerComponent).afterClosed()
       .pipe(take(1))

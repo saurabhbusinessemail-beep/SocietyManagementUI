@@ -10,6 +10,7 @@ import { FcmTokenService } from './services/fcm-token.service';
 import { ConsoleCaptureService } from './services/console-capture.service';
 import { PushNotificationService } from './services/push-notification.service';
 import { ColdStartService } from './services/cold-start.service';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,8 @@ import { ColdStartService } from './services/cold-start.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  firstRouteLoad = true;
   show = false;
   title = 'SocietyManagementUI';
   dialogRef?: MatDialogRef<UserNameInputPopupComponent, any>
@@ -33,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private coldStartService: ColdStartService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
 
     this.FcmTokenService.init();
 
@@ -45,7 +48,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.menuService.userMenus//.pipe(take(1))
           .subscribe(res => {
-            this.menuService.syncSelectedMenuWithCurrentUrl();
+            console.log('res = ', res)
+
+            if (this.firstRouteLoad && res.length > 0) {
+              this.menuService.syncSelectedMenuWithCurrentUrl(true);
+              this.firstRouteLoad = false;
+            }
+            else
+              this.menuService.syncSelectedMenuWithCurrentUrl();
             this.checkAndAskForUserName();
           });
       })
@@ -53,9 +63,33 @@ export class AppComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (this.router.url === '/dashboard/user')
         this.menuService.syncSelectedMenuWithCurrentUrl(true);
-
-      this.pushNotificationService.initialize();
     }, 100);
+
+    // Initialize push notifications
+    this.pushNotificationService.initialize();
+
+    // Listen for app resume events
+    App.addListener('appStateChange', ({ isActive }) => {
+      console.log('App state changed. Active:', isActive);
+      if (isActive) {
+        // App came to foreground, check for pending notifications
+        this.checkPendingNotifications();
+      }
+    });
+  }
+
+  private checkPendingNotifications() {
+    // Check if there's a pending notification in storage
+    const pending = localStorage.getItem('pending_notification');
+    if (pending) {
+      try {
+        const notification = JSON.parse(pending);
+        this.pushNotificationService.triggerNotificationManually(notification);
+        localStorage.removeItem('pending_notification');
+      } catch (error) {
+        console.error('Error handling pending notification:', error);
+      }
+    }
   }
 
   checkAndAskForUserName() {
@@ -95,19 +129,6 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
       })
-  }
-
-  private checkPendingNotifications() {
-    const pendingNotification = localStorage.getItem('pendingNotification');
-    if (pendingNotification) {
-      try {
-        const data = JSON.parse(pendingNotification);
-        this.coldStartService.setNotificationData(data);
-        localStorage.removeItem('pendingNotification');
-      } catch (error) {
-        console.error('Error parsing pending notification:', error);
-      }
-    }
   }
 
   ngOnDestroy() {

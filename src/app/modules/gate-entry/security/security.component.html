@@ -93,7 +93,9 @@
 
     <ui-form-layout>
         <ng-container *ngFor="let gateEntry of pendingApprovals">
-            <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="80px">
+            <app-gate-entry-card [gateEntry]="gateEntry" [isActive]="true">
+            </app-gate-entry-card>
+            <!-- <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="80px">
                 <ng-container card-main>
                     <a class="visitor-name">
                         {{ gateEntry.visitorName }}
@@ -106,7 +108,7 @@
                         </span>
                     </div>
                 </ng-container>
-            </ui-card>
+            </ui-card> -->
         </ng-container>
     </ui-form-layout>
 

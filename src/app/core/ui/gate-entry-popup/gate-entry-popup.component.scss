@@ -1,0 +1,262 @@
+// gate-entry-card.component.scss
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.gate-notification-card {
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    padding: $sp-md;
+    display: flex;
+    align-items: center;
+    gap: $sp;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        border-color: $color-dark-blue;
+        box-shadow: 0 2px 8px rgba($color-dark-blue, 0.1);
+    }
+
+    &.expired {
+        opacity: 0.7;
+        background: $color-light-gray;
+    }
+
+    &.active {
+        border-color: $color-border-highlight;
+        box-shadow: 0 0 0 1px $color-border-highlight;
+    }
+
+    &.new-notification {
+        animation: pulse 2s infinite;
+    }
+}
+
+// Status Indicator
+.notification-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &.status-pending {
+        background-color: $status-pending;
+    }
+
+    &.status-approved {
+        background-color: $status-approved;
+    }
+
+    &.status-rejected {
+        background-color: $status-rejected;
+    }
+
+    &.status-expired {
+        background-color: $status-expired;
+    }
+}
+
+// Notification Content (Compact)
+.notification-content {
+    flex: 1;
+    min-width: 0; // For text truncation
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $sp-xs;
+
+    @include mobile {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $sp-xs;
+    }
+}
+
+.visitor-name {
+    font-weight: 600;
+    color: $color-black;
+    @include fluid-font($font-size-base, $font-size-base, $font-size-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notification-time {
+    color: $color-help-text;
+    font-size: $font-size-xs;
+    white-space: nowrap;
+}
+
+.notification-details {
+    display: flex;
+    gap: $sp-sm;
+
+    @include mobile {
+        flex-wrap: wrap;
+    }
+}
+
+.notification-detail-item {
+    display: flex;
+    align-items: center;
+    gap: $sp-xs;
+    font-size: $font-size-sm;
+    color: $color-black;
+
+    @include mobile {
+        font-size: $font-size-xs;
+        flex: 0 0 calc(50% - #{$sp-sm / 2});
+    }
+
+    &.flat-info {
+        color: $color-dark-blue;
+        font-weight: 500;
+    }
+
+    i {
+        color: $icon-on-light-highlight;
+        font-size: 14px;
+        width: 16px;
+        text-align: center;
+    }
+}
+
+// Resend Button (Icon only in compact view)
+.resend-btn-icon {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $color-dark-blue;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover:not(:disabled) {
+        background: rgba($color-dark-blue, 0.1);
+    }
+
+    &:disabled {
+        color: $color-disable-background;
+        cursor: not-allowed;
+    }
+
+    i {
+        font-size: 18px;
+    }
+}
+
+// Countdown Timer
+.countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: $sp-xs;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    padding: $sp-xs $sp-sm;
+    border-radius: $btn-border-radius-sm;
+    background: rgba($status-pending, 0.1);
+    color: $status-pending;
+    white-space: nowrap;
+
+    &.expiring {
+        background: rgba($status-rejected, 0.1);
+        color: $status-rejected;
+    }
+
+    &.expired {
+        background: rgba($status-expired, 0.1);
+        color: $status-expired;
+    }
+
+    i {
+        font-size: 14px;
+    }
+}
+
+// Container for grid layout
+.gate-notifications-grid {
+    display: grid;
+    gap: $sp;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include desktop {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+// Empty and loading states for card container
+.no-notifications {
+    text-align: center;
+    padding: $sp-xl;
+    color: $color-help-text;
+
+    i {
+        font-size: 48px;
+        margin-bottom: $sp;
+        color: $color-border;
+    }
+
+    p {
+        font-size: $font-size-lg;
+        margin: 0;
+    }
+}
+
+.notification-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $sp-xl;
+    gap: $sp;
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid $color-border;
+        border-top-color: $color-dark-blue;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    p {
+        color: $color-help-text;
+        font-size: $font-size-base;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba($color-border-highlight, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba($color-border-highlight, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba($color-border-highlight, 0);
+    }
+}
