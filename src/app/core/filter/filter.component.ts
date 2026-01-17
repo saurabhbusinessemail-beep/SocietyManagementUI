@@ -96,9 +96,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   getFieldLabel(colId: string) {
-    const label = this.allDropDownConfig.find(c => c.id === colId)?.label
+    return this.allDropDownConfig.find(c => c.id === colId)?.label
       ?? this.dateControlConfigs.find(c => c.id === colId)?.label
-    return (label ?? '') + label
   }
 
   getFieldValue(colId: string) {
