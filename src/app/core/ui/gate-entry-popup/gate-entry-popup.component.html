@@ -51,7 +51,7 @@
     </div>
 
     <!-- Actions -->
-    <div class="popup-actions">
+    <div class="popup-actions" *ngIf="gateEntry.status === 'requested'">
 
         <ng-container *ngIf="!isForApproval">
             <button class="cancel-btn" (click)="close()">
@@ -69,7 +69,7 @@
                 Reject
             </button>
 
-            <button class="primary primary" [disabled]="!isExpired" (click)="approveReject('approved')">
+            <button class="btn primary" [disabled]="!isExpired" (click)="approveReject('approved')">
                 Approve
             </button>
         </ng-container>

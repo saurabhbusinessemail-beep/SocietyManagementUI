@@ -4,8 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, take } from 'rxjs';
 import { IBEResponseFormat, IGateEntry, IPagedResponse } from '../interfaces';
 import { GateEntryStatus } from '../types';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GateEntryPopupComponent } from '../core/ui/gate-entry-popup/gate-entry-popup.component';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +15,10 @@ export class GateEntryService {
 
     private baseUrl = `${environment.apiBaseUrl}/gateentry`;
 
+    gateEntryRequestPopupRef?: { gateEntryId: string; popupRef: MatDialogRef<GateEntryPopupComponent> };
     gateEntryApprovalResponse = new Subject<IGateEntry>();
 
-    constructor(private http: HttpClient, private dialog: MatDialog) { }
+    constructor(private http: HttpClient, private dialog: MatDialog, private router: Router) { }
 
     newGateEntry(payload: any): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.post<IBEResponseFormat<IGateEntry>>(this.baseUrl, payload);
@@ -56,25 +58,37 @@ export class GateEntryService {
         this.getGateEntry(gateEntryId).pipe(take(1))
             .subscribe(response => {
                 if (!response || !response.data) return;
+                if (this.gateEntryRequestPopupRef) this.handlePreviousApprovalPopupClose(gateEntryId);
 
-                this.dialog.open(GateEntryPopupComponent, { data: { gateEntry: response.data, isForApproval: true } })
-                    .afterClosed().pipe(take(1))
+                const popupRef = this.dialog.open(GateEntryPopupComponent, { data: { gateEntry: response.data, isForApproval: true } });
+                popupRef.afterClosed().pipe(take(1))
                     .subscribe(response => {
                         if (!response || !response.status) return;
 
                         this.changeStatus(gateEntryId, response.status).pipe(take(1)).subscribe();
-                    })
+                    });
+                this.gateEntryRequestPopupRef = { gateEntryId, popupRef };
             })
+    }
+
+    handlePreviousApprovalPopupClose(gateEntryId: string) {
+        if (!this.gateEntryRequestPopupRef) return;
+
+        this.gateEntryRequestPopupRef.popupRef.close();
+        if (this.gateEntryRequestPopupRef.gateEntryId !== gateEntryId) {
+            this.router.navigateByUrl('/visitors/list'); // later be replaced by collecting and showing pending approvals as snack bar
+        }
+        this.gateEntryRequestPopupRef = undefined;
     }
 
     handleApprovalNotificationResponse(gateEntryId: string) {
         this.getGateEntry(gateEntryId).pipe(take(1))
             .subscribe(response => {
                 if (!response || !response.data) return;
+                if (this.gateEntryRequestPopupRef) this.handlePreviousApprovalPopupClose(gateEntryId);
 
                 this.gateEntryApprovalResponse.next(response.data);
             })
     }
-
 
 }

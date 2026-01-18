@@ -5,12 +5,16 @@ import { Router } from '@angular/router';
 import { Platform } from '@angular/cdk/platform';
 import { App } from '@capacitor/app';
 import { GateEntryService } from './gate-entry.service';
+import { fireBase } from '../constants';
+import { FirebaseOptions, initializeApp } from 'firebase/app';
+import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PushNotificationService {
     private isInitialized = false;
+    private firebaseConfig: FirebaseOptions = fireBase;
 
     constructor(
         private router: Router,
@@ -29,7 +33,8 @@ export class PushNotificationService {
         }
 
         if (!Capacitor.isNativePlatform()) {
-            console.log('Push notifications only work on native platforms');
+            // console.log('Push notifications only work on native platforms');
+            this.initializeWeb();
             return;
         }
 
@@ -137,6 +142,7 @@ export class PushNotificationService {
 
     private showInAppNotification(notification: PushNotificationSchema) {
         console.log('Show in-app notification:', notification);
+        this.handleNotification(notification);
         // Show a toast or banner in your app
     }
 
@@ -159,5 +165,67 @@ export class PushNotificationService {
 
     async removeAllListeners() {
         await PushNotifications.removeAllListeners();
+    }
+
+
+    /* For Web Browser */
+    private async initializeWeb() {
+        try {
+            // Initialize Firebase for web
+            const app = initializeApp(this.firebaseConfig);
+
+            // Request permission
+            if (Notification.permission === 'default') {
+                await Notification.requestPermission();
+            }
+
+            // Get FCM token via Capacitor Firebase Messaging
+            const result = await FirebaseMessaging.getToken();
+            const token = result.token;
+
+            console.log('Web FCM Token:', token);
+
+            // Send token to backend
+            this.sendTokenToServer(token);
+
+            // Setup foreground listener for web
+            this.setupWebForegroundListener(app);
+
+            // Also setup Capacitor listeners (they work on web too)
+            this.setupCapacitorListeners();
+
+        } catch (error) {
+            console.error('Web notification initialization failed:', error);
+        }
+    }
+
+    private setupWebForegroundListener(app: any) {
+        // Additional foreground listener for web using Firebase SDK
+        // This ensures we catch all foreground messages on web
+
+        // if (this.isWebPlatform) {
+        try {
+            import('firebase/messaging').then(({ getMessaging, onMessage }) => {
+                const messaging = getMessaging(app);
+
+                onMessage(messaging, (payload) => {
+                    console.log('Web foreground message via Firebase:', payload);
+
+                    // this.ngZone.run(() => {
+                    //     // Convert Firebase payload to Capacitor format
+                    //     const notification: PushNotificationSchema = {
+                    //         title: payload.notification?.title || payload.data?.title,
+                    //         body: payload.notification?.body || payload.data?.body,
+                    //         data: payload.data || {}
+                    //     };
+
+                    //     this.showInAppNotification(notification);
+                    // });
+                });
+            });
+        } catch (error) {
+            console.log('Firebase onMessage setup skipped:', error);
+        }
+        // }
     }
 }

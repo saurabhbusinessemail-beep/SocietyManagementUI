@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IGateEntry } from '../../../interfaces';
+import { GateEntryService } from '../../../services/gate-entry.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-gate-entry-card',
@@ -15,15 +17,23 @@ export class GateEntryCardComponent implements OnInit, OnDestroy {
   timeOutDelay = 30;
   remainingSeconds = this.timeOutDelay;
   isExpired = false;
+  isComponentActive = new Subject<void>();
 
   private timerId!: number;
 
+  constructor(private gateEntryService: GateEntryService) { }
+
   ngOnInit(): void {
-    this.startCountdown();
+    if (this.gateEntry.status === 'requested')
+      this.startCountdown();
+
+      this.subscribeToApprovalResponse();
   }
 
   ngOnDestroy(): void {
     clearInterval(this.timerId);
+    this.isComponentActive.next();
+    this.isComponentActive.complete();
   }
 
   private startCountdown(): void {
@@ -54,5 +64,17 @@ export class GateEntryCardComponent implements OnInit, OnDestroy {
 
     if (!this.isExpired) return;
     this.resendRequest.emit();
+  }
+
+  subscribeToApprovalResponse() {
+    const obsApproval = this.gateEntryService.gateEntryApprovalResponse
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(response => {
+        if (!this.gateEntry || response._id !== this.gateEntry._id) return;
+
+        this.gateEntry.status = this.gateEntry.status;
+        this.gateEntry.history = this.gateEntry.history;
+        obsApproval.unsubscribe();
+      });
   }
 }

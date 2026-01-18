@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Inject } from '@angular/core';
 import { IGateEntry } from '../../../interfaces';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
+import { GateEntryService } from '../../../services/gate-entry.service';
 
 @Component({
   selector: 'app-gate-entry-popup',
@@ -11,6 +13,7 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
 
   gateEntry!: IGateEntry;
   isForApproval: boolean;
+  isComponentActive = new Subject<void>();
 
   timeOutDelay = 30;
   remainingSeconds = this.timeOutDelay;
@@ -28,7 +31,8 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<GateEntryPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { gateEntry: IGateEntry, isForApproval: boolean }
+    @Inject(MAT_DIALOG_DATA) public data: { gateEntry: IGateEntry, isForApproval: boolean },
+    private gateEntryService: GateEntryService
   ) {
     this.gateEntry = data.gateEntry;
     this.isForApproval = data.isForApproval ?? false;
@@ -37,10 +41,28 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.gateEntry.status === 'requested')
       this.startCountdown();
+
+    if (!this.isForApproval) {
+      this.subscribeToApprovalResponse();
+    }
   }
 
   ngOnDestroy(): void {
     clearInterval(this.timerId);
+    this.isComponentActive.next();
+    this.isComponentActive.complete();
+  }
+
+  subscribeToApprovalResponse() {
+    const obsApproval = this.gateEntryService.gateEntryApprovalResponse
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(response => {
+        if (!this.gateEntry || response._id !== this.gateEntry._id) return;
+
+        this.gateEntry.status = this.gateEntry.status;
+        this.gateEntry.history = this.gateEntry.history;
+        obsApproval.unsubscribe();
+      })
   }
 
   private startCountdown(): void {
