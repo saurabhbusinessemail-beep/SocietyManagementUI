@@ -52,12 +52,27 @@
 
     <!-- Actions -->
     <div class="popup-actions">
-        <button class="cancel-btn" (click)="close()">
-            Close
-        </button>
 
-        <button class="resend-btn-large" [disabled]="!isExpired" (click)="resendRequest()">
-            Resend Request
-        </button>
+        <ng-container *ngIf="!isForApproval">
+            <button class="cancel-btn" (click)="close()">
+                Close
+            </button>
+
+            <button class="resend-btn-large" [disabled]="!isExpired" (click)="resendRequest()">
+                Resend Request
+            </button>
+        </ng-container>
+
+        
+        <ng-container *ngIf="isForApproval">
+            <button class="btn error" (click)="approveReject('rejected')">
+                Reject
+            </button>
+
+            <button class="primary primary" [disabled]="!isExpired" (click)="approveReject('approved')">
+                Approve
+            </button>
+        </ng-container>
+
     </div>
 </div>

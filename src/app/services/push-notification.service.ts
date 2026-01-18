@@ -4,6 +4,7 @@ import { PushNotifications, Token, ActionPerformed, PushNotificationSchema } fro
 import { Router } from '@angular/router';
 import { Platform } from '@angular/cdk/platform';
 import { App } from '@capacitor/app';
+import { GateEntryService } from './gate-entry.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,8 @@ export class PushNotificationService {
         private router: Router,
         private ngZone: NgZone,
         private platform: Platform,
-        private appRef: ApplicationRef
+        private appRef: ApplicationRef,
+        private gateEntryService: GateEntryService
     ) {
         // Check for launch notification when app starts
         this.checkLaunchNotification();
@@ -115,7 +117,13 @@ export class PushNotificationService {
 
             // Navigate based on notification type
             if (type === 'GATE_PASS' && gateEntryId) {
-                this.router.navigate(['/visitors/list']);
+                setTimeout(() => {
+                    this.gateEntryService.handleApprovalNotificationRequest(gateEntryId)
+                }, 100);
+            } else if (type === 'GATE_PASS_RESPONSE' && gateEntryId) {
+                setTimeout(() => {
+                    this.gateEntryService.handleApprovalNotificationResponse(gateEntryId)
+                }, 100);
             } else if (notificationId) {
                 this.router.navigate(['/notifications', notificationId]);
             } else {

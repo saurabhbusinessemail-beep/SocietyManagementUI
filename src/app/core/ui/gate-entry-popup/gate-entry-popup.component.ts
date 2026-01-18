@@ -10,6 +10,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class GateEntryPopupComponent implements OnInit, OnDestroy {
 
   gateEntry!: IGateEntry;
+  isForApproval: boolean;
 
   timeOutDelay = 30;
   remainingSeconds = this.timeOutDelay;
@@ -27,13 +28,15 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<GateEntryPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { gateEntry: IGateEntry }
+    @Inject(MAT_DIALOG_DATA) public data: { gateEntry: IGateEntry, isForApproval: boolean }
   ) {
     this.gateEntry = data.gateEntry;
+    this.isForApproval = data.isForApproval ?? false;
   }
 
   ngOnInit(): void {
-    this.startCountdown();
+    if (this.gateEntry.status === 'requested')
+      this.startCountdown();
   }
 
   ngOnDestroy(): void {
@@ -66,6 +69,12 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
   resendRequest(): void {
     if (!this.isExpired) return;
     this.dialogRef.close({ action: 'resend' });
+  }
+
+  approveReject(status: string) {
+    if (this.isExpired) return;
+
+    this.dialogRef.close({ status });
   }
 
   close(): void {

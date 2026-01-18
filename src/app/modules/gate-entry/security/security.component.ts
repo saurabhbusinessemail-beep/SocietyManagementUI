@@ -21,6 +21,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   isComponentActive = new Subject<void>();
   pendingApprovals: IGateEntry[] = [];
+  openedGateEntryId?: string;
 
   societyConfig: IUIControlConfig = {
     id: 'society',
@@ -127,6 +128,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.subscribeToApprovalResponse();
     this.subscribeToSocietyChange();
     this.loadSocities();
   }
@@ -162,6 +164,23 @@ export class SecurityComponent implements OnInit, OnDestroy {
       this.entryForm.get('society')?.setValue(this.societyOptions[0]);
       this.loadPendingApprovals();
     }
+  }
+
+  subscribeToApprovalResponse() {
+    this.gateEntryService.gateEntryApprovalResponse
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(gateEntry => {
+        const approval = this.pendingApprovals.find(ge => ge._id === gateEntry._id);
+        if (!approval) return;
+
+        approval.approvedBy = gateEntry.approvedBy;
+        approval.status = gateEntry.status;
+        approval.history = gateEntry.history;
+
+        if (this.openedGateEntryId !== gateEntry._id) return;
+        this.dialog.closeAll();
+        this.openGateEntryDetails(gateEntry);
+      })
   }
 
   subscribeToSocietyChange() {
@@ -223,6 +242,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   openGateEntryDetails(gateEntry: IGateEntry) {
+    this.openedGateEntryId = gateEntry._id;
     this.dialog.open(GateEntryPopupComponent, { data: { gateEntry } }).afterClosed().pipe(take(1))
       .subscribe(response => {
         if (response && response.action === 'resend') this.resendNotification(gateEntry);
