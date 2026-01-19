@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PendingHttpService } from '../services/pending-http.service';
 
@@ -9,6 +9,7 @@ export class LoadingOverlayDirective implements OnInit, OnDestroy {
     private overlayElement: HTMLElement | null = null;
     private spinnerElement: HTMLElement | null = null;
     private subscription: Subscription = new Subscription();
+    private originalOverflow: string = '';
 
     @Input('appLoadingOverlay') loadingCondition: boolean | string = false;
     @Input() overlayColor: string = 'rgba(255, 255, 255, 0.7)';
@@ -56,9 +57,16 @@ export class LoadingOverlayDirective implements OnInit, OnDestroy {
     private createOverlay(): void {
         if (this.overlayElement) return;
 
+        // Save original overflow style before modifying it
+        const nativeElement = this.el.nativeElement;
+        this.originalOverflow = getComputedStyle(nativeElement).overflow;
+
+        // Disable scrolling on the host element
+        this.renderer.setStyle(nativeElement, 'overflow', 'hidden');
+
         // Create overlay element
         this.overlayElement = this.renderer.createElement('div');
-        this.renderer.setStyle(this.overlayElement, 'position', 'fixed');
+        this.renderer.setStyle(this.overlayElement, 'position', 'absolute');
         this.renderer.setStyle(this.overlayElement, 'top', '0');
         this.renderer.setStyle(this.overlayElement, 'left', '0');
         this.renderer.setStyle(this.overlayElement, 'width', '100%');
@@ -83,8 +91,8 @@ export class LoadingOverlayDirective implements OnInit, OnDestroy {
         this.renderer.appendChild(this.overlayElement, this.spinnerElement);
 
         // Add overlay to host element
-        this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
-        this.renderer.appendChild(this.el.nativeElement, this.overlayElement);
+        this.renderer.setStyle(nativeElement, 'position', 'relative');
+        this.renderer.appendChild(nativeElement, this.overlayElement);
 
         // Add CSS animation if not already present
         this.addSpinAnimation();
@@ -92,7 +100,11 @@ export class LoadingOverlayDirective implements OnInit, OnDestroy {
 
     private removeOverlay(): void {
         if (this.overlayElement) {
-            this.renderer.removeChild(this.el.nativeElement, this.overlayElement);
+            // Restore original overflow style
+            const nativeElement = this.el.nativeElement;
+            this.renderer.setStyle(nativeElement, 'overflow', this.originalOverflow || '');
+
+            this.renderer.removeChild(nativeElement, this.overlayElement);
             this.overlayElement = null;
             this.spinnerElement = null;
         }
