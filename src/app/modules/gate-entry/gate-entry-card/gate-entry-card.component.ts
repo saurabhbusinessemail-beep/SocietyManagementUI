@@ -96,4 +96,9 @@ export class GateEntryCardComponent implements OnInit, OnDestroy {
   getGateEntryLabelType(gateEntry: IGateEntry): UILabelValueType {
     return this.gateEntryService.getGateEntryLabelType(gateEntry);
   }
+
+  markExitEvent(event: MouseEvent) {
+    event.stopPropagation();
+    this.markExit.emit();
+  }
 }

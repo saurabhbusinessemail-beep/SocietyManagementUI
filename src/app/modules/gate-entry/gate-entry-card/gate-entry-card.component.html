@@ -33,7 +33,7 @@
             <app-icon name="call"></app-icon>
         </button>
 
-        <app-icon name="exit" class="exit-button" (click)="markExit.emit()"
+        <app-icon name="exit" class="exit-button" (click)="markExitEvent($event)"
             *ngIf="gateEntry.status === 'approved' && showApprovalAction"></app-icon>
 
         <ui-label [config]="{id: '', label: ''}" valueText="{{gateEntry.status | uppercase}}"
