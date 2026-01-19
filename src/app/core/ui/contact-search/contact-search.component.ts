@@ -82,50 +82,50 @@ export class ContactSearchComponent extends UIBaseFormControl<IPhoneContactFlat 
           const uniqueRecords = new Set(this.contacts.map(c =>
             c.contactId + '___'
             + c.name + '___'
-            + c.phoneNumber.replaceAll(' ', '').replaceAll('+', '').replaceAll('-', '')
+            + c.phoneNumber.replaceAll(' ', '').replaceAll('+', '').replaceAll('-', '').slice(-10)
           ));
-          const updatedContacts: IPhoneContactFlat[] = [];
-          uniqueRecords.forEach(e => {
-            const arr = e.split('___');
-            updatedContacts.push({
-              contactId: arr[0],
-              name: arr[1],
-              phoneNumber: arr[2]
-            });
-          });
-          this.contacts = updatedContacts;
+    const updatedContacts: IPhoneContactFlat[] = [];
+    uniqueRecords.forEach(e => {
+      const arr = e.split('___');
+      updatedContacts.push({
+        contactId: arr[0],
+        name: arr[1],
+        phoneNumber: arr[2]
+      });
+    });
+    this.contacts = updatedContacts;
 
-          this.filteredContacts = this.contacts
-            .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
-            .reduce((arr, u) => {
-              if (u.name.toLowerCase().indexOf(this.search$.value.toLowerCase()) < 0) return arr;
+    this.filteredContacts = this.contacts
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+      .reduce((arr, u) => {
+        if (u.name.toLowerCase().indexOf(this.search$.value.toLowerCase()) < 0) return arr;
 
-              arr.push({
-                label: u.name + ' ' + u.phoneNumber,
-                value: u.contactId,
-              });
-              return arr;
-            }, [] as IUIDropdownOption[]);
-        },
-        error: err => {
-          alert('Error while getting contacts ' + JSON.stringify(err));
-        }
+        arr.push({
+          label: u.name + ' ' + u.phoneNumber,
+          value: u.contactId,
+        });
+        return arr;
+      }, [] as IUIDropdownOption[]);
+  },
+  error: err => {
+  alert('Error while getting contacts ' + JSON.stringify(err));
+}
       });
   }
 
-  subscribeToContactSelection() {
-    this.contactSearchControl.valueChanges.pipe(takeUntil(this.isComponentActive))
-      .subscribe({
-        next: selectedContact => {
-          const user = this.contacts.find(c => c.contactId === selectedContact);
-          if (user) this.selectionChange.emit(user);
-          this.updateValue(user);
-        }
-      })
-  }
+subscribeToContactSelection() {
+  this.contactSearchControl.valueChanges.pipe(takeUntil(this.isComponentActive))
+    .subscribe({
+      next: selectedContact => {
+        const user = this.contacts.find(c => c.contactId === selectedContact);
+        if (user) this.selectionChange.emit(user);
+        this.updateValue(user);
+      }
+    })
+}
 
-  ngOnDestroy(): void {
-    this.isComponentActive.next();
-    this.isComponentActive.complete();
-  }
+ngOnDestroy(): void {
+  this.isComponentActive.next();
+  this.isComponentActive.complete();
+}
 }
