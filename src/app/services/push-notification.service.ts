@@ -5,16 +5,12 @@ import { Router } from '@angular/router';
 import { Platform } from '@angular/cdk/platform';
 import { App } from '@capacitor/app';
 import { GateEntryService } from './gate-entry.service';
-import { fireBase } from '../constants';
-import { FirebaseOptions, initializeApp } from 'firebase/app';
-import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PushNotificationService {
     private isInitialized = false;
-    private firebaseConfig: FirebaseOptions = fireBase;
 
     constructor(
         private router: Router,
@@ -33,8 +29,8 @@ export class PushNotificationService {
         }
 
         if (!Capacitor.isNativePlatform()) {
-            // console.log('Push notifications only work on native platforms');
-            this.initializeWeb();
+            console.log('Push notifications only work on native platforms');
+            // await this.initializeWeb();
             return;
         }
 
@@ -169,63 +165,100 @@ export class PushNotificationService {
 
 
     /* For Web Browser */
-    private async initializeWeb() {
-        try {
-            // Initialize Firebase for web
-            const app = initializeApp(this.firebaseConfig);
+    // async initializeWeb() {
+    //     try {
 
-            // Request permission
-            if (Notification.permission === 'default') {
-                await Notification.requestPermission();
-            }
+    //         // Initialize Firebase for web
+    //         const app = initializeApp(fireBase);
 
-            // Get FCM token via Capacitor Firebase Messaging
-            const result = await FirebaseMessaging.getToken();
-            const token = result.token;
+    //         // Request permission
+    //         if (Notification.permission === 'default') {
+    //             const result = await Notification.requestPermission();
+    //             console.log('result = ', result)
+    //         }
 
-            console.log('Web FCM Token:', token);
+    //         // Get FCM token via Capacitor Firebase Messaging
+    //         const result = await FirebaseMessaging.getToken({ vapidKey: vpiId });
+    //         const token = result.token;
 
-            // Send token to backend
-            this.sendTokenToServer(token);
+    //         console.log('Web FCM Token:', token);
 
-            // Setup foreground listener for web
-            this.setupWebForegroundListener(app);
+    //         // Send token to backend
+    //         this.sendTokenToServer(token);
 
-            // Also setup Capacitor listeners (they work on web too)
-            this.setupCapacitorListeners();
+    //         // Setup foreground listener for web
+    //         this.setupWebForegroundListener(app);
 
-        } catch (error) {
-            console.error('Web notification initialization failed:', error);
-        }
-    }
+    //         // Also setup Capacitor listeners (they work on web too)
+    //         this.setupWebCapacitorListeners();
 
-    private setupWebForegroundListener(app: any) {
-        // Additional foreground listener for web using Firebase SDK
-        // This ensures we catch all foreground messages on web
+    //     } catch (error) {
+    //         console.error('Web notification initialization failed:', error);
+    //     }
+    // }
 
-        // if (this.isWebPlatform) {
-        try {
-            import('firebase/messaging').then(({ getMessaging, onMessage }) => {
-                const messaging = getMessaging(app);
+    // private setupWebForegroundListener(app: any) {
+    //     // Additional foreground listener for web using Firebase SDK
+    //     // This ensures we catch all foreground messages on web
 
-                onMessage(messaging, (payload) => {
-                    console.log('Web foreground message via Firebase:', payload);
+    //     // if (this.isWebPlatform) {
+    //     try {
+    //         import('firebase/messaging').then(({ getMessaging, onMessage }) => {
+    //             const messaging = getMessaging(app);
 
-                    // this.ngZone.run(() => {
-                    //     // Convert Firebase payload to Capacitor format
-                    //     const notification: PushNotificationSchema = {
-                    //         title: payload.notification?.title || payload.data?.title,
-                    //         body: payload.notification?.body || payload.data?.body,
-                    //         data: payload.data || {}
-                    //     };
+    //             onMessage(messaging, (payload) => {
+    //                 console.log('Web foreground message via Firebase:', payload);
 
-                    //     this.showInAppNotification(notification);
-                    // });
-                });
-            });
-        } catch (error) {
-            console.log('Firebase onMessage setup skipped:', error);
-        }
-        // }
-    }
+    //                 this.ngZone.run(() => {
+    //                     // Convert Firebase payload to Capacitor format
+    //                     const notification: PushNotificationSchema = {
+    //                         id: '',
+    //                         title: payload.notification?.title || payload.data?.['title'],
+    //                         body: payload.notification?.body || payload.data?.['body'],
+    //                         data: payload.data || {}
+    //                     };
+
+    //                     this.showInAppNotification(notification);
+    //                 });
+    //             });
+    //         });
+    //     } catch (error) {
+    //         console.log('Firebase onMessage setup skipped:', error);
+    //     }
+    //     // }
+    // }
+
+    // private setupWebCapacitorListeners() {
+    //     // For token - works on both
+    //     FirebaseMessaging.addListener('tokenReceived', (event) => {
+    //         console.log('Token:', event.token);
+    //         //   this.sendTokenToServer(event.token);
+    //     });
+
+    //     // For foreground - works on both
+    //     FirebaseMessaging.addListener('notificationReceived', (event) => {
+    //         console.log('Foreground:', event);
+    //         this.ngZone.run(() => {
+    //             const notification = event.notification || event;
+    //             this.showInAppNotification({
+    //                 title: notification.title,
+    //                 body: notification.body,
+    //                 data: notification.data || {}
+    //             } as PushNotificationSchema);
+    //         });
+    //     });
+
+    //     // For clicks - works on both
+    //     FirebaseMessaging.addListener('notificationActionPerformed', (event) => {
+    //         console.log('Clicked:', event);
+    //         this.ngZone.run(() => {
+    //             const notification = event.notification || event;
+    //             this.handleNotification({
+    //                 title: notification.title,
+    //                 body: notification.body,
+    //                 data: notification.data || {}
+    //             } as PushNotificationSchema);
+    //         });
+    //     });
+    // }
 }

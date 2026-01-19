@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConsoleComponent } from '../console/console.component';
 import { LocalStorageComponent } from '../storage/local-storage.component';
 import { WindowService } from '../../services/window.service';
+import { PushNotificationService } from '../../services/push-notification.service';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     public ccs: ConsoleCaptureService,
     private dialog: MatDialog,
-    public windowServic: WindowService
+    public windowServic: WindowService,
+    private pushNotificationService: PushNotificationService
   ) { }
 
   ngOnInit(): void {
@@ -47,4 +49,8 @@ export class HeaderComponent implements OnInit {
   showStorage() {
     this.dialog.open(LocalStorageComponent, { width: '90%', height: '80vh' })
   }
+
+  // async initilizeWebNotificationPermission() {
+  //   await this.pushNotificationService.initializeWeb()
+  // }
 }

@@ -2,10 +2,12 @@
     <!-- Title -->
     <div class="popup-title">
         Visitor Entry Request
+
+        <app-icon name="clear" (click)="close"></app-icon>
     </div>
 
     <!-- Countdown -->
-    <div class="popup-countdown" [class.expired]="isExpired">
+    <div class="popup-countdown" [class.expired]="isExpired" *ngIf="gateEntry.status === 'requested'">
         {{ remainingSeconds }} seconds remaining
     </div>
 
@@ -63,16 +65,20 @@
             </button>
         </ng-container>
 
-        
+
         <ng-container *ngIf="isForApproval">
             <button class="btn error" (click)="approveReject('rejected')">
                 Reject
             </button>
 
-            <button class="btn primary" [disabled]="!isExpired" (click)="approveReject('approved')">
+            <button class="btn primary" (click)="approveReject('approved')">
                 Approve
             </button>
         </ng-container>
 
+    </div>
+
+    <div class="gate-entry-status" [ngClass]="getGateEntryStatusColorName()">
+        {{ gateEntry.status | uppercase}}
     </div>
 </div>

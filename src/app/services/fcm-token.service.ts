@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { DialogService } from './dialog.service';
 import { NgZone } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({ providedIn: 'root' })
 export class FcmTokenService {
@@ -18,7 +19,15 @@ export class FcmTokenService {
     constructor(private dialogService: DialogService, private zone: NgZone) { }
 
     async init() {
+        if (!Capacitor.isNativePlatform()) {
+            console.log('Push notifications only work on native platforms');
+            return;
+        }
+        
         const perm = await PushNotifications.requestPermissions();
+        this.zone.run(() => {
+            console.log("Notification permission = ", perm)
+        });
         if (perm.receive !== 'granted') return;
 
         await PushNotifications.register();
@@ -31,7 +40,7 @@ export class FcmTokenService {
                 this.zone.run(() => {
                     console.log('FCM Token:', this.fcmToken);
                 });
-            }, 500);
+            }, 10);
         });
 
         PushNotifications.addListener('pushNotificationActionPerformed', action => {

@@ -6,7 +6,7 @@
     background: $color-white;
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
-    min-width: 320px;
+    min-width: 200px;
     max-width: 520px;
 
     display: flex;
@@ -20,9 +20,15 @@
 
 /* Title */
 .popup-title {
+    display: flex;
+    justify-content: space-between;
     font-weight: 700;
     color: $color-dark-blue;
     @include fluid-font($font-size-xl, $font-size-lg, $font-size-base);
+
+    app-icon {
+        color: $color-dark-blue;
+    }
 }
 
 /* Countdown prominently shown */
@@ -106,4 +112,38 @@
     border-radius: $btn-border-radius-md;
     padding: $sp-sm $sp-lg;
     font-weight: 500;
+}
+
+.gate-entry-status {
+    &.active {
+        color: $status-active;
+    }
+
+    &.inactive {
+        color: $status-inactive;
+    }
+
+    &.approved {
+        color: $status-approved;
+    }
+
+    &.rejected {
+        color: $status-rejected;
+    }
+
+    &.pending {
+        color: $status-pending;
+    }
+
+    &.expired {
+        color: $status-expired;
+    }
+
+    &.purchased {
+        color: $status-purchased;
+    }
+
+    &.yet {
+        color: $status-yet;
+    }
 }

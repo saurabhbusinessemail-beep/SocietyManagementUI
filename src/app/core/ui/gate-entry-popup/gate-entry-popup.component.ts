@@ -88,6 +88,12 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
     }
   }
 
+  getGateEntryStatusColorName(): string {
+    if (!this.gateEntry) return '';
+
+    return this.gateEntryService.getGateEntryStatusColorName(this.gateEntry);
+  }
+
   resendRequest(): void {
     if (!this.isExpired) return;
     this.dialogRef.close({ action: 'resend' });

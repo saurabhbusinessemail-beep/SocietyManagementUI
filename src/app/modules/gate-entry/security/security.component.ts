@@ -243,7 +243,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   openGateEntryDetails(gateEntry: IGateEntry) {
     this.openedGateEntryId = gateEntry._id;
-    this.dialog.open(GateEntryPopupComponent, { data: { gateEntry } }).afterClosed().pipe(take(1))
+    this.dialog.open(GateEntryPopupComponent, { width: '90%', data: { gateEntry } }).afterClosed().pipe(take(1))
       .subscribe(response => {
         if (response && response.action === 'resend') this.resendNotification(gateEntry);
       })

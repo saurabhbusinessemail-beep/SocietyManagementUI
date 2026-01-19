@@ -20,6 +20,17 @@ export class GateEntryService {
 
     constructor(private http: HttpClient, private dialog: MatDialog, private router: Router) { }
 
+    getGateEntryStatusColorName(gateEntry: IGateEntry): string {
+        switch (gateEntry.status) {
+            case 'approved': return 'approved';
+            case 'cancelled': return 'rejected';
+            case 'completed': return 'approved';
+            case 'expired': return 'expired';
+            case 'rejected': return 'rejected';
+            case 'requested': return 'pending';
+        }
+    }
+
     newGateEntry(payload: any): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.post<IBEResponseFormat<IGateEntry>>(this.baseUrl, payload);
     }
@@ -57,12 +68,15 @@ export class GateEntryService {
     handleApprovalNotificationRequest(gateEntryId: string) {
         this.getGateEntry(gateEntryId).pipe(take(1))
             .subscribe(response => {
+                console.log('getGateEntry response', response)
                 if (!response || !response.data) return;
                 if (this.gateEntryRequestPopupRef) this.handlePreviousApprovalPopupClose(gateEntryId);
+                console.log('initializeApp complete')
 
-                const popupRef = this.dialog.open(GateEntryPopupComponent, { data: { gateEntry: response.data, isForApproval: true } });
+                const popupRef = this.dialog.open(GateEntryPopupComponent, { width: '90%', data: { gateEntry: response.data, isForApproval: true } });
                 popupRef.afterClosed().pipe(take(1))
                     .subscribe(response => {
+                        console.log('approval response');
                         if (!response || !response.status) return;
 
                         this.changeStatus(gateEntryId, response.status).pipe(take(1)).subscribe();

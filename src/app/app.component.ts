@@ -38,7 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
-    this.FcmTokenService.init();
+    await this.FcmTokenService.init();
+    await this.pushNotificationService.initialize();
 
     this.router.events
       .pipe(
@@ -64,9 +65,6 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.router.url === '/dashboard/user')
         this.menuService.syncSelectedMenuWithCurrentUrl(true);
     }, 100);
-
-    // Initialize push notifications
-    this.pushNotificationService.initialize();
 
     // Listen for app resume events
     App.addListener('appStateChange', ({ isActive }) => {
