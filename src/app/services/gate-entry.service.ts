@@ -54,6 +54,10 @@ export class GateEntryService {
         return this.http.get<IBEResponseFormat<IGateEntry>>(`${this.baseUrl}/resendNotification/${gateEntryId}`);
     }
 
+    markGateExit(gateEntryId: string): Observable<IBEResponseFormat> {
+        return this.http.get<IBEResponseFormat>(`${this.baseUrl}/markGateExit/${gateEntryId}`);
+    }
+
     getAllMyGateEntries(societyId?: string, flatId?: string, status?: GateEntryStatus, createdOn?: Date): Observable<IPagedResponse<IGateEntry>> {
         let payload: any = { societyId, flatId, status };
         if (createdOn) payload.createdOn = createdOn;

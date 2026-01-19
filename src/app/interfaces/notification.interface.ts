@@ -5,7 +5,7 @@ export interface INotification extends IDefaultFields {
     _id: string;
     userId: string | IUser;
     societyId?: string | ISociety;
-    type: 'COMPLAINT' | 'ANNOUNCEMENT' | 'PAYMENT' | 'GATE_PASS' | 'GATE_PASS_RESPONSE' | 'GENERAL';
+    type: 'COMPLAINT' | 'ANNOUNCEMENT' | 'PAYMENT' | 'GATE_PASS' | 'GATE_PASS_RESPONSE' | 'GATE_EXIT' | 'GENERAL';
     title: string,
     message: string;
     data?: any;

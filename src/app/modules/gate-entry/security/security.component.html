@@ -83,6 +83,28 @@
 
 
                     </ui-form-layout>
+                    <br>
+                    <ui-form-layout>
+                        <ng-container *ngFor="let gateEntry of pendingApprovals">
+                            <app-gate-entry-card [gateEntry]="gateEntry" (openDetails)="openGateEntryDetails(gateEntry)"
+                                (resendRequest)="resendNotification(gateEntry)" [smColumns]="12" [mdColumns]="6"
+                                [lgColumns]="6">
+                            </app-gate-entry-card>
+                        </ng-container>
+                    </ui-form-layout>
+                </ng-template>
+
+                <ng-template uiTab="exit">
+                    <br>
+                    <br class="no-mobile">
+                    <ui-form-layout>
+                        <ng-container *ngFor="let gateEntry of pendingExits">
+                            <app-gate-entry-card [gateEntry]="gateEntry" (openDetails)="openGateEntryDetails(gateEntry)"
+                                (markExit)="markGateExit(gateEntry)" [showApprovalAction]="true" [smColumns]="12" [mdColumns]="6"
+                                [lgColumns]="6">
+                            </app-gate-entry-card>
+                        </ng-container>
+                    </ui-form-layout>
                 </ng-template>
 
             </ui-tabs>
@@ -91,12 +113,6 @@
 
     </form>
 
-    <ui-form-layout>
-        <ng-container *ngFor="let gateEntry of pendingApprovals">
-            <app-gate-entry-card [gateEntry]="gateEntry" (openDetails)="openGateEntryDetails(gateEntry)"
-                (resendRequest)="resendNotification(gateEntry)" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-            </app-gate-entry-card>
-        </ng-container>
-    </ui-form-layout>
+
 
 </app-layout>

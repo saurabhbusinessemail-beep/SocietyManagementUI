@@ -28,7 +28,7 @@
         <div class="detail-item">
             <span class="detail-label">Flat</span>
             <span class="detail-value">
-                {{ Flat?.flatNumber }}
+                {{ Flat?.flatNumber }} ({{Flat?.floor}})
             </span>
         </div>
 
@@ -78,7 +78,7 @@
 
     </div>
 
-    <div class="gate-entry-status"  *ngIf="gateEntry.status !== 'requested'" [ngClass]="getGateEntryStatusColorName()">
+    <div class="gate-entry-status" *ngIf="gateEntry.status !== 'requested'" [ngClass]="getGateEntryStatusColorName()">
         {{ gateEntry.status | uppercase}}
     </div>
 </div>

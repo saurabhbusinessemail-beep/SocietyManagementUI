@@ -21,6 +21,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   isComponentActive = new Subject<void>();
   pendingApprovals: IGateEntry[] = [];
+  pendingExits: IGateEntry[] = [];
   openedGateEntryId?: string;
 
   societyConfig: IUIControlConfig = {
@@ -93,7 +94,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
   };
   tabsOptions: IUIDropdownOption[] = [
     { value: 'entry', label: 'Entry' },
-    { value: 'out', label: 'Exit' },
+    { value: 'exit', label: 'Exit' },
   ];
 
   societyOptions: IUIDropdownOption[] = [];
@@ -131,6 +132,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
     this.subscribeToApprovalResponse();
     this.subscribeToSocietyChange();
     this.loadSocities();
+    this.loadPendingExists();
   }
 
   getGateEntrySociety(gateEntry: IGateEntry): ISociety | undefined {
@@ -223,6 +225,18 @@ export class SecurityComponent implements OnInit, OnDestroy {
             const gateEntry = this.pendingApprovals.find(ge => ge._id === openGateEntryId);
             if (gateEntry) this.openGateEntryDetails(gateEntry)
           }
+        }
+      });
+  }
+
+  loadPendingExists() {
+    this.gateEntryService.getExitPendingGateEntries(undefined, undefined, 'approved')
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.pendingExits = response.data;
         }
       });
   }
@@ -388,6 +402,18 @@ export class SecurityComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.loadPendingApprovals();
         },
+      })
+  }
+
+  markGateExit(gateEntry: IGateEntry) {
+    this.gateEntryService.markGateExit(gateEntry._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.loadPendingExists();
+        }
       })
   }
 

@@ -10,9 +10,12 @@ import { UILabelValueType } from '../../../types';
   styleUrl: './gate-entry-card.component.scss'
 })
 export class GateEntryCardComponent implements OnInit, OnDestroy {
+
   @Input() gateEntry!: any;
+  @Input() showApprovalAction = false;
 
   @Output() openDetails = new EventEmitter<void>();
+  @Output() markExit = new EventEmitter<void>();
   @Output() resendRequest = new EventEmitter<void>();
 
   timeOutDelay = 30;
