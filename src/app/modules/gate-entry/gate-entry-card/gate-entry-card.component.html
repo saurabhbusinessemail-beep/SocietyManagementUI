@@ -1,4 +1,5 @@
-<div class="gate-entry-card" [class.expired]="isExpired" (click)="openDetails.emit()">
+<div class="gate-entry-card" [class.expired]="isExpired && gateEntry.status === 'requested'"
+    [ngClass]="getGateEntryStatusColorName()" (click)="openDetails.emit()">
     <!-- Header -->
     <div class="gate-entry-header">
         <div>
@@ -11,7 +12,7 @@
         </div>
 
         <!-- Countdown -->
-        <div class="countdown" [class.expired]="isExpired">
+        <div class="countdown" [class.expired]="isExpired" *ngIf="gateEntry.status === 'requested'">
             {{ remainingSeconds }}s
         </div>
     </div>
@@ -27,8 +28,13 @@
             {{ gateEntry.societyId?.societyName }}
         </span>
 
-        <button class="btn primary" [disabled]="!isExpired" (click)="onResendClick($event)">
+        <button class="btn primary" [disabled]="!isExpired" (click)="onResendClick($event)"
+            *ngIf="gateEntry.status === 'requested'">
             <app-icon name="call"></app-icon>
         </button>
+
+        <ui-label [config]="{id: '', label: ''}" valueText="{{gateEntry.status | uppercase}}"
+            [valueType]="getGateEntryLabelType(gateEntry)" *ngIf="gateEntry.status !== 'requested'">
+        </ui-label>
     </div>
 </div>

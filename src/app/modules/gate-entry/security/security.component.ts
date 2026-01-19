@@ -379,6 +379,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
           if (!response.success || !response.data) return;
 
           this.entryForm.reset();
+          if (this.societyOptions.length > 0) this.entryForm.get('society')?.setValue(this.societyOptions[0])
           if (!openAfterSave)
             this.loadPendingApprovals();
           else

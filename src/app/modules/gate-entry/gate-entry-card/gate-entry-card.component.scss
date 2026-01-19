@@ -42,6 +42,38 @@
         background: $color-light-gray;
         opacity: 0.8;
     }
+
+    &.active {
+        border-color: $status-active;
+    }
+
+    &.inactive {
+        border-color: $status-inactive;
+    }
+
+    &.approved {
+        border-color: $status-approved;
+    }
+
+    &.rejected {
+        border-color: $status-rejected;
+    }
+
+    &.pending {
+        border-color: $status-pending;
+    }
+
+    &.expired {
+        border-color: $status-expired;
+    }
+
+    &.purchased {
+        border-color: $status-purchased;
+    }
+
+    &.yet {
+        border-color: $status-yet;
+    }
 }
 
 /* Header row */

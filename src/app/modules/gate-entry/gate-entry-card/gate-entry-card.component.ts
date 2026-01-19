@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { IGateEntry } from '../../../interfaces';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { Subject, takeUntil } from 'rxjs';
+import { UILabelValueType } from '../../../types';
 
 @Component({
   selector: 'app-gate-entry-card',
@@ -27,7 +28,7 @@ export class GateEntryCardComponent implements OnInit, OnDestroy {
     if (this.gateEntry.status === 'requested')
       this.startCountdown();
 
-      this.subscribeToApprovalResponse();
+    this.subscribeToApprovalResponse();
   }
 
   ngOnDestroy(): void {
@@ -45,6 +46,10 @@ export class GateEntryCardComponent implements OnInit, OnDestroy {
   }
 
   private updateCountdown(): void {
+    if (this.gateEntry.status !== 'requested') {
+      clearInterval(this.timerId);
+      return;
+    }
     const createdTime = new Date(this.gateEntry.entryTime).getTime();
     const now = Date.now();
 
@@ -70,11 +75,22 @@ export class GateEntryCardComponent implements OnInit, OnDestroy {
     const obsApproval = this.gateEntryService.gateEntryApprovalResponse
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(response => {
+        console.log('subscribeToApprovalResponse  in gate entry card')
         if (!this.gateEntry || response._id !== this.gateEntry._id) return;
 
         this.gateEntry.status = this.gateEntry.status;
         this.gateEntry.history = this.gateEntry.history;
         obsApproval.unsubscribe();
       });
+  }
+
+  getGateEntryStatusColorName(): string {
+    if (!this.gateEntry) return '';
+
+    return this.gateEntryService.getGateEntryStatusColorName(this.gateEntry);
+  }
+
+  getGateEntryLabelType(gateEntry: IGateEntry): UILabelValueType {
+    return this.gateEntryService.getGateEntryLabelType(gateEntry);
   }
 }

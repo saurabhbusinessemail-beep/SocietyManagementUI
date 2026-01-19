@@ -78,7 +78,7 @@
 
     </div>
 
-    <div class="gate-entry-status" [ngClass]="getGateEntryStatusColorName()">
+    <div class="gate-entry-status"  *ngIf="gateEntry.status !== 'requested'" [ngClass]="getGateEntryStatusColorName()">
         {{ gateEntry.status | uppercase}}
     </div>
 </div>

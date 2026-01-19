@@ -53,14 +53,7 @@ export class VisitorListComponent implements OnInit {
   }
 
   getGateEntryLabelType(gateEntry: IGateEntry): UILabelValueType {
-    switch (gateEntry.status) {
-      case 'approved': return 'active';
-      case 'cancelled': return 'rejected';
-      case 'completed': return 'active';
-      case 'expired': return 'inactive';
-      case 'rejected': return 'rejected';
-      case 'requested': return 'pending';
-    }
+    return this.gateEntryService.getGateEntryLabelType(gateEntry);
   }
 
   loadGateEntries(selectedFilter: IVisitorFilter) {

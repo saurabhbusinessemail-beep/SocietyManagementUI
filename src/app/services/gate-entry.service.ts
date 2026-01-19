@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, take } from 'rxjs';
 import { IBEResponseFormat, IGateEntry, IPagedResponse } from '../interfaces';
-import { GateEntryStatus } from '../types';
+import { GateEntryStatus, UILabelValueType } from '../types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GateEntryPopupComponent } from '../core/ui/gate-entry-popup/gate-entry-popup.component';
 import { Router } from '@angular/router';
@@ -30,6 +30,17 @@ export class GateEntryService {
             case 'requested': return 'pending';
         }
     }
+
+    getGateEntryLabelType(gateEntry: IGateEntry): UILabelValueType {
+        switch (gateEntry.status) {
+          case 'approved': return 'active';
+          case 'cancelled': return 'rejected';
+          case 'completed': return 'active';
+          case 'expired': return 'inactive';
+          case 'rejected': return 'rejected';
+          case 'requested': return 'pending';
+        }
+      }
 
     newGateEntry(payload: any): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.post<IBEResponseFormat<IGateEntry>>(this.baseUrl, payload);

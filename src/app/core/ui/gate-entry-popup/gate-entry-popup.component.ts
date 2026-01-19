@@ -57,6 +57,8 @@ export class GateEntryPopupComponent implements OnInit, OnDestroy {
     const obsApproval = this.gateEntryService.gateEntryApprovalResponse
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(response => {
+        console.log('subscribeToApprovalResponse  in gate entry popup')
+        console.log({ response, gateEntry: this.gateEntry })
         if (!this.gateEntry || response._id !== this.gateEntry._id) return;
 
         this.gateEntry.status = this.gateEntry.status;

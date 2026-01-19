@@ -6,8 +6,7 @@
     background: $color-white;
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
-    min-width: 200px;
-    max-width: 520px;
+    width: 100%;
 
     display: flex;
     flex-direction: column;
@@ -115,6 +114,9 @@
 }
 
 .gate-entry-status {
+    display: flex;
+    justify-content: center;
+    text-align: center;
     &.active {
         color: $status-active;
     }

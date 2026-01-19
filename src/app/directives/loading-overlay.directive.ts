@@ -58,7 +58,7 @@ export class LoadingOverlayDirective implements OnInit, OnDestroy {
 
         // Create overlay element
         this.overlayElement = this.renderer.createElement('div');
-        this.renderer.setStyle(this.overlayElement, 'position', 'absolute');
+        this.renderer.setStyle(this.overlayElement, 'position', 'fixed');
         this.renderer.setStyle(this.overlayElement, 'top', '0');
         this.renderer.setStyle(this.overlayElement, 'left', '0');
         this.renderer.setStyle(this.overlayElement, 'width', '100%');
