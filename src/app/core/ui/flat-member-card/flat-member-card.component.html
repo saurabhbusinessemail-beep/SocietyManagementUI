@@ -1,0 +1,87 @@
+<!-- flat-member-card.component.html -->
+<div class="member-card">
+
+    <!-- Header -->
+    <div class="card-header">
+        <div class="name-section">
+            <h3>{{ member.name }}</h3>
+            <span class="role-chip" *ngIf="member.isOwner">Owner</span>
+            <span class="role-chip tenant" *ngIf="member.isTenant">Tenant</span>
+        </div>
+
+        <span class="status-chip" [ngClass]="statusClass">
+            {{ member.status | titlecase }}
+        </span>
+
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+
+        <div class="info-row">
+            <label>Contact</label>
+            <span>{{ member.contact }}</span>
+        </div>
+
+        <div class="info-row">
+            <label>Residing Type</label>
+            <span>{{ member.residingType }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="flat">
+            <label>Flat</label>
+            <span>{{ flat.flatNumber }} (Floor {{ flat.floor }})</span>
+        </div>
+
+        <!-- OWNER VIEW -->
+        <ng-container *ngIf="!isAdminView">
+
+            <div class="info-row" *ngIf="isTenant">
+                <label>Lease Period</label>
+                <span>
+                    {{ member.leaseStart | date:'mediumDate' }} –
+                    {{ member.leaseEnd | date:'mediumDate' }}
+                </span>
+            </div>
+
+            <div class="info-row" *ngIf="member.rentAmount">
+                <label>Rent</label>
+                <span>₹ {{ member.rentAmount }}</span>
+            </div>
+
+        </ng-container>
+
+        <!-- ADMIN / MANAGER VIEW -->
+        <ng-container *ngIf="isAdminView">
+
+            <div class="info-row" *ngIf="society">
+                <label>Society</label>
+                <span>{{ society.societyName }}</span>
+            </div>
+
+        </ng-container>
+
+    </div>
+
+
+    <div class="flex flex-end flex-gap">
+        <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()" *ngIf="!member.leaseEnd">
+        </ui-button>
+        <ui-button label="Delete" type="error" (clicked)="onDeleteClick()">
+        </ui-button>
+    </div>
+</div>
+
+<ng-template #endDate>
+    <div class="end-date-container">
+        <ui-date [config]="leaseEndConfig" [formControl]="leaseEnd">
+        </ui-date>
+
+        <div class="action">
+            <ui-button label="Cancel" type="only-content" (clicked)="cancel()">
+            </ui-button>
+            <ui-button label="Moveout" type="primary" (clicked)="moveOut()">
+            </ui-button>
+        </div>
+    </div>
+</ng-template>

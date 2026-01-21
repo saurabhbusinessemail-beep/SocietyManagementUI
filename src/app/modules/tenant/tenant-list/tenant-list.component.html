@@ -1,0 +1,21 @@
+<app-layout>
+    <ng-container moreActions>
+        <ui-button label="New Tenant" type="primary" routerLink="../add">
+        </ui-button>
+    </ng-container>
+
+    <div class="flex-col full-h">
+        <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadTenants($event)">
+        </app-filter>
+
+        <ui-form-layout class="flex-auto">
+
+            <ng-container *ngFor="let tenant of tenants">
+                <ui-flat-member-card [member]="tenant" (deleteMember)="deleteTenant(tenant)"
+                    (moveOutMember)="moveOut(tenant, $event)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                </ui-flat-member-card>
+            </ng-container>
+
+        </ui-form-layout>
+    </div>
+</app-layout>

@@ -28,6 +28,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CenterPopupComponent } from './center-popup/center-popup.component';
 import { CardV2Component } from './card-v2/card-v2.component';
 import { GateEntryPopupComponent } from './gate-entry-popup/gate-entry-popup.component';
+import { FlatMemberCardComponent } from './flat-member-card/flat-member-card.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { GateEntryPopupComponent } from './gate-entry-popup/gate-entry-popup.com
     Select2Component,
     CenterPopupComponent,
     CardV2Component,
-    GateEntryPopupComponent
+    GateEntryPopupComponent,
+    FlatMemberCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -80,6 +82,7 @@ import { GateEntryPopupComponent } from './gate-entry-popup/gate-entry-popup.com
     Select2Component,
     CenterPopupComponent,
     CardV2Component,
+    FlatMemberCardComponent
   ],
   providers: [MatDatepickerModule]
 })

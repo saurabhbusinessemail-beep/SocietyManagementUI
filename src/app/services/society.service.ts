@@ -127,6 +127,7 @@ export class SocietyService {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/buildings/${buildingId}`);
     }
 
+
     /* FLATS */
     // Get one Flat by Id
     getFlat(flatId: string): Observable<IFlat> {
@@ -156,6 +157,7 @@ export class SocietyService {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats/${flatId}`);
     }
 
+    // Get my flats as a owner/tenant/member
     myFlats(societyId?: string) {
         if (!societyId)
             return this.http.get<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myFlats`);
@@ -163,9 +165,25 @@ export class SocietyService {
             return this.http.get<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
     }
 
+    // Get flat and its member details
     getFlatMemberDetails(flatMemberId: string) {
         return this.http.get<IFlatMember>(`${this.flatsBaseUrl}/myFlats/${flatMemberId}`);
     }
+
+    // Get flat tenants
+    myTenants(societyId?: string, flatId?: string): Observable<IPagedResponse<IFlatMember>> {
+        const payload = { societyId, flatId };
+        return this.http.post<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myTenants`, payload);
+    }
+
+    deleteFlatMember(flatMemberId: string) {
+        return this.http.delete<IBEResponseFormat>(`${this.flatsBaseUrl}/deleteFlatMember/${flatMemberId}`);
+    }
+
+    updatedeleteFlatMemberLeaseEnd(flatMemberId: string, endDate: Date): Observable<IBEResponseFormat<IFlatMember>> {
+        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/updatedeleteFlatMemberLeaseEnd/${flatMemberId}`, { endDate });
+    }
+
 
     /* Parking */
     // Get all parking in a building or society

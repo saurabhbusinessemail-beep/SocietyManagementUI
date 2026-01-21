@@ -1,0 +1,124 @@
+// flat-member-card.component.scss
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.member-card {
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    padding: $sp-md;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    @include mobile {
+        padding: $sp;
+    }
+}
+
+/* Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $sp-md;
+
+    h3 {
+        margin: 0;
+        font-family: $font-family-base;
+        @include fluid-font($font-size-lg, $font-size-base, $font-size-sm);
+    }
+}
+
+.name-section {
+    display: flex;
+    align-items: center;
+    gap: $sp-sm;
+}
+
+.role-chip {
+    background: $color-light-gray;
+    padding: 2px 8px;
+    border-radius: $btn-border-radius-sm;
+    font-size: $font-size-xs;
+
+    &.tenant {
+        background: $color-header-footer;
+    }
+}
+
+/* Status */
+.status-chip {
+    padding: 4px 10px;
+    border-radius: $btn-border-radius-sm;
+    font-size: $font-size-xs;
+    color: $color-white;
+
+    &.status-active {
+        background: $status-active;
+    }
+
+    &.status-expired {
+        background: $status-expired;
+    }
+
+    &.status-terminated {
+        background: $status-rejected;
+    }
+}
+
+/* Body */
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $sp-md;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+
+    label {
+        font-size: $font-size-xs;
+        color: $color-help-text;
+        margin-bottom: 2px;
+    }
+
+    span {
+        font-size: $font-size-sm;
+        color: $color-black;
+    }
+}
+
+.delete-btn {
+    background: $btn-error;
+    color: $btn-text-primary;
+    border: none;
+    padding: 6px 12px;
+    border-radius: $btn-border-radius-sm;
+    cursor: pointer;
+    font-size: $font-size-xs;
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    @include mobile {
+        padding: 4px 10px;
+    }
+}
+
+
+.end-date-container {
+    display: flex;
+    flex-direction: column;
+    padding: $sp;
+    gap: $sp;
+
+    .action {
+        display: flex;
+        gap: $sp;
+    }
+}

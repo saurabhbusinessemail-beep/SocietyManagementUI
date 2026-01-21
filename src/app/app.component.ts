@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
           .subscribe(res => {
             console.log('res = ', res)
 
-            if (this.firstRouteLoad && res.length > 0) {
+            if (this.firstRouteLoad && res.length > 0 && this.router.url === '/dashboard/user') {
               this.menuService.syncSelectedMenuWithCurrentUrl(true);
               this.firstRouteLoad = false;
             }

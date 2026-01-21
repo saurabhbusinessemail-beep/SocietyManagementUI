@@ -1,0 +1,48 @@
+<app-layout [hideMoreActions]="true">
+
+    <form [formGroup]="fb">
+
+        <ui-form-layout>
+
+            <ui-select2 formControlName="flat" [config]="flatSearchConfig" [options]="flatOptions"
+                placeholder="Search Flat" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+            </ui-select2>
+
+            <ui-text-box formControlName="rentAmount" type="number" [config]="rentAmountConfig" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="2">
+            </ui-text-box>
+            <ui-date formControlName="leaseStart" [config]="leaseStartConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="2">
+            </ui-date>
+            <ui-date formControlName="leaseEnd" [config]="leaseEndConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="2">
+            </ui-date>
+
+            <br>
+            <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+                <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" direction="horizontal"
+                    [options]="radioOptions" [smColumns]="12" [mdColumns]="12" [lgColumns]="10">
+                </ui-radio-list>
+
+                <ui-contact-search [formControl]="contactSearchFormControl" *ngIf="showContactSearch" [smColumns]="12"
+                    [mdColumns]="12" [lgColumns]="10">
+                </ui-contact-search>
+                <ui-user-search [formControl]="userSearchFormControl" *ngIf="showUserSearch" [smColumns]="12"
+                    [mdColumns]="12" [lgColumns]="10">
+                </ui-user-search>
+
+            </ui-form-layout>
+
+            <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
+                <ui-button type="only-content" label="Cancel" (clicked)="cancel()">
+                </ui-button>
+                <ui-button [isSubmit]="true" label="Save" [disable]="fb.invalid || !selectedUser" (clicked)="save()">
+                </ui-button>
+            </section>
+
+        </ui-form-layout>
+
+    </form>
+
+</app-layout>
