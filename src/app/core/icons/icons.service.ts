@@ -18,7 +18,8 @@ export class IconsService {
       'society-icon', 'dashboard', 'search', 'clear', 'more-vert', 'account', 'down-arrow',
       'location-color', 'edit', 'double-arrow-right', 'delete', 'home', 'security', 'tenant',
       'calendar', 'complaint', 'approve', 'reject', 'gateentry', 'gatepass', 'qr-code',
-      'download', 'valid', 'invalid', 'visitor', 'filter', 'call', 'exit', 'member'
+      'download', 'valid', 'invalid', 'visitor', 'filter', 'call', 'exit', 'member', 'setting',
+      'account-circle', 'help'
     ];
 
     iconList.forEach((icon, index) => {

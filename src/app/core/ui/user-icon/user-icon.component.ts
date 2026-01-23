@@ -11,7 +11,7 @@ import { IMyProfile } from '../../../interfaces';
 export class UserIconComponent implements OnInit {
 
   open = false;
-  
+
   get myProfile(): IMyProfile | undefined {
     return this.loginService.getProfileFromStorage()
   }
@@ -34,5 +34,23 @@ export class UserIconComponent implements OnInit {
     // emit or route to logout (hook up from parent)
     console.log('logout clicked');
     this.loginService.logout();
+  }
+
+  onProfileClick() {
+    // Add profile navigation logic here
+    console.log('Profile clicked');
+    this.open = false; // Close dropdown after click
+  }
+
+  onSettingsClick() {
+    // Add settings navigation logic here
+    console.log('Settings clicked');
+    this.open = false;
+  }
+
+  onHelpClick() {
+    // Add help navigation logic here
+    console.log('Help clicked');
+    this.open = false;
   }
 }

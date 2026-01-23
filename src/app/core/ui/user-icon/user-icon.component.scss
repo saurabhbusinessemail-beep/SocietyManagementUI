@@ -1,37 +1,266 @@
 @import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 .user-root {
+    position: relative;
+
     .user-btn {
         background: transparent;
         border: none;
         cursor: pointer;
+        padding: $sp-sm;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: $color-light-gray;
+        }
+
+        &:focus {
+            outline: 2px solid $color-dark-blue;
+            outline-offset: 2px;
+        }
+
+        app-icon {
+            color: $color-dark-blue;
+        }
     }
 }
+
 .user-dropdown {
     position: absolute;
     right: 0;
-    top: calc(100% + 6px);
+    top: calc(100% + $sp-sm);
     background: $color-white;
     border: 1px solid $color-border;
-    padding: $sp-sm;
-    border-radius: 6px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border-radius: $btn-border-radius-md;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     z-index: $z-user-dropdown;
-    ul {
+    width: 320px;
+    max-width: 90vw;
+    overflow: hidden;
+    animation: dropdownFade 0.2s ease;
+
+    @include mobile {
+        width: 280px;
+        right: -10px;
+    }
+
+    .dropdown-header {
+        padding: $sp-md;
+        display: flex;
+        align-items: center;
+        gap: $sp;
+        background: linear-gradient(135deg, $color-header-footer 0%, rgba($color-sky, 0.3) 100%);
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: $color-white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid $color-dark-blue;
+
+            app-icon {
+                color: $color-dark-blue;
+                font-size: 24px;
+            }
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+
+            .user-name {
+                margin: 0 0 $sp-xs;
+                font-size: $font-size-base;
+                font-weight: 600;
+                color: $color-black;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                @include mobile {
+                    font-size: $font-size-sm;
+                }
+            }
+
+            .user-details {
+                margin: 0;
+                font-size: $font-size-sm;
+                color: $color-help-text;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                @include mobile {
+                    font-size: $font-size-xs;
+                }
+            }
+        }
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background: $color-border;
         margin: 0;
-        padding: 0;
+    }
+
+    .dropdown-menu {
+        margin: 0;
+        padding: $sp-sm 0;
         list-style: none;
+
+        .menu-item {
+            margin: 0;
+
+            &:hover {
+                background: $color-light-gray;
+            }
+
+            .menu-btn {
+                width: 100%;
+                padding: $sp $sp-md;
+                background: none;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: $sp;
+                text-align: left;
+                font-size: $font-size-base;
+                color: $color-black;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    color: $color-dark-blue;
+                }
+
+                &:focus {
+                    outline: none;
+                    background: $color-light-gray;
+                }
+
+                @include mobile {
+                    padding: 10px $sp;
+                    font-size: $font-size-sm;
+                }
+
+                .menu-icon {
+                    color: $icon-on-light-highlight;
+                    width: 20px;
+                    height: 20px;
+                    flex-shrink: 0;
+                }
+
+                span {
+                    flex: 1;
+                }
+            }
+
+            &.logout-item {
+                .menu-btn {
+                    color: $color-error-dark;
+
+                    &:hover {
+                        color: $color-error-header;
+                        background: $color-error-light;
+                    }
+
+                    .menu-icon {
+                        color: $color-error-dark;
+                    }
+                }
+            }
+        }
     }
-    li {
-        margin-bottom: $sp-sm;
-        text-align: end;
-    }
-    li:last-child {
-        margin-bottom: 0;
+
+    .dropdown-footer {
+        padding: $sp-sm $sp-md;
+        background: $color-light-gray;
+        text-align: center;
+
+        .version-text {
+            color: $color-help-text;
+            font-size: $font-size-xs;
+        }
     }
 }
 
+// Animation
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-.logged-in-user{
-  white-space: nowrap;
+// Arrow for desktop
+@include desktop {
+    .user-dropdown::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        right: 20px;
+        width: 16px;
+        height: 16px;
+        background: $color-white;
+        border-left: 1px solid $color-border;
+        border-top: 1px solid $color-border;
+        transform: rotate(45deg);
+
+        @include mobile {
+            display: none;
+        }
+    }
+}
+
+// Mobile-specific adjustments
+@include mobile {
+    .user-dropdown {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        max-height: 70vh;
+        overflow-y: auto;
+        border-radius: $btn-border-radius-lg $btn-border-radius-lg 0 0;
+        animation: slideUp 0.3s ease;
+
+        .dropdown-header {
+            padding: $sp-lg;
+        }
+
+        .dropdown-menu {
+            padding: $sp 0;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+}
+
+// Tablet-specific adjustments
+@include tablet {
+    .user-dropdown {
+        width: 300px;
+    }
 }

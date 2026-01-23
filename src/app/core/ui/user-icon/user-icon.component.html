@@ -1,16 +1,54 @@
 <div class="user-root" style="position:relative;">
-    <button class="icon user-btn" (click)="toggle()">
+    <button class="icon user-btn" (click)="toggle()" [attr.aria-expanded]="open" aria-label="User menu">
         <app-icon name="account"></app-icon>
     </button>
 
-    <div class="user-dropdown" *ngIf="open">
-        <ul>
-            <li><button class="btn only-content" (click)="logout()">Logout</button></li>
-            <li class="logged-in-user">
-                <ui-label [valueText]="myProfile?.user?.name ?? 'No Name' + ' ' + myProfile?.user?.phoneNumber"
-                    [config]="{id: ''}">
-                </ui-label>
+    <div class="user-dropdown" *ngIf="open" [@dropdownAnimation]>
+        <div class="dropdown-header">
+            <div class="user-avatar">
+                <app-icon name="account" size="lg"></app-icon>
+            </div>
+            <div class="user-info">
+                <h3 class="user-name">{{ myProfile?.user?.name ?? 'No Name' }}</h3>
+                <p class="user-details">{{ myProfile?.user?.phoneNumber || 'No contact info' }}</p>
+            </div>
+        </div>
+
+        <div class="dropdown-divider"></div>
+
+        <ul class="dropdown-menu">
+            <li class="menu-item" (click)="onProfileClick()">
+                <button class="menu-btn">
+                    <app-icon name="account-circle" class="menu-icon"></app-icon>
+                    <span>My Profile</span>
+                </button>
+            </li>
+            <li class="menu-item" (click)="onSettingsClick()">
+                <button class="menu-btn">
+                    <app-icon name="setting" class="menu-icon"></app-icon>
+                    <span>Settings</span>
+                </button>
+            </li>
+            <li class="menu-item" (click)="onHelpClick()">
+                <button class="menu-btn">
+                    <app-icon name="help" class="menu-icon"></app-icon>
+                    <span>Help & Support</span>
+                </button>
+            </li>
+
+            <div class="dropdown-divider"></div>
+
+            <li class="menu-item logout-item" (click)="logout()">
+                <button class="menu-btn logout-btn">
+                    <app-icon name="logout-icon" class="menu-icon"></app-icon>
+                    <span>Logout</span>
+                </button>
             </li>
         </ul>
+
+        <div class="dropdown-footer">
+            <ui-label [valueText]="'Version 1.0.0'" [config]="{id: 'version-label'}" class="version-text">
+            </ui-label>
+        </div>
     </div>
 </div>
