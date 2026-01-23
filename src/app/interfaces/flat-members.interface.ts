@@ -13,6 +13,8 @@ export interface IFlatMember extends IDefaultFields {
 
     isOwner: boolean;
     isTenant: boolean;
+    isMember: boolean;
+    isTenantMember: boolean;
 
     leaseStart?: Date;
     leaseEnd?: Date;

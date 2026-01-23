@@ -1,0 +1,22 @@
+<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- House -->
+  <path d="M20 72L80 28L140 72V140H20V72Z"
+        stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- Door -->
+  <rect x="68" y="96" width="24" height="44"
+        stroke="currentColor" stroke-width="5" rx="2"/>
+
+  <!-- People heads -->
+  <circle cx="52" cy="78" r="8" fill="currentColor"/>
+  <circle cx="80" cy="78" r="8" fill="currentColor"/>
+  <circle cx="108" cy="78" r="8" fill="currentColor"/>
+
+  <!-- People bodies -->
+  <path d="M40 104C40 96 48 92 52 92C56 92 64 96 64 104"
+        stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M68 104C68 96 76 92 80 92C84 92 92 96 92 104"
+        stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M96 104C96 96 104 92 108 92C112 92 120 96 120 104"
+        stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+</svg>

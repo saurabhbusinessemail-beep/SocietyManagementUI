@@ -70,6 +70,10 @@ body {
     overflow: auto;
 }
 
+.error {
+    color: $btn-error;
+}
+
 // header/footer shared background
 .app-header,
 .app-footer {

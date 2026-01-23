@@ -11,7 +11,7 @@
         <ui-form-layout class="flex-auto">
 
             <ng-container *ngFor="let tenant of tenants">
-                <ui-flat-member-card [member]="tenant" (deleteMember)="deleteTenant(tenant)"
+                <ui-flat-member-card [member]="tenant" [showDelete]="true" (deleteMember)="deleteTenant(tenant)"
                     (moveOutMember)="moveOut(tenant, $event)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
                 </ui-flat-member-card>
             </ng-container>

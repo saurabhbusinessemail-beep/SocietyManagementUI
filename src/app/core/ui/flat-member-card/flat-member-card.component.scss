@@ -43,6 +43,10 @@
     &.tenant {
         background: $color-header-footer;
     }
+
+    &.member {
+        background: $color-sky;
+    }
 }
 
 /* Status */

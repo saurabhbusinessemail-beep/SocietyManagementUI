@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
-import { IFlat, IFlatMember, ISociety, IUIControlConfig } from '../../../interfaces';
+import { IFlat, IFlatMember, ISociety, IUIControlConfig, IUser } from '../../../interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -11,10 +11,14 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class FlatMemberCardComponent {
 
   @Input() member!: IFlatMember;
-  @Input() viewerRole: 'admin' | 'manager' | 'owner' = 'owner';
+  @Input() viewerRole: 'admin' | 'manager' | 'owner' | 'tenant' | 'member' = 'owner';
+  @Input() showDelete = false;
   @Output() deleteMember = new EventEmitter<IFlatMember>();
   @Output() moveOutMember = new EventEmitter<Date>();
 
+  get memberUser(): IUser | undefined {
+    return typeof this.member.userId === 'string' ? undefined : this.member.userId;
+  }
 
   get society(): ISociety | undefined {
     return typeof this.member.societyId !== 'string' ? this.member.societyId : undefined

@@ -4,9 +4,10 @@
     <!-- Header -->
     <div class="card-header">
         <div class="name-section">
-            <h3>{{ member.name }}</h3>
+            <h3>{{ memberUser?.name }}</h3>
             <span class="role-chip" *ngIf="member.isOwner">Owner</span>
             <span class="role-chip tenant" *ngIf="member.isTenant">Tenant</span>
+            <span class="role-chip member" *ngIf="member.isMember || member.isTenantMember">Member</span>
         </div>
 
         <span class="status-chip" [ngClass]="statusClass">
@@ -20,11 +21,11 @@
 
         <div class="info-row">
             <label>Contact</label>
-            <span>{{ member.contact }}</span>
+            <span>{{ memberUser?.phoneNumber }}</span>
         </div>
 
         <div class="info-row">
-            <label>Residing Type</label>
+            <label>Residing</label>
             <span>{{ member.residingType }}</span>
         </div>
 
@@ -36,7 +37,7 @@
         <!-- OWNER VIEW -->
         <ng-container *ngIf="!isAdminView">
 
-            <div class="info-row" *ngIf="isTenant">
+            <div class="info-row" *ngIf="member.isTenant">
                 <label>Lease Period</label>
                 <span>
                     {{ member.leaseStart | date:'mediumDate' }} –
@@ -65,10 +66,10 @@
 
 
     <div class="flex flex-end flex-gap">
-        <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()" *ngIf="!member.leaseEnd">
+        <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()"
+            *ngIf="!member.leaseEnd && viewerRole === 'owner'">
         </ui-button>
-        <ui-button label="Delete" type="error" (clicked)="onDeleteClick()">
-        </ui-button>
+        <app-icon name="delete" class="error" *ngIf="showDelete"></app-icon>
     </div>
 </div>
 

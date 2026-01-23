@@ -15,7 +15,6 @@ interface ITenantsFilter {
 export class TenantListComponent implements OnInit {
 
   selectedFIlter: ITenantsFilter = {};
-  isComponentActive = new Subject<void>();
   tenants: IFlatMember[] = [];
 
   constructor(private societyService: SocietyService) { }

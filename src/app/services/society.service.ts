@@ -176,6 +176,13 @@ export class SocietyService {
         return this.http.post<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myTenants`, payload);
     }
 
+    // Get flat Members
+    myFlatMembers(societyId?: string, flatId?: string): Observable<IPagedResponse<IFlatMember>> {
+        const payload = { societyId, flatId };
+        return this.http.post<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myFlatMembers`, payload);
+    }
+
+    // Delete Flat Member
     deleteFlatMember(flatMemberId: string) {
         return this.http.delete<IBEResponseFormat>(`${this.flatsBaseUrl}/deleteFlatMember/${flatMemberId}`);
     }
