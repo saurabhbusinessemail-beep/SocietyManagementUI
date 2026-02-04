@@ -9,13 +9,14 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ErrorDialogService } from '../services/error-dialog.service';
+import { Router } from '@angular/router';
 
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
 
-    constructor(private errorDialogService: ErrorDialogService) { }
+    constructor(private errorDialogService: ErrorDialogService, private router: Router) { }
 
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -38,6 +39,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     message = 'Unable to connect to server.';
                 } else if (error.status === 401) {
                     title = 'Unauthorized';
+                    this.router.navigateByUrl('/unauthorized/logout');
                 } else if (error.status === 403) {
                     title = 'Forbidden';
                 } else if (error.status === 404) {
