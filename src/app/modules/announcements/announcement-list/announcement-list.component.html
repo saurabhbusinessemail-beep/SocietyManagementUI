@@ -1,0 +1,21 @@
+<app-layout>
+    <ng-container moreActions>
+        <ui-button label="New Member" type="primary" routerLink="../add">
+        </ui-button>
+    </ng-container>
+
+    <div class="flex-col full-h">
+        <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadAnnouncements($event)">
+        </app-filter>
+
+        <!-- <ui-form-layout class="flex-auto">
+
+            <ng-container *ngFor="let member of members">
+                <ui-flat-member-card [member]="member" (deleteMember)="deleteMember(member)" viewerRole="admin"
+                    [showDelete]="allowDelete(member)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                </ui-flat-member-card>
+            </ng-container>
+
+        </ui-form-layout> -->
+    </div>
+</app-layout>
