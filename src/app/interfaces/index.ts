@@ -4,6 +4,7 @@ export * from './ui/location-result .interface';
 export * from './ui/ui-control-config.interface';
 export * from './ui/ui-drop-down-option.interface';
 
+export * from './announcement.interface';
 export * from './building.interface';
 export * from './complaint.interface';
 export * from './confirmation-popup-config.interface';
