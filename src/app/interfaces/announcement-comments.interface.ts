@@ -75,29 +75,6 @@ export interface UserInfo {
     role?: string;
 }
 
-export interface CommentResponse {
-    comments: Comment[];
-    pagination: {
-        currentPage: number;
-        totalPages: number;
-        totalItems: number;
-        itemsPerPage: number;
-    };
-}
-
-export interface CommentTree {
-    comments: Comment[];
-}
-
-export interface CommentOptions {
-    page?: number;
-    limit?: number;
-    sortBy?: 'newest' | 'oldest' | 'popular' | 'controversial';
-    includeReplies?: boolean;
-    userId?: string;
-    maxDepth?: number;
-}
-
 export interface ToggleLikeRequest {
     commentId: string;
     userId: string;
