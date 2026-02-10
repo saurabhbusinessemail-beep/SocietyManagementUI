@@ -1,5 +1,5 @@
 // comment.interface.ts
-export interface CommentAttachment {
+export interface ICommentAttachment {
     fileName: string;
     fileUrl: string;
     fileType: string;
@@ -8,19 +8,19 @@ export interface CommentAttachment {
     uploadedAt: Date;
 }
 
-export interface EditHistory {
+export interface IEditHistory {
     content: string;
     editedAt: Date;
     reason?: string;
 }
 
-export interface Like {
+export interface ILike {
     userId: string;
     reactedAt: Date;
     reactionType: 'like' | 'love' | 'helpful' | 'agree' | 'disagree';
 }
 
-export interface Report {
+export interface IReport {
     userId: string;
     reason: 'spam' | 'abuse' | 'offensive' | 'off_topic' | 'other';
     description?: string;
@@ -28,7 +28,7 @@ export interface Report {
     status: 'pending' | 'reviewed' | 'dismissed';
 }
 
-export interface CommentBase {
+export interface ICommentBase {
     _id: string;
     announcementId: string;
     userId: string;
@@ -36,8 +36,8 @@ export interface CommentBase {
     parentCommentId?: string;
     isReply: boolean;
     isEdited: boolean;
-    editHistory: EditHistory[];
-    likes: Like[];
+    editHistory: IEditHistory[];
+    likes: ILike[];
     likeCount: number;
     reports: Report[];
     reportCount: number;
@@ -55,19 +55,19 @@ export interface CommentBase {
     userAgent?: string;
     ipAddress?: string;
     mentions: string[];
-    attachments: CommentAttachment[];
+    attachments: ICommentAttachment[];
     depth: number;
     path: string;
-    author?: UserInfo;
+    author?: IUserInfo;
     replies?: Comment[];
     hasLiked?: boolean;
 }
 
-export interface Comment extends CommentBase {
+export interface Comment extends ICommentBase {
     replies?: Comment[];
 }
 
-export interface UserInfo {
+export interface IUserInfo {
     _id: string;
     name: string;
     email?: string;
@@ -75,13 +75,13 @@ export interface UserInfo {
     role?: string;
 }
 
-export interface ToggleLikeRequest {
+export interface IToggleLikeRequest {
     commentId: string;
     userId: string;
     reactionType?: 'like' | 'love' | 'helpful' | 'agree' | 'disagree';
 }
 
-export interface CreateCommentRequest {
+export interface ICreateCommentRequest {
     announcementId: string;
     userId: string;
     content: string;
@@ -90,25 +90,25 @@ export interface CreateCommentRequest {
     mentions?: string[];
 }
 
-export interface UpdateCommentRequest {
+export interface IUpdateCommentRequest {
     content: string;
     reason?: string;
 }
 
-export interface ReportCommentRequest {
+export interface IReportCommentRequest {
     commentId: string;
     userId: string;
     reason: 'spam' | 'abuse' | 'offensive' | 'off_topic' | 'other';
     description?: string;
 }
 
-export interface PinCommentRequest {
+export interface IPinCommentRequest {
     commentId: string;
     pinnedBy: string;
     pinnedAt: Date;
 }
 
-export interface SoftDeleteCommentRequest {
+export interface ISoftDeleteCommentRequest {
     commentId: string;
     deletedBy: string;
     reason?: string;
