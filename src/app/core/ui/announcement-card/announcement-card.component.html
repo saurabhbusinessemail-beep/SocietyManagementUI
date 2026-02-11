@@ -22,8 +22,9 @@
             </div>
         </div>
 
-        <div class="meta-info" *ngIf="announcement.publishDate">
-            <span class="date">
+        <div class="meta-info">
+
+            <span class="date" *ngIf="announcement.publishDate">
                 <app-icon name="publish" size="md"></app-icon>
                 {{ announcement.publishDate | date:'mediumDate' }}
             </span>

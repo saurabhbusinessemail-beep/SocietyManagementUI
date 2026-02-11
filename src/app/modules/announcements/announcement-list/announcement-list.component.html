@@ -35,7 +35,10 @@
 
             <ng-container *ngFor="let announcement of announcements">
                 <ui-announcement-card [announcement]="announcement" [viewerRole]="societyRole ?? 'admin'"
-                    [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                    (viewAnnouncement)="viewAnnouncement(announcement)"
+                    (editAnnouncement)="editAnnouncement(announcement)"
+                    (deleteAnnouncement)="deleteAnnouncement(announcement)" [smColumns]="12" [mdColumns]="6"
+                    [lgColumns]="6">
                 </ui-announcement-card>
             </ng-container>
 

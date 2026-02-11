@@ -31,7 +31,9 @@
             <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
                 <ui-button type="only-content" label="Cancel" (clicked)="cancel()">
                 </ui-button>
-                <ui-button [isSubmit]="true" label="Save" [disable]="fb.invalid" (clicked)="save()">
+                <ui-button type="only-content" label="Save Draft" (clicked)="saveDraft()" [disable]="fb.invalid">
+                </ui-button>
+                <ui-button [isSubmit]="true" label="Publish" [disable]="fb.invalid" (clicked)="publish()">
                 </ui-button>
             </section>
 

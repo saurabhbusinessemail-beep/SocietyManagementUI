@@ -6,6 +6,7 @@ import { filter, take } from 'rxjs';
 import { AnnouncementCategoryTypesText, AnnouncementCategoryTypes, AnnouncementPriorityTypes, AnnouncementPriorityTypesText, AnnouncementStatusTypes, AnnouncementStatusTypesText, adminManagerRoles } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { SocietyRoles } from '../../../types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-announcement-list',
@@ -18,6 +19,7 @@ export class AnnouncementListComponent implements OnInit {
   myProfile: IMyProfile | undefined;
   societyRole?: 'admin' | SocietyRoles;
   announcements: IAnnouncement[] = [];
+  selectedFIlter?: IAnnouncementFilters;
 
   categoryControl = new FormControl<IUIDropdownOption | undefined>(undefined);
   categoryConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
@@ -123,14 +125,18 @@ export class AnnouncementListComponent implements OnInit {
     return this.societyRole === SocietyRoles.member;
   }
 
-  constructor(private announcementService: AnnouncementService, private loginService: LoginService) { }
+  constructor(
+    private announcementService: AnnouncementService,
+    private loginService: LoginService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.myProfile = this.loginService.getProfileFromStorage();
   }
 
   loadAnnouncements(selectedFIlter: IAnnouncementFilters) {
-    console.log('selectedFIlter = ', selectedFIlter)
+    this.selectedFIlter = selectedFIlter;
     if (selectedFIlter.societyId === undefined) return;
 
     this.resetSelectedSocietyRole(selectedFIlter.societyId);
@@ -166,5 +172,25 @@ export class AnnouncementListComponent implements OnInit {
       this.societyRole = SocietyRoles.manager;
     else
       this.societyRole = SocietyRoles.member;
+  }
+
+  viewAnnouncement(announcement: IAnnouncement) {
+    this.router.navigate(['announcements', announcement._id]);
+  }
+
+  editAnnouncement(announcement: IAnnouncement) {
+    this.router.navigate(['announcements/edit', announcement._id]);
+  }
+
+  deleteAnnouncement(announcement: IAnnouncement) {
+    this.announcementService.deleteAnnouncement(announcement._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !this.selectedFIlter) return;
+
+          this.loadAnnouncements(this.selectedFIlter)
+        }
+      })
   }
 }

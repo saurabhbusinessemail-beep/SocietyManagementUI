@@ -11,12 +11,14 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { PipeModule } from '../../pipes/pipes.module';
+import { AnnouncementDetailsComponent } from './announcement-details/announcement-details.component';
 
 
 @NgModule({
   declarations: [
     AnnouncementListComponent,
-    AddAnnouncementComponent
+    AddAnnouncementComponent,
+    AnnouncementDetailsComponent
   ],
   imports: [
     CommonModule,

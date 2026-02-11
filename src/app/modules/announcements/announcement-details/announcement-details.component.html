@@ -1,0 +1,180 @@
+<app-layout [hideMoreActions]="true">
+    <div class="announcement-details-page">
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="isLoading">
+            <div class="spinner"></div>
+            <p>Loading announcement details...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" *ngIf="error && !isLoading && announcementId">
+            <app-icon name="error" size="lg"></app-icon>
+            <p>{{ error }}</p>
+            <ui-button label="Try Again" type="primary" (clicked)="getAnnouncement(announcementId)">
+            </ui-button>
+        </div>
+
+        <!-- Announcement Details -->
+        <div class="details-container" *ngIf="!isLoading && !error && announcement">
+            <!-- Status Badges - Top -->
+            <div class="status-bar" [class.pinned]="announcement.isPinned" [class.expired]="isExpired">
+                <div class="badge-group">
+                    <span class="priority-badge" [ngClass]="priorityClass">
+                        {{ announcement.priority | titlecase }}
+                        <span class="urgent-indicator" *ngIf="announcement.priority === 'urgent'">!</span>
+                    </span>
+                    <span class="category-badge" [ngClass]="categoryClass">
+                        {{ announcement.category | titlecase }}
+                    </span>
+                    <span class="status-chip" [ngClass]="statusClass">
+                        {{ announcement.status | titlecase }}
+                    </span>
+                    <span class="pin-badge" *ngIf="announcement.isPinned">
+                        <app-icon name="pin" size="md"></app-icon>
+                        Pinned
+                    </span>
+                    <span class="expiry-badge" *ngIf="announcement.expiryDate && isExpired">
+                        <app-icon name="expire" size="md"></app-icon>
+                        Expired {{ announcement.expiryDate | date:'mediumDate' }}
+                    </span>
+                </div>
+
+                <div class="action-buttons" *ngIf="isAdminView">
+                    <ui-button [label]="announcement.isPinned ? 'Unpin' : 'Pin'" type="only-content"
+                        (clicked)="onPinClick()" *ngIf="announcement.status === 'published' && !isExpired">
+                    </ui-button>
+                    <ui-button label="Edit" type="only-content" (clicked)="onEditClick()"
+                        *ngIf="announcement.status === 'draft' && isAdminView">
+                    </ui-button>
+                    <ui-button label="Unpublish" type="only-content" (clicked)="onUnpublishClick()"
+                        *ngIf="announcement.status === 'published'">
+                    </ui-button>
+                    <app-icon name="delete" size="md" class="delete-icon" (click)="deleteAnnouncement()">
+                    </app-icon>
+                </div>
+            </div>
+
+            <!-- Header Section -->
+            <div class="details-header">
+                <div class="title-wrapper">
+                    <app-icon name="pin" class="pin-icon" size="lg" *ngIf="announcement.isPinned"></app-icon>
+                    <h1 class="announcement-title">{{ announcement.title }}</h1>
+                </div>
+
+                <div class="meta-info">
+                    <div class="date-info">
+                        <span class="publish-date" *ngIf="announcement.publishDate">
+                            <app-icon name="publish" size="md"></app-icon>
+                            Published: {{ announcement.publishDate | date:'fullDate' }}
+                        </span>
+                        <span class="expiry-date" *ngIf="announcement.expiryDate && !isExpired">
+                            <app-icon name="expire" size="md"></app-icon>
+                            Expires: {{ announcement.expiryDate | date:'fullDate' }}
+                        </span>
+                    </div>
+
+                    <div class="stats-info">
+                        <span class="views-count" *ngIf="announcement.viewCount > 0">
+                            <app-icon name="abacus" size="md"></app-icon>
+                            {{ announcement.viewCount }} views
+                        </span>
+                        <span class="comments-count" *ngIf="announcement.commentsEnabled">
+                            <app-icon name="comment" size="md"></app-icon>
+                            {{ announcement.commentCount || 0 }} comments
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Author Information -->
+            <div class="author-section">
+                <div class="author-avatar">
+                    {{ createdByUser?.name?.charAt(0) || 'A' }}
+                </div>
+                <div class="author-details">
+                    <span class="author-name">{{ createdByUser?.name || 'Unknown' }}</span>
+                    <span class="author-role" *ngIf="createdByUser?.role">{{ createdByUser?.role | titlecase }}</span>
+                    <div class="post-meta">
+                        <span class="created-date">
+                            Posted on {{ announcement.createdOn | date:'fullDate' }}
+                        </span>
+                        <span class="society" *ngIf="society">
+                            • {{ society.societyName }}
+                        </span>
+                        <span class="modified-date" *ngIf="announcement.modifiedOn">
+                            • Updated {{ announcement.modifiedOn | date:'mediumDate' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content-section">
+                <div class="announcement-content">
+                    {{ announcement.content }}
+                </div>
+            </div>
+
+            <!-- Tags Section -->
+            <div class="tags-section" *ngIf="announcement.tags?.length">
+                <h3 class="section-title">Tags</h3>
+                <div class="tags-container">
+                    <span class="tag" *ngFor="let tag of announcement.tags">
+                        #{{ tag }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Attachments Section -->
+            <!-- <div class="attachments-section" *ngIf="announcement.attachments?.length">
+            <h3 class="section-title">
+                Attachments ({{ announcement.attachments.length }})
+            </h3>
+            <div class="attachments-grid">
+                <a *ngFor="let attachment of announcement.attachments" [href]="attachment.url" target="_blank"
+                    class="attachment-item">
+                    <app-icon name="attach_file" size="lg"></app-icon>
+                    <div class="attachment-info">
+                        <span class="attachment-name">{{ attachment.fileName }}</span>
+                        <span class="attachment-size">{{ attachment.fileSize }}</span>
+                    </div>
+                    <app-icon name="open_in_new" size="sm" class="external-link"></app-icon>
+                </a>
+            </div>
+        </div> -->
+
+            <!-- Comments Section (if enabled) -->
+            <div class="comments-section" *ngIf="announcement.commentsEnabled">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        Comments ({{ announcement.commentCount || 0 }})
+                    </h3>
+                    <span class="comments-status">
+                        <app-icon name="comment" size="md"></app-icon>
+                        Comments are enabled
+                    </span>
+                </div>
+                <!-- Comments component would go here -->
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="details-footer">
+                <div class="footer-left">
+                    <ui-button label="← Back to Announcements" type="only-content" (clicked)="goBack()">
+                    </ui-button>
+                </div>
+                <div class="footer-right">
+                    <span class="announcement-id">ID: {{ announcement._id }}</span>
+                    <span class="draft-badge" *ngIf="announcement.status === 'draft'">
+                        <app-icon name="edit" size="md"></app-icon>
+                        Draft
+                    </span>
+                    <span class="archived-badge" *ngIf="announcement.status === 'archived'">
+                        <app-icon name="archive" size="md"></app-icon>
+                        Archived
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-layout>

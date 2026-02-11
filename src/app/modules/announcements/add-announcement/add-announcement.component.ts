@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
+import { IAnnouncement, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { AnnouncementCategoryTypes, AnnouncementCategoryTypesText, AnnouncementPriorityTypes, AnnouncementPriorityTypesText, adminManagerRoles } from '../../../constants';
 import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
 import { Location } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { AnnouncementService } from '../../../services/announcement.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-announcement',
@@ -15,6 +16,8 @@ import { AnnouncementService } from '../../../services/announcement.service';
 })
 export class AddAnnouncementComponent implements OnInit {
 
+  announcementId?: string | null;
+
   societies: ISociety[] = [];
   societyOptions: IUIDropdownOption[] = [];
 
@@ -22,8 +25,8 @@ export class AddAnnouncementComponent implements OnInit {
     society: new FormControl<IUIDropdownOption | undefined>(undefined),
     title: new FormControl<string | null>(null),
     content: new FormControl<string | null>(null),
-    priority: new FormControl<IUIDropdownOption | undefined>(undefined),
-    category: new FormControl<IUIDropdownOption | undefined>(undefined),
+    priority: new FormControl<string | undefined>(undefined),
+    category: new FormControl<string | undefined>(undefined),
     expiryDate: new FormControl<Date>(new Date(new Date().setDate(new Date().getDate() + 1))),
   });
 
@@ -160,11 +163,15 @@ export class AddAnnouncementComponent implements OnInit {
     private location: Location,
     private societyService: SocietyService,
     private loginService: LoginService,
-    private announcementService: AnnouncementService
+    private announcementService: AnnouncementService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.announcementId = this.route.snapshot.paramMap.get('id');
     this.loadSocities();
+
+    if (this.announcementId) this.loadAnnouncement(this.announcementId);
   }
 
   loadSocities() {
@@ -198,11 +205,43 @@ export class AddAnnouncementComponent implements OnInit {
     }
   }
 
+  loadAnnouncement(id: string) {
+    this.announcementService.getAnnouncement(id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !response.data) return;
+
+          this.patchAnnouncement(response.data);
+        }
+      })
+  }
+  patchAnnouncement(announcement: IAnnouncement) {
+    const societyId = typeof announcement.societyId === 'string' ? announcement.societyId : announcement.societyId._id
+    const so = this.societyOptions.find(so => so.value === societyId);
+    if (!so) return;
+
+    this.fb.get('society')?.setValue(so, { emitEvent: false });
+    this.fb.get('title')?.setValue(announcement.title, { emitEvent: false });
+    this.fb.get('content')?.setValue(announcement.content, { emitEvent: false });
+    if (announcement.expiryDate) this.fb.get('expiryDate')?.setValue(announcement.expiryDate);
+
+    const priorityOption = this.priorityConfig.dropDownOptions?.find(o => o.value === announcement.priority);
+    if (priorityOption) {
+      this.fb.get('priority')?.setValue(announcement.priority, { emitEvent: false });
+    }
+
+    const categoryOption = this.categoryConfig.dropDownOptions?.find(o => o.value === announcement.category);
+    if (categoryOption) {
+      this.fb.get('category')?.setValue(announcement.category, { emitEvent: false });
+    }
+  }
+
   cancel() {
     this.location.back();
   }
 
-  save() {
+  publish() {
     if (this.fb.invalid) return;
 
     const formValue = this.fb.value;
@@ -210,13 +249,41 @@ export class AddAnnouncementComponent implements OnInit {
       societyId: formValue.society?.value,
       title: formValue.title,
       content: formValue.content,
-      priority: formValue.priority?.value,
-      category: formValue.category?.value,
-      expiryDate: formValue.expiryDate
+      priority: formValue.priority,
+      category: formValue.category,
+      expiryDate: formValue.expiryDate,
+      status: 'published',
+      isPublished: true,
+      publishDate: new Date()
     };
 
-    this.announcementService.createAnnouncement(payload)
-      .pipe(take(1))
+    this.save(payload);
+  }
+
+  saveDraft() {
+    if (this.fb.invalid) return;
+
+    const formValue = this.fb.value;
+    const payload = {
+      societyId: formValue.society?.value,
+      title: formValue.title,
+      content: formValue.content,
+      priority: formValue.priority,
+      category: formValue.category,
+      expiryDate: formValue.expiryDate,
+      status: 'draft',
+      isPublished: false,
+    };
+
+    this.save(payload);
+  }
+
+  save(payload: any) {
+    (
+      this.announcementId
+        ? this.announcementService.updateAnnouncement(this.announcementId, payload)
+        : this.announcementService.createAnnouncement(payload)
+    ).pipe(take(1))
       .subscribe({
         next: response => {
           if (!response.success) return;
