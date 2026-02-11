@@ -1,33 +1,42 @@
 <app-layout [hideMoreActions]="true">
 
-    <ui-form-layout>
+    <form [formGroup]="fb">
+        <ui-form-layout>
 
-        <!-- <ui-select2 [formControl]="flatControl" [config]="flatSearchConfig" [options]="flatOptions"
-            placeholder="Search Flat" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-        </ui-select2>
+            <ui-select2 formControlName="society" [config]="societySearchConfig" [options]="societyOptions"
+                placeholder="Search Society" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+            </ui-select2>
 
-        <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <ui-text-box formControlName="title" [config]="titleConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="4">
+            </ui-text-box>
 
-            <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" direction="horizontal"
-                [options]="radioOptions" [smColumns]="12" [mdColumns]="12" [lgColumns]="10">
+            <ui-text-box formControlName="content" [config]="contentConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="4">
+            </ui-text-box>
+
+            <ui-date formControlName="expiryDate" [config]="expiryDateConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="4">
+            </ui-date>
+            <div class="no-mobile no-tablet" [lgColumns]="8"></div>
+
+            <ui-radio-list formControlName="priority" [config]="priorityConfig" direction="horizontal"
+                [options]="priorityConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="12">
             </ui-radio-list>
 
-            <ui-contact-search [formControl]="contactSearchFormControl" *ngIf="showContactSearch" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
-            </ui-contact-search>
-            <ui-user-search [formControl]="userSearchFormControl" *ngIf="showUserSearch" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
-            </ui-user-search>
+            <ui-radio-list formControlName="category" [config]="categoryConfig" direction="horizontal"
+                [options]="categoryConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="12">
+            </ui-radio-list>
 
-        </ui-form-layout> -->
+            <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
+                <ui-button type="only-content" label="Cancel" (clicked)="cancel()">
+                </ui-button>
+                <ui-button [isSubmit]="true" label="Save" [disable]="fb.invalid" (clicked)="save()">
+                </ui-button>
+            </section>
 
-        <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
-            <!-- <ui-button type="only-content" label="Cancel" (clicked)="cancel()">
-            </ui-button>
-            <ui-button [isSubmit]="true" label="Save" [disable]="flatControl.invalid || !selectedUser" (clicked)="save()">
-            </ui-button> -->
-        </section>
+        </ui-form-layout>
 
-    </ui-form-layout>
+    </form>
 
 </app-layout>

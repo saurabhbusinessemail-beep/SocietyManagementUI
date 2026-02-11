@@ -1,0 +1,105 @@
+<div class="announcement-card" [class.pinned]="announcement.isPinned" [class.expired]="isExpired"
+    [class.draft]="announcement.status === 'draft'" [class.archived]="announcement.status === 'archived'">
+
+    <!-- Header -->
+    <div class="card-header">
+        <div class="title-section">
+            <div class="title-wrapper">
+                <app-icon name="pin" class="pin-icon" size="md" *ngIf="announcement.isPinned"></app-icon>
+                <h3 (click)="onViewClick()" class="clickable">{{ announcement.title }}</h3>
+            </div>
+            <div class="badge-container">
+                <span class="priority-badge" [ngClass]="priorityClass">
+                    {{ announcement.priority | titlecase }}
+                    <span class="urgent-indicator" *ngIf="announcement.priority === 'urgent'">!</span>
+                </span>
+                <span class="category-badge" [ngClass]="categoryClass">
+                    {{ announcement.category | titlecase }}
+                </span>
+                <span class="status-chip" [ngClass]="statusClass">
+                    {{ announcement.status | titlecase }}
+                </span>
+            </div>
+        </div>
+
+        <div class="meta-info" *ngIf="announcement.publishDate">
+            <span class="date">
+                <app-icon name="publish" size="md"></app-icon>
+                {{ announcement.publishDate | date:'mediumDate' }}
+            </span>
+            <span class="expiry-date" *ngIf="announcement.expiryDate && !isExpired">
+                <app-icon name="expire" size="md"></app-icon>
+                Expires: {{ announcement.expiryDate | date:'mediumDate' }}
+            </span>
+            <span class="views-count" *ngIf="announcement.viewCount > 0">
+                <app-icon name="abacus" size="md"></app-icon>
+                {{ announcement.viewCount }}
+            </span>
+            <span class="comments-count" *ngIf="announcement.commentsEnabled">
+                <app-icon name="comment" size="md"></app-icon>
+                {{ announcement.commentCount || 0 }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body" (click)="onViewClick()">
+        <p class="announcement-content">{{ getExcerpt(announcement.content) }}</p>
+
+        <!-- Tags -->
+        <div class="tags-container" *ngIf="announcement.tags?.length">
+            <span class="tag" *ngFor="let tag of announcement.tags.slice(0, 3)">
+                #{{ tag }}
+            </span>
+            <span class="tag more" *ngIf="announcement.tags.length > 3">
+                +{{ announcement.tags.length - 3 }}
+            </span>
+        </div>
+
+        <!-- Attachments preview -->
+        <div class="attachments-preview" *ngIf="announcement.attachments?.length">
+            <app-icon name="attach_file" size="md"></app-icon>
+            <span>{{ announcement.attachments.length }} attachment(s)</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+        <div class="author-info">
+            <span class="label">Posted by</span>
+            <span class="author">{{ createdByUser?.name || 'Unknown' }}</span>
+            <span class="created-date">{{ announcement.createdOn | date:'shortDate' }}</span>
+            <span class="society" *ngIf="society && !isAdminView">
+                • {{ society.societyName }}
+            </span>
+        </div>
+
+        <div class="action-buttons">
+            <!-- Pin/Unpin Button - Admin/Manager only -->
+            <ui-button [label]="announcement.isPinned ? 'Unpin' : 'Pin'" type="only-content" (clicked)="onPinClick()"
+                *ngIf="isAdminView && announcement.status === 'published'">
+            </ui-button>
+
+            <!-- Edit Button - Show for draft or admin/manager -->
+            <ui-button label="Edit" type="only-content" (clicked)="onEditClick()"
+                *ngIf="isAdminView && announcement.status === 'draft'">
+            </ui-button>
+
+            <!-- Delete Button -->
+            <app-icon name="delete" size="md" class="error-icon" (click)="onDeleteClick()" *ngIf="isAdminView">
+            </app-icon>
+        </div>
+    </div>
+
+    <!-- Expiry indicator -->
+    <div class="expiry-badge" *ngIf="announcement.expiryDate && isExpired">
+        <app-icon name="expire" size="md"></app-icon>
+        Expired {{ announcement.expiryDate | date:'mediumDate' }}
+    </div>
+
+    <!-- Draft indicator -->
+    <div class="draft-badge" *ngIf="announcement.status === 'draft'">
+        <app-icon name="edit" size="md"></app-icon>
+        Draft
+    </div>
+</div>

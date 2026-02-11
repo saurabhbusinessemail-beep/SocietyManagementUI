@@ -7,6 +7,7 @@ import { ResidingTypeList, ResidingTypes } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { NewUserService } from '../../../services/new-user.service';
 import { MenuService } from '../../../services/menu.service';
+import { SocietyRoles } from '../../../types';
 
 @Component({
   selector: 'app-user',
@@ -18,17 +19,17 @@ export class UserComponent implements OnInit, OnDestroy {
   role: string = '';
   roles: { role: string; label: string; icon: string }[] = [
     {
-      role: 'owner',
+      role: SocietyRoles.owner,
       label: 'Flat Owner',
       icon: 'home'
     },
     {
-      role: 'tenant',
+      role: SocietyRoles.tenant,
       label: 'Tenant',
       icon: 'tenant'
     },
     {
-      role: 'security',
+      role: SocietyRoles.security,
       label: 'Security',
       icon: 'security'
     }
@@ -154,15 +155,15 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   get isTenant(): boolean {
-    return this.role === 'tenant'
+    return this.role === SocietyRoles.tenant
   }
 
   get isSecurity(): boolean {
-    return this.role === 'security'
+    return this.role === SocietyRoles.security
   }
 
   get isOwner(): boolean {
-    return this.role === 'owner'
+    return this.role === SocietyRoles.owner
   }
 
   get residingTypeOptions(): IUIDropdownOption[] {
@@ -324,9 +325,9 @@ export class UserComponent implements OnInit, OnDestroy {
 
   save() {
     switch (this.role) {
-      case 'owner': this.saveOwner(); break;
-      case 'tenant': this.saveTenant(); break;
-      case 'security': this.saveSecurity(); break;
+      case SocietyRoles.owner: this.saveOwner(); break;
+      case SocietyRoles.tenant: this.saveTenant(); break;
+      case SocietyRoles.security: this.saveSecurity(); break;
     }
   }
 

@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
 import { ISociety } from '../../../interfaces';
-import { PERMISSIONS } from '../../../constants';
+import { PERMISSIONS, ownerMemberTenanRoles } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
+import { SocietyRoles } from '../../../types';
 
 @Component({
   selector: 'app-society-list',
@@ -48,8 +49,8 @@ export class SocietyListComponent implements OnInit, OnDestroy {
     const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles
     if (!societyRoles) return;
 
-    const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === 'manager');
-    const hasNonManagerialRole = societyRoles.some(sr => sr.name === 'owner' || sr.name === 'member' || sr.name === 'tenant');
+    const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === SocietyRoles.manager);
+    const hasNonManagerialRole = societyRoles.some(sr => ownerMemberTenanRoles.includes(sr.name));
 
     if (hasManagerialRole) {
       this.router.navigate(['/society', society._id, 'details']);

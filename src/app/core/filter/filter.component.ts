@@ -7,6 +7,8 @@ import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { WindowService } from '../../services/window.service';
 import { DatePipe } from '@angular/common';
+import { adminManagerRoles, ownerMemberTenanRoles } from '../../constants';
+import { SocietyRoles } from '../../types';
 
 type DropDownControl = IUIDropdownOption | undefined | null;
 type DateControl = Date | undefined | null | string;
@@ -21,6 +23,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() societyControlSizes: number[] = [12, 5, 5];
   @Input() flatControlSizes: number[] = [12, 5, 5];
   @Input() loadFirstSociety = false;
+  @Input() filterByRoles: string[] = [];
+  @Input() hideFlatSearch: boolean = false;
   @Input() dropDownControlConfigs: IUIControlConfig<DropDownControl>[] = [];
   @Input() dateControlConfigs: IUIControlConfig<DateControl>[] = [];
   @Output() isFlatMemberChanged = new EventEmitter<boolean>();
@@ -49,6 +53,10 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   filterFormGroup?: FormGroup;
 
+  get showFlatSearch(): boolean {
+    return !this.hideFlatSearch && (this.windowService.mode.value !== 'mobile' || this.isFilterOpen)
+  }
+
   get allDropDownConfig() {
     return [this.societiesSearchConfig, this.flatSearchConfig, ...this.dropDownControlConfigs]
   }
@@ -70,7 +78,12 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     // Initialize Form Controls
-    const formControls = [this.societiesSearchConfig, this.flatSearchConfig, ...this.dropDownControlConfigs, ...this.dateControlConfigs].reduce((acc, ctrl) => {
+    let formConfigs: (IUIControlConfig<DropDownControl> | IUIControlConfig<DateControl>)[] = [this.societiesSearchConfig];
+    if (!this.hideFlatSearch) formConfigs.push(this.flatSearchConfig);
+    formConfigs = formConfigs.concat(this.dropDownControlConfigs);
+    formConfigs = formConfigs.concat(this.dateControlConfigs);
+
+    const formControls = formConfigs.reduce((acc, ctrl) => {
       if (ctrl.formControl) acc[ctrl.id] = ctrl.formControl
 
       return acc;
@@ -123,7 +136,13 @@ export class FilterComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: response => {
-          const socities = response.data;
+          let socities = response.data;
+          if (this.filterByRoles.length > 0) {
+            const managerSocities = new Set<string>(myProfile.socities
+              .filter(s => s.societyRoles.some(sr => this.filterByRoles.includes(sr.name)))
+              .map(s => s.societyId));
+            socities = socities.filter(s => managerSocities.has(s._id));
+          }
           this.societiesSearchConfig.dropDownOptions = socities.map(s => ({
             label: s.societyName,
             value: s._id
@@ -143,7 +162,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     const isFlatMember = myProfile.socities
       .filter(s => !societyId || s.societyId === societyId)
-      .some(s => s?.societyRoles?.some(sr => ['owner', 'member', 'tenant'].includes(sr.name)))
+      .some(s => s?.societyRoles?.some(sr => ownerMemberTenanRoles.includes(sr.name)))
       ?? false;
     this.isFlatMemberChanged.emit(isFlatMember);
   }
@@ -204,8 +223,8 @@ export class FilterComponent implements OnInit, OnDestroy {
         if (this.myProfile) this.amIAMember(this.myProfile);
 
         if (selectedSociety) {
-          const isManager = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => ['manager', 'societyadmin'].includes(sr.name));
-          const isFlatMember = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => ['owner', 'member', 'tenant'].includes(sr.name));
+          const isManager = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => adminManagerRoles.includes(sr.name));
+          const isFlatMember = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => ownerMemberTenanRoles.includes(sr.name));
 
           // If I am society manager or admin then load all flats from society
           if (isAdmin || isManager) this.loadSocietyFlats(selectedSociety.value)
@@ -222,8 +241,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   async loadDefaultFlats(myProfile: IMyProfile) {
     const isAdmin = myProfile.user.role === 'admin';
 
-    const managerOfSocities = myProfile.socities.filter(s => s.societyRoles.some(sr => ['manager', 'societyadmin'].includes(sr.name)));
-    const isFlatMember = myProfile.socities.some(s => s.societyRoles.some(sr => ['owner', 'member', 'tenant'].includes(sr.name)));
+    const managerOfSocities = myProfile.socities.filter(s => s.societyRoles.some(sr => adminManagerRoles.includes(sr.name)));
+    const isFlatMember = myProfile.socities.some(s => s.societyRoles.some(sr => ownerMemberTenanRoles.includes(sr.name)));
 
     // If I am admin then clear all flats and complaints list
     if (isAdmin) {

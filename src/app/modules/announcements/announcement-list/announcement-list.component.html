@@ -1,21 +1,44 @@
-<app-layout>
+<app-layout [hideMoreActions]="hideMoreAction">
     <ng-container moreActions>
-        <ui-button label="New Member" type="primary" routerLink="../add">
+        <ui-button label="New Announcement" type="primary" routerLink="../add">
         </ui-button>
     </ng-container>
 
     <div class="flex-col full-h">
-        <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadAnnouncements($event)">
+
+        <app-filter [dropDownControlConfigs]="[categoryConfig, priorityConfig, statusConfig, isPinnedConfig]"
+            [loadFirstSociety]="true" [hideFlatSearch]="true" [societyControlSizes]="[12,6,3]" [smColumns]="12"
+            [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadAnnouncements($event)">
+
+            <ui-select2 [formControl]="categoryControl" [config]="categoryConfig"
+                [options]="categoryConfig.dropDownOptions ?? []" placeholder="Select Category" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="3">
+            </ui-select2>
+
+            <ui-select2 [formControl]="priorityControl" [config]="priorityConfig"
+                [options]="priorityConfig.dropDownOptions ?? []" placeholder="Select Prority" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="3">
+            </ui-select2>
+
+            <ui-select2 [formControl]="statusControl" [config]="statusConfig"
+                [options]="statusConfig.dropDownOptions ?? []" placeholder="Select Prority" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="3">
+            </ui-select2>
+
+            <ui-select2 [formControl]="isPinnedControl" [config]="isPinnedConfig"
+                [options]="isPinnedConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+            </ui-select2>
+
         </app-filter>
 
-        <!-- <ui-form-layout class="flex-auto">
+        <ui-form-layout class="flex-auto">
 
-            <ng-container *ngFor="let member of members">
-                <ui-flat-member-card [member]="member" (deleteMember)="deleteMember(member)" viewerRole="admin"
-                    [showDelete]="allowDelete(member)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-                </ui-flat-member-card>
+            <ng-container *ngFor="let announcement of announcements">
+                <ui-announcement-card [announcement]="announcement" [viewerRole]="societyRole ?? 'admin'"
+                    [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                </ui-announcement-card>
             </ng-container>
 
-        </ui-form-layout> -->
+        </ui-form-layout>
     </div>
 </app-layout>

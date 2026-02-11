@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IFlatMember } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
+import { SocietyRoles } from '../../../types';
 
 interface IMemberFilter {
   societyId?: string, flatId?: string
@@ -13,6 +14,7 @@ interface IMemberFilter {
   styleUrl: './members-list.component.scss'
 })
 export class MembersListComponent implements OnInit {
+
   selectedFIlter: IMemberFilter = {};
   members: IFlatMember[] = [];
 

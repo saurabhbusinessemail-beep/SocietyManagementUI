@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '
 import { IFlat, IFlatMember, ISociety, IUIControlConfig, IUser } from '../../../interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SocietyRoles } from '../../../types';
 
 @Component({
   selector: 'ui-flat-member-card',
@@ -11,7 +12,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class FlatMemberCardComponent {
 
   @Input() member!: IFlatMember;
-  @Input() viewerRole: 'admin' | 'manager' | 'owner' | 'tenant' | 'member' = 'owner';
+  @Input() viewerRole: 'admin' | SocietyRoles.manager | SocietyRoles.owner | SocietyRoles.tenant | SocietyRoles.member = SocietyRoles.owner;
   @Input() showDelete = false;
   @Output() deleteMember = new EventEmitter<IFlatMember>();
   @Output() moveOutMember = new EventEmitter<Date>();
@@ -29,11 +30,11 @@ export class FlatMemberCardComponent {
   }
 
   get isAdminView(): boolean {
-    return this.viewerRole === 'owner';
+    return this.viewerRole === SocietyRoles.owner;
   }
 
   get isTenant(): boolean {
-    return this.member.residingType === 'Tenant';
+    return this.member.residingType as string === SocietyRoles.tenant;
   }
 
   get statusClass(): string {

@@ -1,3 +1,4 @@
+import { AnnouncementCategoryType, AnnouncementPriorityType, AnnouncementStatusType } from "../types";
 import { IDefaultFields } from "./default-fields.interface";
 import { ISociety } from "./society.interface";
 import { IUser } from "./user.interface";
@@ -19,8 +20,8 @@ export interface IAnnouncement extends IDefaultFields {
     _id: string;
     title: string;
     content: string;
-    priority: 'low' | 'medium' | 'high' | 'urgent';
-    category: 'general' | 'maintenance' | 'event' | 'security' | 'billing' | 'other';
+    priority: AnnouncementPriorityType;
+    category: AnnouncementCategoryType;
     societyId: string | ISociety;
     attachments: IAttachment[];
     isPublished: boolean;
@@ -30,18 +31,17 @@ export interface IAnnouncement extends IDefaultFields {
     viewCount: number;
     isPinned: boolean;
     tags: string[];
-    status: 'draft' | 'published' | 'archived';
+    status: AnnouncementStatusType;
     commentsEnabled: boolean;
     commentCount: number;
     comments?: Comment[];
-    createdAt?: Date;
-    updatedAt?: Date;
 }
 
 export interface IAnnouncementFilters {
-    category?: string;
-    priority?: string;
-    status?: string;
+    societyId: string;
+    category?: AnnouncementCategoryType;
+    priority?: AnnouncementPriorityType;
+    status?: AnnouncementStatusType;
     isPublished?: boolean;
     isPinned?: boolean;
 }

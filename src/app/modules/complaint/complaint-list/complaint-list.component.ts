@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subject, take } from 'rxjs';
 import { ComplaintService } from '../../../services/complaint.service';
+import { adminManagerRoles } from '../../../constants';
 
 interface IComplaintFilter {
   societyId?: string, flatId?: string, complaintType?: string
@@ -84,7 +85,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
     return this.myProfile.socities
       .find(s => s.societyId === societyId)
-      ?.societyRoles?.some(sr => ['manager', 'societyadmin'].includes(sr.name))
+      ?.societyRoles?.some(sr => adminManagerRoles.includes(sr.name))
       ?? false;
   }
 
