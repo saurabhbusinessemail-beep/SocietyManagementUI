@@ -1,0 +1,44 @@
+<div class="json-node">
+
+    <!-- Primitive -->
+    <span *ngIf="!isObject(data)" class="json-value">
+        {{ data }}
+    </span>
+
+    <!-- Object -->
+    <div *ngIf="isObject(data) && !isArray(data)">
+
+        <div class="json-header" (click)="toggle()">
+            <span class="toggle">{{ expanded ? '▼' : '▶' }}</span>
+            {{ '{' }} ({{ keys(data).length }} keys) {{ '}' }}
+        </div>
+
+        <div *ngIf="expanded" class="json-children">
+            <div *ngFor="let key of keys(data)" class="json-row">
+                <span class="json-key">"{{ key }}"</span>:
+                <app-json-viewer [data]="data[key]" [level]="level + 1">
+                </app-json-viewer>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Array -->
+    <div *ngIf="isArray(data)">
+
+        <div class="json-header" (click)="toggle()">
+            <span class="toggle">{{ expanded ? '▼' : '▶' }}</span>
+            {{ '[' }} ({{ data.length }} items) {{ ']' }}
+        </div>
+
+        <div *ngIf="expanded" class="json-children">
+            <div *ngFor="let item of data; let i = index" class="json-row">
+                <span class="json-index">{{ i }}</span>:
+                <app-json-viewer [data]="item" [level]="level + 1">
+                </app-json-viewer>
+            </div>
+        </div>
+
+    </div>
+
+</div>

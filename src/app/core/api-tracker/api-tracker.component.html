@@ -1,0 +1,82 @@
+<div class="tracker-wrapper">
+
+    <div class="tracker-header">
+        <h2>API Tracker</h2>
+        <button (click)="clear()">Clear</button>
+        <button (click)="close()">Close</button>
+    </div>
+
+    <div class="api-card" *ngFor="let call of apiCalls$ | async; trackBy: trackById" [ngClass]="{
+        'opened':  expandedCallId === call.id
+    }">
+
+        <!-- Summary -->
+        <div class="api-summary" (click)="toggle(call.id)">
+
+            <span class="method" [ngClass]="call.method">
+                {{ call.method }}
+            </span>
+
+            <span class="url">
+                {{ call.url }}
+            </span>
+
+            <span class="status" [ngClass]="{ error: call.status >= 400 }">
+                {{ call.status }}
+            </span>
+
+            <span class="duration">
+                {{ call.duration | number:'1.0-0' }} ms
+            </span>
+
+            <span class="expand">
+                {{ expandedCallId === call.id ? '−' : '+' }}
+            </span>
+
+        </div>
+
+        <!-- Details -->
+        <div class="api-details" *ngIf="expandedCallId === call.id">
+
+            <div class="tabs">
+                <button [class.active]="getTab(call.id) === 'headers'"
+                    (click)="setTab(call.id, 'headers'); $event.stopPropagation()">
+                    Headers
+                </button>
+
+                <button [class.active]="getTab(call.id) === 'payload'"
+                    (click)="setTab(call.id, 'payload'); $event.stopPropagation()">
+                    Payload
+                </button>
+
+                <button [class.active]="getTab(call.id) === 'response'"
+                    (click)="setTab(call.id, 'response'); $event.stopPropagation()">
+                    Response
+                </button>
+
+                <button *ngIf="call.error" [class.active]="getTab(call.id) === 'error'"
+                    (click)="setTab(call.id, 'error'); $event.stopPropagation()">
+                    Error
+                </button>
+            </div>
+
+            <div class="json-container">
+
+                <app-json-viewer *ngIf="getTab(call.id) === 'headers'" [data]="call.headers">
+                </app-json-viewer>
+
+                <app-json-viewer *ngIf="getTab(call.id) === 'payload'" [data]="call.requestPayload">
+                </app-json-viewer>
+
+                <app-json-viewer *ngIf="getTab(call.id) === 'response'" [data]="call.responseBody">
+                </app-json-viewer>
+
+                <app-json-viewer *ngIf="getTab(call.id) === 'error'" [data]="call.error">
+                </app-json-viewer>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

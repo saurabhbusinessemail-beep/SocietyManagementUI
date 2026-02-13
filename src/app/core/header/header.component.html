@@ -26,6 +26,7 @@
     </div>
 
     <div class="right">
+        <button (click)="showApiCalls()" *ngIf="showDevButtons">APIs</button>
         <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
         <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
         <ui-user-icon></ui-user-icon>

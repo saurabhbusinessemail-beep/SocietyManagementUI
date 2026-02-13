@@ -1,0 +1,186 @@
+.tracker-wrapper {
+    padding: 16px;
+    font-family: monospace;
+    background: #f5f7fa;
+}
+
+.tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.clear-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #ff5252;
+    color: white;
+}
+
+.api-card {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: solid 1px;
+
+    &.opened {
+        background-color: #d1ffff;
+    }
+}
+
+/* =============================
+     SUMMARY ROW
+  ============================= */
+
+.api-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.method {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    min-width: 60px;
+    text-align: center;
+}
+
+.method.GET {
+    background: #2196f3;
+}
+.method.POST {
+    background: #4caf50;
+}
+.method.PUT {
+    background: #ff9800;
+}
+.method.DELETE {
+    background: #f44336;
+}
+.method.PATCH {
+    background: #9c27b0;
+}
+
+.url {
+    flex: 1;
+    word-break: break-all;
+    font-size: 13px;
+}
+
+.status {
+    font-weight: bold;
+    min-width: 50px;
+    text-align: center;
+}
+
+.status.error {
+    color: #f44336;
+}
+
+.duration {
+    font-size: 12px;
+    color: #666;
+    min-width: 70px;
+    text-align: right;
+}
+
+.expand-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* =============================
+     DETAILS
+  ============================= */
+
+.api-details {
+    padding: 12px;
+    background: #fafafa;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.tabs button {
+    padding: 6px 10px;
+    border: none;
+    background: #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tabs button.active {
+    background: #1976d2;
+    color: white;
+}
+
+.tab-content pre {
+    background: #1e1e1e;
+    color: #00ff90;
+    padding: 12px;
+    border-radius: 6px;
+    overflow: auto;
+    max-height: 400px;
+    font-size: 12px;
+}
+
+/* =============================
+     TABLET
+  ============================= */
+
+@media(max-width: 1024px) {
+    .api-summary {
+        font-size: 13px;
+    }
+
+    .duration {
+        min-width: 60px;
+    }
+}
+
+/* =============================
+     MOBILE
+  ============================= */
+
+@media(max-width: 768px) {
+
+    .api-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .url {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .status,
+    .duration {
+        text-align: left;
+    }
+
+    .expand-icon {
+        align-self: flex-end;
+    }
+
+    .api-details {
+        font-size: 12px;
+    }
+}

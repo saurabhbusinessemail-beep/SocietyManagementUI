@@ -127,7 +127,7 @@ export class PushNotificationService {
                 setTimeout(() => {
                     this.gateEntryService.handleApprovalNotificationResponse(gateEntryId)
                 }, 100);
-            } else if (type === 'OTP' && gateEntryId) {
+            } else if (type === 'OTP') {
                 this.loginService.otpReceived.next(data.otp);
 
             } else if (notificationId) {
