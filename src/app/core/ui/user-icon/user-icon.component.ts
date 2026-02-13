@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { IMyProfile } from '../../../interfaces';
@@ -10,6 +10,7 @@ import { IMyProfile } from '../../../interfaces';
 })
 export class UserIconComponent implements OnInit {
 
+  @Input() hideMoreActions: boolean = false;
   open = false;
 
   get myProfile(): IMyProfile | undefined {

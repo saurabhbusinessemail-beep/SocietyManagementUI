@@ -32,7 +32,7 @@
         <button (click)="showApiCalls()" *ngIf="showDevButtons">APIs</button>
         <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
         <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
-        <ui-user-icon></ui-user-icon>
+        <ui-user-icon [hideMoreActions]="hideMoreActions"></ui-user-icon>
         <app-more-icon *ngIf="!hideMoreActions">
             <ng-content select="[moreActions]"></ng-content>
         </app-more-icon>

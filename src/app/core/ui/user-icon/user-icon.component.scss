@@ -10,7 +10,7 @@
         cursor: pointer;
         padding: $sp-sm;
         border-radius: 50%;
-        transition: all 0.2s ease;
+        transition: transform 0.3s ease-in-out;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -22,6 +22,10 @@
         &:focus {
             outline: 2px solid $color-dark-blue;
             outline-offset: 2px;
+        }
+
+        &.shrink {
+            transform: scale(0.7);
         }
 
         app-icon {
@@ -68,9 +72,8 @@
 
             app-icon {
                 color: $color-dark-blue;
-                font-size: 24px;
             }
-        }
+        };
 
         .user-info {
             flex: 1;
