@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, take, tap } from 'rxjs';
+import { Observable, Subject, of, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from './menu.service';
@@ -12,6 +12,7 @@ import { IBEResponseFormat, IMenu, IMyProfile, IMyProfileResponse, IOTPVerificat
 export class LoginService {
 
     private baseUrl = `${environment.apiBaseUrl}/auth`;
+    public otpReceived = new Subject<string>();
 
     constructor(
         private http: HttpClient,
@@ -25,8 +26,8 @@ export class LoginService {
     // --------------------------------------------------------
     // STEP 1: SEND OTP
     // --------------------------------------------------------
-    sendOTP(phoneNumber: string): Observable<IBEResponseFormat> {
-        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/request-otp`, { phoneNumber });
+    sendOTP(phoneNumber: string, fcmToken?: string): Observable<IBEResponseFormat> {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/request-otp`, { phoneNumber, fcmToken });
     }
 
     // --------------------------------------------------------

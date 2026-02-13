@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { FcmTokenService } from '../../../services/fcm-token.service';
 import { UserService } from '../../../core/ui/user-search/user.service';
@@ -10,12 +10,13 @@ import { UserService } from '../../../core/ui/user-search/user.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
   loginForm: FormGroup;
   otpForm: FormGroup;
   step: 'login' | 'otp' = 'login';
   isLoading = false;
   isVerifying = false;
+  isComponentActive = new Subject<void>();
 
 
   countDownTimer = 300;
@@ -42,13 +43,27 @@ export class LoginComponent {
     });
   }
 
+  subscribeToOTPNotification() {
+    this.loginService.otpReceived
+    .pipe(takeUntil(this.isComponentActive))
+    .subscribe({
+      next: otp => {
+        if (!otp || otp.length === 0) return;
+
+        this.otpForm.get('otp')?.setValue(otp);
+        this.verifyOtp();
+      }
+    });
+  }
+
 
   sendOtp() {
     if (this.loginForm.invalid) return;
 
 
     this.isLoading = true;
-    this.loginService.sendOTP(this.loginForm.value.phone)
+    const fcmToken = this.fcmTokenService.fcmToken;
+    this.loginService.sendOTP(this.loginForm.value.phone, fcmToken)
       .pipe(take(1))
       .subscribe({
         next: () => {
@@ -147,6 +162,12 @@ export class LoginComponent {
     this.otpError = false;
     this.isLoading = false;
     this.isVerifying = false;
+    this.otpForm.get('otp')?.setValue('');
     clearInterval(this.countdownInterval);
+  }
+
+  ngOnDestroy(): void {
+    this.isComponentActive.next();
+    this.isComponentActive.complete();
   }
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@angular/cdk/platform';
 import { App } from '@capacitor/app';
 import { GateEntryService } from './gate-entry.service';
+import { LoginService } from './login.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,8 @@ export class PushNotificationService {
         private ngZone: NgZone,
         private platform: Platform,
         private appRef: ApplicationRef,
-        private gateEntryService: GateEntryService
+        private gateEntryService: GateEntryService,
+        private loginService: LoginService
     ) {
         // Check for launch notification when app starts
         this.checkLaunchNotification();
@@ -125,6 +127,9 @@ export class PushNotificationService {
                 setTimeout(() => {
                     this.gateEntryService.handleApprovalNotificationResponse(gateEntryId)
                 }, 100);
+            } else if (type === 'OTP' && gateEntryId) {
+                this.loginService.otpReceived.next(data.otp);
+
             } else if (notificationId) {
                 this.router.navigate(['/notifications', notificationId]);
             } else {
