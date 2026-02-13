@@ -2,26 +2,13 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-.user-management {
-  padding: $sp-lg;
-  
-  @include mobile {
-    padding: $sp;
-  }
-}
 
 // Page Header
-.page-header {
+.user-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
-  margin-bottom: $sp-lg;
-  
-  h1 {
-    @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
-    color: $color-dark-blue;
-    margin: 0;
-  }
+  margin-bottom: $sp;
 }
 
 // Filters Section

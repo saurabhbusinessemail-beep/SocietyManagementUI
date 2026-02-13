@@ -2,7 +2,7 @@
 <app-layout>
     <div class="user-management">
         <!-- Header -->
-        <div class="page-header">
+        <div class="user-header">
             <ui-button label="Add User" (clicked)="openAddModal()"></ui-button>
         </div>
 
@@ -101,7 +101,7 @@
         <div class="mobile-view" *ngIf="!isLoading">
             <div class="user-cards">
                 <div class="user-card" *ngFor="let user of filteredUsers">
-                    <div class="card-header">
+                    <div class="card-header" (click)="toggleExpand(user._id)">
                         <div class="user-info">
                             <h3 class="user-name">{{ user.name || 'N/A' }}</h3>
                             <div class="user-contact">
@@ -117,9 +117,13 @@
                                 {{ user.status }}
                             </span>
                         </div>
+                        <div class="expand-icon">
+                            <span class="chevron" [class.rotated]="isExpanded(user._id)">▼</span>
+                        </div>
                     </div>
-                    
-                    <div class="card-actions">
+
+                    <!-- Collapsible Actions Section -->
+                    <div class="card-actions" *ngIf="isExpanded(user._id)" [@slideToggle]>
                         <button class="action-btn view" (click)="openViewModal(user)">
                             <span class="btn-icon">👁️</span>
                             <span class="btn-label">View</span>
@@ -150,7 +154,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="no-data" *ngIf="filteredUsers.length === 0">
                     No users found
                 </div>

@@ -51,6 +51,9 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     blocked: '$status-rejected'
   };
 
+  // Add this property in your component class
+  expandedUserIds: Set<string> = new Set<string>();
+
   constructor(
     private userService: UserService,
     private fb: FormBuilder
@@ -269,5 +272,28 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   getTotalPages(): number {
     return Math.ceil(this.totalUsers / this.pageSize);
+  }
+
+  // Toggle expanded state for a specific user
+  toggleExpand(userId: string, event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation(); // Prevent event bubbling
+    }
+
+    if (this.expandedUserIds.has(userId)) {
+      this.expandedUserIds.delete(userId);
+    } else {
+      this.expandedUserIds.add(userId);
+    }
+  }
+
+  // Check if a user is expanded
+  isExpanded(userId: string): boolean {
+    return this.expandedUserIds.has(userId);
+  }
+
+  // Optional: Close all expanded cards
+  closeAllExpanded(): void {
+    this.expandedUserIds.clear();
   }
 }
