@@ -3,5 +3,6 @@ export interface IUser {
     name?: string;
     email: string;
     phoneNumber: string;
-    role: 'admin' | 'user'
+    role: 'admin' | 'user',
+    status: 'active' | 'inactive' | 'pending' | 'blocked';
 }

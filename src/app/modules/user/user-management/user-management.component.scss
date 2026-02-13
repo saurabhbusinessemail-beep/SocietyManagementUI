@@ -1,0 +1,809 @@
+// user-management.component.scss
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.user-management {
+  padding: $sp-lg;
+  
+  @include mobile {
+    padding: $sp;
+  }
+}
+
+// Page Header
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $sp-lg;
+  
+  h1 {
+    @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+    color: $color-dark-blue;
+    margin: 0;
+  }
+}
+
+// Filters Section
+.filters-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $sp-lg;
+  gap: $sp;
+  
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $sp-sm;
+  }
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+  
+  @include mobile {
+    max-width: 100%;
+  }
+}
+
+.search-input {
+  width: 100%;
+  padding: $input-padding-desktop;
+  border: 1px solid $color-border;
+  border-radius: $input-border-radius;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  
+  &:focus {
+    outline: none;
+    border-color: $color-dark-blue;
+  }
+  
+  @include mobile {
+    padding: $input-padding-mobile;
+  }
+}
+
+.filter-group {
+  display: flex;
+  gap: $sp;
+  
+  @include mobile {
+    width: 100%;
+    gap: $sp-sm;
+  }
+}
+
+.filter-select {
+  padding: $input-padding-desktop;
+  border: 1px solid $color-border;
+  border-radius: $input-border-radius;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  background-color: $color-white;
+  min-width: 120px;
+  
+  &:focus {
+    outline: none;
+    border-color: $color-dark-blue;
+  }
+  
+  @include mobile {
+    flex: 1;
+    padding: $input-padding-mobile;
+    min-width: unset;
+  }
+}
+
+// Desktop Table View
+.desktop-view {
+  display: none;
+  
+  @include desktop {
+    display: block;
+  }
+  
+  @include tablet {
+    display: block;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: $sp-lg;
+  border-radius: $btn-border-radius-md;
+  border: 1px solid $color-border;
+  background-color: $color-white;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: $font-family-base;
+  
+  th {
+    background-color: $color-header-footer;
+    color: $color-dark-blue;
+    font-weight: 600;
+    font-size: $font-size-sm;
+    text-align: left;
+    padding: $sp-md $sp;
+    border-bottom: 2px solid $color-border;
+    white-space: nowrap;
+  }
+  
+  td {
+    padding: $sp-md $sp;
+    border-bottom: 1px solid $color-border;
+    font-size: $font-size-sm;
+  }
+  
+  tbody tr {
+    background-color: $color-white;
+    
+    &:hover {
+      background-color: $color-light-gray;
+    }
+  }
+}
+
+// Mobile Card View
+.mobile-view {
+  display: none;
+  
+  @include mobile {
+    display: block;
+  }
+}
+
+.user-cards {
+  display: flex;
+  flex-direction: column;
+  gap: $sp;
+  margin-bottom: $sp-lg;
+}
+
+.user-card {
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $btn-border-radius-md;
+  padding: $sp;
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $sp;
+    padding-bottom: $sp;
+    border-bottom: 1px solid $color-border;
+  }
+  
+  .user-info {
+    flex: 1;
+    margin-right: $sp;
+  }
+  
+  .user-name {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $color-dark-blue;
+    margin: 0 0 $sp-xs 0;
+  }
+  
+  .user-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .contact-item {
+      font-size: $font-size-xs;
+      color: $color-note-gray;
+      word-break: break-word;
+    }
+  }
+  
+  .badges {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-xs;
+    min-width: 70px;
+  }
+  
+  .card-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $sp-xs;
+    position: relative;
+  }
+  
+  .action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $sp-sm $sp-xs;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-sm;
+    background-color: $color-white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: $font-size-xs;
+    
+    .btn-icon {
+      font-size: $font-size-base;
+      margin-bottom: 2px;
+    }
+    
+    .btn-label {
+      color: $color-note-gray;
+    }
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+    
+    &.view:hover {
+      background-color: $color-header-footer;
+      border-color: $color-dark-blue;
+      
+      .btn-label {
+        color: $color-dark-blue;
+      }
+    }
+    
+    &.edit:hover {
+      background-color: rgba($status-pending, 0.15);
+      border-color: $status-pending;
+      
+      .btn-label {
+        color: $status-pending;
+      }
+    }
+    
+    &.status:hover {
+      background-color: rgba($color-dark-blue, 0.15);
+      border-color: $color-dark-blue;
+      
+      .btn-label {
+        color: $color-dark-blue;
+      }
+    }
+    
+    &.delete:hover {
+      background-color: rgba($status-rejected, 0.15);
+      border-color: $status-rejected;
+      
+      .btn-label {
+        color: $status-rejected;
+      }
+    }
+  }
+}
+
+// Mobile Status Dropdown
+.mobile-status-dropdown {
+  position: relative;
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background-color: $color-white;
+    box-shadow: 0 -4px 12px rgba($color-black, 0.15);
+    border-radius: $btn-border-radius-sm;
+    border: 1px solid $color-border;
+    z-index: $z-user-dropdown;
+    margin-bottom: $sp-xs;
+    
+    a {
+      color: $color-black;
+      padding: $sp-sm;
+      text-decoration: none;
+      display: block;
+      font-size: $font-size-sm;
+      text-align: center;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: $color-light-gray;
+      }
+      
+      &:first-child {
+        border-radius: $btn-border-radius-sm $btn-border-radius-sm 0 0;
+      }
+      
+      &:last-child {
+        border-radius: 0 0 $btn-border-radius-sm $btn-border-radius-sm;
+      }
+    }
+  }
+  
+  &:hover .dropdown-content {
+    display: block;
+  }
+}
+
+// Desktop Status Dropdown (unchanged)
+.status-dropdown {
+  position: relative;
+  display: inline-block;
+  
+  @include mobile {
+    display: none; // Hide desktop dropdown on mobile
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: $color-white;
+    min-width: 120px;
+    box-shadow: 0 8px 16px rgba($color-black, 0.1);
+    border-radius: $btn-border-radius-sm;
+    border: 1px solid $color-border;
+    z-index: $z-user-dropdown;
+    
+    a {
+      color: $color-black;
+      padding: $sp-sm $sp;
+      text-decoration: none;
+      display: block;
+      font-size: $font-size-sm;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: $color-light-gray;
+      }
+    }
+  }
+  
+  &:hover .dropdown-content {
+    display: block;
+  }
+}
+
+// Status Badges
+.status-badge {
+  display: inline-block;
+  padding: $sp-xs $sp-sm;
+  border-radius: $btn-border-radius-sm;
+  font-size: $font-size-xs;
+  font-weight: 500;
+  text-transform: capitalize;
+  min-width: 65px;
+  text-align: center;
+  
+  @include mobile {
+    min-width: 50px;
+    padding: 2px $sp-xs;
+  }
+}
+
+.status-active {
+  background-color: rgba($status-active, 0.15);
+  color: $status-active;
+}
+
+.status-inactive {
+  background-color: rgba($status-inactive, 0.15);
+  color: $status-inactive;
+}
+
+.status-pending {
+  background-color: rgba($status-pending, 0.15);
+  color: $status-pending;
+}
+
+.status-rejected,
+.status-blocked {
+  background-color: rgba($status-rejected, 0.15);
+  color: $status-rejected;
+}
+
+// Role Badges
+.role-badge {
+  display: inline-block;
+  padding: $sp-xs $sp-sm;
+  border-radius: $btn-border-radius-sm;
+  font-size: $font-size-xs;
+  font-weight: 500;
+  background-color: $color-light-gray;
+  color: $color-note-gray;
+  min-width: 50px;
+  text-align: center;
+  
+  @include mobile {
+    min-width: 40px;
+    padding: 2px $sp-xs;
+  }
+}
+
+.role-admin {
+  background-color: $color-dark-blue;
+  color: $icon-on-dark;
+}
+
+// Desktop Action Buttons
+.actions {
+  display: flex;
+  gap: $sp-xs;
+  position: relative;
+  flex-wrap: wrap;
+  
+  @include mobile {
+    display: none; // Hide desktop actions on mobile
+  }
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: $btn-border-radius-sm;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-base;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  padding: 0;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+  
+  &.view:hover {
+    background-color: $color-header-footer;
+    color: $color-dark-blue;
+  }
+  
+  &.edit:hover {
+    background-color: rgba($status-pending, 0.15);
+    color: $status-pending;
+  }
+  
+  &.delete:hover {
+    background-color: rgba($status-rejected, 0.15);
+    color: $status-rejected;
+  }
+  
+  &.status:hover {
+    background-color: rgba($color-dark-blue, 0.15);
+    color: $color-dark-blue;
+  }
+}
+
+// Pagination
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $sp-md;
+  margin-top: $sp-lg;
+  
+  .page-btn {
+    padding: $sp-sm $sp-lg;
+    border: 1px solid $color-border;
+    background-color: $color-white;
+    border-radius: $btn-border-radius-sm;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    font-family: $font-family-base;
+    
+    &:hover:not(:disabled) {
+      background-color: $color-dark-blue;
+      color: $icon-on-dark;
+      border-color: $color-dark-blue;
+    }
+    
+    &:disabled {
+      background-color: $color-disable-background;
+      cursor: not-allowed;
+      opacity: 0.6;
+      border-color: $color-disable-background;
+    }
+    
+    @include mobile {
+      padding: $sp-sm $sp;
+    }
+  }
+  
+  .page-info {
+    font-size: $font-size-sm;
+    color: $color-note-gray;
+  }
+}
+
+// Buttons (for modals)
+.btn-primary {
+  background-color: $btn-bg-primary;
+  color: $btn-text-primary;
+  border: none;
+  padding: $sp-sm $sp-lg;
+  border-radius: $btn-border-radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: $font-family-base;
+  font-weight: 500;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($color-dark-blue, 10%);
+  }
+  
+  &:disabled {
+    background-color: $color-disable-background;
+    cursor: not-allowed;
+  }
+  
+  @include mobile {
+    padding: $sp-sm $sp;
+  }
+}
+
+.btn-cancel {
+  background-color: $btn-bg-cancel;
+  color: $btn-text-cancel;
+  border: none;
+  padding: $sp-sm $sp-lg;
+  border-radius: $btn-border-radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: $font-family-base;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: darken($color-cancel, 10%);
+  }
+  
+  @include mobile {
+    padding: $sp-sm $sp;
+  }
+}
+
+.btn-delete {
+  background-color: $btn-error;
+  color: $icon-on-dark;
+  border: none;
+  padding: $sp-sm $sp-lg;
+  border-radius: $btn-border-radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: $font-family-base;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: darken($color-error-header, 10%);
+  }
+  
+  @include mobile {
+    padding: $sp-sm $sp;
+  }
+}
+
+// Modal Styles
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color-black, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-menu-overlay;
+  
+  .modal-content {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-lg;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    
+    @include mobile {
+      width: 95%;
+      margin: $sp;
+    }
+    
+    &.delete-modal {
+      max-width: 400px;
+    }
+  }
+  
+  .modal-header {
+    padding: $sp-lg;
+    border-bottom: 1px solid $color-border;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    h2 {
+      margin: 0;
+      font-size: $font-size-lg;
+      color: $color-dark-blue;
+    }
+    
+    &.error h2 {
+      color: $btn-error;
+    }
+    
+    @include mobile {
+      padding: $sp;
+    }
+  }
+  
+  .modal-body {
+    padding: $sp-lg;
+    
+    @include mobile {
+      padding: $sp;
+    }
+    
+    &.view-details {
+      .detail-row {
+        display: flex;
+        padding: $sp-sm 0;
+        border-bottom: 1px solid $color-light-gray;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .label {
+          width: 100px;
+          font-weight: 600;
+          color: $color-note-gray;
+        }
+        
+        .value {
+          flex: 1;
+          word-break: break-word;
+        }
+        
+        @include mobile {
+          flex-direction: column;
+          gap: 2px;
+          
+          .label {
+            width: auto;
+          }
+        }
+      }
+    }
+  }
+  
+  .modal-footer {
+    padding: $sp-lg;
+    border-top: 1px solid $color-border;
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp;
+    
+    @include mobile {
+      padding: $sp;
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: $font-size-xl;
+    cursor: pointer;
+    color: $color-note-gray;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      color: $btn-error;
+    }
+  }
+}
+
+// Form Styles
+.form-group {
+  margin-bottom: $sp-md;
+  
+  label {
+    display: block;
+    margin-bottom: $sp-xs;
+    font-weight: 500;
+    font-size: $font-size-sm;
+    color: $color-note-gray;
+    
+    .mandatory {
+      color: $color-mandatory;
+    }
+  }
+  
+  input, select {
+    width: 100%;
+    padding: $input-padding-desktop;
+    border: 1px solid $color-border;
+    border-radius: $input-border-radius;
+    font-family: $font-family-base;
+    font-size: $font-size-sm;
+    
+    &:focus {
+      outline: none;
+      border-color: $color-dark-blue;
+    }
+    
+    @include mobile {
+      padding: $input-padding-mobile;
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $sp;
+  
+  @include mobile {
+    flex-direction: column;
+    gap: $sp-sm;
+  }
+  
+  .form-group {
+    flex: 1;
+  }
+}
+
+// Loading State
+.loading-state {
+  text-align: center;
+  padding: $sp-xl;
+  
+  .spinner {
+    border: 4px solid $color-light-gray;
+    border-top: 4px solid $color-dark-blue;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto $sp;
+  }
+  
+  p {
+    color: $color-note-gray;
+    font-size: $font-size-sm;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// No Data
+.no-data {
+  text-align: center;
+  padding: $sp-xl !important;
+  color: $color-note-gray;
+  font-size: $font-size-base;
+}
+
+// Warning Text
+.warning-text {
+  color: $btn-error;
+  font-size: $font-size-sm;
+  margin-top: $sp;
+}

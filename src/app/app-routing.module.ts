@@ -64,6 +64,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'user',
+    loadChildren: () => import('./modules/user/user.module').then(module => module.UserModule)
+  },
+  {
     path: 'unauthorized',
     loadChildren: () => import('./modules/unauthorized/unauthorized.module').then(module => module.UnauthorizedModule)
   },
