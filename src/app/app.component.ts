@@ -5,12 +5,12 @@ import { NavigationEnd, Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserNameInputPopupComponent } from './core/user-name-popup/user-name-input-popup.component';
-import { UserService } from './core/ui/user-search/user.service';
 import { FcmTokenService } from './services/fcm-token.service';
 import { ConsoleCaptureService } from './services/console-capture.service';
 import { PushNotificationService } from './services/push-notification.service';
 import { ColdStartService } from './services/cold-start.service';
 import { App } from '@capacitor/app';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -50,6 +50,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.menuService.userMenus//.pipe(take(1))
           .subscribe(res => {
             console.log('res = ', res)
+            this.checkAndAskForUserName();
+
+            // No sync with URL change for some URLs
+            const excludeURLs = ['/profile']
+            if (excludeURLs.includes(this.router.url)) return;
 
             if (this.firstRouteLoad && res.length > 0 && this.router.url === '/dashboard/user') {
               this.menuService.syncSelectedMenuWithCurrentUrl(true);
@@ -57,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
             }
             else
               this.menuService.syncSelectedMenuWithCurrentUrl();
-            this.checkAndAskForUserName();
           });
       })
 
@@ -103,7 +107,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.dialogRef = undefined;
             if (!userName || typeof userName !== 'string') return;
 
-            this.userService.updateUserName(userName)
+            this.userService.updateMyUserName(userName)
               .pipe(take(1))
               .subscribe(response => {
                 if (!response.success) return;

@@ -222,21 +222,6 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateUserNameOnly(): void {
-    if (!this.selectedUser) return;
-
-    const newName = prompt('Enter new name:', this.selectedUser.name);
-    if (newName && newName !== this.selectedUser.name) {
-      this.userService.updateUserName(this.selectedUser._id, newName)
-        .subscribe({
-          next: () => {
-            this.loadUsers();
-          },
-          error: (error) => console.error('Error updating name:', error)
-        });
-    }
-  }
-
   updateUserStatus(user: IUser, newStatus: IUser['status']): void {
     this.userService.updateUser(user._id, { ...user, status: newStatus })
       .subscribe({

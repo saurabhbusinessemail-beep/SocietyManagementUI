@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, take, takeUntil } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { FcmTokenService } from '../../../services/fcm-token.service';
-import { UserService } from '../../../core/ui/user-search/user.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -154,9 +154,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         const fcmToken = this.fcmTokenService.fcmToken;
         if (!fcmToken) return;
-
-        this.userService.updateFCMToken(fcmToken)
-          .pipe(take(1)).subscribe();
       })
   }
 

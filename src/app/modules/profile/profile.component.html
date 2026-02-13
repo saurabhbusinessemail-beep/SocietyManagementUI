@@ -1,0 +1,113 @@
+<app-layout [hideMoreActions]="true">
+    <div class="profile-container">
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="isLoading">
+            <div class="spinner"></div>
+            <p>Loading profile...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" *ngIf="error && !isLoading">
+            <span class="error-icon">!</span>
+            <p>{{ error }}</p>
+            <button class="btn-retry" (click)="loadProfile()">Try Again</button>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-content" *ngIf="!isLoading && !error && user">
+            <!-- Profile Header with Avatar -->
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <div class="avatar">
+                        {{ getInitial() }}
+                    </div>
+                </div>
+                <div class="header-info">
+                    <h2 class="user-name">{{ user.name || 'Update Your Name' }}</h2>
+                    <p class="user-email">{{ user.email }}</p>
+                    <p class="user-phone">{{ user.phoneNumber }}</p>
+                    <div class="user-badges">
+                        <span class="role-badge">{{ user.role | titlecase }}</span>
+                        <span class="status-badge" [ngClass]="getStatusClass()">
+                            {{ user.status | titlecase }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Details Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <h3 class="card-title">Personal Information</h3>
+                    <button class="btn-edit" (click)="openEditNameDialog()">
+                        <span class="edit-icon">✎</span>
+                        Edit Name
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    <div class="info-row">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value">
+                            {{ user.name || 'Not set' }}
+                            <span class="info-hint" *ngIf="!user.name">(Click edit to add your name)</span>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">{{ user.phoneNumber || 'Not provided' }}</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">User ID</div>
+                        <div class="info-value">{{ user._id }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Societies Card -->
+            <div class="profile-card" *ngIf="profile?.socities?.length">
+                <div class="card-header">
+                    <h3 class="card-title">My Societies</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="societies-list">
+                        <div class="society-item" *ngFor="let society of profile?.socities">
+                            <div class="society-header">
+                                <span class="society-id">{{ society.societyId }}</span>
+                            </div>
+                            <div class="society-roles" *ngIf="society.societyRoles?.length">
+                                <span class="role-tag" *ngFor="let role of society.societyRoles">
+                                    {{ role.name }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Access Card -->
+            <div class="profile-card" *ngIf="profile?.allMenus?.length">
+                <div class="card-header">
+                    <h3 class="card-title">Menu Access</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="menus-list">
+                        <span class="menu-tag" *ngFor="let menu of profile?.allMenus">
+                            {{ menu.menuName }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-layout>

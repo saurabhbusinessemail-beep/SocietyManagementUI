@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, Se
 import { FormControl, NgControl, Validators } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil } from 'rxjs';
 import { IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
-import { UserService } from './user.service';
 import { UIBaseFormControl } from '../../../directives';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'ui-user-search',

@@ -1,13 +1,20 @@
-
 <div class="layout-body">
     <ui-form-layout>
+
+        
 
         <ui-text-box [formControl]="userNameFormControl" [config]="userNameConfig" [smColumns]="12" [mdColumns]="12"
             [lgColumns]="12">
         </ui-text-box>
         <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
-            <ui-button label="Save" [smColumns]="12" [mdColumns]="3" [lgColumns]="3" (clicked)="save()" [disable]="userNameFormControl.invalid">
+
+            <ui-button label="Cancel" type="only-content" [smColumns]="6" [mdColumns]="3" [lgColumns]="3"
+                (clicked)="cancel()" [disable]="userNameFormControl.invalid">
+            </ui-button>
+
+            <ui-button label="Save" [smColumns]="6" [mdColumns]="3" [lgColumns]="3" (clicked)="save()"
+                [disable]="userNameFormControl.invalid">
             </ui-button>
 
         </section>

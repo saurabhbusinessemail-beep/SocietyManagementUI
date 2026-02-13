@@ -17,7 +17,7 @@ export class UserIconComponent implements OnInit {
     return this.loginService.getProfileFromStorage()
   }
 
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -40,6 +40,7 @@ export class UserIconComponent implements OnInit {
   onProfileClick() {
     // Add profile navigation logic here
     console.log('Profile clicked');
+    this.router.navigateByUrl('/profile');
     this.open = false; // Close dropdown after click
   }
 

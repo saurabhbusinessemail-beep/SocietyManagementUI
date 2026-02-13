@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUser } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
+import { IOTPVerificationResponse, IPagedResponse } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -33,23 +34,23 @@ export class UserService {
         return this.http.put<IUser>(`${this.baseUrl}/${id}`, user);
     }
 
-    updateUserName(id: string, userName: string): Observable<any> {
-        return this.http.patch(`${this.baseUrl}/updateName`, { userName });
-    }
-
-    updateFCMToken(id: string, fcmToken: string): Observable<any> {
-        return this.http.post(`${this.baseUrl}/updateFCMToken`, { fcmToken });
+    updateUserName(id: string, userName: string): Observable<IOTPVerificationResponse> {
+        return this.http.patch<IOTPVerificationResponse>(`${this.baseUrl}/updateName`, { userName });
     }
 
     deleteUser(id: string): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/${id}`);
     }
 
-    searchUsers(searchText: string, page: number = 1, limit: number = 20): Observable<any> {
-        return this.http.get(`${this.baseUrl}/search/${searchText}`, {
+    searchUsers(searchText: string, page: number = 1, limit: number = 20): Observable<IPagedResponse<IUser>> {
+        return this.http.get<IPagedResponse<IUser>>(`${this.baseUrl}/search/${searchText}`, {
             params: new HttpParams()
                 .set('page', page.toString())
                 .set('limit', limit.toString())
         });
+    }
+
+    updateMyUserName(userName: string): Observable<IOTPVerificationResponse> {
+        return this.http.patch<IOTPVerificationResponse>(`${this.baseUrl}/updateName`, { userName });
     }
 }
