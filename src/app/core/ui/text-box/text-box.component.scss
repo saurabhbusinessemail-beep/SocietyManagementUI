@@ -45,7 +45,7 @@
 
 
     .ui-textarea {
-        padding: 0 $input-padding-desktop;
+        padding: $input-padding-desktop;
         border-radius: $input-border-radius;
         border: 1px solid var(--border-color, $color-border);
         font-size: small;
