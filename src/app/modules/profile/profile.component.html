@@ -1,12 +1,6 @@
 <app-layout [hideMoreActions]="true">
     <div class="profile-container">
 
-        <!-- Loading State -->
-        <div class="loading-state" *ngIf="isLoading">
-            <div class="spinner"></div>
-            <p>Loading profile...</p>
-        </div>
-
         <!-- Error State -->
         <div class="error-state" *ngIf="error && !isLoading">
             <span class="error-icon">!</span>
@@ -19,9 +13,29 @@
             <!-- Profile Header with Avatar -->
             <div class="profile-header">
                 <div class="avatar-container">
-                    <div class="avatar">
+                    <!-- Image Avatar (if exists) -->
+                    <div class="avatar-image" *ngIf="profilePictureUrl">
+                        <img [src]="profilePictureUrl" alt="Profile Picture">
+                    </div>
+
+                    <!-- Initial Avatar (if no image) -->
+                    <div class="avatar-initial" *ngIf="!profilePictureUrl">
                         {{ getInitial() }}
                     </div>
+
+                    <!-- Edit Button Overlay -->
+                    <button class="avatar-edit-btn" (click)="triggerFileInput()">
+                        <span class="edit-icon">✎</span>
+                        <span class="edit-text">Change Photo</span>
+                    </button>
+
+                    <div class="uploading-overlay" *ngIf="isUploading">
+                        <div class="spinner-small"></div>
+                    </div>
+
+                    <!-- Hidden File Input -->
+                    <input type="file" #fileInput accept="image/*" style="display: none"
+                        (change)="onFileSelected($event)">
                 </div>
                 <div class="header-info">
                     <h2 class="user-name">{{ user.name || 'Update Your Name' }}</h2>

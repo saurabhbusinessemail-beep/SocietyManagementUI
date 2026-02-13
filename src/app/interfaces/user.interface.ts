@@ -5,4 +5,5 @@ export interface IUser {
     phoneNumber: string;
     role: 'admin' | 'user',
     status: 'active' | 'inactive' | 'pending' | 'blocked';
+    profilePicture?: string;
 }

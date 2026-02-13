@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subject, take, takeUntil } from 'rxjs';
 import { UserNameInputPopupComponent } from '../../core/user-name-popup/user-name-input-popup.component';
 import { IMyProfile, IUser } from '../../interfaces';
 import { LoginService } from '../../services/login.service';
 import { UserService } from '../../services/user.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile',
@@ -16,17 +17,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
   user: IUser | null = null;
   isLoading = false;
   error: string = '';
+  profilePictureUrl: SafeUrl | string | null = null;
+  isUploading = false;
   private dialogRef: MatDialogRef<UserNameInputPopupComponent> | undefined;
   private destroy$ = new Subject<void>();
+
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(
     private userService: UserService,
     private loginService: LoginService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
     this.loadProfile();
+    this.loadProfilePicture();
   }
 
   ngOnDestroy(): void {
@@ -62,6 +69,76 @@ export class ProfileComponent implements OnInit, OnDestroy {
           }
         });
     }
+  }
+
+  loadProfilePicture(): void {
+    // Try to load from localStorage first
+    const savedPicture = this.userService.getProfilePictureToStorage();
+    if (savedPicture) {
+      this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(savedPicture);
+    } else {
+      // Or fetch from server if you have an endpoint
+      // this.userService.getProfilePicture().subscribe(...)
+    }
+  }
+
+  triggerFileInput(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      console.log('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      console.log('File size should be less than 2MB');
+      return;
+    }
+
+    this.isUploading = true;
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const base64Image = e.target.result;
+
+      // Show preview immediately
+      this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(base64Image);
+
+      // Upload to server
+      this.userService.uploadProfilePicture(base64Image)
+        .pipe(take(1))
+        .subscribe({
+          next: (response: any) => {
+            if (response?.success) {
+
+              // Update user object
+              if (this.user) {
+                this.user.profilePicture = base64Image;
+              }
+
+              // Save to localStorage for persistence
+              this.userService.saveProfilePictureToStorage(base64Image);
+            }
+            this.isUploading = false;
+          },
+          error: (error) => {
+            console.error('Error uploading profile picture:', error);
+            console.log('Failed to upload profile picture');
+            // Revert preview on error
+            this.loadProfilePicture();
+            this.isUploading = false;
+          }
+        });
+    };
+    reader.readAsDataURL(file);
   }
 
   openEditNameDialog(): void {

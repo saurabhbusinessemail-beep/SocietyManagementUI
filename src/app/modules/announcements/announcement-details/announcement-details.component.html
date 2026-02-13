@@ -1,10 +1,5 @@
 <app-layout [hideMoreActions]="true" [showBackButton]="true">
     <div class="announcement-details-page">
-        <!-- Loading State -->
-        <div class="loading-state" *ngIf="isLoading">
-            <div class="spinner"></div>
-            <p>Loading announcement details...</p>
-        </div>
 
         <!-- Error State -->
         <div class="error-state" *ngIf="error && !isLoading && announcementId">

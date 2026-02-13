@@ -118,6 +118,7 @@ export class LoginService {
     logout() {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('my_profile');
+        localStorage.removeItem('profilePicture');
         this.router.navigateByUrl('/');
     }
 

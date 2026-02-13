@@ -10,9 +10,19 @@ import { IOTPVerificationResponse, IPagedResponse } from '../interfaces';
     providedIn: 'root'
 })
 export class UserService {
+
+    private profilePictureStorageKey = 'profilePicture';
     private baseUrl = `${environment.apiBaseUrl}/users`; // Adjust based on your API URL
 
     constructor(private http: HttpClient) { }
+
+    saveProfilePictureToStorage(profilePicture: string) {
+        localStorage.setItem(this.profilePictureStorageKey, profilePicture);
+    }
+
+    getProfilePictureToStorage(): string {
+        return localStorage.getItem(this.profilePictureStorageKey) ?? '';
+    }
 
     getAllUsers(page: number = 1, limit: number = 20): Observable<any> {
         let params = new HttpParams()
@@ -52,5 +62,9 @@ export class UserService {
 
     updateMyUserName(userName: string): Observable<IOTPVerificationResponse> {
         return this.http.patch<IOTPVerificationResponse>(`${this.baseUrl}/updateName`, { userName });
+    }
+
+    uploadProfilePicture(profilePicture: string): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}/upload-profile-picture`, { profilePicture });
     }
 }
