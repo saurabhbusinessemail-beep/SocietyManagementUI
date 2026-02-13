@@ -9,9 +9,14 @@
 
 
     <!-- Input -->
-    <input #inputEl class="ui-input" [type]="type" [attr.placeholder]="config?.placeholder"
+    <input #inputEl class="ui-input" [type]="type" [attr.placeholder]="config?.placeholder" *ngIf="type !== 'textarea'"
         [attr.autocomplete]="autocomplete" [disabled]="disabled" [value]="value" (input)="onInput(inputEl.value)"
         (blur)="onTouched()" />
+
+    <textarea #inputAreaEl class="ui-textarea" [attr.placeholder]="config?.placeholder" *ngIf="type === 'textarea'"
+        [attr.rows]="rows" [attr.autocomplete]="autocomplete" [disabled]="disabled" [value]="value"
+        (input)="onInput(inputAreaEl.value)" (blur)="onTouched()">
+    </textarea>
 
 
     <!-- Help text -->

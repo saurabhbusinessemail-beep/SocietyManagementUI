@@ -193,4 +193,16 @@ export class AnnouncementListComponent implements OnInit {
         }
       })
   }
+
+  togglePinAnnouncement(announcement: IAnnouncement) {
+    this.announcementService.togglePinAnnouncement(announcement._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !this.selectedFIlter) return;
+
+          this.loadAnnouncements(this.selectedFIlter)
+        }
+      })
+  }
 }

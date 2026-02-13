@@ -44,6 +44,25 @@
     }
 
 
+    .ui-textarea {
+        padding: 0 $input-padding-desktop;
+        border-radius: $input-border-radius;
+        border: 1px solid var(--border-color, $color-border);
+        font-size: small;
+
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary-color, $btn-bg-primary);
+        }
+    }
+
+
+    &.invalid .ui-textarea {
+        border-color: $color-error-dark;
+    }
+
+
     .ui-help {
         font-size: x-small;
         color: $color-help-text;

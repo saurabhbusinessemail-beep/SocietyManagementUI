@@ -10,7 +10,8 @@ import { Validators } from '@angular/forms';
 export class TextBoxComponent extends UIBaseFormControl<string> {
 
 
-  @Input() type: 'text' | 'email' | 'password' | 'number' | 'phone' = 'text';
+  @Input() type: 'text' | 'email' | 'password' | 'number' | 'phone' | 'textarea' = 'text';
+  @Input() rows = 2;
   @Input() autocomplete: string = 'off';
 
   usernameConfig = {

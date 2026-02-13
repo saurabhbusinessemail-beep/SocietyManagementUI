@@ -11,22 +11,21 @@
                 [lgColumns]="4">
             </ui-text-box>
 
-            <ui-text-box formControlName="content" [config]="contentConfig" [smColumns]="12" [mdColumns]="6"
-                [lgColumns]="4">
-            </ui-text-box>
-
             <ui-date formControlName="expiryDate" [config]="expiryDateConfig" [smColumns]="12" [mdColumns]="6"
                 [lgColumns]="4">
             </ui-date>
-            <div class="no-mobile no-tablet" [lgColumns]="8"></div>
 
             <ui-radio-list formControlName="priority" [config]="priorityConfig" direction="horizontal"
                 [options]="priorityConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="12">
             </ui-radio-list>
 
             <ui-radio-list formControlName="category" [config]="categoryConfig" direction="horizontal"
-                [options]="categoryConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="12">
+                [options]="categoryConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-radio-list>
+
+            <ui-text-box formControlName="content" [config]="contentConfig" type="textarea" [rows]="10" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-text-box>
 
             <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
                 <ui-button type="only-content" label="Cancel" (clicked)="cancel()">

@@ -37,6 +37,7 @@
                 <ui-announcement-card [announcement]="announcement" [viewerRole]="societyRole ?? 'admin'"
                     (viewAnnouncement)="viewAnnouncement(announcement)"
                     (editAnnouncement)="editAnnouncement(announcement)"
+                    (pinAnnouncement)="togglePinAnnouncement(announcement)"
                     (deleteAnnouncement)="deleteAnnouncement(announcement)" [smColumns]="12" [mdColumns]="6"
                     [lgColumns]="6">
                 </ui-announcement-card>
