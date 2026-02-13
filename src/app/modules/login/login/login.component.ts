@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, take, takeUntil } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
@@ -10,7 +10,7 @@ import { UserService } from '../../../core/ui/user-search/user.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   otpForm: FormGroup;
   step: 'login' | 'otp' = 'login';
@@ -41,6 +41,10 @@ export class LoginComponent implements OnDestroy {
     this.otpForm = this.fb.group({
       otp: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
     });
+  }
+
+  ngOnInit(): void {
+    this.subscribeToOTPNotification();
   }
 
   subscribeToOTPNotification() {
