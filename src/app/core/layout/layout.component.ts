@@ -13,6 +13,7 @@ export class LayoutComponent implements OnInit {
   @Input() title?: string;
   @Input() menuItems: IMenu[] = [];
   @Input() hideMoreActions: boolean = false;
+  @Input() showBackButton = false;
 
   constructor(public menuService: MenuService, private windowServic: WindowService) { }
 
