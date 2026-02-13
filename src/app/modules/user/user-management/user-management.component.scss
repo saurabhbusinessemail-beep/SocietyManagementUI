@@ -1,0 +1,553 @@
+// user-management.component.scss
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.user-management {
+    padding: $sp-lg;
+
+    @include mobile {
+        padding: $sp;
+    }
+}
+
+// Page Header
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $sp-lg;
+
+    h1 {
+        @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+        color: $color-dark-blue;
+        margin: 0;
+    }
+}
+
+// Filters Section
+.filters-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $sp-lg;
+    gap: $sp;
+
+    @include mobile {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.search-box {
+    flex: 1;
+    max-width: 400px;
+
+    @include mobile {
+        max-width: 100%;
+    }
+}
+
+.search-input {
+    width: 100%;
+    padding: $input-padding-desktop;
+    border: 1px solid $color-border;
+    border-radius: $input-border-radius;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+
+    &:focus {
+        outline: none;
+        border-color: $color-dark-blue;
+    }
+
+    @include mobile {
+        padding: $input-padding-mobile;
+    }
+}
+
+.filter-group {
+    display: flex;
+    gap: $sp;
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
+.filter-select {
+    padding: $input-padding-desktop;
+    border: 1px solid $color-border;
+    border-radius: $input-border-radius;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    background-color: $color-white;
+    min-width: 120px;
+
+    &:focus {
+        outline: none;
+        border-color: $color-dark-blue;
+    }
+
+    @include mobile {
+        flex: 1;
+        padding: $input-padding-mobile;
+    }
+}
+
+// Table Styles
+.table-container {
+    overflow-x: auto;
+    margin-bottom: $sp-lg;
+    border-radius: $btn-border-radius-md;
+    border: 1px solid $color-border;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: $font-family-base;
+
+    th {
+        background-color: $color-header-footer;
+        color: $color-dark-blue;
+        font-weight: 600;
+        font-size: $font-size-sm;
+        text-align: left;
+        padding: $sp;
+        border-bottom: 2px solid $color-border;
+    }
+
+    td {
+        padding: $sp;
+        border-bottom: 1px solid $color-border;
+        font-size: $font-size-sm;
+    }
+
+    tbody tr {
+        background-color: $color-white;
+
+        &:hover {
+            background-color: $color-light-gray;
+        }
+    }
+}
+
+// Status Badges
+.status-badge {
+    display: inline-block;
+    padding: $sp-xs $sp-sm;
+    border-radius: $btn-border-radius-sm;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status-active {
+    background-color: rgba($status-active, 0.15);
+    color: $status-active;
+}
+
+.status-inactive {
+    background-color: rgba($status-inactive, 0.15);
+    color: $status-inactive;
+}
+
+.status-pending {
+    background-color: rgba($status-pending, 0.15);
+    color: $status-pending;
+}
+
+.status-rejected {
+    background-color: rgba($status-rejected, 0.15);
+    color: $status-rejected;
+}
+
+// Role Badges
+.role-badge {
+    display: inline-block;
+    padding: $sp-xs $sp-sm;
+    border-radius: $btn-border-radius-sm;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    background-color: $color-light-gray;
+    color: $color-note-gray;
+}
+
+.role-admin {
+    background-color: $color-dark-blue;
+    color: $icon-on-dark;
+}
+
+// Action Buttons
+.actions {
+    display: flex;
+    gap: $sp-xs;
+    position: relative;
+}
+
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: $btn-border-radius-sm;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-base;
+    transition: all 0.2s ease;
+    background-color: transparent;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &.view:hover {
+        background-color: $color-header-footer;
+        color: $color-dark-blue;
+    }
+
+    &.edit:hover {
+        background-color: rgba($status-pending, 0.15);
+        color: $status-pending;
+    }
+
+    &.delete:hover {
+        background-color: rgba($status-rejected, 0.15);
+        color: $status-rejected;
+    }
+
+    &.status:hover {
+        background-color: rgba($color-dark-blue, 0.15);
+        color: $color-dark-blue;
+    }
+}
+
+// Status Dropdown
+.status-dropdown {
+    position: relative;
+    display: inline-block;
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: $color-white;
+        min-width: 120px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: $btn-border-radius-sm;
+        border: 1px solid $color-border;
+        z-index: $z-user-dropdown;
+
+        a {
+            color: $color-black;
+            padding: $sp-sm $sp;
+            text-decoration: none;
+            display: block;
+            font-size: $font-size-sm;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $color-light-gray;
+            }
+
+            &:first-child {
+                border-radius: $btn-border-radius-sm $btn-border-radius-sm 0 0;
+            }
+
+            &:last-child {
+                border-radius: 0 0 $btn-border-radius-sm $btn-border-radius-sm;
+            }
+        }
+    }
+
+    &:hover .dropdown-content {
+        display: block;
+    }
+}
+
+// Pagination
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $sp;
+
+    .page-btn {
+        padding: $sp-sm $sp-md;
+        border: 1px solid $color-border;
+        background-color: $color-white;
+        border-radius: $btn-border-radius-sm;
+        cursor: pointer;
+        font-size: $font-size-sm;
+
+        &:hover:not(:disabled) {
+            background-color: $color-dark-blue;
+            color: $icon-on-dark;
+            border-color: $color-dark-blue;
+        }
+
+        &:disabled {
+            background-color: $color-disable-background;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    }
+
+    .page-info {
+        font-size: $font-size-sm;
+        color: $color-note-gray;
+    }
+}
+
+// Buttons
+.btn-primary {
+    background-color: $btn-bg-primary;
+    color: $btn-text-primary;
+    border: none;
+    padding: $sp-sm $sp-lg;
+    border-radius: $btn-border-radius-md;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-family: $font-family-base;
+
+    &:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    &:disabled {
+        background-color: $color-disable-background;
+        cursor: not-allowed;
+    }
+}
+
+.btn-cancel {
+    background-color: $btn-bg-cancel;
+    color: $btn-text-cancel;
+    border: none;
+    padding: $sp-sm $sp-lg;
+    border-radius: $btn-border-radius-md;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-family: $font-family-base;
+
+    &:hover {
+        background-color: darken($color-cancel, 10%);
+    }
+}
+
+.btn-delete {
+    background-color: $btn-error;
+    color: $icon-on-dark;
+    border: none;
+    padding: $sp-sm $sp-lg;
+    border-radius: $btn-border-radius-md;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-family: $font-family-base;
+
+    &:hover {
+        background-color: darken($color-error-header, 10%);
+    }
+}
+
+// Modal Styles
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: $z-menu-overlay;
+
+    .modal-content {
+        background-color: $color-white;
+        border-radius: $btn-border-radius-lg;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+
+        @include mobile {
+            width: 95%;
+            margin: $sp;
+        }
+
+        &.delete-modal {
+            max-width: 400px;
+        }
+    }
+
+    .modal-header {
+        padding: $sp-lg;
+        border-bottom: 1px solid $color-border;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            margin: 0;
+            font-size: $font-size-lg;
+            color: $color-dark-blue;
+        }
+
+        &.error h2 {
+            color: $btn-error;
+        }
+    }
+
+    .modal-body {
+        padding: $sp-lg;
+
+        &.view-details {
+            .detail-row {
+                display: flex;
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-light-gray;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .label {
+                    width: 100px;
+                    font-weight: 600;
+                    color: $color-note-gray;
+                }
+
+                .value {
+                    flex: 1;
+                }
+            }
+        }
+    }
+
+    .modal-footer {
+        padding: $sp-lg;
+        border-top: 1px solid $color-border;
+        display: flex;
+        justify-content: flex-end;
+        gap: $sp;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: $font-size-xl;
+        cursor: pointer;
+        color: $color-note-gray;
+
+        &:hover {
+            color: $btn-error;
+        }
+    }
+}
+
+// Form Styles
+.form-group {
+    margin-bottom: $sp-md;
+
+    label {
+        display: block;
+        margin-bottom: $sp-xs;
+        font-weight: 500;
+        font-size: $font-size-sm;
+        color: $color-note-gray;
+
+        .mandatory {
+            color: $color-mandatory;
+        }
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: $input-padding-desktop;
+        border: 1px solid $color-border;
+        border-radius: $input-border-radius;
+        font-family: $font-family-base;
+        font-size: $font-size-sm;
+
+        &:focus {
+            outline: none;
+            border-color: $color-dark-blue;
+        }
+
+        @include mobile {
+            padding: $input-padding-mobile;
+        }
+    }
+}
+
+.form-row {
+    display: flex;
+    gap: $sp;
+
+    @include mobile {
+        flex-direction: column;
+    }
+
+    .form-group {
+        flex: 1;
+    }
+}
+
+// Loading State
+.loading-state {
+    text-align: center;
+    padding: $sp-xl;
+
+    .spinner {
+        border: 4px solid $color-light-gray;
+        border-top: 4px solid $color-dark-blue;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto $sp;
+    }
+
+    p {
+        color: $color-note-gray;
+        font-size: $font-size-sm;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+// No Data
+.no-data {
+    text-align: center;
+    padding: $sp-xl !important;
+    color: $color-note-gray;
+    font-size: $font-size-base;
+}
+
+// Warning Text
+.warning-text {
+    color: $btn-error;
+    font-size: $font-size-sm;
+    margin-top: $sp;
+}
+
+// Icons
+.icon {
+    display: inline-block;
+    margin-right: $sp-xs;
+}
