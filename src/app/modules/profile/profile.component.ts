@@ -92,53 +92,109 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      console.log('Please select an image file');
+      alert('Please select an image file');
       return;
     }
 
     // Validate file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
-      console.log('File size should be less than 2MB');
+      alert('File size should be less than 2MB');
       return;
     }
 
     this.isUploading = true;
 
-    // Convert to base64
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const base64Image = e.target.result;
+    // Compress image before converting to base64
+    this.compressImage(file).then((compressedFile) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const base64Image = e.target.result;
 
-      // Show preview immediately
-      this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(base64Image);
+        // Show preview
+        this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(base64Image);
 
-      // Upload to server
-      this.userService.uploadProfilePicture(base64Image)
-        .pipe(take(1))
-        .subscribe({
-          next: (response: any) => {
-            if (response?.success) {
-
-              // Update user object
-              if (this.user) {
-                this.user.profilePicture = base64Image;
+        // Upload to server
+        this.userService.uploadProfilePicture(base64Image)
+          .pipe(take(1))
+          .subscribe({
+            next: (response: any) => {
+              if (response?.success) {
+                if (this.user) {
+                  this.user.profilePicture = response.profilePicture;
+                }
+                localStorage.setItem('profilePicture', response.profilePicture);
               }
-
-              // Save to localStorage for persistence
-              this.userService.saveProfilePictureToStorage(base64Image);
+              this.isUploading = false;
+            },
+            error: (error) => {
+              console.error('Error uploading profile picture:', error);
+              alert('Failed to upload profile picture');
+              this.loadProfilePicture();
+              this.isUploading = false;
             }
-            this.isUploading = false;
-          },
-          error: (error) => {
-            console.error('Error uploading profile picture:', error);
-            console.log('Failed to upload profile picture');
-            // Revert preview on error
-            this.loadProfilePicture();
-            this.isUploading = false;
+          });
+      };
+      reader.readAsDataURL(compressedFile);
+    }).catch(error => {
+      console.error('Error compressing image:', error);
+      this.isUploading = false;
+    });
+  }
+
+  // Image compression function
+  compressImage(file: File): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          // Max dimensions
+          const MAX_WIDTH = 50;
+          const MAX_HEIGHT = 50;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
           }
-        });
-    };
-    reader.readAsDataURL(file);
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Convert to blob with reduced quality
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              });
+              resolve(compressedFile);
+            } else {
+              reject(new Error('Failed to compress image'));
+            }
+          }, 'image/jpeg', 0.7); // 70% quality
+        };
+
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
   }
 
   openEditNameDialog(): void {
