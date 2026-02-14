@@ -7,6 +7,7 @@ export * from './ui/ui-drop-down-option.interface';
 export * from './announcement.interface';
 export * from './announcement-comments.interface';
 export * from './building.interface';
+export * from './cache.interface';
 export * from './complaint.interface';
 export * from './confirmation-popup-config.interface';
 export * from './country.intrerface';

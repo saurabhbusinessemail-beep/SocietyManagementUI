@@ -7,6 +7,7 @@ import { GateEntryStatus, UILabelValueType } from '../types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GateEntryPopupComponent } from '../core/ui/gate-entry-popup/gate-entry-popup.component';
 import { Router } from '@angular/router';
+import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,10 @@ export class GateEntryService {
 
     constructor(private http: HttpClient, private dialog: MatDialog, private router: Router) { }
 
+    @Cacheable({
+        // ttl: 3600000, // 1 hour - pure function
+        paramIndices: [0]
+    })
     getGateEntryStatusColorName(gateEntry: IGateEntry): string {
         switch (gateEntry.status) {
             case 'approved': return 'approved';
@@ -31,55 +36,164 @@ export class GateEntryService {
         }
     }
 
+    @Cacheable({
+        // ttl: 3600000, // 1 hour - pure function
+        paramIndices: [0]
+    })
     getGateEntryLabelType(gateEntry: IGateEntry): UILabelValueType {
         switch (gateEntry.status) {
-          case 'approved': return 'active';
-          case 'cancelled': return 'rejected';
-          case 'completed': return 'active';
-          case 'expired': return 'inactive';
-          case 'rejected': return 'rejected';
-          case 'requested': return 'pending';
+            case 'approved': return 'active';
+            case 'cancelled': return 'rejected';
+            case 'completed': return 'active';
+            case 'expired': return 'inactive';
+            case 'rejected': return 'rejected';
+            case 'requested': return 'pending';
         }
-      }
+    }
 
+    @InvalidateCache({
+        methods: [
+            'GateEntryService.getAllMyGateEntries*',
+            'GateEntryService.getExitPendingGateEntries*',
+            'GateEntryService.getApprovalPendingGateEntries*'
+        ],
+        groups: ['gateEntries']
+    })
     newGateEntry(payload: any): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.post<IBEResponseFormat<IGateEntry>>(this.baseUrl, payload);
     }
 
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0],
+        group: 'gateEntries'
+    })
     getGateEntry(gateEntryId: string): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.get<IBEResponseFormat<IGateEntry>>(`${this.baseUrl}/${gateEntryId}`);
     }
 
+    @InvalidateCache({
+        methods: [
+            'GateEntryService.getGateEntry',
+            'GateEntryService.getAllMyGateEntries*',
+            'GateEntryService.getExitPendingGateEntries*',
+            'GateEntryService.getApprovalPendingGateEntries*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['gateEntries']
+    })
     resendNotification(gateEntryId: string): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.get<IBEResponseFormat<IGateEntry>>(`${this.baseUrl}/resendNotification/${gateEntryId}`);
     }
 
+    @InvalidateCache({
+        methods: [
+            'GateEntryService.getGateEntry',
+            'GateEntryService.getAllMyGateEntries*',
+            'GateEntryService.getExitPendingGateEntries*',
+            'GateEntryService.getApprovalPendingGateEntries*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['gateEntries']
+    })
     markGateExit(gateEntryId: string): Observable<IBEResponseFormat> {
         return this.http.get<IBEResponseFormat>(`${this.baseUrl}/markGateExit/${gateEntryId}`);
     }
 
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0, 1, 2, 3],
+        paramKeys: {
+            0: ['societyId'],
+            1: ['flatId'],
+            2: ['status'],
+            3: ['createdOn']
+        },
+        group: 'gateEntries',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [societyId, flatId, status, createdOn] = args;
+            const filters: any = {};
+            if (societyId) filters.societyId = societyId;
+            if (flatId) filters.flatId = flatId;
+            if (status) filters.status = status;
+            if (createdOn) filters.createdOn = createdOn;
+            return `${methodName}_${JSON.stringify(filters)}`;
+        }
+    })
     getAllMyGateEntries(societyId?: string, flatId?: string, status?: GateEntryStatus, createdOn?: Date): Observable<IPagedResponse<IGateEntry>> {
         let payload: any = { societyId, flatId, status };
         if (createdOn) payload.createdOn = createdOn;
         return this.http.post<IPagedResponse<IGateEntry>>(`${this.baseUrl}/getGateEntries`, payload);
     }
 
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0, 1, 2, 3],
+        paramKeys: {
+            0: ['societyId'],
+            1: ['flatId'],
+            2: ['status'],
+            3: ['createdOn']
+        },
+        group: 'gateEntries',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [societyId, flatId, status, createdOn] = args;
+            const filters: any = { exitPending: true };
+            if (societyId) filters.societyId = societyId;
+            if (flatId) filters.flatId = flatId;
+            if (status) filters.status = status;
+            if (createdOn) filters.createdOn = createdOn;
+            return `${methodName}_${JSON.stringify(filters)}`;
+        }
+    })
     getExitPendingGateEntries(societyId?: string, flatId?: string, status?: GateEntryStatus, createdOn?: Date): Observable<IPagedResponse<IGateEntry>> {
         let payload: any = { societyId, flatId, status, exitPending: true };
         if (createdOn) payload.createdOn = createdOn;
         return this.http.post<IPagedResponse<IGateEntry>>(`${this.baseUrl}/getGateEntries`, payload);
     }
 
+    @Cacheable({
+        // ttl: 120000, // 2 minutes - shorter TTL for approval pending
+        paramIndices: [0, 1, 2],
+        paramKeys: {
+            0: ['societyId'],
+            1: ['flatId'],
+            2: ['createdOn']
+        },
+        group: 'gateEntries',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [societyId, flatId, createdOn] = args;
+            const filters: any = { status: 'requested', exitPending: true };
+            if (societyId) filters.societyId = societyId;
+            if (flatId) filters.flatId = flatId;
+            if (createdOn) filters.createdOn = createdOn;
+            return `${methodName}_${JSON.stringify(filters)}`;
+        }
+    })
     getApprovalPendingGateEntries(societyId?: string, flatId?: string, createdOn?: Date): Observable<IPagedResponse<IGateEntry>> {
         let payload: any = { societyId, flatId, status: 'requested', exitPending: true };
         if (createdOn) payload.createdOn = createdOn;
         return this.http.post<IPagedResponse<IGateEntry>>(`${this.baseUrl}/getGateEntries`, payload);
     }
 
+    @InvalidateCache({
+        methods: [
+            'GateEntryService.getGateEntry',
+            'GateEntryService.getAllMyGateEntries*',
+            'GateEntryService.getExitPendingGateEntries*',
+            'GateEntryService.getApprovalPendingGateEntries*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['gateEntries']
+    })
     changeStatus(gateEntryId: string, newStatus: GateEntryStatus): Observable<IBEResponseFormat<IGateEntry>> {
         return this.http.post<IBEResponseFormat<IGateEntry>>(`${this.baseUrl}/changeStatus/${gateEntryId}`, { newStatus });
     }
 
+    // Non-HTTP methods - no decorators needed
     handleApprovalNotificationRequest(gateEntryId: string) {
         this.getGateEntry(gateEntryId).pipe(take(1))
             .subscribe(response => {
@@ -105,7 +219,7 @@ export class GateEntryService {
 
         this.gateEntryRequestPopupRef.popupRef.close();
         if (this.gateEntryRequestPopupRef.gateEntryId !== gateEntryId) {
-            this.router.navigateByUrl('/visitors/list'); // later be replaced by collecting and showing pending approvals as snack bar
+            this.router.navigateByUrl('/visitors/list');
         }
         this.gateEntryRequestPopupRef = undefined;
     }
