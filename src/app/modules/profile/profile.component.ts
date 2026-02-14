@@ -77,8 +77,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (savedPicture) {
       this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(savedPicture);
     } else {
-      // Or fetch from server if you have an endpoint
-      // this.userService.getProfilePicture().subscribe(...)
+      this.userService.getMyProfilePicture()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response: any) => {
+            if (response?.success && response.data) {
+              this.profilePictureUrl = response.data;
+              if (typeof this.profilePictureUrl === 'string')
+                this.userService.saveProfilePictureToStorage(this.profilePictureUrl);
+            }
+            this.isLoading = false;
+          },
+          error: (error) => {
+            this.error = 'Failed to load profile picture';
+            this.isLoading = false;
+            console.error('Error loading profile picture:', error);
+          }
+        });
     }
   }
 
@@ -122,7 +137,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 if (this.user) {
                   this.user.profilePicture = response.profilePicture;
                 }
-                localStorage.setItem('profilePicture', response.profilePicture);
+                this.userService.saveProfilePictureToStorage(response.data);
               }
               this.isUploading = false;
             },
@@ -156,8 +171,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
           let height = img.height;
 
           // Max dimensions
-          const MAX_WIDTH = 50;
-          const MAX_HEIGHT = 50;
+          const MAX_WIDTH = 200;
+          const MAX_HEIGHT = 200;
 
           if (width > height) {
             if (width > MAX_WIDTH) {
@@ -188,7 +203,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             } else {
               reject(new Error('Failed to compress image'));
             }
-          }, 'image/jpeg', 0.7); // 70% quality
+          }, 'image/jpeg');
         };
 
         img.onerror = reject;

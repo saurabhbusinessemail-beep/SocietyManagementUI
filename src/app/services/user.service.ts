@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUser } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
-import { IOTPVerificationResponse, IPagedResponse } from '../interfaces';
+import { IBEResponseFormat, IOTPVerificationResponse, IPagedResponse } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -66,5 +66,9 @@ export class UserService {
 
     uploadProfilePicture(profilePicture: string): Observable<any> {
         return this.http.post<any>(`${this.baseUrl}/upload-profile-picture`, { profilePicture });
+    }
+
+    getMyProfilePicture() {
+        return this.http.get<IBEResponseFormat<string>>(`${this.baseUrl}/myProfilePicture`);
     }
 }
