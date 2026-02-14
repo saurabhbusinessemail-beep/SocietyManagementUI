@@ -67,7 +67,7 @@ export class AnnouncementService {
     /**
      * Update announcement
      */
-    updateAnnouncement(id: string, updates: Partial<IAnnouncement>): Observable<IBEResponseFormat<IAnnouncement>> {
+    updateAnnouncement(id: string, updates: IAnnouncement): Observable<IBEResponseFormat<IAnnouncement>> {
         return this.http.put<IBEResponseFormat<IAnnouncement>>(`${this.apiUrl}/${id}`, updates);
     }
 
