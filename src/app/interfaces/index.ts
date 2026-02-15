@@ -22,6 +22,7 @@ export * from './manager.interface';
 export * from './menu.interface';
 export * from './my-profile.interface';
 export * from './notification.interface';
+export * from './PAGINATION.interface';
 export * from './parking.interface';
 export * from './security.interface';
 export * from './society-role-menu.interface';

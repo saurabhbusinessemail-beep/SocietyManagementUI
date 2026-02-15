@@ -39,7 +39,7 @@
             </div>
             <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <label>Flats</label>
-                <strong>{{ 0 }}</strong>
+                <strong>{{ flats.length }}</strong>
                 <ui-button label="Manage" type="only-content" [disable]="!canViewFlats" (clicked)="gotoFlatManager()">
                 </ui-button>
             </div>
@@ -52,6 +52,9 @@
                 <span>Parkings</span>
                 <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoParkingManager()">
                 </ui-button>
+            </div>
+            <div class="parkings">
+                <div class="badge done">Added: {{ parkings.length }}</div>
             </div>
         </section>
 

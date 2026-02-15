@@ -67,6 +67,11 @@ section {
     gap: $sp-md;
 }
 
+.parkings {
+    display: flex;
+    gap: $sp-md;
+}
+
 .badge {
     padding: $sp-sm $sp-md;
     border-radius: $input-border-radius;

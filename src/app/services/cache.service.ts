@@ -118,3 +118,5 @@ export class CacheService {
         return JSON.stringify(cachedParams) === JSON.stringify(targetParams);
     }
 }
+
+export const GLOBAL_CACHE = new CacheService();

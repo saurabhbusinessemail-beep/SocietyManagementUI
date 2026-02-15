@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
+import { ComplaintService } from '../../../services/complaint.service';
 
 @Component({
   selector: 'app-society-details',
@@ -44,8 +45,13 @@ export class SocietyDetailsComponent implements OnInit {
     return this.loginService.hasPermission(PERMISSIONS.parking_view, this.society?._id);
   }
 
-  constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService,
-    private loginService: LoginService) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private societyService: SocietyService,
+    private loginService: LoginService,
+    private complaintService: ComplaintService
+  ) { }
 
 
   ngOnInit(): void {
@@ -77,7 +83,7 @@ export class SocietyDetailsComponent implements OnInit {
 
 
           // if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
-          // if (this.society.flatIds) this.loadFlats(this.society.flatIds);
+          this.loadFlats(this.society._id);
           this.loadComplaints(this.society._id);
           this.loadParkings(this.society._id);
           // this.loadFeatures(this.society._id);
@@ -89,36 +95,50 @@ export class SocietyDetailsComponent implements OnInit {
 
 
   /** Step 3: Load flats separately */
-  loadFlats(ids: string[]): void {
-    // 🔁 Replace with API call later
-    this.flats = [
-      { _id: '201', flatNumber: 'A-101', societyId: '100', buildingId: '101', flatType: FlatTypes['1BHK'] } as IFlat,
-      { _id: '202', flatNumber: 'A-102', societyId: '100', buildingId: '101', flatType: FlatTypes['1BHK'] } as IFlat,
-      { _id: '203', flatNumber: 'B-201', societyId: '100', buildingId: '102', flatType: FlatTypes['1BHK'] } as IFlat,
-      { _id: '204', flatNumber: 'B-202', societyId: '100', buildingId: '102', flatType: FlatTypes['1BHK'] } as IFlat
-    ];
+  loadFlats(societyId: string): void {
+    this.societyService.getFlats(societyId, undefined, { limit: 10000 })
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.flats = response.data;
+        }
+      });
   }
 
 
   /** Step 4: Complaints by society */
   loadComplaints(societyId: string): void {
     // 🔁 Replace with API call later
-    this.complaints = {
-      pending: 5,
-      completed: 18
-    } as IComplaintStats;
+    this.complaintService.getComplaints(societyId, undefined, undefined, undefined, { limit: 50000 })
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.complaints = {
+            pending: response.data.filter(d => ['submitted', 'approved', 'in_progress'].includes(d.status)).length,
+            completed: response.data.filter(d => ['resolved', 'closed', 'rejected'].includes(d.status)).length
+          }
+        }
+      });
   }
 
 
   /** Step 5: Parkings by society */
   loadParkings(societyId: string): void {
-    // 🔁 Replace with API call later
-    this.parkings = [
-      { _id: '1', parkingNumber: 'CAR' } as IParking,
-      { _id: '2', parkingNumber: 'BIKE', flatId: '101' } as IParking
-    ];
+    this.societyService.getParkings(societyId, undefined, { limit: 50000 })
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.parkings = response.data;
+        }
+      })
   }
-  
+
   gotoEditSociety() {
     this.router.navigate(['/society', this.society?._id, 'edit']);
   }

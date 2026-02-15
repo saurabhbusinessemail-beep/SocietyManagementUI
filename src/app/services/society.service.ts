@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination } from '../interfaces';
 import { Observable } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
+import { PaginationService } from './pagination.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,7 @@ export class SocietyService {
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private paginationService: PaginationService) { }
 
     convertFlatMemberToDropdownOption(flatMember: IFlatMember, societyId?: string): IUIDropdownOption {
         const buildingNumber = flatMember.flatId
@@ -250,11 +251,13 @@ export class SocietyService {
             return `${methodName}_${societyId}_${buildingId || 'all'}`;
         }
     })
-    getFlats(societyId: string, buildingId?: string) {
+    getFlats(societyId: string, buildingId?: string, options: IPagination = {}) {
+        let params = this.paginationService.createPaginationParams(options);
+
         if (!buildingId)
-            return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/flats`);
+            return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/flats`, { params });
         else
-            return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/flats`);
+            return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/flats`, { params });
     }
 
     // Add One Flat
@@ -409,18 +412,22 @@ export class SocietyService {
     // Get all parking in a building or society
     @Cacheable({
         // ttl: 300000, // 5 minutes
-        paramIndices: [0, 1],
+        paramIndices: [0, 1, 2],
         group: 'parkings',
         keyGenerator: (methodName: string, args: any[]) => {
-            const [societyId, buildingId] = args;
-            return `${methodName}_${societyId}_${buildingId || 'all'}`;
+            const [societyId, buildingId, options] = args;
+            // Create a deterministic key based on all parameters including pagination
+            const cacheKey = `${methodName}_${societyId}_${buildingId || 'all'}_page${options?.page || 1}_limit${options?.limit || 20}`;
+            return cacheKey;
         }
     })
-    getParkings(societyId: string, buildingId?: string) {
+    getParkings(societyId: string, buildingId?: string, options: IPagination = {}) {
+        let params = this.paginationService.createPaginationParams(options);
+
         if (!buildingId)
-            return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/parkings`);
+            return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/parkings`, { params });
         else
-            return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/parkings`);
+            return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/parkings`, { params });
     }
 
     // Add One Parking
@@ -428,6 +435,8 @@ export class SocietyService {
         methods: [
             'SocietyService.getParkings*'
         ],
+        matchParams: true,
+        paramIndices: [0], // Only match societyId parameter
         groups: ['parkings']
     })
     newParking(societyId: string, payload: any) {
@@ -439,6 +448,8 @@ export class SocietyService {
         methods: [
             'SocietyService.getParkings*'
         ],
+        matchParams: true,
+        paramIndices: [0], // Only match societyId parameter
         groups: ['parkings']
     })
     newParkings(societyId: string, payload: any[]) {
@@ -450,7 +461,7 @@ export class SocietyService {
             'SocietyService.getParkings*'
         ],
         matchParams: true,
-        paramIndices: [0, 1],
+        paramIndices: [0], // Only match societyId parameter
         groups: ['parkings']
     })
     updateParking(societyId: string, parkingId: string, payload: any) {
@@ -463,7 +474,7 @@ export class SocietyService {
             'SocietyService.getParkings*'
         ],
         matchParams: true,
-        paramIndices: [0, 1],
+        paramIndices: [0], // Only match societyId parameter
         groups: ['parkings']
     })
     deleteParking(societyId: string, parkingId: string) {

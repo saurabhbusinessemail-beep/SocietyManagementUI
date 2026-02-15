@@ -1,12 +1,12 @@
 import { Observable } from "rxjs";
 import { InvalidateCacheOptions } from "../interfaces";
-import { CacheService } from "../services/cache.service";
+import { GLOBAL_CACHE } from "../services/cache.service";
 
 
 export function InvalidateCache(options: InvalidateCacheOptions) {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        const cacheService = new CacheService(); // Inject properly in practice
+        const cacheService = GLOBAL_CACHE;
 
         descriptor.value = function (...args: any[]): Observable<any> {
             // Execute the original method first

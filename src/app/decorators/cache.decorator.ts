@@ -1,11 +1,11 @@
 import { Observable, of } from "rxjs";
-import { CacheService } from "../services/cache.service";
+import { GLOBAL_CACHE } from "../services/cache.service";
 import { ICacheableOptions } from "../interfaces";
 
 export function Cacheable(options: ICacheableOptions = {}) {
     return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
       const originalMethod = descriptor.value;
-      const cacheService = new CacheService(); // In practice, inject this properly
+      const cacheService = GLOBAL_CACHE;
       const methodName = `${target.constructor.name}.${propertyKey}`;
       
       // Configure parameter indices for caching

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IBEResponseFormat, IComplaint, IPagedResponse } from '../interfaces';
+import { IBEResponseFormat, IComplaint, IPagedResponse, IPagination } from '../interfaces';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
+import { PaginationService } from './pagination.service';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class ComplaintService {
         resolved: ['closed'],
     }
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private paginationService: PaginationService) { }
 
     /**
      * Create a new complaint
@@ -78,13 +79,16 @@ export class ComplaintService {
             return `${methodName}_${JSON.stringify(filters)}`;
         }
     })
-    getComplaints(societyId?: string, flatId?: string, complaintType?: string): Observable<IPagedResponse<IComplaint>> {
+    getComplaints(societyId?: string, flatId?: string, complaintType?: string, status?: string, options: IPagination = {}): Observable<IPagedResponse<IComplaint>> {
         let payload = {};
         if (societyId) payload = { societyId };
         if (flatId) payload = { ...payload, flatId };
+        if (status) payload = { ...payload, status };
         if (complaintType) payload = { ...payload, complaintType };
 
-        return this.http.post<IPagedResponse<IComplaint>>(`${this.baseUrl}`, payload);
+        let params = this.paginationService.createPaginationParams(options);
+
+        return this.http.post<IPagedResponse<IComplaint>>(`${this.baseUrl}`, payload, { params });
     }
 
     /**

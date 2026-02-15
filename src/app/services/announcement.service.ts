@@ -6,9 +6,11 @@ import {
     IAnnouncement,
     IBEResponseFormat,
     IPagedResponse,
-    IAnnouncementFilters
+    IAnnouncementFilters,
+    IPagination
 } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
+import { PaginationService } from './pagination.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +18,7 @@ import { Cacheable, InvalidateCache } from '../decorators';
 export class AnnouncementService {
     private apiUrl = `${environment.apiBaseUrl}/announcement`;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private paginationService: PaginationService) { }
 
     /**
      * Create a new announcement
@@ -65,18 +67,12 @@ export class AnnouncementService {
     })
     getSocietyAnnouncements(
         filters: IAnnouncementFilters = { societyId: '' },
-        options: {
-            page?: number;
-            limit?: number;
-            search?: string;
-            sortBy?: string;
-        } = {}
+        options: IPagination = {}
     ): Observable<IPagedResponse<IAnnouncement>> {
         let params = new HttpParams();
 
         // Add pagination parameters
-        if (options.page) params = params.set('page', options.page.toString());
-        if (options.limit) params = params.set('limit', options.limit.toString());
+        params = this.paginationService.createPaginationParams(options, params);
 
         // Add filter parameters
         if (filters.category) params = params.set('category', filters.category);
