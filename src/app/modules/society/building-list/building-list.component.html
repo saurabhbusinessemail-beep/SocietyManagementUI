@@ -43,7 +43,7 @@
 <!-- Dialog template for building form -->
 <ng-template #buildingFormTemplate>
     <form [formGroup]="fb">
-        <app-add-edit-popup [title]="selectedBuildingId ? 'Edit Building' : 'Add Building'" (onClose)="closeDialog(); resetBuildingForm();">
+        <app-add-edit-popup [title]="selectedBuildingId ? 'Edit Building' : 'Add Building'" (onClose)="closeDialog();">
 
             <ui-form-layout>
 
@@ -83,7 +83,7 @@
             </ui-form-layout>
 
             <ng-container actions>
-                <ui-button [label]="'Cancel'" type="only-content" (clicked)="closeDialog(); resetBuildingForm()">
+                <ui-button [label]="'Cancel'" type="only-content" (clicked)="closeDialog();">
                 </ui-button>
                 <ui-button label="Save" type="primary" *ngIf="!selectedBuildingId" [isSubmit]="true"
                     [disable]="fb.invalid || !canAddBuildings || pendingBuildingsToAdd === 0" (clicked)="addBuilding()">

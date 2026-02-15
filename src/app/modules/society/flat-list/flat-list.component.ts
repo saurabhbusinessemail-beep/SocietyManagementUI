@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
@@ -6,6 +6,9 @@ import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { IBuilding, IFlat, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { FlatTypeList, FlatTypes, PERMISSIONS } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogService } from '../../../services/dialog.service';
+import { WindowService } from '../../../services/window.service';
 
 @Component({
   selector: 'app-flat-list',
@@ -20,6 +23,9 @@ export class FlatListComponent implements OnInit, OnDestroy {
   buildings: IBuilding[] = [];
   building?: IBuilding;
   flats: IFlat[] = [];
+
+  @ViewChild('flatTemplate') flatTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
 
   fb = new FormGroup({
     _id: new FormControl<string | undefined>(''),
@@ -36,7 +42,8 @@ export class FlatListComponent implements OnInit, OnDestroy {
       flatNumber: new FormControl<string | null>(null, [Validators.required]),
       floor: new FormControl<number>(1, [Validators.required]),
       flatType: new FormControl<FlatTypes>(FlatTypes['1BHK'], [Validators.required])
-    })
+    }),
+    appendFloorNumber: new FormControl<boolean[]>([])
   });
   floorControl = new FormControl<string | null>(null);
 
@@ -152,6 +159,10 @@ export class FlatListComponent implements OnInit, OnDestroy {
       required: 'Flat Number is required',
     }
   };
+  appendFloorNumberConfig: IUIControlConfig = {
+    id: 'appendFloorNumber',
+    label: 'Append Floor Number',
+  };
 
   selectedTab = 'addFlat';
   tabsOptions: IUIDropdownOption[] = [
@@ -163,6 +174,9 @@ export class FlatListComponent implements OnInit, OnDestroy {
       value: 'autoGen',
       label: 'Autogenerate Flats'
     },
+  ];
+  appendFloorNumberOptions: IUIDropdownOption[] = [
+    { label: 'Append Floor Number with Flat Number ?', value: true }
   ];
   defaultFilter: IUIDropdownOption = {
     label: 'All',
@@ -229,9 +243,11 @@ export class FlatListComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private societyService: SocietyService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private dialog: MatDialog,
+    private dialogService: DialogService,
+    private windowService: WindowService
   ) { }
 
   ngOnInit(): void {
@@ -340,11 +356,11 @@ export class FlatListComponent implements OnInit, OnDestroy {
         this.loadFlats(societyId, building._id);
       });
 
-      this.floorControl.valueChanges
+    this.floorControl.valueChanges
       .pipe(takeUntil(this.isComponentActive))
       .subscribe({
         next: response => {
-          
+
         }
       });
   }
@@ -362,14 +378,48 @@ export class FlatListComponent implements OnInit, OnDestroy {
     }
   }
 
+  resetFlatForm() {
+    this.fb.get('addFlats')?.setValue({ flatNumber: null, floor: 1, flatType: FlatTypes['1BHK'] }, { emitEvent: false });
+    this.fb.get('autogenerateForm')?.setValue({ fromFloor: 1, toFloor: 1, startFlat: 1, endFlat: 1, flatType: FlatTypes['1BHK'] }, { emitEvent: false })
+    this.fb.get('appendFloorNumber')?.setValue([]);
+    this.selectedTab = 'addFlat';
+    this.handleTabChange(this.selectedTab);
+  }
+
+  getDialogWidth(): string {
+    let width = '50%';
+    switch (this.windowService.mode.value) {
+      case 'mobile': width = '90%'; break;
+      case 'tablet': width = '70%'; break;
+      case 'desktop': width = '60%'; break
+    }
+    return width;
+  }
+  openAddDialog() {
+    this.resetFlatForm();
+    this.currentDialogRef = this.dialog.open(this.flatTemplate, {
+      width: this.getDialogWidth(),
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetFlatForm();
+    });
+  }
+
+  closeDialog() {
+    this.currentDialogRef?.close();
+  }
+
   addFlat() {
     if (this.fb.invalid) return;
 
     const formValue = this.fb.getRawValue();
+    const connectFloorToFlatNumber = formValue.appendFloorNumber && formValue.appendFloorNumber.length > 0 && formValue.appendFloorNumber[0] === true;
     let obs: Observable<any> | undefined;
     if (this.selectedTab === 'addFlat') {
       const payload = {
-        flatNumber: formValue.addFlats?.flatNumber,
+        flatNumber: (connectFloorToFlatNumber ? formValue.addFlats.floor ?? '' : '') + (formValue.addFlats?.flatNumber ?? ''),
         buildingId: formValue.building,
         societyId: formValue.society?._id ?? '',
         flatType: formValue.addFlats?.flatType,
@@ -396,7 +446,7 @@ export class FlatListComponent implements OnInit, OnDestroy {
       const flats = arrFloors.reduce((arrFlats, floorNumber) => {
         arrFlatNumbers.forEach(flatNumber => {
           arrFlats.push({
-            flatNumber: flatNumber.toString(),
+            flatNumber: (connectFloorToFlatNumber ? floorNumber : '') + flatNumber.toString(),
             flatType,
             floor: floorNumber,
             societyId: formValue.society?._id ?? '',
@@ -425,6 +475,7 @@ export class FlatListComponent implements OnInit, OnDestroy {
           this.loadFlats(societyId, buildingId);
           this.fb.get('autogenerateForm')?.reset();
           this.fb.get('addFlats')?.reset();
+          this.closeDialog();
         }
       });
   }
@@ -437,8 +488,10 @@ export class FlatListComponent implements OnInit, OnDestroy {
       .join(', ')
   }
 
-  deleteFlat(flat: IFlat) {
+  async deleteFlat(flat: IFlat) {
     if (!this.societyId) return;
+
+    if (!await this.dialogService.confirmDelete('Delete Flat', `Are you sure you want to delete flat ${flat.flatNumber} ?`)) return;
 
     this.societyService.deleteFlat(this.societyId, flat._id)
       .pipe(take(1))
