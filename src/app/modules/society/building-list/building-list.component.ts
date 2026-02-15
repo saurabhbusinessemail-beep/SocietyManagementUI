@@ -8,6 +8,8 @@ import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { UILabelValueType } from '../../../types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { WindowService } from '../../../services/window.service';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-building-list',
@@ -91,9 +93,9 @@ export class BuildingListComponent implements OnInit, OnDestroy {
   });
 
   get pageTitle(): string | undefined {
-    if (!this.society) return;
+    if (!this.society) return 'Buildings';
 
-    return this.society.societyName + ' Building Manager'
+    return 'Buildings: ' + this.society.societyName
   }
 
   get showUserSearch(): boolean {
@@ -148,7 +150,9 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dialogService: DialogService,
+    private windowService: WindowService
   ) { }
 
   ngOnInit(): void {
@@ -260,10 +264,19 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       })
   }
 
+  getDialogWidth(): string {
+    let width = '50%';
+    switch (this.windowService.mode.value) {
+      case 'mobile': width = '90%'; break;
+      case 'tablet': width = '70%'; break;
+      case 'desktop': width = '60%'; break
+    }
+    return width;
+  }
   openAddDialog() {
     this.resetBuildingForm(); // empty form
     this.currentDialogRef = this.dialog.open(this.buildingFormTemplate, {
-      width: '600px',
+      width: this.getDialogWidth(),
       panelClass: 'building-form-dialog'
     });
     this.currentDialogRef.afterClosed().subscribe(() => {
@@ -320,8 +333,10 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteBuilding(building: IBuilding) {
+  async deleteBuilding(building: IBuilding) {
     if (!this.societyId) return;
+
+    if (!await this.dialogService.confirmDelete('Delete Building', `Are you sure you want to delete building ${building.buildingNumber}?`)) return;
 
     this.societyService.deleteBuilding(this.societyId, building._id)
       .pipe(take(1))

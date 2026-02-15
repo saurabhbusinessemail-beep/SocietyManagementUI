@@ -1,0 +1,22 @@
+<div class="popup-container">
+
+    <!-- HEADER -->
+    <div class="popup-header">
+        <div class="popup-title">{{ title }}</div>
+
+        <button type="button" class="popup-close" (click)="onCloseClick()">
+            ✕
+        </button>
+    </div>
+
+    <!-- BODY (projection only) -->
+    <div class="popup-body">
+        <ng-content></ng-content>
+    </div>
+
+    <!-- FOOTER (actions projection) -->
+    <div class="popup-footer">
+        <ng-content select="[actions]"></ng-content>
+    </div>
+
+</div>

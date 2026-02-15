@@ -7,13 +7,15 @@ import { HeaderModule } from '../header/header.module';
 import { MenuModule } from '../menu/menu.module';
 import { FormLayoutComponent } from './form-layout/form-layout.component';
 import { DirectiveModule } from '../../directives/directive.module';
+import { AddEditPopupComponent } from './add-edit-popup/add-edit-popup.component';
 
 
 
 @NgModule({
   declarations: [
     LayoutComponent,
-    FormLayoutComponent
+    FormLayoutComponent,
+    AddEditPopupComponent
   ],
   imports: [
     CommonModule,
@@ -23,6 +25,6 @@ import { DirectiveModule } from '../../directives/directive.module';
     BodyModule,
     DirectiveModule
   ],
-  exports: [LayoutComponent, FormLayoutComponent]
+  exports: [LayoutComponent, FormLayoutComponent, AddEditPopupComponent]
 })
 export class LayoutModule { }
