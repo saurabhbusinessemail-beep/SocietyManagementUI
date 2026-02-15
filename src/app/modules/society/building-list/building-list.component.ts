@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IBuilding, ISelectedUser, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { UILabelValueType } from '../../../types';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-building-list',
@@ -18,6 +19,9 @@ export class BuildingListComponent implements OnInit, OnDestroy {
   societyId?: string;
   society?: ISociety;
   buildings: IBuilding[] = [];
+
+  @ViewChild('buildingFormTemplate') buildingFormTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
 
   loading: boolean = false;
   isComponentActive = new Subject<void>();
@@ -143,7 +147,8 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private societyService: SocietyService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -255,22 +260,50 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       })
   }
 
+  openAddDialog() {
+    this.resetBuildingForm(); // empty form
+    this.currentDialogRef = this.dialog.open(this.buildingFormTemplate, {
+      width: '600px',
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetBuildingForm(); // clean up on close
+    });
+  }
+
+  openEditDialog(building: IBuilding) {
+    this.resetBuildingForm(building); // populate form
+    this.currentDialogRef = this.dialog.open(this.buildingFormTemplate, {
+      width: '600px',
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetBuildingForm();
+    });
+  }
+
+  closeDialog() {
+    this.currentDialogRef?.close();
+  }
+
+  // Modify addBuilding and editBuilding to close dialog on success
   addBuilding() {
     if (this.fb.invalid || !this.societyId) return;
-
     this.societyService.newBuilding(this.societyId, this.fb.value)
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.loadSocietyBuildings(this.societyId ?? '');
+          this.loadSocietyBuildings(this.societyId!);
           this.resetBuildingForm();
+          this.closeDialog();
         }
-      })
+      });
   }
 
   editBuilding() {
     if (this.fb.invalid || !this.selectedBuildingId || !this.societyId) return;
-
     this.societyService.updateBuilding(this.societyId, this.selectedBuildingId, {
       buildingNumber: this.fb.value.buildingNumber,
       societyId: this.fb.value.societyId,
@@ -280,10 +313,11 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.loadSocietyBuildings(this.societyId ?? '');
+          this.loadSocietyBuildings(this.societyId!);
           this.resetBuildingForm();
+          this.closeDialog();
         }
-      })
+      });
   }
 
   deleteBuilding(building: IBuilding) {
