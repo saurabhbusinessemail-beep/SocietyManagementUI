@@ -3,7 +3,10 @@
     <ui-form-layout>
 
         <ng-container *ngFor="let flatMember of flatMembers">
-            <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+
+            <ui-my-flat-member-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [member]="flatMember">
+            </ui-my-flat-member-card>
+            <!-- <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 <ng-container card-main>
                     <a class="flat-name" (click)="gotoFlatDetails(flatMember)">
                         {{ getflat(flatMember)?.floor }}: {{ getflat(flatMember)?.flatNumber }}
@@ -25,7 +28,7 @@
                 <ng-container card-icon>
                     {{ getflat(flatMember)?.flatType }}
                 </ng-container>
-            </ui-card>
+            </ui-card> -->
 
         </ng-container>
 

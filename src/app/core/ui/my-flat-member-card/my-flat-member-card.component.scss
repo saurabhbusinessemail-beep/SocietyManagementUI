@@ -1,0 +1,231 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.flat-member-card {
+    background-color: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    padding: $sp-md;
+    margin-bottom: $sp-md;
+    box-shadow: 0 2px 6px rgba($color-black, 0.08);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        border-color: $color-border-highlight;
+        box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $sp-sm;
+        padding-bottom: $sp-sm;
+        border-bottom: 1px solid $color-border;
+
+        @include mobile {
+            flex-wrap: wrap;
+            gap: $sp-sm;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            min-width: 0;
+            flex: 1;
+
+            .selection-checkbox {
+                display: flex;
+                align-items: center;
+
+                input[type="checkbox"] {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    accent-color: $color-dark-blue;
+                }
+            }
+
+            .member-info {
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+                flex-wrap: wrap;
+
+                .member-name {
+                    margin: 0;
+                    font-weight: 600;
+                    @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+                    color: $color-dark-blue;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .residing-badge {
+                    font-size: $font-size-xs;
+                    font-weight: 600;
+                    color: $color-white;
+                    background-color: $color-note-gray;
+                    padding: $sp-xs $sp-sm;
+                    border-radius: $btn-border-radius-sm;
+                    letter-spacing: 0.3px;
+                    text-transform: uppercase;
+
+                    &.self {
+                        background-color: $status-active;
+                    }
+                    &.tenant {
+                        background-color: $status-pending;
+                    }
+                    &.vacant {
+                        background-color: $status-inactive;
+                    }
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: $sp-xs;
+
+            button {
+                border: none;
+                background: none;
+                padding: $sp-xs $sp-sm;
+                border-radius: $btn-border-radius-sm;
+                font-size: $font-size-sm;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s ease, color 0.2s ease;
+
+                &.edit-btn {
+                    background-color: $btn-bg-primary;
+                    color: $btn-text-primary;
+
+                    &:hover {
+                        background-color: darken($btn-bg-primary, 10%);
+                    }
+                }
+
+                &.delete-btn {
+                    background-color: $color-error-light;
+                    color: $color-error-dark;
+
+                    &:hover {
+                        background-color: $color-error-header;
+                        color: $color-white;
+                    }
+                }
+            }
+        }
+    }
+
+    .card-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $sp-sm $sp-md;
+
+        @include tablet {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include desktop {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+
+            .label {
+                font-size: $font-size-xs;
+                font-weight: 600;
+                color: $color-help-text;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: $sp-xs;
+            }
+
+            .value {
+                font-size: $font-size-sm;
+                color: $color-black;
+                word-break: break-word;
+                line-height: 1.5;
+
+                &.truncate-mobile {
+                    @include mobile {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+
+                &.status-badge {
+                    display: inline-block;
+                    padding: $sp-xs $sp-sm;
+                    border-radius: $btn-border-radius-sm;
+                    font-size: $font-size-xs;
+                    font-weight: 600;
+                    text-transform: uppercase;
+
+                    &.active {
+                        background-color: $status-active;
+                        color: $color-white;
+                    }
+                    &.expired {
+                        background-color: $status-expired;
+                        color: $color-white;
+                    }
+                    &.terminated {
+                        background-color: $status-rejected;
+                        color: $color-white;
+                    }
+                }
+
+                &.flag-badge {
+                    display: inline-block;
+                    padding: $sp-xs $sp-sm;
+                    border-radius: $btn-border-radius-sm;
+                    font-size: $font-size-xs;
+                    font-weight: 600;
+                    background-color: $color-light-gray;
+                    color: $color-dark-blue;
+                    margin-right: $sp-xs;
+                    margin-bottom: $sp-xs;
+                }
+            }
+
+            // Special spans
+            &.full-width {
+                grid-column: 1 / -1;
+            }
+
+            &.contact-item {
+                @include tablet {
+                    grid-column: span 2;
+                }
+            }
+        }
+
+        // Lease dates row: can appear as two columns side by side
+        .lease-dates {
+            display: flex;
+            gap: $sp-md;
+            flex-wrap: wrap;
+
+            .date-item {
+                flex: 1 1 auto;
+                min-width: 120px;
+            }
+        }
+
+        // Timestamp styling (creation info)
+        .timestamp {
+            color: $color-note-gray;
+            font-size: $font-size-xs;
+        }
+    }
+}

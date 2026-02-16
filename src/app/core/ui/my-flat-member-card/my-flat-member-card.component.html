@@ -1,0 +1,89 @@
+<div class="flat-member-card">
+    <div class="card-header">
+        <div class="header-left">
+            <div class="selection-checkbox" *ngIf="selectMode">
+                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+            </div>
+            <div class="member-info">
+                <h3 class="member-name">{{ member.name }}</h3>
+                <span *ngIf="member.residingType" class="residing-badge" [ngClass]="member.residingType.toLowerCase()">
+                    {{ member.residingType }}
+                </span>
+            </div>
+        </div>
+        <div class="actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="card-details">
+        <!-- Contact - spans both columns on tablet -->
+        <div class="detail-item contact-item">
+            <span class="label">Contact</span>
+            <span class="value">{{ member.contact }}</span>
+        </div>
+
+        <!-- Status -->
+        <div class="detail-item">
+            <span class="label">Status</span>
+            <span class="value">
+                <span class="status-badge" [ngClass]="member.status">{{ member.status }}</span>
+            </span>
+        </div>
+
+        <!-- Flat & Society (combined) - spans full width -->
+        <div class="detail-item full-width">
+            <span class="label">Location</span>
+            <span class="value">{{ getFlatDisplay() }} • {{ getSocietyDisplay() }}</span>
+        </div>
+
+        <!-- Flags: Owner, Tenant, Member, TenantMember -->
+        <div class="detail-item full-width">
+            <span class="label">Roles</span>
+            <div class="value">
+                <span *ngIf="member.isOwner" class="flag-badge">Owner</span>
+                <span *ngIf="member.isTenant" class="flag-badge">Tenant</span>
+                <span *ngIf="member.isMember" class="flag-badge">Member</span>
+                <span *ngIf="member.isTenantMember" class="flag-badge">Tenant Member</span>
+                <span *ngIf="!member.isOwner && !member.isTenant && !member.isMember && !member.isTenantMember">—</span>
+            </div>
+        </div>
+
+        <!-- Lease information (only if tenant) -->
+        <ng-container *ngIf="member.isTenant">
+            <!-- Lease dates side by side -->
+            <div class="detail-item full-width">
+                <span class="label">Lease Period</span>
+                <div class="lease-dates">
+                    <div class="date-item">
+                        <div class="label">Start</div>
+                        <div class="value">{{ (member.leaseStart | date:'mediumDate') || '—' }}</div>
+                    </div>
+                    <div class="date-item">
+                        <div class="label">End</div>
+                        <div class="value">{{ (member.leaseEnd | date:'mediumDate') || '—' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rent amount -->
+            <div class="detail-item" *ngIf="member.rentAmount">
+                <span class="label">Rent</span>
+                <span class="value">{{ member.rentAmount | currency:'INR' }}</span>
+            </div>
+        </ng-container>
+
+        <!-- Linked user (if any) -->
+        <div class="detail-item" *ngIf="member.userId">
+            <span class="label">Linked User</span>
+            <span class="value truncate-mobile">{{ getUserDisplay() }}</span>
+        </div>
+
+        <!-- Creation info - always full width and muted -->
+        <div class="detail-item full-width timestamp">
+            <span class="label">Created</span>
+            <span class="value">{{ member.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
+        </div>
+    </div>
+</div>
