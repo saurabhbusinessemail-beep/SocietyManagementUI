@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, take, takeUntil, Observable } from 'rxjs';
@@ -6,6 +6,9 @@ import { FlatTypes, FlatTypeList, PERMISSIONS, VehicleTypes, VehicleTypeList } f
 import { ISociety, IBuilding, IFlat, IUIControlConfig, IUIDropdownOption, IParking } from '../../../interfaces';
 import { LoginService } from '../../../services/login.service';
 import { SocietyService } from '../../../services/society.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogService } from '../../../services/dialog.service';
+import { WindowService } from '../../../services/window.service';
 
 @Component({
   selector: 'app-parkings-list',
@@ -21,6 +24,10 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
   building?: IBuilding;
   flats: IFlat[] = [];
   parkings: IParking[] = [];
+
+
+  @ViewChild('parkingTemplate') parkingTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
 
   @ViewChild('target') target!: ElementRef;
 
@@ -108,9 +115,9 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
   }
 
   get pageTitle(): string | undefined {
-    if (!this.society) return 'Parkings Manager';
+    if (!this.society) return 'Parkings';
 
-    return this.society.societyName + ' Parkings Manager'
+    return 'Parkings: ' + this.society.societyName;
   }
 
   get buildingOptions(): IUIDropdownOption<string>[] {
@@ -150,9 +157,11 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private societyService: SocietyService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private dialog: MatDialog,
+    private dialogService: DialogService,
+    private windowService: WindowService
   ) { }
 
   ngOnInit(): void {
@@ -260,7 +269,7 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
             this.fb.get('building')?.disable();
           });
         }
-        this.cancelEditParking();
+        this.resetParkingForm();
       });
 
     this.fb.get('building')?.valueChanges
@@ -276,8 +285,45 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
         const societyId = typeof building.societyId === 'string' ? building.societyId : building.societyId._id;
         this.loadFlats(societyId, building._id);
         this.loadParkings(societyId, building._id);
-        this.cancelEditParking();
+        this.resetParkingForm();
       });
+  }
+
+  getDialogWidth(): string {
+    let width = '50%';
+    switch (this.windowService.mode.value) {
+      case 'mobile': width = '90%'; break;
+      case 'tablet': width = '70%'; break;
+      case 'desktop': width = '60%'; break
+    }
+    return width;
+  }
+  openAddDialog() {
+    this.resetParkingForm();
+    this.currentDialogRef = this.dialog.open(this.parkingTemplate, {
+      width: this.getDialogWidth(),
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetParkingForm();
+    });
+  }
+
+  openEditDialog(parking: IParking) {
+    this.resetParkingForm(parking); // populate form
+    this.currentDialogRef = this.dialog.open(this.parkingTemplate, {
+      width: '600px',
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetParkingForm();
+    });
+  }
+
+  closeDialog() {
+    this.currentDialogRef?.close();
   }
 
   addParking() {
@@ -302,7 +348,7 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.loadParkings(this.societyId ?? '', formValue.building ?? undefined)
-          this.cancelEditParking();
+          this.closeDialog();
         }
       })
   }
@@ -333,7 +379,7 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.loadParkings(this.societyId ?? '', this.selectedBuilding)
-          this.cancelEditParking();
+          this.closeDialog();
         }
       })
   }
@@ -362,7 +408,7 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.loadParkings(this.societyId ?? '', formValue.building ?? undefined);
-          this.cancelEditParking();
+          this.closeDialog();
         }
       })
   }
@@ -373,8 +419,10 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
       .join(', ');
   }
 
-  deleteParking(parking: IParking) {
+  async deleteParking(parking: IParking) {
     if (!this.societyId) return;
+
+    if (!await this.dialogService.confirmDelete('Delete Parking', `Are you sure you want to delete Parking ${parking.parkingNumber} ?`)) return;
 
     this.societyService.deleteParking(this.societyId, parking._id)
       .pipe(take(1))
@@ -393,11 +441,12 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
     this.scrollToElement();
   }
 
-  cancelEditParking() {
-    this.fb.get('_id')?.reset();
-    this.fb.get('parkingNumber')?.reset();
-    this.fb.get('parkingType')?.reset();
-    this.fb.get('flatId')?.reset();
+  resetParkingForm(parking?: IParking) {
+    const flatId = typeof parking?.flatId === 'string' ? parking.flatId : parking?.flatId?._id;
+    this.fb.get('_id')?.setValue(parking?._id);
+    this.fb.get('parkingNumber')?.setValue(parking?.parkingNumber ?? null);
+    this.fb.get('parkingType')?.setValue(parking?.parkingType ?? '4w');
+    this.fb.get('flatId')?.setValue(flatId ?? null);
   }
 
   scrollToElement() {

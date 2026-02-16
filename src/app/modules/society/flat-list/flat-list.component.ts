@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { IBuilding, IFlat, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
@@ -210,9 +210,9 @@ export class FlatListComponent implements OnInit, OnDestroy {
   }
 
   get pageTitle(): string | undefined {
-    if (!this.society) return 'Flat Manager';
+    if (!this.society) return 'Flats';
 
-    return this.society.societyName + ' Flats Manager'
+    return 'Flats: ' + this.society.societyName
   }
 
   get flatTypeOptions(): IUIDropdownOption<FlatTypes>[] {

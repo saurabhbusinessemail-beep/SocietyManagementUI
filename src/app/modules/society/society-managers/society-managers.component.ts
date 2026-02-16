@@ -47,7 +47,9 @@ export class SocietyManagersComponent implements OnDestroy {
   ];
 
   get managerName(): string {
-    return (this.society ? this.society.societyName : '') + ' Managers';
+    if (!this.society) return 'Managers';
+
+    return 'Managers: ' + this.society.societyName;
   }
 
   get showUserSearch(): boolean {
@@ -77,7 +79,7 @@ export class SocietyManagersComponent implements OnDestroy {
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
     if (!this.societyId) this.router.navigateByUrl('');
-    
+
     this.loadSocietyManagers(this.societyId);
     this.subscribeToRadioChange();
   }
