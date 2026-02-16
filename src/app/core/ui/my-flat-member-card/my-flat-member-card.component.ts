@@ -16,6 +16,7 @@ export class MyFlatMemberCardComponent {
   @Output() edit = new EventEmitter<IFlatMember>();
   @Output() delete = new EventEmitter<IFlatMember>();
   @Output() selectedChange = new EventEmitter<boolean>();
+  @Output() clicked = new EventEmitter<void>();
 
   // Helper methods to resolve objects
 

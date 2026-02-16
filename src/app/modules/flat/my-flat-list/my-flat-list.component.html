@@ -4,31 +4,8 @@
 
         <ng-container *ngFor="let flatMember of flatMembers">
 
-            <ui-my-flat-member-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [member]="flatMember">
+            <ui-my-flat-member-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [member]="flatMember" (clicked)="gotoFlatDetails(flatMember)">
             </ui-my-flat-member-card>
-            <!-- <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-                <ng-container card-main>
-                    <a class="flat-name" (click)="gotoFlatDetails(flatMember)">
-                        {{ getflat(flatMember)?.floor }}: {{ getflat(flatMember)?.flatNumber }}
-                    </a>
-
-                    <div class="flat-meta">
-                        <span><strong>Society:</strong> {{ getSociety(flatMember)?.societyName }} </span>
-                    </div>
-
-                    <div class="flat-meta" *ngIf="hasBuilding(flatMember)">
-                        <span><strong>Building:</strong> {{ getBuilding(flatMember)?.buildingNumber }} </span>
-                    </div>
-
-                    <div class="flat-address">
-                        <span><strong>Residing:</strong> {{ flatMember.residingType }} </span>
-                    </div>
-                </ng-container>
-
-                <ng-container card-icon>
-                    {{ getflat(flatMember)?.flatType }}
-                </ng-container>
-            </ui-card> -->
 
         </ng-container>
 

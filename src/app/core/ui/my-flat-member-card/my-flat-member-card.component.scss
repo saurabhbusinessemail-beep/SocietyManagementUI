@@ -19,7 +19,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: $sp-sm;
+        margin-bottom: $sp-md;
         padding-bottom: $sp-sm;
         border-bottom: 1px solid $color-border;
 
@@ -64,12 +64,11 @@
                 }
 
                 .residing-badge {
-                    font-size: $font-size-xs;
+                    font-size: $font-size-sm;
                     font-weight: 600;
                     color: $color-white;
-                    background-color: $color-note-gray;
-                    padding: $sp-xs $sp-sm;
-                    border-radius: $btn-border-radius-sm;
+                    padding: $sp-xs $sp-md;
+                    border-radius: 20px; // pill shape for emphasis
                     letter-spacing: 0.3px;
                     text-transform: uppercase;
 
@@ -125,107 +124,226 @@
     .card-details {
         display: grid;
         grid-template-columns: 1fr;
-        gap: $sp-sm $sp-md;
+        gap: $sp-md;
 
         @include tablet {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
         }
 
         @include desktop {
             grid-template-columns: repeat(3, 1fr);
         }
 
-        .detail-item {
+        // Quick info row: contact and status
+        .quick-info {
             display: flex;
-            flex-direction: column;
-            min-width: 0;
+            flex-wrap: wrap;
+            gap: $sp-md;
+            align-items: center;
+            background-color: $color-light-gray;
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+            margin-bottom: $sp-xs;
 
-            .label {
+            @include tablet {
+                grid-column: span 3;
+            }
+
+            .contact {
+                display: flex;
+                align-items: center;
+                gap: $sp-xs;
+                font-size: $font-size-base;
+                font-weight: 500;
+
+                i {
+                    font-style: normal;
+                    margin-right: $sp-xs;
+                }
+            }
+
+            .status-badge {
+                font-size: $font-size-sm;
+                font-weight: 600;
+                padding: $sp-xs $sp-md;
+                border-radius: 20px;
+                color: $color-white;
+                text-transform: uppercase;
+
+                &.active {
+                    background-color: $status-active;
+                }
+                &.expired {
+                    background-color: $status-expired;
+                }
+                &.terminated {
+                    background-color: $status-rejected;
+                }
+            }
+        }
+
+        // Location block: flat and society
+        .location-block {
+            background-color: rgba($color-sky, 0.1);
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+            border-left: 4px solid $color-dark-blue;
+
+            @include tablet {
+                grid-column: span 2;
+            }
+
+            .location-item {
+                display: flex;
+                align-items: center;
+                gap: $sp-xs;
+                margin-bottom: $sp-xs;
+
+                i {
+                    font-style: normal;
+                    min-width: 20px;
+                    color: $color-dark-blue;
+                }
+
+                .label {
+                    font-weight: 600;
+                    color: $color-help-text;
+                    margin-right: $sp-xs;
+                }
+                .value {
+                    font-weight: 500;
+                }
+            }
+        }
+
+        // Roles section: chips
+        .roles-section {
+            background-color: $color-white;
+            border: 1px dashed $color-border;
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+
+            @include tablet {
+                grid-column: span 1;
+            }
+
+            .section-title {
                 font-size: $font-size-xs;
                 font-weight: 600;
                 color: $color-help-text;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-bottom: $sp-xs;
+                margin-bottom: $sp-sm;
             }
 
-            .value {
-                font-size: $font-size-sm;
-                color: $color-black;
-                word-break: break-word;
-                line-height: 1.5;
+            .role-chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: $sp-xs;
 
-                &.truncate-mobile {
-                    @include mobile {
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-                }
-
-                &.status-badge {
-                    display: inline-block;
+                .chip {
                     padding: $sp-xs $sp-sm;
-                    border-radius: $btn-border-radius-sm;
+                    background-color: $color-light-gray;
+                    border-radius: 16px;
                     font-size: $font-size-xs;
-                    font-weight: 600;
-                    text-transform: uppercase;
+                    font-weight: 500;
+                    color: $color-dark-blue;
 
-                    &.active {
+                    &.owner {
                         background-color: $status-active;
                         color: $color-white;
                     }
-                    &.expired {
-                        background-color: $status-expired;
+                    &.tenant {
+                        background-color: $status-pending;
                         color: $color-white;
                     }
-                    &.terminated {
-                        background-color: $status-rejected;
+                    &.member {
+                        background-color: $color-note-gray;
+                        color: $color-white;
+                    }
+                    &.tenant-member {
+                        background-color: $color-dark-blue;
                         color: $color-white;
                     }
                 }
+            }
+        }
 
-                &.flag-badge {
-                    display: inline-block;
-                    padding: $sp-xs $sp-sm;
-                    border-radius: $btn-border-radius-sm;
-                    font-size: $font-size-xs;
+        // Lease info card (shown only if tenant)
+        .lease-card {
+            background-color: $color-white;
+            border: 1px solid $color-border;
+            padding: $sp-md;
+            border-radius: $btn-border-radius-md;
+            margin-top: $sp-xs;
+
+            @include tablet {
+                grid-column: span 3;
+            }
+
+            .lease-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: $sp-sm;
+
+                .lease-title {
                     font-weight: 600;
-                    background-color: $color-light-gray;
                     color: $color-dark-blue;
-                    margin-right: $sp-xs;
-                    margin-bottom: $sp-xs;
+                }
+
+                .rent-amount {
+                    font-size: $font-size-lg;
+                    font-weight: 700;
+                    color: $color-dark-blue;
                 }
             }
 
-            // Special spans
-            &.full-width {
-                grid-column: 1 / -1;
-            }
+            .lease-dates {
+                display: flex;
+                gap: $sp-lg;
+                flex-wrap: wrap;
 
-            &.contact-item {
-                @include tablet {
-                    grid-column: span 2;
+                .date-item {
+                    .label {
+                        font-size: $font-size-xs;
+                        color: $color-help-text;
+                    }
+                    .value {
+                        font-weight: 500;
+                    }
                 }
             }
         }
 
-        // Lease dates row: can appear as two columns side by side
-        .lease-dates {
+        // Linked user (if any)
+        .linked-user {
             display: flex;
-            gap: $sp-md;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: $sp-xs;
+            background-color: $color-light-gray;
+            padding: $sp-xs $sp-md;
+            border-radius: $btn-border-radius-sm;
 
-            .date-item {
-                flex: 1 1 auto;
-                min-width: 120px;
+            @include tablet {
+                grid-column: span 3;
+            }
+
+            i {
+                font-style: normal;
             }
         }
 
-        // Timestamp styling (creation info)
-        .timestamp {
+        // Creation info - always full width and muted
+        .creation-info {
             color: $color-note-gray;
             font-size: $font-size-xs;
+            border-top: 1px solid $color-border;
+            padding-top: $sp-sm;
+            margin-top: $sp-sm;
+
+            @include tablet {
+                grid-column: span 3;
+            }
         }
     }
 }
