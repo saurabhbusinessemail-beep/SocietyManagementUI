@@ -101,7 +101,8 @@ export class SocietyService {
             'SocietyService.searchSocieties*',
             'SocietyService.getBuildings*',
             'SocietyService.getFlats*',
-            'SocietyService.getParkings*'
+            'SocietyService.getParkings*',
+            'SocietyService.getParkingsByFlat*'
         ],
         matchParams: true,
         paramIndices: [0],
@@ -219,7 +220,8 @@ export class SocietyService {
             'SocietyService.getBuilding',
             'SocietyService.getBuildings*',
             'SocietyService.getFlats*',
-            'SocietyService.getParkings*'
+            'SocietyService.getParkings*',
+            'SocietyService.getParkingsByFlat*'
         ],
         matchParams: true,
         paramIndices: [0, 1],
@@ -430,10 +432,29 @@ export class SocietyService {
             return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/parkings`, { params });
     }
 
+    // Get all parking in a flat and society
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0, 1, 2],
+        group: 'parkings',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [societyId, buildingId, options] = args;
+            // Create a deterministic key based on all parameters including pagination
+            const cacheKey = `${methodName}_${societyId}_${buildingId || 'all'}_page${options?.page || 1}_limit${options?.limit || 20}`;
+            return cacheKey;
+        }
+    })
+    getParkingsByFlat(societyId: string, flatId?: string, options: IPagination = {}) {
+        let params = this.paginationService.createPaginationParams(options);
+
+        return this.http.get<IPagedResponse<IParking>>(`${this.baseUrl}/${societyId}/flats/${flatId}/parkings`, { params });
+    }
+
     // Add One Parking
     @InvalidateCache({
         methods: [
-            'SocietyService.getParkings*'
+            'SocietyService.getParkings*',
+            'SocietyService.getParkingsByFlat*'
         ],
         matchParams: true,
         paramIndices: [0], // Only match societyId parameter
@@ -446,7 +467,8 @@ export class SocietyService {
     // Add Parkings in bulk
     @InvalidateCache({
         methods: [
-            'SocietyService.getParkings*'
+            'SocietyService.getParkings*',
+            'SocietyService.getParkingsByFlat*'
         ],
         matchParams: true,
         paramIndices: [0], // Only match societyId parameter
@@ -458,7 +480,8 @@ export class SocietyService {
 
     @InvalidateCache({
         methods: [
-            'SocietyService.getParkings*'
+            'SocietyService.getParkings*',
+            'SocietyService.getParkingsByFlat*'
         ],
         matchParams: true,
         paramIndices: [0], // Only match societyId parameter
@@ -471,7 +494,8 @@ export class SocietyService {
     // Delete Parkings
     @InvalidateCache({
         methods: [
-            'SocietyService.getParkings*'
+            'SocietyService.getParkings*',
+            'SocietyService.getParkingsByFlat*'
         ],
         matchParams: true,
         paramIndices: [0], // Only match societyId parameter

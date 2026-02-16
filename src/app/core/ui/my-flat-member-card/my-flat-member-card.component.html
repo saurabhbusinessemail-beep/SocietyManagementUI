@@ -1,11 +1,11 @@
-<div class="flat-member-card" (click)="selectMode ? toggleSelection($event) : clicked.emit()">
+<div class="flat-member-card" (click)="toggleSelection($event)">
     <div class="card-header">
         <div class="header-left">
             <div class="selection-checkbox" *ngIf="selectMode">
                 <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
             </div>
             <div class="member-info">
-                <h3 class="member-name">{{ member.name }}</h3>
+                <h3 class="member-name" (click)="clicked.emit()">{{ getFlatDisplay() }}</h3>
                 <span *ngIf="member.residingType" class="residing-badge" [ngClass]="member.residingType.toLowerCase()">
                     {{ member.residingType }}
                 </span>
@@ -29,11 +29,6 @@
         <!-- Location block: flat and society -->
         <div class="location-block">
             <div class="location-item">
-                <i>🏢</i>
-                <span class="label">Flat:</span>
-                <span class="value">{{ getFlatDisplay() }}</span>
-            </div>
-            <div class="location-item">
                 <i>🏘️</i>
                 <span class="label">Society:</span>
                 <span class="value">{{ getSocietyDisplay() }}</span>
@@ -42,7 +37,6 @@
 
         <!-- Roles section -->
         <div class="roles-section">
-            <div class="section-title">Roles</div>
             <div class="role-chips">
                 <span *ngIf="member.isOwner" class="chip owner">Owner</span>
                 <span *ngIf="member.isTenant" class="chip tenant">Tenant</span>
