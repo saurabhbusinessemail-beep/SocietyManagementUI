@@ -18,7 +18,7 @@ export class ManagerCardComponent {
    * Returns the display name: name if present, otherwise email.
    */
   getUserDisplayName(): string {
-    return this.user.name?.trim() || this.user.email;
+    return this.user.name?.trim() || this.user.email || 'N/A';
   }
 
   /**
@@ -28,7 +28,7 @@ export class ManagerCardComponent {
     if (this.user.name) {
       return this.user.name.charAt(0).toUpperCase();
     }
-    return this.user.email.charAt(0).toUpperCase();
+    return this.user.email?.charAt(0).toUpperCase() ?? '';
   }
 
   onEdit(event: MouseEvent): void {

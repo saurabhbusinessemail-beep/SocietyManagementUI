@@ -1,0 +1,37 @@
+<div class="building-card">
+    <div class="card-header">
+        <div class="building-info">
+            <h3 class="building-number">Building {{ building.buildingNumber }}</h3>
+        </div>
+        <div class="actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="card-details">
+        <!-- Society -->
+        <div class="detail-item society-item">
+            <span class="label">Society</span>
+            <span class="value truncate-mobile">{{ getSocietyDisplay() }}</span>
+        </div>
+
+        <!-- Manager -->
+        <div class="detail-item manager-item">
+            <span class="label">Manager</span>
+            <span class="value truncate-mobile">{{ getManagerDisplay() }}</span>
+        </div>
+
+        <!-- Floors -->
+        <div class="detail-item floors-item">
+            <span class="label">Floors</span>
+            <span class="value truncate-mobile">{{ building.floors }}</span>
+        </div>
+
+        <!-- Creation info -->
+        <div class="detail-item timestamp-item">
+            <span class="label">Created</span>
+            <span class="value">{{ building.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
+        </div>
+    </div>
+</div>

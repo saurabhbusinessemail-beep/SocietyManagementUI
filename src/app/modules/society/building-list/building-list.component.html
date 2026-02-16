@@ -22,22 +22,14 @@
         </div>
 
         <!-- Building cards -->
-        <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let building of buildings">
-            <div card-main>
-                {{ building.buildingNumber }} - <span class="floor-count"> {{ building.floors }} Floor {{
-                    building.floors > 1 ? 's' : '' }}</span>
-                <span class="manager" *ngIf="building.managerId">
-                    Manager:
-                    <i>{{ building.managerId | userName: true }}</i>
-                </span>
-            </div>
-            <div card-icon class="building-action">
-                <app-icon name="edit" *ngIf="canUpdateBuildings" (click)="openEditDialog(building)"></app-icon>
-                <app-icon class="delete" name="delete" *ngIf="canDeleteBuildings" color="#a60000"
-                    (click)="deleteBuilding(building)"></app-icon>
-            </div>
-        </ui-card>
+        <ng-container *ngFor="let building of buildings">
+            <ui-building-card [building]="building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                [showDelete]="canDeleteBuildings" [showEdit]="canUpdateBuildings" (delete)="deleteBuilding(building)"
+                (edit)="openEditDialog(building)">
+            </ui-building-card>
+        </ng-container>
     </ui-form-layout>
+
 </app-layout>
 
 <!-- Dialog template for building form -->
@@ -73,11 +65,6 @@
                     <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="12"
                         [lgColumns]="12" *ngIf="needManager && showUserSearch">
                     </ui-user-search>
-                </section>
-
-                <!-- Action buttons: Cancel/Reset and Save -->
-                <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-
                 </section>
 
             </ui-form-layout>
