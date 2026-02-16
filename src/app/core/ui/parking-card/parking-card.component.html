@@ -1,0 +1,45 @@
+<div class="parking-card">
+    <div class="card-header">
+        <div class="parking-info">
+            <h3 class="parking-number">Parking {{ parking.parkingNumber }}</h3>
+        </div>
+        <div class="actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="card-details">
+        <!-- Building -->
+        <div class="detail-item">
+            <span class="label">Building</span>
+            <span class="value truncate-mobile">{{ getBuildingDisplay() }}</span>
+        </div>
+
+        <!-- Society -->
+        <div class="detail-item">
+            <span class="label">Society</span>
+            <span class="value truncate-mobile">{{ getSocietyDisplay() }}</span>
+        </div>
+
+        <!-- Flat (optional) -->
+        <div class="detail-item" *ngIf="parking.flatId">
+            <span class="label">Flat</span>
+            <span class="value truncate-mobile">{{ getFlatDisplay() }}</span>
+        </div>
+
+        <!-- Flat (optional) -->
+        <div class="detail-item">
+            <span class="label">Type</span>
+            <span class="value truncate-mobile">
+                <app-icon [name]="parking.parkingType"></app-icon>
+            </span>
+        </div>
+
+        <!-- Creation info – always full width -->
+        <div class="detail-item timestamp-item">
+            <span class="label">Created</span>
+            <span class="value">{{ parking.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
+        </div>
+    </div>
+</div>
