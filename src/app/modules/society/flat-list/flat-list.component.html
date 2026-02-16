@@ -34,24 +34,10 @@
             </ui-drop-down>
 
             <ng-container *ngFor="let flat of flats">
-                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [disable]="selectedFlatId === flat._id"
-                    *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()">
-                    <div card-main class="flex flex-gap">
-                        <span class="note">
-                            <b>{{ flat.floor }}:</b> {{ flat.flatNumber }}
-                        </span>
-                        <span class="note">
-                            {{ flat.flatType }}
-                        </span>
-                        <div>
-                        </div>
-                    </div>
-                    <div card-icon class="flat-action">
-                        <app-icon class="delete" name="delete" color="#a60000" (click)="deleteFlat(flat)"
-                            *ngIf="canDeleteFlat">
-                        </app-icon>
-                    </div>
-                </ui-card>
+                <ui-flat-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [flat]="flat"
+                    *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()"
+                    [showDelete]="canDeleteFlat" (delete)="deleteFlat(flat)">
+                </ui-flat-card>
             </ng-container>
 
         </ui-form-layout>

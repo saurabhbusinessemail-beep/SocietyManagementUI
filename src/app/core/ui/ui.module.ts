@@ -33,6 +33,7 @@ import { AnnouncementCardComponent } from './announcement-card/announcement-card
 import { SocietyCardComponent } from './society-card/society-card.component';
 import { ManagerCardComponent } from './manager-card/manager-card.component';
 import { BuildingCardComponent } from './building-card/building-card.component';
+import { FlatCardComponent } from './flat-card/flat-card.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { BuildingCardComponent } from './building-card/building-card.component';
     AnnouncementCardComponent,
     SocietyCardComponent,
     ManagerCardComponent,
-    BuildingCardComponent
+    BuildingCardComponent,
+    FlatCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -94,7 +96,8 @@ import { BuildingCardComponent } from './building-card/building-card.component';
     AnnouncementCardComponent,
     SocietyCardComponent,
     ManagerCardComponent,
-    BuildingCardComponent
+    BuildingCardComponent,
+    FlatCardComponent
   ],
   providers: [MatDatepickerModule]
 })
