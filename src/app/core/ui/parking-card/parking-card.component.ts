@@ -12,6 +12,10 @@ export class ParkingCardComponent {
   @Input() showEdit = false;
   @Input() showDelete = false;
 
+  @Input() selectMode = false;
+  @Input() selected = false;
+  @Output() selectedChange = new EventEmitter<boolean>();
+
   @Output() edit = new EventEmitter<IParking>();
   @Output() delete = new EventEmitter<IParking>();
 
@@ -21,10 +25,10 @@ export class ParkingCardComponent {
    */
   getParkingTypeClass(): string {
     const type = this.parking.parkingType;
-    if (type === VehicleTypes['2W']) return '2w';
-    if (type === VehicleTypes['3W']) return '3w';
-    if (type === VehicleTypes['4W']) return '4w';
-    if (type === VehicleTypes['6W']) return '6w';
+    if (type === '2W') return '2w';
+    if (type === '3W') return '3w';
+    if (type === '4W') return '4w';
+    if (type === '6W') return '6w';
     return '';
   }
 
@@ -99,5 +103,9 @@ export class ParkingCardComponent {
   onDelete(event: MouseEvent): void {
     event.stopPropagation();
     this.delete.emit(this.parking);
+  }
+
+  toggleSelection(event: Event): void {
+    this.selectedChange.emit(!this.selected);
   }
 }

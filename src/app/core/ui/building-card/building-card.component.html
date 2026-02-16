@@ -1,7 +1,10 @@
-<div class="building-card">
+<div class="building-card" (click)="toggleSelection($event)">
     <div class="card-header">
+        <div class="selection-checkbox" *ngIf="selectMode">
+            <input type="checkbox" [checked]="selected">
+        </div>
         <div class="building-info">
-            <h3 class="building-number">Building {{ building.buildingNumber }}</h3>
+            <h3 class="building-number">{{ building.buildingNumber }}</h3>
         </div>
         <div class="actions" *ngIf="showEdit || showDelete">
             <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>

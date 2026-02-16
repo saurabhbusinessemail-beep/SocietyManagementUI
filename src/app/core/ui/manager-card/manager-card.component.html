@@ -1,5 +1,8 @@
-<div class="manager-card">
+<div class="manager-card" (click)="toggleSelection($event)">
     <div class="card-header">
+        <div class="selection-checkbox" *ngIf="selectMode">
+            <input type="checkbox" [checked]="selected">
+        </div>
         <div class="user-info">
             <div class="avatar">
                 <img *ngIf="user.profilePicture" [src]="user.profilePicture" alt="{{ getUserDisplayName() }}">

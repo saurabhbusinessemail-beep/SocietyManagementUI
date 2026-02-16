@@ -14,11 +14,12 @@ export class IconsService {
 
   private preloadIcons() {
     const iconList = [
+      '2W', '3W', '4W', '6W',
       'abacus', 'account', 'account-circle', 'announcement', 'approve', 'arrow-down', 'arrow-left', 'block-icon',
       'calendar', 'call', 'clear', 'comment', 'complaint', 'dashboard', 'delete', 'double-arrow-right', 'down-arrow',
       'download', 'edit', 'exit', 'expire', 'filter', 'gateentry', 'gatepass', 'help', 'home', 'invalid',
-      'location-color', 'logout-icon', 'member', 'menu-icon', 'more-vert', 'pin', 'publish', 'qr-code', 'reject',
-      'search', 'security', 'setting', 'society-icon', 'tenant', 'user-icon', 'valid', 'visitor', '2W', '3W', '4W', '6W'
+      'location-color', 'logout-icon', 'member', 'menu-icon', 'more-vert', 'multi-select-on', 'multi-select', 'pin', 'publish', 'qr-code', 'reject',
+      'search', 'security', 'setting', 'society-icon', 'tenant', 'user-icon', 'valid', 'visitor'
     ];
 
     iconList.forEach((icon, index) => {

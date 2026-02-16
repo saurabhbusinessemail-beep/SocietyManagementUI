@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
 import { DialogService } from '../../../services/dialog.service';
+import { ListBase } from '../../../directives/list-base.directive';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { DialogService } from '../../../services/dialog.service';
   templateUrl: './society-managers.component.html',
   styleUrl: './society-managers.component.scss'
 })
-export class SocietyManagersComponent implements OnDestroy {
+export class SocietyManagersComponent extends ListBase implements OnDestroy {
 
   societyId?: string;
   society?: ISociety;
@@ -75,8 +76,8 @@ export class SocietyManagersComponent implements OnDestroy {
     private location: Location,
     private loginService: LoginService,
     private router: Router,
-    private dialogService: DialogService,
-  ) { }
+    dialogService: DialogService,
+  ) { super(dialogService) }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
@@ -178,6 +179,18 @@ export class SocietyManagersComponent implements OnDestroy {
       .subscribe(() => {
         this.loadSocietyManagers(this.societyId ?? '');
       });
+  }
+
+  deleteOneRecord(id: string) {
+    if (!this.societyId) return;
+
+    return this.societyService.deleteManager(this.societyId, id);
+  }
+
+  refreshList() {
+    if (!this.societyId) return;
+
+    this.loadSocietyManagers(this.societyId);
   }
 
   cancel() {

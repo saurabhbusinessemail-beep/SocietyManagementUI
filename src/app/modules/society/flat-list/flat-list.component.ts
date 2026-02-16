@@ -9,13 +9,14 @@ import { LoginService } from '../../../services/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../../../services/dialog.service';
 import { WindowService } from '../../../services/window.service';
+import { ListBase } from '../../../directives/list-base.directive';
 
 @Component({
   selector: 'app-flat-list',
   templateUrl: './flat-list.component.html',
   styleUrl: './flat-list.component.scss'
 })
-export class FlatListComponent implements OnInit, OnDestroy {
+export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
 
   societyId?: string;
   buildingId?: string;
@@ -246,9 +247,9 @@ export class FlatListComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private loginService: LoginService,
     private dialog: MatDialog,
-    private dialogService: DialogService,
+    dialogService: DialogService,
     private windowService: WindowService
-  ) { }
+  ) { super(dialogService) }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
@@ -504,6 +505,18 @@ export class FlatListComponent implements OnInit, OnDestroy {
           this.loadFlats(this.societyId ?? '', buildingId ?? undefined);
         },
       })
+  }
+
+  deleteOneRecord(id: string) {
+    if (!this.societyId) return;
+
+    return this.societyService.deleteFlat(this.societyId, id);
+  }
+
+  refreshList() {
+    if (!this.societyId || !this.selectedBuilding) return;
+
+    this.loadFlats(this.societyId, this.selectedBuilding);
   }
 
   ngOnDestroy(): void {

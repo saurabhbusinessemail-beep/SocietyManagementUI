@@ -33,19 +33,18 @@
 
         </ng-container>
 
+        <!-- Multi Select -->
+        <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+            [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+            (delete)="deleteAllSelectedRecords()">
+        </ui-multi-select>
+
         <ng-container *ngFor="let manager of managers">
-            <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [showDelete]="canDeleteSocietyManager" (delete)="removeSecretary(manager)">
+            <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [selectMode]="selectMode"
+                [selected]="selectedIds.has(manager._id)" [showDelete]="canDeleteSocietyManager && !selectMode"
+                (selectedChange)="onSelectionChange(manager._id, $event)" (delete)="removeSecretary(manager)">
             </ui-manager-card>
         </ng-container>
-
-        <!-- <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let manager of managers">
-            <div card-main>
-                {{ manager.name ?? manager.phoneNumber }}
-            </div>
-            <div card-icon (click)="removeSecretary(manager)" *ngIf="canDeleteSocietyManager">
-                <app-icon class="delete" name="delete" color="#a60000"></app-icon>
-            </div>
-        </ui-card> -->
 
     </ui-form-layout>
 

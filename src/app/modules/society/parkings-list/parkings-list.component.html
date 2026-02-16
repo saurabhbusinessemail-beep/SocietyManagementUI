@@ -2,7 +2,7 @@
     <form [formGroup]="fb">
         <ui-form-layout>
 
-            <div class="flex" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <div class="flex flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
                 <div class="flex-auto flex flex-gap">
                     <ui-form-layout class="full-w">
@@ -18,21 +18,30 @@
                 </div>
 
                 <div>
+
                     <ui-button *ngIf="canAddParking" label="Add Flat" type="primary" (clicked)="openAddDialog()">
                     </ui-button>
                 </div>
             </div>
 
             <!-- Building Drop Down -->
-            <ui-form-layout  [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                 <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
                     placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 </ui-drop-down>
             </ui-form-layout>
 
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
             <ng-container *ngFor="let parking of parkings">
                 <ui-parking-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [parking]="parking"
-                    [showEdit]="canUpdateParking" [showDelete]="canDeleteParking" (edit)="openEditDialog(parking)"
+                    [showEdit]="canUpdateParking && !selectMode" [showDelete]="canDeleteParking && !selectMode"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(parking._id)"
+                    (selectedChange)="onSelectionChange(parking._id, $event)" (edit)="openEditDialog(parking)"
                     (delete)="deleteParking(parking)">
                 </ui-parking-card>
 
@@ -88,9 +97,9 @@
 
 
             <ng-container actions>
-                <ui-button label="Auto Generate" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
-                    (clicked)="generateParking()"
-                    *ngIf="!selectedParkingId && selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1">
+
+                <ui-button label="Auto Gen" type="only-content" (clicked)="generateParking()"
+                    *ngIf="selectedParkingType && selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1">
                 </ui-button>
 
                 <ui-button label="Cancel" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"

@@ -15,19 +15,28 @@
             </div>
         </div>
 
-        <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
             <ui-label [valueText]="pendingBuildingsToAdd" [config]="pendingBuildingsConfig" direction="horizontal"
                 [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
             </ui-label>
         </div>
 
+        <!-- Multi Select -->
+        <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+            [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+            (delete)="deleteAllSelectedRecords()">
+        </ui-multi-select>
+
         <!-- Building cards -->
         <ng-container *ngFor="let building of buildings">
             <ui-building-card [building]="building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
-                [showDelete]="canDeleteBuildings" [showEdit]="canUpdateBuildings" (delete)="deleteBuilding(building)"
+                [selectMode]="selectMode" [selected]="selectedIds.has(building._id)"
+                [showDelete]="canDeleteBuildings && !selectMode" [showEdit]="canUpdateBuildings && !selectMode"
+                (selectedChange)="onSelectionChange(building._id, $event)" (delete)="deleteBuilding(building)"
                 (edit)="openEditDialog(building)">
             </ui-building-card>
         </ng-container>
+
     </ui-form-layout>
 
 </app-layout>

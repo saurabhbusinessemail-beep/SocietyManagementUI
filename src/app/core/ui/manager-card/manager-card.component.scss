@@ -23,11 +23,6 @@
         padding-bottom: $sp-sm;
         border-bottom: 1px solid $color-border;
 
-        @include mobile {
-            flex-direction: column;
-            gap: $sp-sm;
-        }
-
         .user-info {
             display: flex;
             align-items: center;
@@ -234,5 +229,18 @@
                 font-weight: 500;
             }
         }
+    }
+}
+
+.selection-checkbox {
+    display: flex;
+    align-items: center;
+    margin-right: $sp-sm;
+
+    input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: $color-dark-blue; // uses your variable
     }
 }

@@ -9,13 +9,14 @@ import { SocietyService } from '../../../services/society.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../../../services/dialog.service';
 import { WindowService } from '../../../services/window.service';
+import { ListBase } from '../../../directives/list-base.directive';
 
 @Component({
   selector: 'app-parkings-list',
   templateUrl: './parkings-list.component.html',
   styleUrl: './parkings-list.component.scss'
 })
-export class ParkingsListComponent implements OnInit, OnDestroy {
+export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy {
 
   societyId?: string;
   buildingId?: string;
@@ -114,6 +115,11 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
     return this.fb.get('building')?.value ?? undefined;
   }
 
+  get selectedParkingType(): keyof typeof VehicleTypes | undefined {
+    const ctrl = this.fb.get('parkingType');
+    return ctrl && ctrl.value ? ctrl.value as keyof typeof VehicleTypes : undefined;
+  }
+
   get pageTitle(): string | undefined {
     if (!this.society) return 'Parkings';
 
@@ -160,9 +166,9 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private loginService: LoginService,
     private dialog: MatDialog,
-    private dialogService: DialogService,
+    dialogService: DialogService,
     private windowService: WindowService
-  ) { }
+  ) { super(dialogService) }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
@@ -353,9 +359,16 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
       })
   }
 
-  generateParking() {
+  async generateParking() {
+    const parkingType = this.selectedParkingType;
+    if (!parkingType) return;
+
+    const parkingTypeName = VehicleTypes[parkingType];
+
+    if(!await this.dialogService.confirmToProceed(`Parkings will be created automatically for all pending flats which do not have ${parkingTypeName} parking yet`)) return;
+
     // Find flats with pending parkings
-    const flatsWithoutParking = this.flats.filter(f => !this.parkings.some(p => p.flatId === f._id));
+    const flatsWithoutParking = this.flats.filter(f => !this.parkings.some(p => p.flatId === f._id && p.parkingType === parkingType));
     if (flatsWithoutParking.length === 0) return;
 
     const newParkings = flatsWithoutParking.map(f => {
@@ -431,6 +444,18 @@ export class ParkingsListComponent implements OnInit, OnDestroy {
           this.loadParkings(this.societyId ?? '', this.fb.value.building ?? undefined);
         },
       })
+  }
+
+  deleteOneRecord(id: string) {
+    if (!this.societyId) return;
+
+    return this.societyService.deleteParking(this.societyId, id);
+  }
+
+  refreshList() {
+    if (!this.societyId) return;
+
+    this.loadParkings(this.societyId, this.selectedBuilding);
   }
 
   editParking(parking: IParking) {

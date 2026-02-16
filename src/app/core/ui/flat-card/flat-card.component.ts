@@ -11,6 +11,10 @@ export class FlatCardComponent {
   @Input() showEdit = false;
   @Input() showDelete = false;
 
+  @Input() selectMode = false;
+  @Input() selected = false;
+  @Output() selectedChange = new EventEmitter<boolean>();
+
   @Output() edit = new EventEmitter<IFlat>();
   @Output() delete = new EventEmitter<IFlat>();
 
@@ -72,5 +76,9 @@ export class FlatCardComponent {
   onDelete(event: MouseEvent): void {
     event.stopPropagation();
     this.delete.emit(this.flat);
+  }
+
+  toggleSelection(event: Event): void {
+    this.selectedChange.emit(!this.selected);
   }
 }

@@ -4,6 +4,7 @@ import { ConfirmationPopupComponent } from '../core/confirmation/confirmation-po
 import { IConfirmationPopupDataConfig } from '../interfaces';
 import { Observable, take } from 'rxjs';
 import { ConfirmDeleteComponent } from '../core/delete-confirmation/confirm-delete.component';
+import { ProceedConfirmComponent } from '../core/ui/proceed-confirm/proceed-confirm.component';
 
 
 @Injectable({
@@ -38,6 +39,20 @@ export class DialogService {
     });
 
     return this.dialogRef.afterClosed();
+  }
+
+  confirmToProceed(message: string) {
+    const ref = this.dialog.open(ProceedConfirmComponent, {
+      data: { message }
+    });
+
+    return new Promise(resolve => {
+      ref.afterClosed()
+        .pipe(take(1))
+        .subscribe((response: boolean) => {
+          resolve(response);
+        });
+    })
   }
 
   confirmDelete(title: string, message: string): Promise<boolean> {

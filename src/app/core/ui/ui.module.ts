@@ -35,6 +35,8 @@ import { ManagerCardComponent } from './manager-card/manager-card.component';
 import { BuildingCardComponent } from './building-card/building-card.component';
 import { FlatCardComponent } from './flat-card/flat-card.component';
 import { ParkingCardComponent } from './parking-card/parking-card.component';
+import { MultiSelectComponent } from './multi-select/multi-select.component';
+import { ProceedConfirmComponent } from './proceed-confirm/proceed-confirm.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,9 @@ import { ParkingCardComponent } from './parking-card/parking-card.component';
     ManagerCardComponent,
     BuildingCardComponent,
     FlatCardComponent,
-    ParkingCardComponent
+    ParkingCardComponent,
+    MultiSelectComponent,
+    ProceedConfirmComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -100,7 +104,9 @@ import { ParkingCardComponent } from './parking-card/parking-card.component';
     ManagerCardComponent,
     BuildingCardComponent,
     FlatCardComponent,
-    ParkingCardComponent
+    ParkingCardComponent,
+    MultiSelectComponent,
+    ProceedConfirmComponent
   ],
   providers: [MatDatepickerModule]
 })

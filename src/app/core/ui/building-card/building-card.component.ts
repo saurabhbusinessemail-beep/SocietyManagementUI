@@ -11,6 +11,10 @@ export class BuildingCardComponent {
   @Input() showEdit = false;
   @Input() showDelete = false;
 
+  @Input() selectMode = false;
+  @Input() selected = false;
+  @Output() selectedChange = new EventEmitter<boolean>();
+
   @Output() edit = new EventEmitter<IBuilding>();
   @Output() delete = new EventEmitter<IBuilding>();
 
@@ -92,5 +96,9 @@ export class BuildingCardComponent {
   onDelete(event: MouseEvent): void {
     event.stopPropagation();
     this.delete.emit(this.building);
+  }
+
+  toggleSelection(event: Event): void {
+    this.selectedChange.emit(!this.selected);
   }
 }

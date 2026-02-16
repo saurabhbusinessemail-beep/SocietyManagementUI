@@ -11,6 +11,10 @@ export class ManagerCardComponent {
   @Input() showEdit = false;
   @Input() showDelete = false;
 
+  @Input() selectMode = false;
+  @Input() selected = false;
+  @Output() selectedChange = new EventEmitter<boolean>();
+
   @Output() edit = new EventEmitter<IUser>();
   @Output() delete = new EventEmitter<IUser>();
 
@@ -39,5 +43,9 @@ export class ManagerCardComponent {
   onDelete(event: MouseEvent): void {
     event.stopPropagation();
     this.delete.emit(this.user);
+  }
+
+  toggleSelection(event: Event): void {
+    this.selectedChange.emit(!this.selected);
   }
 }

@@ -10,13 +10,14 @@ import { UILabelValueType } from '../../../types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WindowService } from '../../../services/window.service';
 import { DialogService } from '../../../services/dialog.service';
+import { ListBase } from '../../../directives/list-base.directive';
 
 @Component({
   selector: 'app-building-list',
   templateUrl: './building-list.component.html',
   styleUrl: './building-list.component.scss'
 })
-export class BuildingListComponent implements OnInit, OnDestroy {
+export class BuildingListComponent extends ListBase implements OnInit, OnDestroy {
 
   societyId?: string;
   society?: ISociety;
@@ -151,9 +152,9 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private dialogService: DialogService,
+    dialogService: DialogService,
     private windowService: WindowService
-  ) { }
+  ) { super(dialogService) }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
@@ -346,6 +347,18 @@ export class BuildingListComponent implements OnInit, OnDestroy {
           this.resetBuildingForm();
         },
       })
+  }
+
+  deleteOneRecord(id: string) {
+    if (!this.societyId) return;
+
+    return this.societyService.deleteBuilding(this.societyId, id);
+  }
+
+  refreshList() {
+    if (!this.societyId) return;
+
+    this.loadSocietyBuildings(this.societyId);
   }
 
   gotoViewFlats() {

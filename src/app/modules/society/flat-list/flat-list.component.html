@@ -33,10 +33,18 @@
                 [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-drop-down>
 
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
             <ng-container *ngFor="let flat of flats">
                 <ui-flat-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [flat]="flat"
                     *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()"
-                    [showDelete]="canDeleteFlat" (delete)="deleteFlat(flat)">
+                    [selectMode]="selectMode" [selected]="selectedIds.has(flat._id)"
+                    (selectedChange)="onSelectionChange(flat._id, $event)" [showDelete]="canDeleteFlat && !selectMode"
+                    (delete)="deleteFlat(flat)">
                 </ui-flat-card>
             </ng-container>
 
