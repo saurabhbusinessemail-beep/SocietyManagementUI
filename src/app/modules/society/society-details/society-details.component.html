@@ -1,91 +1,92 @@
 <app-layout [hideMoreActions]="true" [showBackButton]="true">
-    <ui-form-layout>
+    <div class="society-details-container">
 
-
-        <!-- Society Header -->
-        <div class="society-header" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        <!-- Society Header with Edit Button -->
+        <div class="society-header">
             <h2 class="society-name">{{ society?.societyName }}</h2>
-
             <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
                 <app-icon name="edit"></app-icon>
             </ui-button>
-
         </div>
 
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
 
-        <!-- Secretaries -->
-        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
-            <div class="card-header">
-                <span>Secretaries</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canViewManager" (clicked)="gotoSocietyManageers()">
-                </ui-button>
+            <!-- Secretaries Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <span class="card-title">Secretaries</span>
+                    <ui-button label="Manage" type="only-content" *ngIf="canViewManager"
+                        (clicked)="gotoSocietyManageers()">
+                    </ui-button>
+                </div>
+                <div class="list">
+                    <ui-chip *ngFor="let s of managerIds" [value]="(s.name ?? '') + '' + s.phoneNumber"
+                        [crossAction]="canDeleteManager" (crossClicked)="removeSecretary(s)">
+                    </ui-chip>
+                </div>
             </div>
-            <div class="list">
-                <ui-chip *ngFor="let s of managerIds" [value]="(s.name ?? '') + '' + s.phoneNumber"
-                    [crossAction]="canDeleteManager" (crossClicked)="removeSecretary(s)">
-                </ui-chip>
+
+            <!-- Stats Card -->
+            <div class="dashboard-card stats-card">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Buildings</span>
+                        <span class="stat-value">{{ society?.numberOfBuildings }}</span>
+                        <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety"
+                            (clicked)="gotoBuildingManager()"
+                            [disable]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
+                        </ui-button>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Flats</span>
+                        <span class="stat-value">{{ flats.length }}</span>
+                        <ui-button label="Manage" type="only-content" [disable]="!canViewFlats"
+                            (clicked)="gotoFlatManager()">
+                        </ui-button>
+                    </div>
+                </div>
             </div>
-        </section>
 
-
-        <!-- Stats -->
-        <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
-            <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-                <label>Buildings</label>
-                <strong>{{ society?.numberOfBuildings }}</strong>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoBuildingManager()"
-                    [disable]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
-                </ui-button>
+            <!-- Parkings Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <span class="card-title">Parkings</span>
+                    <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety"
+                        (clicked)="gotoParkingManager()">
+                    </ui-button>
+                </div>
+                <div class="badge-container">
+                    <div class="badge done">Added: {{ parkings.length }}</div>
+                </div>
             </div>
-            <div class="stat" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-                <label>Flats</label>
-                <strong>{{ flats.length }}</strong>
-                <ui-button label="Manage" type="only-content" [disable]="!canViewFlats" (clicked)="gotoFlatManager()">
-                </ui-button>
+
+            <!-- Complaints Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <span class="card-title">Complaints</span>
+                    <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoComplaints()">
+                    </ui-button>
+                </div>
+                <div class="badge-container">
+                    <div class="badge pending">Pending: {{ complaints?.pending }}</div>
+                    <div class="badge done">Completed: {{ complaints?.completed }}</div>
+                </div>
             </div>
-        </section>
 
+            <!-- Active Features Card -->
+            <!-- <div class="dashboard-card">
+                <div class="card-header">
+                    <span class="card-title">Active Features</span>
+                    <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
+                    </ui-button>
+                </div>
+                <div class="features">
+                   
+                </div>
+            </div> -->
 
-        <!-- Parkings Table -->
-        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
-            <div class="card-header">
-                <span>Parkings</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoParkingManager()">
-                </ui-button>
-            </div>
-            <div class="parkings">
-                <div class="badge done">Added: {{ parkings.length }}</div>
-            </div>
-        </section>
+        </div> <!-- end dashboard-grid -->
 
-
-        <!-- Complaints -->
-        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
-            <div class="card-header">
-                <span>Complaints</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoComplaints()">
-                </ui-button>
-            </div>
-            <div class="complaints">
-                <div class="badge pending">Pending: {{ complaints?.pending }}</div>
-                <div class="badge done">Completed: {{ complaints?.completed }}</div>
-            </div>
-        </section>
-
-
-        <!-- Features -->
-        <section class="card" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
-            <div class="card-header">
-                <span>Active Features</span>
-                <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
-                </ui-button>
-            </div>
-            <div class="features">
-                <!-- <ui-chip  *ngFor="let f of features" [value]="f.featureKey">
-                </ui-chip> -->
-            </div>
-        </section>
-
-
-    </ui-form-layout>
+    </div> <!-- end society-details-container -->
 </app-layout>

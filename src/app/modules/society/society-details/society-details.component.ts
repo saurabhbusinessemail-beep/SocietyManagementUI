@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IBuilding, IComplaintStats, IFlat, IParking, ISociety, IUser } from '../../../interfaces';
-import { FlatTypes, PERMISSIONS } from '../../../constants';
+import { IComplaintStats, IFlat, IParking, ISociety, IUser } from '../../../interfaces';
+import { PERMISSIONS } from '../../../constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
