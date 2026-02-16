@@ -8,8 +8,10 @@
 
   <ui-form-layout>
     <ng-container *ngFor="let s of socities">
-      <ng-template [ngTemplateOutlet]="society" [ngTemplateOutletContext]="{society: s}">
-      </ng-template>
+      <!-- <ng-template [ngTemplateOutlet]="society" [ngTemplateOutletContext]="{society: s}"> -->
+      <!-- </ng-template> -->
+      <ui-society-card [society]="s"  [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+      </ui-society-card>
     </ng-container>
 
   </ui-form-layout>

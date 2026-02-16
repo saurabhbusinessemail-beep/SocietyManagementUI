@@ -30,6 +30,7 @@ import { CardV2Component } from './card-v2/card-v2.component';
 import { GateEntryPopupComponent } from './gate-entry-popup/gate-entry-popup.component';
 import { FlatMemberCardComponent } from './flat-member-card/flat-member-card.component';
 import { AnnouncementCardComponent } from './announcement-card/announcement-card.component';
+import { SocietyCardComponent } from './society-card/society-card.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { AnnouncementCardComponent } from './announcement-card/announcement-card
     CardV2Component,
     GateEntryPopupComponent,
     FlatMemberCardComponent,
-    AnnouncementCardComponent
+    AnnouncementCardComponent,
+    SocietyCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -85,7 +87,8 @@ import { AnnouncementCardComponent } from './announcement-card/announcement-card
     CenterPopupComponent,
     CardV2Component,
     FlatMemberCardComponent,
-    AnnouncementCardComponent
+    AnnouncementCardComponent,
+    SocietyCardComponent
   ],
   providers: [MatDatepickerModule]
 })

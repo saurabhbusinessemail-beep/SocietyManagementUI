@@ -1,0 +1,109 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.society-card {
+    background-color: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    padding: $sp-md;
+    margin-bottom: $sp-md;
+    box-shadow: 0 2px 4px rgba($color-black, 0.05);
+
+    // Header section
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $sp-sm;
+        padding-bottom: $sp-sm;
+        border-bottom: 1px solid $color-border;
+
+        .society-name {
+            margin: 0;
+            font-weight: 600;
+            @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+            color: $color-dark-blue;
+        }
+
+        .building-count {
+            font-size: $font-size-sm;
+            color: $color-note-gray;
+            background-color: $color-light-gray;
+            padding: $sp-xs $sp-sm;
+            border-radius: $btn-border-radius-sm;
+        }
+    }
+
+    // Details grid – responsive using the mixins
+    .card-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $sp-sm $sp-md;
+
+        // Tablet: two columns
+        @include tablet {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        // Desktop: three columns, with address possibly spanning
+        @include desktop {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 0; // helps truncation work
+
+            .label {
+                font-size: $font-size-xs;
+                font-weight: 600;
+                color: $color-note-gray;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: $sp-xs;
+            }
+
+            .value,
+            .value-list {
+                font-size: $font-size-sm;
+                color: $color-black;
+                word-break: break-word;
+            }
+
+            .value-list {
+                line-height: 1.5;
+            }
+
+            .empty {
+                color: $color-disable-background;
+                font-style: italic;
+            }
+
+            // Special handling for address truncation on mobile only
+            .address-value {
+                @include mobile {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+
+        // Make address item span full width on tablet/desktop if desired (optional)
+        .address-item {
+            @include tablet {
+                grid-column: span 2;
+            }
+            @include desktop {
+                grid-column: span 3;
+            }
+        }
+    }
+
+    // Optional: hover effect
+    &:hover {
+        border-color: $color-border-highlight;
+        transition: border-color 0.2s ease;
+    }
+}
