@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ISociety, IUser } from '../../../interfaces';
 
 @Component({
@@ -7,7 +7,9 @@ import { ISociety, IUser } from '../../../interfaces';
   styleUrl: './society-card.component.scss'
 })
 export class SocietyCardComponent {
+
   @Input() society!: ISociety;
+  @Output() clicked = new EventEmitter<void>();
 
   /**
    * Returns a displayable list of admin contact names/strings.

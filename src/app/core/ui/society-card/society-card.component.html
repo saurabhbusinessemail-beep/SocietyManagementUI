@@ -1,6 +1,6 @@
 <div class="society-card">
     <!-- Header: Society name and basic info -->
-    <div class="card-header">
+    <div class="card-header" (click)="clicked.emit()">
         <h3 class="society-name">{{ society.societyName }}</h3>
         <span class="building-count">Buildings: {{ society.numberOfBuildings }}</span>
     </div>

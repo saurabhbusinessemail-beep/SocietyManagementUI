@@ -7,7 +7,13 @@
     border-radius: $btn-border-radius-md;
     padding: $sp-md;
     margin-bottom: $sp-md;
-    box-shadow: 0 2px 4px rgba($color-black, 0.05);
+    box-shadow: 0 2px 6px rgba($color-black, 0.08);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        border-color: $color-border-highlight;
+        box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
+    }
 
     // Header section
     .card-header {
@@ -22,15 +28,20 @@
             margin: 0;
             font-weight: 600;
             @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
-            color: $color-dark-blue;
+            color: $color-dark-blue; // primary brand color
         }
 
         .building-count {
             font-size: $font-size-sm;
-            color: $color-note-gray;
-            background-color: $color-light-gray;
+            color: $color-white; // white text on status background
+            background-color: $status-active; // green for active indicator
             padding: $sp-xs $sp-sm;
             border-radius: $btn-border-radius-sm;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+
+            // Could optionally change color based on number of buildings
+            // e.g., if zero, use $status-inactive – but that would require a binding
         }
     }
 
@@ -40,12 +51,10 @@
         grid-template-columns: 1fr;
         gap: $sp-sm $sp-md;
 
-        // Tablet: two columns
         @include tablet {
             grid-template-columns: repeat(2, 1fr);
         }
 
-        // Desktop: three columns, with address possibly spanning
         @include desktop {
             grid-template-columns: repeat(3, 1fr);
         }
@@ -54,11 +63,12 @@
             display: flex;
             flex-direction: column;
             min-width: 0; // helps truncation work
+            padding: $sp-xs 0;
 
             .label {
                 font-size: $font-size-xs;
                 font-weight: 600;
-                color: $color-note-gray;
+                color: $color-help-text; // muted label color
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: $sp-xs;
@@ -69,18 +79,17 @@
                 font-size: $font-size-sm;
                 color: $color-black;
                 word-break: break-word;
-            }
-
-            .value-list {
                 line-height: 1.5;
             }
 
-            .empty {
-                color: $color-disable-background;
-                font-style: italic;
+            .value-list {
+                .empty {
+                    color: $color-disable-background;
+                    font-style: italic;
+                }
             }
 
-            // Special handling for address truncation on mobile only
+            // Address truncation only on mobile
             .address-value {
                 @include mobile {
                     white-space: nowrap;
@@ -88,9 +97,18 @@
                     text-overflow: ellipsis;
                 }
             }
+
+            // Creation and modification timestamps – use note color
+            &:has(.label:contains('Created')),
+            &:has(.label:contains('Last Modified')) {
+                .value {
+                    color: $color-note-gray;
+                    font-size: $font-size-xs;
+                }
+            }
         }
 
-        // Make address item span full width on tablet/desktop if desired (optional)
+        // Address item spans full width on tablet/desktop
         .address-item {
             @include tablet {
                 grid-column: span 2;
@@ -98,12 +116,22 @@
             @include desktop {
                 grid-column: span 3;
             }
+
+            .address-value {
+                font-weight: 500; // slightly more emphasis
+            }
         }
     }
 
-    // Optional: hover effect
-    &:hover {
-        border-color: $color-border-highlight;
-        transition: border-color 0.2s ease;
+    // Optional: settings JSON styling
+    .detail-item:has(.label:contains('Settings')) {
+        .value {
+            background-color: $color-light-gray;
+            padding: $sp-xs $sp-sm;
+            border-radius: $btn-border-radius-sm;
+            font-family: monospace;
+            font-size: $font-size-xs;
+            color: $color-dark-blue;
+        }
     }
 }
