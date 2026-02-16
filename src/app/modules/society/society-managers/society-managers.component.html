@@ -33,14 +33,19 @@
 
         </ng-container>
 
-        <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let manager of managers">
+        <ng-container *ngFor="let manager of managers">
+            <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [showDelete]="canDeleteSocietyManager" (delete)="removeSecretary(manager)">
+            </ui-manager-card>
+        </ng-container>
+
+        <!-- <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let manager of managers">
             <div card-main>
                 {{ manager.name ?? manager.phoneNumber }}
             </div>
             <div card-icon (click)="removeSecretary(manager)" *ngIf="canDeleteSocietyManager">
                 <app-icon class="delete" name="delete" color="#a60000"></app-icon>
             </div>
-        </ui-card>
+        </ui-card> -->
 
     </ui-form-layout>
 

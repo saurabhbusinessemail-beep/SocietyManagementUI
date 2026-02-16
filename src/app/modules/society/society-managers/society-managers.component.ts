@@ -7,6 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
+import { DialogService } from '../../../services/dialog.service';
 
 
 @Component({
@@ -73,7 +74,8 @@ export class SocietyManagersComponent implements OnDestroy {
     private societyService: SocietyService,
     private location: Location,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService,
   ) { }
 
   ngOnInit(): void {
@@ -168,6 +170,8 @@ export class SocietyManagersComponent implements OnDestroy {
 
   async removeSecretary(user: IUser) {
     if (!this.societyId) return;
+
+    if (!await this.dialogService.confirmDelete('Delete Manager', `Are you sure you want to delete manager ${user.name}?`)) return;
 
     this.societyService.deleteManager(this.societyId, user._id)
       .pipe(take(1))
