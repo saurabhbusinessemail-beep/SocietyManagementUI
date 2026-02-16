@@ -442,11 +442,14 @@ export class FlatListComponent implements OnInit, OnDestroy {
       const endFlat = (autogenerateForm?.endFlat ?? 0) * 1;
       const arrFloors = Array.from({ length: toFloor - fromFloor + 1 }, (_, i) => fromFloor + i);
       const arrFlatNumbers = Array.from({ length: endFlat - startFlat + 1 }, (_, i) => startFlat + i);
+      const digitLength = endFlat > 9 ? endFlat.toString().length : 2;
 
       const flats = arrFloors.reduce((arrFlats, floorNumber) => {
         arrFlatNumbers.forEach(flatNumber => {
+          const paddedFlat = flatNumber.toString().padStart(digitLength, '0');
+
           arrFlats.push({
-            flatNumber: (connectFloorToFlatNumber ? floorNumber : '') + flatNumber.toString(),
+            flatNumber: (connectFloorToFlatNumber ? floorNumber : '') + paddedFlat,
             flatType,
             floor: floorNumber,
             societyId: formValue.society?._id ?? '',
