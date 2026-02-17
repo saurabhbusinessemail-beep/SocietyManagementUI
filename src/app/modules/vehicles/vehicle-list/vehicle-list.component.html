@@ -8,7 +8,7 @@
 
 
     <div class="flex-col full-h">
-        <app-filter [dropDownControlConfigs]="[]" (isFlatMemberChanged)="isFlatMember=$event"
+        <app-filter [dropDownControlConfigs]="[]" (isFlatMemberChanged)="isFlatMember=$event" [hideSocietySearch]="true"
             [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadFlatParking($event)">
         </app-filter>
 
