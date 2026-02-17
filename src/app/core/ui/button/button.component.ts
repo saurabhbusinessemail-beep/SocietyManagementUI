@@ -16,7 +16,7 @@ export class ButtonComponent extends UIBaseFormControl<void> {
   @Input() disable?: boolean;
   @Input() routerLink?: string | any[];
 
-  @Output() clicked = new EventEmitter<void>();
+  @Output() clicked = new EventEmitter<any>();
 
   getbuttonClasses(): string {
     let className = 'btn ' + this.type;

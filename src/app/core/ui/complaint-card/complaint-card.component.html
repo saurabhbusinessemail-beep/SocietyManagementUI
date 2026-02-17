@@ -1,0 +1,87 @@
+<div class="complaint-card">
+    <div class="card-header">
+        <div class="header-left">
+            <div class="selection-checkbox" *ngIf="selectMode">
+                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+            </div>
+            <div class="badges">
+                <span class="priority-badge" [ngClass]="getPriorityClass()">
+                    {{ complaint.priority }}
+                </span>
+                <span class="status-badge" [ngClass]="getStatusClass()">
+                    {{ complaint.status }}
+                </span>
+                <span class="type-badge" *ngIf="complaint.complaintType">
+                    {{ complaint.complaintType }}
+                </span>
+            </div>
+        </div>
+        <div class="header-actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <h3 class="complaint-title">{{ complaint.title }}</h3>
+        <p class="complaint-description">{{ complaint.description }}</p>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="label">Flat</span>
+                <span class="value">{{ getFlatDisplay() }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Society</span>
+                <span class="value">{{ getSocietyDisplay() }}</span>
+            </div>
+            <div class="detail-item" *ngIf="complaint.assignedTo">
+                <span class="label">Assigned To</span>
+                <span class="value">{{ getAssignedToDisplay() }}</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action" *ngIf="canApprove || canReject || canMoveToProgress || canMarkResolved || canClose">
+            <!-- Approve -->
+            <ui-button *ngIf="canApprove" type="only-content" label="Approve" 
+                       class="approved" (clicked)="onChangeStatus('approved', $event)">
+                <app-icon name="approve" size="md"></app-icon>
+            </ui-button>
+
+            <!-- Reject -->
+            <ui-button *ngIf="canReject" type="only-content" label="Reject" 
+                       class="rejected" (clicked)="onChangeStatus('rejected', $event)">
+                <app-icon name="reject" size="md"></app-icon>
+            </ui-button>
+
+            <!-- Move To Progress -->
+            <ui-button *ngIf="canMoveToProgress" type="only-content" label="Move To Progress" 
+                       class="in_progress" (clicked)="onChangeStatus('in_progress', $event)">
+                <app-icon name="inProgress" size="sm"></app-icon>
+            </ui-button>
+
+            <!-- Mark Resolved -->
+            <ui-button *ngIf="canMarkResolved" type="only-content" label="Mark Resolved" 
+                       class="resolved" (clicked)="onChangeStatus('resolved', $event)">
+                <app-icon name="resolve" size="sm"></app-icon>
+            </ui-button>
+
+            <!-- Close -->
+            <ui-button *ngIf="canClose" type="only-content" label="Close" 
+                       class="closed" (clicked)="onChangeStatus('closed', $event)">
+                <app-icon name="close" size="sm"></app-icon>
+            </ui-button>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <span class="created-info">
+            <span class="label">Created</span>
+            {{ complaint.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
+        </span>
+        <span class="modified-info" *ngIf="complaint.modifiedOn">
+            • Modified {{ complaint.modifiedOn | date:'medium' }}
+        </span>
+    </div>
+</div>

@@ -38,6 +38,7 @@ import { ParkingCardComponent } from './parking-card/parking-card.component';
 import { MultiSelectComponent } from './multi-select/multi-select.component';
 import { ProceedConfirmComponent } from './proceed-confirm/proceed-confirm.component';
 import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-card.component';
+import { ComplaintCardComponent } from './complaint-card/complaint-card.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-
     ParkingCardComponent,
     MultiSelectComponent,
     ProceedConfirmComponent,
-    MyFlatMemberCardComponent
+    MyFlatMemberCardComponent,
+    ComplaintCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -109,7 +111,8 @@ import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-
     ParkingCardComponent,
     MultiSelectComponent,
     ProceedConfirmComponent,
-    MyFlatMemberCardComponent
+    MyFlatMemberCardComponent,
+    ComplaintCardComponent
   ],
   providers: [MatDatepickerModule]
 })

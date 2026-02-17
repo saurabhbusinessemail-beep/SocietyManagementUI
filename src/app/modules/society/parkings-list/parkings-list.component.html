@@ -19,7 +19,7 @@
 
                 <div>
 
-                    <ui-button *ngIf="canAddParking" label="Add Flat" type="primary" (clicked)="openAddDialog()">
+                    <ui-button *ngIf="canAddParking" label="Add Parking" type="primary" (clicked)="openAddDialog()">
                     </ui-button>
                 </div>
             </div>
@@ -55,7 +55,7 @@
 <ng-template #parkingTemplate>
 
     <form [formGroup]="fb">
-        <app-add-edit-popup title="Add Building" (onClose)="closeDialog();">
+        <app-add-edit-popup [title]="selectedParkingId ? 'Edit Parking' : 'Add Parking'" (onClose)="closeDialog();">
 
             <ui-form-layout>
                 <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"

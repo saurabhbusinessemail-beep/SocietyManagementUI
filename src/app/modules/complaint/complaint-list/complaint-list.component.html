@@ -20,83 +20,14 @@
 
             <ng-container *ngFor=" let complaint of complaints">
 
-                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="160px">
-                    <ng-container card-main>
-                        <div class="title">
-                            {{ complaint.title | titlecase }}
-                        </div>
-                        <div class="subtitle">
-                            {{ complaint.description }}
-                        </div>
-                        <div class="society">
-                            <b>Society: </b> {{ getSociety(complaint)?.societyName | titlecase }}
-                        </div>
-                        <div class="flat">
-                            <b>Flat: </b> {{ getFlat(complaint)?.floor + ':' + getFlat(complaint)?.flatNumber }}
-                        </div>
-                        <div class="priority">
-                            <b>Priority: </b> {{ complaint.priority | titlecase }}
-                        </div>
-
-                        <div class="action">
-
-                            <!-- Manager submitted to Approved -->
-                            <ui-button type="only-content" label="Approve" [smColumns]="12" [mdColumns]="12"
-                                [lgColumns]="12" class="approved" (clicked)="changeStatus(complaint, 'approved')"
-                                *ngIf="isStatusTransitionAllowed(complaint, 'approved') && amIManagerOfSociety(complaint)">
-                                <app-icon name="approve" size="md"></app-icon>
-                            </ui-button>
-
-                            <!-- Manager submitted/approved/inprogress to rejected -->
-                            <ui-button type="only-content" label="Reject" [smColumns]="12" [mdColumns]="12"
-                                [lgColumns]="12" class="rejected" (clicked)="changeStatus(complaint, 'rejected')"
-                                *ngIf="isStatusTransitionAllowed(complaint, 'rejected') && amIManagerOfSociety(complaint)">
-                                <app-icon name="reject" size="md"></app-icon>
-                            </ui-button>
-
-                            <!-- Manager approved to inprogress -->
-                            <ui-button type="only-content" label="Move To Progress" [smColumns]="12" [mdColumns]="12"
-                                [lgColumns]="12" (clicked)="changeStatus(complaint, 'in_progress')" class="in_progress"
-                                *ngIf="isStatusTransitionAllowed(complaint, 'in_progress') && amIManagerOfSociety(complaint)">
-                                <app-icon name="inProgress" size="sm"></app-icon>
-                            </ui-button>
-
-                            <!-- Manager inprogress to resolved -->
-                            <ui-button type="only-content" label="Mark Resolved" [smColumns]="12" [mdColumns]="12"
-                                [lgColumns]="12" class="resolved" (clicked)="changeStatus(complaint, 'resolved')"
-                                *ngIf="isStatusTransitionAllowed(complaint, 'resolved') && amIManagerOfSociety(complaint)">
-                                <app-icon name="resolve" size="sm"></app-icon>
-                            </ui-button>
-
-                            <!-- Owner submitted/approved/resolved to closed -->
-                            <ui-button type="only-content" label="Close" [smColumns]="12" [mdColumns]="12"
-                                [lgColumns]="12" class="closed" (clicked)="changeStatus(complaint, 'closed')"
-                                *ngIf="isStatusTransitionAllowed(complaint, 'closed') && isMyComplaint(complaint)">
-                                <app-icon name="close" size="sm"></app-icon>
-                            </ui-button>
-                        </div>
-
-                    </ng-container>
-
-                    <ng-container card-icon>
-                        <div class="right-container">
-                            <div class="date">
-                                {{ complaint.createdOn | smartDate }}
-                            </div>
-
-
-                            <div class="stat">
-                                <div class="status" [ngClass]="complaint.status">
-                                    {{ complaint.status | titlecase }}
-                                </div>
-                                <div class="type" [ngClass]="complaint.complaintType.toString()">
-                                    {{ complaint.complaintType }}
-                                </div>
-                            </div>
-                        </div>
-
-                    </ng-container>
-                </ui-card>
+                <ui-complaint-card [complaint]="complaint" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                    [canApprove]="isStatusTransitionAllowed(complaint, 'approved') && amIManagerOfSociety(complaint)"
+                    [canReject]="isStatusTransitionAllowed(complaint, 'rejected') && amIManagerOfSociety(complaint)"
+                    [canMoveToProgress]="isStatusTransitionAllowed(complaint, 'in_progress') && amIManagerOfSociety(complaint)"
+                    [canMarkResolved]="isStatusTransitionAllowed(complaint, 'resolved') && amIManagerOfSociety(complaint)"
+                    [canClose]="isStatusTransitionAllowed(complaint, 'closed') && isMyComplaint(complaint)"
+                    (statusChange)="changeStatus(complaint, $event)">
+                </ui-complaint-card>
 
             </ng-container>
 
