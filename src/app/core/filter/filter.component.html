@@ -19,13 +19,12 @@
             [options]="societiesSearchConfig.dropDownOptions ?? []" placeholder="Search Society"
             (searchChange)="onSocietySearch($event)" [smColumns]="societyControlSizes[0]"
             [mdColumns]="societyControlSizes[1]" [lgColumns]="societyControlSizes[2]"
-            *ngIf="societiesSearchConfig.formControl && (windowService.mode.value !== 'mobile' || isFilterOpen)">
+            *ngIf="societiesSearchConfig.formControl && showSocietySearch">
         </ui-select2>
 
         <ui-select2 [formControl]="flatSearchConfig.formControl" [config]="flatSearchConfig"
             [options]="flatSearchConfig.dropDownOptions ?? []" placeholder="Search Flat"
-            [smColumns]="societyControlSizes[0]" [mdColumns]="societyControlSizes[1]"
-            [lgColumns]="societyControlSizes[2]"
+            [smColumns]="flatControlSizes[0]" [mdColumns]="flatControlSizes[1]" [lgColumns]="flatControlSizes[2]"
             *ngIf="showFlatSearch && flatSearchConfig.formControl">
         </ui-select2>
 
