@@ -39,6 +39,7 @@ import { MultiSelectComponent } from './multi-select/multi-select.component';
 import { ProceedConfirmComponent } from './proceed-confirm/proceed-confirm.component';
 import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-card.component';
 import { ComplaintCardComponent } from './complaint-card/complaint-card.component';
+import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ComplaintCardComponent } from './complaint-card/complaint-card.componen
     MultiSelectComponent,
     ProceedConfirmComponent,
     MyFlatMemberCardComponent,
-    ComplaintCardComponent
+    ComplaintCardComponent,
+    GatePassCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -112,7 +114,8 @@ import { ComplaintCardComponent } from './complaint-card/complaint-card.componen
     MultiSelectComponent,
     ProceedConfirmComponent,
     MyFlatMemberCardComponent,
-    ComplaintCardComponent
+    ComplaintCardComponent,
+    GatePassCardComponent
   ],
   providers: [MatDatepickerModule]
 })
