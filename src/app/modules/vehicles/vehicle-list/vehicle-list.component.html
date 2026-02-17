@@ -1,1 +1,24 @@
-<p>vehicle-list works!</p>
+<app-layout>
+
+    <ng-container moreActions>
+        <ui-button label="New Complaint" type="primary" [smColumns]="1" [mdColumns]="1"
+            [lgColumns]="1">
+        </ui-button>
+    </ng-container>
+
+
+    <div class="flex-col full-h">
+        <app-filter [dropDownControlConfigs]="[]" (isFlatMemberChanged)="isFlatMember=$event"
+            [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadFlatParking($event)">
+        </app-filter>
+
+        <ui-form-layout class="flex-auto">
+
+            <ng-container *ngFor=" let vehicle of vehicles">
+
+            </ng-container>
+
+        </ui-form-layout>
+    </div>
+
+</app-layout>

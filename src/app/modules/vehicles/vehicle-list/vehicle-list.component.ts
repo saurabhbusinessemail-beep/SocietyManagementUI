@@ -3,6 +3,11 @@ import { ListBase } from '../../../directives/list-base.directive';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
+import { IVehicle } from '../../../interfaces';
+
+interface IVehicleFilter {
+  flatId?: string
+}
 
 @Component({
   selector: 'app-vehicle-list',
@@ -12,11 +17,14 @@ import { DialogService } from '../../../services/dialog.service';
 export class VehicleListComponent extends ListBase implements OnInit, OnDestroy {
 
   flatId?: string;
+  vehicles: IVehicle[] = [];
+
+  isFlatMember: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     dialogService: DialogService,
-    
+
   ) {
     super(dialogService);
   }
@@ -25,7 +33,7 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     this.flatId = this.route.snapshot.paramMap.get('flatId')!;
   }
 
-  loadFlatParking() {
+  loadFlatParking(selectedFilter: IVehicleFilter) {
     if (!this.flatId) return;
 
 
