@@ -1,0 +1,349 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.flat-member-card {
+    background-color: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    padding: $sp-md;
+    margin-bottom: $sp-md;
+    box-shadow: 0 2px 6px rgba($color-black, 0.08);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        border-color: $color-border-highlight;
+        box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $sp-md;
+        padding-bottom: $sp-sm;
+        border-bottom: 1px solid $color-border;
+
+        @include mobile {
+            flex-wrap: wrap;
+            gap: $sp-sm;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            min-width: 0;
+            flex: 1;
+
+            .selection-checkbox {
+                display: flex;
+                align-items: center;
+
+                input[type="checkbox"] {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    accent-color: $color-dark-blue;
+                }
+            }
+
+            .member-info {
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+                flex-wrap: wrap;
+
+                .member-name {
+                    margin: 0;
+                    font-weight: 600;
+                    @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+                    color: $color-dark-blue;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .residing-badge {
+                    font-size: $font-size-sm;
+                    font-weight: 600;
+                    color: $color-white;
+                    padding: $sp-xs $sp-md;
+                    border-radius: 20px; // pill shape for emphasis
+                    letter-spacing: 0.3px;
+                    text-transform: uppercase;
+
+                    &.self {
+                        background-color: $status-active;
+                    }
+                    &.tenant {
+                        background-color: $status-pending;
+                    }
+                    &.vacant {
+                        background-color: $status-inactive;
+                    }
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: $sp-xs;
+
+            button {
+                border: none;
+                background: none;
+                padding: $sp-xs $sp-sm;
+                border-radius: $btn-border-radius-sm;
+                font-size: $font-size-sm;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s ease, color 0.2s ease;
+
+                &.edit-btn {
+                    background-color: $btn-bg-primary;
+                    color: $btn-text-primary;
+
+                    &:hover {
+                        background-color: darken($btn-bg-primary, 10%);
+                    }
+                }
+
+                &.delete-btn {
+                    background-color: $color-error-light;
+                    color: $color-error-dark;
+
+                    &:hover {
+                        background-color: $color-error-header;
+                        color: $color-white;
+                    }
+                }
+            }
+        }
+    }
+
+    .card-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $sp-md;
+
+        @include tablet {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @include desktop {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        // Quick info row: contact and status
+        .quick-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-md;
+            align-items: center;
+            background-color: $color-light-gray;
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+            margin-bottom: $sp-xs;
+
+            @include tablet {
+                grid-column: span 3;
+            }
+
+            .contact {
+                display: flex;
+                align-items: center;
+                gap: $sp-xs;
+                font-size: $font-size-base;
+                font-weight: 500;
+
+                i {
+                    font-style: normal;
+                    margin-right: $sp-xs;
+                }
+            }
+
+            .status-badge {
+                font-size: $font-size-sm;
+                font-weight: 600;
+                padding: $sp-xs $sp-md;
+                border-radius: 20px;
+                color: $color-white;
+                text-transform: uppercase;
+
+                &.active {
+                    background-color: $status-active;
+                }
+                &.expired {
+                    background-color: $status-expired;
+                }
+                &.terminated {
+                    background-color: $status-rejected;
+                }
+            }
+        }
+
+        // Location block: flat and society
+        .location-block {
+            background-color: rgba($color-sky, 0.1);
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+            border-left: 4px solid $color-dark-blue;
+
+            @include tablet {
+                grid-column: span 2;
+            }
+
+            .location-item {
+                display: flex;
+                align-items: center;
+                gap: $sp-xs;
+                margin-bottom: $sp-xs;
+
+                i {
+                    font-style: normal;
+                    min-width: 20px;
+                    color: $color-dark-blue;
+                }
+
+                .label {
+                    font-weight: 600;
+                    color: $color-help-text;
+                    margin-right: $sp-xs;
+                }
+                .value {
+                    font-weight: 500;
+                }
+            }
+        }
+
+        // Roles section: chips
+        .roles-section {
+            background-color: $color-white;
+            border: 1px dashed $color-border;
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+
+            @include tablet {
+                grid-column: span 1;
+            }
+
+            .section-title {
+                font-size: $font-size-xs;
+                font-weight: 600;
+                color: $color-help-text;
+                text-transform: uppercase;
+                margin-bottom: $sp-sm;
+            }
+
+            .role-chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: $sp-xs;
+
+                .chip {
+                    padding: $sp-xs $sp-sm;
+                    background-color: $color-light-gray;
+                    border-radius: 16px;
+                    font-size: $font-size-xs;
+                    font-weight: 500;
+                    color: $color-dark-blue;
+
+                    &.owner {
+                        background-color: $status-active;
+                        color: $color-white;
+                    }
+                    &.tenant {
+                        background-color: $status-pending;
+                        color: $color-white;
+                    }
+                    &.member {
+                        background-color: $color-note-gray;
+                        color: $color-white;
+                    }
+                    &.tenant-member {
+                        background-color: $color-dark-blue;
+                        color: $color-white;
+                    }
+                }
+            }
+        }
+
+        // Lease info card (shown only if tenant)
+        .lease-card {
+            background-color: $color-white;
+            border: 1px solid $color-border;
+            padding: $sp-md;
+            border-radius: $btn-border-radius-md;
+            margin-top: $sp-xs;
+
+            @include tablet {
+                grid-column: span 3;
+            }
+
+            .lease-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: $sp-sm;
+
+                .lease-title {
+                    font-weight: 600;
+                    color: $color-dark-blue;
+                }
+
+                .rent-amount {
+                    font-size: $font-size-lg;
+                    font-weight: 700;
+                    color: $color-dark-blue;
+                }
+            }
+
+            .lease-dates {
+                display: flex;
+                gap: $sp-lg;
+                flex-wrap: wrap;
+
+                .date-item {
+                    .label {
+                        font-size: $font-size-xs;
+                        color: $color-help-text;
+                    }
+                    .value {
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        // Linked user (if any)
+        .linked-user {
+            display: flex;
+            align-items: center;
+            gap: $sp-xs;
+            background-color: $color-light-gray;
+            padding: $sp-xs $sp-md;
+            border-radius: $btn-border-radius-sm;
+
+            @include tablet {
+                grid-column: span 3;
+            }
+
+            i {
+                font-style: normal;
+            }
+        }
+
+        // Creation info - always full width and muted
+        .creation-info {
+            color: $color-note-gray;
+            font-size: $font-size-xs;
+            border-top: 1px solid $color-border;
+            padding-top: $sp-sm;
+            margin-top: $sp-sm;
+
+            @include tablet {
+                grid-column: span 3;
+            }
+        }
+    }
+}

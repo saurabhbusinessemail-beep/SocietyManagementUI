@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ISelectedUser, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
@@ -7,6 +7,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
+import { DialogService } from '../../../services/dialog.service';
+import { ListBase } from '../../../directives/list-base.directive';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { WindowService } from '../../../services/window.service';
 
 
 @Component({
@@ -14,12 +18,15 @@ import { PERMISSIONS } from '../../../constants';
   templateUrl: './society-managers.component.html',
   styleUrl: './society-managers.component.scss'
 })
-export class SocietyManagersComponent implements OnDestroy {
+export class SocietyManagersComponent extends ListBase implements OnDestroy {
 
   societyId?: string;
   society?: ISociety;
 
   managers: IUser[] = [];
+  
+  @ViewChild('managerTemplate') managerTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
 
   loading = false;
   isComponentActive = new Subject<void>();
@@ -47,7 +54,9 @@ export class SocietyManagersComponent implements OnDestroy {
   ];
 
   get managerName(): string {
-    return (this.society ? this.society.societyName : '') + ' Managers';
+    if (!this.society) return 'Managers';
+
+    return 'Managers: ' + this.society.societyName;
   }
 
   get showUserSearch(): boolean {
@@ -71,13 +80,16 @@ export class SocietyManagersComponent implements OnDestroy {
     private societyService: SocietyService,
     private location: Location,
     private loginService: LoginService,
-    private router: Router
-  ) { }
+    private router: Router,
+    dialogService: DialogService,
+    private windowService: WindowService,
+    private dialog: MatDialog,
+  ) { super(dialogService) }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
     if (!this.societyId) this.router.navigateByUrl('');
-    
+
     this.loadSocietyManagers(this.societyId);
     this.subscribeToRadioChange();
   }
@@ -151,6 +163,32 @@ export class SocietyManagersComponent implements OnDestroy {
         }
       });
   }
+  
+  getDialogWidth(): string {
+    let width = '50%';
+    switch (this.windowService.mode.value) {
+      case 'mobile': width = '90%'; break;
+      case 'tablet': width = '70%'; break;
+      case 'desktop': width = '60%'; break
+    }
+    return width;
+  }
+  openAddDialog() {
+    // this.resetParkingForm();
+    this.currentDialogRef = this.dialog.open(this.managerTemplate, {
+      width: this.getDialogWidth(),
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      // this.resetParkingForm();
+      this.refreshList();
+    });
+  }
+
+  closeDialog() {
+    this.currentDialogRef?.close();
+  }
 
   addSecretary() {
     if (this.fb.invalid || !this.societyId) return;
@@ -167,11 +205,25 @@ export class SocietyManagersComponent implements OnDestroy {
   async removeSecretary(user: IUser) {
     if (!this.societyId) return;
 
+    if (!await this.dialogService.confirmDelete('Delete Manager', `Are you sure you want to delete manager ${user.name}?`)) return;
+
     this.societyService.deleteManager(this.societyId, user._id)
       .pipe(take(1))
       .subscribe(() => {
         this.loadSocietyManagers(this.societyId ?? '');
       });
+  }
+
+  deleteOneRecord(id: string) {
+    if (!this.societyId) return;
+
+    return this.societyService.deleteManager(this.societyId, id);
+  }
+
+  refreshList() {
+    if (!this.societyId) return;
+
+    this.loadSocietyManagers(this.societyId);
   }
 
   cancel() {

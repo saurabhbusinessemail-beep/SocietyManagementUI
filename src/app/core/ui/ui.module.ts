@@ -30,6 +30,16 @@ import { CardV2Component } from './card-v2/card-v2.component';
 import { GateEntryPopupComponent } from './gate-entry-popup/gate-entry-popup.component';
 import { FlatMemberCardComponent } from './flat-member-card/flat-member-card.component';
 import { AnnouncementCardComponent } from './announcement-card/announcement-card.component';
+import { SocietyCardComponent } from './society-card/society-card.component';
+import { ManagerCardComponent } from './manager-card/manager-card.component';
+import { BuildingCardComponent } from './building-card/building-card.component';
+import { FlatCardComponent } from './flat-card/flat-card.component';
+import { ParkingCardComponent } from './parking-card/parking-card.component';
+import { MultiSelectComponent } from './multi-select/multi-select.component';
+import { ProceedConfirmComponent } from './proceed-confirm/proceed-confirm.component';
+import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-card.component';
+import { ComplaintCardComponent } from './complaint-card/complaint-card.component';
+import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +66,17 @@ import { AnnouncementCardComponent } from './announcement-card/announcement-card
     CardV2Component,
     GateEntryPopupComponent,
     FlatMemberCardComponent,
-    AnnouncementCardComponent
+    AnnouncementCardComponent,
+    SocietyCardComponent,
+    ManagerCardComponent,
+    BuildingCardComponent,
+    FlatCardComponent,
+    ParkingCardComponent,
+    MultiSelectComponent,
+    ProceedConfirmComponent,
+    MyFlatMemberCardComponent,
+    ComplaintCardComponent,
+    GatePassCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -85,7 +105,17 @@ import { AnnouncementCardComponent } from './announcement-card/announcement-card
     CenterPopupComponent,
     CardV2Component,
     FlatMemberCardComponent,
-    AnnouncementCardComponent
+    AnnouncementCardComponent,
+    SocietyCardComponent,
+    ManagerCardComponent,
+    BuildingCardComponent,
+    FlatCardComponent,
+    ParkingCardComponent,
+    MultiSelectComponent,
+    ProceedConfirmComponent,
+    MyFlatMemberCardComponent,
+    ComplaintCardComponent,
+    GatePassCardComponent
   ],
   providers: [MatDatepickerModule]
 })

@@ -44,6 +44,7 @@ export class SocietyListComponent implements OnInit, OnDestroy {
 
     if (profile.user.role === 'admin') {
       this.router.navigate(['/society', society._id, 'details']);
+      return;
     }
 
     const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles

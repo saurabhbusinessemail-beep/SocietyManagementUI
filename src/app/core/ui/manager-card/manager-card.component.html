@@ -1,0 +1,48 @@
+<div class="manager-card" (click)="toggleSelection($event)">
+    <div class="card-header">
+        <div class="selection-checkbox" *ngIf="selectMode">
+            <input type="checkbox" [checked]="selected">
+        </div>
+        <div class="user-info">
+            <div class="avatar">
+                <img *ngIf="user.profilePicture" [src]="user.profilePicture" alt="{{ getUserDisplayName() }}">
+                <span *ngIf="!user.profilePicture" class="avatar-placeholder">
+                    {{ getUserInitials() }}
+                </span>
+            </div>
+            <div class="name-role">
+                <h3 class="user-name">{{ getUserDisplayName() }}</h3>
+                <span class="role-badge" [ngClass]="user.role">{{ user.role }}</span>
+            </div>
+        </div>
+        <div class="actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">
+                Edit
+            </button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <div class="card-details">
+        <div class="detail-item email-item">
+            <span class="label">Email</span>
+            <span class="value truncate-mobile">{{ user.email ?? 'N/A' }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="label">Phone</span>
+            <span class="value">{{ user.phoneNumber }}</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="label">Status</span>
+            <span class="value">
+                <span class="status-badge" [ngClass]="user.status">
+                    {{ user.status }}
+                </span>
+            </span>
+        </div>
+    </div>
+</div>

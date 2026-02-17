@@ -1,0 +1,17 @@
+<div class="confirm-dialog">
+    <div class="dialog-header">
+        <h2>Confirm</h2>
+        <button class="close-btn" (click)="onCancel()" aria-label="Close">
+            <span aria-hidden="true">✕</span>
+        </button>
+    </div>
+
+    <div class="dialog-content">
+        <p>{{ data.message }}</p>
+    </div>
+
+    <div class="dialog-actions">
+        <button class="cancel-btn" (click)="onCancel()">Cancel</button>
+        <button class="proceed-btn" (click)="onProceed()">Proceed</button>
+    </div>
+</div>

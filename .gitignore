@@ -8,6 +8,7 @@
 
 # Node
 /android
+/ios
 /node_modules
 /.angular
 /.vscode

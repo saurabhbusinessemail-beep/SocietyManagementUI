@@ -1,28 +1,215 @@
 <app-layout [hideMoreActions]="true" [title]="pageTitle" [showBackButton]="true">
-    <ui-form-layout>
+    <!-- Main container -->
+    <div class="flat-details-container">
 
-        <section class="flex flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        <!-- Member Profile Card -->
+        <div class="profile-card" *ngIf="flatMember && showFlatMemberProfile">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <span class="avatar-initials">{{ getInitials(flatMember.name) }}</span>
+                </div>
+                <div class="profile-info">
+                    <h2 class="profile-name">{{ flatMember.name }}</h2>
+                    <div class="profile-meta">
+                        <span class="residing-badge" [ngClass]="flatMember.residingType?.toLowerCase()">
+                            {{ flatMember.residingType }}
+                        </span>
+                        <span class="status-badge" [ngClass]="flatMember.status">
+                            {{ flatMember.status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-contact">
+                    <div class="contact-item">
+                        <i>📞</i> {{ flatMember.contact }}
+                    </div>
+                </div>
+            </div>
 
-            <ui-button label="Complaints" [smColumns]="1" [mdColumns]="1" [lgColumns]="1">
-            </ui-button>
+            <!-- Role Chips -->
+            <div class="role-chips">
+                <span *ngIf="flatMember.isOwner" class="chip owner">Owner</span>
+                <span *ngIf="flatMember.isTenant" class="chip tenant">Tenant</span>
+                <span *ngIf="flatMember.isMember" class="chip member">Member</span>
+                <span *ngIf="flatMember.isTenantMember" class="chip tenant-member">Tenant Member</span>
+            </div>
 
-        </section>
+            <!-- Lease Details (if tenant) -->
+            <div class="lease-details" *ngIf="flatMember.isTenant">
+                <div class="lease-item" *ngIf="flatMember.leaseStart">
+                    <span class="label">Lease Start</span>
+                    <span class="value">{{ flatMember.leaseStart | date:'mediumDate' }}</span>
+                </div>
+                <div class="lease-item" *ngIf="flatMember.leaseEnd">
+                    <span class="label">Lease End</span>
+                    <span class="value">{{ flatMember.leaseEnd | date:'mediumDate' }}</span>
+                </div>
+                <div class="lease-item" *ngIf="flatMember.rentAmount">
+                    <span class="label">Rent</span>
+                    <span class="value rent">{{ flatMember.rentAmount | currency:'INR' }}</span>
+                </div>
+            </div>
+        </div>
 
-        <ui-label [valueText]="getSociety()?.societyName" [config]="{id: '', label: 'Society'}" [smColumns]="12"
-            [mdColumns]="6" [lgColumns]="3">
-        </ui-label>
+        <!-- Flat & Society Details Card -->
+        <div class="details-card">
+            <h3 class="section-title">Flat Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="label">Society</span>
+                    <span class="value">{{ getSociety()?.societyName || '—' }}</span>
+                </div>
+                <div class="detail-item" *ngIf="hasMultiBuilding">
+                    <span class="label">Building</span>
+                    <span class="value">{{ getBuildingDisplay() }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Flat Number</span>
+                    <span class="value">{{ getflat()?.flatNumber || '—' }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Floor</span>
+                    <span class="value">{{ getflat()?.floor || '—' }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Flat Type</span>
+                    <span class="value">{{ getflat()?.flatType || '—' }}</span>
+                </div>
+            </div>
+        </div>
 
-        <ui-label [valueText]="getflat()?.flatNumber" [config]="{id: '', label: 'Flat Number'}" [smColumns]="12"
-            [mdColumns]="6" [lgColumns]="3">
-        </ui-label>
+        <!-- Related Sections (2-column layout on tablet/desktop) -->
+        <div class="related-sections">
+            <!-- Left Column -->
+            <div class="related-column">
+                <!-- Residents -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Residents</h3>
+                        <ui-button label="Manage" size="sm" (click)="manageResidents()"></ui-button>
+                    </div>
+                    <div class="member-list" *ngIf="members?.length; else noResidents">
+                        <div class="member-item" *ngFor="let member of members">
+                            <span class="member-name">{{ member.name }}</span>
+                            <span class="member-role" *ngIf="member.isOwner">Owner</span>
+                            <span class="member-role" *ngIf="member.isTenant">Tenant</span>
+                            <span class="member-role"
+                                *ngIf="member.isMember && !member.isOwner && !member.isTenant">Member</span>
+                            <span class="member-contact">{{ member.contact }}</span>
+                        </div>
+                    </div>
+                    <ng-template #noResidents>
+                        <div class="empty-message">No residents found.</div>
+                    </ng-template>
+                </div>
 
-        <ui-label [valueText]="this.flatMember?.residingType" [config]="{id: '', label: 'Residing'}" [smColumns]="12"
-            [mdColumns]="6" [lgColumns]="3">
-        </ui-label>
+                <!-- Vehicles -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Vehicles</h3>
+                        <ui-button label="Manage" size="sm" (click)="manageVehicles()"></ui-button>
+                    </div>
+                    <div class="vehicle-list" *ngIf="vehicles?.length; else noVehicles">
+                        <div class="vehicle-item" *ngFor="let vehicle of vehicles">
+                            <span class="vehicle-number">{{ vehicle.vehicleNumber }}</span>
+                            <span class="vehicle-type">{{ vehicle.vehicleType }}</span>
+                        </div>
+                    </div>
+                    <ng-template #noVehicles>
+                        <div class="empty-message">No vehicles registered.</div>
+                    </ng-template>
+                </div>
 
-        <ui-label [valueText]="getflat()?.flatType" [config]="{id: '', label: 'Flat Type'}" [smColumns]="12"
-            [mdColumns]="6" [lgColumns]="3">
-        </ui-label>
+                <!-- Parking -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Parking</h3>
+                    </div>
+                    <div class="parking-list" *ngIf="parkings?.length; else noParking">
+                        <div class="parking-item" *ngFor="let parking of parkings">
+                            <span class="parking-number">#{{ parking.parkingNumber }}</span>
+                            <span class="parking-type">{{ parking.parkingType }}</span>
+                        </div>
+                    </div>
+                    <ng-template #noParking>
+                        <div class="empty-message">No parking assigned.</div>
+                    </ng-template>
+                </div>
+            </div>
 
-    </ui-form-layout>
+            <!-- Right Column -->
+            <div class="related-column">
+                <!-- Complaints -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Complaints</h3>
+                        <ui-button label="Manage" size="sm" (click)="manageComplaints()"></ui-button>
+                    </div>
+                    <div class="complaint-list" *ngIf="complaints?.length; else noComplaints">
+                        <div class="complaint-item" *ngFor="let complaint of complaints">
+                            <div class="complaint-header">
+                                <span class="complaint-title">{{ complaint.title }}</span>
+                                <span class="priority-badge" [ngClass]="complaint.priority">{{ complaint.priority
+                                    }}</span>
+                            </div>
+                            <div class="complaint-meta">
+                                <span class="status" [ngClass]="complaint.status">{{ complaint.status }}</span>
+                                <span class="date">{{ complaint.createdOn | date:'mediumDate' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noComplaints>
+                        <div class="empty-message">No complaints filed.</div>
+                    </ng-template>
+                </div>
+
+                <!-- Gate Entries -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Gate Entries</h3>
+                        <ui-button label="Manage" size="sm" (click)="manageGateEntries()"></ui-button>
+                    </div>
+                    <div class="gate-list" *ngIf="gateEntries?.length; else noGateEntries">
+                        <div class="gate-item" *ngFor="let entry of gateEntries">
+                            <div class="gate-header">
+                                <span class="visitor-name">{{ entry.visitorName || 'Visitor' }}</span>
+                                <span class="gate-status" [ngClass]="entry.status">{{ entry.status }}</span>
+                            </div>
+                            <div class="gate-details" *ngIf="entry.entryTime">
+                                <span>🕒 {{ entry.entryTime | date:'short' }}</span>
+                                <span *ngIf="entry.vehicleNumber">🚗 {{ entry.vehicleNumber }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noGateEntries>
+                        <div class="empty-message">No gate entries found.</div>
+                    </ng-template>
+                </div>
+
+                <!-- Gate Passes -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Gate Passes</h3>
+                        <ui-button label="Manage" size="sm" (click)="manageGatePasses()"></ui-button>
+                    </div>
+                    <div class="gatepass-list" *ngIf="gatePasses?.length; else noGatePasses">
+                        <div class="gatepass-item" *ngFor="let pass of gatePasses">
+                            <span class="pass-otp">OTP: {{ pass.otp }}</span>
+                            <span class="pass-date">{{ pass.expectedDate | date:'mediumDate' }}</span>
+                        </div>
+                    </div>
+                    <ng-template #noGatePasses>
+                        <div class="empty-message">No gate passes.</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creation / Modification Footer -->
+        <div class="footer-meta" *ngIf="flatMember">
+            <span>Created {{ flatMember.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}</span>
+            <span *ngIf="flatMember.modifiedOn"> • Modified {{ flatMember.modifiedOn | date:'medium' }}</span>
+        </div>
+
+    </div>
 </app-layout>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IBuilding, ISelectedUser, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
@@ -7,17 +7,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { UILabelValueType } from '../../../types';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { WindowService } from '../../../services/window.service';
+import { DialogService } from '../../../services/dialog.service';
+import { ListBase } from '../../../directives/list-base.directive';
 
 @Component({
   selector: 'app-building-list',
   templateUrl: './building-list.component.html',
   styleUrl: './building-list.component.scss'
 })
-export class BuildingListComponent implements OnInit, OnDestroy {
+export class BuildingListComponent extends ListBase implements OnInit, OnDestroy {
 
   societyId?: string;
   society?: ISociety;
   buildings: IBuilding[] = [];
+
+  @ViewChild('buildingFormTemplate') buildingFormTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
 
   loading: boolean = false;
   isComponentActive = new Subject<void>();
@@ -87,9 +94,9 @@ export class BuildingListComponent implements OnInit, OnDestroy {
   });
 
   get pageTitle(): string | undefined {
-    if (!this.society) return;
+    if (!this.society) return 'Buildings';
 
-    return this.society.societyName + ' Building Manager'
+    return 'Buildings: ' + this.society.societyName
   }
 
   get showUserSearch(): boolean {
@@ -143,8 +150,11 @@ export class BuildingListComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private societyService: SocietyService,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router,
+    private dialog: MatDialog,
+    dialogService: DialogService,
+    private windowService: WindowService
+  ) { super(dialogService) }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
@@ -255,22 +265,59 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       })
   }
 
+  getDialogWidth(): string {
+    let width = '50%';
+    switch (this.windowService.mode.value) {
+      case 'mobile': width = '90%'; break;
+      case 'tablet': width = '70%'; break;
+      case 'desktop': width = '60%'; break
+    }
+    return width;
+  }
+  openAddDialog() {
+    this.resetBuildingForm(); // empty form
+    this.currentDialogRef = this.dialog.open(this.buildingFormTemplate, {
+      width: this.getDialogWidth(),
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetBuildingForm(); // clean up on close
+    });
+  }
+
+  openEditDialog(building: IBuilding) {
+    this.resetBuildingForm(building); // populate form
+    this.currentDialogRef = this.dialog.open(this.buildingFormTemplate, {
+      width: '600px',
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      this.resetBuildingForm();
+    });
+  }
+
+  closeDialog() {
+    this.currentDialogRef?.close();
+  }
+
+  // Modify addBuilding and editBuilding to close dialog on success
   addBuilding() {
     if (this.fb.invalid || !this.societyId) return;
-
     this.societyService.newBuilding(this.societyId, this.fb.value)
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.loadSocietyBuildings(this.societyId ?? '');
+          this.loadSocietyBuildings(this.societyId!);
           this.resetBuildingForm();
+          this.closeDialog();
         }
-      })
+      });
   }
 
   editBuilding() {
     if (this.fb.invalid || !this.selectedBuildingId || !this.societyId) return;
-
     this.societyService.updateBuilding(this.societyId, this.selectedBuildingId, {
       buildingNumber: this.fb.value.buildingNumber,
       societyId: this.fb.value.societyId,
@@ -280,14 +327,17 @@ export class BuildingListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.loadSocietyBuildings(this.societyId ?? '');
+          this.loadSocietyBuildings(this.societyId!);
           this.resetBuildingForm();
+          this.closeDialog();
         }
-      })
+      });
   }
 
-  deleteBuilding(building: IBuilding) {
+  async deleteBuilding(building: IBuilding) {
     if (!this.societyId) return;
+
+    if (!await this.dialogService.confirmDelete('Delete Building', `Are you sure you want to delete building ${building.buildingNumber}?`)) return;
 
     this.societyService.deleteBuilding(this.societyId, building._id)
       .pipe(take(1))
@@ -297,6 +347,18 @@ export class BuildingListComponent implements OnInit, OnDestroy {
           this.resetBuildingForm();
         },
       })
+  }
+
+  deleteOneRecord(id: string) {
+    if (!this.societyId) return;
+
+    return this.societyService.deleteBuilding(this.societyId, id);
+  }
+
+  refreshList() {
+    if (!this.societyId) return;
+
+    this.loadSocietyBuildings(this.societyId);
   }
 
   gotoViewFlats() {

@@ -1,0 +1,238 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.complaint-card {
+    background-color: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    padding: $sp-md;
+    margin-bottom: $sp-md;
+    box-shadow: 0 2px 6px rgba($color-black, 0.08);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        border-color: $color-border-highlight;
+        box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $sp-sm;
+        padding-bottom: $sp-sm;
+        border-bottom: 1px solid $color-border;
+
+        @include mobile {
+            flex-wrap: wrap;
+            gap: $sp-sm;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            flex-wrap: wrap;
+
+            .selection-checkbox {
+                display: flex;
+                align-items: center;
+
+                input[type="checkbox"] {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    accent-color: $color-dark-blue;
+                }
+            }
+
+            .badges {
+                display: flex;
+                flex-wrap: wrap;
+                gap: $sp-xs;
+
+                .priority-badge,
+                .status-badge,
+                .type-badge {
+                    font-size: $font-size-xs;
+                    font-weight: 600;
+                    padding: $sp-xs $sp-sm;
+                    border-radius: $btn-border-radius-sm;
+                    color: $color-white;
+                    text-transform: uppercase;
+                }
+
+                .priority-badge {
+                    &.low { background-color: $status-active; }
+                    &.medium { background-color: $status-pending; }
+                    &.high { background-color: $status-rejected; }
+                    &.urgent { background-color: $color-error-header; }
+                }
+
+                .status-badge {
+                    &.submitted { background-color: $status-pending; }
+                    &.approved { background-color: $status-approved; }
+                    &.in-progress { background-color: $color-dark-blue; }
+                    &.resolved { background-color: $status-active; }
+                    &.closed { background-color: $status-inactive; }
+                    &.rejected { background-color: $status-rejected; }
+                }
+
+                .type-badge {
+                    background-color: $color-note-gray;
+                }
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: $sp-xs;
+
+            .edit-btn,
+            .delete-btn {
+                border: none;
+                background: none;
+                padding: $sp-xs $sp-sm;
+                border-radius: $btn-border-radius-sm;
+                font-size: $font-size-sm;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            .edit-btn {
+                background-color: $btn-bg-primary;
+                color: $btn-text-primary;
+
+                &:hover {
+                    background-color: darken($btn-bg-primary, 10%);
+                }
+            }
+
+            .delete-btn {
+                background-color: $color-error-light;
+                color: $color-error-dark;
+
+                &:hover {
+                    background-color: $color-error-header;
+                    color: $color-white;
+                }
+            }
+        }
+    }
+
+    .card-body {
+        margin-bottom: $sp-sm;
+
+        .complaint-title {
+            margin: 0 0 $sp-xs 0;
+            font-size: $font-size-base;
+            font-weight: 600;
+            color: $color-dark-blue;
+        }
+
+        .complaint-description {
+            margin: 0 0 $sp-sm 0;
+            font-size: $font-size-sm;
+            color: $color-black;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: $sp-sm;
+
+            .detail-item {
+                .label {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                    display: block;
+                    margin-bottom: $sp-xs;
+                }
+
+                .value {
+                    font-size: $font-size-sm;
+                    font-weight: 500;
+                    word-break: break-word;
+                }
+            }
+        }
+
+        // Action buttons container
+        .action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-xs;
+            margin-top: $sp-md;
+            padding-top: $sp-sm;
+            border-top: 1px dashed $color-border;
+
+            ui-button {
+                ::ng-deep button {
+                    font-size: $font-size-xs;
+                    padding: $sp-xs $sp-sm;
+                    border-radius: $btn-border-radius-sm;
+                    font-weight: 500;
+                    transition: background-color 0.2s ease, color 0.2s ease;
+                }
+            }
+
+            .approved ::ng-deep button {
+                background-color: $status-approved;
+                color: $color-white;
+                &:hover {
+                    background-color: darken($status-approved, 10%);
+                }
+            }
+            .rejected ::ng-deep button {
+                background-color: $status-rejected;
+                color: $color-white;
+                &:hover {
+                    background-color: darken($status-rejected, 10%);
+                }
+            }
+            .in_progress ::ng-deep button {
+                background-color: $color-dark-blue;
+                color: $color-white;
+                &:hover {
+                    background-color: darken($color-dark-blue, 10%);
+                }
+            }
+            .resolved ::ng-deep button {
+                background-color: $status-active;
+                color: $color-white;
+                &:hover {
+                    background-color: darken($status-active, 10%);
+                }
+            }
+            .closed ::ng-deep button {
+                background-color: $status-inactive;
+                color: $color-white;
+                &:hover {
+                    background-color: darken($status-inactive, 10%);
+                }
+            }
+        }
+    }
+
+    .card-footer {
+        padding-top: $sp-sm;
+        border-top: 1px solid $color-border;
+        font-size: $font-size-xs;
+        color: $color-note-gray;
+
+        .created-info {
+            .label {
+                font-weight: 600;
+                margin-right: $sp-xs;
+            }
+        }
+
+        .modified-info {
+            margin-left: $sp-xs;
+        }
+    }
+}

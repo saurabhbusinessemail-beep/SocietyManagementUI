@@ -1,0 +1,522 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.flat-details-container {
+    max-width: 1400px;
+    margin: 0 auto;
+
+    // Profile Card
+    .profile-card {
+        background-color: $color-white;
+        border-radius: $btn-border-radius-md;
+        border: 1px solid $color-border;
+        padding: $sp-lg;
+        margin-bottom: $sp-lg;
+        box-shadow: 0 2px 8px rgba($color-black, 0.05);
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: $sp-md;
+            flex-wrap: wrap;
+            margin-bottom: $sp-md;
+
+            @include mobile {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-avatar {
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+                background-color: $color-light-gray;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 3px solid $color-dark-blue;
+                margin: auto;
+
+                .avatar-initials {
+                    font-size: $font-size-xl;
+                    font-weight: 600;
+                    color: $color-dark-blue;
+                    text-transform: uppercase;
+                }
+            }
+
+            .profile-info {
+                flex: 1;
+
+                .profile-name {
+                    margin: 0 0 $sp-xs;
+                    font-size: $font-size-xxl;
+                    font-weight: 600;
+                    color: $color-dark-blue;
+                }
+
+                .profile-meta {
+                    display: flex;
+                    gap: $sp-sm;
+
+                    .residing-badge {
+                        font-size: $font-size-sm;
+                        font-weight: 600;
+                        padding: $sp-xs $sp-md;
+                        border-radius: 20px;
+                        color: $color-white;
+                        text-transform: uppercase;
+
+                        &.self {
+                            background-color: $status-active;
+                        }
+                        &.tenant {
+                            background-color: $status-pending;
+                        }
+                        &.vacant {
+                            background-color: $status-inactive;
+                        }
+                    }
+
+                    .status-badge {
+                        font-size: $font-size-sm;
+                        font-weight: 600;
+                        padding: $sp-xs $sp-md;
+                        border-radius: 20px;
+                        color: $color-white;
+
+                        &.active {
+                            background-color: $status-active;
+                        }
+                        &.expired {
+                            background-color: $status-expired;
+                        }
+                        &.terminated {
+                            background-color: $status-rejected;
+                        }
+                    }
+                }
+            }
+
+            .profile-contact {
+                .contact-item {
+                    display: flex;
+                    align-items: center;
+                    gap: $sp-xs;
+                    font-size: $font-size-base;
+                    background-color: $color-light-gray;
+                    padding: $sp-sm $sp-md;
+                    border-radius: $btn-border-radius-sm;
+
+                    i {
+                        font-style: normal;
+                    }
+                }
+            }
+        }
+
+        .role-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-xs;
+            margin-bottom: $sp-md;
+
+            .chip {
+                padding: $sp-xs $sp-sm;
+                border-radius: 16px;
+                font-size: $font-size-xs;
+                font-weight: 500;
+                background-color: $color-light-gray;
+                color: $color-dark-blue;
+
+                &.owner {
+                    background-color: $status-active;
+                    color: $color-white;
+                }
+                &.tenant {
+                    background-color: $status-pending;
+                    color: $color-white;
+                }
+                &.member {
+                    background-color: $color-note-gray;
+                    color: $color-white;
+                }
+                &.tenant-member {
+                    background-color: $color-dark-blue;
+                    color: $color-white;
+                }
+            }
+        }
+
+        .lease-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-lg;
+            padding-top: $sp-md;
+            border-top: 1px solid $color-border;
+
+            .lease-item {
+                .label {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                    display: block;
+                    margin-bottom: $sp-xs;
+                }
+                .value {
+                    font-size: $font-size-base;
+                    font-weight: 500;
+
+                    &.rent {
+                        font-size: $font-size-lg;
+                        color: $color-dark-blue;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+    }
+
+    // Details Card (Flat info)
+    .details-card {
+        background-color: $color-white;
+        border-radius: $btn-border-radius-md;
+        border: 1px solid $color-border;
+        padding: $sp-lg;
+        margin-bottom: $sp-lg;
+        box-shadow: 0 2px 8px rgba($color-black, 0.05);
+
+        .section-title {
+            margin: 0 0 $sp-md;
+            font-size: $font-size-lg;
+            font-weight: 600;
+            color: $color-dark-blue;
+            padding-bottom: $sp-sm;
+            border-bottom: 2px solid $color-border;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: $sp-md;
+
+            .detail-item {
+                .label {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                    display: block;
+                    margin-bottom: $sp-xs;
+                }
+                .value {
+                    font-size: $font-size-base;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    // Related sections (two columns)
+    .related-sections {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $sp-lg;
+        margin-bottom: $sp-lg;
+
+        @include tablet {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .related-column {
+            display: flex;
+            flex-direction: column;
+            gap: $sp-lg;
+        }
+    }
+
+    // Section Card (for each related entity)
+    .section-card {
+        background-color: $color-white;
+        border-radius: $btn-border-radius-md;
+        border: 1px solid $color-border;
+        padding: $sp-lg;
+        box-shadow: 0 2px 8px rgba($color-black, 0.05);
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $sp-md;
+
+            .section-title {
+                margin: 0;
+                font-size: $font-size-lg;
+                font-weight: 600;
+                color: $color-dark-blue;
+            }
+
+            ::ng-deep ui-button button {
+                // Adjust button size for small appearance
+                padding: $sp-xs $sp-sm;
+                font-size: $font-size-xs;
+            }
+        }
+
+        .empty-message {
+            padding: $sp-md;
+            text-align: center;
+            color: $color-help-text;
+            font-style: italic;
+            background-color: $color-light-gray;
+            border-radius: $btn-border-radius-sm;
+        }
+
+        // Member list
+        .member-list {
+            .member-item {
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-border;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .member-name {
+                    font-size: smaller;
+                    flex: 2;
+                }
+                .member-role {
+                    font-size: $font-size-xs;
+                    padding: $sp-xs $sp-sm;
+                    background-color: $color-light-gray;
+                    border-radius: 12px;
+                    color: $color-dark-blue;
+                }
+                .member-contact {
+                    color: $color-help-text;
+                    font-size: $font-size-sm;
+                }
+            }
+        }
+
+        // Vehicle list
+        .vehicle-list {
+            .vehicle-item {
+                display: flex;
+                justify-content: space-between;
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-border;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .vehicle-number {
+                    font-size: smaller;
+                }
+                .vehicle-type {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                }
+            }
+        }
+
+        // Parking list
+        .parking-list {
+            .parking-item {
+                display: flex;
+                justify-content: space-between;
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-border;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .parking-number {
+                    font-size: smaller;
+                }
+                .parking-type {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                }
+            }
+        }
+
+        // Complaint list
+        .complaint-list {
+            .complaint-item {
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-border;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .complaint-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: $sp-xs;
+
+                    .complaint-title {
+                        font-size: smaller;
+                    }
+
+                    .priority-badge {
+                        font-size: $font-size-xs;
+                        padding: $sp-xs $sp-sm;
+                        border-radius: 12px;
+                        color: $color-white;
+                        text-transform: uppercase;
+
+                        &.low {
+                            background-color: $status-active;
+                        }
+                        &.medium {
+                            background-color: $status-pending;
+                        }
+                        &.high {
+                            background-color: $status-rejected;
+                        }
+                        &.urgent {
+                            background-color: $color-error-header;
+                        }
+                    }
+                }
+
+                .complaint-meta {
+                    display: flex;
+                    gap: $sp-md;
+                    font-size: $font-size-xs;
+
+                    .status {
+                        text-transform: capitalize;
+                        padding: $sp-xs $sp-sm;
+                        background-color: $color-light-gray;
+                        border-radius: 12px;
+
+                        &.submitted {
+                            background-color: $status-pending;
+                            color: $color-white;
+                        }
+                        &.approved {
+                            background-color: $status-approved;
+                            color: $color-white;
+                        }
+                        &.in_progress {
+                            background-color: $color-dark-blue;
+                            color: $color-white;
+                        }
+                        &.resolved {
+                            background-color: $status-active;
+                            color: $color-white;
+                        }
+                        &.closed {
+                            background-color: $status-inactive;
+                            color: $color-white;
+                        }
+                        &.rejected {
+                            background-color: $status-rejected;
+                            color: $color-white;
+                        }
+                    }
+                    .date {
+                        color: $color-help-text;
+                    }
+                }
+            }
+        }
+
+        // Gate entries list
+        .gate-list {
+            .gate-item {
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-border;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .gate-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: $sp-xs;
+
+                    .visitor-name {
+                        font-size: smaller;
+                    }
+                    .gate-status {
+                        font-size: $font-size-xs;
+                        padding: $sp-xs $sp-sm;
+                        border-radius: 12px;
+                        color: $color-white;
+                        text-transform: uppercase;
+
+                        &.requested {
+                            background-color: $status-pending;
+                        }
+                        &.approved {
+                            background-color: $status-approved;
+                        }
+                        &.rejected {
+                            background-color: $status-rejected;
+                        }
+                        &.cancelled {
+                            background-color: $status-inactive;
+                        }
+                        &.expired {
+                            background-color: $status-expired;
+                        }
+                        &.completed {
+                            background-color: $status-active;
+                        }
+                    }
+                }
+                .gate-details {
+                    display: flex;
+                    gap: $sp-md;
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                }
+            }
+        }
+
+        // Gate passes list
+        .gatepass-list {
+            .gatepass-item {
+                display: flex;
+                justify-content: space-between;
+                padding: $sp-sm 0;
+                border-bottom: 1px solid $color-border;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .pass-otp {
+                    font-size: smaller;
+                    font-family: monospace;
+                }
+                .pass-date {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                }
+            }
+        }
+    }
+
+    // Footer meta
+    .footer-meta {
+        margin-top: $sp-lg;
+        padding-top: $sp-md;
+        border-top: 1px solid $color-border;
+        text-align: center;
+        color: $color-note-gray;
+        font-size: $font-size-sm;
+    }
+}

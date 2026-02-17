@@ -1,0 +1,59 @@
+<div class="society-card">
+    <!-- Header: Society name and basic info -->
+    <div class="card-header" (click)="clicked.emit()">
+        <h3 class="society-name">{{ society.societyName }}</h3>
+        <span class="building-count">Buildings: {{ society.numberOfBuildings }}</span>
+    </div>
+
+    <!-- Main content grid (responsive via CSS) -->
+    <div class="card-details">
+        <!-- Address -->
+        <div class="detail-item address-item">
+            <span class="label">Address</span>
+            <span class="value address-value" [class.truncate-mobile]="true">{{ getAddressDisplay() }}</span>
+        </div>
+
+        <!-- Admin Contacts -->
+        <div class="detail-item">
+            <span class="label">Admin Contacts</span>
+            <div class="value-list">
+                <span *ngFor="let contact of getAdminContactsDisplay(); let last = last">
+                    {{ contact }}<span *ngIf="!last">, </span>
+                </span>
+                <span *ngIf="getAdminContactsDisplay().length === 0" class="empty">—</span>
+            </div>
+        </div>
+
+        <!-- Manager IDs -->
+        <div class="detail-item">
+            <span class="label">Managers</span>
+            <div class="value-list">
+                <span *ngFor="let manager of getManagerIdsDisplay(); let last = last">
+                    {{ manager }}<span *ngIf="!last">, </span>
+                </span>
+                <span *ngIf="getManagerIdsDisplay().length === 0" class="empty">—</span>
+            </div>
+        </div>
+
+        <!-- Creation info -->
+        <div class="detail-item">
+            <span class="label">Created</span>
+            <span class="value">{{ society.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
+        </div>
+
+        <!-- Modification info (if exists) -->
+        <div class="detail-item" *ngIf="society.modifiedOn || getModifiedByDisplay()">
+            <span class="label">Last Modified</span>
+            <span class="value">
+                <span *ngIf="society.modifiedOn">{{ society.modifiedOn | date:'mediumDate' }}</span>
+                <span *ngIf="getModifiedByDisplay()"> by {{ getModifiedByDisplay() }}</span>
+            </span>
+        </div>
+
+        <!-- Settings (optional) -->
+        <div class="detail-item" *ngIf="society.settings">
+            <span class="label">Settings</span>
+            <span class="value">{{ society.settings | json }}</span>
+        </div>
+    </div>
+</div>

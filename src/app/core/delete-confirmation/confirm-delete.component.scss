@@ -1,0 +1,67 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.popup-container {
+    background: $color-white;
+    border-radius: $btn-border-radius-md;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $sp-md;
+    border-bottom: 1px solid $color-border;
+}
+
+.popup-title {
+    font-family: $font-family-base;
+    font-weight: 600;
+
+    @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+
+    text-align: left;
+
+    @include mobile {
+        text-align: center;
+        flex: 1;
+    }
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    font-size: $font-size-lg;
+    cursor: pointer;
+    color: $icon-on-light;
+}
+
+.popup-body {
+    padding: $sp-md;
+}
+
+.popup-footer {
+    padding: $sp-md;
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp-sm;
+    border-top: 1px solid $color-border;
+}
+
+.btn-cancel {
+    background: $btn-bg-cancel;
+    color: $btn-text-cancel;
+    border-radius: $btn-border-radius-sm;
+    padding: $sp-sm $sp-md;
+    border: none;
+}
+
+.btn-delete {
+    background: $btn-error;
+    color: $btn-text-primary;
+    border-radius: $btn-border-radius-sm;
+    padding: $sp-sm $sp-md;
+    border: none;
+}

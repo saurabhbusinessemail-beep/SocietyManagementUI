@@ -28,4 +28,8 @@
         text-overflow: ellipsis;
         overflow: hidden;
     }
+
+    &.small {
+        padding: $sp-xs $sp-sm;
+    }
 }

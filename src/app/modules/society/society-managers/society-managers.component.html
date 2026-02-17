@@ -1,8 +1,35 @@
 <app-layout [title]="managerName" [hideMoreActions]="true" [showBackButton]="true">
     <ui-form-layout>
 
-        <ng-container *ngIf="canAddSocietyManager">
+        <div class="flex flex-gap flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            *ngIf="canAddSocietyManager">
 
+            <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
+            </ui-button>
+        </div>
+
+        <!-- Multi Select -->
+        <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+            [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+            (delete)="deleteAllSelectedRecords()">
+        </ui-multi-select>
+
+        <ng-container *ngFor="let manager of managers">
+            <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [selectMode]="selectMode"
+                [selected]="selectedIds.has(manager._id)" [showDelete]="canDeleteSocietyManager && !selectMode"
+                (selectedChange)="onSelectionChange(manager._id, $event)" (delete)="removeSecretary(manager)">
+            </ui-manager-card>
+        </ng-container>
+
+    </ui-form-layout>
+
+
+</app-layout>
+
+<ng-template #managerTemplate>
+    <app-add-edit-popup title="Add Manager" (onClose)="closeDialog();">
+
+        <ui-form-layout>
             <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
                 helpText="Select current status" direction="horizontal" [options]="radioOptions" [smColumns]="12"
                 [mdColumns]="12" [lgColumns]="12">
@@ -16,33 +43,18 @@
             <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="8"
                 *ngIf="showUserSearch">
             </ui-user-search>
+        </ui-form-layout>
+
+        <ng-container actions>
+            <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                (clicked)="closeDialog()">
+            </ui-button>
 
 
-
-            <div class="flex ui-form-layout flex-end" [smColumns]="12" [mdColumns]="8" [lgColumns]="8">
-
-                <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
-                    (clicked)="cancel()">
-                </ui-button>
-
-
-                <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
-                    [disable]="fb.invalid" (clicked)="addSecretary()">
-                </ui-button>
-            </div>
-
+            <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                [disable]="fb.invalid" (clicked)="addSecretary()">
+            </ui-button>
         </ng-container>
 
-        <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" *ngFor="let manager of managers">
-            <div card-main>
-                {{ manager.name ?? manager.phoneNumber }}
-            </div>
-            <div card-icon (click)="removeSecretary(manager)" *ngIf="canDeleteSocietyManager">
-                <app-icon class="delete" name="delete" color="#a60000"></app-icon>
-            </div>
-        </ui-card>
-
-    </ui-form-layout>
-
-
-</app-layout>
+    </app-add-edit-popup>
+</ng-template>

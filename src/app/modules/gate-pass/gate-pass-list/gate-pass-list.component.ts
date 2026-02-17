@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, debounceTime, take, takeUntil } from 'rxjs';
 import { GatePassService } from '../../../services/gate-pass.service';
 import { MatDialog } from '@angular/material/dialog';
 import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
+import { DialogService } from '../../../services/dialog.service';
 
 interface IGatePassFilter {
   societyId?: string, flatId?: string
@@ -22,7 +23,8 @@ export class GatePassListComponent implements OnInit, OnDestroy {
 
   constructor(
     private gatepassService: GatePassService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +48,11 @@ export class GatePassListComponent implements OnInit, OnDestroy {
       });
   }
 
-  deletePass(gatePass: IGatePass) {
+  async deletePass(gatePass: IGatePass) {
+    const forUser = typeof gatePass.userId === 'string' ? undefined : ` for ${gatePass.userId.name ?? gatePass.userId.phoneNumber}`
+
+    if (!await this.dialogService.confirmDelete('Delete Gate Pass', `Are you sure you want to delete this gate pass ${forUser}?`)) return;
+
     this.gatepassService.deleteGatePass(gatePass._id)
       .pipe(take(1))
       .subscribe(response => {

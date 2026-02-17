@@ -15,6 +15,7 @@ import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 import { PipeModule } from '../../pipes/pipes.module';
 import { ParkingsListComponent } from './parkings-list/parkings-list.component';
+import { MatDialogContent } from "@angular/material/dialog";
 
 
 
@@ -37,7 +38,8 @@ import { ParkingsListComponent } from './parkings-list/parkings-list.component';
     UiModule,
     IconModule,
     DirectiveModule,
-    PipeModule
-  ]
+    PipeModule,
+    MatDialogContent
+]
 })
 export class SocietyModule { }

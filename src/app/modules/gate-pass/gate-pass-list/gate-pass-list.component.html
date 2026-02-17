@@ -12,34 +12,9 @@
         <ui-form-layout class="flex-auto">
             <ng-container *ngFor="let gatepass of gatepasses">
 
-                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" height="180px">
-
-                    <ng-container card-main>
-
-                        <ui-label [config]="{id: '', label: getGatePassUser(gatepass)?.name}"
-                            [valueText]="getGatePassUser(gatepass)?.phoneNumber">
-                        </ui-label>
-
-                        <ui-label [config]="{id: '', label: 'OTP'}" [valueText]="gatepass.otp">
-                        </ui-label>
-
-                        <ui-label [config]="{id: '', label: 'Remarks'}" [valueText]="gatepass.remarks">
-                        </ui-label>
-
-                    </ng-container>
-
-                    <div card-icon class="flex flex-end flex-gap flex-align-item-center">
-
-                        <ui-button label="" type="only-content" (clicked)="showQR(gatepass)">
-                            <app-icon name="qr-code"></app-icon>
-                        </ui-button>
-
-                        <app-icon class="delete" name="delete" color="#a60000" *ngIf="!gatepass.isAssignedBySociety"
-                            (click)="deletePass(gatepass)">
-                        </app-icon>
-                    </div>
-
-                </ui-card>
+                <ui-gate-pass-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [gatePass]="gatepass"
+                    [showDelete]="!gatepass.isAssignedBySociety" (showQR)="showQR(gatepass)" (delete)="deletePass(gatepass)">
+                </ui-gate-pass-card>
 
             </ng-container>
 

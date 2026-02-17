@@ -1,23 +1,82 @@
 <app-layout [hideMoreActions]="true" [title]="pageTitle" [showBackButton]="true">
     <form [formGroup]="fb">
         <ui-form-layout>
-            
-            <ng-container *ngIf="canAddFlat">
 
+            <div class="flex" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
+                <div class="flex-auto flex flex-gap">
+                    <ui-form-layout class="full-w">
+                        <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+                            *ngIf="!society">
+                        </ui-society-search>
+
+                        <ui-label [valueText]="society.societyName" [config]="societyNameConfig" direction="horizontal"
+                            valueType="info" [smColumns]="12" [mdColumns]="10" [lgColumns]="10" *ngIf="society">
+                        </ui-label>
+
+                    </ui-form-layout>
+                </div>
+
+                <div>
+                    <ui-button *ngIf="canAddFlat" label="Add Flat" type="primary" (clicked)="openAddDialog()">
+                    </ui-button>
+                </div>
+            </div>
+
+            <!-- Building Drop Down -->
+            <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
+                placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <!-- Floor -->
+            <ui-drop-down [formControl]="floorControl" [config]="floorFilterConfig" [options]="filterOptions"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
+            <ng-container *ngFor="let flat of flats">
+                <ui-flat-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [flat]="flat"
+                    *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(flat._id)"
+                    (selectedChange)="onSelectionChange(flat._id, $event)" [showDelete]="canDeleteFlat && !selectMode"
+                    (delete)="deleteFlat(flat)">
+                </ui-flat-card>
+            </ng-container>
+
+        </ui-form-layout>
+    </form>
+
+</app-layout>
+
+<ng-template #flatTemplate>
+    <form [formGroup]="fb">
+        <app-add-edit-popup title="Add Flat" (onClose)="closeDialog();">
+            <ui-form-layout>
+
+                <!-- Society Control -->
                 <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="10" [lgColumns]="5"
                     *ngIf="!society">
                 </ui-society-search>
-
+                <!-- Society Label -->
                 <ui-label [valueText]="society.societyName" [config]="societyNameConfig" direction="horizontal"
                     valueType="info" [smColumns]="12" [mdColumns]="10" [lgColumns]="10" *ngIf="society">
                 </ui-label>
 
 
-
+                <!-- Building Drop Down -->
                 <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
-                    placeholder="Select Building" [smColumns]="12" [mdColumns]="10" [lgColumns]="5">
+                    placeholder="Select Building" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
                 </ui-drop-down>
+                <!-- Append Floor Number checkbox -->
+                <ui-checklist class="flex-end" formControlName="appendFloorNumber" [config]="appendFloorNumberConfig"
+                    [options]="appendFloorNumberOptions" direction="horizontal" [smColumns]="12" [mdColumns]="12"
+                    [lgColumns]="6">
+                </ui-checklist>
 
 
                 <ng-container
@@ -30,21 +89,21 @@
                     <ng-container formGroupName="autogenerateForm" *ngIf="selectedTab === 'autoGen'">
 
                         <ui-text-box type="number" formControlName="fromFloor" [config]="fromFloorConfig"
-                            [smColumns]="6" [mdColumns]="5" [lgColumns]="2">
+                            [smColumns]="6" [mdColumns]="6" [lgColumns]="2">
                         </ui-text-box>
 
                         <ui-text-box type="number" formControlName="toFloor" [config]="toFloorConfig" [smColumns]="6"
-                            [mdColumns]="5" [lgColumns]="2">
+                            [mdColumns]="6" [lgColumns]="2">
                         </ui-text-box>
                         <ui-text-box type="number" formControlName="startFlat" [config]="startFlatConfig"
-                            [smColumns]="6" [mdColumns]="5" [lgColumns]="2">
+                            [smColumns]="6" [mdColumns]="6" [lgColumns]="2">
                         </ui-text-box>
                         <ui-text-box type="number" formControlName="endFlat" [config]="endFlatConfig" [smColumns]="6"
-                            [mdColumns]="5" [lgColumns]="2">
+                            [mdColumns]="6" [lgColumns]="2">
                         </ui-text-box>
 
                         <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
-                            [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="4"
+                            [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="6"
                             [lgColumns]="2">
                         </ui-drop-down>
 
@@ -72,40 +131,17 @@
                         [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                     </ui-label>
 
-                    <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
-                        (clicked)="addFlat()">
-                    </ui-button>
                 </section>
 
-                <section class="fui-form-layout" [smColumns]="12" [mdColumns]="10" [lgColumns]="10">
-                    <ui-drop-down [formControl]="floorControl" [config]="floorFilterConfig" [options]="filterOptions"
-                        [smColumns]="12" [mdColumns]="10" [lgColumns]="5">
-                    </ui-drop-down>
-                </section>
-                
-            </ng-container>
+            </ui-form-layout>
 
-            <ng-container *ngFor="let flat of flats">
-                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [disable]="selectedFlatId === flat._id"
-                    *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()">
-                    <div card-main class="flex flex-gap">
-                        <span class="note">
-                            <b>{{ flat.floor }}:</b> {{ flat.flatNumber }}
-                        </span>
-                        <span class="note">
-                            {{ flat.flatType }}
-                        </span>
-                        <div>
-                        </div>
-                    </div>
-                    <div card-icon class="flat-action">
-                        <app-icon class="delete" name="delete" color="#a60000" (click)="deleteFlat(flat)" *ngIf="canDeleteFlat">
-                        </app-icon>
-                    </div>
-                </ui-card>
+            <ng-container actions>
+                <ui-button [label]="'Cancel'" type="only-content" (clicked)="closeDialog();">
+                </ui-button>
+                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
+                    (clicked)="addFlat()">
+                </ui-button>
             </ng-container>
-
-        </ui-form-layout>
+        </app-add-edit-popup>
     </form>
-
-</app-layout>
+</ng-template>

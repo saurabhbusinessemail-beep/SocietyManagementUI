@@ -1,0 +1,18 @@
+<div class="flex">
+    <div class="selection-count" *ngIf="selectMode">
+        <span class="label">Selected: </span>
+        <span class="value">{{ selectedIds.size }}</span>
+    </div>
+    <div class="flex-auto"></div>
+    <div class="actions flex flex-gap">
+        <ui-button type="error" size="sm" label="Delete" *ngIf="isDeleteVisible" (clicked)="delete.emit()">
+            <app-icon name="delete" size="md">
+            </app-icon>
+        </ui-button>
+        <ui-button [type]="selectMode ? 'primary' : 'only-content'" [label]="selectMode ? '' : 'Multi Select'"
+            (clicked)="changeSelectionMode.emit(!selectMode)" size="sm">
+            <app-icon name="multi-select" *ngIf="!selectMode" size="md"></app-icon>
+            <app-icon name="multi-select-on" *ngIf="selectMode" size="md"></app-icon>
+        </ui-button>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="gate-pass-card">
+    <div class="card-header">
+        <div class="header-left">
+            <div class="selection-checkbox" *ngIf="selectMode">
+                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+            </div>
+            <div class="otp-badge">
+                OTP: <strong>{{ gatePass.otp }}</strong>
+            </div>
+            <span class="assigned-badge" *ngIf="gatePass.isAssignedBySociety">
+                Assigned by Society
+            </span>
+        </div>
+        <div class="header-actions">
+            <button class="qr-btn" (click)="onShowQR($event)" title="Show QR">
+                <span class="qr-icon">📱</span> QR
+            </button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" title="Delete">
+                <span class="delete-icon">🗑️</span> Delete
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="label">Flat</span>
+                <span class="value">{{ getFlatDisplay() }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Society</span>
+                <span class="value">{{ getSocietyDisplay() }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">User</span>
+                <span class="value">{{ getUserDisplay() }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Expected Date</span>
+                <span class="value">{{ gatePass.expectedDate | date:'mediumDate' }}</span>
+            </div>
+            <div class="detail-item full-width" *ngIf="gatePass.remarks">
+                <span class="label">Remarks</span>
+                <span class="value">{{ gatePass.remarks }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <span class="created-info">
+            <span class="label">Created</span>
+            {{ gatePass.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
+        </span>
+        <span class="modified-info" *ngIf="gatePass.modifiedOn">
+            • Modified {{ gatePass.modifiedOn | date:'medium' }}
+        </span>
+    </div>
+</div>

@@ -1,6 +1,5 @@
 import { FlatTypes } from "../constants";
-import { IBuilding, IDefaultFields, ISociety, IUser } from "./";
-import { IFlatMember } from "./flat-members.interface";
+import { IBuilding, IDefaultFields, ISociety } from "./";
 
 export interface IFlat extends IDefaultFields {
     _id: string;

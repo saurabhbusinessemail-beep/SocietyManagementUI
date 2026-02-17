@@ -7,5 +7,5 @@ export interface IParking extends IDefaultFields {
     buildingId?: string | IBuilding;
     societyId: string | ISociety;
     flatId?: string | IFlat;
-    parkingType: VehicleTypes;
+    parkingType: keyof typeof VehicleTypes;
 }

@@ -1,0 +1,25 @@
+<div class="popup-container">
+
+    <div class="popup-header">
+        <div class="popup-title">{{ title }}</div>
+
+        <button type="button" class="popup-close" (click)="onClose()">
+            ✕
+        </button>
+    </div>
+
+    <div class="popup-body">
+        {{ message }}
+    </div>
+
+    <div class="popup-footer">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+            Cancel
+        </button>
+
+        <button type="button" class="btn-delete" (click)="onDelete()">
+            Delete
+        </button>
+    </div>
+
+</div>

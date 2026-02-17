@@ -1,0 +1,73 @@
+<div class="flat-member-card" (click)="toggleSelection($event)">
+    <div class="card-header">
+        <div class="header-left">
+            <div class="selection-checkbox" *ngIf="selectMode">
+                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+            </div>
+            <div class="member-info">
+                <h3 class="member-name" (click)="clicked.emit()">{{ getFlatDisplay() }}</h3>
+                <span *ngIf="member.residingType" class="residing-badge" [ngClass]="member.residingType.toLowerCase()">
+                    {{ member.residingType }}
+                </span>
+            </div>
+        </div>
+        <div class="actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="card-details">
+        <!-- Quick info row: contact and status -->
+        <!-- <div class="quick-info">
+            <div class="contact">
+                <i>📞</i> {{ member.contact }}
+            </div>
+            <span class="status-badge" [ngClass]="member.status">{{ member.status }}</span>
+        </div> -->
+
+        <!-- Location block: flat and society -->
+        <div class="location-block">
+            <div class="location-item">
+                <i>🏘️</i>
+                <span class="label">Society:</span>
+                <span class="value">{{ getSocietyDisplay() }}</span>
+            </div>
+        </div>
+
+        <!-- Roles section -->
+        <div class="roles-section">
+            <div class="role-chips">
+                <span *ngIf="member.isOwner" class="chip owner">Owner</span>
+                <span *ngIf="member.isTenant" class="chip tenant">Tenant</span>
+                <span *ngIf="member.isMember" class="chip member">Member</span>
+                <span *ngIf="member.isTenantMember" class="chip tenant-member">Tenant Member</span>
+                <span *ngIf="!member.isOwner && !member.isTenant && !member.isMember && !member.isTenantMember">—</span>
+            </div>
+        </div>
+
+        <!-- Lease info card (only if tenant) -->
+        <div class="lease-card" *ngIf="member.isTenant">
+            <div class="lease-header">
+                <span class="lease-title">Lease Details</span>
+                <span class="rent-amount" *ngIf="member.rentAmount">{{ member.rentAmount | currency:'INR' }}</span>
+            </div>
+            <div class="lease-dates">
+                <div class="date-item" *ngIf="member.leaseStart">
+                    <div class="label">Start</div>
+                    <div class="value">{{ member.leaseStart | date:'mediumDate' }}</div>
+                </div>
+                <div class="date-item" *ngIf="member.leaseEnd">
+                    <div class="label">End</div>
+                    <div class="value">{{ member.leaseEnd | date:'mediumDate' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creation info -->
+        <div class="creation-info">
+            <span>Created {{ member.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
+            <span *ngIf="member.modifiedOn"> • Modified {{ member.modifiedOn | date:'mediumDate' }}</span>
+        </div>
+    </div>
+</div>

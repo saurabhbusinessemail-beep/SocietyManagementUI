@@ -1,0 +1,53 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.popup-container {
+    background: $color-white;
+    border-radius: $btn-border-radius-md;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $sp-md;
+    border-bottom: 1px solid $color-border;
+}
+
+.popup-title {
+    font-family: $font-family-base;
+    font-weight: 600;
+    color: $color-dark-blue;
+    @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+
+    text-align: left;
+
+    @include mobile {
+        text-align: center;
+        flex: 1;
+    }
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    font-size: $font-size-lg;
+    cursor: pointer;
+    color: $icon-on-light;
+}
+
+.popup-body {
+    padding: $sp-md;
+    overflow-y: auto;
+}
+
+.popup-footer {
+    padding: $sp-md;
+    border-top: 1px solid $color-border;
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp-sm;
+}

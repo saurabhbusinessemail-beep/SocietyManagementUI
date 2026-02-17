@@ -1,0 +1,43 @@
+<div class="flat-card" (click)="toggleSelection($event)">
+    <div class="card-header">
+        <div class="selection-checkbox" *ngIf="selectMode">
+            <input type="checkbox" [checked]="selected">
+        </div>
+        <div class="flat-info">
+            <h3 class="flat-number">Flat {{ flat.flatNumber }}</h3>
+            <span class="flat-type-badge" [ngClass]="'type-' + (flat.flatType | lowercase)">
+                {{ flat.flatType }}
+            </span>
+        </div>
+        <div class="actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="card-details">
+        <!-- Building -->
+        <div class="detail-item">
+            <span class="label">Building</span>
+            <span class="value truncate-mobile">{{ getBuildingDisplay() }}</span>
+        </div>
+
+        <!-- Society -->
+        <div class="detail-item">
+            <span class="label">Society</span>
+            <span class="value truncate-mobile">{{ getSocietyDisplay() }}</span>
+        </div>
+
+        <!-- Society -->
+        <div class="detail-item">
+            <span class="label">Floor</span>
+            <span class="value truncate-mobile">{{ flat.floor }}</span>
+        </div>
+
+        <!-- Creation info -->
+        <div class="detail-item timestamp-item">
+            <span class="label">Created</span>
+            <span class="value">{{ flat.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
+        </div>
+    </div>
+</div>

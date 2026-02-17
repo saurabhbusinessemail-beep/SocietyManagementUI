@@ -8,34 +8,9 @@
 
   <ui-form-layout>
     <ng-container *ngFor="let s of socities">
-      <ng-template [ngTemplateOutlet]="society" [ngTemplateOutletContext]="{society: s}">
-      </ng-template>
+      <ui-society-card [society]="s"  [smColumns]="12" [mdColumns]="6" [lgColumns]="6" (clicked)="handleSocietyClick(s)">
+      </ui-society-card>
     </ng-container>
 
   </ui-form-layout>
 </app-layout>
-
-
-<ng-template #society let-society="society">
-  <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-    <ng-container card-main>
-      <a class="society-name" (click)="handleSocietyClick(society)">
-        {{ society.societyName }}
-      </a>
-
-      <div class="society-meta">
-        <span><strong>Buildings:</strong> {{ society.numberOfBuildings ?? 1 }}</span>
-        <span><strong>Flats:</strong> --</span>
-      </div>
-
-      <div class="society-address">
-        {{ society.gpsLocation.address }}
-      </div>
-    </ng-container>
-
-    <ng-container card-icon>
-      <app-icon name="location-color"></app-icon>
-    </ng-container>
-  </ui-card>
-
-</ng-template>

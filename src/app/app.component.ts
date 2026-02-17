@@ -49,7 +49,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.menuService.userMenus//.pipe(take(1))
           .subscribe(res => {
-            console.log('res = ', res)
             this.checkAndAskForUserName();
 
             // No sync with URL change for some URLs

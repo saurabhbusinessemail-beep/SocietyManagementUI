@@ -2,9 +2,62 @@
     <form [formGroup]="fb">
         <ui-form-layout>
 
-            <ng-container *ngIf="canAddParking || (canUpdateParking && selectedParkingId)">
+            <div class="flex flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
+                <div class="flex-auto flex flex-gap">
+                    <ui-form-layout class="full-w">
+                        <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+                            *ngIf="!society">
+                        </ui-society-search>
 
+                        <ui-label [valueText]="society.societyName" [config]="societyNameConfig" direction="horizontal"
+                            valueType="info" [smColumns]="12" [mdColumns]="10" [lgColumns]="10" *ngIf="society">
+                        </ui-label>
+
+                    </ui-form-layout>
+                </div>
+
+                <div>
+
+                    <ui-button *ngIf="canAddParking" label="Add Parking" type="primary" (clicked)="openAddDialog()">
+                    </ui-button>
+                </div>
+            </div>
+
+            <!-- Building Drop Down -->
+            <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
+                    placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                </ui-drop-down>
+            </ui-form-layout>
+
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
+            <ng-container *ngFor="let parking of parkings">
+                <ui-parking-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [parking]="parking"
+                    [showEdit]="canUpdateParking && !selectMode" [showDelete]="canDeleteParking && !selectMode"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(parking._id)"
+                    (selectedChange)="onSelectionChange(parking._id, $event)" (edit)="openEditDialog(parking)"
+                    (delete)="deleteParking(parking)">
+                </ui-parking-card>
+
+            </ng-container>
+
+        </ui-form-layout>
+    </form>
+
+</app-layout>
+
+<ng-template #parkingTemplate>
+
+    <form [formGroup]="fb">
+        <app-add-edit-popup [title]="selectedParkingId ? 'Edit Parking' : 'Add Parking'" (onClose)="closeDialog();">
+
+            <ui-form-layout>
                 <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
                     *ngIf="!society">
                 </ui-society-search>
@@ -36,61 +89,33 @@
                     </ui-text-box>
                 </section>
 
-                <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <ui-label [valueText]="errorMessage" [config]="{id: 'error'}" *ngIf="errorMessage" valueType="error"
+                    [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                </ui-label>
 
-                    <ui-label [valueText]="errorMessage" [config]="{id: 'error'}" *ngIf="errorMessage" valueType="error"
-                        [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-                    </ui-label>
+            </ui-form-layout>
 
-                    <ui-button label="Auto Generate" type="only-content" [smColumns]="12" [mdColumns]="2"
-                        [lgColumns]="2" (clicked)="generateParking()"
-                        *ngIf="!selectedParkingId && selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1">
-                    </ui-button>
 
-                    <ui-button label="Cancel" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
-                        *ngIf="selectedParkingId" [disable]="fb.invalid" (clicked)="cancelEditParking()">
-                    </ui-button>
+            <ng-container actions>
 
-                    <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" *ngIf="selectedParkingId"
-                        [disable]="fb.invalid" (clicked)="updateParking()">
-                    </ui-button>
+                <ui-button label="Auto Gen" type="only-content" (clicked)="generateParking()"
+                    *ngIf="selectedParkingType && selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1">
+                </ui-button>
 
-                    <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" *ngIf="!selectedParkingId"
-                        [disable]="fb.invalid" (clicked)="addParking()">
-                    </ui-button>
-                </section>
+                <ui-button label="Cancel" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
+                    (clicked)="closeDialog()">
+                </ui-button>
+
+                <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" *ngIf="selectedParkingId"
+                    [disable]="fb.invalid" (clicked)="updateParking()">
+                </ui-button>
+
+                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" *ngIf="!selectedParkingId"
+                    [disable]="fb.invalid" (clicked)="addParking()">
+                </ui-button>
 
             </ng-container>
 
-            <ng-container *ngFor="let parking of parkings">
-                <ui-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [disable]="selectedParkingId === parking._id">
-
-                    <div card-main class="flex-column">
-
-                        <div class="flex flex-gap">
-                            <span class="note">
-                                <b>{{ parking.parkingNumber }}</b>
-                            </span>
-                            <span class="note">
-                                {{ getFlatType(parking) }}
-                            </span>
-                        </div>
-
-                        <div class="note" *ngIf="parking.flatId">
-                            Flat {{ getFlatNumber(parking) }}
-                        </div>
-                    </div>
-                    <div card-icon class="flat-action">
-                        <app-icon name="edit" color="#a60000" *ngIf="canUpdateParking" (click)="editParking(parking)">
-                        </app-icon>
-                        <app-icon class="delete" name="delete" color="#a60000" *ngIf="canDeleteParking"
-                            (click)="deleteParking(parking)">
-                        </app-icon>
-                    </div>
-                </ui-card>
-            </ng-container>
-
-        </ui-form-layout>
+        </app-add-edit-popup>
     </form>
-
-</app-layout>
+</ng-template>

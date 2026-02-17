@@ -1,105 +1,153 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-.society-header {
-    margin-bottom: $sp-lg;
-    display: flex;
-    justify-content: space-between;
+.society-details-container {
+    max-width: 1400px;
+    margin: 0 auto;
 
-    .society-name {
-        color: $color-dark-blue;
-        @include fluid-font(22px, 20px, 18px);
-    }
-}
-
-.card {
-    border-radius: $input-border-radius;
-    padding: $sp-md;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: $sp;
-    color: $color-dark-blue;
-}
-
-section {
-    border: 1px solid #f1f1f1;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $sp-sm;
-}
-
-.stat {
-    padding: $sp-md;
-    border-radius: $input-border-radius;
-    display: flex;
-    gap: $sp-xs;
-    justify-content: space-between;
-
-    label, strong, ui-button {
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-        padding: $sp-sm;
-        border-bottom: 1px solid $color-light-gray;
-        text-align: left;
-    }
-}
-
-.complaints {
-    display: flex;
-    gap: $sp-md;
-}
-
-.parkings {
-    display: flex;
-    gap: $sp-md;
-}
-
-.badge {
-    padding: $sp-sm $sp-md;
-    border-radius: $input-border-radius;
-    &.pending {
-        background: $color-sky;
-    }
-    &.done {
-        background: $color-header-footer;
-    }
-}
-
-.features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $sp-sm;
-}
-
-@include desktop {
-    .stat {
+    .society-header {
+        display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: $sp-xl;
+        padding-bottom: $sp-md;
+        border-bottom: 2px solid $color-border;
 
-        .btn.primary {
-            width: auto;
-            min-width: auto;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            flex-shrink: 0;
+        .society-name {
+            margin: 0;
+            font-size: $font-size-xxl;
+            font-weight: 600;
+            color: $color-dark-blue;
+
+            @include tablet {
+                font-size: $font-size-xl;
+            }
+            @include mobile {
+                font-size: $font-size-lg;
+            }
+        }
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $sp-lg;
+
+        @include tablet {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .dashboard-card {
+        background-color: $color-white;
+        border: 1px solid $color-border;
+        border-radius: $btn-border-radius-md;
+        padding: $sp;
+        box-shadow: 0 2px 8px rgba($color-black, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
+            border-color: $color-border-highlight;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $sp-md;
+            padding-bottom: $sp-sm;
+            border-bottom: 1px solid $color-border;
+
+            .card-title {
+                font-size: $font-size-lg;
+                font-weight: 600;
+                color: $color-dark-blue;
+            }
+
+            ::ng-deep ui-button button {
+                padding: $sp-xs $sp-sm;
+                font-size: $font-size-xs;
+            }
+        }
+
+        .list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-sm;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-md;
+        }
+
+        .badge {
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+            font-weight: 600;
+            font-size: $font-size-sm;
+
+            &.pending {
+                background-color: $status-pending;
+                color: $color-white;
+            }
+            &.done {
+                background-color: $status-approved;
+                color: $color-white;
+            }
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-sm;
+        }
+    }
+
+    .stats-card {
+        background-color: $color-light-gray;
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: $sp-md;
+
+            @include tablet {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-item {
+                display: flex;
+                flex-direction: column;
+                gap: $sp-xs;
+                background-color: $color-white;
+                padding: $sp-md;
+                border-radius: $btn-border-radius-sm;
+                border: 1px solid $color-border;
+
+                .stat-label {
+                    font-size: $font-size-xs;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .stat-value {
+                    font-size: $font-size-xxl;
+                    font-weight: 700;
+                    color: $color-dark-blue;
+                    line-height: 1.2;
+                }
+
+                ::ng-deep ui-button button {
+                    align-self: flex-start;
+                    margin-top: $sp-xs;
+                    padding: $sp-xs $sp-sm;
+                    font-size: $font-size-xs;
+                }
+            }
         }
     }
 }
