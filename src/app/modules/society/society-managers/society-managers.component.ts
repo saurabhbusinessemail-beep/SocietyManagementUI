@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ISelectedUser, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
@@ -9,6 +9,8 @@ import { LoginService } from '../../../services/login.service';
 import { PERMISSIONS } from '../../../constants';
 import { DialogService } from '../../../services/dialog.service';
 import { ListBase } from '../../../directives/list-base.directive';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { WindowService } from '../../../services/window.service';
 
 
 @Component({
@@ -22,6 +24,9 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
   society?: ISociety;
 
   managers: IUser[] = [];
+  
+  @ViewChild('managerTemplate') managerTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
 
   loading = false;
   isComponentActive = new Subject<void>();
@@ -77,6 +82,8 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
     private loginService: LoginService,
     private router: Router,
     dialogService: DialogService,
+    private windowService: WindowService,
+    private dialog: MatDialog,
   ) { super(dialogService) }
 
   ngOnInit(): void {
@@ -155,6 +162,32 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
           this.loading = false;
         }
       });
+  }
+  
+  getDialogWidth(): string {
+    let width = '50%';
+    switch (this.windowService.mode.value) {
+      case 'mobile': width = '90%'; break;
+      case 'tablet': width = '70%'; break;
+      case 'desktop': width = '60%'; break
+    }
+    return width;
+  }
+  openAddDialog() {
+    // this.resetParkingForm();
+    this.currentDialogRef = this.dialog.open(this.managerTemplate, {
+      width: this.getDialogWidth(),
+      panelClass: 'building-form-dialog'
+    });
+    this.currentDialogRef.afterClosed().subscribe(() => {
+      this.currentDialogRef = null;
+      // this.resetParkingForm();
+      this.refreshList();
+    });
+  }
+
+  closeDialog() {
+    this.currentDialogRef?.close();
   }
 
   addSecretary() {

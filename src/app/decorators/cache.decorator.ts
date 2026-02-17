@@ -49,13 +49,13 @@ export function Cacheable(options: ICacheableOptions = {}) {
         // Check cache
         const cached = cacheService.get(cacheKey);
         if (cached !== null) {
-          console.log(`[Cache] HIT: ${cacheKey}`);
+          // console.log(`[Cache] HIT: ${cacheKey}`);
           // Return cached data as Observable
           return of(cached);
         }
   
         // Execute original method and cache its result
-        console.log(`[Cache] MISS: ${cacheKey}`);
+        // console.log(`[Cache] MISS: ${cacheKey}`);
         const result = originalMethod.apply(this, args);
         
         // If result is Observable, subscribe and cache the data

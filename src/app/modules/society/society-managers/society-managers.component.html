@@ -1,37 +1,12 @@
 <app-layout [title]="managerName" [hideMoreActions]="true" [showBackButton]="true">
     <ui-form-layout>
 
-        <ng-container *ngIf="canAddSocietyManager">
+        <div class="flex flex-gap flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            *ngIf="canAddSocietyManager">
 
-            <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
-                helpText="Select current status" direction="horizontal" [options]="radioOptions" [smColumns]="12"
-                [mdColumns]="12" [lgColumns]="12">
-            </ui-radio-list>
-
-
-            <ui-contact-search [formControl]="contactSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="8"
-                *ngIf="showContactSearch">
-            </ui-contact-search>
-
-            <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="8"
-                *ngIf="showUserSearch">
-            </ui-user-search>
-
-
-
-            <div class="flex ui-form-layout flex-end" [smColumns]="12" [mdColumns]="8" [lgColumns]="8">
-
-                <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
-                    (clicked)="cancel()">
-                </ui-button>
-
-
-                <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
-                    [disable]="fb.invalid" (clicked)="addSecretary()">
-                </ui-button>
-            </div>
-
-        </ng-container>
+            <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
+            </ui-button>
+        </div>
 
         <!-- Multi Select -->
         <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
@@ -50,3 +25,36 @@
 
 
 </app-layout>
+
+<ng-template #managerTemplate>
+    <app-add-edit-popup title="Add Manager" (onClose)="closeDialog();">
+
+        <ui-form-layout>
+            <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
+                helpText="Select current status" direction="horizontal" [options]="radioOptions" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-radio-list>
+
+
+            <ui-contact-search [formControl]="contactSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="8"
+                *ngIf="showContactSearch">
+            </ui-contact-search>
+
+            <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="8"
+                *ngIf="showUserSearch">
+            </ui-user-search>
+        </ui-form-layout>
+
+        <ng-container actions>
+            <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                (clicked)="closeDialog()">
+            </ui-button>
+
+
+            <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                [disable]="fb.invalid" (clicked)="addSecretary()">
+            </ui-button>
+        </ng-container>
+
+    </app-add-edit-popup>
+</ng-template>
