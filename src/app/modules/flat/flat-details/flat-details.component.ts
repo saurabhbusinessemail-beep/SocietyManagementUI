@@ -229,7 +229,11 @@ export class FlatDetailsComponent implements OnInit {
   }
 
   manageVehicles() {
-    console.log('Manage vehicles');
+    if (!this.flatMember) return;
+
+    const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id
+
+    this.router.navigate(['vehicles', flatId, 'list']);
   }
 
   manageComplaints() {

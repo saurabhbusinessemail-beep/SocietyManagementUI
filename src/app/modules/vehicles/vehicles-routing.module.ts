@@ -5,7 +5,7 @@ import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 
 const routes: Routes = [
   {
-    path: ':flatId',
+    path: ':flatId/list',
     component: VehicleListComponent
   },
   {

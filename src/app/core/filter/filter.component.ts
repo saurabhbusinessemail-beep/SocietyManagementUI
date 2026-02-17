@@ -25,6 +25,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() loadFirstSociety = false;
   @Input() filterByRoles: string[] = [];
   @Input() hideFlatSearch: boolean = false;
+  @Input() hideSocietySearch: boolean = false; // new input
   @Input() dropDownControlConfigs: IUIControlConfig<DropDownControl>[] = [];
   @Input() dateControlConfigs: IUIControlConfig<DateControl>[] = [];
   @Output() isFlatMemberChanged = new EventEmitter<boolean>();
@@ -52,9 +53,13 @@ export class FilterComponent implements OnInit, OnDestroy {
   protected isComponentActive = new Subject<void>();
 
   filterFormGroup?: FormGroup;
-
+  
   get showFlatSearch(): boolean {
     return !this.hideFlatSearch && (this.windowService.mode.value !== 'mobile' || this.isFilterOpen)
+  }
+
+  get showSocietySearch(): boolean {
+    return !this.hideSocietySearch && (this.windowService.mode.value !== 'mobile' || this.isFilterOpen)
   }
 
   get allDropDownConfig() {
@@ -77,30 +82,36 @@ export class FilterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Initialize Form Controls
-    let formConfigs: (IUIControlConfig<DropDownControl> | IUIControlConfig<DateControl>)[] = [this.societiesSearchConfig];
+    // Build form group with only visible controls
+    let formConfigs: (IUIControlConfig<DropDownControl> | IUIControlConfig<DateControl>)[] = [];
+    if (!this.hideSocietySearch) formConfigs.push(this.societiesSearchConfig);
     if (!this.hideFlatSearch) formConfigs.push(this.flatSearchConfig);
     formConfigs = formConfigs.concat(this.dropDownControlConfigs);
     formConfigs = formConfigs.concat(this.dateControlConfigs);
 
     const formControls = formConfigs.reduce((acc, ctrl) => {
-      if (ctrl.formControl) acc[ctrl.id] = ctrl.formControl
-
+      if (ctrl.formControl) acc[ctrl.id] = ctrl.formControl;
       return acc;
     }, {} as any);
 
-    this.filterFormGroup = this.fb.group({
-      ...formControls
-    });
+    this.filterFormGroup = this.fb.group(formControls);
 
-    // Subcribe society and flat selection changes
-    this.subscribeToFlatSelection();
-    this.subscribeToSocietySelection(this.myProfile);
+    // Subscribe to changes for visible controls
+    if (!this.hideFlatSearch) this.subscribeToFlatSelection();
+    if (!this.hideSocietySearch) {
+      this.subscribeToSocietySelection(this.myProfile);
+      if (this.myProfile.user.role === 'admin')
+        this.subscribeToSocietySearch();
+      else
+        this.loadMySocities(this.myProfile);
+    } else {
+      // If society hidden but flat visible, load flats without society
+      if (!this.hideFlatSearch) {
+        this.loadDefaultFlats(this.myProfile);
+      }
+    }
+
     this.subscribeToOtherControlChanges();
-    if (this.myProfile.user.role === 'admin')
-      this.subscribeToSocietySearch();
-    else
-      this.loadMySocities(this.myProfile);
   }
 
   getAllFields(): string[] {
@@ -151,7 +162,10 @@ export class FilterComponent implements OnInit, OnDestroy {
           if (socities.length > 0 && this.loadFirstSociety) {
             this.societiesSearchConfig.formControl?.setValue({ label: socities[0].societyName, value: socities[0]._id });
           } else {
-            this.loadDefaultFlats(myProfile);
+            // Only load default flats if flat is visible
+            if (!this.hideFlatSearch) {
+              this.loadDefaultFlats(myProfile);
+            }
           }
         }
       });
@@ -179,7 +193,6 @@ export class FilterComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.isComponentActive))
         .subscribe(() => this.emitSelectedFilter())
     });
-
 
     this.dateControlConfigs.forEach(controlConfig => {
       if (!controlConfig.formControl) return;
@@ -217,7 +230,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.societiesSearchConfig.formControl?.valueChanges
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(selectedSociety => {
-        this.flatSearchConfig.formControl?.setValue(undefined, { emitEvent: false });
+        // Reset flat only if flat is visible
+        if (!this.hideFlatSearch) {
+          this.flatSearchConfig.formControl?.setValue(undefined, { emitEvent: false });
+        }
 
         const isAdmin = myProfile.user.role === 'admin';
         if (this.myProfile) this.amIAMember(this.myProfile);
@@ -226,18 +242,22 @@ export class FilterComponent implements OnInit, OnDestroy {
           const isManager = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => adminManagerRoles.includes(sr.name));
           const isFlatMember = myProfile.socities.find(s => s.societyId === selectedSociety.value)?.societyRoles?.find(sr => ownerMemberTenanRoles.includes(sr.name));
 
-          // If I am society manager or admin then load all flats from society
-          if (isAdmin || isManager) this.loadSocietyFlats(selectedSociety.value)
-
-          // If I am society flat owner/tenanat/member load only flat I am related to
-          else if (isFlatMember) this.loadAllMyFlats(selectedSociety.value)
-
+          // Load flats only if flat is visible
+          if (!this.hideFlatSearch) {
+            if (isAdmin || isManager) this.loadSocietyFlats(selectedSociety.value)
+            else if (isFlatMember) this.loadAllMyFlats(selectedSociety.value)
+          }
         } else {
-          this.loadDefaultFlats(myProfile);
+          if (!this.hideFlatSearch) {
+            this.loadDefaultFlats(myProfile);
+          }
         }
 
+        // Emit filter change on society selection
+        this.emitSelectedFilter();
       });
   }
+
   async loadDefaultFlats(myProfile: IMyProfile) {
     const isAdmin = myProfile.user.role === 'admin';
 
@@ -317,9 +337,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   subscribeToFlatSelection() {
     this.flatSearchConfig.formControl?.valueChanges
       .pipe(takeUntil(this.isComponentActive))
-      .subscribe(selectedFlat => {
-        this.emitSelectedFilter();
-      });
+      .subscribe(() => this.emitSelectedFilter());
   }
 
   emitSelectedFilter() {
