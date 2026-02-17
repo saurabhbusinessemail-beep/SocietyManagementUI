@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subject, take } from 'rxjs';
 import { IFlatMember } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
+import { DialogService } from '../../../services/dialog.service';
 
 interface ITenantsFilter {
   societyId?: string, flatId?: string
@@ -17,7 +18,7 @@ export class TenantListComponent implements OnInit {
   selectedFIlter: ITenantsFilter = {};
   tenants: IFlatMember[] = [];
 
-  constructor(private societyService: SocietyService) { }
+  constructor(private societyService: SocietyService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
 
@@ -37,7 +38,10 @@ export class TenantListComponent implements OnInit {
       });
   }
 
-  deleteTenant(tenant: IFlatMember) {
+  async deleteTenant(tenant: IFlatMember) {
+    const forUser = !tenant.userId || typeof tenant.userId === 'string' ? undefined : ` ${tenant.userId.name ?? tenant.userId.phoneNumber}`
+
+    if (!await this.dialogService.confirmDelete('Delete Tenant', `Are you sure you want to delete tenant ${forUser}?`)) return;
     this.societyService.deleteFlatMember(tenant._id)
       .pipe(take(1))
       .subscribe({

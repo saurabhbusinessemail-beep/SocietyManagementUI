@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "android-open": "ng build --configuration=production && npx cap sync && npx cap open android"
+    "android-open": "ng build --configuration=production && npx cap sync && npx cap open android",
+    "build-sync": "ng build --configuration=production && npx cap sync"
   },
   "private": true,
   "dependencies": {

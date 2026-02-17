@@ -40,7 +40,7 @@ export class MembersListComponent implements OnInit {
   }
 
   async deleteMember(member: IFlatMember) {
-    const forUser = !member.userId || typeof member.userId === 'string' ? undefined : ` for ${member.userId.name ?? member.userId.phoneNumber}`
+    const forUser = !member.userId || typeof member.userId === 'string' ? undefined : ` ${member.userId.name ?? member.userId.phoneNumber}`
 
     if (!await this.dialogService.confirmDelete('Delete Flat Member', `Are you sure you want to delete flat member ${forUser}?`)) return;
 
