@@ -3,6 +3,7 @@ import { IFlatMember } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
 import { SocietyRoles } from '../../../types';
+import { DialogService } from '../../../services/dialog.service';
 
 interface IMemberFilter {
   societyId?: string, flatId?: string
@@ -18,7 +19,7 @@ export class MembersListComponent implements OnInit {
   selectedFIlter: IMemberFilter = {};
   members: IFlatMember[] = [];
 
-  constructor(private societyService: SocietyService) { }
+  constructor(private societyService: SocietyService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
 
@@ -38,7 +39,11 @@ export class MembersListComponent implements OnInit {
       });
   }
 
-  deleteMember(member: IFlatMember) {
+  async deleteMember(member: IFlatMember) {
+    const forUser = !member.userId || typeof member.userId === 'string' ? undefined : ` for ${member.userId.name ?? member.userId.phoneNumber}`
+
+    if (!await this.dialogService.confirmDelete('Delete Flat Member', `Are you sure you want to delete flat member ${forUser}?`)) return;
+
     this.societyService.deleteFlatMember(member._id)
       .pipe(take(1))
       .subscribe({

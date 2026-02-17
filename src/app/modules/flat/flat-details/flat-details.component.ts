@@ -13,11 +13,13 @@ import {
   IGateEntry,
   IGatePass,
   IVehicle,
-  IParking
+  IParking,
+  IMyProfile
 } from '../../../interfaces'; // adjust path as needed
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { GatePassService } from '../../../services/gate-pass.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-flat-details',
@@ -28,6 +30,7 @@ export class FlatDetailsComponent implements OnInit {
 
   flatMemberId?: string;
   flatMember?: IFlatMember;
+  myProfile?: IMyProfile;
 
   // Related data arrays (populated via API calls)
   members: IFlatMember[] = [];           // other residents of the same flat
@@ -45,16 +48,29 @@ export class FlatDetailsComponent implements OnInit {
     return 'Flat Details';
   }
 
+  get showFlatMemberProfile(): boolean {
+    if (!this.myProfile || !this.flatMember) return true;
+
+    const flatMemberUserId = !this.flatMember.userId || typeof this.flatMember.userId === 'string' ? this.flatMember.userId : this.flatMember.userId._id;
+    if (!flatMemberUserId) return false;
+
+    if (flatMemberUserId === this.myProfile.user._id) return false;
+
+    return true;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private societyService: SocietyService,
     private complaintService: ComplaintService,
     private gateEntryService: GateEntryService,
-    private gatepassService: GatePassService
+    private gatepassService: GatePassService,
+    private loginService: LoginService
   ) { }
 
   ngOnInit(): void {
+    this.myProfile = this.loginService.getProfileFromStorage();
     this.flatMemberId = this.route.snapshot.paramMap.get('flatMemberId')!;
     if (!this.flatMemberId) {
       this.router.navigateByUrl('/myflats');

@@ -69,7 +69,7 @@
         <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()"
             *ngIf="!member.leaseEnd && viewerRole === 'owner'">
         </ui-button>
-        <app-icon name="delete" class="error" *ngIf="showDelete"></app-icon>
+        <app-icon name="delete" class="error" *ngIf="showDelete" (click)="onDeleteClick()"></app-icon>
     </div>
 </div>
 

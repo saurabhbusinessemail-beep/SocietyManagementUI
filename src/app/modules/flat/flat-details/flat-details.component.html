@@ -3,7 +3,7 @@
     <div class="flat-details-container">
 
         <!-- Member Profile Card -->
-        <div class="profile-card" *ngIf="flatMember">
+        <div class="profile-card" *ngIf="flatMember && showFlatMemberProfile">
             <div class="profile-header">
                 <div class="profile-avatar">
                     <span class="avatar-initials">{{ getInitials(flatMember.name) }}</span>
