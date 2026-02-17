@@ -59,6 +59,14 @@ export class FlatDetailsComponent implements OnInit {
     return true;
   }
 
+  get hasMultiBuilding(): boolean {
+    if (!this.flatMember || typeof this.flatMember.societyId === 'string') return false;
+
+    if (this.flatMember.societyId.numberOfBuildings <= 1) return false;
+
+    return true;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

@@ -59,7 +59,7 @@
                     <span class="label">Society</span>
                     <span class="value">{{ getSociety()?.societyName || '—' }}</span>
                 </div>
-                <div class="detail-item">
+                <div class="detail-item" *ngIf="hasMultiBuilding">
                     <span class="label">Building</span>
                     <span class="value">{{ getBuildingDisplay() }}</span>
                 </div>
