@@ -95,7 +95,6 @@ export class LoginService {
                 .pipe(take(1))
                 .subscribe({
                     next: response => {
-                        console.log('menu = ', this.menuService.userMenus.value)
                         if (!response || !response.success) {
                             observer.next(null);
                             observer.complete();

@@ -168,7 +168,7 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
 
     const formValue = this.fb.value;
     const payload = {
-      flatId: this.flatId,
+      flatId: this.flatId ?? formValue.flat?.value,
       societyId: this.flat ? this.flat.societyId : this.societyId,
       title: formValue.title ?? '',
       description: formValue.description,

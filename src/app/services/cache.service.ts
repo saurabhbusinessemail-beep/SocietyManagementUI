@@ -117,6 +117,10 @@ export class CacheService {
         // Implement parameter matching logic
         return JSON.stringify(cachedParams) === JSON.stringify(targetParams);
     }
+
+    clearAll(): void {
+        this.cache.clear();
+    }
 }
 
 export const GLOBAL_CACHE = new CacheService();
