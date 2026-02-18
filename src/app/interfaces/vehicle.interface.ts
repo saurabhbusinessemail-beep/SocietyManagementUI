@@ -1,9 +1,9 @@
 import { VehicleTypes } from "../constants";
-import { IDefaultFields } from "./";
+import { IDefaultFields, IFlat } from "./";
 
 export interface IVehicle extends IDefaultFields {
      _id: string;
-     flatId: string;
+     flatId: string | IFlat;
      vehicleNumber: string;
      vehicleType: VehicleTypes;
 }

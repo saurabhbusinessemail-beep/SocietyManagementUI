@@ -1,0 +1,50 @@
+<div class="vehicle-card">
+    <div class="card-header">
+        <div class="header-left">
+            <div class="selection-checkbox" *ngIf="selectMode">
+                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+            </div>
+            <div class="vehicle-type-icon" [ngClass]="getVehicleTypeClass()">
+                {{ getVehicleTypeIcon() }}
+            </div>
+            <div class="vehicle-number">
+                {{ vehicle.vehicleNumber }}
+            </div>
+        </div>
+        <div class="header-actions" *ngIf="showEdit || showDelete">
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)" title="Edit">
+                <span class="btn-icon">✏️</span>
+            </button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" title="Delete">
+                <span class="btn-icon">🗑️</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="vehicle-details">
+            <div class="detail-row">
+                <span class="label">Type</span>
+                <span class="value type-value" [ngClass]="getVehicleTypeClass()">
+                    {{ vehicle.vehicleType }}
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Flat ID</span>
+                <span class="value">{{ getFlatNumberDisplay() }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div class="created-info">
+            <span class="label">Created</span>
+            <span class="value">{{ vehicle.createdOn | date:'mediumDate' }}</span>
+            <span class="by" *ngIf="vehicle.createdByUserId"> by {{ getCreatedByDisplay() }}</span>
+        </div>
+        <div class="modified-info" *ngIf="vehicle.modifiedOn">
+            <span class="label">Modified</span>
+            <span class="value">{{ vehicle.modifiedOn | date:'mediumDate' }}</span>
+        </div>
+    </div>
+</div>

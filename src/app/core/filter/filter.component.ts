@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { IMyProfile, IUIControlConfig, IUIDropdownOption } from '../../interfaces';
+import { IFlat, IMyProfile, ISociety, IUIControlConfig, IUIDropdownOption } from '../../interfaces';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from 'rxjs';
 import { SocietyService } from '../../services/society.service';
 import { LoginService } from '../../services/login.service';
@@ -8,10 +8,8 @@ import { Router } from '@angular/router';
 import { WindowService } from '../../services/window.service';
 import { DatePipe } from '@angular/common';
 import { adminManagerRoles, ownerMemberTenanRoles } from '../../constants';
-import { SocietyRoles } from '../../types';
+import { DateControl, DropDownControl, SocietyRoles } from '../../types';
 
-type DropDownControl = IUIDropdownOption | undefined | null;
-type DateControl = Date | undefined | null | string;
 
 @Component({
   selector: 'app-filter',
@@ -23,6 +21,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() societyControlSizes: number[] = [12, 5, 5];
   @Input() flatControlSizes: number[] = [12, 5, 5];
   @Input() loadFirstSociety = false;
+  @Input() loadFirstFlat = false;
   @Input() filterByRoles: string[] = [];
   @Input() hideFlatSearch: boolean = false;
   @Input() hideSocietySearch: boolean = false; // new input
@@ -31,16 +30,14 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Output() isFlatMemberChanged = new EventEmitter<boolean>();
   @Output() filterChanged = new EventEmitter<any>();
 
-  isFilterOpen = false;
-
-  societiesSearchConfig: IUIControlConfig<DropDownControl> = {
+  @Input() societiesSearchConfig: IUIControlConfig<DropDownControl> = {
     id: 'societyId',
     label: 'Society',
     placeholder: 'Search Society',
     formControl: new FormControl<DropDownControl>(undefined),
     dropDownOptions: []
   };
-  flatSearchConfig: IUIControlConfig<DropDownControl> = {
+  @Input() flatSearchConfig: IUIControlConfig<DropDownControl> = {
     id: 'flatId',
     label: 'Flat',
     placeholder: 'Search Flat',
@@ -48,12 +45,14 @@ export class FilterComponent implements OnInit, OnDestroy {
     dropDownOptions: []
   };
 
+
+  isFilterOpen = false;
   myProfile?: IMyProfile;
   private search$ = new Subject<string>();
   protected isComponentActive = new Subject<void>();
 
   filterFormGroup?: FormGroup;
-  
+
   get showFlatSearch(): boolean {
     return !this.hideFlatSearch && (this.windowService.mode.value !== 'mobile' || this.isFilterOpen)
   }
@@ -284,10 +283,27 @@ export class FilterComponent implements OnInit, OnDestroy {
       const allFlats = await this.loadAllMyFlats(undefined, false);
       allFlats.forEach(f => societyFlats.push(f));
 
-      this.flatSearchConfig.dropDownOptions = societyFlats;
+      this.flatSearchConfig.dropDownOptions = this.getUniqueOptions(societyFlats);
+    }
+
+      const flatOptions = this.flatSearchConfig.dropDownOptions ?? [];
+    if (this.loadFirstFlat && flatOptions.length > 0) {
+      this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
     }
 
     this.emitSelectedFilter();
+  }
+
+  getUniqueOptions<T>(options: IUIDropdownOption<T>[]): IUIDropdownOption<T>[] {
+    const seen = new Set<string>();
+    return options.filter(option => {
+      const key = `${option.label}-${JSON.stringify(option.value)}`;
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
   }
 
   loadAllMyFlats(societyId?: string, populate = true): Promise<IUIDropdownOption<any>[]> {
@@ -326,6 +342,10 @@ export class FilterComponent implements OnInit, OnDestroy {
           const flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.societiesSearchConfig.formControl?.value?.value));
           if (populate) {
             this.flatSearchConfig.dropDownOptions = flatOptions;
+
+            if (this.loadFirstFlat && flatOptions.length > 0) {
+              this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+            }
             this.emitSelectedFilter();
           }
           resolve(flatOptions);

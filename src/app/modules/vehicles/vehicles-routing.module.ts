@@ -5,6 +5,19 @@ import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'list',
+    pathMatch: 'full'
+  },
+  {
+    path: 'list',
+    component: VehicleListComponent
+  },
+  {
+    path: 'add',
+    component: AddVehicleComponent
+  },
+  {
     path: ':flatId/list',
     component: VehicleListComponent
   },

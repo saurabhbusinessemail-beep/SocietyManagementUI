@@ -40,6 +40,7 @@ import { ProceedConfirmComponent } from './proceed-confirm/proceed-confirm.compo
 import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-card.component';
 import { ComplaintCardComponent } from './complaint-card/complaint-card.component';
 import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component';
+import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component
     ProceedConfirmComponent,
     MyFlatMemberCardComponent,
     ComplaintCardComponent,
-    GatePassCardComponent
+    GatePassCardComponent,
+    VehicleCardComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -115,7 +117,8 @@ import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component
     ProceedConfirmComponent,
     MyFlatMemberCardComponent,
     ComplaintCardComponent,
-    GatePassCardComponent
+    GatePassCardComponent,
+    VehicleCardComponent
   ],
   providers: [MatDatepickerModule]
 })

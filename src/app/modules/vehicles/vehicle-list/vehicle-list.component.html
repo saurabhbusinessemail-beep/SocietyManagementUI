@@ -1,24 +1,65 @@
 <app-layout>
 
     <ng-container moreActions>
-        <ui-button label="New Complaint" type="primary" [smColumns]="1" [mdColumns]="1"
+        <ui-button label="New Vehicle" type="primary" (clicked)="openAddDialog()" [smColumns]="1" [mdColumns]="1"
             [lgColumns]="1">
         </ui-button>
     </ng-container>
 
 
     <div class="flex-col full-h">
-        <app-filter [dropDownControlConfigs]="[]" (isFlatMemberChanged)="isFlatMember=$event" [hideSocietySearch]="true"
-            [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadFlatParking($event)">
+        <app-filter [dropDownControlConfigs]="[]" (isFlatMemberChanged)="isFlatMember=$event"
+            [societiesSearchConfig]="societiesSearchConfig" [flatSearchConfig]="flatSearchConfig"
+            [hideSocietySearch]="!!flatId" [loadFirstSociety]="true" [loadFirstFlat]="true" [smColumns]="12"
+            [mdColumns]="12" [lgColumns]="12" (filterChanged)="handleFilterChange($event)">
         </app-filter>
 
         <ui-form-layout class="flex-auto">
 
             <ng-container *ngFor=" let vehicle of vehicles">
-
+                <ui-vehicle-card [vehicle]="vehicle" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                </ui-vehicle-card>
             </ng-container>
 
         </ui-form-layout>
     </div>
 
 </app-layout>
+
+<ng-template #vehicleTemplate>
+    <form [formGroup]="fb">
+        <app-add-edit-popup title="Add Vehicle" (onClose)="closeDialog();">
+            <ui-form-layout>
+
+                <ui-drop-down formControlName="society" [config]="societiesSearchConfig" *ngIf="!flatId"
+                    [options]="societiesSearchConfig.dropDownOptions ?? []" placeholder="Select Society"
+                    [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                </ui-drop-down>
+
+                <ui-drop-down formControlName="flat" [config]="flatSearchConfig"
+                    [options]="flatSearchConfig.dropDownOptions ?? []" placeholder="Select Flat" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-drop-down>
+
+                <ui-text-box formControlName="vehicleNumber" [config]="vehicleNumberConfig" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-text-box>
+
+                <ui-drop-down formControlName="vehicleType" [config]="vehicleTypeConfig"
+                    [options]="vehicleTypeConfig.dropDownOptions ?? []" placeholder="Select Vehicle Type"
+                    [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                </ui-drop-down>
+
+            </ui-form-layout>
+
+            <ng-container actions>
+                <ui-button [label]="'Cancel'" type="only-content" (clicked)="closeDialog();">
+                </ui-button>
+                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
+                    (clicked)="saveVehicle()">
+                </ui-button>
+            </ng-container>
+        </app-add-edit-popup>
+
+    </form>
+</ng-template>
