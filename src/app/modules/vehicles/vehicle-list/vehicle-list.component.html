@@ -17,7 +17,8 @@
         <ui-form-layout class="flex-auto">
 
             <ng-container *ngFor=" let vehicle of vehicles">
-                <ui-vehicle-card [vehicle]="vehicle" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                <ui-vehicle-card [vehicle]="vehicle" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                    [showDelete]="true" (delete)="deleteVehicle(vehicle)">
                 </ui-vehicle-card>
             </ng-container>
 

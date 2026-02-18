@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from './menu.service';
 import { IBEResponseFormat, IMenu, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
+import { ClearCache } from '../decorators';
 
 @Injectable({
     providedIn: 'root'
@@ -114,6 +115,7 @@ export class LoginService {
     // --------------------------------------------------------
     // LOGOUT
     // --------------------------------------------------------
+    @ClearCache({ clearAll: true })
     logout() {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('my_profile');

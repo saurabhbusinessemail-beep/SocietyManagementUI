@@ -177,6 +177,11 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     this.selectedFilterChanged.next(this.selectedFilterChanged.value);
   }
 
+  resetVehicleForm() {
+    this.fb.get('vehicleNumber')?.reset();
+    this.fb.get('vehicleType')?.reset();
+  }
+
   getDialogWidth(): string {
     let width = '50%';
     switch (this.windowService.mode.value) {
@@ -187,14 +192,14 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     return width;
   }
   openAddDialog() {
-    // this.resetFlatForm();
+    this.resetVehicleForm();
     this.currentDialogRef = this.dialog.open(this.vehicleTemplate, {
       width: this.getDialogWidth(),
       panelClass: 'building-form-dialog'
     });
     this.currentDialogRef.afterClosed().subscribe(() => {
       this.currentDialogRef = null;
-      // this.resetFlatForm();
+      this.resetVehicleForm();
     });
   }
 
@@ -207,26 +212,29 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
       vehicleNumber: formValue.vehicleNumber,
       vehicleType: formValue.vehicleType
     }
-    this.vehicleService.createVehicle(payload.flatId,payload)
-    .pipe(take(1))
-    .subscribe({
-      next: response => {
-        if (!response.success) return;
+    this.vehicleService.createVehicle(payload.flatId, payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
 
-        this.refreshList();
-        this.closeDialog();
-      }
-    })
+          this.refreshList();
+          this.closeDialog();
+        }
+      })
   }
 
-  deleteVehicle(vehicle: IVehicle) {
+  async deleteVehicle(vehicle: IVehicle) {
+
+    if (!await this.dialogService.confirmDelete('Delete Vehicle', `Are you sure you want to delete vehicle ${vehicle.vehicleNumber} ?`)) return;
+
     this.deleteOneRecord(vehicle._id)
-    .pipe(take(1))
-    .subscribe({
-      next: () => {
-        this.refreshList();
-      }
-    })
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.refreshList();
+        }
+      })
   }
 
   closeDialog() {

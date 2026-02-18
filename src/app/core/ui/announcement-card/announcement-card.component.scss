@@ -67,10 +67,7 @@
 
             &.clickable {
                 cursor: pointer;
-
-                &:hover {
-                    color: $color-dark-blue;
-                }
+                color: $color-dark-blue;
             }
         }
     }

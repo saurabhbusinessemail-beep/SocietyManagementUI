@@ -52,8 +52,11 @@ export class AppComponent implements OnInit, OnDestroy {
             this.checkAndAskForUserName();
 
             // No sync with URL change for some URLs
-            const excludeURLs = ['/profile']
-            if (excludeURLs.includes(this.router.url)) return;
+            const excludeURLs = ['/profile'];
+            if (excludeURLs.includes(this.router.url)) {
+              this.menuService.selectedMenu.next(undefined);
+              return;
+            }
 
             if (this.firstRouteLoad && res.length > 0 && this.router.url === '/dashboard/user') {
               this.menuService.syncSelectedMenuWithCurrentUrl(true);
