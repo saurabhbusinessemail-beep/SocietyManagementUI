@@ -1,12 +1,11 @@
-<app-layout [title]="managerName" [hideMoreActions]="true" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddSocietyManager" [title]="managerName" [showBackButton]="true">
+
+    <ng-container moreActions>
+        <ui-button label="Add Manager" type="primary" (clicked)="openAddDialog()">
+        </ui-button>
+    </ng-container>
+    
     <ui-form-layout>
-
-        <div class="flex flex-gap flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-            *ngIf="canAddSocietyManager">
-
-            <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
-            </ui-button>
-        </div>
 
         <!-- Multi Select -->
         <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"

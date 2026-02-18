@@ -1,4 +1,9 @@
-<app-layout [hideMoreActions]="true" [title]="pageTitle" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddBuildings" [title]="pageTitle" [showBackButton]="true">
+    
+    <ng-container moreActions>
+        <ui-button label="Add Building" type="primary" (clicked)="openAddDialog()">
+        </ui-button>
+    </ng-container>
 
     <ui-form-layout>
 
@@ -7,10 +12,6 @@
                 <ui-button label="Flats" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewFlats()">
                 </ui-button>
                 <ui-button label="Parkings" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewParkings()">
-                </ui-button>
-            </div>
-            <div>
-                <ui-button *ngIf="canAddBuildings" label="Add Building" type="primary" (clicked)="openAddDialog()">
                 </ui-button>
             </div>
         </div>

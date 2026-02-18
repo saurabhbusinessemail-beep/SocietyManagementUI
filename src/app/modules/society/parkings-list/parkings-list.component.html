@@ -1,4 +1,10 @@
-<app-layout [hideMoreActions]="true" [title]="pageTitle" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddParking" [title]="pageTitle" [showBackButton]="true">
+    
+    <ng-container moreActions>
+        <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
+        </ui-button>
+    </ng-container>
+
     <form [formGroup]="fb">
         <ui-form-layout>
 
@@ -15,12 +21,6 @@
                         </ui-label>
 
                     </ui-form-layout>
-                </div>
-
-                <div>
-
-                    <ui-button *ngIf="canAddParking" label="Add Parking" type="primary" (clicked)="openAddDialog()">
-                    </ui-button>
                 </div>
             </div>
 

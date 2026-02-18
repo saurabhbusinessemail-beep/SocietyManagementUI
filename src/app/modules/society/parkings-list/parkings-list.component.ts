@@ -470,7 +470,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
     const flatId = typeof parking?.flatId === 'string' ? parking.flatId : parking?.flatId?._id;
     this.fb.get('_id')?.setValue(parking?._id);
     this.fb.get('parkingNumber')?.setValue(parking?.parkingNumber ?? null);
-    this.fb.get('parkingType')?.setValue(parking?.parkingType ?? '4w');
+    this.fb.get('parkingType')?.setValue(parking?.parkingType ?? '4W');
     this.fb.get('flatId')?.setValue(flatId ?? null);
   }
 
