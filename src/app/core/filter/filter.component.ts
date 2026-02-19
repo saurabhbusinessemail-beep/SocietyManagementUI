@@ -272,7 +272,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     // If I am society manager then show all flats of those society
     let societyFlats: IUIDropdownOption<any>[] = [];
-    if (managerOfSocities.length > 0) {
+    if (managerOfSocities.length > 0 && !this.supressAdminManageFlats) {
       const societyFlatsObs = managerOfSocities.map(s => this.loadSocietyFlats(s.societyId, false));
       const societyFlatsArr = await Promise.all(societyFlatsObs);
       societyFlatsArr.forEach(sf => sf.forEach(f => societyFlats.push(f)));

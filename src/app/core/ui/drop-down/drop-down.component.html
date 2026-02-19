@@ -15,8 +15,8 @@
             {{ placeholder }}
         </option>
 
-        <option *ngFor="let opt of options; trackBy: trackByValue" [value]="opt.value" [disabled]="opt.disabled"
-            [selected]="opt.value === value">
+        <option *ngFor="let opt of options; trackBy: trackByValue" [value]="!selectCompleteObject ? opt.value : opt"
+            [disabled]="opt.disabled" [selected]="opt.value === value">
             {{ opt.label }}
         </option>
 

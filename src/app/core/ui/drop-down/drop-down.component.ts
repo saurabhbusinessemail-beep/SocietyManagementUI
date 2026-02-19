@@ -9,13 +9,22 @@ import { UIBaseFormControl } from '../../../directives';
 })
 export class DropDownComponent extends UIBaseFormControl<any> {
   @Input() options: IUIDropdownOption<any>[] = [];
+  @Input() selectCompleteObject: boolean = false;
   @Input() placeholder = 'Select';
 
   onSelect(value: any): void {
-    this.updateValue(value);
+    if (!this.selectCompleteObject)
+      this.updateValue(value);
+    else {
+      const opt = this.options.find(o => o.value === value);
+      if (opt) this.updateValue(opt)
+    }
   }
 
   trackByValue(_: number, option: IUIDropdownOption<any>): any {
-    return option.value;
+    if (!this.selectCompleteObject)
+      return option.value;
+    else
+      return option;
   }
 }
