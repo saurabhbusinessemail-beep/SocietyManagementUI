@@ -53,7 +53,18 @@
 
         <!-- Flat & Society Details Card -->
         <div class="details-card">
-            <h3 class="section-title">Flat Information</h3>
+            <h3 class="section-title">
+                <div class="title">Flat Information</div>
+                <div class="action">
+                    <div class="role-chips">
+                        <span *ngIf="flatMember?.isOwner" class="chip owner">Owner</span>
+                        <span *ngIf="flatMember?.isTenant" class="chip tenant">Tenant</span>
+                        <span *ngIf="flatMember?.isMember" class="chip member">Member</span>
+                        <span *ngIf="flatMember?.isTenantMember" class="chip tenant-member">Tenant Member</span>
+                    </div>
+                    <app-icon name="edit" size="md"></app-icon>
+                </div>
+            </h3>
             <div class="details-grid">
                 <div class="detail-item">
                     <span class="label">Society</span>

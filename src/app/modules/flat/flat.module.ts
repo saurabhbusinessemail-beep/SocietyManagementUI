@@ -7,6 +7,7 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { FlatDetailsComponent } from './flat-details/flat-details.component';
+import { IconModule } from '../../core/icons/icon.module';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { FlatDetailsComponent } from './flat-details/flat-details.component';
     FlatRoutingModule,
     LayoutModule,
     UiModule,
+    IconModule,
     DirectiveModule
   ]
 })

@@ -5,6 +5,44 @@
     max-width: 1400px;
     margin: 0 auto;
 
+
+
+    .role-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $sp-xs;
+        margin-bottom: $sp-md;
+
+        .chip {
+            padding: $sp-xs $sp-sm;
+            border-radius: 16px;
+            font-size: $font-size-xs;
+            font-weight: 500;
+            background-color: $color-light-gray;
+            color: $color-dark-blue;
+
+            &.owner {
+                background-color: $status-active;
+                color: $color-white;
+            }
+
+            &.tenant {
+                background-color: $status-pending;
+                color: $color-white;
+            }
+
+            &.member {
+                background-color: $color-note-gray;
+                color: $color-white;
+            }
+
+            &.tenant-member {
+                background-color: $color-dark-blue;
+                color: $color-white;
+            }
+        }
+    }
+
     // Profile Card
     .profile-card {
         background-color: $color-white;
@@ -70,9 +108,11 @@
                         &.self {
                             background-color: $status-active;
                         }
+
                         &.tenant {
                             background-color: $status-pending;
                         }
+
                         &.vacant {
                             background-color: $status-inactive;
                         }
@@ -88,9 +128,11 @@
                         &.active {
                             background-color: $status-active;
                         }
+
                         &.expired {
                             background-color: $status-expired;
                         }
+
                         &.terminated {
                             background-color: $status-rejected;
                         }
@@ -115,39 +157,6 @@
             }
         }
 
-        .role-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: $sp-xs;
-            margin-bottom: $sp-md;
-
-            .chip {
-                padding: $sp-xs $sp-sm;
-                border-radius: 16px;
-                font-size: $font-size-xs;
-                font-weight: 500;
-                background-color: $color-light-gray;
-                color: $color-dark-blue;
-
-                &.owner {
-                    background-color: $status-active;
-                    color: $color-white;
-                }
-                &.tenant {
-                    background-color: $status-pending;
-                    color: $color-white;
-                }
-                &.member {
-                    background-color: $color-note-gray;
-                    color: $color-white;
-                }
-                &.tenant-member {
-                    background-color: $color-dark-blue;
-                    color: $color-white;
-                }
-            }
-        }
-
         .lease-details {
             display: flex;
             flex-wrap: wrap;
@@ -163,6 +172,7 @@
                     display: block;
                     margin-bottom: $sp-xs;
                 }
+
                 .value {
                     font-size: $font-size-base;
                     font-weight: 500;
@@ -187,12 +197,22 @@
         box-shadow: 0 2px 8px rgba($color-black, 0.05);
 
         .section-title {
+            display: flex;
             margin: 0 0 $sp-md;
             font-size: $font-size-lg;
             font-weight: 600;
             color: $color-dark-blue;
             padding-bottom: $sp-sm;
             border-bottom: 2px solid $color-border;
+
+            .title {
+                flex: 1 auto;
+            }
+
+            .action {
+                display: flex;
+                gap: $sp;
+            }
         }
 
         .details-grid {
@@ -208,6 +228,7 @@
                     display: block;
                     margin-bottom: $sp-xs;
                 }
+
                 .value {
                     font-size: $font-size-base;
                     font-weight: 500;
@@ -288,6 +309,7 @@
                     font-size: smaller;
                     flex: 2;
                 }
+
                 .member-role {
                     font-size: $font-size-xs;
                     padding: $sp-xs $sp-sm;
@@ -295,6 +317,7 @@
                     border-radius: 12px;
                     color: $color-dark-blue;
                 }
+
                 .member-contact {
                     color: $color-help-text;
                     font-size: $font-size-sm;
@@ -317,6 +340,7 @@
                 .vehicle-number {
                     font-size: smaller;
                 }
+
                 .vehicle-type {
                     font-size: $font-size-xs;
                     color: $color-help-text;
@@ -339,6 +363,7 @@
                 .parking-number {
                     font-size: smaller;
                 }
+
                 .parking-type {
                     font-size: $font-size-xs;
                     color: $color-help-text;
@@ -376,12 +401,15 @@
                         &.low {
                             background-color: $status-active;
                         }
+
                         &.medium {
                             background-color: $status-pending;
                         }
+
                         &.high {
                             background-color: $status-rejected;
                         }
+
                         &.urgent {
                             background-color: $color-error-header;
                         }
@@ -403,27 +431,33 @@
                             background-color: $status-pending;
                             color: $color-white;
                         }
+
                         &.approved {
                             background-color: $status-approved;
                             color: $color-white;
                         }
+
                         &.in_progress {
                             background-color: $color-dark-blue;
                             color: $color-white;
                         }
+
                         &.resolved {
                             background-color: $status-active;
                             color: $color-white;
                         }
+
                         &.closed {
                             background-color: $status-inactive;
                             color: $color-white;
                         }
+
                         &.rejected {
                             background-color: $status-rejected;
                             color: $color-white;
                         }
                     }
+
                     .date {
                         color: $color-help-text;
                     }
@@ -450,6 +484,7 @@
                     .visitor-name {
                         font-size: smaller;
                     }
+
                     .gate-status {
                         font-size: $font-size-xs;
                         padding: $sp-xs $sp-sm;
@@ -460,23 +495,29 @@
                         &.requested {
                             background-color: $status-pending;
                         }
+
                         &.approved {
                             background-color: $status-approved;
                         }
+
                         &.rejected {
                             background-color: $status-rejected;
                         }
+
                         &.cancelled {
                             background-color: $status-inactive;
                         }
+
                         &.expired {
                             background-color: $status-expired;
                         }
+
                         &.completed {
                             background-color: $status-active;
                         }
                     }
                 }
+
                 .gate-details {
                     display: flex;
                     gap: $sp-md;
@@ -502,6 +543,7 @@
                     font-size: smaller;
                     font-family: monospace;
                 }
+
                 .pass-date {
                     font-size: $font-size-xs;
                     color: $color-help-text;
