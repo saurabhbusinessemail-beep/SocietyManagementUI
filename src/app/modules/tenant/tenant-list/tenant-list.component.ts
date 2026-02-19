@@ -50,7 +50,7 @@ export class TenantListComponent implements OnInit {
   }
 
   moveOut(tenant: IFlatMember, dt: Date) {
-    this.societyService.updatedeleteFlatMemberLeaseEnd(tenant._id, dt)
+    this.societyService.moveOutTenant(tenant._id, dt)
       .pipe(take(1))
       .subscribe({
         next: response => {

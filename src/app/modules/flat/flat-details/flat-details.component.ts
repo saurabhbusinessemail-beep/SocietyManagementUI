@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
@@ -14,23 +14,38 @@ import {
   IGatePass,
   IVehicle,
   IParking,
-  IMyProfile
+  IMyProfile,
+  IConfirmationPopupDataConfig
 } from '../../../interfaces'; // adjust path as needed
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { GatePassService } from '../../../services/gate-pass.service';
 import { LoginService } from '../../../services/login.service';
+import { WindowService } from '../../../services/window.service';
+import { ResidingTypes } from '../../../constants';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-flat-details',
   templateUrl: './flat-details.component.html',
   styleUrls: ['./flat-details.component.scss']
 })
-export class FlatDetailsComponent implements OnInit {
+export class FlatDetailsComponent implements OnInit, OnDestroy {
 
   flatMemberId?: string;
   flatMember?: IFlatMember;
   myProfile?: IMyProfile;
+
+
+  @ViewChild('confirmationTemplate') confirmationTemplate!: TemplateRef<any>;
+  currentDialogRef: MatDialogRef<any> | null = null;
+  confirmationDialogData = {
+    message: '',
+    note: '',
+    showVaccant: false,
+    showSelf: false,
+    showTenant: false
+  }
 
   // Related data arrays (populated via API calls)
   members: IFlatMember[] = [];           // other residents of the same flat
@@ -67,6 +82,11 @@ export class FlatDetailsComponent implements OnInit {
     return true;
   }
 
+  get residingButtonText(): string {
+    const residingType = this.flatMember?.residingType ?? ''
+    return this.windowService.mode.value === 'mobile' ? residingType : 'Residing: ' + residingType
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -74,7 +94,9 @@ export class FlatDetailsComponent implements OnInit {
     private complaintService: ComplaintService,
     private gateEntryService: GateEntryService,
     private gatepassService: GatePassService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private windowService: WindowService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -224,6 +246,99 @@ export class FlatDetailsComponent implements OnInit {
     return `ID: ${createdBy.substring(0, 6)}...`;
   }
 
+  resetDialogData(): void {
+    if (!this.flatMember) return;
+
+    switch (this.flatMember.residingType) {
+      case ResidingTypes.Self:
+        this.confirmationDialogData.message = 'You are currently residing in this flat. You can either set it as vaccant or add a tenant.';
+        this.confirmationDialogData.note = 'All current flat members will be deactivated.';
+        this.confirmationDialogData.showSelf = false;
+        this.confirmationDialogData.showTenant = true;
+        this.confirmationDialogData.showVaccant = true;
+        break;
+      case ResidingTypes.Tenant:
+        this.confirmationDialogData.message = 'You can either set the flat as vaccant or reside yourself. The current tenant will be moved out if you proceed';
+        this.confirmationDialogData.note = 'All current flat members will be deactivated.';
+        this.confirmationDialogData.showSelf = true;
+        this.confirmationDialogData.showTenant = false;
+        this.confirmationDialogData.showVaccant = true;
+        break;
+      case ResidingTypes.Vacant:
+        this.confirmationDialogData.message = 'Currently no one is residing in your flat. You can either reside yourself or add a tenant.';
+        this.confirmationDialogData.showSelf = true;
+        this.confirmationDialogData.showTenant = true;
+        this.confirmationDialogData.showVaccant = false;
+    }
+  }
+
+  handleChangeResidingTypeClick() {
+    const popupConfig = this.resetDialogData();
+
+    this.currentDialogRef = this.dialog.open(this.confirmationTemplate);
+  }
+
+  cancelResidingTypeChange() {
+    this.currentDialogRef?.close();
+  }
+
+  handleTenantClick() {
+    this.cancelResidingTypeChange();
+    this.router.navigateByUrl('/tenants/add');
+  }
+
+  handleVaccantClick() {
+    if (!this.flatMember) return;
+
+    // If current status is OWNER then only disable current members
+    if (this.flatMember.residingType === ResidingTypes.Self) {
+      this.societyService.moveOutSelf(this.flatMember._id)
+        .pipe(take(1))
+        .subscribe({
+          next: response => {
+            if (!response.success) return;
+
+            this.flatMember = response.data;
+          },
+          complete: () => this.cancelResidingTypeChange()
+        });
+      return;
+    }
+
+    // if current status is TENANT then move out tenant
+    if (this.flatMember.residingType === ResidingTypes.Tenant) {
+      this.societyService.moveOutTenant(this.flatMember._id)
+        .pipe(take(1))
+        .subscribe({
+          next: response => {
+            if (!response.success) return;
+
+            this.flatMember = response.data;
+          },
+          complete: () => this.cancelResidingTypeChange()
+        });
+      return;
+    }
+
+  }
+
+  handleSelfClick() {
+    if (!this.flatMember) return;
+
+    this.societyService.moveInSelf(this.flatMember._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
+
+          this.flatMember = response.data;
+        },
+        complete: () => this.cancelResidingTypeChange()
+      });
+    // If current is VACCANT then activate all members and change residing type to self
+    // if current is TENANT then vaccate tenant and then activate all members and change residing type to self
+  }
+
   manageResidents() {
     this.router.navigateByUrl('/members/list')
   }
@@ -246,5 +361,9 @@ export class FlatDetailsComponent implements OnInit {
 
   manageGatePasses() {
     this.router.navigateByUrl('/gatepass/list')
+  }
+
+  ngOnDestroy(): void {
+    // this.currentDialogRef.cle
   }
 }

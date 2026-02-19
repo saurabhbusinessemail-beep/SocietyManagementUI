@@ -56,13 +56,11 @@
             <h3 class="section-title">
                 <div class="title">Flat Information</div>
                 <div class="action">
-                    <div class="role-chips">
-                        <span *ngIf="flatMember?.isOwner" class="chip owner">Owner</span>
-                        <span *ngIf="flatMember?.isTenant" class="chip tenant">Tenant</span>
-                        <span *ngIf="flatMember?.isMember" class="chip member">Member</span>
-                        <span *ngIf="flatMember?.isTenantMember" class="chip tenant-member">Tenant Member</span>
-                    </div>
-                    <app-icon name="edit" size="md"></app-icon>
+                    <ui-button size="sm" [label]="residingButtonText" type="only-content"
+                        (clicked)="handleChangeResidingTypeClick()" *ngIf="flatMember && flatMember.residingType"
+                        [ngClass]="flatMember.residingType.toLowerCase()">
+                        <app-icon name="edit" size="md"></app-icon>
+                    </ui-button>
                 </div>
             </h3>
             <div class="details-grid">
@@ -224,3 +222,33 @@
 
     </div>
 </app-layout>
+
+<ng-template #confirmationTemplate>
+    <div class="confirm-dialog">
+        <div class="dialog-header">
+            <h2>Confirm</h2>
+            <button class="close-btn" (click)="cancelResidingTypeChange()" aria-label="Close">
+                <span aria-hidden="true">✕</span>
+            </button>
+        </div>
+
+        <div class="dialog-content">
+            <p>{{ confirmationDialogData.message }}</p>
+        </div>
+
+        <div class="dialog-content note" *ngIf="confirmationDialogData.note">
+            <p>{{ confirmationDialogData.note }}</p>
+        </div>
+
+        <div class="dialog-actions">
+            <ui-button label="Cancel" type="only-content" (clicked)="cancelResidingTypeChange()">
+            </ui-button>
+            <ui-button label="Self" *ngIf="confirmationDialogData.showSelf" (clicked)="handleSelfClick()">
+            </ui-button>
+            <ui-button label="Tenant" *ngIf="confirmationDialogData.showTenant" (clicked)="handleTenantClick()">
+            </ui-button>
+            <ui-button label="Vaccant" *ngIf="confirmationDialogData.showVaccant" (clicked)="handleVaccantClick()">
+            </ui-button>
+        </div>
+    </div>
+</ng-template>

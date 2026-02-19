@@ -7,7 +7,8 @@
 
     <div class="flex-col full-h">
         <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [loadFirstSociety]="true"
-            [loadFirstSociety]="true" (filterChanged)="handleSelectedFilterChanged($event)">
+            [supressAdminManageFlats]="true" [loadFirstSociety]="true"
+            (filterChanged)="handleSelectedFilterChanged($event)">
         </app-filter>
 
         <ui-form-layout class="flex-auto">

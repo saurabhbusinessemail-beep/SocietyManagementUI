@@ -6,42 +6,27 @@
     margin: 0 auto;
 
 
+    .residing-badge {
+        font-size: $font-size-sm;
+        font-weight: 600;
+        padding: $sp-xs $sp-md;
+        border-radius: 20px;
+        color: $color-white;
+        text-transform: uppercase;
 
-    .role-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $sp-xs;
-        margin-bottom: $sp-md;
+        &.self {
+            background-color: $status-active;
+        }
 
-        .chip {
-            padding: $sp-xs $sp-sm;
-            border-radius: 16px;
-            font-size: $font-size-xs;
-            font-weight: 500;
-            background-color: $color-light-gray;
-            color: $color-dark-blue;
+        &.tenant {
+            background-color: $status-pending;
+        }
 
-            &.owner {
-                background-color: $status-active;
-                color: $color-white;
-            }
-
-            &.tenant {
-                background-color: $status-pending;
-                color: $color-white;
-            }
-
-            &.member {
-                background-color: $color-note-gray;
-                color: $color-white;
-            }
-
-            &.tenant-member {
-                background-color: $color-dark-blue;
-                color: $color-white;
-            }
+        &.vacant {
+            background-color: $status-inactive;
         }
     }
+
 
     // Profile Card
     .profile-card {
@@ -561,5 +546,94 @@
         text-align: center;
         color: $color-note-gray;
         font-size: $font-size-sm;
+    }
+}
+
+.confirm-dialog {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-md;
+    overflow: hidden;
+    min-width: 300px;
+    max-width: 400px;
+
+    .dialog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $sp-md;
+        border-bottom: 1px solid $color-border;
+
+        h2 {
+            margin: 0;
+            font-size: $font-size-lg;
+            font-weight: 600;
+            color: $color-dark-blue;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: $font-size-xl;
+            line-height: 1;
+            cursor: pointer;
+            color: $color-help-text;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: $color-light-gray;
+                color: $color-dark-blue;
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    .dialog-content {
+        padding: $sp-lg $sp-md;
+        color: $color-black;
+        font-size: $font-size-base;
+
+        p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        &.note {
+            color: $color-note-gray;
+            padding-top: 0;
+            font-style: italic;
+            font-size: smaller;
+        }
+    }
+
+    .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: $sp-sm;
+        padding: $sp-md;
+        border-top: 1px solid $color-border;
+
+        button {
+            border: none;
+            padding: $sp-sm $sp-lg;
+            border-radius: $btn-border-radius-sm;
+            font-size: $font-size-sm;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+
+            &:focus {
+                outline: none;
+            }
+        }
     }
 }

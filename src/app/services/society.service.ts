@@ -405,8 +405,36 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
-    updatedeleteFlatMemberLeaseEnd(flatMemberId: string, endDate: Date): Observable<IBEResponseFormat<IFlatMember>> {
-        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/updatedeleteFlatMemberLeaseEnd/${flatMemberId}`, { endDate });
+    moveOutTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMember>> {
+        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutTenant/${flatMemberId}`, { endDate });
+    }
+
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getFlatMemberDetails',
+            'SocietyService.myFlatMembers*',
+            'SocietyService.myTenants*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['flatMembers']
+    })
+    moveOutSelf(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
+        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutSelf/${flatMemberId}`, {});
+    }
+
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getFlatMemberDetails',
+            'SocietyService.myFlatMembers*',
+            'SocietyService.myTenants*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['flatMembers']
+    })
+    moveInSelf(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
+        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveInSelf/${flatMemberId}`, {});
     }
 
 
