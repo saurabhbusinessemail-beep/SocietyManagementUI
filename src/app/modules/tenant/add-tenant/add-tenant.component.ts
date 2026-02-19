@@ -6,6 +6,7 @@ import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
 import { ResidingTypes } from '../../../constants';
 import { NewUserService } from '../../../services/new-user.service';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-add-tenant',
@@ -118,7 +119,8 @@ export class AddTenantComponent implements OnInit {
   constructor(
     private location: Location,
     private societyService: SocietyService,
-    private newUserService: NewUserService
+    private newUserService: NewUserService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -140,7 +142,16 @@ export class AddTenantComponent implements OnInit {
       });
   }
 
-  save() {
+  checkIfResidingStatusNeedsToChange(leaseStart?: Date | null, leaseEnd?: Date | null) {
+    if (!leaseStart) return false;
+
+    const today = new Date().getTime();
+    if (today > new Date(leaseStart).getTime() && (!leaseEnd || today < new Date(leaseEnd).getTime())) return true;
+
+    return false;
+  }
+
+  async save() {
     if (this.fb.invalid || !this.selectedUser) return;
 
     const formValue = this.fb.value;
@@ -148,6 +159,12 @@ export class AddTenantComponent implements OnInit {
       return (typeof fm.flatId === 'string' ? fm.flatId : fm.flatId._id) === formValue.flat?.value
     });
     if (!selectedFlat) return;
+
+    if (this.checkIfResidingStatusNeedsToChange(formValue.leaseStart, formValue.leaseEnd)) {
+      if (!await this.dialogService.confirmToProceed('You are adding a tenant with a lease start date of today or earlier – if the flat is currently occupied (by an owner or another tenant), the existing occupant(s) will be automatically vacated to make room for the new tenant; do you want to proceed?')) {
+        return;
+      }
+    }
 
     const payload = {
       societyId: typeof selectedFlat.societyId === 'string' ? selectedFlat.societyId : selectedFlat.societyId._id,
