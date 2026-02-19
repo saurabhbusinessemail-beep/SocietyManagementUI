@@ -52,19 +52,19 @@
             <!-- Reject -->
             <ui-button *ngIf="canReject" type="only-content" label="Reject" 
                        class="rejected" (clicked)="onChangeStatus('rejected', $event)">
-                <app-icon name="reject" size="md"></app-icon>
+                <app-icon name="clear" size="md"></app-icon>
             </ui-button>
 
             <!-- Move To Progress -->
             <ui-button *ngIf="canMoveToProgress" type="only-content" label="Move To Progress" 
                        class="in_progress" (clicked)="onChangeStatus('in_progress', $event)">
-                <app-icon name="inProgress" size="sm"></app-icon>
+                <app-icon name="in-progress" size="md"></app-icon>
             </ui-button>
 
             <!-- Mark Resolved -->
             <ui-button *ngIf="canMarkResolved" type="only-content" label="Mark Resolved" 
                        class="resolved" (clicked)="onChangeStatus('resolved', $event)">
-                <app-icon name="resolve" size="sm"></app-icon>
+                <app-icon name="resolved" size="md"></app-icon>
             </ui-button>
 
             <!-- Close -->

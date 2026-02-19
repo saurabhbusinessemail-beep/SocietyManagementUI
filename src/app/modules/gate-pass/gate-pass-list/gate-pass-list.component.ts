@@ -21,6 +21,8 @@ export class GatePassListComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   gatepasses: IGatePass[] = [];
 
+  selectedFilterChanged = new BehaviorSubject<IGatePassFilter | undefined>(undefined);
+
   constructor(
     private gatepassService: GatePassService,
     private dialog: MatDialog,
@@ -28,10 +30,29 @@ export class GatePassListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.subscribeToSelectedFilterChanged();
   }
 
   getGatePassUser(gatePass: IGatePass): IUser | undefined {
     return gatePass.userId && typeof gatePass.userId !== 'string' ? gatePass.userId : undefined;
+  }
+
+  subscribeToSelectedFilterChanged() {
+    this.selectedFilterChanged
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.isComponentActive)
+      )
+      .subscribe(selectedFIlter => {
+        if (!selectedFIlter) return;
+
+        this.loadGatePasses(selectedFIlter);
+      })
+  }
+
+
+  handleSelectedFilterChanged(selectedFIlter: IGatePassFilter) {
+    this.selectedFilterChanged.next(selectedFIlter);
   }
 
   loadGatePasses(selectedFIlter: IGatePassFilter) {

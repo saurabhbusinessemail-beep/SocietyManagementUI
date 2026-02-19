@@ -9,7 +9,8 @@
 
     <div class="flex-col full-h">
         <app-filter [dropDownControlConfigs]="[complaintTypeConfig]" (isFlatMemberChanged)="isFlatMember=$event"
-            [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadComplaints($event)">
+            [loadFirstSociety]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            (filterChanged)="loadComplaints($event)">
 
             <ui-select2 [formControl]="complaintTypeControl" [config]="complaintTypeConfig"
                 [options]="complaintTypeConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="2" [lgColumns]="2">

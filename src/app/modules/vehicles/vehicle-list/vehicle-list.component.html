@@ -10,8 +10,9 @@
     <div class="flex-col full-h">
         <app-filter [dropDownControlConfigs]="[]" (isFlatMemberChanged)="isFlatMember=$event"
             [societiesSearchConfig]="societiesSearchConfig" [flatSearchConfig]="flatSearchConfig"
-            [hideSocietySearch]="!!flatId" [loadFirstSociety]="true" [loadFirstFlat]="true" [smColumns]="12"
-            [mdColumns]="12" [lgColumns]="12" (filterChanged)="handleFilterChange($event)">
+            [hideSocietySearch]="!!flatId" [loadFirstSociety]="true" [loadFirstFlat]="true"
+            [supressAdminManageFlats]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            (filterChanged)="handleFilterChange($event)">
         </app-filter>
 
         <ui-form-layout class="flex-auto">

@@ -6,14 +6,16 @@
     </ng-container>
 
     <div class="flex-col full-h">
-        <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadGatePasses($event)">
+        <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [loadFirstSociety]="true"
+            [loadFirstSociety]="true" (filterChanged)="handleSelectedFilterChanged($event)">
         </app-filter>
 
         <ui-form-layout class="flex-auto">
             <ng-container *ngFor="let gatepass of gatepasses">
 
                 <ui-gate-pass-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [gatePass]="gatepass"
-                    [showDelete]="!gatepass.isAssignedBySociety" (showQR)="showQR(gatepass)" (delete)="deletePass(gatepass)">
+                    [showDelete]="!gatepass.isAssignedBySociety" (showQR)="showQR(gatepass)"
+                    (delete)="deletePass(gatepass)">
                 </ui-gate-pass-card>
 
             </ng-container>

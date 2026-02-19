@@ -24,7 +24,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() loadFirstFlat = false;
   @Input() filterByRoles: string[] = [];
   @Input() hideFlatSearch: boolean = false;
-  @Input() hideSocietySearch: boolean = false; // new input
+  @Input() hideSocietySearch: boolean = false;
+  @Input() supressAdminManageFlats: boolean = false;
   @Input() dropDownControlConfigs: IUIControlConfig<DropDownControl>[] = [];
   @Input() dateControlConfigs: IUIControlConfig<DateControl>[] = [];
   @Output() isFlatMemberChanged = new EventEmitter<boolean>();
@@ -243,7 +244,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
           // Load flats only if flat is visible
           if (!this.hideFlatSearch) {
-            if (isAdmin || isManager) this.loadSocietyFlats(selectedSociety.value)
+            if ((isAdmin || isManager) && !this.supressAdminManageFlats) this.loadSocietyFlats(selectedSociety.value)
             else if (isFlatMember) this.loadAllMyFlats(selectedSociety.value)
           }
         } else {
@@ -320,6 +321,10 @@ export class FilterComponent implements OnInit, OnDestroy {
           const flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
           if (populate) {
             this.flatSearchConfig.dropDownOptions = flatOptions;
+
+            if (this.loadFirstFlat && flatOptions.length > 0) {
+              this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+            }
             this.emitSelectedFilter();
           }
           resolve(flatOptions);

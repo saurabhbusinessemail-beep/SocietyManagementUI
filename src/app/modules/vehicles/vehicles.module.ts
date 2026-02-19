@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { VehiclesRoutingModule } from './vehicles-routing.module';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
-import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterModule } from '../../core/filter/filter.module';
 import { IconModule } from '../../core/icons/icon.module';
@@ -16,7 +15,6 @@ import { PipeModule } from '../../pipes/pipes.module';
 @NgModule({
   declarations: [
     VehicleListComponent,
-    AddVehicleComponent
   ],
   imports: [
     CommonModule,
