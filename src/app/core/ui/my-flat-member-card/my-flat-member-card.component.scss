@@ -127,11 +127,11 @@
         gap: $sp-md;
 
         @include tablet {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
         }
 
         @include desktop {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
         }
 
         // Quick info row: contact and status
