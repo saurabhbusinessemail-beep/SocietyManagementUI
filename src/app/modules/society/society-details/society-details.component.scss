@@ -111,12 +111,8 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: $sp-md;
-
-            @include tablet {
-                grid-template-columns: 1fr 1fr;
-            }
 
             .stat-item {
                 display: flex;

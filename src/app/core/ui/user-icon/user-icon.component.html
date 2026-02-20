@@ -7,7 +7,7 @@
     <div class="user-dropdown" *ngIf="open" [@dropdownAnimation]>
         <div class="dropdown-header">
             <div class="user-avatar">
-                <app-icon name="account" [size]="hideMoreActions ? 'md' : 'lg'"></app-icon>
+                <app-icon name="account" size="lg"></app-icon>
             </div>
             <div class="user-info">
                 <h3 class="user-name">{{ myProfile?.user?.name ?? 'No Name' }}</h3>
