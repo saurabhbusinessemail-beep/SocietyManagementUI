@@ -419,8 +419,8 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
-    moveOutSelf(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
-        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutSelf/${flatMemberId}`, {});
+    moveOutOwner(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
+        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutOwner/${flatMemberId}`, {});
     }
 
     @InvalidateCache({

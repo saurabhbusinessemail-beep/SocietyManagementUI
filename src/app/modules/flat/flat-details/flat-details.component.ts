@@ -292,7 +292,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
     // If current status is OWNER then only disable current members
     if (this.flatMember.residingType === ResidingTypes.Self) {
-      this.societyService.moveOutSelf(this.flatMember._id)
+      this.societyService.moveOutOwner(this.flatMember._id)
         .pipe(take(1))
         .subscribe({
           next: response => {

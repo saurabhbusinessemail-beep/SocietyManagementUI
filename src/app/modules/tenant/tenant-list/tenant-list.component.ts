@@ -34,6 +34,7 @@ export class TenantListComponent implements OnInit {
       .subscribe({
         next: response => {
           this.tenants = response.data;
+          this.loadTenants(this.selectedFIlter)
         }
       });
   }
@@ -57,6 +58,7 @@ export class TenantListComponent implements OnInit {
           if (!response.success || !response.data) return;
 
           tenant.leaseEnd = response.data.leaseEnd;
+          this.loadTenants(this.selectedFIlter)
         }
       })
   }

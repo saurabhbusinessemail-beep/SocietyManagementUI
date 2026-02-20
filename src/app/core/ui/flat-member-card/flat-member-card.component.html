@@ -41,7 +41,7 @@
                 <span>
                     {{ member.leaseStart | date:'mediumDate' }} –
                     <ng-container *ngIf="member.leaseEnd"> {{ member.leaseEnd | date:'mediumDate' }} </ng-container>
-                    <ng-container *ngIf="!member.leaseEnd"> N/Today </ng-container>
+                    <ng-container *ngIf="!member.leaseEnd"> Today </ng-container>
                     
                 </span>
             </div>
@@ -68,7 +68,7 @@
 
     <div class="flex flex-end flex-gap">
         <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()"
-            *ngIf="!member.leaseEnd && viewerRole === 'owner'">
+            *ngIf="!member.leaseEnd && viewerRole === 'owner' && member.residingType === 'Tenant'">
         </ui-button>
         <app-icon name="delete" class="error" *ngIf="showDelete" (click)="onDeleteClick()"></app-icon>
     </div>
