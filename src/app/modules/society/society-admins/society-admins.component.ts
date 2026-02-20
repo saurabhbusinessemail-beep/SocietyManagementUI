@@ -14,18 +14,18 @@ import { WindowService } from '../../../services/window.service';
 
 
 @Component({
-  selector: 'app-society-managers',
-  templateUrl: './society-managers.component.html',
-  styleUrl: './society-managers.component.scss'
+  selector: 'app-society-admins',
+  templateUrl: './society-admins.component.html',
+  styleUrl: './society-admins.component.scss'
 })
-export class SocietyManagersComponent extends ListBase implements OnDestroy {
+export class SocietyAdminsComponent extends ListBase implements OnDestroy {
 
   societyId?: string;
   society?: ISociety;
 
-  managers: IUser[] = [];
+  admins: IUser[] = [];
 
-  @ViewChild('managerTemplate') managerTemplate!: TemplateRef<any>;
+  @ViewChild('adminTemplate') adminTemplate!: TemplateRef<any>;
   currentDialogRef: MatDialogRef<any> | null = null;
 
   loading = false;
@@ -35,7 +35,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>(null);
   radioFormControl = new FormControl<string>('user');
   fb = new FormGroup({
-    manager: new FormControl<ISelectedUser | null>(null, [Validators.required])
+    admin: new FormControl<ISelectedUser | null>(null, [Validators.required])
   });
   radioConfig: IUIControlConfig = {
     id: 'radio',
@@ -53,10 +53,10 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
     { label: 'By Contact', value: 'contact' }
   ];
 
-  get managerName(): string {
-    if (!this.society) return 'Managers';
+  get adminName(): string {
+    if (!this.society) return 'Admins';
 
-    return 'Managers: ' + this.society.societyName;
+    return 'Admins: ' + this.society.societyName;
   }
 
   get showUserSearch(): boolean {
@@ -67,12 +67,12 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
     return this.radioFormControl.value === 'contact' ? true : false;
   }
 
-  get canAddSocietyManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.manager_add, this.society?._id);
+  get canAddSocietyAdmin(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_add, this.society?._id);
   }
 
-  get canDeleteSocietyManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.manager_delete, this.society?._id);
+  get canDeleteSocietyAdmin(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete, this.society?._id);
   }
 
   constructor(
@@ -90,7 +90,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
     this.societyId = this.route.snapshot.paramMap.get('id')!;
     if (!this.societyId) this.router.navigateByUrl('');
 
-    this.loadSocietyManagers(this.societyId);
+    this.loadSocietyAdmins(this.societyId);
     this.subscribeToRadioChange();
   }
 
@@ -114,7 +114,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
         if (!user) return;
 
         this.fb.patchValue({
-          manager: {
+          admin: {
             name: user.name ?? 'No Name',
             phoneNumber: user.phoneNumber,
             _id: user._id
@@ -129,14 +129,14 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
         if (!contact) return;
 
         this.fb.patchValue({
-          manager: {
+          admin: {
             name: contact.name, phoneNumber: contact.phoneNumber
           }
         });
       })
   }
 
-  loadSocietyManagers(societyId: string) {
+  loadSocietyAdmins(societyId: string) {
     this.loading = true;
 
     this.societyService.getSociety(societyId)
@@ -146,14 +146,14 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
           this.society = response;
 
           if (
-            this.society.managerIds &&
-            typeof this.society.managerIds[0] === 'string'
+            this.society.adminContacts &&
+            typeof this.society.adminContacts[0] === 'string'
           ) {
             // this.secretaries = await this.userService.getUsersByIds(
             //   this.society.secreataryIds as string[]
             // );
           } else {
-            this.managers = this.society.managerIds as IUser[];
+            this.admins = this.society.adminContacts as IUser[];
           }
 
           this.loading = false;
@@ -175,7 +175,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
   }
   openAddDialog() {
     // this.resetParkingForm();
-    this.currentDialogRef = this.dialog.open(this.managerTemplate, {
+    this.currentDialogRef = this.dialog.open(this.adminTemplate, {
       width: this.getDialogWidth(),
       panelClass: 'building-form-dialog'
     });
@@ -190,27 +190,28 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
     this.currentDialogRef?.close();
   }
 
-  addSecretary() {
+  addAdmin() {
     if (this.fb.invalid || !this.societyId) return;
 
-    this.societyService.newManager(this.societyId, this.fb.value.manager)
+    this.societyService.newSocietyAdmin(this.societyId, this.fb.value.admin)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          if (response.success) this.closeDialog();
+          if (!response.success) return;
+          this.closeDialog();
         }
       });
   }
 
-  async removeSecretary(user: IUser) {
+  async removeAdmin(user: IUser) {
     if (!this.societyId) return;
 
-    if (!await this.dialogService.confirmDelete('Delete Manager', `Are you sure you want to delete manager ${user.name}?`)) return;
+    if (!await this.dialogService.confirmDelete('Delete Manager', `Are you sure you want to delete admin ${user.name}?`)) return;
 
-    this.societyService.deleteManager(this.societyId, user._id)
+    this.societyService.deleteSocietyAdmin(this.societyId, user._id)
       .pipe(take(1))
       .subscribe(() => {
-        this.loadSocietyManagers(this.societyId ?? '');
+        this.loadSocietyAdmins(this.societyId ?? '');
       });
   }
 
@@ -223,7 +224,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
   refreshList() {
     if (!this.societyId) return;
 
-    this.loadSocietyManagers(this.societyId);
+    this.loadSocietyAdmins(this.societyId);
   }
 
   cancel() {

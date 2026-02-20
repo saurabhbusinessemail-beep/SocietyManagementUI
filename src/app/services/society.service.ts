@@ -166,6 +166,32 @@ export class SocietyService {
     }
 
 
+    /* MANAGER */
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getSociety'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['societies']
+    })
+    newSocietyAdmin(societyId: string, payload: any): Observable<IBEResponseFormat> {
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts`, payload);
+    }
+
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getSociety'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['societies']
+    })
+    deleteSocietyAdmin(societyId: string, adminId: string): Observable<IBEResponseFormat> {
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts/${adminId}`);
+    }
+
+
     /* BUILDINGS */
     // Get one building
     @Cacheable({

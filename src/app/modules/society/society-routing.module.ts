@@ -9,6 +9,7 @@ import { SocietyManagersComponent } from './society-managers/society-managers.co
 import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 import { ParkingsListComponent } from './parkings-list/parkings-list.component';
+import { SocietyAdminsComponent } from './society-admins/society-admins.component';
 
 const routes: Routes = [
   // Socities
@@ -47,6 +48,14 @@ const routes: Routes = [
     path: ':id/managers',
     canActivate: [PermissionGuard],
     component: SocietyManagersComponent,
+    data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
+  },
+
+  // Society Admins
+  {
+    path: ':id/admins',
+    canActivate: [PermissionGuard],
+    component: SocietyAdminsComponent,
     data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
   },
 

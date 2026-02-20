@@ -12,6 +12,20 @@
         <!-- Dashboard Grid -->
         <div class="dashboard-grid">
 
+            <!-- Admin Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <span class="card-title">Admins</span>
+                    <ui-button label="Manage" type="only-content" *ngIf="canViewAdmin" (clicked)="gotoSocietyAdmins()">
+                    </ui-button>
+                </div>
+                <div class="list">
+                    <ui-chip *ngFor="let a of adminIds" [value]="(a.name ?? '') + '' + a.phoneNumber"
+                        [crossAction]="canDeleteAdmin" (crossClicked)="removeAdmin(a)">
+                    </ui-chip>
+                </div>
+            </div>
+
             <!-- Secretaries Card -->
             <div class="dashboard-card">
                 <div class="card-header">

@@ -20,16 +20,25 @@ export class SocietyDetailsComponent implements OnInit {
   complaints?: IComplaintStats;
   // features: ISocietyFeature[] = [];
   managerIds: IUser[] = [];
+  adminIds: IUser[] = [];
 
   get canUpdateSociety(): boolean {
     return this.loginService.hasPermission(PERMISSIONS.society_update, this.society?._id);
   }
 
   get canViewManager(): boolean {
-    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_view, this.society?._id);
+    return this.loginService.hasPermission(PERMISSIONS.manager_view, this.society?._id);
   }
 
   get canDeleteManager(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.manager_delete, this.society?._id);
+  }
+
+  get canViewAdmin(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.society_adminContact_view, this.society?._id);
+  }
+
+  get canDeleteAdmin(): boolean {
     return this.loginService.hasPermission(PERMISSIONS.society_adminContact_delete, this.society?._id);
   }
 
@@ -77,6 +86,14 @@ export class SocietyDetailsComponent implements OnInit {
           const managerIds = this.society.managerIds;
 
           this.managerIds = managerIds.reduce((arr: IUser[], s) => {
+            if (typeof s !== 'string') arr.push(s);
+            return arr;
+          }, [] as IUser[]);
+
+
+          const adminIds = this.society.adminContacts;
+
+          this.adminIds = adminIds.reduce((arr: IUser[], s) => {
             if (typeof s !== 'string') arr.push(s);
             return arr;
           }, [] as IUser[]);
@@ -147,6 +164,10 @@ export class SocietyDetailsComponent implements OnInit {
     this.router.navigate(['/society', this.society?._id, 'managers']);
   }
 
+  gotoSocietyAdmins() {
+    this.router.navigate(['/society', this.society?._id, 'admins']);
+  }
+
   gotoBuildingManager() {
     this.router.navigate(['/society', this.society?._id, 'buildings']);
   }
@@ -167,6 +188,16 @@ export class SocietyDetailsComponent implements OnInit {
     if (!this.society) return;
 
     this.societyService.deleteManager(this.society._id, user._id)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.loadSociety(this.society?._id ?? '');
+      });
+  }
+
+  async removeAdmin(user: IUser) {
+    if (!this.society) return;
+
+    this.societyService.deleteSocietyAdmin(this.society._id, user._id)
       .pipe(take(1))
       .subscribe(() => {
         this.loadSociety(this.society?._id ?? '');
