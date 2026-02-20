@@ -48,42 +48,42 @@ $btn-bg-primary: $color-dark-blue;
 $btn-text-primary: $color-white;
 $btn-bg-cancel: $color-cancel;
 $btn-text-cancel: $color-black;
-$btn-border-radius-sm: 6px;
-$btn-border-radius-md: 10px;
-$btn-border-radius-lg: 14px;
+$btn-border-radius-sm: 4px;      // decreased from 6px
+$btn-border-radius-md: 8px;      // decreased from 10px
+$btn-border-radius-lg: 12px;     // decreased from 14px
 $btn-error: $color-error-header;
 
 // ----- Typography -----
 $font-family-base: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-$font-size-xs: 12px;
-$font-size-sm: 14px;
-$font-size-base: 16px;
-$font-size-lg: 18px;
-$font-size-xl: 22px;
-$font-size-xxl: 28px;
+$font-size-xs: 11px;    // decreased from 12px
+$font-size-sm: 12px;    // decreased from 14px
+$font-size-base: 14px;  // decreased from 16px
+$font-size-lg: 16px;    // decreased from 18px
+$font-size-xl: 18px;    // decreased from 22px
+$font-size-xxl: 22px;   // decreased from 28px
 
 // Page header sizes (responsive)
-$page-header-desktop: 28px;
-$page-header-tablet: 22px;
-$page-header-mobile: 18px;
+$page-header-desktop: 24px;   // decreased from 28px
+$page-header-tablet: 20px;    // decreased from 22px
+$page-header-mobile: 16px;    // decreased from 18px
 
 // Spacing
-$sp-xs: 4px;
-$sp-sm: 8px;
-$sp: 12px;
-$sp-md: 16px;
-$sp-lg: 24px;
-$sp-xl: 32px;
+$sp-xs: 3px;    // decreased from 4px
+$sp-sm: 6px;    // decreased from 8px
+$sp: 10px;      // decreased from 12px
+$sp-md: 14px;   // decreased from 16px
+$sp-lg: 20px;   // decreased from 24px
+$sp-xl: 28px;   // decreased from 32px
 
 // Inputs
-$input-padding-desktop: 12px;
-$input-padding-mobile: 10px;
-$input-border-radius: 6px;
+$input-padding-desktop: 10px;   // decreased from 12px
+$input-padding-mobile: 8px;     // decreased from 10px
+$input-border-radius: 5px;      // decreased from 6px
 
 // Menu widths
-$menu-width-expanded: 260px;
-$menu-width-icons: 45px;
+$menu-width-expanded: 220px;    // decreased from 260px
+$menu-width-icons: 40px;        // decreased from 45px
 
 // z-index
 $z-header: 1000;
