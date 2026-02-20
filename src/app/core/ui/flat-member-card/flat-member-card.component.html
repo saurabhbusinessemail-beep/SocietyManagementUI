@@ -35,13 +35,14 @@
         </div>
 
         <!-- OWNER VIEW -->
-        <ng-container *ngIf="!isAdminView">
-
+        <ng-container *ngIf="!isAdminView || member.isTenant">
             <div class="info-row" *ngIf="member.isTenant">
                 <label>Lease Period</label>
                 <span>
                     {{ member.leaseStart | date:'mediumDate' }} –
-                    {{ member.leaseEnd | date:'mediumDate' }}
+                    <ng-container *ngIf="member.leaseEnd"> {{ member.leaseEnd | date:'mediumDate' }} </ng-container>
+                    <ng-container *ngIf="!member.leaseEnd"> N/Today </ng-container>
+                    
                 </span>
             </div>
 

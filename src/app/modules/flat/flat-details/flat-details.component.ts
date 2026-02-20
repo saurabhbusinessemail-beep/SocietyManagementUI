@@ -298,7 +298,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           next: response => {
             if (!response.success) return;
 
-            this.flatMember = response.data;
+            if (this.flatMember) this.loadFlatMember(this.flatMember._id);
           },
           complete: () => this.cancelResidingTypeChange()
         });
@@ -313,7 +313,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           next: response => {
             if (!response.success) return;
 
-            this.flatMember = response.data;
+            if (this.flatMember) this.loadFlatMember(this.flatMember._id);
           },
           complete: () => this.cancelResidingTypeChange()
         });
@@ -331,7 +331,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
         next: response => {
           if (!response.success) return;
 
-          this.flatMember = response.data;
+          if (this.flatMember) this.loadFlatMember(this.flatMember._id);
         },
         complete: () => this.cancelResidingTypeChange()
       });
