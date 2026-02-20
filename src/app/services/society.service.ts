@@ -419,6 +419,20 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
+    moveInTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMember>> {
+        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveInTenant/${flatMemberId}`, { endDate });
+    }
+
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getFlatMemberDetails',
+            'SocietyService.myFlatMembers*',
+            'SocietyService.myTenants*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['flatMembers']
+    })
     moveOutOwner(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
         return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutOwner/${flatMemberId}`, {});
     }

@@ -67,8 +67,11 @@
 
 
     <div class="flex flex-end flex-gap">
+        <ui-button label="Move In" type="only-content" (clicked)="onMoveInClick()"
+            *ngIf="showMoveIn">
+        </ui-button>
         <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()"
-            *ngIf="!member.leaseEnd && viewerRole === 'owner' && member.residingType === 'Tenant'">
+            *ngIf="showMoveOut">
         </ui-button>
         <app-icon name="delete" class="error" *ngIf="showDelete" (click)="onDeleteClick()"></app-icon>
     </div>

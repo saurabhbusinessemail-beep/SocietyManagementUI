@@ -62,4 +62,17 @@ export class TenantListComponent implements OnInit {
         }
       })
   }
+
+  moveIn(tenant: IFlatMember) {
+    this.societyService.moveInTenant(tenant._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (!response.success || !response.data) return;
+
+          tenant.leaseEnd = response.data.leaseEnd;
+          this.loadTenants(this.selectedFIlter)
+        }
+      })
+  }
 }

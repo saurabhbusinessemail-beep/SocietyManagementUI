@@ -3,6 +3,7 @@ import { IFlat, IFlatMember, ISociety, IUIControlConfig, IUser } from '../../../
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SocietyRoles } from '../../../types';
+import { ResidingTypes } from '../../../constants';
 
 @Component({
   selector: 'ui-flat-member-card',
@@ -15,6 +16,7 @@ export class FlatMemberCardComponent {
   @Input() viewerRole: 'admin' | SocietyRoles.manager | SocietyRoles.owner | SocietyRoles.tenant | SocietyRoles.member = SocietyRoles.owner;
   @Input() showDelete = false;
   @Output() deleteMember = new EventEmitter<IFlatMember>();
+  @Output() moveInMember = new EventEmitter<void>();
   @Output() moveOutMember = new EventEmitter<Date>();
 
   get memberUser(): IUser | undefined {
@@ -59,10 +61,30 @@ export class FlatMemberCardComponent {
   };
   @ViewChild('endDate', { static: true }) endDateTemplate!: TemplateRef<any>;
 
+  get showMoveOut(): boolean {
+    return !this.member.leaseEnd && this.viewerRole === 'owner' && this.member.status === 'active' && this.member.residingType === ResidingTypes.Tenant
+  }
+
+  get showMoveIn(): boolean {
+    const startDate = (this.member.leaseStart ? new Date(this.member.leaseStart) : new Date());
+    const endDate = (this.member.leaseEnd ? new Date(this.member.leaseEnd) : new Date());
+    const today = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    const isOverlap = startDate <= today && today >= endDate;
+
+    return isOverlap && this.viewerRole === 'owner' && this.member.status === 'active' && this.member.residingType !== ResidingTypes.Tenant
+  }
+
   constructor(private dialog: MatDialog) { }
 
   onDeleteClick(): void {
     this.deleteMember.emit(this.member);
+  }
+
+  onMoveInClick(): void {
+    this.moveInMember.emit()
   }
 
   onMouveOutClick(): void {
