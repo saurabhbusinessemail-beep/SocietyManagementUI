@@ -1,13 +1,12 @@
 <div class="user-root" style="position:relative;">
-    <button class="icon user-btn" (click)="toggle()" [attr.aria-expanded]="open" aria-label="User menu"
-        [class.shrink]="!hideMoreActions">
+    <button class="icon user-btn" (click)="toggle()" [attr.aria-expanded]="open" aria-label="User menu">
         <app-icon name="account"></app-icon>
     </button>
 
     <div class="user-dropdown" *ngIf="open" [@dropdownAnimation]>
         <div class="dropdown-header">
             <div class="user-avatar">
-                <app-icon name="account" size="lg"></app-icon>
+                <app-icon name="account" [size]="hideMoreActions ? 'md' : 'lg'"></app-icon>
             </div>
             <div class="user-info">
                 <h3 class="user-name">{{ myProfile?.user?.name ?? 'No Name' }}</h3>
