@@ -11,6 +11,16 @@ export class MenuService {
   userMenus = new BehaviorSubject<IMenu[]>([]);
   selectedMenu = new BehaviorSubject<IMenu | undefined>(undefined);
 
+  dashboardMenu: IMenu = {
+    _id: '',
+    createdByUserId: '',
+    createdOn: new Date(),
+    menuId: 'dashboard',
+    menuName: 'Dashboard',
+    icon: 'dashboard',
+    relativePath: '/dashboard/user',
+  }
+
   get pageTitle(): string {
     return this.selectedMenu.value?.menuName ?? ''
   }

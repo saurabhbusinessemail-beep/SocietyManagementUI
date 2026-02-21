@@ -1,12 +1,16 @@
 <footer class="app-footer">
-    <div class="left">© {{ curYear }} My App</div>
     <div class="center">
-        <ng-container *ngFor="let c of config">
-            <a [href]="c.url" target="_blank" class="footer-item">
-                <span class="icon">{{ c.icon }}</span>
-                <span class="label">{{ c.label }}</span>
-            </a>
-        </ng-container>
+        
+        <ui-button type="only-content" label="" *ngIf="showMenu" (clicked)="menuClicked.emit()">
+            <app-icon name="menu" size="lg"></app-icon>
+        </ui-button>
+
+        <ui-button type="only-content" label="" (clicked)="homeClicked.emit()" *ngIf="showHome">
+            <app-icon name="home" size="lg"></app-icon>
+        </ui-button>
+        
+        <ui-button type="only-content" label="" *ngIf="showDashboard" (clicked)="dashboardClicked.emit()">
+            <app-icon name="dashboard" size="lg"></app-icon>
+        </ui-button>
     </div>
-    <div class="right"></div>
 </footer>

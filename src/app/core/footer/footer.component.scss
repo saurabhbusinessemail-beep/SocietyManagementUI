@@ -3,12 +3,18 @@
 .app-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    color: $color-dark-blue;
+
     .center {
         display: flex;
         gap: $sp-md;
+        justify-content: space-between;
         align-items: center;
+        width: 100%;
+    color: #7ec8ff;
     }
+
     .footer-item {
         text-decoration: none;
         color: $color-black;

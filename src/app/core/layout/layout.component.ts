@@ -1,7 +1,8 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { IMenu } from '../../interfaces';
 import { MenuService } from '../../services/menu.service';
 import { WindowService } from '../../services/window.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -15,7 +16,11 @@ export class LayoutComponent implements OnInit {
   @Input() hideMoreActions: boolean = false;
   @Input() showBackButton = false;
 
-  constructor(public menuService: MenuService, private windowServic: WindowService) { }
+  constructor(
+    public menuService: MenuService,
+    private windowServic: WindowService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.windowServic.evaluateMode();
@@ -23,4 +28,8 @@ export class LayoutComponent implements OnInit {
 
   @HostListener('window:resize')
   onResize() { this.windowServic.evaluateMode(); }
+
+  handleHomeButtonClick() {
+    this.menuService.syncSelectedMenuWithCurrentUrl(true);
+  }
 }
