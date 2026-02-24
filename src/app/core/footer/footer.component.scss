@@ -5,21 +5,14 @@
     align-items: center;
     justify-content: center;
     color: $color-dark-blue;
+    background-color: $color-white;
 
     .center {
         display: flex;
         gap: $sp-md;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         width: 100%;
-    color: #7ec8ff;
-    }
-
-    .footer-item {
-        text-decoration: none;
-        color: $color-black;
-        display: flex;
-        gap: $sp-sm;
-        align-items: center;
+        color: #7ec8ff;
     }
 }

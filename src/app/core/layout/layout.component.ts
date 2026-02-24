@@ -1,8 +1,8 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, HostListener, Input, OnInit, Output } from '@angular/core';
 import { IMenu } from '../../interfaces';
 import { MenuService } from '../../services/menu.service';
 import { WindowService } from '../../services/window.service';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
@@ -19,7 +19,7 @@ export class LayoutComponent implements OnInit {
   constructor(
     public menuService: MenuService,
     private windowServic: WindowService,
-    private router: Router
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -31,5 +31,9 @@ export class LayoutComponent implements OnInit {
 
   handleHomeButtonClick() {
     this.menuService.syncSelectedMenuWithCurrentUrl(true);
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

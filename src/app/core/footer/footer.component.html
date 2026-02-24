@@ -1,16 +1,8 @@
 <footer class="app-footer">
     <div class="center">
-        
-        <ui-button type="only-content" label="" *ngIf="showMenu" (clicked)="menuClicked.emit()">
-            <app-icon name="menu" size="lg"></app-icon>
-        </ui-button>
 
-        <ui-button type="only-content" label="" (clicked)="homeClicked.emit()" *ngIf="showHome">
-            <app-icon name="home" size="lg"></app-icon>
-        </ui-button>
-        
-        <ui-button type="only-content" label="" *ngIf="showDashboard" (clicked)="dashboardClicked.emit()">
-            <app-icon name="dashboard" size="lg"></app-icon>
-        </ui-button>
+        <app-icon size="xxl" name="back" (click)="handleBackButtonClick()">
+        </app-icon>
+
     </div>
 </footer>

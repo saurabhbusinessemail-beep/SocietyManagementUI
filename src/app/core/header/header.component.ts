@@ -1,13 +1,10 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../types';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConsoleCaptureService } from '../../services/console-capture.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConsoleComponent } from '../console/console.component';
 import { LocalStorageComponent } from '../storage/local-storage.component';
 import { WindowService } from '../../services/window.service';
-import { PushNotificationService } from '../../services/push-notification.service';
 import { ApiTrackerComponent } from '../api-tracker/api-tracker.component';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -30,9 +27,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     public ccs: ConsoleCaptureService,
     private dialog: MatDialog,
-    public windowServic: WindowService,
-    private location: Location,
-    private pushNotificationService: PushNotificationService
+    public windowServic: WindowService
   ) { }
 
   ngOnInit(): void {
@@ -56,10 +51,6 @@ export class HeaderComponent implements OnInit {
 
   showStorage() {
     this.dialog.open(LocalStorageComponent, { width: '90%', height: '80vh' })
-  }
-
-  goBack() {
-    this.location.back();
   }
 
   // async initilizeWebNotificationPermission() {

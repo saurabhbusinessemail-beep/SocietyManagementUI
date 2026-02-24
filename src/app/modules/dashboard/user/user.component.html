@@ -5,13 +5,13 @@
             <ng-container *ngIf="!role">
                 <div class="no-mobile no-tablet" [lgColumns]="3"></div>
 
-                <ui-card *ngFor="let r of roles" [smColumns]="12" [mdColumns]="4" [lgColumns]="2"
+                <ui-card *ngFor="let r of roles" [smColumns]="4" [mdColumns]="4" [lgColumns]="2"
                     (click)="setRole(r.role)">
                     <div card-main>
                         <b>{{ r.label }}</b>
                     </div>
                     <div card-icon>
-                        <app-icon [name]="r.icon"></app-icon>
+                        <app-icon [name]="r.icon" size="xxl"></app-icon>
                     </div>
                 </ui-card>
 

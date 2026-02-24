@@ -15,7 +15,7 @@ export class IconsService {
   private preloadIcons() {
     const iconList = [
       '2W', '3W', '4W', '6W',
-      'abacus', 'account', 'account-circle', 'announcement', 'approve', 'arrow-down', 'arrow-left', 'block-icon',
+      'abacus', 'account', 'account-circle', 'announcement', 'approve', 'arrow-down', 'arrow-left', 'back', 'block-icon',
       'calendar', 'call', 'clear', 'close', 'comment', 'complaint', 'dashboard', 'delete', 'double-arrow-right', 'down-arrow',
       'download', 'edit', 'exit', 'expire', 'filter', 'gateentry', 'gatepass', 'help', 'home', 'in-progress', 'invalid',
       'location-color', 'logout-icon', 'member', 'menu-icon', 'menu', 'more-vert', 'multi-select-on', 'multi-select', 'pin', 'publish', 'qr-code', 'reject',

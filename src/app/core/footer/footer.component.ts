@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 export interface FooterIcon {
   icon: string; label?: string; url: string;
@@ -10,14 +10,10 @@ export interface FooterIcon {
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
+  
+  @Output() backButtonClicked = new EventEmitter<void>();
 
-  @Input() showMenu = false;
-  @Input() showHome = false;
-  @Input() showDashboard = false;
-
-  @Output() menuClicked = new EventEmitter<void>();
-  @Output() homeClicked = new EventEmitter<void>();
-  @Output() dashboardClicked = new EventEmitter<void>();
-
-  curYear = (new Date()).getFullYear();
+  handleBackButtonClick() {
+    this.backButtonClicked.emit();
+  }
 }

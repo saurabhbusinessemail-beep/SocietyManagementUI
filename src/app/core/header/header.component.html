@@ -1,8 +1,6 @@
 <header class="app-header header-root">
     <div class="left">
-        <img class="icon menu-icon" src="assets/logo.png" (click)="onMenuClick()" *ngIf="!showBackButton">
-        <app-icon size="xl" class="icon-left" name="arrow-left" *ngIf="showBackButton" (click)="goBack()">
-        </app-icon>
+        <img class="icon menu-icon" src="assets/logo.png" (click)="onMenuClick()">
     </div>
 
     <div class="left" *ngIf="windowServic.mode.value !== 'mobile' || title === ''" appLongTouch

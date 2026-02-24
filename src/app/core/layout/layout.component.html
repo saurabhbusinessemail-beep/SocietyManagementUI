@@ -21,8 +21,7 @@
     </div>
 
     <!-- FOOTER -->
-    <app-footer *ngIf="showBackButton" [showMenu]="true" [showHome]="true" [showDashboard]="false"
-        (homeClicked)="handleHomeButtonClick()" (menuClicked)="menu.toggleMenu()">
+    <app-footer *ngIf="showBackButton" (backButtonClicked)="goBack()">
     </app-footer>
 
 </div>
