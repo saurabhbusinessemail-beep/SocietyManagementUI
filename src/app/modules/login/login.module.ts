@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipeModule } from '../../pipes/pipes.module';
 import { IconModule } from '../../core/icons/icon.module';
+import { LayoutModule } from '../../core/layout/layout.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { IconModule } from '../../core/icons/icon.module';
     IconModule,
     FormsModule,
     ReactiveFormsModule,
-    PipeModule
+    PipeModule,
+    LayoutModule
   ]
 })
 export class LoginModule { }

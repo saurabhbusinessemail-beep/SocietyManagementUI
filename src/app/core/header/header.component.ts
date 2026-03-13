@@ -5,6 +5,7 @@ import { ConsoleComponent } from '../console/console.component';
 import { LocalStorageComponent } from '../storage/local-storage.component';
 import { WindowService } from '../../services/window.service';
 import { ApiTrackerComponent } from '../api-tracker/api-tracker.component';
+import { IMyProfile } from '../../interfaces';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit {
 
   @Input() title: string = '';
   @Input() hideMoreActions: boolean = false;
+  @Input() loggedInUserProfile?: IMyProfile
   @Input() showSocietyFilter = false;
   @Input() showBackButton = false;
   @Output() toggleMenu = new EventEmitter<void>();

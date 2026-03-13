@@ -2,7 +2,7 @@
 
     <!-- HEADER -->
     <app-header (toggleMenu)="menu.toggleMenu()" [title]="title ?? menuService.pageTitle"
-        [hideMoreActions]="hideMoreActions" [showBackButton]="showBackButton">
+        [hideMoreActions]="hideMoreActions" [loggedInUserProfile]="loggedInUserProfile" [showBackButton]="showBackButton">
         <ng-container moreActions>
             <ng-content select="[moreActions]"></ng-content>
         </ng-container>
