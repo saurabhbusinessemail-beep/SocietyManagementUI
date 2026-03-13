@@ -7,6 +7,9 @@
     <div class="menu-inner">
         <div class="brand" (click)="toggleMenu()" *ngIf="windowService.mode.value !== 'desktop'">
             <div class="brand-icon">
+                <span class="logo-mobile">
+                    <span class="n-bold">GMS</span>
+                </span>
                 <app-icon name="double-arrow-right" color="white" *ngIf="!this.open"></app-icon>
             </div>
             <div class="menu-close" *ngIf="open">
@@ -18,8 +21,10 @@
 
         <ul class="menu-list">
             <li *ngFor="let m of menuItems" class="menu-item">
-                <div (click)="closeOverlay(m)"  [ngClass]="{ 'active': menuService.selectedMenu.value?.menuId === m.menuId}">
-                    <app-icon [name]="m.icon ?? ''" [color]="menuService.selectedMenu.value?.menuId === m.menuId ? '#05ff01' : 'white'"></app-icon>
+                <div (click)="closeOverlay(m)"
+                    [ngClass]="{ 'active': menuService.selectedMenu.value?.menuId === m.menuId}">
+                    <app-icon [name]="m.icon ?? ''"
+                        [color]="menuService.selectedMenu.value?.menuId === m.menuId ? '#05ff01' : 'white'" size="xl"></app-icon>
                     <span class="label" *ngIf="open">{{ m.menuName }}</span>
                 </div>
             </li>

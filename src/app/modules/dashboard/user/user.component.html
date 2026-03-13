@@ -1,6 +1,9 @@
-<app-layout [hideMoreActions]="true" title="I Am">
-    <form [formGroup]="fb">
-        <ui-form-layout>
+<app-layout [hideMoreActions]="true" title="Dashboard">
+    <div class="banner-container">
+    <img src="../../../../assets/banner.png" class="banner-image">
+    </div>
+    <form [formGroup]="fb" class="user-form">
+        <ui-form-layout title="JOIN AS" [showAsSection]="!role" [colorTheme]="!role ? 'gradient-modern-ui' : ''">
 
             <ng-container *ngIf="!role">
                 <div class="no-mobile no-tablet" [lgColumns]="3"></div>
@@ -104,7 +107,7 @@
 
 
                 </section>
-                
+
                 <!-- Action -->
                 <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="9">
 

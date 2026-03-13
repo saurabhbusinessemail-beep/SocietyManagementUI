@@ -1,0 +1,283 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.ui-form-layout {
+
+    &.section-view {
+        border: dashed 1px;
+
+        .form-title-container {
+            grid-column: span 12;
+        }
+
+        @include mobile {
+            border-radius: $btn-border-radius-sm;
+            padding: $input-padding-mobile;
+            margin-top: $input-padding-mobile;
+        }
+
+        @include tablet {
+            border-radius: $btn-border-radius-md;
+            padding: $input-padding-desktop;
+            margin-top: $input-padding-desktop;
+        }
+
+        @include desktop {
+            border-radius: $btn-border-radius-lg;
+            padding: $input-padding-desktop;
+            margin-top: $input-padding-desktop;
+        }
+    }
+
+    // Gradient 1: Sky to Deep Ocean
+    &.gradient-sky-ocean {
+        background: linear-gradient(135deg, $color-sky 0%, $color-dark-blue 100%);
+
+        .form-title {
+            color: $color-white; // Dark blue dominates at bottom, white stands out
+        }
+    }
+
+    // Gradient 2: Header-Inspired Gradient
+    &.gradient-header-breeze {
+        background: linear-gradient(120deg, $color-header-footer 0%, $color-sky 50%, $color-dark-blue 100%);
+
+        .form-title {
+            color: $color-black; // Light colors at top, black for contrast
+        }
+    }
+
+    // Gradient 3: Status Colors Rainbow
+    &.gradient-status-rainbow {
+        background: linear-gradient(90deg,
+                $status-active 0%,
+                $status-approved 20%,
+                $color-sky 40%,
+                $color-dark-blue 60%,
+                $status-pending 80%,
+                $status-rejected 100%);
+
+        .form-title {
+            color: $color-white; // Mix of dark/medium colors, white is safest
+        }
+    }
+
+    // Gradient 4: Success to Purchase
+    &.gradient-success-purchase {
+        background: linear-gradient(145deg, $status-approved 0%, $status-purchased 100%);
+
+        .form-title {
+            color: $color-white; // Both are darker greens/blues
+        }
+    }
+
+    // Gradient 5: Warning to Error
+    &.gradient-warning-error {
+        background: linear-gradient(45deg, $status-pending 0%, $status-rejected 100%);
+
+        .form-title {
+            color: $color-black; // Yellow/orange to red, black works on both
+        }
+    }
+
+    // Gradient 6: Cool Blue Trio
+    &.gradient-cool-blues {
+        background: linear-gradient(180deg, $color-white 0%, $color-sky 50%, $color-dark-blue 100%);
+
+        .form-title {
+            color: $color-dark-blue; // Dark blue contrasts with white and sky
+        }
+    }
+
+    // Gradient 7: Status Dashboard Gradient
+    &.gradient-status-dashboard {
+        background: radial-gradient(circle at top left, $status-active, $status-purchased, $status-pending);
+
+        .form-title {
+            color: $color-white; // Darker colors in the mix, white for readability
+        }
+    }
+
+    // Gradient 8: Purple to Blue
+    &.gradient-purple-blue {
+        background: linear-gradient(225deg, $status-yet 0%, $color-dark-blue 70%, $color-sky 100%);
+
+        .form-title {
+            color: $color-white; // Purple and dark blue dominate
+        }
+    }
+
+    // Gradient 9: Error Alert Gradient
+    &.gradient-error-alert {
+        background: linear-gradient(90deg, $color-error-light 0%, $color-error-header 50%, $color-error-dark 100%);
+
+        .form-title {
+            color: $color-white; // Error header and dark are bright/dark respectively
+        }
+    }
+
+    // Gradient 10: Light & Airy
+    &.gradient-light-airy {
+        background: linear-gradient(135deg, $color-header-footer 0%, $color-white 70%, $color-sky 100%);
+
+        .form-title {
+            color: $color-dark-blue; // Dark blue stands out on light background
+        }
+    }
+
+    // Gradient 11: Button Primary Gradient
+    &.gradient-button-primary {
+        background: linear-gradient(to right, $color-dark-blue, lighten($color-dark-blue, 15%), $color-dark-blue);
+
+        .form-title {
+            color: $color-white; // Dark blue background needs white text
+        }
+    }
+
+    // Gradient 12: Complete Spectrum
+    &.gradient-complete-spectrum {
+        background: linear-gradient(120deg,
+                $color-dark-blue 0%,
+                $color-sky 20%,
+                $color-header-footer 40%,
+                $status-approved 60%,
+                $status-pending 80%,
+                $status-rejected 100%);
+
+        .form-title {
+            color: $color-black; // Mix of light and dark, black works well
+        }
+    }
+
+    // Gradient 13: Metallic Blue
+    &.gradient-metallic-blue {
+        background: linear-gradient(145deg, $color-dark-blue, lighten($color-dark-blue, 20%), $color-dark-blue);
+
+        .form-title {
+            color: $color-white; // Dark blue variations need white
+        }
+    }
+
+    // Gradient 14: Icon-Inspired Gradient
+    &.gradient-icon-inspire {
+        background: radial-gradient(ellipse at center, $icon-on-light-highlight, $color-dark-blue, $color-sky);
+
+        .form-title {
+            color: $color-white; // Center is lighter but edges are dark
+        }
+    }
+
+    // Gradient 15: Multi-Directional Gradient
+    &.gradient-multi-directional {
+        background:
+            radial-gradient(circle at 0% 30%, $color-sky, transparent 50%),
+            radial-gradient(circle at 100% 70%, $color-dark-blue, transparent 50%),
+            linear-gradient(135deg, $color-header-footer 0%, $status-purchased 100%);
+
+        .form-title {
+            color: $color-black; // Complex but overall light-medium tone
+        }
+    }
+
+    // Gradient 16: Pastel Dreams
+    &.gradient-pastel-dreams {
+        background: linear-gradient(90deg,
+                lighten($color-sky, 10%) 0%,
+                $color-header-footer 50%,
+                lighten($status-yet, 20%) 100%);
+
+        .form-title {
+            color: $color-dark-blue; // Pastel colors need dark text
+        }
+    }
+
+    // Gradient 17: Corporate Professional
+    &.gradient-corporate {
+        background: linear-gradient(135deg, $color-dark-blue, darken($color-dark-blue, 10%), $color-dark-blue);
+
+        .form-title {
+            color: $color-white; // Dark blue variations need white
+        }
+    }
+
+    // Gradient 18: Status Ring
+    &.gradient-status-ring {
+        background: conic-gradient($status-active 0deg 90deg,
+                $status-approved 90deg 180deg,
+                $status-pending 180deg 270deg,
+                $status-purchased 270deg 360deg);
+
+        .form-title {
+            color: $color-black; // Mix of light and dark, black adapts better
+        }
+    }
+
+    // Gradient 19: Header to Footer
+    &.gradient-header-footer {
+        background: linear-gradient(180deg, $color-header-footer 0%, $color-sky 50%, $color-dark-blue 100%);
+
+        .form-title {
+            color: $color-black; // Top part is light, black works well
+        }
+    }
+
+    // Gradient 20: Sunset over Ocean
+    &.gradient-sunset-ocean {
+        background: linear-gradient(135deg,
+                $status-pending 0%,
+                $color-error-header 30%,
+                $color-dark-blue 70%,
+                $color-sky 100%);
+
+        .form-title {
+            color: $color-white; // Dark blue dominates bottom portion
+        }
+    }
+
+    // Gradient 21: Modern UI Gradient
+    &.gradient-modern-ui {
+        background: linear-gradient(90deg, $color-dark-blue, $status-purchased, $color-sky);
+
+        .form-title {
+            color: $color-white; // Starts dark, white works throughout
+        }
+    }
+
+    // Gradient 22: Subtle Background Gradient
+    &.gradient-subtle-bg {
+        background: linear-gradient(135deg, $color-light-gray 0%, $color-header-footer 100%);
+
+        .form-title {
+            color: $color-dark-blue; // Light background needs dark text
+        }
+    }
+
+    // Gradient 23: Border Highlight Inspired
+    &.gradient-border-highlight {
+        background: linear-gradient(45deg, $color-dark-blue, $color-border-highlight, $color-sky);
+
+        .form-title {
+            color: $color-black; // Bright green in middle, black works best
+        }
+    }
+
+    // Gradient 24: Deep Space
+    &.gradient-deep-space {
+        background: radial-gradient(circle at 30% 50%, $color-dark-blue, darken($color-dark-blue, 15%), $color-black);
+
+        .form-title {
+            color: $color-white; // Very dark background needs white
+        }
+    }
+
+    // Gradient 25: Fresh & Clean
+    &.gradient-fresh-clean {
+        background: linear-gradient(120deg, $color-white 0%, $color-sky 50%, $color-header-footer 100%);
+
+        .form-title {
+            color: $color-dark-blue; // Light background needs dark text
+        }
+    }
+
+
+}

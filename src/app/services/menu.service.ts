@@ -43,8 +43,8 @@ export class MenuService {
 
     if (matchedMenu && !skipCurrentUrlMatch) {
       this.selectedMenu.next(matchedMenu);
-    } else if (menus.length > 1) {
-      this.selectAndLoadMenu(menus[1]);
+    // } else if (menus.length > 1) {
+    //   this.selectAndLoadMenu(menus[1]);
     } else if (menus.length > 0) {
       this.selectAndLoadMenu(menus[0]);
     }

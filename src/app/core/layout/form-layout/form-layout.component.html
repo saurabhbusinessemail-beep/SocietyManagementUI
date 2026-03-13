@@ -1,3 +1,8 @@
-<div class="ui-form-layout">
+<div class="ui-form-layout" [ngClass]="formClasses">
+    <div class="form-title-container" *ngIf="title">
+        <div class="form-title">
+            {{ title }}
+        </div>
+    </div>
     <ng-content></ng-content>
 </div>

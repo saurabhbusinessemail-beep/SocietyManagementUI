@@ -1,3 +1,37 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
+
+::ng-deep {
+    .layout-body {
+        background-color: $color-header-footer !important;
+    }
+}
+
+.banner-container {
+    display: flex;
+    .banner-image {
+        width: -webkit-fill-available;
+        padding-bottom: $input-padding-desktop;
+
+        @include desktop {
+            max-height: 500px;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+.user-form {
+
+    ::ng-deep {
+        .card {
+            justify-content: center !important;
+        }
+
+        .card-main {
+            text-align: center;
+        }
+    }
+}
