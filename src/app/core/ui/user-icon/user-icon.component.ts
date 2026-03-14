@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { IMyProfile } from '../../../interfaces';
@@ -11,6 +11,8 @@ import { IMyProfile } from '../../../interfaces';
 export class UserIconComponent implements OnInit {
 
   @Input() hideMoreActions: boolean = false;
+  @Input() loggedInUserProfile?: IMyProfile
+  @Output() needLogin = new EventEmitter<void>();
   open = false;
 
   get myProfile(): IMyProfile | undefined {
@@ -22,7 +24,12 @@ export class UserIconComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  toggle() { this.open = !this.open; }
+  toggle() {
+    if (this.loggedInUserProfile)
+      this.open = !this.open;
+    else
+      this.needLogin.emit();
+  }
 
   @HostListener('document:click', ['$event'])
   onDocClick(e: Event) {

@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
   @Input() showSocietyFilter = false;
   @Input() showBackButton = false;
   @Output() toggleMenu = new EventEmitter<void>();
+  @Output() needLogin = new EventEmitter<void>();
 
   // center dropdown example
   dropdownOptions = ['Option A', 'Option B', 'Option C'];

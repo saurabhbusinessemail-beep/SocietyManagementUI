@@ -25,6 +25,7 @@
             text-overflow: ellipsis;
             font-weight: 500;
             overflow: hidden;
+            color: $color-white;
         }
     }
     .right {
@@ -38,10 +39,11 @@
         align-items: center;
         font-weight: 500;
         letter-spacing: 0.5px;
+        color: $color-header-footer;
 
         .n-bold {
             font-weight: 900;
-            color: $icon-on-light-highlight;
+            color: $color-white;
         }
 
         .logo-full {

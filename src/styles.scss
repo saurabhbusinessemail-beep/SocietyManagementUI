@@ -6,12 +6,14 @@
 * {
     box-sizing: border-box;
 }
+
 html,
 body,
 app-root {
     height: 100%;
     margin: 0;
 }
+
 body {
     font-family: $font-family-base;
     font-size: $font-size-base;
@@ -35,6 +37,7 @@ body {
 .full-h {
     height: 100%;
 }
+
 .full-w {
     width: 100%;
 }
@@ -43,28 +46,36 @@ body {
     display: flex;
     padding: 1px;
 }
+
 .flex-col {
     display: flex;
     flex-direction: column;
 }
+
 .flex-end {
     justify-content: flex-end;
 }
+
 .flex-center {
     justify-content: center;
 }
+
 .flex-align-item-center {
     align-items: center;
 }
+
 .flex-space-between {
     justify-content: space-between;
 }
+
 .flex-gap {
     gap: $sp;
 }
+
 .flex-wrap {
     flex-wrap: wrap;
 }
+
 .flex-auto {
     flex: 1 auto;
     overflow: auto;
@@ -83,6 +94,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: url(./assets/header-background.png);
 }
 
 // Icon style helper
@@ -130,14 +142,17 @@ body {
         background: $btn-bg-primary;
         color: $btn-text-primary;
     }
+
     &.cancel {
         background: $btn-bg-cancel;
         color: $btn-text-cancel;
     }
+
     &.error {
         background: $btn-error;
         color: $color-white;
     }
+
     &.only-content {
         background: transparent;
         color: $color-dark-blue;
@@ -153,6 +168,7 @@ textarea {
     border: 1px solid $color-border;
     border-radius: $input-border-radius;
     background: $color-white;
+
     &:disabled {
         background: $color-disable-background;
         color: $status-inactive;
@@ -165,16 +181,20 @@ textarea {
     color: $color-black;
     margin: $sp-lg 0 $sp-md 0;
     font-weight: 600;
+
     &.optional {
         color: $status-inactive;
         font-weight: 500;
     }
+
     @include mobile {
         font-size: $page-header-mobile;
     }
+
     @include tablet {
         font-size: $page-header-tablet;
     }
+
     @include desktop {
         font-size: $page-header-desktop;
     }
@@ -186,6 +206,7 @@ textarea {
     font-weight: 600;
     margin-bottom: $sp-sm;
 }
+
 .note {
     padding: $sp;
     border-radius: 6px;
@@ -196,16 +217,19 @@ textarea {
 .tabs {
     display: flex;
     gap: $sp-sm;
+
     .tab {
         padding: $sp-sm $sp-md;
         border-radius: 6px 6px 0 0;
         cursor: pointer;
         border: 1px solid $color-border;
         border-bottom: none;
+
         &.active {
             background: $color-dark-blue;
             color: $color-white;
         }
+
         &.inactive {
             background: $color-sky;
             color: $color-black;
@@ -217,19 +241,88 @@ html,
 body {
     height: 100%;
 }
+
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-// .status {
-//     &--active {
-//         color: $status-active;
-//     }
-//     &--active-bg {
-//         background-color: $status-active;
-//     }
-// }
+// Add these styles to your global styles or component styles
+.height-restriction-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    padding-bottom: 10%;
+
+    // Optional: Add a subtle fade effect at the bottom when collapsed
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        background: linear-gradient(transparent, rgba(255, 255, 255, 0.9));
+    }
+
+    // Show fade effect only when collapsed and content exceeds height
+    &:not([style*="max-height: none"])::after {
+        opacity: 1;
+    }
+}
+
+.show-more-trigger {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 20px 0 10px 0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10;
+    transition: background 0.3s ease;
+
+    .show-more-text {
+        transition: color 0.2s ease;
+        border-bottom: 1px dashed currentColor;
+        padding-bottom: 2px;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    // When expanded, remove gradient background
+    &[data-expanded="true"] {
+        background: transparent;
+    }
+}
+
+// Optional: Add animation for content
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Dark mode support (if needed)
+@media (prefers-color-scheme: dark) {
+    .height-restriction-wrapper::after {
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    }
+}
 
 @include mobile {
     .no-mobile {

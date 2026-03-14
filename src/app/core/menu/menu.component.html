@@ -5,7 +5,7 @@
 
     <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
     <div class="menu-inner">
-        <div class="brand" (click)="toggleMenu()" *ngIf="windowService.mode.value !== 'desktop'">
+        <div class="brand" (click)="toggleMenu()" *ngIf="windowService.mode.value !== 'desktop' && windowService.mode.value !== 'tablet'">
             <div class="brand-icon">
                 <span class="logo-mobile">
                     <span class="n-bold">GMS</span>

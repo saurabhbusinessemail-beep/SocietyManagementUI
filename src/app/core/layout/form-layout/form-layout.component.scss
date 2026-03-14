@@ -279,5 +279,30 @@
         }
     }
 
+    &.gradient-random-bubbles {
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+
+            background:
+                radial-gradient(circle at 12% 22%, rgba($color-white, 0.45) 0px, rgba($color-white, 0.35) 60px, transparent 12px),
+                radial-gradient(circle at 82% 18%, rgba($color-white, 0.30) 0px, rgba($color-white, 0.25) 90px, transparent 16px),
+                radial-gradient(circle at 70% 75%, rgba($color-sky, 0.45) 0px, rgba($color-sky, 0.35) 110px, transparent 20px),
+                radial-gradient(circle at 25% 80%, rgba($color-header-footer, 0.50) 0px, rgba($color-header-footer, 0.40) 13px, transparent 220px),
+                radial-gradient(circle at 55% 40%, rgba($color-white, 0.25) 0px, rgba($color-white, 0.18) 70px, transparent 15px);
+        }
+
+        .form-title {
+            color: $color-white;
+            position: relative;
+            z-index: 1;
+        }
+    }
+
 
 }

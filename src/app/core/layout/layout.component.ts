@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { IMenu, IMyProfile } from '../../interfaces';
 import { MenuService } from '../../services/menu.service';
 import { WindowService } from '../../services/window.service';
@@ -16,8 +16,9 @@ export class LayoutComponent implements OnInit {
   @Input() menuItems: IMenu[] = [];
   @Input() hideMoreActions: boolean = false;
   @Input() showBackButton = false;
+  @Output() needLogin = new EventEmitter<void>();
 
-  
+
   loggedInUserProfile?: IMyProfile;
 
   constructor(

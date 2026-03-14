@@ -35,6 +35,9 @@ export class FormLayoutComponent {
   | 'gradient-border-highlight'
   | 'gradient-deep-space'
   | 'gradient-fresh-clean';
+
+  @Input() backgroundDesigns?: ''
+  | 'gradient-random-bubbles'
   
 
   get formClasses() {
@@ -42,6 +45,7 @@ export class FormLayoutComponent {
 
     if (this.showAsSection) classes += ' section-view'
     if (this.colorTheme) classes += ' ' + this.colorTheme
+    if (this.backgroundDesigns) classes += ' ' + this.backgroundDesigns
 
     return classes;
   }

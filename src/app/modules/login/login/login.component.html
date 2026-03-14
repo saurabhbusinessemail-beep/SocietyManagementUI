@@ -1,5 +1,173 @@
-<app-layout [hideMoreActions]="true" title="Gate My Society">
+<app-layout [hideMoreActions]="true" title="Gate My Society" (needLogin)="simpleLogin()">
+
+    <div class="first-div">
+
+        <h1 class="first-div-title">
+            Manage Your Society <span class="smarter"> Smarter </span>
+        </h1>
+
+        <div class="first-div-description">
+            Streamline gate entries, manage residents & tenants, track complaints, and keep your community informed —
+            all from one powerful platform.
+        </div>
+
+        <div class="first-div-actions">
+            <button class="get-started">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in size-4"
+                    aria-hidden="true">
+                    <path d="m10 17 5-5-5-5"></path>
+                    <path d="M15 12H3"></path>
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                </svg>
+                Get Started
+            </button>
+
+            <button class="explore-features">
+                Explore Features
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4"
+                    aria-hidden="true" data-hercules-id="src/pages/_components/HeroSection.tsx:96:18"
+                    data-hercules-name="ArrowRightIcon">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="first-div-tags">
+            <div class="tag-container">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-shield-check w-4 h-4 text-indigo-300 flex-shrink-0" aria-hidden="true"
+                    data-hercules-id="src/pages/_components/HeroSection.tsx:110:18" data-hercules-name="Icon">
+                    <path
+                        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                    </path>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>
+                Secure & Compliant
+            </div>
+
+
+            <div class="tag-container">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-zap w-4 h-4 text-indigo-300 flex-shrink-0" aria-hidden="true"
+                    data-hercules-id="src/pages/_components/HeroSection.tsx:110:18" data-hercules-name="Icon">
+                    <path
+                        d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+                    </path>
+                </svg>
+                Real-time Updates
+            </div>
+
+
+            <div class="tag-container">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-users w-4 h-4 text-indigo-300 flex-shrink-0" aria-hidden="true"
+                    data-hercules-id="src/pages/_components/HeroSection.tsx:110:18" data-hercules-name="Icon">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Multi-role Access
+            </div>
+        </div>
+    </div>
+
+    <div class="features-container">
+        <div class="feature-title-container" [appRestrictHeight]="800" [restrictEnabled]="enableShoeMoreFeature">
+            <div class="feature-title">
+                <h2 class="main-title" style="opacity: 1; transform: none;">Everything you need to run a perfect society
+                </h2>
+                <p class="sub-title" style="opacity: 1; transform: none;">Replace scattered
+                    spreadsheets and WhatsApp groups with a single, powerful platform designed for modern residential
+                    management.</p>
+
+            </div>
+            <ui-form-layout>
+                <!-- Regular feature cards -->
+                <div *ngFor="let feature of features" class="feature-card" style="opacity: 1; transform: none;" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                    <div class="icon-wrapper" [ngClass]="[feature.bgColorClass, feature.textColorClass]">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            [attr.class]="'lucide lucide-' + feature.iconName + ' w-6 h-6'" [attr.aria-hidden]="true">
+                            <path *ngFor="let path of feature.svgPath.split(' M')"
+                                [attr.d]="path.startsWith('M') ? path : 'M' + path"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">{{ feature.title }}</h3>
+                    <p class="card-description">{{ feature.description }}</p>
+                </div>
+
+                <!-- Special "And much more" card -->
+                <div class="special-card"  [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                    <h3 class="special-title">And much more</h3>
+                    <p class="special-description">Explore the full platform capabilities.</p>
+                    <div class="special-icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-arrow-right w-5 h-5" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </ui-form-layout>
+        </div>
+    </div>
+
+
+    <!-- 
+    <ui-form-layout title="" [showAsSection]="true" colorTheme="gradient-pastel-dreams"
+        backgroundDesigns="gradient-random-bubbles">
+        <ng-container *ngFor="let feature of features">
+            <div class="no-desktop" [smColumns]="1" [mdColumns]="1"></div>
+            <div class="feature-container" [smColumns]="2" [mdColumns]="2" [lgColumns]="1">
+                <div class="feature-icon">
+                    <img [attr.src]="'../../../../assets/icons/' + feature.icon + '.svg'">
+                </div>
+                <div class="feature-label">
+                    {{feature.label}}
+                </div>
+            </div>
+            <div class="no-desktop" [smColumns]="1" [mdColumns]="1"></div>
+        </ng-container>
+
+    </ui-form-layout> -->
+
+    <!-- 
+    <ui-form-layout title="" [showAsSection]="true" colorTheme="gradient-pastel-dreams">
+
+        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+
+        <ui-card *ngFor="let r of roles" [smColumns]="4" [mdColumns]="4" [lgColumns]="2" (click)="openLoginPopup()">
+            <div card-main>
+                <b>{{ r.label }}</b>
+            </div>
+            <div card-icon>
+                <app-icon [name]="r.icon" size="xxl"></app-icon>
+            </div>
+        </ui-card>
+
+
+        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+
+
+
+    </ui-form-layout> -->
+
+</app-layout>
+
+<ng-template #loginPopup>
+
     <div *ngIf="step === 'login'" class="login-container">
+        <div class="full-w flex flex-end">
+            <app-icon name="close" size="xxl" (click)="closeLoginPopup()"></app-icon>
+        </div>
         <div class="login-card">
             <h1 class="page-header">Login</h1>
 
@@ -18,7 +186,6 @@
             </form>
         </div>
     </div>
-
 
 
 
@@ -62,4 +229,5 @@
         </div>
     </div>
 
-</app-layout>
+
+</ng-template>
