@@ -27,8 +27,7 @@
                 Explore Features
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4"
-                    aria-hidden="true" data-hercules-id="src/pages/_components/HeroSection.tsx:96:18"
-                    data-hercules-name="ArrowRightIcon">
+                    aria-hidden="true">
                     <path d="M5 12h14"></path>
                     <path d="m12 5 7 7-7 7"></path>
                 </svg>
@@ -90,7 +89,8 @@
             </div>
             <ui-form-layout>
                 <!-- Regular feature cards -->
-                <div *ngFor="let feature of features" class="feature-card" style="opacity: 1; transform: none;" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                <div *ngFor="let feature of features" class="feature-card" style="opacity: 1; transform: none;"
+                    [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
                     <div class="icon-wrapper" [ngClass]="[feature.bgColorClass, feature.textColorClass]">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -104,7 +104,7 @@
                 </div>
 
                 <!-- Special "And much more" card -->
-                <div class="special-card"  [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                <div class="special-card" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
                     <h3 class="special-title">And much more</h3>
                     <p class="special-description">Explore the full platform capabilities.</p>
                     <div class="special-icon-wrapper">
@@ -120,6 +120,41 @@
         </div>
     </div>
 
+
+    <div class="py-20 bg-foreground text-background relative overflow-hidden">
+        <div
+            class="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div
+                class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-border/20">
+                <div class="flex flex-col items-center justify-center pt-8 md:pt-0"
+                    style="opacity: 1; transform: none;">
+                    <div class="text-4xl md:text-5xl font-display font-extrabold text-white mb-2">500+</div>
+                    <div class="text-sm md:text-base font-medium text-slate-400">Societies
+                        Managed</div>
+                </div>
+                <div class="flex flex-col items-center justify-center pt-8 md:pt-0"
+                    style="opacity: 1; transform: none;">
+                    <div class="text-4xl md:text-5xl font-display font-extrabold text-white mb-2">10,000+</div>
+                    <div class="text-sm md:text-base font-medium text-slate-400">Flats
+                        Registered</div>
+                </div>
+                <div class="flex flex-col items-center justify-center pt-8 md:pt-0"
+                    style="opacity: 1; transform: none;">
+                    <div class="text-4xl md:text-5xl font-display font-extrabold text-white mb-2">50,000+</div>
+                    <div class="text-sm md:text-base font-medium text-slate-400">Happy
+                        Residents</div>
+                </div>
+                <div class="flex flex-col items-center justify-center pt-8 md:pt-0"
+                    style="opacity: 1; transform: none;">
+                    <div class="text-4xl md:text-5xl font-display font-extrabold text-white mb-2">99.9%</div>
+                    <div class="text-sm md:text-base font-medium text-slate-400">Platform
+                        Uptime</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 
     <ui-form-layout title="" [showAsSection]="true" colorTheme="gradient-pastel-dreams"
