@@ -17,6 +17,10 @@ const routes: Routes = [
     path: 'user',
     component: UserComponent
   },
+  {
+    path: 'user/:role',
+    component: UserComponent
+  },
 ];
 
 @NgModule({

@@ -8,6 +8,7 @@ import { LoginService } from '../../../services/login.service';
 import { NewUserService } from '../../../services/new-user.service';
 import { MenuService } from '../../../services/menu.service';
 import { SocietyRoles } from '../../../types';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -195,10 +196,19 @@ export class UserComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private loginService: LoginService,
     private newUserService: NewUserService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.route.params.pipe(take(1))
+    .subscribe(params => {
+      console.log('params = ', params)
+      if (params?.['role'] && [SocietyRoles.owner.toString(),SocietyRoles.tenant.toString(),SocietyRoles.security.toString()].includes(params['role'])) {
+        this.role = params['role']
+      }
+    })
+
     this.fb.get('society')?.valueChanges
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(society => {

@@ -1430,9 +1430,8 @@
     align-items: center;
     justify-content: center;
     gap: $sp-xs;
-    padding: $sp-sm $sp-md;
+    padding: $sp $sp-lg;
     border-radius: 0.75rem;
-    font-size: $font-size-sm;
     font-weight: 600;
     color: $color-white;
     border: none;
@@ -1451,11 +1450,6 @@
 
     &:active {
         opacity: 1;
-    }
-
-    @include mobile {
-        padding: $sp-xs $sp-sm;
-        font-size: $font-size-xs;
     }
 }
 

@@ -4,9 +4,9 @@ import { Subject, take, takeUntil, tap } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { FcmTokenService } from '../../../services/fcm-token.service';
 import { UserService } from '../../../services/user.service';
-import { SocietyRoles } from '../../../types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WindowService } from '../../../services/window.service';
+import { Router } from '@angular/router';
 
 interface IFeatures {
   iconName: string;
@@ -264,7 +264,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private fcmTokenService: FcmTokenService,
     private dialog: MatDialog,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
@@ -319,6 +320,19 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (token) {
           this.loginService.saveTokenToStorage(token);
           this.getAndSaveProfile();
+        }
+      })
+  }
+
+  loginAndJoinAs(role: string) {
+    this.openLoginPopup()
+      .subscribe(token => {
+        if (token) {
+          this.loginService.saveTokenToStorage(token);
+          this.getAndSaveProfile();
+          setTimeout(() => {
+          this.router.navigate(['dashboard/user', role])
+          }, 1000);
         }
       })
   }

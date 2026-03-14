@@ -3,7 +3,7 @@
         <img src="../../../../assets/banner.png" class="banner-image">
     </div>
     <form [formGroup]="fb" class="user-form">
-        <ui-form-layout title="JOIN AS" [showAsSection]="!role" [colorTheme]="!role ? 'gradient-modern-ui' : ''">
+        <ui-form-layout [title]="role ? '' : 'JOIN AS'" [showAsSection]="!role" [colorTheme]="!role ? 'gradient-modern-ui' : ''">
 
             <ng-container *ngIf="!role">
                 <div class="no-mobile no-tablet" [lgColumns]="3"></div>
