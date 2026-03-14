@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
+import { IMyProfile, IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
 import { countries } from '../../../constants';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-add-society',
@@ -21,6 +22,7 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     numberOfBuildings: new FormControl<number>(1),
   });
 
+  myProfile?: IMyProfile;
 
   isMultipleBuildings = new FormControl<boolean[]>([]);
   multiBuildingConfig: IUIControlConfig = {
@@ -76,9 +78,17 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
 
   errorMessage = '';
 
-  constructor(private router: Router, private route: ActivatedRoute, private societyService: SocietyService, private location: Location) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private societyService: SocietyService,
+    private location: Location,
+    private loginService: LoginService
+  ) { }
 
   ngOnInit() {
+    this.myProfile = this.loginService.getProfileFromStorage();
+
     this.isMultipleBuildings.valueChanges
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(isMultiArr => {
@@ -131,7 +141,6 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     let payload = this.fb.value;
     if (!payload) return;
 
@@ -142,9 +151,25 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     if (this.fb.value.societyId) {
       this.edit(payload);
     } else {
-      this.add(payload);
+      
+      if (!this.myProfile || this.myProfile.user.role === 'user')
+        this.sendForApproval(payload);
+      else
+        this.add(payload);
     }
 
+  }
+
+  sendForApproval(payload: any) {
+    this.societyService.createSocietyForApproval(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => this.location.back(),
+        error: err => {
+          this.errorMessage = 'Error while sending society for approval.';
+          console.log('error while adding society');
+        }
+      })
   }
 
   add(payload: any) {

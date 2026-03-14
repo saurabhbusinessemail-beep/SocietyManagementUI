@@ -331,10 +331,14 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.loginService.saveTokenToStorage(token);
           this.getAndSaveProfile();
           setTimeout(() => {
-          this.router.navigate(['dashboard/user', role])
+            this.router.navigate(['dashboard/user', role])
           }, 1000);
         }
       })
+  }
+
+  gotoAddSociety() {
+    this.router.navigateByUrl('/society-public/add')
   }
 
   sendOtp() {

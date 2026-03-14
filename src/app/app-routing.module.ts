@@ -29,6 +29,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'society-public',
+    loadChildren: () => import('./modules/society/society.module').then(module => module.SocietyModule)
+  },
+  {
     path: 'myflats',
     loadChildren: () => import('./modules/flat/flat.module').then(module => module.FlatModule),
     canActivate: [AuthGuard]

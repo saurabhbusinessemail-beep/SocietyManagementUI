@@ -10,6 +10,7 @@ import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 import { SocietyAdminsComponent } from './society-admins/society-admins.component';
+import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
 
 const routes: Routes = [
   // Socities
@@ -25,10 +26,16 @@ const routes: Routes = [
     data: { permission: PERMISSIONS.society_view }
   },
   {
-    path: 'add',
+    path: 'pendingApproval',
     canActivate: [PermissionGuard],
-    component: AddSocietyComponent,
+    component: PendingSocietyApprovalsComponent,
     data: { permission: PERMISSIONS.society_add }
+  },
+  {
+    path: 'add',
+    // canActivate: [PermissionGuard],
+    component: AddSocietyComponent,
+    // data: { permission: PERMISSIONS.society_add }
   },
   {
     path: ':id/edit',

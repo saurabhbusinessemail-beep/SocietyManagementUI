@@ -1,0 +1,146 @@
+<app-layout [hideMoreActions]="true" title="Pending Approvals">
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <i class="material-icons search-icon">search</i>
+            <input type="text" class="search-input" placeholder="Search by society name, location, or admin..."
+                [formControl]="searchControl">
+            <button class="clear-search" *ngIf="searchControl.value" (click)="clearSearch()">
+                <i class="material-icons">close</i>
+            </button>
+        </div>
+    </div>
+
+    <div class="society-table">
+
+        <!-- Desktop Table -->
+        <div class="table-wrapper desktop">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Society</th>
+                        <th>Location</th>
+                        <th>Buildings</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let s of paginatedSocieties">
+                        <td class="society-cell">
+                            <div class="society-info">
+                                <div class="icon">
+                                    <i class="material-icons">apartment</i>
+                                </div>
+                                <div class="text">
+                                    <div class="name">{{ s.societyName }}</div>
+                                    <div class="society-type">Apartment Complex</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="location">
+                            <div class="location-info">
+                                <i class="material-icons location-icon">location_on</i>
+                                {{ s.gpsLocation.address }}
+                            </div>
+                        </td>
+
+                        <td class="buildings">
+                            {{ s.numberOfBuildings }}
+                        </td>
+
+                        <td class="submitted">
+                            {{ s.createdOn | date:'dd MMM yyyy' }}
+                        </td>
+
+                        <td class="actions-cell">
+                            <div class="action-buttons">
+                                <button class="btn-approve" (click)="approve(s)">
+                                    <i class="material-icons">check</i>
+                                    Approve
+                                </button>
+                                <button class="btn-reject" (click)="reject(s)">
+                                    <i class="material-icons">close</i>
+                                    Reject
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Mobile / Tablet -->
+        <div class="mobile-list">
+            <div class="mobile-card" *ngFor="let s of paginatedSocieties; let i = index">
+
+                <div class="mobile-header" (click)="toggleRow(i)">
+                    <div class="mobile-header-left">
+                        <div class="icon small">
+                            <i class="material-icons">apartment</i>
+                        </div>
+                        <div class="mobile-title">
+                            <div class="society-name">{{ s.societyName }}</div>
+                            <div class="society-location">{{ s.gpsLocation.address }}</div>
+                        </div>
+                    </div>
+
+                    <div class="mobile-header-right">
+                        <span class="status-badge pending">
+                        </span>
+                        <div class="expand-icon" [ngClass]="{'inverted': expandedRow === i}">
+                            <app-icon name="arrow-down"></app-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-body" *ngIf="expandedRow === i">
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Total Buildings</span>
+                            <strong class="detail-value">{{ s.numberOfBuildings }}</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Submitted On</span>
+                            <strong class="detail-value">{{ s.createdOn | date:'dd MMM yyyy' }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="mobile-actions">
+                        <button class="btn-approve mobile" (click)="approve(s)">
+                            <i class="material-icons">check</i>
+                            Approve
+                        </button>
+                        <button class="btn-reject mobile" (click)="reject(s)">
+                            <i class="material-icons">close</i>
+                            Reject
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="prevPage()" [disabled]="page === 1">
+                <i class="material-icons">chevron_left</i>
+                Prev
+            </button>
+
+            <span class="page-info">
+                Page {{ page }} of {{ totalPages }}
+            </span>
+
+            <button (click)="nextPage()" [disabled]="page === totalPages">
+                Next
+                <i class="material-icons">chevron_right</i>
+            </button>
+        </div>
+
+    </div>
+</app-layout>

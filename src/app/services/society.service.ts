@@ -12,6 +12,7 @@ import { PaginationService } from './pagination.service';
 export class SocietyService {
 
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
+    private readonly baseUrlPublic = `${environment.apiBaseUrl}/societies-public`;
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
     constructor(private http: HttpClient, private paginationService: PaginationService) { }
@@ -59,6 +60,18 @@ export class SocietyService {
         return this.http.post<ISociety>(this.baseUrl, payload);
     }
 
+    /* Create society For Approval */
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getAllSocieties*',
+            'SocietyService.searchSocieties*'
+        ],
+        groups: ['societies']
+    })
+    createSocietyForApproval(payload: any): Observable<ISociety> {
+        return this.http.post<ISociety>(`${this.baseUrlPublic}/sentForApproval`, payload);
+    }
+
     /* Get all societies */
     @Cacheable({
         // ttl: 300000, // 5 minutes
@@ -66,6 +79,28 @@ export class SocietyService {
     })
     getAllSocieties(): Observable<IPagedResponse<ISociety>> {
         return this.http.get<IPagedResponse<ISociety>>(this.baseUrl);
+    }
+
+    getAllUnApprovedSocieties(page: number, limit: number, searchString: string = '') {
+        return this.http.post<IPagedResponse<ISociety>>(`${this.baseUrl}/unApproved`,
+            { searchString },
+            {
+                params: {
+                    page: page.toString(),
+                    limit: limit.toString()
+                }
+            }
+        );
+    }
+
+    approveSociety(id: string) {
+        const payload = { approved: true };
+        return this.http.patch<IPagedResponse<ISociety>>(`${this.baseUrl}/${id}`, payload);
+    }
+
+    rejectSociety(id: string) {
+        const payload = { approved: false };
+        return this.http.patch<IPagedResponse<ISociety>>(`${this.baseUrl}/${id}`, payload);
     }
 
     /* Get society by ID */

@@ -17,6 +17,7 @@ import { PipeModule } from '../../pipes/pipes.module';
 import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 import { MatDialogContent } from "@angular/material/dialog";
 import { SocietyAdminsComponent } from './society-admins/society-admins.component';
+import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
 
 
 
@@ -29,7 +30,8 @@ import { SocietyAdminsComponent } from './society-admins/society-admins.componen
     BuildingListComponent,
     FlatListComponent,
     ParkingsListComponent,
-    SocietyAdminsComponent
+    SocietyAdminsComponent,
+    PendingSocietyApprovalsComponent
   ],
   imports: [
     CommonModule,
