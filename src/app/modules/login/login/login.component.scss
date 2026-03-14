@@ -8,6 +8,12 @@
     align-items: center;
     justify-content: center;
     padding: $sp-lg;
+    border-top: solid 10px $color-dark-blue;
+
+    app-icon {
+        color: $color-dark-blue;
+        cursor: pointer;
+    }
 }
 
 
@@ -297,8 +303,7 @@
 .features-container {
     padding-top: 6rem;
     padding-bottom: 6rem;
-    background-color: rgba($color-header-footer, 0.5);
-    border-top: 1px solid $color-border;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0) 90%, #ffffff 100%), rgba($color-header-footer, 0.5);
     border-bottom: 1px solid $color-border;
 
     .feature-title-container {
@@ -893,6 +898,231 @@
 
     @include mobile {
         font-size: $font-size-sm;
+    }
+}
+
+.cta-section {
+    padding: 6rem 0; // py-24
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+
+    @include mobile {
+        padding: 4rem 0;
+    }
+
+    @include tablet {
+        padding: 5rem 0;
+    }
+}
+
+// Background Layers
+.bg-layer {
+    position: absolute;
+    inset: 0;
+    background-color: $color-dark-blue; // bg-primary
+    z-index: -2;
+}
+
+.image-layer {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    mix-blend-mode: overlay;
+    opacity: 0.1;
+    z-index: -1;
+
+    // Fallback for older browsers
+    @media not all and (min-resolution: 0.001dpcm) {
+        background-color: rgba($color-dark-blue, 0.3);
+    }
+}
+
+// Content Container
+.content-container {
+    max-width: 56rem; // max-w-4xl
+    margin: 0 auto;
+    padding: 0 1rem; // px-4
+    text-align: center;
+    position: relative;
+    z-index: 10;
+
+    @include tablet {
+        padding: 0 1.5rem; // sm:px-6
+    }
+
+    @include desktop {
+        padding: 0 2rem; // lg:px-8
+    }
+}
+
+// Title Styles
+.cta-title {
+    font-size: 1.875rem; // text-3xl
+    font-weight: 700;
+    font-family: $font-family-base;
+    color: $color-white;
+    margin-bottom: 1.5rem; // mb-6
+    line-height: 1.2;
+
+    @include tablet {
+        font-size: 3rem; // md:text-5xl
+    }
+
+    @include mobile {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+// Description Styles
+.cta-description {
+    font-size: 1.125rem; // text-lg
+    color: rgba($color-white, 0.8); // text-primary-foreground/80
+    margin-bottom: 2.5rem; // mb-10
+    max-width: 42rem; // max-w-2xl
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+
+    @include tablet {
+        font-size: 1.25rem; // md:text-xl
+    }
+
+    @include mobile {
+        font-size: $font-size-base;
+        margin-bottom: 2rem;
+    }
+}
+
+// Buttons Wrapper
+.buttons-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem; // gap-4
+
+    @include tablet {
+        flex-direction: row; // sm:flex-row
+    }
+
+    @include mobile {
+        gap: 0.75rem;
+    }
+}
+
+// Base Button Styles
+.btn {
+    padding: 1rem 2rem; // px-8 py-4
+    border-radius: 0.75rem; // rounded-xl
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: $font-size-base;
+    line-height: 1.5;
+
+    @include mobile {
+        padding: 0.875rem 1.5rem;
+        font-size: $font-size-sm;
+    }
+
+    &:focus {
+        outline: 2px solid rgba($color-white, 0.5);
+        outline-offset: 2px;
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+// Primary Button
+.btn-primary {
+    background-color: $color-white;
+    color: $color-dark-blue; // text-primary
+    box-shadow: 0 10px 15px -3px rgba($color-black, 0.1), 0 4px 6px -2px rgba($color-black, 0.05); // shadow-lg shadow-black/10
+
+    &:hover {
+        background-color: darken($color-white, 3%); // hover:bg-slate-50
+    }
+
+    &:active {
+        background-color: darken($color-white, 6%);
+    }
+}
+
+// Secondary Button
+.btn-secondary {
+    background-color: transparent;
+    color: $color-white;
+    border: 2px solid rgba($color-white, 0.3); // border-2 border-white/30
+
+    &:hover {
+        background-color: rgba($color-white, 0.1); // hover:bg-white/10
+    }
+
+    &:active {
+        background-color: rgba($color-white, 0.15);
+    }
+}
+
+// Optional Animation Classes
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cta-title,
+.cta-description,
+.buttons-wrapper {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.cta-description {
+    animation-delay: 0.2s;
+}
+
+.buttons-wrapper {
+    animation-delay: 0.4s;
+}
+
+// High Contrast Mode Support
+@media (prefers-contrast: high) {
+    .btn-primary {
+        border: 2px solid $color-black;
+    }
+
+    .btn-secondary {
+        border: 2px solid $color-white;
+    }
+}
+
+// Print Styles
+@media print {
+    .cta-section {
+        background-color: $color-dark-blue;
+        color: $color-white;
+        padding: 2rem 0;
+    }
+
+    .image-layer {
+        display: none;
+    }
+
+    .btn {
+        border: 1px solid $color-white;
+        background: none;
+        color: $color-white;
     }
 }
 

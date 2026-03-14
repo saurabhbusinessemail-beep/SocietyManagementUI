@@ -25,6 +25,7 @@ interface IHowItWorksStep {
   description: string;
 }
 
+
 interface IJoinAsRole {
   role: string; label: string; icon: string
 }
@@ -133,22 +134,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   ];
   howItWorksSteps: IHowItWorksStep[] = [
-  {
-    stepNumber: '01',
-    title: 'Register your Society',
-    description: 'Create an account, set up your building structure, and define roles in minutes. Our onboarding wizard makes it effortless.'
-  },
-  {
-    stepNumber: '02',
-    title: 'Add Members & Residents',
-    description: 'Invite owners and tenants to join. They can download the mobile app to get verified and stay connected.'
-  },
-  {
-    stepNumber: '03',
-    title: 'Manage Everything Digitally',
-    description: 'From gate approvals to maintenance complaints, everything is logged securely in the cloud and accessible anytime.'
-  }
-];
+    {
+      stepNumber: '01',
+      title: 'Register your Society',
+      description: 'Create an account, set up your building structure, and define roles in minutes. Our onboarding wizard makes it effortless.'
+    },
+    {
+      stepNumber: '02',
+      title: 'Add Members & Residents',
+      description: 'Invite owners and tenants to join. They can download the mobile app to get verified and stay connected.'
+    },
+    {
+      stepNumber: '03',
+      title: 'Manage Everything Digitally',
+      description: 'From gate approvals to maintenance complaints, everything is logged securely in the cloud and accessible anytime.'
+    }
+  ];
   roles: IJoinAsRole[] = [
     {
       role: SocietyRoles.owner,
@@ -217,6 +218,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
+  scrollToElement(element: HTMLElement) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   openLoginPopup() {
     this.loginPopupDialogRef = this.dialog.open(this.loginPopup)
