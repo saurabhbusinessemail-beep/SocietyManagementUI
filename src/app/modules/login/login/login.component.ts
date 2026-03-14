@@ -155,7 +155,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   otpError = false;
 
   get enableShoeMoreFeature(): boolean {
-    return this.windowService.mode.value === 'mobile'
+    return this.windowService.mode.value !== 'desktop'
   }
 
 
