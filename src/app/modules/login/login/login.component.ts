@@ -19,6 +19,12 @@ interface IFeatures {
   isSpecial?: boolean;
 }
 
+interface IHowItWorksStep {
+  stepNumber: string;
+  title: string;
+  description: string;
+}
+
 interface IJoinAsRole {
   role: string; label: string; icon: string
 }
@@ -126,6 +132,23 @@ export class LoginComponent implements OnInit, OnDestroy {
       svgPath: 'M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2 M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M9 17h6 M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0'
     }
   ];
+  howItWorksSteps: IHowItWorksStep[] = [
+  {
+    stepNumber: '01',
+    title: 'Register your Society',
+    description: 'Create an account, set up your building structure, and define roles in minutes. Our onboarding wizard makes it effortless.'
+  },
+  {
+    stepNumber: '02',
+    title: 'Add Members & Residents',
+    description: 'Invite owners and tenants to join. They can download the mobile app to get verified and stay connected.'
+  },
+  {
+    stepNumber: '03',
+    title: 'Manage Everything Digitally',
+    description: 'From gate approvals to maintenance complaints, everything is logged securely in the cloud and accessible anytime.'
+  }
+];
   roles: IJoinAsRole[] = [
     {
       role: SocietyRoles.owner,

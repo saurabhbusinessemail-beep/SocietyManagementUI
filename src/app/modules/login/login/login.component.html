@@ -151,6 +151,47 @@
         </div>
     </div>
 
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+
+            <!-- Header Section -->
+            <div class="header-wrapper">
+                <h2 class="section-title">Up and running in minutes</h2>
+                <p class="section-subtitle">We've streamlined the setup process so your committee can focus on what
+                    matters most.</p>
+            </div>
+
+            <!-- Steps Section -->
+            <div class="steps-main-wrapper">
+
+                <!-- Connector Line (visible only on desktop) -->
+                <div class="connector-line"></div>
+
+                <!-- Steps Grid -->
+                <div class="steps-grid">
+
+                    <!-- Step Cards - Generated from array -->
+                    <div *ngFor="let step of howItWorksSteps" class="step-card">
+
+                        <!-- Step Number Badge -->
+                        <div class="step-badge">
+                            {{ step.stepNumber }}
+                        </div>
+
+                        <!-- Step Content -->
+                        <div class="step-content-wrapper">
+                            <h3 class="step-title">{{ step.title }}</h3>
+                            <p class="step-description">{{ step.description }}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <!-- 
     <ui-form-layout title="" [showAsSection]="true" colorTheme="gradient-pastel-dreams"
         backgroundDesigns="gradient-random-bubbles">

@@ -704,6 +704,198 @@
     }
 }
 
+.how-it-works-section {
+    padding: 6rem 0; // py-24 equivalent
+    background-color: $color-white;
+
+    @include mobile {
+        padding: 4rem 0;
+    }
+
+    @include tablet {
+        padding: 5rem 0;
+    }
+}
+
+// Container
+.container {
+    max-width: 1280px; // max-w-7xl equivalent
+    margin: 0 auto;
+    padding: 0 1rem; // px-4 equivalent
+
+    @include tablet {
+        padding: 0 1.5rem; // sm:px-6 equivalent
+    }
+
+    @include desktop {
+        padding: 0 2rem; // lg:px-8 equivalent
+    }
+}
+
+// Header Styles
+.header-wrapper {
+    text-align: center;
+    max-width: 42rem; // max-w-2xl equivalent
+    margin: 0 auto 5rem; // mb-20 equivalent
+
+    @include mobile {
+        margin-bottom: 3rem;
+    }
+}
+
+.section-title {
+    font-size: 1.875rem; // text-3xl
+    font-weight: 700;
+    font-family: $font-family-base;
+    color: $color-black;
+    margin-bottom: 1rem;
+
+    @include tablet {
+        font-size: 2.25rem; // md:text-4xl
+    }
+
+    @include mobile {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+.section-subtitle {
+    font-size: 1.125rem; // text-lg
+    color: $color-help-text;
+    line-height: 1.6;
+
+    @include mobile {
+        font-size: $font-size-base;
+    }
+}
+
+// Steps Wrapper
+.steps-main-wrapper {
+    position: relative;
+}
+
+// Connector Line (hidden on mobile)
+.connector-line {
+    display: none;
+
+    @include tablet {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px; // h-0.5 equivalent
+        background-color: $color-border;
+        transform: translateY(-50%);
+        z-index: 0;
+    }
+}
+
+// Steps Grid
+.steps-grid {
+    display: grid;
+    grid-template-columns: 1fr; // grid-cols-1
+    gap: 3rem; // gap-12
+    position: relative;
+    z-index: 10;
+
+    @include tablet {
+        grid-template-columns: repeat(3, 1fr); // md:grid-cols-3
+    }
+
+    @include mobile {
+        gap: 2rem;
+    }
+}
+
+// Step Card
+.step-card {
+    background-color: $color-white;
+    border-radius: 1rem; // rounded-2xl
+    padding: 2rem; // p-8
+    border: 1px solid $color-border;
+    box-shadow: 0 1px 3px rgba($color-black, 0.1); // shadow-sm
+    position: relative;
+    transition: border-color 0.3s ease;
+
+    &:hover {
+        border-color: rgba($color-dark-blue, 0.5); // hover:border-primary/50
+
+        .step-badge {
+            background-color: $color-dark-blue;
+            color: $color-white;
+        }
+    }
+
+    @include mobile {
+        padding: 1.5rem;
+    }
+}
+
+// Step Number Badge
+.step-badge {
+    width: 3.5rem; // w-14
+    height: 3.5rem; // h-14
+    border-radius: 9999px; // rounded-full
+    background-color: $color-white;
+    border: 4px solid $color-white; // border-4 border-card
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-weight: 700;
+    font-size: 1.25rem; // text-xl
+    color: $color-dark-blue; // text-primary
+    position: absolute;
+    top: -1.75rem; // -top-7
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1), 0 2px 4px -1px rgba($color-black, 0.06); // shadow-md
+    transition: all 0.3s ease;
+
+    @include mobile {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.125rem;
+        top: -1.5rem;
+        border-width: 3px;
+    }
+}
+
+// Step Content
+.step-content-wrapper {
+    padding-top: 1.5rem; // pt-6
+    text-align: center;
+
+    @include mobile {
+        padding-top: 1.25rem;
+    }
+}
+
+.step-title {
+    font-size: 1.25rem; // text-xl
+    font-weight: 700;
+    color: $color-black;
+    margin-bottom: 0.75rem; // mb-3
+    font-family: $font-family-base;
+
+    @include mobile {
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.step-description {
+    color: $color-help-text;
+    line-height: 1.625; // leading-relaxed
+    font-size: $font-size-base;
+
+    @include mobile {
+        font-size: $font-size-sm;
+    }
+}
+
 ::ng-deep {
     .layout-body {
         padding: 0px !important;
