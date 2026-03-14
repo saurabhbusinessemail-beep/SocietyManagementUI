@@ -25,9 +25,23 @@ interface IHowItWorksStep {
   description: string;
 }
 
-
-interface IJoinAsRole {
-  role: string; label: string; icon: string
+interface IJoinAsFeature {
+  text: string;
+}
+interface IJoinAsCard {
+  id: string;
+  role: string;
+  title: string;
+  description: string;
+  badgeText: string;
+  badgeClass: string; // Combined class for badge styling
+  iconName: string;
+  iconWrapperClass: string; // Combined class for icon wrapper
+  iconColorClass: string;
+  gradientClass: string; // Class for top gradient bar
+  buttonGradientClass: string; // Class for button gradient
+  dotGradientClass: string; // Class for feature dot gradient
+  features: IJoinAsFeature[];
 }
 
 @Component({
@@ -150,23 +164,84 @@ export class LoginComponent implements OnInit, OnDestroy {
       description: 'From gate approvals to maintenance complaints, everything is logged securely in the cloud and accessible anytime.'
     }
   ];
-  roles: IJoinAsRole[] = [
+  joinAsCards: IJoinAsCard[] = [
     {
-      role: SocietyRoles.owner,
-      label: 'Flat Owner',
-      icon: 'home'
+      id: 'owner',
+      role: 'For Flat Owners',
+      title: 'Join as Owner',
+      description: 'Manage your property, track maintenance requests, view financial statements, and stay connected with your society committee — all from one place.',
+      badgeText: 'For Flat Owners',
+      badgeClass: 'badge-blue',
+      iconName: 'house',
+      iconWrapperClass: 'icon-wrapper-blue',
+      iconColorClass: 'icon-blue',
+      gradientClass: 'gradient-bar-blue',
+      buttonGradientClass: 'button-gradient-blue',
+      dotGradientClass: 'dot-gradient-blue',
+      features: [
+        { text: 'View & pay maintenance bills' },
+        { text: 'Raise complaints' },
+        { text: 'Track visitors & gate passes' },
+        { text: 'Society announcements' }
+      ]
     },
     {
-      role: SocietyRoles.tenant,
-      label: 'Tenant',
-      icon: 'tenant'
+      id: 'tenant',
+      role: 'For Tenants',
+      title: 'Join as Tenant',
+      description: 'Access everything you need as a resident — raise service requests, get visitor gate passes, stay updated on announcements, and manage your rental documents.',
+      badgeText: 'For Tenants',
+      badgeClass: 'badge-violet',
+      iconName: 'key-round',
+      iconWrapperClass: 'icon-wrapper-violet',
+      iconColorClass: 'icon-violet',
+      gradientClass: 'gradient-bar-violet',
+      buttonGradientClass: 'button-gradient-violet',
+      dotGradientClass: 'dot-gradient-violet',
+      features: [
+        { text: 'Generate visitor gate passes' },
+        { text: 'Raise service complaints' },
+        { text: 'View announcements' },
+        { text: 'Manage tenancy docs' }
+      ]
     },
     {
-      role: SocietyRoles.security,
-      label: 'Security',
-      icon: 'security'
+      id: 'security',
+      role: 'For Security Staff',
+      title: 'Join as Security',
+      description: 'Streamline gate operations — log visitor entries and exits, verify gate passes, track vehicle movement, and keep the society safe with a digital register.',
+      badgeText: 'For Security Staff',
+      badgeClass: 'badge-emerald',
+      iconName: 'shield-check',
+      iconWrapperClass: 'icon-wrapper-emerald',
+      iconColorClass: 'icon-emerald',
+      gradientClass: 'gradient-bar-emerald',
+      buttonGradientClass: 'button-gradient-emerald',
+      dotGradientClass: 'dot-gradient-emerald',
+      features: [
+        { text: 'Log gate entries & exits' },
+        { text: 'Verify visitor gate passes' },
+        { text: 'Track vehicle movement' },
+        { text: 'Digital duty register' }
+      ]
     }
-  ]
+  ];
+
+  // SVG Paths for Icons (unchanged)
+  iconPaths: Record<string, string[]> = {
+    'house': [
+      'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8',
+      'M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'
+    ],
+    'key-round': [
+      'M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z',
+      'M16.5 7.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z'
+    ],
+    'shield-check': [
+      'M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z',
+      'm9 12 2 2 4-4'
+    ]
+  };
 
   @ViewChild('loginPopup') loginPopup!: TemplateRef<any>;
   loginPopupDialogRef: MatDialogRef<any> | null = null;

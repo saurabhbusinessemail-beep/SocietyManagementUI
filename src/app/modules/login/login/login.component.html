@@ -192,6 +192,72 @@
         </div>
     </section>
 
+    <div class="join-as-container">
+
+        <!-- Header Section -->
+        <div class="header-wrapper">
+            <span class="badge">Who is it for?</span>
+            <h2 class="section-title">One platform, every role covered</h2>
+            <p class="section-description">
+                Whether you own a flat, rent one, or guard the gate — GateMySociety has a dedicated experience built just
+                for you.
+            </p>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="cards-grid">
+
+            <!-- Card - Generated from array -->
+            <div *ngFor="let card of joinAsCards" class="card" [ngClass]="card.id + '-card'">
+
+                <!-- Top Gradient Bar -->
+                <div class="card-top-bar" [ngClass]="card.gradientClass"></div>
+
+                <!-- Badge -->
+                <span class="card-badge" [ngClass]="card.badgeClass">
+                    {{ card.badgeText }}
+                </span>
+
+                <!-- Icon -->
+                <div class="card-icon" [ngClass]="card.iconWrapperClass">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" [ngClass]="card.iconColorClass">
+                        <path *ngFor="let path of iconPaths[card.iconName]" [attr.d]="path"></path>
+                        <circle *ngIf="card.iconName === 'key-round'" cx="16.5" cy="7.5" r="0.5" fill="currentColor">
+                        </circle>
+                    </svg>
+                </div>
+
+                <!-- Title -->
+                <h3 class="card-title">{{ card.title }}</h3>
+
+                <!-- Description -->
+                <p class="card-description">{{ card.description }}</p>
+
+                <!-- Features List -->
+                <ul class="features-list">
+                    <li *ngFor="let feature of card.features" class="feature-item">
+                        <div class="feature-dot" [ngClass]="card.dotGradientClass"></div>
+                        {{ feature.text }}
+                    </li>
+                </ul>
+
+                <!-- Button -->
+                <button class="card-button" [ngClass]="card.buttonGradientClass">
+                    <span>Get Started</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="button-arrow">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <section class="cta-section">
         <!-- Background Color Layer -->
         <div class="bg-layer"></div>
@@ -206,7 +272,7 @@
             <h2 class="cta-title">Ready to digitize your society?</h2>
 
             <p class="cta-description">
-                Join hundreds of other residential complexes that trust SocietyPro for secure, transparent, and
+                Join hundreds of other residential complexes that trust GateMySociety for secure, transparent, and
                 effortless management.
             </p>
 

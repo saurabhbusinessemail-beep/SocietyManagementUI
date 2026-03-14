@@ -1126,6 +1126,381 @@
     }
 }
 
+.join-as-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 $sp-md;
+
+    @include tablet {
+        padding: 0 $sp-lg;
+    }
+
+    @include desktop {
+        padding: 0 $sp-xl;
+    }
+}
+
+// Header Styles
+.header-wrapper {
+    text-align: center;
+    margin-bottom: $sp-xl;
+
+    @include mobile {
+        margin-bottom: $sp-lg;
+    }
+}
+
+.badge {
+    display: inline-block;
+    padding: $sp-xs $sp-sm;
+    border-radius: 9999px;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    background-color: rgba($color-dark-blue, 0.1);
+    color: $color-dark-blue;
+    border: 1px solid rgba($color-dark-blue, 0.2);
+    margin-bottom: $sp-md;
+
+    @include mobile {
+        font-size: $font-size-xs;
+        padding: 2px $sp-xs;
+    }
+}
+
+.section-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: $color-black;
+    margin-bottom: $sp-md;
+
+    @include tablet {
+        font-size: 2.25rem;
+    }
+
+    @include mobile {
+        font-size: 1.5rem;
+        margin-bottom: $sp-sm;
+    }
+}
+
+.section-description {
+    color: $color-help-text;
+    font-size: 1.125rem;
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.6;
+
+    @include mobile {
+        font-size: $font-size-base;
+    }
+}
+
+// Cards Grid
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $sp-lg;
+
+    @include tablet {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include desktop {
+        gap: $sp-xl;
+    }
+
+    @include mobile {
+        gap: $sp-md;
+    }
+}
+
+// Base Card Styles
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    border-width: 1px;
+    background-color: $color-white;
+    padding: $sp-xl;
+    box-shadow: 0 1px 3px rgba($color-black, 0.1);
+    transition: all 300ms ease;
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: 0 20px 25px -5px rgba($color-black, 0.1), 0 10px 10px -5px rgba($color-black, 0.04);
+        transform: translateY(-0.25rem);
+    }
+
+    @include mobile {
+        padding: $sp-lg;
+    }
+}
+
+// Card-specific border colors
+.owner-card {
+    border-color: lighten($color-sky, 15%);
+}
+
+.tenant-card {
+    border-color: lighten($color-dark-blue, 45%);
+}
+
+.security-card {
+    border-color: lighten($status-active, 45%);
+}
+
+// Card Top Gradient Bar
+.card-top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.25rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+.gradient-bar-blue {
+    background: linear-gradient(to right, $color-sky, darken($color-sky, 15%));
+}
+
+.gradient-bar-violet {
+    background: linear-gradient(to right, lighten($color-dark-blue, 30%), $color-dark-blue);
+}
+
+.gradient-bar-emerald {
+    background: linear-gradient(to right, lighten($status-active, 20%), $status-active);
+}
+
+// Card Badge
+.card-badge {
+    align-self: flex-start;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    padding: $sp-xs $sp-sm;
+    border-radius: 9999px;
+    margin-bottom: $sp-md;
+}
+
+.badge-blue {
+    background-color: rgba($color-sky, 0.15);
+    color: darken($color-sky, 30%);
+}
+
+.badge-violet {
+    background-color: rgba($color-dark-blue, 0.1);
+    color: $color-dark-blue;
+}
+
+.badge-emerald {
+    background-color: rgba($status-active, 0.1);
+    color: darken($status-active, 15%);
+}
+
+// Card Icon
+.card-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $sp-md;
+
+    svg {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    @include mobile {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: $sp-sm;
+
+        svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+}
+
+.icon-wrapper-blue {
+    background-color: rgba($color-sky, 0.1);
+}
+
+.icon-wrapper-violet {
+    background-color: rgba($color-dark-blue, 0.05);
+}
+
+.icon-wrapper-emerald {
+    background-color: rgba($status-active, 0.05);
+}
+
+.icon-blue {
+    color: darken($color-sky, 20%);
+}
+
+.icon-violet {
+    color: $color-dark-blue;
+}
+
+.icon-emerald {
+    color: darken($status-active, 10%);
+}
+
+// Card Title
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $color-black;
+    margin-bottom: $sp-sm;
+
+    @include mobile {
+        font-size: 1.125rem;
+    }
+}
+
+// Card Description
+.card-description {
+    color: $color-help-text;
+    font-size: $font-size-sm;
+    line-height: 1.625;
+    margin-bottom: $sp-lg;
+
+    @include mobile {
+        font-size: $font-size-xs;
+        margin-bottom: $sp-md;
+    }
+}
+
+// Features List
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 $sp-xl 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $sp-sm;
+
+    @include mobile {
+        gap: $sp-xs;
+        margin-bottom: $sp-lg;
+    }
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: $sp-sm;
+    font-size: $font-size-sm;
+    color: $color-black;
+
+    @include mobile {
+        font-size: $font-size-xs;
+        gap: $sp-xs;
+    }
+}
+
+.feature-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+.dot-gradient-blue {
+    background: linear-gradient(to bottom right, $color-sky, darken($color-sky, 15%));
+}
+
+.dot-gradient-violet {
+    background: linear-gradient(to bottom right, lighten($color-dark-blue, 30%), $color-dark-blue);
+}
+
+.dot-gradient-emerald {
+    background: linear-gradient(to bottom right, lighten($status-active, 20%), $status-active);
+}
+
+// Card Button
+.card-button {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $sp-xs;
+    padding: $sp-sm $sp-md;
+    border-radius: 0.75rem;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
+    transition: all 200ms ease;
+
+    &:hover {
+        box-shadow: 0 10px 15px -3px rgba($color-black, 0.1);
+        opacity: 0.9;
+
+        .button-arrow {
+            transform: translateX(0.25rem);
+        }
+    }
+
+    &:active {
+        opacity: 1;
+    }
+
+    @include mobile {
+        padding: $sp-xs $sp-sm;
+        font-size: $font-size-xs;
+    }
+}
+
+.button-gradient-blue {
+    background: linear-gradient(to right, $color-sky, darken($color-sky, 15%));
+}
+
+.button-gradient-violet {
+    background: linear-gradient(to right, lighten($color-dark-blue, 30%), $color-dark-blue);
+}
+
+.button-gradient-emerald {
+    background: linear-gradient(to right, lighten($status-active, 20%), $status-active);
+}
+
+.button-arrow {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 200ms ease;
+}
+
+// Animation for cards
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+
+    @for $i from 1 through 3 {
+        &:nth-child(#{$i}) {
+            animation-delay: #{$i * 0.1}s;
+        }
+    }
+}
+
 ::ng-deep {
     .layout-body {
         padding: 0px !important;
