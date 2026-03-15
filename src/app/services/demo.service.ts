@@ -352,18 +352,6 @@ export class DemoService {
   }
 
   /**
- * Approve a demo booking
- * @param id - Booking ID
- * @returns Observable with IBEResponseFormat containing approved booking
- */
-  approveDemo(id: string): Observable<IBEResponseFormat<IDemoBooking>> {
-    return this.http.post<IBEResponseFormat<IDemoBooking>>(
-      `${this.apiUrl}/${id}/approve`,
-      {}
-    );
-  }
-
-  /**
    * Reject a demo booking
    * @param id - Booking ID
    * @param reason - Reason for rejection

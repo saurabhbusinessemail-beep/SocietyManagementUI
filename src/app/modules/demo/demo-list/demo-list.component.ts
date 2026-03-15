@@ -280,24 +280,6 @@ export class DemoListComponent implements OnInit {
     this.selectedBooking = null;
   }
 
-  // Approve action
-  approveBooking(booking: IDemoBooking): void {
-    this.activeActionMenu = null; // Close mobile menu
-    if (confirm(`Approve booking for ${booking.fullName}?`)) {
-      this.demoService.approveDemo(booking._id!).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.loadBookings();
-            this.showSuccessToast('Booking approved successfully');
-          } else {
-            this.showErrorToast(response.message || 'Failed to approve booking');
-          }
-        },
-        error: (error) => this.showErrorToast(error.message)
-      });
-    }
-  }
-
   // Confirm action
   confirmBooking(booking: IDemoBooking): void {
     this.activeActionMenu = null; // Close mobile menu

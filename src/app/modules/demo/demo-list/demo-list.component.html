@@ -302,10 +302,10 @@
             <div class="bulk-actions" *ngIf="selectedIds.size > 0">
                 <span class="selected-count">{{ selectedIds.size }} item(s) selected</span>
                 <div class="bulk-buttons">
-                    <button class="bulk-btn approve" (click)="openBulkApproveModal()"
+                    <!-- <button class="bulk-btn approve" (click)="openBulkApproveModal()"
                         *ngIf="hasPendingSelected()">Approve Selected</button>
                     <button class="bulk-btn reject" (click)="openBulkRejectModal()" *ngIf="hasPendingSelected()">Reject
-                        Selected</button>
+                        Selected</button> -->
                     <button class="bulk-btn export" (click)="bulkExport()">Export Selected</button>
                     <button class="bulk-btn delete" (click)="bulkDelete()">Delete Selected</button>
                     <button class="bulk-btn clear" (click)="clearSelection()">Clear</button>
