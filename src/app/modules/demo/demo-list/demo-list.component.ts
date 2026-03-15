@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DemoService } from '../../../services/demo.service';
 import { LoginService } from '../../../services/login.service';
 import { IDemoBooking, IDemoBookingFilters } from '../../../interfaces';
+import { DemoBookingStatus } from '../../../constants';
 
 @Component({
   selector: 'app-demo-list',
@@ -14,6 +15,8 @@ export class DemoListComponent implements OnInit {
   bookings: IDemoBooking[] = [];
   selectedBooking: IDemoBooking | null = null;
   selectedIds: Set<string> = new Set();
+
+   DemoBookingStatus = DemoBookingStatus;
 
   // Filters
   filters: IDemoBookingFilters = {
@@ -57,7 +60,6 @@ export class DemoListComponent implements OnInit {
   showCancelModal: boolean = false;
   showNoteModal: boolean = false;
   showViewModal: boolean = false;
-  showRejectModal: boolean = false;
   showBulkActionModal: boolean = false;
 
   // Modal data
@@ -237,10 +239,6 @@ export class DemoListComponent implements OnInit {
 
   // ==================== ACTION CHECKS ====================
 
-  canEdit(booking: IDemoBooking): boolean {
-    return ['pending', 'confirmed', 'rescheduled'].includes(booking.status || '');
-  }
-
   canReschedule(booking: IDemoBooking): boolean {
     return ['pending', 'confirmed'].includes(booking.status || '');
   }
@@ -265,10 +263,6 @@ export class DemoListComponent implements OnInit {
     return booking.status === 'pending';
   }
 
-  canReject(booking: IDemoBooking): boolean {
-    return booking.status === 'pending';
-  }
-
   canMarkNoShow(booking: IDemoBooking): boolean {
     return booking.status === 'confirmed' || booking.status === 'rescheduled';
   }
@@ -284,11 +278,6 @@ export class DemoListComponent implements OnInit {
   closeViewModal(): void {
     this.showViewModal = false;
     this.selectedBooking = null;
-  }
-
-  editBooking(booking: IDemoBooking): void {
-    this.activeActionMenu = null; // Close mobile menu
-    this.router.navigate(['/book-demo', booking._id, 'edit']);
   }
 
   // Approve action
@@ -307,29 +296,6 @@ export class DemoListComponent implements OnInit {
         error: (error) => this.showErrorToast(error.message)
       });
     }
-  }
-
-  // Reject action with modal
-  openRejectModal(booking: IDemoBooking): void {
-    this.selectedBooking = booking;
-    this.rejectReason = '';
-    this.showRejectModal = true;
-    this.activeActionMenu = null; // Close mobile menu
-  }
-
-  confirmReject(): void {
-    this.demoService.rejectDemo(this.selectedBooking!._id!, this.rejectReason).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.showRejectModal = false;
-          this.loadBookings();
-          this.showSuccessToast('Booking rejected successfully');
-        } else {
-          this.showErrorToast(response.message || 'Failed to reject booking');
-        }
-      },
-      error: (error) => this.showErrorToast(error.message)
-    });
   }
 
   // Confirm action
@@ -471,6 +437,7 @@ export class DemoListComponent implements OnInit {
 
   // Add note
   openNoteModal(booking: IDemoBooking): void {
+    this.closeAllModals();
     this.selectedBooking = booking;
     this.followUpNote = '';
     this.showNoteModal = true;
@@ -612,7 +579,6 @@ export class DemoListComponent implements OnInit {
     this.showCancelModal = false;
     this.showNoteModal = false;
     this.showViewModal = false;
-    this.showRejectModal = false;
     this.showBulkActionModal = false;
     this.selectedBooking = null;
   }

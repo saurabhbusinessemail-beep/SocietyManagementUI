@@ -7,6 +7,7 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DemoListComponent } from './demo-list/demo-list.component';
 import { ModalComponent } from './modal/modal.component';
+import { PipeModule } from '../../pipes/pipes.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ModalComponent } from './modal/modal.component';
     DemoRoutingModule,
     LayoutModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipeModule
   ]
 })
 export class DemoModule { }
