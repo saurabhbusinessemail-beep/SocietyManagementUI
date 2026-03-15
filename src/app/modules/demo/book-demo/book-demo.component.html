@@ -97,17 +97,35 @@
                         Preferred Time<span class="mandatory-star">*</span>
                     </label>
 
-                    <div class="time-slots-grid">
+                    <!-- Loading state -->
+                    <div *ngIf="isLoadingSlots" class="loading-slots">
+                        <span class="spinner-small"></span>
+                        Checking availability...
+                    </div>
+
+                    <!-- Time slots grid -->
+                    <div *ngIf="!isLoadingSlots" class="time-slots-grid">
                         <button *ngFor="let time of timeSlots" type="button" (click)="selectTimeSlot(time)"
-                            class="time-slot-btn" [class.time-slot-selected]="selectedTime === time">
+                            class="time-slot-btn" [class.time-slot-selected]="selectedTime === time"
+                            [class.time-slot-unavailable]="!isTimeSlotAvailable(time)"
+                            [disabled]="!isTimeSlotAvailable(time)" [title]="getSlotStatusMessage(time)">
                             {{ time }}
+                            <span *ngIf="!isTimeSlotAvailable(time)" class="slot-status">(Booked)</span>
                         </button>
+                    </div>
+
+                    <!-- Availability summary -->
+                    <div *ngIf="slotAvailability && isDateFullyBooked()" class="availability-warning">
+                        <span class="warning-icon">⚠️</span>
+                        All slots are booked for this date. Please select another date.
                     </div>
 
                     <div *ngIf="isFieldInvalid('preferredTime')" class="error-message">
                         Please select a time slot.
                     </div>
-                    <p class="help-text">Please select a time slot.</p>
+                    <p class="help-text">
+                        {{ isLoadingSlots ? 'Checking available slots...' : 'Select an available time slot for your demo.' }}
+                    </p>
                 </div>
 
                 <!-- Additional Notes -->

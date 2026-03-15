@@ -1,0 +1,558 @@
+<app-layout [hideMoreActions]="false" [showBackButton]="false" (needLogin)="loginService.simpleLogin()">
+    <div class="demo-list-container">
+        <!-- Header -->
+        <div class="list-header">
+            <h1 class="page-title">Demo Bookings</h1>
+            <div class="header-actions">
+                <button class="btn-refresh" (click)="loadBookings()" [disabled]="isLoading">
+                    <span class="btn-icon refresh-icon"></span>
+                    Refresh
+                </button>
+                <button class="btn-export" (click)="exportBookings()" [disabled]="!bookings.length">
+                    <span class="btn-icon export-icon"></span>
+                    Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <!-- Date Range Filter -->
+            <div class="filter-group">
+                <label class="filter-label">Date Range</label>
+                <div class="date-range">
+                    <input type="date" class="filter-input" [(ngModel)]="filters.startDate" (change)="onFilterChange()">
+                    <span class="date-separator">to</span>
+                    <input type="date" class="filter-input" [(ngModel)]="filters.endDate" (change)="onFilterChange()">
+                </div>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select class="filter-select" [(ngModel)]="filters.status" (change)="onFilterChange()">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="rescheduled">Rescheduled</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="no_show">No Show</option>
+                    <option value="follow_up">Follow Up</option>
+                </select>
+            </div>
+
+            <!-- Source Filter -->
+            <div class="filter-group">
+                <label class="filter-label">Source</label>
+                <select class="filter-select" [(ngModel)]="filters.source" (change)="onFilterChange()">
+                    <option value="">All Sources</option>
+                    <option value="website">Website</option>
+                    <option value="mobile_app">Mobile App</option>
+                    <option value="referral">Referral</option>
+                    <option value="social_media">Social Media</option>
+                    <option value="email_campaign">Email Campaign</option>
+                    <option value="direct_call">Direct Call</option>
+                    <option value="chatbot">Chatbot</option>
+                    <option value="partner">Partner</option>
+                </select>
+            </div>
+
+            <!-- Search Filter -->
+            <div class="filter-group search-group">
+                <label class="filter-label">Search</label>
+                <div class="search-wrapper">
+                    <span class="search-icon"></span>
+                    <input type="text" class="filter-input search-input" placeholder="Search by name, email, phone..."
+                        [(ngModel)]="filters.search" (ngModelChange)="onSearchChange()">
+                </div>
+            </div>
+
+            <!-- Clear Filters -->
+            <button class="btn-clear-filters" (click)="clearFilters()" *ngIf="hasActiveFilters">
+                Clear Filters
+            </button>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="stat-card">
+                <span class="stat-label">Total</span>
+                <span class="stat-value">{{ stats.total }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Pending</span>
+                <span class="stat-value status-pending">{{ stats.pendingCount }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Confirmed</span>
+                <span class="stat-value status-confirmed">{{ stats.confirmed }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Completed</span>
+                <span class="stat-value status-completed">{{ stats.completed }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Cancelled</span>
+                <span class="stat-value status-cancelled">{{ stats.cancelled }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Converted</span>
+                <span class="stat-value status-converted">{{ stats.converted }}</span>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="isLoading">
+            <div class="spinner"></div>
+            <p>Loading bookings...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" *ngIf="!isLoading && error">
+            <span class="error-icon">⚠️</span>
+            <p>{{ error }}</p>
+            <button class="btn-retry" (click)="loadBookings()">Retry</button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!isLoading && !error && bookings.length === 0">
+            <span class="empty-icon">📅</span>
+            <h3>No Bookings Found</h3>
+            <p>Try adjusting your filters or create a new demo booking.</p>
+            <button class="btn-create" routerLink="/book-demo">Create New Booking</button>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="table-container" *ngIf="!isLoading && !error && bookings.length > 0">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th class="checkbox-col">
+                            <input type="checkbox" [checked]="allSelected" (change)="toggleAllSelection()">
+                        </th>
+                        <th (click)="sortBy('fullName')" class="sortable">
+                            Customer
+                            <span class="sort-icon" *ngIf="sortField === 'fullName'">
+                                {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                            </span>
+                        </th>
+                        <th (click)="sortBy('preferredDate')" class="sortable">
+                            Date & Time
+                            <span class="sort-icon" *ngIf="sortField === 'preferredDate'">
+                                {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                            </span>
+                        </th>
+                        <th>Contact</th>
+                        <th (click)="sortBy('status')" class="sortable">
+                            Status
+                            <span class="sort-icon" *ngIf="sortField === 'status'">
+                                {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                            </span>
+                        </th>
+                        <th (click)="sortBy('source')" class="sortable">
+                            Source
+                            <span class="sort-icon" *ngIf="sortField === 'source'">
+                                {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                            </span>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let booking of bookings" [class.selected]="booking._id && isSelected(booking._id)">
+                        <td class="checkbox-col">
+                            <input type="checkbox" [checked]="booking._id && isSelected(booking._id)"
+                                (change)="booking._id && toggleSelection(booking._id)">
+                        </td>
+                        <td>
+                            <div class="customer-info">
+                                <span class="customer-name">{{ booking.fullName }}</span>
+                                <span class="customer-society">{{ booking.societyName || '—' }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="datetime-info">
+                                <span class="demo-date">{{ booking.preferredDate | date:'mediumDate' }}</span>
+                                <span class="demo-time">{{ booking.preferredTime }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-info">
+                                <span class="contact-email">{{ booking.email }}</span>
+                                <span class="contact-phone">{{ booking.phone }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge" [class]="'status-' + booking.status">
+                                {{ booking.status | titlecase }}
+                            </span>
+                            <span class="converted-badge" *ngIf="booking.convertedToCustomer">✓ Converted</span>
+                        </td>
+                        <td>
+                            <span class="source-badge">{{ booking.source }}</span>
+                        </td>
+                        <td class="actions-cell">
+                            <div class="action-buttons-container">
+                                <button class="action-toggle" (click)="booking._id && toggleActionMenu(booking._id)"
+                                    *ngIf="isMobile" title="Actions">
+                                    <span class="action-icon more-icon"></span>
+                                </button>
+                                <div class="action-buttons" [class.show]="isMobile && activeActionMenu === booking._id">
+                                    <!-- View button - always visible -->
+                                    <button class="action-btn view" (click)="viewBookingDetails(booking)"
+                                        title="View Details">
+                                        <span class="action-icon view-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">View</span>
+                                    </button>
+
+                                    <!-- Reject button -->
+                                    <button class="action-btn reject" (click)="openRejectModal(booking)" title="Reject"
+                                        *ngIf="canReject(booking)">
+                                        <span class="action-icon reject-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Reject</span>
+                                    </button>
+
+                                    <!-- Confirm button -->
+                                    <button class="action-btn confirm" (click)="confirmBooking(booking)" title="Confirm"
+                                        *ngIf="canConfirm(booking)">
+                                        <span class="action-icon confirm-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Confirm</span>
+                                    </button>
+
+                                    <!-- Edit button -->
+                                    <button class="action-btn edit" (click)="editBooking(booking)" title="Edit"
+                                        *ngIf="canEdit(booking)">
+                                        <span class="action-icon edit-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Edit</span>
+                                    </button>
+
+                                    <!-- Reschedule button -->
+                                    <button class="action-btn reschedule" (click)="openRescheduleModal(booking)"
+                                        title="Reschedule" *ngIf="canReschedule(booking)">
+                                        <span class="action-icon reschedule-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Reschedule</span>
+                                    </button>
+
+                                    <!-- Complete button -->
+                                    <button class="action-btn complete" (click)="openFeedbackModal(booking)"
+                                        title="Complete" *ngIf="canComplete(booking)">
+                                        <span class="action-icon complete-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Complete</span>
+                                    </button>
+
+                                    <!-- No-show button -->
+                                    <button class="action-btn noshow" (click)="markAsNoShow(booking)" title="No Show"
+                                        *ngIf="canMarkNoShow(booking)">
+                                        <span class="action-icon noshow-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">No Show</span>
+                                    </button>
+
+                                    <!-- Convert button -->
+                                    <button class="action-btn convert" (click)="convertBooking(booking)" title="Convert"
+                                        *ngIf="canConvert(booking)">
+                                        <span class="action-icon convert-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Convert</span>
+                                    </button>
+
+                                    <!-- Cancel button -->
+                                    <button class="action-btn cancel" (click)="openCancelModal(booking)" title="Cancel"
+                                        *ngIf="canCancel(booking)">
+                                        <span class="action-icon cancel-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Cancel</span>
+                                    </button>
+
+                                    <!-- Add Note button -->
+                                    <button class="action-btn note" (click)="openNoteModal(booking)" title="Add Note">
+                                        <span class="action-icon note-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Add Note</span>
+                                    </button>
+
+                                    <!-- Delete button -->
+                                    <button class="action-btn delete" (click)="deleteBooking(booking)" title="Delete"
+                                        *ngIf="canDelete(booking)">
+                                        <span class="action-icon delete-icon"></span>
+                                        <span class="action-label" *ngIf="isMobile">Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Bulk Actions -->
+            <div class="bulk-actions" *ngIf="selectedIds.size > 0">
+                <span class="selected-count">{{ selectedIds.size }} item(s) selected</span>
+                <div class="bulk-buttons">
+                    <button class="bulk-btn approve" (click)="openBulkApproveModal()"
+                        *ngIf="hasPendingSelected()">Approve Selected</button>
+                    <button class="bulk-btn reject" (click)="openBulkRejectModal()" *ngIf="hasPendingSelected()">Reject
+                        Selected</button>
+                    <button class="bulk-btn export" (click)="bulkExport()">Export Selected</button>
+                    <button class="bulk-btn delete" (click)="bulkDelete()">Delete Selected</button>
+                    <button class="bulk-btn clear" (click)="clearSelection()">Clear</button>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">
+                    Previous
+                </button>
+                <span class="page-info">
+                    Page {{ page }} of {{ totalPages }}
+                </span>
+                <button class="pagination-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">
+                    Next
+                </button>
+                <select class="page-size" [(ngModel)]="limit" (change)="onPageSizeChange()">
+                    <option [value]="10">10 per page</option>
+                    <option [value]="25">25 per page</option>
+                    <option [value]="50">50 per page</option>
+                    <option [value]="100">100 per page</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Reschedule Modal -->
+    <div class="custom-modal" *ngIf="showRescheduleModal">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reschedule Demo</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-field">
+                    <label class="field-label">New Date <span class="mandatory-star">*</span></label>
+                    <input type="date" class="modal-input" [(ngModel)]="rescheduleData.newDate" [min]="minDate">
+                </div>
+                <div class="form-field">
+                    <label class="field-label">New Time <span class="mandatory-star">*</span></label>
+                    <select class="modal-select" [(ngModel)]="rescheduleData.newTime">
+                        <option value="">Select Time</option>
+                        <option *ngFor="let time of timeSlots" [value]="time">{{ time }}</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label class="field-label">Reason</label>
+                    <textarea class="modal-textarea" [(ngModel)]="rescheduleData.reason"
+                        placeholder="Reason for rescheduling..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" (click)="closeAllModals()">Cancel</button>
+                <button class="confirm-btn" (click)="confirmReschedule()">Reschedule</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="custom-modal" *ngIf="showFeedbackModal">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Complete Demo</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-field">
+                    <label class="field-label">Feedback</label>
+                    <textarea class="modal-textarea" [(ngModel)]="feedbackData.feedback"
+                        placeholder="Customer feedback..."></textarea>
+                </div>
+                <div class="form-field">
+                    <label class="field-label">Rating (1-5)</label>
+                    <input type="number" class="modal-input" [(ngModel)]="feedbackData.rating" min="1" max="5">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" (click)="closeAllModals()">Cancel</button>
+                <button class="confirm-btn" (click)="confirmComplete()">Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Modal -->
+    <div class="custom-modal" *ngIf="showCancelModal">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cancel Demo</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-field">
+                    <label class="field-label">Reason for cancellation</label>
+                    <textarea class="modal-textarea" [(ngModel)]="cancelReason"
+                        placeholder="Enter reason..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" (click)="closeAllModals()">Cancel</button>
+                <button class="confirm-btn cancel" (click)="confirmCancel()">Confirm Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div class="custom-modal" *ngIf="showRejectModal">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reject Booking</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to reject this booking?</p>
+                <div class="form-field">
+                    <label class="field-label">Reason for rejection (optional)</label>
+                    <textarea class="modal-textarea" [(ngModel)]="rejectReason"
+                        placeholder="Enter reason..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" (click)="closeAllModals()">Cancel</button>
+                <button class="reject-btn" (click)="confirmReject()">Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="custom-modal" *ngIf="showNoteModal">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Follow-up Note</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-field">
+                    <label class="field-label">Note <span class="mandatory-star">*</span></label>
+                    <textarea class="modal-textarea" [(ngModel)]="followUpNote"
+                        placeholder="Enter follow-up note..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" (click)="closeAllModals()">Cancel</button>
+                <button class="confirm-btn" (click)="confirmAddNote()">Add Note</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Action Modal -->
+    <div class="custom-modal" *ngIf="showBulkActionModal">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>{{ bulkActionType === 'approve' ? 'Approve' : 'Reject' }} Selected</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>{{ selectedIds.size }} booking(s) selected for {{ bulkActionType }}.</p>
+                <div class="form-field" *ngIf="bulkActionType === 'reject'">
+                    <label class="field-label">Reason for rejection (optional)</label>
+                    <textarea class="modal-textarea" [(ngModel)]="rejectReason"
+                        placeholder="Enter reason..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" (click)="closeAllModals()">Cancel</button>
+                <button class="confirm-btn" [class.reject]="bulkActionType === 'reject'" (click)="confirmBulkAction()">
+                    {{ bulkActionType === 'approve' ? 'Approve' : 'Reject' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modal -->
+    <div class="custom-modal view-modal" *ngIf="showViewModal && selectedBooking">
+        <div class="modal-overlay" (click)="closeAllModals()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Booking Details</h3>
+                <button class="close-btn" (click)="closeAllModals()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <span class="detail-label">Customer:</span>
+                    <span class="detail-value">{{ selectedBooking.fullName }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">{{ selectedBooking.email }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value">{{ selectedBooking.phone }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Society:</span>
+                    <span class="detail-value">{{ selectedBooking.societyName || '—' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value">{{ selectedBooking.preferredDate | date:'fullDate' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Time:</span>
+                    <span class="detail-value">{{ selectedBooking.preferredTime }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value">
+                        <span class="status-badge" [class]="'status-' + selectedBooking.status">
+                            {{ selectedBooking.status | titlecase }}
+                        </span>
+                    </span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Source:</span>
+                    <span class="detail-value">{{ selectedBooking.source }}</span>
+                </div>
+                <div class="detail-row" *ngIf="selectedBooking.notes">
+                    <span class="detail-label">Notes:</span>
+                    <span class="detail-value">{{ selectedBooking.notes }}</span>
+                </div>
+                <div class="detail-row" *ngIf="selectedBooking.feedback">
+                    <span class="detail-label">Feedback:</span>
+                    <span class="detail-value">{{ selectedBooking.feedback }}</span>
+                </div>
+                <div class="detail-row" *ngIf="selectedBooking.rating">
+                    <span class="detail-label">Rating:</span>
+                    <span class="detail-value">{{ selectedBooking.rating }}/5</span>
+                </div>
+                <div class="detail-row" *ngIf="selectedBooking.rescheduleCount && selectedBooking.rescheduleCount > 0">
+                    <span class="detail-label">Reschedule Count:</span>
+                    <span class="detail-value">{{ selectedBooking.rescheduleCount }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Created:</span>
+                    <span class="detail-value">{{ selectedBooking.createdAt | date:'medium' }}</span>
+                </div>
+                <div class="detail-row" *ngIf="selectedBooking.convertedToCustomer">
+                    <span class="detail-label">Converted:</span>
+                    <span class="detail-value">{{ selectedBooking.convertedToCustomerDate | date:'medium' }}</span>
+                </div>
+                <div class="detail-row notes-list-row" *ngIf="selectedBooking.followUpNotes?.length">
+                    <span class="detail-label">Follow-up Notes:</span>
+                    <div class="notes-list">
+                        <div *ngFor="let note of selectedBooking.followUpNotes" class="note-item">
+                            {{ note }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="note-btn" (click)="openNoteModal(selectedBooking)">Add Note</button>
+                <button class="close-btn" (click)="closeAllModals()">Close</button>
+            </div>
+        </div>
+    </div>
+</app-layout>

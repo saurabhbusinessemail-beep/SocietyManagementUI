@@ -1,0 +1,151 @@
+@import '../../../../styles//variables';
+@import '../../../../styles/mixins';
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($color-black, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: $z-menu-overlay;
+    padding: $sp-md;
+
+    @include mobile {
+        padding: $sp;
+        align-items: flex-end;
+    }
+}
+
+.modal-container {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-lg;
+    box-shadow: 0 20px 25px -5px rgba($color-black, 0.2);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+
+    @include mobile {
+        max-height: 80vh;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        animation: slideUp 0.3s ease;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $sp-lg;
+    border-bottom: 1px solid $color-border;
+
+    @include mobile {
+        padding: $sp-md;
+    }
+}
+
+.modal-title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $color-black;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: $font-size-xl;
+    cursor: pointer;
+    color: $color-help-text;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $btn-border-radius-sm;
+
+    &:hover {
+        background-color: $color-light-gray;
+        color: $color-black;
+    }
+}
+
+.modal-body {
+    padding: $sp-lg;
+
+    @include mobile {
+        padding: $sp-md;
+    }
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp-sm;
+    padding: $sp-lg;
+    border-top: 1px solid $color-border;
+
+    @include mobile {
+        padding: $sp-md;
+    }
+}
+
+.modal-btn {
+    padding: $sp-sm $sp-lg;
+    border-radius: $btn-border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.cancel {
+        background-color: $color-white;
+        border: 1px solid $color-border;
+        color: $color-black;
+
+        &:hover {
+            background-color: $color-light-gray;
+        }
+    }
+
+    &.confirm {
+        background-color: $btn-bg-primary;
+        border: none;
+        color: $btn-text-primary;
+
+        &:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba($btn-bg-primary, 0.3);
+        }
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}

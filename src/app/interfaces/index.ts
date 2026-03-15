@@ -12,6 +12,7 @@ export * from './complaint.interface';
 export * from './confirmation-popup-config.interface';
 export * from './country.intrerface';
 export * from './default-fields.interface';
+export * from './demo.interface';
 export * from './district.interface';
 export * from './feature.interface';
 export * from './flat-members.interface';

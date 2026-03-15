@@ -1,0 +1,15 @@
+<div class="modal-overlay" *ngIf="isOpen" #modalOverlay (click)="onClickOverlay($event)">
+    <div class="modal-container" #modalContent>
+        <div class="modal-header">
+            <h3 class="modal-title">{{ title }}</h3>
+            <button class="modal-close" (click)="cancel()">×</button>
+        </div>
+        <div class="modal-body">
+            <ng-content></ng-content>
+        </div>
+        <div class="modal-footer" *ngIf="!hideConfirm">
+            <button class="modal-btn cancel" (click)="cancel()">{{ cancelText }}</button>
+            <button class="modal-btn confirm" (click)="confirm()">{{ confirmText }}</button>
+        </div>
+    </div>
+</div>
