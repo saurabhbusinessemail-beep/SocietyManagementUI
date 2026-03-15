@@ -1,0 +1,140 @@
+<app-layout [hideMoreActions]="true" [showBackButton]="true" (needLogin)="loginService.simpleLogin()">
+    <div class="demo-container">
+        <div class="demo-header-gradient"></div>
+
+        <div class="demo-content">
+            <h2 class="demo-title">Schedule Your Demo</h2>
+            <p class="demo-subtitle">Fill in your details and pick a convenient time slot.</p>
+
+            <form [formGroup]="demoForm" (ngSubmit)="onSubmit()" class="demo-form">
+                <!-- Name and Email Row -->
+                <div class="form-row">
+                    <!-- Full Name Field -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            Full Name<span class="mandatory-star">*</span>
+                        </label>
+                        <div class="field-wrapper">
+                            <span class="field-icon user-icon"></span>
+                            <input type="text" formControlName="fullName" placeholder="Your name" class="field-input"
+                                [class.field-error]="isFieldInvalid('fullName')">
+                        </div>
+                        <div *ngIf="isFieldInvalid('fullName')" class="error-message">
+                            <span *ngIf="demoForm.get('fullName')?.errors?.['required']">Full name is required</span>
+                            <span *ngIf="demoForm.get('fullName')?.errors?.['minlength']">Name must be at least 2
+                                characters</span>
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            Email<span class="mandatory-star">*</span>
+                        </label>
+                        <div class="field-wrapper">
+                            <span class="field-icon mail-icon"></span>
+                            <input type="email" formControlName="email" placeholder="you@example.com"
+                                class="field-input" [class.field-error]="isFieldInvalid('email')">
+                        </div>
+                        <div *ngIf="isFieldInvalid('email')" class="error-message">
+                            <span *ngIf="demoForm.get('email')?.errors?.['required']">Email is required</span>
+                            <span *ngIf="demoForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone and Society Row -->
+                <div class="form-row">
+                    <!-- Phone Field -->
+                    <div class="form-field">
+                        <label class="field-label">
+                            Phone<span class="mandatory-star">*</span>
+                        </label>
+                        <div class="field-wrapper">
+                            <span class="field-icon phone-icon"></span>
+                            <input type="tel" formControlName="phone" placeholder="+91 98765 43210" class="field-input"
+                                [class.field-error]="isFieldInvalid('phone')">
+                        </div>
+                        <div *ngIf="isFieldInvalid('phone')" class="error-message">
+                            <span *ngIf="demoForm.get('phone')?.errors?.['required']">Phone number is required</span>
+                            <span *ngIf="demoForm.get('phone')?.errors?.['pattern']">Please enter a valid phone
+                                number</span>
+                        </div>
+                    </div>
+
+                    <!-- Society Name Field -->
+                    <div class="form-field">
+                        <label class="field-label">Society Name</label>
+                        <div class="field-wrapper">
+                            <span class="field-icon building-icon"></span>
+                            <input type="text" formControlName="societyName" placeholder="Optional" class="field-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferred Date -->
+                <div class="form-field full-width">
+                    <label class="field-label">
+                        Preferred Date<span class="mandatory-star">*</span>
+                    </label>
+                    <div class="field-wrapper">
+                        <span class="field-icon calendar-icon"></span>
+                        <input type="date" formControlName="preferredDate" [min]="minDate" class="field-input"
+                            [class.field-error]="isFieldInvalid('preferredDate')">
+                    </div>
+                    <div *ngIf="isFieldInvalid('preferredDate')" class="error-message">
+                        <span *ngIf="demoForm.get('preferredDate')?.errors?.['required']">Preferred date is
+                            required</span>
+                        <span *ngIf="demoForm.get('preferredDate')?.errors?.['futureDate']">Date must be in the
+                            future</span>
+                    </div>
+                </div>
+
+                <!-- Preferred Time -->
+                <div class="form-field full-width">
+                    <label class="field-label">
+                        <span class="label-icon clock-icon"></span>
+                        Preferred Time<span class="mandatory-star">*</span>
+                    </label>
+
+                    <div class="time-slots-grid">
+                        <button *ngFor="let time of timeSlots" type="button" (click)="selectTimeSlot(time)"
+                            class="time-slot-btn" [class.time-slot-selected]="selectedTime === time">
+                            {{ time }}
+                        </button>
+                    </div>
+
+                    <div *ngIf="isFieldInvalid('preferredTime')" class="error-message">
+                        Please select a time slot.
+                    </div>
+                    <p class="help-text">Please select a time slot.</p>
+                </div>
+
+                <!-- Additional Notes -->
+                <div class="form-field full-width">
+                    <label class="field-label">
+                        <span class="label-icon message-icon"></span>
+                        Anything specific to cover?
+                        <span class="optional-text">(optional)</span>
+                    </label>
+                    <div class="field-wrapper">
+                        <textarea formControlName="notes" rows="3"
+                            placeholder="e.g. We have 3 wings with 250 flats. We want to see the complaints and gate modules."
+                            class="field-textarea">
+            </textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" [disabled]="demoForm.invalid || !selectedTime || isSubmitting" class="submit-btn"
+                    [class.btn-loading]="isSubmitting">
+                    <span class="btn-icon calendar-icon" *ngIf="!isSubmitting"></span>
+                    <span class="spinner-icon" *ngIf="isSubmitting"></span>
+                    {{ isSubmitting ? 'Booking...' : 'Book My Free Demo' }}
+                </button>
+
+                <p class="footer-note">No commitment required. Cancel or reschedule anytime.</p>
+            </form>
+        </div>
+    </div>
+</app-layout>

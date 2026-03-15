@@ -264,6 +264,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/society-public/add');
   }
 
+  gotoBookDemo() {
+    this.router.navigateByUrl('/demo/book');
+  }
+
   ngOnDestroy(): void {
     this.isComponentActive.next();
     this.isComponentActive.complete();

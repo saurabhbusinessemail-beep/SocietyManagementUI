@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" title="Gate My Society" (needLogin)="simpleLogin()">
+<app-layout title="Book A Demo" [hideMoreActions]="true" title="Gate My Society" (needLogin)="simpleLogin()">
 
     <div class="first-div">
         <h1 class="first-div-title">
@@ -258,7 +258,7 @@
                 </button>
 
                 <!-- Secondary Button -->
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" (click)="gotoBookDemo()">
                     Book a Demo
                 </button>
             </div>

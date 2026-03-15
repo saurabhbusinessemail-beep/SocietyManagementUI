@@ -82,6 +82,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/user/user.module').then(module => module.UserModule)
   },
   {
+    path: 'demo',
+    loadChildren: () => import('./modules/demo/demo.module').then(module => module.DemoModule)
+  },
+  {
     path: 'unauthorized',
     loadChildren: () => import('./modules/unauthorized/unauthorized.module').then(module => module.UnauthorizedModule)
   },
