@@ -1,12 +1,8 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, take, takeUntil, tap } from 'rxjs';
-import { LoginService } from '../../../services/login.service';
-import { FcmTokenService } from '../../../services/fcm-token.service';
-import { UserService } from '../../../services/user.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { WindowService } from '../../../services/window.service';
 import { Router } from '@angular/router';
+import { LoginService } from '../../../services/login.service';
 
 interface IFeatures {
   iconName: string;
@@ -28,19 +24,20 @@ interface IHowItWorksStep {
 interface IJoinAsFeature {
   text: string;
 }
+
 interface IJoinAsCard {
   id: string;
   role: string;
   title: string;
   description: string;
   badgeText: string;
-  badgeClass: string; // Combined class for badge styling
+  badgeClass: string;
   iconName: string;
-  iconWrapperClass: string; // Combined class for icon wrapper
+  iconWrapperClass: string;
   iconColorClass: string;
-  gradientClass: string; // Class for top gradient bar
-  buttonGradientClass: string; // Class for button gradient
-  dotGradientClass: string; // Class for feature dot gradient
+  gradientClass: string;
+  buttonGradientClass: string;
+  dotGradientClass: string;
   features: IJoinAsFeature[];
 }
 
@@ -50,11 +47,6 @@ interface IJoinAsCard {
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  loginForm: FormGroup;
-  otpForm: FormGroup;
-  step: 'login' | 'otp' = 'login';
-  isLoading = false;
-  isVerifying = false;
   isComponentActive = new Subject<void>();
 
   features: IFeatures[] = [
@@ -147,6 +139,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       svgPath: 'M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2 M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M9 17h6 M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0'
     }
   ];
+
   howItWorksSteps: IHowItWorksStep[] = [
     {
       stepNumber: '01',
@@ -164,6 +157,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       description: 'From gate approvals to maintenance complaints, everything is logged securely in the cloud and accessible anytime.'
     }
   ];
+
   joinAsCards: IJoinAsCard[] = [
     {
       id: 'owner',
@@ -227,7 +221,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   ];
 
-  // SVG Paths for Icons (unchanged)
   iconPaths: Record<string, string[]> = {
     'house': [
       'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8',
@@ -243,207 +236,32 @@ export class LoginComponent implements OnInit, OnDestroy {
     ]
   };
 
-  @ViewChild('loginPopup') loginPopup!: TemplateRef<any>;
-  loginPopupDialogRef: MatDialogRef<any> | null = null;
-
-  countDownTimer = 300;
-  countdown = this.countDownTimer;
-  countdownInterval: any;
-
-
-  otpError = false;
-
   get enableShoeMoreFeature(): boolean {
-    return this.windowService.mode.value !== 'desktop'
+    return this.windowService.mode.value !== 'desktop';
   }
-
 
   constructor(
-    private fb: FormBuilder,
     private loginService: LoginService,
-    private userService: UserService,
-    private fcmTokenService: FcmTokenService,
-    private dialog: MatDialog,
     private windowService: WindowService,
     private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-    });
+  ) {}
 
-
-    this.otpForm = this.fb.group({
-      otp: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
-    });
-  }
-
-  ngOnInit(): void {
-    this.subscribeToOTPNotification();
-  }
-
-  subscribeToOTPNotification() {
-    this.loginService.otpReceived
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe({
-        next: otp => {
-          if (!otp || otp.length === 0) return;
-
-          this.otpForm.get('otp')?.setValue(otp);
-          this.verifyOtp();
-        }
-      });
-  }
+  ngOnInit(): void {}
 
   scrollToElement(element: HTMLElement) {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  openLoginPopup() {
-    this.loginPopupDialogRef = this.dialog.open(this.loginPopup)
-    return this.loginPopupDialogRef
-      .afterClosed()
-      .pipe(
-        take(1),
-        tap(() => {
-          this.resetToLogin();
-        })
-      )
-  }
-
-  closeLoginPopup() {
-    this.loginPopupDialogRef?.close();
-  }
-
   simpleLogin() {
-    this.openLoginPopup()
-      .subscribe(token => {
-        if (token) {
-          this.loginService.saveTokenToStorage(token);
-          this.getAndSaveProfile();
-        }
-      })
+    this.loginService.simpleLogin();
   }
 
   loginAndJoinAs(role: string) {
-    this.openLoginPopup()
-      .subscribe(token => {
-        if (token) {
-          this.loginService.saveTokenToStorage(token);
-          this.getAndSaveProfile();
-          setTimeout(() => {
-            this.router.navigate(['dashboard/user', role])
-          }, 1000);
-        }
-      })
+    this.loginService.loginAndJoinAs(role);
   }
 
   gotoAddSociety() {
-    this.router.navigateByUrl('/society-public/add')
-  }
-
-  sendOtp() {
-    if (this.loginForm.invalid) return;
-
-
-    this.isLoading = true;
-    const fcmToken = this.fcmTokenService.fcmToken;
-    this.loginService.sendOTP(this.loginForm.value.phone, fcmToken)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          this.isLoading = false;
-          this.step = 'otp';
-          this.startCountdown();
-        },
-        error: err => {
-          this.isLoading = false;
-        }
-      });
-  }
-
-
-  startCountdown() {
-    this.countdown = this.countDownTimer;
-    clearInterval(this.countdownInterval);
-
-
-    this.countdownInterval = setInterval(() => {
-      if (this.countdown > 0) {
-        this.countdown--;
-      } else {
-        clearInterval(this.countdownInterval);
-      }
-    }, 1000);
-  }
-
-
-  resendOtp() {
-    if (this.countdown > 0) return;
-
-
-    this.sendOtp();
-  }
-
-
-  verifyOtp() {
-    if (this.otpForm.invalid) return;
-
-
-    this.isVerifying = true;
-    this.otpError = false;
-
-
-    this.loginService.verifyOTP(this.loginForm.value.phone, this.otpForm.value.otp)
-      .pipe(take(1))
-      .subscribe({
-        next: (response) => {
-          this.isVerifying = false;
-
-
-          if (!response.success) {
-            this.otpError = true;
-            return;
-          }
-
-          if (response?.token) {
-            this.loginPopupDialogRef?.close(response.token);
-          }
-
-        },
-        error: err => {
-          this.isVerifying = false;
-          this.otpError = true;
-        }
-      });
-  }
-
-  getAndSaveProfile() {
-    this.isVerifying = true;
-
-    // this.router.navigateByUrl('/dashboard');
-    this.loginService.loadProfile()
-      .pipe(take(1))
-      .subscribe((response: any) => {
-        this.isVerifying = false;
-
-        if (!response || !response.success) {
-          this.otpError = true;
-          return;
-        }
-
-        const fcmToken = this.fcmTokenService.fcmToken;
-        if (!fcmToken) return;
-      })
-  }
-
-
-  resetToLogin() {
-    this.step = 'login';
-    this.otpError = false;
-    this.isLoading = false;
-    this.isVerifying = false;
-    this.otpForm.get('otp')?.setValue('');
-    clearInterval(this.countdownInterval);
+    this.router.navigateByUrl('/society-public/add');
   }
 
   ngOnDestroy(): void {

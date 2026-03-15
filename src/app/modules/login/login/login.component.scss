@@ -1,72 +1,6 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-
-.login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: $sp-lg;
-    border-top: solid 10px $color-dark-blue;
-
-    app-icon {
-        color: $color-dark-blue;
-        cursor: pointer;
-    }
-}
-
-
-.login-card {
-    background: $color-white;
-    padding: $sp-xl;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-
-    .section-header {
-        color: $color-dark-blue;
-    }
-
-    @include mobile {
-        padding: $sp-lg;
-    }
-}
-
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: $sp-md;
-}
-
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: $sp-xs;
-
-
-    label {
-        font-size: $font-size-sm;
-        color: $color-black;
-        font-weight: 500;
-    }
-}
-
-
-.login-btn {
-    margin-top: $sp-sm;
-    width: 100%;
-}
-
-
-.error-message {
-    color: $color-error-header;
-    font-weight: 600;
-}
-
 .first-div {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 90%, #ffffff 100%), url(../../../../assets/header-background.png);
     padding-bottom: 10%;
@@ -123,7 +57,7 @@
             padding: 0.625rem 1.5rem;
             height: auto;
 
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
 
             border-radius: 0.75rem;
@@ -170,6 +104,7 @@
             }
         }
 
+
         .explore-features {
             display: inline-flex;
             align-items: center;
@@ -187,7 +122,7 @@
             gap: 0.5rem;
             padding: 0.625rem 1.5rem;
             height: auto;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border-radius: 0.75rem;
 
             flex-shrink: 0;
@@ -259,7 +194,15 @@
         .first-div-title {
             padding-left: 10%;
             padding-right: 10%;
-            font-size: 3rem;
+            font-size: 2.5rem;
+        }
+
+        .first-div-description {
+            font-size: 0.8rem;
+        }
+
+        .get-started {
+            font-size: 0.7rem;
         }
 
         .tag-container {
@@ -271,11 +214,11 @@
         .first-div-title {
             padding-left: 20%;
             padding-right: 20%;
-            font-size: 3.75rem;
+            font-size: 3rem;
         }
 
         .first-div-description {
-            font-size: 1.125rem;
+            font-size: 1rem;
         }
 
         .tag-container {
@@ -287,7 +230,7 @@
         .first-div-title {
             padding-left: 30%;
             padding-right: 30%;
-            font-size: 4.5rem;
+            font-size: 3.5rem;
         }
 
         .first-div-description {
@@ -333,8 +276,6 @@
             }
         }
     }
-
-
 
     @include tablet {
         .feature-title-container {
@@ -511,12 +452,10 @@
     background-color: lighten(#4f46e5, 40%);
 }
 
-// Approximated with available colors
 .bg-purple-100 {
     background-color: lighten(#9333ea, 40%);
 }
 
-// Approximated with available colors
 .bg-rose-100 {
     background-color: lighten($color-error-header, 35%);
 }
@@ -537,7 +476,6 @@
     background-color: lighten(#0d9488, 55%);
 }
 
-// Approximated with available colors
 .bg-cyan-100 {
     background-color: lighten($color-sky, 25%);
 }
@@ -558,12 +496,10 @@
     color: darken(#4f46e5, 5%);
 }
 
-// Using darken to approximate
 .text-purple-600 {
     color: darken(#9333ea, 5%);
 }
 
-// Using darken to approximate
 .text-rose-600 {
     color: $color-error-header;
 }
@@ -584,7 +520,6 @@
     color: darken(#0d9488, 5%);
 }
 
-// Using darken to approximate
 .text-cyan-600 {
     color: darken($color-sky, 40%);
 }
@@ -597,11 +532,10 @@
     color: $color-note-gray;
 }
 
-
 .stats-section {
     padding: $sp-xl 0;
-    background-color: $color-dark-blue; // using dark blue as foreground
-    color: $color-white; // using white as background text
+    background-color: $color-dark-blue;
+    color: $color-white;
     position: relative;
     overflow: hidden;
 
@@ -625,7 +559,7 @@
 }
 
 .stats-container {
-    max-width: 1280px; // 7xl equivalent
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 $sp-md;
     position: relative;
@@ -650,7 +584,6 @@
         gap: $sp-md;
     }
 
-    // Divider styles
     >* {
         border-bottom: 1px solid rgba($color-border, 0.2);
 
@@ -678,14 +611,14 @@
 }
 
 .stat-number {
-    font-size: 2.25rem; // text-4xl
+    font-size: 2.25rem;
     font-family: $font-family-base;
     font-weight: 800;
     color: $color-white;
     margin-bottom: $sp-xs;
 
     @include tablet {
-        font-size: 3rem; // text-5xl
+        font-size: 3rem;
     }
 
     @include mobile {
@@ -705,12 +638,12 @@
 
     @include mobile {
         font-size: $font-size-xs;
-        max-width: 120px; // Prevent wrapping issues on very small screens
+        max-width: 120px;
     }
 }
 
 .how-it-works-section {
-    padding: 6rem 0; // py-24 equivalent
+    padding: 6rem 0;
     background-color: $color-white;
 
     @include mobile {
@@ -722,26 +655,24 @@
     }
 }
 
-// Container
 .container {
-    max-width: 1280px; // max-w-7xl equivalent
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 1rem; // px-4 equivalent
+    padding: 0 1rem;
 
     @include tablet {
-        padding: 0 1.5rem; // sm:px-6 equivalent
+        padding: 0 1.5rem;
     }
 
     @include desktop {
-        padding: 0 2rem; // lg:px-8 equivalent
+        padding: 0 2rem;
     }
 }
 
-// Header Styles
 .header-wrapper {
     text-align: center;
-    max-width: 42rem; // max-w-2xl equivalent
-    margin: 0 auto 5rem; // mb-20 equivalent
+    max-width: 42rem;
+    margin: 0 auto 5rem;
 
     @include mobile {
         margin-bottom: 3rem;
@@ -749,14 +680,14 @@
 }
 
 .section-title {
-    font-size: 1.875rem; // text-3xl
+    font-size: 1.875rem;
     font-weight: 700;
     font-family: $font-family-base;
     color: $color-black;
     margin-bottom: 1rem;
 
     @include tablet {
-        font-size: 2.25rem; // md:text-4xl
+        font-size: 2.25rem;
     }
 
     @include mobile {
@@ -766,7 +697,7 @@
 }
 
 .section-subtitle {
-    font-size: 1.125rem; // text-lg
+    font-size: 1.125rem;
     color: $color-help-text;
     line-height: 1.6;
 
@@ -775,12 +706,10 @@
     }
 }
 
-// Steps Wrapper
 .steps-main-wrapper {
     position: relative;
 }
 
-// Connector Line (hidden on mobile)
 .connector-line {
     display: none;
 
@@ -790,23 +719,38 @@
         top: 50%;
         left: 0;
         right: 0;
-        height: 2px; // h-0.5 equivalent
+        height: 2px;
+        background-color: $color-border;
+        transform: translateY(-50%);
+        z-index: 0;
+    }
+
+    @include desktop {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
         background-color: $color-border;
         transform: translateY(-50%);
         z-index: 0;
     }
 }
 
-// Steps Grid
 .steps-grid {
     display: grid;
-    grid-template-columns: 1fr; // grid-cols-1
-    gap: 3rem; // gap-12
+    grid-template-columns: 1fr;
+    gap: 3rem;
     position: relative;
     z-index: 10;
 
+    @include desktop {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     @include tablet {
-        grid-template-columns: repeat(3, 1fr); // md:grid-cols-3
+        grid-template-columns: repeat(3, 1fr);
     }
 
     @include mobile {
@@ -814,18 +758,17 @@
     }
 }
 
-// Step Card
 .step-card {
     background-color: $color-white;
-    border-radius: 1rem; // rounded-2xl
-    padding: 2rem; // p-8
+    border-radius: 1rem;
+    padding: 2rem;
     border: 1px solid $color-border;
-    box-shadow: 0 1px 3px rgba($color-black, 0.1); // shadow-sm
+    box-shadow: 0 1px 3px rgba($color-black, 0.1);
     position: relative;
     transition: border-color 0.3s ease;
 
     &:hover {
-        border-color: rgba($color-dark-blue, 0.5); // hover:border-primary/50
+        border-color: rgba($color-dark-blue, 0.5);
 
         .step-badge {
             background-color: $color-dark-blue;
@@ -838,25 +781,24 @@
     }
 }
 
-// Step Number Badge
 .step-badge {
-    width: 3.5rem; // w-14
-    height: 3.5rem; // h-14
-    border-radius: 9999px; // rounded-full
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 9999px;
     background-color: $color-white;
-    border: 4px solid $color-white; // border-4 border-card
+    border: 4px solid $color-white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: $font-family-base;
     font-weight: 700;
-    font-size: 1.25rem; // text-xl
-    color: $color-dark-blue; // text-primary
+    font-size: 1.25rem;
+    color: $color-dark-blue;
     position: absolute;
-    top: -1.75rem; // -top-7
+    top: -1.75rem;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1), 0 2px 4px -1px rgba($color-black, 0.06); // shadow-md
+    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1), 0 2px 4px -1px rgba($color-black, 0.06);
     transition: all 0.3s ease;
 
     @include mobile {
@@ -868,9 +810,8 @@
     }
 }
 
-// Step Content
 .step-content-wrapper {
-    padding-top: 1.5rem; // pt-6
+    padding-top: 1.5rem;
     text-align: center;
 
     @include mobile {
@@ -879,10 +820,10 @@
 }
 
 .step-title {
-    font-size: 1.25rem; // text-xl
+    font-size: 1.25rem;
     font-weight: 700;
     color: $color-black;
-    margin-bottom: 0.75rem; // mb-3
+    margin-bottom: 0.75rem;
     font-family: $font-family-base;
 
     @include mobile {
@@ -893,7 +834,7 @@
 
 .step-description {
     color: $color-help-text;
-    line-height: 1.625; // leading-relaxed
+    line-height: 1.625;
     font-size: $font-size-base;
 
     @include mobile {
@@ -902,7 +843,7 @@
 }
 
 .cta-section {
-    padding: 6rem 0; // py-24
+    padding: 6rem 0;
     position: relative;
     overflow: hidden;
     min-height: 400px;
@@ -916,59 +857,55 @@
     }
 }
 
-// Background Layers
 .bg-layer {
     position: absolute;
     inset: 0;
-    background-color: $color-dark-blue; // bg-primary
+    background-color: $color-dark-blue;
     z-index: -2;
 }
 
 .image-layer {
     position: absolute;
     inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop');
+    background-image: url('../../../../assets/footer-background');
     background-size: cover;
     background-position: center;
     mix-blend-mode: overlay;
     opacity: 0.1;
     z-index: -1;
 
-    // Fallback for older browsers
     @media not all and (min-resolution: 0.001dpcm) {
         background-color: rgba($color-dark-blue, 0.3);
     }
 }
 
-// Content Container
 .content-container {
-    max-width: 56rem; // max-w-4xl
+    max-width: 56rem;
     margin: 0 auto;
-    padding: 0 1rem; // px-4
+    padding: 0 1rem;
     text-align: center;
     position: relative;
     z-index: 10;
 
     @include tablet {
-        padding: 0 1.5rem; // sm:px-6
+        padding: 0 1.5rem;
     }
 
     @include desktop {
-        padding: 0 2rem; // lg:px-8
+        padding: 0 2rem;
     }
 }
 
-// Title Styles
 .cta-title {
-    font-size: 1.875rem; // text-3xl
+    font-size: 1.875rem;
     font-weight: 700;
     font-family: $font-family-base;
     color: $color-white;
-    margin-bottom: 1.5rem; // mb-6
+    margin-bottom: 1.5rem;
     line-height: 1.2;
 
     @include tablet {
-        font-size: 3rem; // md:text-5xl
+        font-size: 3rem;
     }
 
     @include mobile {
@@ -977,18 +914,17 @@
     }
 }
 
-// Description Styles
 .cta-description {
-    font-size: 1.125rem; // text-lg
-    color: rgba($color-white, 0.8); // text-primary-foreground/80
-    margin-bottom: 2.5rem; // mb-10
-    max-width: 42rem; // max-w-2xl
+    font-size: 1.125rem;
+    color: rgba($color-white, 0.8);
+    margin-bottom: 2.5rem;
+    max-width: 42rem;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.6;
 
     @include tablet {
-        font-size: 1.25rem; // md:text-xl
+        font-size: 1.25rem;
     }
 
     @include mobile {
@@ -997,15 +933,14 @@
     }
 }
 
-// Buttons Wrapper
 .buttons-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1rem; // gap-4
+    gap: 1rem;
 
     @include tablet {
-        flex-direction: row; // sm:flex-row
+        flex-direction: row;
     }
 
     @include mobile {
@@ -1013,10 +948,9 @@
     }
 }
 
-// Base Button Styles
 .btn {
-    padding: 1rem 2rem; // px-8 py-4
-    border-radius: 0.75rem; // rounded-xl
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
     font-weight: 700;
     transition: all 0.3s ease;
     border: none;
@@ -1039,14 +973,13 @@
     }
 }
 
-// Primary Button
 .btn-primary {
     background-color: $color-white;
-    color: $color-dark-blue; // text-primary
-    box-shadow: 0 10px 15px -3px rgba($color-black, 0.1), 0 4px 6px -2px rgba($color-black, 0.05); // shadow-lg shadow-black/10
+    color: $color-dark-blue;
+    box-shadow: 0 10px 15px -3px rgba($color-black, 0.1), 0 4px 6px -2px rgba($color-black, 0.05);
 
     &:hover {
-        background-color: darken($color-white, 3%); // hover:bg-slate-50
+        background-color: darken($color-white, 3%);
     }
 
     &:active {
@@ -1054,14 +987,13 @@
     }
 }
 
-// Secondary Button
 .btn-secondary {
     background-color: transparent;
     color: $color-white;
-    border: 2px solid rgba($color-white, 0.3); // border-2 border-white/30
+    border: 2px solid rgba($color-white, 0.3);
 
     &:hover {
-        background-color: rgba($color-white, 0.1); // hover:bg-white/10
+        background-color: rgba($color-white, 0.1);
     }
 
     &:active {
@@ -1069,7 +1001,6 @@
     }
 }
 
-// Optional Animation Classes
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -1096,7 +1027,6 @@
     animation-delay: 0.4s;
 }
 
-// High Contrast Mode Support
 @media (prefers-contrast: high) {
     .btn-primary {
         border: 2px solid $color-black;
@@ -1107,7 +1037,6 @@
     }
 }
 
-// Print Styles
 @media print {
     .cta-section {
         background-color: $color-dark-blue;
@@ -1140,7 +1069,6 @@
     }
 }
 
-// Header Styles
 .header-wrapper {
     text-align: center;
     margin-bottom: $sp-xl;
@@ -1195,7 +1123,6 @@
     }
 }
 
-// Cards Grid
 .cards-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1206,6 +1133,7 @@
     }
 
     @include desktop {
+        grid-template-columns: repeat(3, 1fr);
         gap: $sp-xl;
     }
 
@@ -1214,7 +1142,6 @@
     }
 }
 
-// Base Card Styles
 .card {
     position: relative;
     display: flex;
@@ -1237,7 +1164,6 @@
     }
 }
 
-// Card-specific border colors
 .owner-card {
     border-color: lighten($color-sky, 15%);
 }
@@ -1250,7 +1176,6 @@
     border-color: lighten($status-active, 45%);
 }
 
-// Card Top Gradient Bar
 .card-top-bar {
     position: absolute;
     top: 0;
@@ -1273,7 +1198,6 @@
     background: linear-gradient(to right, lighten($status-active, 20%), $status-active);
 }
 
-// Card Badge
 .card-badge {
     align-self: flex-start;
     font-size: $font-size-xs;
@@ -1298,7 +1222,6 @@
     color: darken($status-active, 15%);
 }
 
-// Card Icon
 .card-icon {
     width: 3.5rem;
     height: 3.5rem;
@@ -1349,7 +1272,6 @@
     color: darken($status-active, 10%);
 }
 
-// Card Title
 .card-title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -1361,7 +1283,6 @@
     }
 }
 
-// Card Description
 .card-description {
     color: $color-help-text;
     font-size: $font-size-sm;
@@ -1374,7 +1295,6 @@
     }
 }
 
-// Features List
 .features-list {
     list-style: none;
     padding: 0;
@@ -1422,7 +1342,6 @@
     background: linear-gradient(to bottom right, lighten($status-active, 20%), $status-active);
 }
 
-// Card Button
 .card-button {
     margin-top: auto;
     width: 100%;
@@ -1471,7 +1390,6 @@
     transition: transform 200ms ease;
 }
 
-// Animation for cards
 @keyframes fadeInUp {
     from {
         opacity: 0;

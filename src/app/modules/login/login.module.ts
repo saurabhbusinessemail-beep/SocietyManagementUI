@@ -9,6 +9,7 @@ import { IconModule } from '../../core/icons/icon.module';
 import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
+import { LoginPopupModule } from '../../core/login-popup/login-popup.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { DirectiveModule } from '../../directives/directive.module';
     PipeModule,
     LayoutModule,
     UiModule,
-    DirectiveModule
+    DirectiveModule,
+    LoginPopupModule
   ]
 })
 export class LoginModule { }

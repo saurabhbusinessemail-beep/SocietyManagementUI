@@ -83,7 +83,7 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private societyService: SocietyService,
     private location: Location,
-    private loginService: LoginService
+    public loginService: LoginService,
   ) { }
 
   ngOnInit() {
@@ -151,24 +151,28 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     if (this.fb.value.societyId) {
       this.edit(payload);
     } else {
-      
+
       if (!this.myProfile || this.myProfile.user.role === 'user')
-        this.sendForApproval(payload);
+        this.loginAndSendForApproval(payload);
       else
         this.add(payload);
     }
 
   }
 
-  sendForApproval(payload: any) {
-    this.societyService.createSocietyForApproval(payload)
+  async loginAndSendForApproval(payload: any) {
+    this.loginService.loginAndReturn()
       .pipe(take(1))
-      .subscribe({
-        next: response => this.location.back(),
-        error: err => {
-          this.errorMessage = 'Error while sending society for approval.';
-          console.log('error while adding society');
-        }
+      .subscribe(() => {
+        this.societyService.createSocietyForApproval(payload)
+          .pipe(take(1))
+          .subscribe({
+            next: response => this.location.back(),
+            error: err => {
+              this.errorMessage = 'Error while sending society for approval.';
+              console.log('error while adding society');
+            }
+          })
       })
   }
 

@@ -12,7 +12,6 @@ import { PaginationService } from './pagination.service';
 export class SocietyService {
 
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
-    private readonly baseUrlPublic = `${environment.apiBaseUrl}/societies-public`;
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
     constructor(private http: HttpClient, private paginationService: PaginationService) { }
@@ -69,7 +68,7 @@ export class SocietyService {
         groups: ['societies']
     })
     createSocietyForApproval(payload: any): Observable<ISociety> {
-        return this.http.post<ISociety>(`${this.baseUrlPublic}/sentForApproval`, payload);
+        return this.http.post<ISociety>(`${this.baseUrl}/sentForApproval`, payload);
     }
 
     /* Get all societies */

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, of, take, tap } from 'rxjs';
+import { Observable, Subject, map, of, switchMap, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
 import { IBEResponseFormat, IMenu, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
 import { ClearCache } from '../decorators';
+import { LoginPopupComponent } from '../core/login-popup/login-popup.component';
+import { MatDialog } from '@angular/material/dialog';
+import { FcmTokenService } from './fcm-token.service';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +22,8 @@ export class LoginService {
         private http: HttpClient,
         private router: Router,
         private menuService: MenuService,
-        private route: ActivatedRoute
+        private dialog: MatDialog,
+        private fcmTokenService: FcmTokenService,
     ) {
         this.loadProfile().pipe(take(1)).subscribe();
     }
@@ -133,5 +137,93 @@ export class LoginService {
     getProfileFromStorage(): IMyProfile | undefined {
         const profile = localStorage.getItem('my_profile');
         return profile ? JSON.parse(profile) : undefined;
+    }
+
+
+    // Login Popup
+    openLoginPopup(): Observable<any> {
+        const dialogRef = this.dialog.open(LoginPopupComponent);
+
+        return dialogRef.componentInstance.loginSuccess.pipe(
+            take(1),
+            tap((token: string) => {
+                this.saveTokenToStorage(token);
+                dialogRef.close();
+            })
+        );
+    }
+
+    simpleLogin(): void {
+        this.openLoginPopup().pipe(
+            tap(() => {
+                this.getAndSaveProfile();
+            })
+        ).subscribe();
+    }
+
+    loginAndJoinAs(role: string): void {
+        this.openLoginPopup().pipe(
+            tap(async () => {
+                await this.getAndSaveProfile();
+                this.router.navigate(['dashboard/user', role]);
+            })
+        ).subscribe();
+    }
+
+    loginAndReturn() {
+        return this.openLoginPopup().pipe(
+            map(async () => {
+                return await this.getAndSaveProfile();
+            })
+        )
+    }
+
+    getAndSaveProfile() {
+        return new Promise((resolve, reject) => {
+            this.loadProfile()
+                .pipe(take(1))
+                .subscribe((response: any) => {
+                    if (!response || !response.success) {
+                        console.error('Failed to load profile');
+                        reject('Failed to load profile');
+                        return;
+                    }
+
+                    resolve(response);
+                });
+        });
+    }
+
+    sendOtp(phone: string): Observable<any> {
+        const fcmToken = this.fcmTokenService.fcmToken;
+        return this.sendOTP(phone, fcmToken).pipe(take(1));
+    }
+
+    verifyOtp(phone: string, otp: string): Observable<any> {
+        return this.verifyOTP(phone, otp).pipe(take(1));
+    }
+
+    // Method to handle the complete OTP flow and return token
+    loginWithOtp(phone: string, otp: string): Observable<string | null> {
+        return this.verifyOtp(phone, otp).pipe(
+            take(1),
+            tap((response) => {
+                if (response?.success && response?.token) {
+                    this.saveTokenToStorage(response.token);
+                }
+            }),
+            switchMap((response) => {
+                if (response?.success && response?.token) {
+                    return this.loadProfile().pipe(
+                        take(1),
+                        tap(() => {
+                            const fcmToken = this.fcmTokenService.fcmToken;
+                        }),
+                        switchMap(() => [response.token])
+                    );
+                }
+                return [null];
+            })
+        );
     }
 }

@@ -1,4 +1,4 @@
-<app-layout [showBackButton]="true">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" (needLogin)="loginService.simpleLogin()">
 
     <form [formGroup]="fb">
 

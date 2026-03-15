@@ -1,0 +1,70 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $sp-lg;
+    border-top: solid 10px $color-dark-blue;
+
+    app-icon {
+        color: $color-dark-blue;
+        cursor: pointer;
+    }
+}
+
+.login-card {
+    background: $color-white;
+    padding: $sp-xl;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+
+    .section-header {
+        color: $color-dark-blue;
+    }
+
+    @include mobile {
+        padding: $sp-lg;
+    }
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-md;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-xs;
+
+    label {
+        font-size: $font-size-sm;
+        color: $color-black;
+        font-weight: 500;
+    }
+}
+
+.login-btn {
+    margin-top: $sp-sm;
+    width: 100%;
+}
+
+.error-message {
+    color: $color-error-header;
+    font-weight: 600;
+}
+
+.full-w {
+    width: 100%;
+}
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+}
