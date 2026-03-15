@@ -5,6 +5,10 @@ export interface ISociety extends IDefaultFields {
     societyName: string;
     gpsLocation: UILocationResult;
     numberOfBuildings: number;
+    
+    isApproved: boolean,
+    isRejected: boolean,
+    addedByAdmin: boolean,
 
     adminContacts: string[] | IUser[];
 
