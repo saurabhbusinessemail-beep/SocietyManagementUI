@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ConsoleCaptureService } from '../../services/console-capture.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConsoleComponent } from '../console/console.component';
@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
   @Input() showSocietyFilter = false;
   @Input() showBackButton = false;
   @Input() navMenuItems: string[] = [];
+  @Input() extendedMenuTemplate?: TemplateRef<any>;
   @Output() menuItemClick = new EventEmitter<string>();
   @Output() toggleMenu = new EventEmitter<void>();
   @Output() needLogin = new EventEmitter<void>();

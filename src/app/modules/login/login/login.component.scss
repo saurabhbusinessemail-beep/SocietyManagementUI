@@ -940,16 +940,13 @@
 
 .buttons-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     gap: 1rem;
 
-    @include tablet {
-        flex-direction: row;
-    }
-
     @include mobile {
         gap: 0.75rem;
+        flex-direction: column;
     }
 }
 
@@ -1421,5 +1418,80 @@
 ::ng-deep {
     .layout-body {
         padding: 0px !important;
+    }
+
+
+    .action-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $sp-xs;
+        width: 100%;
+        padding: $sp-sm $sp;
+        font-size: $font-size-sm;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid;
+        border-radius: $btn-border-radius-md;
+        transition: background-color 0.2s ease;
+
+        &.demo-link {
+            background-color: $color-sky;
+            color: $color-dark-blue;
+            border-color: lighten($color-dark-blue, 50%);
+
+            &:hover {
+                background-color: darken($color-sky, 5%);
+            }
+        }
+
+        &.register-link {
+            background-color: rgba($btn-bg-primary, 0.1);
+            color: $btn-bg-primary;
+            border-color: rgba($btn-bg-primary, 0.3);
+
+            &:hover {
+                background-color: rgba($btn-bg-primary, 0.15);
+            }
+        }
+
+        .action-icon {
+            width: $font-size-base;
+            height: $font-size-base;
+            stroke: currentColor;
+        }
+    }
+
+    .action-button {
+        width: 100%;
+        padding: $sp-sm $sp;
+        text-align: center;
+        font-size: $font-size-sm;
+        border: none;
+        border-radius: $btn-border-radius-md;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.login-button {
+            font-weight: 500;
+            color: $color-black;
+            background: transparent;
+            border: 1px solid $color-border;
+
+            &:hover {
+                background-color: $color-light-gray;
+            }
+        }
+
+        // &.get-started-button {
+        //     font-weight: 600;
+        //     background-color: $btn-bg-primary;
+        //     color: $btn-text-primary;
+        //     box-shadow: 0 2px 4px rgba($color-black, 0.1);
+
+        //     &:hover {
+        //         background-color: darken($btn-bg-primary, 5%);
+        //     }
+        // }
     }
 }

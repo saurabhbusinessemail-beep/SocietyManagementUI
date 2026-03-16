@@ -7,6 +7,11 @@
             {{ item }}
         </a>
     </div>
+
+    <!-- Static action buttons (these don't change) -->
+    <div class="mobile-menu-actions" *ngIf="extendedMenuTemplate">
+        <ng-container *ngTemplateOutlet="extendedMenuTemplate"></ng-container>
+    </div>
 </div>
 
 <!-- Desktop/Tablet Navigation -->

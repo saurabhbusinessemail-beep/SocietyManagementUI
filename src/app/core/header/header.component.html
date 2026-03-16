@@ -50,7 +50,7 @@
             </svg>
         </button>
         <mat-menu #menu="matMenu">
-            <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)">
+            <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)" [extendedMenuTemplate]="extendedMenuTemplate">
             </app-navbar-menu>
         </mat-menu>
     </div>

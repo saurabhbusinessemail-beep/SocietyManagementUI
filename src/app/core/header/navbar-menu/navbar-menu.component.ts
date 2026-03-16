@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-navbar-menu',
@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class NavbarMenuComponent {
   @Input() menuItems: string[] = []; // Input array of menu items
+  @Input() extendedMenuTemplate?: TemplateRef<any>;
   @Output() menuItemClick = new EventEmitter<string>();
 
   // Handle menu item click

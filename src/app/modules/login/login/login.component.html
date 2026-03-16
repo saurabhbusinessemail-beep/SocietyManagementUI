@@ -1,4 +1,6 @@
-<app-layout title="Book A Demo" [hideMoreActions]="true" title="Gate My Society" [navMenuItems]="pageSections" (needLogin)="simpleLogin()" (menuItemClick)="handleMenuItemClick($event)">
+<app-layout title="Book A Demo" [hideMoreActions]="true" title="Gate My Society" [navMenuItems]="pageSections"
+    [extendedMenuTemplate]="extendedMenuTemplate" (needLogin)="simpleLogin()"
+    (menuItemClick)="handleMenuItemClick($event)">
 
     <div class="first-div">
         <h1 class="first-div-title">
@@ -71,7 +73,8 @@
         </div>
     </div>
 
-    <div [attr.id]="generateHref(PageSections.FEATURES)" class="features-container" #featuresTemplate [attr.name]="generateHref(PageSections.FEATURES)">
+    <div [attr.id]="generateHref(PageSections.FEATURES)" class="features-container" #featuresTemplate
+        [attr.name]="generateHref(PageSections.FEATURES)">
         <div class="feature-title-container" [appRestrictHeight]="800" [restrictEnabled]="enableShoeMoreFeature">
             <div class="feature-title">
                 <h2 class="main-title">Everything you need to run a perfect society</h2>
@@ -139,7 +142,8 @@
         </div>
     </div>
 
-    <section [attr.id]="generateHref(PageSections.HOWITWORKS)" class="how-it-works-section" #startSteps [attr.name]="generateHref(PageSections.HOWITWORKS)">
+    <section [attr.id]="generateHref(PageSections.HOWITWORKS)" class="how-it-works-section" #startSteps
+        [attr.name]="generateHref(PageSections.HOWITWORKS)">
         <div class="container">
             <!-- Header Section -->
             <div class="header-wrapper">
@@ -175,7 +179,8 @@
 
     <app-pricing-details [attr.name]="generateHref(PageSections.PRICING)"></app-pricing-details>
 
-    <div [attr.id]="generateHref(PageSections.JOINAS)" class="join-as-container" [attr.name]="generateHref(PageSections.JOINAS)">
+    <div [attr.id]="generateHref(PageSections.JOINAS)" class="join-as-container"
+        [attr.name]="generateHref(PageSections.JOINAS)">
         <!-- Header Section -->
         <div class="header-wrapper">
             <span class="badge">Who is it for?</span>
@@ -267,3 +272,32 @@
         </div>
     </section>
 </app-layout>
+
+
+<ng-template #extendedMenuTemplate>
+    <a href="#" routerLink="/demo/book" class="action-link demo-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon"
+            aria-hidden="true">
+            <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
+            <rect x="2" y="6" width="14" height="12" rx="2"></rect>
+        </svg>
+        Demo Requests
+    </a>
+
+    <a href="#" routerLink="/society-public/add" class="action-link register-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon"
+            aria-hidden="true">
+            <path d="M10 12h4"></path>
+            <path d="M10 8h4"></path>
+            <path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
+            <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
+            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+        </svg>
+        Register Society
+    </a>
+
+    <button class="action-button login-button" (click)="simpleLogin()">Log in</button>
+    <!-- <button class="action-button get-started-button">Get Started</button> -->
+</ng-template>
