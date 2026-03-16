@@ -584,6 +584,11 @@
         gap: $sp-md;
     }
 
+    @include desktop {
+        grid-template-columns: repeat(4, 1fr);
+        gap: $sp-md;
+    }
+
     >* {
         border-bottom: 1px solid rgba($color-border, 0.2);
 
