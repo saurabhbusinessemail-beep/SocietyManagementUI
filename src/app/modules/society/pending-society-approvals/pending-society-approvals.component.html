@@ -22,6 +22,7 @@
                         <th>Location</th>
                         <th>Buildings</th>
                         <th>Submitted</th>
+                        <th *ngIf="!isAdmin">Status</th>
                         <th *ngIf="isAdmin">Actions</th>
                     </tr>
                 </thead>
@@ -53,6 +54,24 @@
 
                         <td class="submitted">
                             {{ s.createdOn | date:'dd MMM yyyy' }}
+                        </td>
+
+                        <td class="actions-cell" *ngIf="!isAdmin">
+                            <div class="action-buttons">
+                                <!-- Status badges for non-admin users -->
+                                <div class="status-badge approved" *ngIf="s.isApproved">
+                                    <i class="material-icons status-icon">check_circle</i>
+                                    Approved
+                                </div>
+                                <div class="status-badge rejected" *ngIf="s.isRejected">
+                                    <i class="material-icons status-icon">cancel</i>
+                                    Rejected
+                                </div>
+                                <div class="status-badge pending" *ngIf="!s.isApproved && !s.isRejected">
+                                    <i class="material-icons status-icon">hourglass_empty</i>
+                                    Pending
+                                </div>
+                            </div>
                         </td>
 
                         <td class="actions-cell" *ngIf="isAdmin">
@@ -89,8 +108,20 @@
                     </div>
 
                     <div class="mobile-header-right">
-                        <span class="status-badge pending">
-                        </span>
+                        <!-- Status badge for mobile header (non-admin only) -->
+                        <div class="status-badge small" *ngIf="!isAdmin" [ngClass]="{
+                                'approved': s.isApproved,
+                                'rejected': s.isRejected,
+                                'pending': !s.isApproved && !s.isRejected
+                             }">
+                            <i class="material-icons status-icon" *ngIf="s.isApproved">check_circle</i>
+                            <i class="material-icons status-icon" *ngIf="s.isRejected">cancel</i>
+                            <i class="material-icons status-icon"
+                                *ngIf="!s.isApproved && !s.isRejected">hourglass_empty</i>
+                            <span class="status-text">
+                                {{ s.isApproved ? 'Approved' : (s.isRejected ? 'Rejected' : 'Pending') }}
+                            </span>
+                        </div>
                         <div class="expand-icon" [ngClass]="{'inverted': expandedRow === i}">
                             <app-icon name="arrow-down"></app-icon>
                         </div>
@@ -109,6 +140,24 @@
                         </div>
                     </div>
 
+                    <!-- Status display for non-admin users in expanded view -->
+                    <div class="status-section" *ngIf="!isAdmin">
+                        <div class="status-badge large" [ngClass]="{
+                                'approved': s.isApproved,
+                                'rejected': s.isRejected,
+                                'pending': !s.isApproved && !s.isRejected
+                             }">
+                            <i class="material-icons status-icon" *ngIf="s.isApproved">check_circle</i>
+                            <i class="material-icons status-icon" *ngIf="s.isRejected">cancel</i>
+                            <i class="material-icons status-icon"
+                                *ngIf="!s.isApproved && !s.isRejected">hourglass_empty</i>
+                            <span class="status-text">
+                                Status: {{ s.isApproved ? 'Approved' : (s.isRejected ? 'Rejected' : 'Pending') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions for admin users in expanded view -->
                     <div class="mobile-actions" *ngIf="isAdmin">
                         <button class="btn-approve mobile" (click)="approve(s)">
                             <i class="material-icons">check</i>

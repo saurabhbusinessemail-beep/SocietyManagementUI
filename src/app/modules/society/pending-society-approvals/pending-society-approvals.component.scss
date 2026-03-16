@@ -631,3 +631,148 @@
         color: $color-note-gray;
     }
 }
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    border: 1px solid;
+    transition: all 0.2s ease;
+
+    &.approved {
+        background: rgba($status-active, 0.1);
+        color: $status-active;
+        border-color: rgba($status-active, 0.3);
+    }
+
+    &.rejected {
+        background: rgba($color-error-dark, 0.1);
+        color: $color-error-dark;
+        border-color: rgba($color-error-dark, 0.3);
+    }
+
+    &.pending {
+        background: rgba($status-rejected, 0.1);
+        color: darken($status-rejected, 20%);
+        border-color: rgba($status-rejected, 0.3);
+    }
+
+    &.small {
+        padding: 4px 8px;
+        font-size: $font-size-xs;
+
+        .status-icon {
+            font-size: 14px;
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    &.large {
+        padding: 8px 16px;
+        font-size: $font-size-sm;
+
+        .status-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    .status-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .status-text {
+        white-space: nowrap;
+    }
+}
+
+/* STATUS SECTION FOR MOBILE */
+.status-section {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $color-border;
+
+    .status-badge {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* MOBILE HEADER RIGHT UPDATES */
+.mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+
+    .status-badge {
+        margin-right: 4px;
+    }
+}
+
+/* ACTION BUTTONS UPDATES */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Ensure proper spacing in desktop view */
+.actions-cell {
+    .action-buttons {
+        .status-badge {
+            min-width: 100px;
+            justify-content: center;
+        }
+    }
+}
+
+/* Mobile responsive adjustments */
+@include mobile {
+    .mobile-header-right {
+        .status-badge {
+            .status-text {
+                display: none;
+                /* Hide text on very small screens, show only icon */
+            }
+
+            &.small {
+                padding: 4px;
+
+                .status-icon {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    /* Show full status text in expanded view */
+    .status-section {
+        .status-badge {
+            .status-text {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+/* Tablet adjustments */
+@include tablet {
+    .mobile-header-right {
+        .status-badge {
+            .status-text {
+                display: inline-block;
+                /* Show text on tablet */
+            }
+        }
+    }
+}
