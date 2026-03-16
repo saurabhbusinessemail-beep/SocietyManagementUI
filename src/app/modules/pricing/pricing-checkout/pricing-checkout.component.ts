@@ -114,13 +114,6 @@ export class PricingCheckoutComponent implements OnInit {
     }
   }
 
-  changePlan(): void {
-    // Redirect to plans page - you can update this URL
-    this.router.navigate(['/pricing-plans'], {
-      queryParams: { societyId: this.societyId }
-    });
-  }
-
   nextStep(): void {
     if (this.currentStep === 1) {
       // Step 1 validation
@@ -199,6 +192,10 @@ export class PricingCheckoutComponent implements OnInit {
     if (this.currentStep === step) return 'active';
     if (step < this.currentStep) return 'completed';
     return 'pending';
+  }
+
+  changePlan() {
+    this.router.navigateByUrl('/pricing-plan/list')
   }
 
   cancel() {

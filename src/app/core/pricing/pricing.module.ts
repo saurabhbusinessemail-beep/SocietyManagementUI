@@ -13,4 +13,4 @@ import { PricingDetailsComponent } from './pricing-details/pricing-details.compo
   ],
   exports: [PricingDetailsComponent]
 })
-export class PricingModule { }
+export class PricingDetailModule { }

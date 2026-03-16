@@ -290,7 +290,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   gotoPricingPlanCheckout(plan: IPricingPlan) {
-    console.log('plan = ', plan)
     // const societyId = 'abcd699055620c4bd294ac82c4bc';
     this.router.navigate(['pricing-plan/checkout', plan._id]);
   }
