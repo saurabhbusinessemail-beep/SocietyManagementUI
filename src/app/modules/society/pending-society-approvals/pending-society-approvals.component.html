@@ -1,4 +1,10 @@
-<app-layout [hideMoreActions]="true" title="Pending Approvals">
+<app-layout [hideMoreActions]="isAdmin" title="Pending Approvals">
+
+    <ng-container moreActions>
+        <ui-button label="New Request" type="primary" (clicked)="gotoAddSociety()">
+        </ui-button>
+    </ng-container>
+
     <!-- Search Bar -->
     <div class="search-container">
         <div class="search-wrapper">

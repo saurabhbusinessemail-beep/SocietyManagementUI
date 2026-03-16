@@ -152,7 +152,9 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
       this.edit(payload);
     } else {
 
-      if (!this.myProfile || this.myProfile.user.role === 'user')
+      if (this.myProfile && this.myProfile.user.role === 'user')
+        this.createSocietyForApproval(payload);
+      else if (!this.myProfile ||  this.myProfile.user.role === 'user')
         this.loginAndSendForApproval(payload);
       else
         this.add(payload);
@@ -164,15 +166,19 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     this.loginService.loginAndReturn()
       .pipe(take(1))
       .subscribe(() => {
-        this.societyService.createSocietyForApproval(payload)
-          .pipe(take(1))
-          .subscribe({
-            next: response => this.location.back(),
-            error: err => {
-              this.errorMessage = 'Error while sending society for approval.';
-              console.log('error while adding society');
-            }
-          })
+        this.createSocietyForApproval(payload)
+      })
+  }
+
+  createSocietyForApproval(payload: any) {
+    this.societyService.createSocietyForApproval(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => this.location.back(),
+        error: err => {
+          this.errorMessage = 'Error while sending society for approval.';
+          console.log('error while adding society');
+        }
       })
   }
 

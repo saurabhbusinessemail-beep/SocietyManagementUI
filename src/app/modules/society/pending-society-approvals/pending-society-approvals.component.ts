@@ -4,6 +4,7 @@ import { SocietyService } from '../../../services/society.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pending-society-approvals',
@@ -37,7 +38,7 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
     return this.societies.slice(start, start + this.limit);
   }
 
-  constructor(private societyService: SocietyService, private loginService: LoginService) { }
+  constructor(private societyService: SocietyService, private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
     this.myProfile = this.loginService.getProfileFromStorage();
@@ -71,6 +72,10 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
     this.total = res.total;
     this.page = res.page;
     this.limit = res.limit;
+  }
+
+  gotoAddSociety() {
+    this.router.navigateByUrl('/society-public/add')
   }
 
   nextPage() {
