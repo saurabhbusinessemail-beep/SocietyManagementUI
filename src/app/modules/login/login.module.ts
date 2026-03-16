@@ -10,6 +10,7 @@ import { LayoutModule } from '../../core/layout/layout.module';
 import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { LoginPopupModule } from '../../core/login-popup/login-popup.module';
+import { PricingModule } from '../../core/pricing/pricing.module';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { LoginPopupModule } from '../../core/login-popup/login-popup.module';
     LayoutModule,
     UiModule,
     DirectiveModule,
-    LoginPopupModule
+    LoginPopupModule,
+    PricingModule,
   ]
 })
 export class LoginModule { }

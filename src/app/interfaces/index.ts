@@ -25,6 +25,7 @@ export * from './my-profile.interface';
 export * from './notification.interface';
 export * from './PAGINATION.interface';
 export * from './parking.interface';
+export * from './pricing.interface';
 export * from './security.interface';
 export * from './society-role-menu.interface';
 export * from './society-role.interface';
