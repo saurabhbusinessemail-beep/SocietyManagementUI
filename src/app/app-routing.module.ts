@@ -86,6 +86,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/demo/demo.module').then(module => module.DemoModule)
   },
   {
+    path: 'pricing-plan',
+    loadChildren: () => import('./modules/pricing/pricing.module').then(module => module.PricingModule)
+  },
+  {
     path: 'unauthorized',
     loadChildren: () => import('./modules/unauthorized/unauthorized.module').then(module => module.UnauthorizedModule)
   },

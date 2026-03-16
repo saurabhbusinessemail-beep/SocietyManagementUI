@@ -177,7 +177,7 @@
         </div>
     </section>
 
-    <app-pricing-details [attr.name]="generateHref(PageSections.PRICING)"></app-pricing-details>
+    <app-pricing-details [attr.name]="generateHref(PageSections.PRICING)" (getStartedWithPlanId)="gotoPricingPlanCheckout($event)"></app-pricing-details>
 
     <div [attr.id]="generateHref(PageSections.JOINAS)" class="join-as-container"
         [attr.name]="generateHref(PageSections.JOINAS)">

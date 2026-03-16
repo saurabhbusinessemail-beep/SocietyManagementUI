@@ -5,7 +5,7 @@ export interface IPricingFeature {
 }
 
 export interface IPricingPlan {
-    id: string;
+    _id: string;
     name: string;
     icon: string;
     price: string;

@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { WindowService } from '../../../services/window.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../services/login.service';
+import { IPricingPlan } from '../../../interfaces';
 
 interface IFeatures {
   iconName: string;
@@ -286,6 +287,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   gotoBookDemo() {
     this.router.navigateByUrl('/demo/book');
+  }
+
+  gotoPricingPlanCheckout(plan: IPricingPlan) {
+    console.log('plan = ', plan)
+    // const societyId = 'abcd699055620c4bd294ac82c4bc';
+    this.router.navigate(['pricing-plan/checkout', plan._id]);
   }
 
   handleMenuItemClick(clickedItem: string): void {

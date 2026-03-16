@@ -1,0 +1,546 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.checkout-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: $sp-lg;
+
+    @include mobile {
+        padding: $sp;
+    }
+}
+
+// Stepper
+.stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $sp-xl;
+
+    @include mobile {
+        margin-bottom: $sp-lg;
+    }
+}
+
+.stepper-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    &.active .stepper-number {
+        background-color: $color-dark-blue;
+        color: $color-white;
+        border-color: $color-dark-blue;
+    }
+
+    &.completed .stepper-number {
+        background-color: $status-active;
+        color: $color-white;
+        border-color: $status-active;
+        position: relative;
+
+        &::after {
+            content: '✓';
+            font-size: $font-size-sm;
+        }
+
+        span {
+            display: none;
+        }
+    }
+}
+
+.stepper-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: $color-white;
+    border: 2px solid $color-border;
+    color: $color-note-gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: $sp-xs;
+    transition: all 0.3s ease;
+
+    @include mobile {
+        width: 28px;
+        height: 28px;
+        font-size: $font-size-xs;
+    }
+}
+
+.stepper-label {
+    font-size: $font-size-xs;
+    color: $color-note-gray;
+    text-align: center;
+
+    @include mobile {
+        display: none;
+    }
+}
+
+.stepper-line {
+    width: 60px;
+    height: 2px;
+    background-color: $color-border;
+    margin: 0 $sp-xs;
+
+    &.completed {
+        background-color: $status-active;
+    }
+
+    @include mobile {
+        width: 30px;
+    }
+}
+
+// Step Content
+.step-content {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-lg;
+    padding: $sp-lg;
+    margin-bottom: $sp-lg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    @include mobile {
+        padding: $sp;
+    }
+}
+
+.step-title {
+    font-size: $font-size-lg;
+    color: $color-black;
+    margin-bottom: $sp-lg;
+    font-weight: 600;
+
+    @include mobile {
+        font-size: $font-size-base;
+        margin-bottom: $sp;
+    }
+}
+
+// Order Summary
+.summary-section {
+    margin-bottom: $sp-lg;
+    padding-bottom: $sp-lg;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+}
+
+.plan-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $sp;
+
+    h3 {
+        font-size: $font-size-base;
+        font-weight: 600;
+        color: $color-black;
+    }
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: $color-dark-blue;
+    cursor: pointer;
+    font-size: $font-size-xs;
+    text-decoration: underline;
+    padding: $sp-xs;
+
+    &:hover {
+        color: darken($color-dark-blue, 10%);
+    }
+}
+
+.plan-details {
+    display: flex;
+    align-items: center;
+    gap: $sp;
+}
+
+.plan-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: $btn-border-radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        background-color: currentColor;
+    }
+}
+
+.plan-info {
+    h4 {
+        font-size: $font-size-base;
+        font-weight: 600;
+        color: $color-black;
+        margin-bottom: $sp-xs;
+    }
+
+    .plan-price {
+        font-size: $font-size-sm;
+        color: $color-note-gray;
+    }
+
+    .plan-billed {
+        font-size: $font-size-xs;
+        color: $color-help-text;
+    }
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $sp-sm;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: $sp-sm;
+}
+
+.feature-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &.included {
+        background-color: rgba($status-active, 0.1);
+    }
+}
+
+.icon-check-small {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    background-color: $status-active;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.feature-name {
+    flex: 1;
+    font-size: $font-size-xs;
+    color: $color-black;
+}
+
+.feature-value {
+    font-size: $font-size-xs;
+    font-weight: 600;
+    color: $color-dark-blue;
+}
+
+// Coupon Form
+.coupon-form {
+    form {
+        display: flex;
+        gap: $sp;
+        margin-bottom: $sp-xs;
+
+        input {
+            flex: 1;
+            padding: $input-padding-desktop;
+            border: 1px solid $color-border;
+            border-radius: $input-border-radius;
+            font-size: $font-size-sm;
+
+            &:focus {
+                outline: none;
+                border-color: $color-dark-blue;
+            }
+
+            @include mobile {
+                padding: $input-padding-mobile;
+            }
+        }
+    }
+}
+
+.coupon-message {
+    font-size: $font-size-xs;
+    margin-top: $sp-xs;
+
+    &.success {
+        color: $status-active;
+    }
+
+    &.error {
+        color: $color-error-header;
+    }
+}
+
+// Price Summary
+.price-summary {
+    background-color: $color-light-gray;
+    padding: $sp;
+    border-radius: $input-border-radius;
+    margin-top: $sp;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $color-black;
+
+    .original-price {
+        font-size: $font-size-xs;
+        color: $color-note-gray;
+        text-decoration: line-through;
+        margin-right: $sp;
+    }
+
+    .final-price {
+        font-size: $font-size-lg;
+        color: $color-dark-blue;
+
+        &.discounted {
+            color: $status-active;
+        }
+    }
+}
+
+.price-note {
+    font-size: $font-size-xs;
+    color: $status-active;
+    margin-top: $sp-xs;
+}
+
+// Payment Methods
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: $sp;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: $sp;
+    padding: $sp;
+    border: 2px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover:not(.disabled) {
+        border-color: $color-dark-blue;
+    }
+
+    &.selected {
+        border-color: $color-dark-blue;
+        background-color: rgba($color-dark-blue, 0.05);
+    }
+
+    &.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: $color-disable-background;
+    }
+}
+
+.method-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid $color-border;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .radio-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $color-dark-blue;
+    }
+}
+
+.method-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.method-name {
+    font-size: $font-size-base;
+    font-weight: 500;
+    color: $color-black;
+}
+
+.method-status {
+    font-size: $font-size-xs;
+    color: $color-note-gray;
+}
+
+.payment-note {
+    font-size: $font-size-xs;
+    color: $color-help-text;
+    margin-top: $sp;
+    text-align: center;
+}
+
+// Payment Details
+.upi-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: $sp;
+
+    label {
+        display: block;
+        font-size: $font-size-sm;
+        color: $color-black;
+        margin-bottom: $sp-xs;
+    }
+
+    .mandatory {
+        color: $color-mandatory;
+    }
+
+    input {
+        width: 100%;
+        padding: $input-padding-desktop;
+        border: 1px solid $color-border;
+        border-radius: $input-border-radius;
+        font-size: $font-size-sm;
+
+        &:focus {
+            outline: none;
+            border-color: $color-dark-blue;
+        }
+
+        &.ng-invalid.ng-touched {
+            border-color: $color-error-header;
+        }
+    }
+}
+
+.error-message {
+    font-size: $font-size-xs;
+    color: $color-error-header;
+    margin-top: $sp-xs;
+}
+
+.coming-soon {
+    text-align: center;
+    padding: $sp-xl;
+    background-color: $color-light-gray;
+    border-radius: $input-border-radius;
+    color: $color-note-gray;
+    font-size: $font-size-base;
+}
+
+// Step Actions
+.step-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp;
+
+    @include mobile {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+// Buttons
+.btn {
+    padding: $input-padding-desktop $sp-lg;
+    border: none;
+    border-radius: $btn-border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    @include mobile {
+        padding: $input-padding-mobile $sp;
+    }
+
+    &-primary {
+        background-color: $color-dark-blue;
+        color: $color-white;
+
+        &:hover:not(:disabled) {
+            background-color: darken($color-dark-blue, 10%);
+        }
+    }
+
+    &-secondary {
+        background-color: $color-light-gray;
+        color: $color-black;
+
+        &:hover:not(:disabled) {
+            background-color: darken($color-light-gray, 10%);
+        }
+    }
+}
+
+// Success Message
+.success-message {
+    text-align: center;
+    padding: $sp-xl;
+
+    .success-icon {
+        width: 64px;
+        height: 64px;
+        background-color: $status-active;
+        color: $color-white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $font-size-xxl;
+        margin: 0 auto $sp-lg;
+    }
+
+    h2 {
+        font-size: $font-size-xl;
+        color: $color-black;
+        margin-bottom: $sp;
+    }
+
+    p {
+        font-size: $font-size-base;
+        color: $color-note-gray;
+        margin-bottom: $sp-lg;
+    }
+}

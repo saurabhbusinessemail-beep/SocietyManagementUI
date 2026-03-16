@@ -1,0 +1,186 @@
+<app-layout [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
+    <div class="checkout-container">
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="stepper-item" [class.active]="getStepStatus(1) === 'active'"
+                [class.completed]="getStepStatus(1) === 'completed'">
+                <div class="stepper-number">1</div>
+                <div class="stepper-label">Order Summary</div>
+            </div>
+            <div class="stepper-line" [class.completed]="currentStep > 1"></div>
+            <div class="stepper-item" [class.active]="getStepStatus(2) === 'active'"
+                [class.completed]="getStepStatus(2) === 'completed'">
+                <div class="stepper-number">2</div>
+                <div class="stepper-label">Payment Method</div>
+            </div>
+            <div class="stepper-line" [class.completed]="currentStep > 2"></div>
+            <div class="stepper-item" [class.active]="getStepStatus(3) === 'active'"
+                [class.completed]="getStepStatus(3) === 'completed'">
+                <div class="stepper-number">3</div>
+                <div class="stepper-label">Payment Details</div>
+            </div>
+        </div>
+
+        <!-- Success Message (after purchase) -->
+        <div class="success-message" *ngIf="purchaseComplete">
+            <div class="success-icon">✓</div>
+            <h2>Purchase Successful!</h2>
+            <p>Your plan has been activated successfully.</p>
+            <button class="btn btn-primary" [routerLink]="['/society', societyId, 'dashboard']">Go to Dashboard</button>
+        </div>
+
+        <!-- Checkout Content -->
+        <div class="checkout-content" *ngIf="!purchaseComplete">
+            <!-- Step 1: Order Summary -->
+            <div class="step-content" *ngIf="currentStep === 1">
+                <h2 class="step-title">Order Summary</h2>
+
+                <div class="order-summary">
+                    <!-- Society Details -->
+                    <div class="summary-section" *ngIf="societyDetails">
+                        <h3>Society Details</h3>
+                        <div class="society-info">
+                            <p><strong>Name:</strong> {{ societyDetails.societyName }}</p>
+                            <p><strong>Buildings:</strong> {{ societyDetails.numberOfBuildings }}</p>
+                            <!-- <p *ngIf="societyDetails.gpsLocation?.formattedAddress">
+                            <strong>Address:</strong> {{ societyDetails.gpsLocation.formattedAddress }}
+                        </p>
+                        <p *ngIf="societyDetails.gpsLocation?.city">
+                            <strong>City:</strong> {{ societyDetails.gpsLocation.city }}
+                        </p>
+                        <p *ngIf="societyDetails.gpsLocation?.state">
+                            <strong>State:</strong> {{ societyDetails.gpsLocation.state }}
+                        </p>
+                        <p *ngIf="societyDetails.gpsLocation?.pincode">
+                            <strong>Pincode:</strong> {{ societyDetails.gpsLocation.pincode }}
+                        </p> -->
+                        </div>
+                    </div>
+
+                    <!-- Selected Plan -->
+                    <div class="summary-section" *ngIf="selectedPlan">
+                        <div class="plan-header">
+                            <h3>Selected Plan</h3>
+                            <button class="btn-link" (click)="changePlan()">Change Plan</button>
+                        </div>
+                        <div class="plan-details">
+                            <div class="plan-icon" [style.background-color]="selectedPlan.colors.light">
+                                <span class="icon" [ngClass]="'icon-' + selectedPlan.icon"
+                                    [style.color]="selectedPlan.colors.primary"></span>
+                            </div>
+                            <div class="plan-info">
+                                <h4>{{ selectedPlan.name }} Plan</h4>
+                                <p class="plan-price">₹{{ selectedPlan.price }}/flat per month</p>
+                                <p class="plan-billed">Billed annually</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Included Features -->
+                    <div class="summary-section" *ngIf="selectedPlan">
+                        <h3>Included Features</h3>
+                        <div class="features-list">
+                            <ng-container *ngFor="let feature of selectedPlan.features">
+                                <div class="feature-item" *ngIf="feature.included">
+                                    <span class="feature-check" [class.included]="feature.included">
+                                        <span *ngIf="feature.included" class="icon-check-small"></span>
+                                    </span>
+                                    <span class="feature-name">{{ feature.name }}</span>
+                                    <span class="feature-value" *ngIf="feature.value">{{ feature.value }}</span>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div class="summary-section">
+                        <h3>Apply Coupon</h3>
+                        <div class="coupon-form">
+                            <form [formGroup]="couponForm">
+                                <input type="text" formControlName="couponCode" placeholder="Enter coupon code">
+                                <button type="button" class="btn btn-secondary" (click)="applyCoupon()"
+                                    [disabled]="isCouponApplied">Apply</button>
+                            </form>
+                            <p class="coupon-message" [class.success]="isCouponApplied"
+                                [class.error]="!isCouponApplied && couponMessage">
+                                {{ couponMessage }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Price Summary -->
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span>Total (Full Year)</span>
+                            <span class="original-price" *ngIf="isCouponApplied">₹{{ originalPrice }}</span>
+                            <span class="final-price" [class.discounted]="isCouponApplied">₹{{ totalPrice }}</span>
+                        </div>
+                        <p class="price-note" *ngIf="totalPrice === 0">Your payment will be ₹0. Click Next to complete
+                            purchase.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Payment Method -->
+            <div class="step-content" *ngIf="currentStep === 2">
+                <h2 class="step-title">Select Payment Method</h2>
+
+                <div class="payment-methods">
+                    <div *ngFor="let method of paymentMethods" class="payment-method"
+                        [class.selected]="selectedPaymentMethod === method.id" [class.disabled]="method.disabled"
+                        (click)="selectPaymentMethod(method.id)">
+                        <div class="method-radio">
+                            <span class="radio-dot" *ngIf="selectedPaymentMethod === method.id"></span>
+                        </div>
+                        <div class="method-info">
+                            <div class="method-name">{{ method.name }}</div>
+                            <div class="method-status" *ngIf="method.disabled">Coming Soon</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="payment-note">* Only UPI is available at the moment</p>
+            </div>
+
+            <!-- Step 3: Payment Details -->
+            <div class="step-content" *ngIf="currentStep === 3">
+                <h2 class="step-title">Enter Payment Details</h2>
+
+                <div class="payment-details">
+                    <!-- UPI Form -->
+                    <div class="upi-form" *ngIf="selectedPaymentMethod === 'upi'">
+                        <form [formGroup]="upiForm">
+                            <div class="form-group">
+                                <label>UPI ID <span class="mandatory">*</span></label>
+                                <input type="text" formControlName="upiId" placeholder="e.g., username@okhdfcbank">
+                                <div class="error-message"
+                                    *ngIf="upiForm.get('upiId')?.invalid && upiForm.get('upiId')?.touched">
+                                    Please enter a valid UPI ID
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Placeholder for other payment methods -->
+                    <div class="coming-soon" *ngIf="selectedPaymentMethod !== 'upi'">
+                        <p>{{ selectedPaymentMethod }} payment integration coming soon</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="step-actions">
+                <button class="btn btn-secondary" (click)="cancel()" *ngIf="currentStep === 1">
+                    Cancel
+                </button>
+                <button class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 1">
+                    Back
+                </button>
+                <button class="btn btn-primary" (click)="nextStep()" [disabled]="!isStepValid() || isProcessing">
+                    <span *ngIf="!isProcessing">{{ currentStep === 3 || (this.totalPrice === 0) ? 'Complete Purchase' : 'Next' }}</span>
+                    <span *ngIf="isProcessing">Processing...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</app-layout>

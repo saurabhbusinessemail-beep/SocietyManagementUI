@@ -27,6 +27,7 @@ export * from './PAGINATION.interface';
 export * from './parking.interface';
 export * from './pricing.interface';
 export * from './security.interface';
+export * from './society-plan.interface';
 export * from './society-role-menu.interface';
 export * from './society-role.interface';
 export * from './society.interface';
