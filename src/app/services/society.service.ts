@@ -92,6 +92,18 @@ export class SocietyService {
         );
     }
 
+    getMySocietiesForApproval(page: number, limit: number, searchString: string = '') {
+        return this.http.post<IPagedResponse<ISociety>>(`${this.baseUrl}/mySocietiesForApproval`,
+            { searchString },
+            {
+                params: {
+                    page: page.toString(),
+                    limit: limit.toString()
+                }
+            }
+        );
+    }
+
     approveSociety(id: string) {
         const payload = { approved: true };
         return this.http.patch<IPagedResponse<ISociety>>(`${this.baseUrl}/${id}`, payload);

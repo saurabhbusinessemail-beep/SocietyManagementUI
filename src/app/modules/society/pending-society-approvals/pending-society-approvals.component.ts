@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IPagedResponse, ISociety } from '../../../interfaces';
+import { IMyProfile, IPagedResponse, ISociety } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-pending-society-approvals',
@@ -10,7 +11,9 @@ import { debounceTime, Subject, switchMap, take, takeUntil } from 'rxjs';
   styleUrl: './pending-society-approvals.component.scss'
 })
 export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
+  
   societies: ISociety[] = [];
+  myProfile?: IMyProfile;
 
   page = 1;
   limit = 10;
@@ -21,6 +24,10 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
 
   expandedRow: number | null = null;
 
+  get isAdmin(): boolean {
+    return this.myProfile?.user.role === 'admin'
+  }
+
   get totalPages() {
     return Math.ceil(this.societies.length / this.limit);
   }
@@ -30,9 +37,11 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
     return this.societies.slice(start, start + this.limit);
   }
 
-  constructor(private societyService: SocietyService) { }
+  constructor(private societyService: SocietyService, private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.myProfile = this.loginService.getProfileFromStorage();
+
     this.searchControl.valueChanges
       .pipe(
         takeUntil(this.isComponentActive),
@@ -44,8 +53,8 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
   }
 
   getUnApprovedSocietyApiCall() {
-    return this.societyService
-      .getAllUnApprovedSocieties(this.page, this.limit, this.searchControl.value ?? '')
+    return this.isAdmin ? this.societyService.getAllUnApprovedSocieties(this.page, this.limit, this.searchControl.value ?? '')
+    : this.societyService.getMySocietiesForApproval(this.page, this.limit, this.searchControl.value ?? '')
   }
 
   loadUnApprovedSocieties() {

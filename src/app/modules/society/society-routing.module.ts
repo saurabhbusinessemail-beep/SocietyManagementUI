@@ -27,9 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'pendingApproval',
-    canActivate: [PermissionGuard],
     component: PendingSocietyApprovalsComponent,
-    data: { permission: PERMISSIONS.society_add }
   },
   {
     path: 'add',
