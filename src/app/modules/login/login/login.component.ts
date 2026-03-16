@@ -41,6 +41,13 @@ interface IJoinAsCard {
   features: IJoinAsFeature[];
 }
 
+enum PageSections {
+  FEATURES = 'Features',
+  HOWITWORKS = 'How It Works',
+  PRICING = 'Pricing',
+  JOINAS = 'Join As',
+}
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -236,6 +243,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     ]
   };
 
+  PageSections = PageSections;
+
+  pageSections: string[] = [
+    PageSections.FEATURES,
+    PageSections.HOWITWORKS,
+    PageSections.PRICING,
+    PageSections.JOINAS
+  ]
+
   get enableShoeMoreFeature(): boolean {
     return this.windowService.mode.value !== 'desktop';
   }
@@ -244,9 +260,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private windowService: WindowService,
     private router: Router
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  generateHref(item: string): string {
+    return item.toLowerCase().replace(/\s+/g, '-');
+  }
 
   scrollToElement(element: HTMLElement) {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -267,6 +287,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   gotoBookDemo() {
     this.router.navigateByUrl('/demo/book');
   }
+
+  handleMenuItemClick(clickedItem: string): void {
+    console.log('Menu item clicked:', clickedItem);
+    // Do something with the clicked item
+    // e.g., navigate to section, open modal, etc.
+
+    // Example: Scroll to section
+    const element = document.getElementById(clickedItem.toLowerCase().replace(/\s+/g, '-'));
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
 
   ngOnDestroy(): void {
     this.isComponentActive.next();

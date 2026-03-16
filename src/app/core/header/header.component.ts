@@ -19,6 +19,8 @@ export class HeaderComponent implements OnInit {
   @Input() loggedInUserProfile?: IMyProfile
   @Input() showSocietyFilter = false;
   @Input() showBackButton = false;
+  @Input() navMenuItems: string[] = [];
+  @Output() menuItemClick = new EventEmitter<string>();
   @Output() toggleMenu = new EventEmitter<void>();
   @Output() needLogin = new EventEmitter<void>();
 

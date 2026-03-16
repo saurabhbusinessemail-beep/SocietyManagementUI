@@ -1,4 +1,4 @@
-<app-layout title="Book A Demo" [hideMoreActions]="true" title="Gate My Society" (needLogin)="simpleLogin()">
+<app-layout title="Book A Demo" [hideMoreActions]="true" title="Gate My Society" [navMenuItems]="pageSections" (needLogin)="simpleLogin()" (menuItemClick)="handleMenuItemClick($event)">
 
     <div class="first-div">
         <h1 class="first-div-title">
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <div class="features-container" #featuresTemplate>
+    <div [attr.id]="generateHref(PageSections.FEATURES)" class="features-container" #featuresTemplate [attr.name]="generateHref(PageSections.FEATURES)">
         <div class="feature-title-container" [appRestrictHeight]="800" [restrictEnabled]="enableShoeMoreFeature">
             <div class="feature-title">
                 <h2 class="main-title">Everything you need to run a perfect society</h2>
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <section id="how-it-works" class="how-it-works-section" #startSteps>
+    <section [attr.id]="generateHref(PageSections.HOWITWORKS)" class="how-it-works-section" #startSteps [attr.name]="generateHref(PageSections.HOWITWORKS)">
         <div class="container">
             <!-- Header Section -->
             <div class="header-wrapper">
@@ -173,9 +173,9 @@
         </div>
     </section>
 
-    <app-pricing-details></app-pricing-details>
+    <app-pricing-details [attr.name]="generateHref(PageSections.PRICING)"></app-pricing-details>
 
-    <div class="join-as-container">
+    <div [attr.id]="generateHref(PageSections.JOINAS)" class="join-as-container" [attr.name]="generateHref(PageSections.JOINAS)">
         <!-- Header Section -->
         <div class="header-wrapper">
             <span class="badge">Who is it for?</span>

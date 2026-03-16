@@ -20,10 +20,13 @@
         <div *ngIf="title" class="title">
             {{ title }}
         </div>
-        <select class="input center-dropdown" [value]="selected" (change)="onSelectChange($any($event.target).value)"
+        <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)"
+            *ngIf="navMenuItems.length > 0" class="no-mobile">
+        </app-navbar-menu>
+        <!-- <select class="input center-dropdown" [value]="selected" (change)="onSelectChange($any($event.target).value)"
             *ngIf="showSocietyFilter">
             <option *ngFor="let opt of dropdownOptions" [value]="opt">{{ opt }}</option>
-        </select>
+        </select> -->
     </div>
 
     <div class="right">
@@ -31,9 +34,24 @@
         <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
         <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
         <ui-user-icon [hideMoreActions]="hideMoreActions" [loggedInUserProfile]="loggedInUserProfile"
-            (needLogin)="needLogin.emit()"></ui-user-icon>
+            *ngIf="loggedInUserProfile" (needLogin)="needLogin.emit()"></ui-user-icon>
         <app-more-icon *ngIf="!hideMoreActions">
             <ng-content select="[moreActions]"></ng-content>
         </app-more-icon>
+
+
+        <button class="navbar-menu-button no-desktop no-tablet" [matMenuTriggerFor]="menu" size="xl" *ngIf="navMenuItems.length > 0"
+            #navBarMenu="matMenuTrigger">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="menu-icon" aria-hidden="true">
+                <path d="M4 5h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 19h16"></path>
+            </svg>
+        </button>
+        <mat-menu #menu="matMenu">
+            <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)">
+            </app-navbar-menu>
+        </mat-menu>
     </div>
 </header>

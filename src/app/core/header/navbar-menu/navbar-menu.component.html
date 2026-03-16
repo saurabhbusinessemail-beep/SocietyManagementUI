@@ -1,0 +1,18 @@
+<!-- Mobile Menu -->
+<div class="mobile-menu">
+    <!-- Dynamic menu links from @Input array -->
+    <div class="mobile-menu-links">
+        <a *ngFor="let item of menuItems" [href]="generateHref(item)" class="mobile-menu-link"
+            (click)="onMenuItemClick(item, $event)">
+            {{ item }}
+        </a>
+    </div>
+</div>
+
+<!-- Desktop/Tablet Navigation -->
+<nav class="desktop-nav">
+    <a *ngFor="let item of menuItems" [href]="generateHref(item)" class="desktop-nav-link"
+        (click)="onMenuItemClick(item, $event)">
+        {{ item }}
+    </a>
+</nav>

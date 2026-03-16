@@ -15,8 +15,10 @@ export class LayoutComponent implements OnInit {
   @Input() title?: string;
   @Input() menuItems: IMenu[] = [];
   @Input() hideMoreActions: boolean = false;
+  @Input() navMenuItems: string[] = [];
   @Input() showBackButton = false;
   @Output() needLogin = new EventEmitter<void>();
+  @Output() menuItemClick = new EventEmitter<string>();
 
 
   loggedInUserProfile?: IMyProfile;

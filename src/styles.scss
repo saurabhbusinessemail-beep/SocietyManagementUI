@@ -326,18 +326,18 @@ body {
 
 @include mobile {
     .no-mobile {
-        display: none;
+        display: none !important;
     }
 }
 
 @include tablet {
     .no-tablet {
-        display: none;
+        display: none !important;
     }
 }
 
 @include desktop {
     .no-desktop {
-        display: none;
+        display: none !important;
     }
 }

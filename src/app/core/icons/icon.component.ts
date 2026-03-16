@@ -29,7 +29,7 @@ export class IconComponent implements OnInit {
     switch(this.size) {
       case 'sm': return 8;
       case 'md': return 10;
-      case 'xl': return 16;
+      case 'xl': return 24;
       case 'xxl': return 32;
       case 'xxxl': return 64;
       default: return 14;
