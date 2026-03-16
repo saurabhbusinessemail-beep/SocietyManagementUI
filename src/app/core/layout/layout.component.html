@@ -4,7 +4,7 @@
     <app-header (toggleMenu)="menu.toggleMenu()" [title]="title ?? menuService.pageTitle"
         [hideMoreActions]="hideMoreActions" [loggedInUserProfile]="loggedInUserProfile" [navMenuItems]="navMenuItems"
         [extendedMenuTemplate]="extendedMenuTemplate" [showBackButton]="showBackButton" (needLogin)="needLogin.emit()"
-        (menuItemClick)="menuItemClick.emit($event)">
+        (menuItemClick)="menuItemClick.emit($event)" (goHome)="goHome()">
         <ng-container moreActions>
             <ng-content select="[moreActions]"></ng-content>
         </ng-container>

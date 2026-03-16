@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   @Input() extendedMenuTemplate?: TemplateRef<any>;
   @Output() menuItemClick = new EventEmitter<string>();
   @Output() toggleMenu = new EventEmitter<void>();
+  @Output() goHome = new EventEmitter<void>();
   @Output() needLogin = new EventEmitter<void>();
 
   // center dropdown example
@@ -41,6 +42,10 @@ export class HeaderComponent implements OnInit {
 
   onMenuClick() {
     this.toggleMenu.emit();
+  }
+
+  onGoHomeClick() {
+    this.goHome.emit();
   }
 
   onSelectChange(val: string) {

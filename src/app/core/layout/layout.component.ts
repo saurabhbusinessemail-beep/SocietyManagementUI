@@ -4,6 +4,7 @@ import { MenuService } from '../../services/menu.service';
 import { WindowService } from '../../services/window.service';
 import { Location } from '@angular/common';
 import { LoginService } from '../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -29,6 +30,7 @@ export class LayoutComponent implements OnInit {
     public menuService: MenuService,
     private windowServic: WindowService,
     private location: Location,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -45,5 +47,9 @@ export class LayoutComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  goHome() {
+    this.router.navigateByUrl('');
   }
 }
