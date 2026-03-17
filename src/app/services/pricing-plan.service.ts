@@ -210,10 +210,14 @@ export class PricingPlanService {
      * @param planId - Plan ID to purchase
      * @param billingCycle - 'monthly' or 'yearly' (default: 'yearly')
      */
-    purchasePlan(societyId: string, planId: string, billingCycle: 'monthly' | 'yearly' = 'yearly'): Observable<ISocietyPlan> {
+    purchasePlan(societyId: string, planId: string, billingCycle: 'monthly' | 'yearly' = 'yearly', couponCode?: string): Observable<ISocietyPlan> {
+        const payload: any = { planId, billingCycle };
+        if (couponCode) {
+            payload.couponCode = couponCode;
+        }
         return this.http.post<ISocietyPlan>(
             `${this.baseUrl}/purchase/${societyId}`,
-            { planId, billingCycle }
+            payload
         );
     }
 
@@ -231,16 +235,28 @@ export class PricingPlanService {
         });
     }
 
-    calculateChangePrice(societyId: string, newPlanId: string): Observable<IChangePlanCalculation> {
-        return this.http.post<IChangePlanCalculation>(`${this.baseUrl}/calculate-change`, { societyId, newPlanId });
+    calculateChangePrice(societyId: string, newPlanId: string, couponCode?: string): Observable<IChangePlanCalculation> {
+        const payload: any = { societyId, newPlanId };
+        if (couponCode) {
+            payload.couponCode = couponCode;
+        }
+        return this.http.post<IChangePlanCalculation>(`${this.baseUrl}/calculate-change`, payload);
     }
 
-    changePlan(societyId: string, newPlanId: string, billingCycle: string = 'yearly', paymentMethod?: string, paymentDetails?: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}/change/${societyId}`, {
+    changePlan(societyId: string, newPlanId: string, billingCycle: string = 'yearly', paymentMethod?: string, paymentDetails?: any, couponCode?: string): Observable<any> {
+        const payload: any = {
             newPlanId,
             billingCycle,
             paymentMethod,
             paymentDetails
-        });
+        };
+        if (couponCode) {
+            payload.couponCode = couponCode;
+        }
+        return this.http.post(`${this.baseUrl}/change/${societyId}`, payload);
+    }
+
+    validateCoupon(couponCode: string, amount: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}/validate-coupon`, { couponCode, amount });
     }
 }

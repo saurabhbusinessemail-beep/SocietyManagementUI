@@ -117,5 +117,8 @@ export interface IChangePlanCalculation {
     usedValue: number;
     remainingValue: number;
     newPlanValue: number;
+    discount: number;
+    finalAmount: number;
+    couponCode: number
   };
 }

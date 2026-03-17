@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IChangePlanCalculation, ICurrentPlanResponse, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
+import { IChangePlanCalculation, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
@@ -24,6 +24,8 @@ export class PricingCheckoutComponent implements OnInit {
   isCouponApplied: boolean = false;
   totalPrice: number = 0;
   originalPrice: number = 0;
+  discountAmount: number = 0;
+  discountPercentage: number = 0;
   isProcessing: boolean = false;
   purchaseComplete: boolean = false;
   societyPlan: ISocietyPlan | null = null;
@@ -33,9 +35,10 @@ export class PricingCheckoutComponent implements OnInit {
 
   // Change plan related properties
   isChangePlan = false;
-  currentPlanDetails?: ICurrentPlanResponse;
+  currentPlanDetails?: any;
   changePlanCalculation?: IChangePlanCalculation;
   showChangePlanSummary = false;
+  showRemoveCoupon: boolean = false;
 
   // Payment methods
   paymentMethods = [
@@ -115,17 +118,21 @@ export class PricingCheckoutComponent implements OnInit {
     });
   }
 
-  calculateChangePrice(): void {
+  calculateChangePrice(couponCode?: string): void {
     if (!this.selectedPlan || !this.societyId) return;
 
-    this.pricingPlanService.calculateChangePrice(this.societyId, this.selectedPlan.id).subscribe({
+    this.pricingPlanService.calculateChangePrice(this.societyId, this.selectedPlan.id, couponCode).subscribe({
       next: response => {
         this.changePlanCalculation = response;
-        this.totalPrice = this.changePlanCalculation?.calculation?.amountToPay ?? 0;
+        this.totalPrice = this.changePlanCalculation?.calculation?.finalAmount ?? 0;
+        this.originalPrice = this.changePlanCalculation?.calculation?.amountToPay ?? 0;
+        this.discountAmount = this.changePlanCalculation?.calculation?.discount ?? 0;
+        this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
         this.showChangePlanSummary = true;
       },
       error: (err) => {
         console.error('Error calculating change price:', err);
+        this.couponMessage = err.error?.message || 'Error applying coupon';
       }
     });
   }
@@ -195,14 +202,60 @@ export class PricingCheckoutComponent implements OnInit {
       return;
     }
 
-    // Check for SKFREE coupon
-    if (this.couponCode.toUpperCase() === 'SKFREE') {
-      this.totalPrice = 0;
-      this.isCouponApplied = true;
-      this.couponMessage = 'Coupon applied successfully!';
+    // Determine amount to apply coupon on
+    let amountToDiscount = this.isChangePlan && this.changePlanCalculation
+      ? (this.changePlanCalculation.calculation?.amountToPay ?? 0)
+      : (this.societyDetails ? this.originalPrice : this.tentativeTotalPrice);
+
+    this.pricingPlanService.validateCoupon(this.couponCode, amountToDiscount).subscribe({
+      next: (response) => {
+        if (response.valid) {
+          if (this.isChangePlan) {
+            // Recalculate change price with coupon
+            this.calculateChangePrice(this.couponCode);
+          } else {
+            // Update new purchase price
+            this.discountAmount = response.discount;
+            this.totalPrice = response.finalAmount;
+            this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
+          }
+          this.isCouponApplied = true;
+          this.showRemoveCoupon = true;
+          this.couponForm.get('couponCode')?.disable();
+          this.couponMessage = 'Coupon applied successfully!';
+        } else {
+          this.couponMessage = response.message || 'Coupon not found';
+          this.isCouponApplied = false;
+          this.showRemoveCoupon = false;
+          this.discountAmount = 0;
+          this.discountPercentage = 0;
+        }
+      },
+      error: (err) => {
+        this.couponMessage = err.error?.message || 'Error applying coupon';
+        this.isCouponApplied = false;
+        this.showRemoveCoupon = false;
+        this.discountAmount = 0;
+        this.discountPercentage = 0;
+      }
+    });
+  }
+
+  removeCoupon(): void {
+    this.isCouponApplied = false;
+    this.showRemoveCoupon = false;
+    this.couponForm.get('couponCode')?.enable();
+    this.couponForm.get('couponCode')?.setValue('');
+    this.couponMessage = '';
+    this.discountAmount = 0;
+    this.discountPercentage = 0;
+
+    if (this.isChangePlan) {
+      // Recalculate without coupon
+      this.calculateChangePrice();
     } else {
-      this.couponMessage = 'Coupon not found';
-      this.isCouponApplied = false;
+      // Reset to original price
+      this.totalPrice = this.originalPrice;
     }
   }
 
@@ -250,13 +303,14 @@ export class PricingCheckoutComponent implements OnInit {
       this.isProcessing = true;
 
       if (this.isChangePlan && this.changePlanCalculation) {
-        // Use change plan API
+        // Use change plan API with coupon if applied
         this.pricingPlanService.changePlan(
           this.societyId,
           this.selectedPlan.id,
           'yearly',
           this.selectedPaymentMethod,
-          { upiId: this.upiForm.get('upiId')?.value }
+          { upiId: this.upiForm.get('upiId')?.value },
+          this.isCouponApplied ? this.couponCode : undefined
         ).subscribe({
           next: (plan) => {
             this.societyPlan = plan;
@@ -269,11 +323,12 @@ export class PricingCheckoutComponent implements OnInit {
           }
         });
       } else {
-        // Use new purchase API
+        // Use new purchase API with coupon if applied
         this.pricingPlanService.purchasePlan(
           this.societyId,
           this.selectedPlan.id,
-          'yearly'
+          'yearly',
+          this.isCouponApplied ? this.couponCode : undefined
         ).subscribe({
           next: (plan) => {
             this.societyPlan = plan;

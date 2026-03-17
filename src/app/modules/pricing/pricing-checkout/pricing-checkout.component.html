@@ -95,7 +95,8 @@
                     </div>
 
                     <!-- Change Plan Summary -->
-                    <div class="summary-section change-plan-summary" *ngIf="isChangePlan && changePlanCalculation && changePlanCalculation.currentPlan">
+                    <div class="summary-section change-plan-summary"
+                        *ngIf="isChangePlan && changePlanCalculation && changePlanCalculation.currentPlan">
                         <h3>Plan Change Summary</h3>
                         <div class="change-plan-details">
                             <div class="plan-comparison">
@@ -115,7 +116,8 @@
                             <div class="calculation-details">
                                 <div class="detail-row">
                                     <span>Remaining value from current plan:</span>
-                                    <span>₹{{ changePlanCalculation.calculation.remainingValue | number:'1.2-2' }}</span>
+                                    <span>₹{{ changePlanCalculation.calculation.remainingValue | number:'1.2-2'
+                                        }}</span>
                                 </div>
                                 <div class="detail-row">
                                     <span>New plan value:</span>
@@ -153,9 +155,15 @@
                         <h3>Apply Coupon</h3>
                         <div class="coupon-form">
                             <form [formGroup]="couponForm">
-                                <input type="text" formControlName="couponCode" placeholder="Enter coupon code">
-                                <button type="button" class="btn btn-secondary" (click)="applyCoupon()"
-                                    [disabled]="isCouponApplied">Apply</button>
+                                <div class="coupon-input-group">
+                                    <input type="text" formControlName="couponCode" placeholder="Enter coupon code">
+                                    <div class="coupon-actions">
+                                        <button type="button" class="btn btn-secondary" (click)="applyCoupon()"
+                                            *ngIf="!showRemoveCoupon" [disabled]="isCouponApplied">Apply</button>
+                                        <button type="button" class="btn btn-remove" (click)="removeCoupon()"
+                                            *ngIf="showRemoveCoupon">Remove</button>
+                                    </div>
+                                </div>
                             </form>
                             <p class="coupon-message" [class.success]="isCouponApplied"
                                 [class.error]="!isCouponApplied && couponMessage">
@@ -168,11 +176,18 @@
                         <div class="price-row">
                             <span>Total (Full Year)</span>
                             <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
-                            <span class="original-price" *ngIf="isCouponApplied">₹{{ (changePlanCalculation?.calculation?.amountToPay ?? originalPrice) | number:'1.2-2' }}</span>
+                            <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
+                                <span class="original-price">₹{{ originalPrice | number:'1.2-2' }}</span>
+                                <span class="discount-badge">-{{ discountPercentage | number:'1.0-0' }}%</span>
+                            </div>
                             <span class="final-price" [class.discounted]="isCouponApplied">
-                                ₹{{ (societyDetails ? totalPrice : tentativeTotalPrice) | number:'1.2-2' }}
+                                ₹{{ totalPrice | number:'1.2-2' }}
                             </span>
                         </div>
+                        <p class="price-note"
+                            *ngIf="isCouponApplied && isChangePlan && changePlanCalculation?.calculation?.couponCode">
+                            Coupon {{ changePlanCalculation?.calculation?.couponCode }} applied
+                        </p>
                         <p class="price-note" *ngIf="!societyDetails">
                             *Based on estimated 10 flats. Final price will be calculated after society selection.
                         </p>
