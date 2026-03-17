@@ -37,11 +37,12 @@
 
                 <div class="order-summary">
                     <!-- Society Details -->
-                    <div class="summary-section" *ngIf="societyDetails">
+                    <div class="summary-section">
                         <h3>Society Details</h3>
-                        <div class="society-info">
+                        <div class="society-info" *ngIf="societyDetails">
                             <p><strong>Name:</strong> {{ societyDetails.societyName }}</p>
                             <p><strong>Buildings:</strong> {{ societyDetails.numberOfBuildings }}</p>
+                            <p><strong>Flats:</strong> {{ societyDetails.numberOfFlats }}</p>
                             <!-- <p *ngIf="societyDetails.gpsLocation?.formattedAddress">
                             <strong>Address:</strong> {{ societyDetails.gpsLocation.formattedAddress }}
                         </p>
