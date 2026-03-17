@@ -23,10 +23,6 @@
         <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)"
             *ngIf="navMenuItems.length > 0" class="no-mobile">
         </app-navbar-menu>
-        <!-- <select class="input center-dropdown" [value]="selected" (change)="onSelectChange($any($event.target).value)"
-            *ngIf="showSocietyFilter">
-            <option *ngFor="let opt of dropdownOptions" [value]="opt">{{ opt }}</option>
-        </select> -->
     </div>
 
     <div class="right">

@@ -45,21 +45,25 @@ export class UserIconComponent implements OnInit {
   }
 
   onProfileClick() {
-    // Add profile navigation logic here
     console.log('Profile clicked');
     this.router.navigateByUrl('/profile');
     this.open = false; // Close dropdown after click
   }
 
-  onSettingsClick() {
-    // Add settings navigation logic here
-    console.log('Settings clicked');
+  onHelpClick() {
+    console.log('Help clicked');
     this.open = false;
   }
 
-  onHelpClick() {
-    // Add help navigation logic here
-    console.log('Help clicked');
-    this.open = false;
+  onRegisterSocietyClick() {
+    console.log('Register Society clicked');
+    this.router.navigateByUrl('/society-public/add');
+    this.open = false; // Close dropdown after click
+  }
+
+  onDemoClick() {
+    console.log('Request Demo clicked');
+    this.router.navigateByUrl('/demo/book');
+    this.open = false; // Close dropdown after click
   }
 }
