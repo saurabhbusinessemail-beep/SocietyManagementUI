@@ -32,6 +32,10 @@ export class MenuService {
     this.router.navigateByUrl(menu.relativePath ?? '');
   }
 
+  clearMenu() {
+    this.selectedMenu.next(undefined);
+  }
+
   syncSelectedMenuWithCurrentUrl(skipCurrentUrlMatch = false) {
     const currentUrl = this.router.url.split('?')[0];
     console.log('currentUrl = ', this.router.url)

@@ -544,3 +544,153 @@
         margin-bottom: $sp-lg;
     }
 }
+
+// ==================== MODAL STYLES ====================
+
+.custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: $z-menu-overlay;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba($color-black, 0.5);
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: $color-white;
+        border-radius: $btn-border-radius-lg;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        z-index: 1;
+        box-shadow: 0 20px 25px -5px rgba($color-black, 0.1), 0 10px 10px -5px rgba($color-black, 0.04);
+
+        @include mobile {
+            width: 95%;
+            max-height: 80vh;
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $sp-lg;
+        border-bottom: 1px solid $color-border;
+
+        h3 {
+            margin: 0;
+            font-size: $font-size-lg;
+            font-weight: 600;
+            color: $color-black;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: $font-size-xl;
+            cursor: pointer;
+            color: $color-help-text;
+            padding: 0 $sp-sm;
+            line-height: 1;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: $color-black;
+            }
+        }
+    }
+
+    .modal-body {
+        padding: $sp-lg;
+        min-height: 40vh;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: $sp-sm;
+        padding: $sp-lg;
+        border-top: 1px solid $color-border;
+
+        @include mobile {
+            flex-direction: column;
+        }
+    }
+
+
+
+    .cancel-btn,
+    .confirm-btn
+    {
+        padding: $sp-sm $sp-lg;
+        border-radius: $btn-border-radius-md;
+        font-size: $font-size-sm;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        @include mobile {
+            width: 100%;
+            padding: $sp-md;
+        }
+    }
+
+    .cancel-btn {
+        background-color: $color-white;
+        border: 1px solid $color-border;
+        color: $color-black;
+
+        &:hover {
+            background-color: $color-light-gray;
+        }
+    }
+
+    .confirm-btn {
+        background-color: $btn-bg-primary;
+        border: none;
+        color: $btn-text-primary;
+
+        &:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba($btn-bg-primary, 0.3);
+        }
+
+        &.cancel {
+            background-color: $status-rejected;
+
+            &:hover {
+                box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+            }
+        }
+
+        &.reject {
+            background-color: $status-rejected;
+
+            &:hover {
+                box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+            }
+        }
+    }
+}
+
+// View Modal Specific
+.view-modal {
+    .modal-content {
+        max-width: 600px;
+    }
+}

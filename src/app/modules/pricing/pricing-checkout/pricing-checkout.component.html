@@ -177,10 +177,28 @@
                     Back
                 </button>
                 <button class="btn btn-primary" (click)="nextStep()" [disabled]="!isStepValid() || isProcessing">
-                    <span *ngIf="!isProcessing">{{ currentStep === 3 || (this.totalPrice === 0) ? 'Complete Purchase' : 'Next' }}</span>
+                    <span *ngIf="!isProcessing">{{ currentStep === 3 || (this.totalPrice === 0) ? 'Complete Purchase' :
+                        'Next' }}</span>
                     <span *ngIf="isProcessing">Processing...</span>
                 </button>
             </div>
         </div>
     </div>
 </app-layout>
+
+<div class="custom-modal view-modal" *ngIf="showSocietySelectModal">
+    <div class="modal-overlay" (click)="closeModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Booking Details</h3>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <ui-society-search></ui-society-search>
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+            <button class="confirm-btn">Select</button>
+        </div>
+    </div>
+</div>

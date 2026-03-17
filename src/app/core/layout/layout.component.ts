@@ -23,7 +23,9 @@ export class LayoutComponent implements OnInit {
   @Output() menuItemClick = new EventEmitter<string>();
 
 
-  loggedInUserProfile?: IMyProfile;
+  get loggedInUserProfile(): IMyProfile | undefined {
+    return this.logginService.getProfileFromStorage();
+  }
 
   constructor(
     private logginService: LoginService,
@@ -35,7 +37,6 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.windowServic.evaluateMode();
-    this.loggedInUserProfile = this.logginService.getProfileFromStorage();
   }
 
   @HostListener('window:resize')

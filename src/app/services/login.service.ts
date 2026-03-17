@@ -116,6 +116,7 @@ export class LoginService {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('my_profile');
         localStorage.removeItem('profilePicture');
+        this.menuService.clearMenu();
         this.router.navigateByUrl('/');
     }
 
@@ -155,8 +156,9 @@ export class LoginService {
 
     simpleLogin(): void {
         this.openLoginPopup().pipe(
-            tap(() => {
-                this.getAndSaveProfile();
+            tap(async () => {
+                await this.getAndSaveProfile();
+                this.router.navigateByUrl('/dashboard');
             })
         ).subscribe();
     }

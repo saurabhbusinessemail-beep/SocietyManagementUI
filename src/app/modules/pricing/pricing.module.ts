@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from "../../core/layout/layout.module";
 import { PricingListComponent } from './pricing-list/pricing-list.component';
 import { PricingDetailModule } from '../../core/pricing/pricing.module';
+import { UiModule } from '../../core/ui/ui.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { PricingDetailModule } from '../../core/pricing/pricing.module';
     FormsModule,
     ReactiveFormsModule,
     LayoutModule,
-    PricingDetailModule
+    PricingDetailModule,
+    UiModule
 ]
 })
 export class PricingModule { }

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
+import { IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
 import { Location } from '@angular/common';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-pricing-checkout',
@@ -25,6 +26,8 @@ export class PricingCheckoutComponent implements OnInit {
   isProcessing: boolean = false;
   purchaseComplete: boolean = false;
   societyPlan: ISocietyPlan | null = null;
+  myProfile?: IMyProfile;
+  showSocietySelectModal = false;
 
   // Payment methods
   paymentMethods = [
@@ -59,6 +62,8 @@ export class PricingCheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Get My Profile
+    this.myProfile = this.loginService.getProfileFromStorage();
     // Get societyId and plan from route/state
     this.route.params.subscribe(params => {
       console.log('params = ', params)
@@ -144,28 +149,40 @@ export class PricingCheckoutComponent implements OnInit {
     }
   }
 
-  completePurchase(): void {
-    if (!this.selectedPlan || !this.societyId) return;
-
-    this.isProcessing = true;
-
-    this.pricingPlanService.purchasePlan(
-      this.societyId,
-      this.selectedPlan._id,
-      'yearly' // Always yearly as per your requirement
-    ).subscribe({
-      next: (plan) => {
-        this.societyPlan = plan;
-        this.purchaseComplete = true;
-        this.isProcessing = false;
-        // Optionally redirect to success page
-      },
-      error: (error) => {
-        console.error('Purchase failed:', error);
-        this.isProcessing = false;
-        // Show error message
+  async completePurchase() {
+    try {
+      this.myProfile = this.loginService.getProfileFromStorage();
+      if (!this.myProfile) {
+        await this.getLoggedIn();
       }
-    });
+      if (!this.societyId) {
+        this.getSociety();
+      }
+      if (!this.selectedPlan || !this.societyId) return;
+
+      this.isProcessing = true;
+
+      this.pricingPlanService.purchasePlan(
+        this.societyId,
+        this.selectedPlan._id,
+        'yearly' // Always yearly as per your requirement
+      ).subscribe({
+        next: (plan) => {
+          this.societyPlan = plan;
+          this.purchaseComplete = true;
+          this.isProcessing = false;
+          // Optionally redirect to success page
+        },
+        error: (error) => {
+          console.error('Purchase failed:', error);
+          this.isProcessing = false;
+          // Show error message
+        }
+      });
+
+    } catch (err) {
+      console.log('Error ', err);
+    }
   }
 
   selectPaymentMethod(methodId: string): void {
@@ -196,6 +213,28 @@ export class PricingCheckoutComponent implements OnInit {
 
   changePlan() {
     this.router.navigateByUrl('/pricing-plan/list')
+  }
+
+  getLoggedIn() {
+    return new Promise((resolve, reject) => {
+      this.loginService.loginAndReturn()
+        .pipe(take(1))
+        .subscribe({
+          next: (response) => {
+            console.log('my profile = ', this.myProfile)
+            resolve(response)
+          },
+          error: err => reject(err)
+        })
+    });
+  }
+
+  getSociety() {
+    this.showSocietySelectModal = true;
+  }
+
+  closeModal() {
+    this.showSocietySelectModal = false;
   }
 
   cancel() {
