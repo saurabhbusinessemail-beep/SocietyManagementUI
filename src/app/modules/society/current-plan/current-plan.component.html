@@ -85,7 +85,7 @@
                         <h3>Plan Usage</h3>
                         <div class="progress-bar">
                             <div class="progress-fill" [style.width]="getProgressWidth()"
-                                [style.background-color]="currentPlan.planDetails?.colors?.primary"></div>
+                                [style.background-color]="currentPlan.planDetails.colors.primary"></div>
                         </div>
                         <div class="usage-details">
                             <span>{{ currentPlan.usage.remainingDays }} days remaining</span>
@@ -112,7 +112,7 @@
                             <div *ngFor="let feature of currentPlan.features" class="feature-item">
                                 <span class="feature-check" [class.included]="feature.included">
                                     <span *ngIf="feature.included" class="icon-check-small"
-                                        [style.background-color]="currentPlan.planDetails?.colors?.primary"></span>
+                                        [style.background-color]="currentPlan.planDetails.colors.primary"></span>
                                     <span *ngIf="!feature.included" class="icon-x-small"></span>
                                 </span>
                                 <span class="feature-name" [class.excluded]="!feature.included">{{ feature.name
