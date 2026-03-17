@@ -22,8 +22,34 @@
             @include tablet {
                 font-size: $font-size-xl;
             }
+
             @include mobile {
                 font-size: $font-size-lg;
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: $sp;
+
+            .plan-info {
+                cursor: pointer;
+
+                .plan-badge {
+                    background-color: $color-dark-blue;
+                    color: $color-white;
+                    padding: $sp-xs $sp;
+                    border-radius: $btn-border-radius-sm;
+                    font-size: $font-size-xs;
+                    font-weight: 600;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        opacity: 0.9;
+                        transform: translateY(-1px);
+                    }
+                }
             }
         }
     }
@@ -93,6 +119,7 @@
                 background-color: $status-pending;
                 color: $color-white;
             }
+
             &.done {
                 background-color: $status-approved;
                 color: $color-white;

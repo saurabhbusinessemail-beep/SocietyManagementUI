@@ -1,0 +1,205 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.history-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $sp-lg;
+
+    @include mobile {
+        padding: $sp;
+    }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $sp-xl;
+
+    h1 {
+        font-size: $page-header-desktop;
+        font-weight: 600;
+        color: $color-black;
+        margin: 0;
+    }
+}
+
+.login-message,
+.loading-state,
+.error-state,
+.empty-state {
+    text-align: center;
+    padding: $sp-xl;
+    background-color: $color-light-gray;
+    border-radius: $btn-border-radius-lg;
+
+    p {
+        margin-bottom: $sp;
+        color: $color-note-gray;
+    }
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid $color-light-gray;
+    border-top-color: $color-dark-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto $sp;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-lg;
+}
+
+.history-card {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-lg;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba($color-black, 0.1);
+
+    .card-header {
+        padding: $sp;
+        display: flex;
+        align-items: center;
+        gap: $sp;
+
+        .plan-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: $btn-border-radius-md;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .icon {
+                width: 20px;
+                height: 20px;
+                background-color: currentColor;
+            }
+        }
+
+        .plan-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            h3 {
+                font-size: $font-size-base;
+                font-weight: 600;
+                margin: 0;
+                color: $color-black;
+            }
+
+            .plan-status {
+                font-size: $font-size-xs;
+                font-weight: 600;
+                padding: $sp-xs $sp;
+                border-radius: $btn-border-radius-sm;
+
+                &.active {
+                    background-color: rgba($status-active, 0.1);
+                    color: $status-active;
+                }
+
+                &:not(.active) {
+                    background-color: rgba($status-inactive, 0.1);
+                    color: $status-inactive;
+                }
+            }
+        }
+    }
+
+    .card-body {
+        padding: $sp;
+    }
+}
+
+.plan-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $sp;
+    margin-bottom: $sp;
+    padding-bottom: $sp;
+    border-bottom: 1px solid $color-border;
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: $sp-xs;
+
+        .label {
+            font-size: $font-size-xs;
+            color: $color-help-text;
+            min-width: 60px;
+        }
+
+        .value {
+            font-size: $font-size-sm;
+            color: $color-black;
+            font-weight: 500;
+        }
+
+        .payment-status {
+            padding: $sp-xs $sp;
+            border-radius: $btn-border-radius-sm;
+            font-size: $font-size-xs;
+            font-weight: 600;
+
+            &.status-paid {
+                background-color: rgba($status-active, 0.1);
+                color: $status-active;
+            }
+
+            &.status-pending {
+                background-color: rgba($status-pending, 0.1);
+                color: $status-pending;
+            }
+
+            &.status-failed {
+                background-color: rgba($status-rejected, 0.1);
+                color: $status-rejected;
+            }
+        }
+    }
+}
+
+.feature-count {
+    font-size: $font-size-xs;
+    color: $color-dark-blue;
+    font-weight: 600;
+    margin-bottom: $sp;
+}
+
+.plan-notes {
+    background-color: $color-light-gray;
+    padding: $sp;
+    border-radius: $input-border-radius;
+    font-size: $font-size-xs;
+    color: $color-note-gray;
+    font-style: italic;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $sp;
+    margin-top: $sp-xl;
+
+    .page-info {
+        font-size: $font-size-sm;
+        color: $color-note-gray;
+    }
+}

@@ -1,0 +1,269 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.plan-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $sp-lg;
+
+    @include mobile {
+        padding: $sp;
+    }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $sp-xl;
+
+    h1 {
+        font-size: $page-header-desktop;
+        font-weight: 600;
+        color: $color-black;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: $sp;
+
+        @include mobile {
+            flex-direction: column;
+        }
+    }
+}
+
+.login-message {
+    text-align: center;
+    padding: $sp-xl;
+    background-color: $color-light-gray;
+    border-radius: $btn-border-radius-lg;
+
+    p {
+        margin-bottom: $sp;
+        color: $color-note-gray;
+    }
+}
+
+.loading-state,
+.error-state {
+    text-align: center;
+    padding: $sp-xl;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid $color-light-gray;
+    border-top-color: $color-dark-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto $sp;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.plan-content {
+    display: grid;
+    gap: $sp-lg;
+}
+
+.society-card {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-lg;
+    padding: $sp-lg;
+    box-shadow: 0 2px 4px rgba($color-black, 0.1);
+
+    h3 {
+        font-size: $font-size-base;
+        font-weight: 600;
+        margin-bottom: $sp;
+        color: $color-black;
+    }
+
+    .society-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: $sp;
+
+        p {
+            margin: 0;
+            font-size: $font-size-sm;
+            color: $color-note-gray;
+
+            strong {
+                color: $color-black;
+                margin-right: $sp-xs;
+            }
+        }
+    }
+}
+
+.plan-card {
+    background-color: $color-white;
+    border-radius: $btn-border-radius-lg;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba($color-black, 0.1);
+
+    .plan-header {
+        padding: $sp-lg;
+        display: flex;
+        align-items: center;
+        gap: $sp;
+
+        .plan-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: $btn-border-radius-md;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .icon {
+                width: 24px;
+                height: 24px;
+                background-color: currentColor;
+            }
+        }
+
+        .plan-title {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: $sp;
+
+            h2 {
+                font-size: $font-size-lg;
+                font-weight: 600;
+                margin: 0;
+                color: $color-black;
+            }
+
+            .plan-badge {
+                font-size: $font-size-xs;
+                font-weight: 700;
+                padding: $sp-xs $sp;
+                border-radius: $btn-border-radius-sm;
+                color: $color-white;
+            }
+        }
+    }
+
+    .plan-body {
+        padding: $sp-lg;
+    }
+
+    .price-info {
+        margin-bottom: $sp-lg;
+        padding-bottom: $sp-lg;
+        border-bottom: 1px solid $color-border;
+
+        .price {
+            font-size: $font-size-xl;
+            font-weight: 600;
+            color: $color-dark-blue;
+            margin-bottom: $sp-xs;
+        }
+
+        .billing {
+            font-size: $font-size-xs;
+            color: $color-help-text;
+        }
+    }
+}
+
+.usage-section {
+    margin-bottom: $sp-lg;
+    padding-bottom: $sp-lg;
+    border-bottom: 1px solid $color-border;
+
+    h3 {
+        font-size: $font-size-base;
+        font-weight: 600;
+        margin-bottom: $sp;
+        color: $color-black;
+    }
+
+    .progress-bar {
+        height: 8px;
+        background-color: $color-light-gray;
+        border-radius: $btn-border-radius-sm;
+        overflow: hidden;
+        margin-bottom: $sp-xs;
+
+        .progress-fill {
+            height: 100%;
+            background-color: $color-dark-blue;
+            transition: width 0.3s ease;
+        }
+    }
+
+    .usage-details {
+        display: flex;
+        justify-content: space-between;
+        font-size: $font-size-xs;
+        color: $color-help-text;
+    }
+}
+
+.features-section {
+    h3 {
+        font-size: $font-size-base;
+        font-weight: 600;
+        margin-bottom: $sp;
+        color: $color-black;
+    }
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $sp;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: $sp;
+    padding: $sp-xs 0;
+}
+
+.feature-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &.included {
+        background-color: rgba($status-active, 0.1);
+    }
+}
+
+.icon-check-small {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    background-color: $status-active;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.feature-name {
+    flex: 1;
+    font-size: $font-size-sm;
+    color: $color-black;
+}
+
+.feature-limit {
+    font-size: $font-size-xs;
+    color: $color-dark-blue;
+    font-weight: 600;
+}

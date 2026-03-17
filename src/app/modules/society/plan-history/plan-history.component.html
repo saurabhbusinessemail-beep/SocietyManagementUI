@@ -1,0 +1,105 @@
+<app-layout [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
+    <div class="history-container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>Plan History</h1>
+            <button class="btn btn-secondary" (click)="goToCurrentPlan()">Back to Current Plan</button>
+        </div>
+
+        <!-- Not Logged In -->
+        <div class="login-message" *ngIf="!myProfile">
+            <p>Please login to view plan history</p>
+            <button class="btn btn-primary" (click)="loginService.simpleLogin()">Login</button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="myProfile && isLoading">
+            <div class="spinner"></div>
+            <p>Loading plan history...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" *ngIf="myProfile && error && !isLoading">
+            <p>{{ error }}</p>
+            <button class="btn btn-primary" (click)="loadHistory()">Retry</button>
+        </div>
+
+        <!-- History List -->
+        <div class="history-content" *ngIf="myProfile && !isLoading && !error">
+            <div class="history-list" *ngIf="plans.length > 0">
+                <div *ngFor="let plan of plans" class="history-card">
+                    <div class="card-header"
+                        [style.background]="'linear-gradient(to right, ' + plan.planDetails?.colors?.gradientFrom + ', ' + plan.planDetails?.colors?.gradientTo + ')'">
+                        <div class="plan-icon" [style.background-color]="plan.planDetails?.colors?.light">
+                            <span class="icon" [ngClass]="'icon-' + plan.planDetails?.icon"
+                                [style.color]="plan.planDetails?.colors?.primary"></span>
+                        </div>
+                        <div class="plan-info">
+                            <h3>{{ plan.planName }}</h3>
+                            <span class="plan-status" [class.active]="plan.isActive">
+                                {{ plan.isActive ? 'Active' : 'Inactive' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="plan-meta">
+                            <div class="meta-item">
+                                <span class="label">Price:</span>
+                                <span class="value">₹{{ plan.price }}/flat</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Period:</span>
+                                <span class="value">{{ plan.period || 'Yearly' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Started:</span>
+                                <span class="value">{{ plan.startDate | date:'mediumDate' }}</span>
+                            </div>
+                            <div class="meta-item" *ngIf="plan.endDate">
+                                <span class="label">Ended:</span>
+                                <span class="value">{{ plan.endDate | date:'mediumDate' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Amount Paid:</span>
+                                <span class="value paid">₹{{ plan.totalAmount }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Payment:</span>
+                                <span class="value payment-status" [class]="getPaymentStatusClass(plan.paymentStatus)">
+                                    {{ plan.paymentStatus | titlecase }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="feature-count">
+                            Features: {{ plan.featureCount }}
+                        </div>
+
+                        <div class="plan-notes" *ngIf="plan.notes">
+                            <p>{{ plan.notes }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="plans.length === 0">
+                <p>No plan history found</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" *ngIf="pagination.pages > 1">
+                <button class="btn btn-secondary" [disabled]="currentPage === 1"
+                    (click)="onPageChange(currentPage - 1)">
+                    Previous
+                </button>
+                <span class="page-info">Page {{ currentPage }} of {{ pagination.pages }}</span>
+                <button class="btn btn-secondary" [disabled]="currentPage === pagination.pages"
+                    (click)="onPageChange(currentPage + 1)">
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+</app-layout>

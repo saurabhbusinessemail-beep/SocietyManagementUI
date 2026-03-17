@@ -14,6 +14,10 @@ const routes: Routes = [
     component: PricingListComponent
   },
   {
+    path: 'list/:societyId',
+    component: PricingListComponent
+  },
+  {
     path: 'checkout/:planId',
     component: PricingCheckoutComponent
   },

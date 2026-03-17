@@ -4,9 +4,14 @@
         <!-- Society Header with Edit Button -->
         <div class="society-header">
             <h2 class="society-name">{{ society?.societyName }}</h2>
-            <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
-                <app-icon name="edit"></app-icon>
-            </ui-button>
+            <div class="header-actions">
+                <div class="plan-info" *ngIf="currentPlan" (click)="gotoPlanEdit()">
+                    <span class="plan-badge">Plan: {{ currentPlan.planName }}</span>
+                </div>
+                <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
+                    <app-icon name="edit"></app-icon>
+                </ui-button>
+            </div>
         </div>
 
         <!-- Dashboard Grid -->

@@ -6,6 +6,7 @@ import { SocietyService } from '../../../services/society.service';
 import { take } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { ComplaintService } from '../../../services/complaint.service';
+import { PricingPlanService } from '../../../services/pricing-plan.service';
 
 @Component({
   selector: 'app-society-details',
@@ -15,7 +16,7 @@ import { ComplaintService } from '../../../services/complaint.service';
 export class SocietyDetailsComponent implements OnInit {
 
   society?: ISociety;
-  // flats: IFlat[] = [];
+  currentPlan?: any;
   parkings: IParking[] = [];
   complaints?: IComplaintStats;
   // features: ISocietyFeature[] = [];
@@ -59,7 +60,8 @@ export class SocietyDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private societyService: SocietyService,
     private loginService: LoginService,
-    private complaintService: ComplaintService
+    private complaintService: ComplaintService,
+    private planService: PricingPlanService
   ) { }
 
 
@@ -103,6 +105,7 @@ export class SocietyDetailsComponent implements OnInit {
           // this.loadFlats(this.society._id);
           this.loadComplaints(this.society._id);
           this.loadParkings(this.society._id);
+          this.loadCurrentPlan(this.society._id);
           // this.loadFeatures(this.society._id);
           // this.loadSecretaries(this.society._id);
         },
@@ -154,6 +157,21 @@ export class SocietyDetailsComponent implements OnInit {
           this.parkings = response.data;
         }
       })
+  }
+
+  loadCurrentPlan(societyId: string): void {
+    this.planService.getCurrentPlan(societyId).subscribe({
+      next: (response: any) => {
+        this.currentPlan = response;
+      },
+      error: (err) => {
+        console.log('No active plan found');
+      }
+    });
+  }
+
+  gotoPlanEdit(): void {
+    this.router.navigate(['society/current-plan', this.society?._id]);
   }
 
   gotoEditSociety() {

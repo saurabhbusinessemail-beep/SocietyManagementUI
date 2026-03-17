@@ -11,6 +11,8 @@ import { FlatListComponent } from './flat-list/flat-list.component';
 import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 import { SocietyAdminsComponent } from './society-admins/society-admins.component';
 import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
+import { CurrentPlanComponent } from './current-plan/current-plan.component';
+import { PlanHistoryComponent } from './plan-history/plan-history.component';
 
 const routes: Routes = [
   // Socities
@@ -46,6 +48,14 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     component: SocietyDetailsComponent,
     data: { permission: PERMISSIONS.society_view, checkSocietyId: true }
+  },
+  {
+    path: 'current-plan/:societyId',
+    component: CurrentPlanComponent
+  },
+  {
+    path: 'plan-history/:societyId',
+    component: PlanHistoryComponent
   },
 
   // Society Managers

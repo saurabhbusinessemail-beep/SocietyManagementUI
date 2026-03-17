@@ -1,0 +1,140 @@
+<app-layout [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
+    <div class="plan-container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>Current Plan</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" (click)="viewHistory()">View History</button>
+                <button class="btn btn-primary" (click)="changePlan()">Change Plan</button>
+            </div>
+        </div>
+
+        <!-- Not Logged In -->
+        <div class="login-message" *ngIf="!myProfile">
+            <p>Please login to view your current plan</p>
+            <button class="btn btn-primary" (click)="loginService.simpleLogin()">Login</button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="myProfile && isLoading">
+            <div class="spinner"></div>
+            <p>Loading plan details...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" *ngIf="myProfile && error && !isLoading">
+            <p>{{ error }}</p>
+            <button class="btn btn-primary" (click)="loadData()">Retry</button>
+        </div>
+
+        <!-- Plan Details -->
+        <div class="plan-content" *ngIf="myProfile && !isLoading && !error && currentPlan">
+            <!-- Society Info -->
+            <div class="society-card" *ngIf="societyDetails">
+                <h3>Society Information</h3>
+                <div class="society-details">
+                    <p><strong>Name:</strong> {{ societyDetails.societyName }}</p>
+                    <p><strong>Buildings:</strong> {{ societyDetails.numberOfBuildings }}</p>
+                    <p><strong>Flats:</strong> {{ societyDetails.numberOfFlats }}</p>
+                </div>
+            </div>
+
+            <!-- Plan Card -->
+            <div class="plan-card">
+                <!-- Plan Header with Colors from planDetails -->
+                <div class="plan-header" *ngIf="currentPlan.planDetails"
+                    [style.background]="'linear-gradient(to right, ' + currentPlan.planDetails.colors.gradientFrom + ', ' + currentPlan.planDetails.colors.gradientTo + ')'">
+                    <div class="plan-icon" [style.background-color]="currentPlan.planDetails.colors.light">
+                        <span class="icon" [ngClass]="'icon-' + currentPlan.planDetails.icon"
+                            [style.color]="currentPlan.planDetails.colors.primary"></span>
+                    </div>
+                    <div class="plan-title">
+                        <h2>{{ currentPlan.planName }} Plan</h2>
+                        <span class="plan-badge"
+                            *ngIf="currentPlan.planDetails.isPopular || currentPlan.planDetails.isBestValue"
+                            [style.background-color]="currentPlan.planDetails.colors.badgeBg || currentPlan.planDetails.colors.primary">
+                            {{ currentPlan.planDetails.isPopular ? 'POPULAR' : (currentPlan.planDetails.isBestValue ?
+                            'BEST VALUE' : '') }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Fallback header if planDetails not available -->
+                <div class="plan-header fallback" *ngIf="!currentPlan.planDetails">
+                    <div class="plan-title">
+                        <h2>{{ currentPlan.planName }} Plan</h2>
+                    </div>
+                </div>
+
+                <div class="plan-body">
+                    <!-- Price Info with Amount Paid -->
+                    <div class="price-info">
+                        <div class="price">₹{{ currentPlan.price }}/flat per month</div>
+                        <div class="billing">Billed {{ currentPlan.billingCycle }}</div>
+                        <div class="amount-paid">
+                            <span class="label">Amount Paid:</span>
+                            <span class="value paid">₹{{ currentPlan.totalAmount }}</span>
+                            <span class="payment-status" [class]="getPaymentStatusClass(currentPlan.paymentStatus)">
+                                {{ currentPlan.paymentStatus | titlecase }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Usage Progress -->
+                    <div class="usage-section">
+                        <h3>Plan Usage</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width]="getProgressWidth()"
+                                [style.background-color]="currentPlan.planDetails?.colors?.primary"></div>
+                        </div>
+                        <div class="usage-details">
+                            <span>{{ currentPlan.usage.remainingDays }} days remaining</span>
+                            <span>Started: {{ currentPlan.usage.startDate | date:'mediumDate' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="dates-section">
+                        <p><strong>Started:</strong> {{ currentPlan.startDate | date:'mediumDate' }}</p>
+                        <p><strong>Ends:</strong> {{ currentPlan.usage.endDate | date:'mediumDate' }}</p>
+                        <p><strong>Auto Renew:</strong> {{ currentPlan.autoRenew ? 'Yes' : 'No' }}</p>
+                    </div>
+
+                    <!-- Feature Count -->
+                    <div class="feature-count-badge">
+                        Features: {{ currentPlan.featureCount }}
+                    </div>
+
+                    <!-- Features -->
+                    <div class="features-section">
+                        <h3>Features</h3>
+                        <div class="features-grid">
+                            <div *ngFor="let feature of currentPlan.features" class="feature-item">
+                                <span class="feature-check" [class.included]="feature.included">
+                                    <span *ngIf="feature.included" class="icon-check-small"
+                                        [style.background-color]="currentPlan.planDetails?.colors?.primary"></span>
+                                    <span *ngIf="!feature.included" class="icon-x-small"></span>
+                                </span>
+                                <span class="feature-name" [class.excluded]="!feature.included">{{ feature.name
+                                    }}</span>
+                                <span class="feature-limit" *ngIf="feature.hasLimit">
+                                    {{ feature.currentUsage }}/{{ feature.limit }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Purchased By -->
+                    <div class="purchased-info" *ngIf="currentPlan.purchasedBy">
+                        <p><strong>Purchased By:</strong> {{ purchaseByName }}</p>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="plan-notes" *ngIf="currentPlan.notes">
+                        <p>{{ currentPlan.notes }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-layout>

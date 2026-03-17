@@ -18,6 +18,8 @@ import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 import { MatDialogContent } from "@angular/material/dialog";
 import { SocietyAdminsComponent } from './society-admins/society-admins.component';
 import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
+import { CurrentPlanComponent } from './current-plan/current-plan.component';
+import { PlanHistoryComponent } from './plan-history/plan-history.component';
 
 
 
@@ -31,7 +33,9 @@ import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pe
     FlatListComponent,
     ParkingsListComponent,
     SocietyAdminsComponent,
-    PendingSocietyApprovalsComponent
+    PendingSocietyApprovalsComponent,
+    CurrentPlanComponent,
+    PlanHistoryComponent
   ],
   imports: [
     CommonModule,

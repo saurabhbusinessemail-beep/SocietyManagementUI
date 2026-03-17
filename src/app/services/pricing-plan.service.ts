@@ -12,7 +12,7 @@ export class PricingPlanService {
 
     plans: IPricingPlan[] = [
         {
-            _id: 'basic',
+            id: 'basic',
             name: 'Basic',
             icon: 'building2',
             price: 'Free',
@@ -47,7 +47,7 @@ export class PricingPlanService {
             ]
         },
         {
-            _id: 'silver',
+            id: 'silver',
             name: 'Silver',
             icon: 'star',
             price: '10',
@@ -84,7 +84,7 @@ export class PricingPlanService {
             ]
         },
         {
-            _id: 'gold',
+            id: 'gold',
             name: 'Gold',
             icon: 'zap',
             price: '20',
@@ -124,7 +124,7 @@ export class PricingPlanService {
             ]
         },
         {
-            _id: 'platinum',
+            id: 'platinum',
             name: 'Platinum',
             icon: 'award',
             price: '30',
@@ -161,7 +161,7 @@ export class PricingPlanService {
             ]
         },
         {
-            _id: 'diamond',
+            id: 'diamond',
             name: 'Diamond',
             icon: 'gem',
             price: '40',
@@ -223,5 +223,24 @@ export class PricingPlanService {
      */
     getCurrentPlan(societyId: string): Observable<ISocietyPlan> {
         return this.http.get<ISocietyPlan>(`${this.baseUrl}/current-plan/${societyId}`);
+    }
+
+    getPlanHistory(societyId: string, page: number = 1, limit: number = 10): Observable<any> {
+        return this.http.get(`${this.baseUrl}/history/${societyId}`, {
+            params: { page: page.toString(), limit: limit.toString() }
+        });
+    }
+
+    calculateChangePrice(societyId: string, newPlanId: string): Observable<any> {
+        return this.http.post(`${this.baseUrl}/calculate-change`, { societyId, newPlanId });
+    }
+
+    changePlan(societyId: string, newPlanId: string, billingCycle: string = 'yearly', paymentMethod?: string, paymentDetails?: any): Observable<any> {
+        return this.http.post(`${this.baseUrl}/change/${societyId}`, {
+            newPlanId,
+            billingCycle,
+            paymentMethod,
+            paymentDetails
+        });
     }
 }

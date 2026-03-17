@@ -16,6 +16,7 @@ import { take } from 'rxjs';
 export class PricingCheckoutComponent implements OnInit {
   currentStep: number = 1;
   societyId: string = '';
+  paramHasSocietyId = false;
   societyDetails?: ISociety;
   selectedPlan?: IPricingPlan;
   couponCode: string = '';
@@ -70,10 +71,11 @@ export class PricingCheckoutComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.societyId = params['societyId'];
       if (this.societyId) {
+        this.paramHasSocietyId = true;
         this.loadSociety(this.societyId);
       }
 
-      this.selectedPlan = this.pricingPlanService.plans.find(p => p._id === params['planId']);
+      this.selectedPlan = this.pricingPlanService.plans.find(p => p.id === params['planId']);
       if (this.selectedPlan) this.calculatePrice();
       else this.router.navigate(['/']);
     });
@@ -81,14 +83,14 @@ export class PricingCheckoutComponent implements OnInit {
 
   triggerLogin() {
     this.loginService.loginAndReturn()
-    .pipe(take(1))
-    .subscribe({
-      next: response => {
-        setTimeout(() => {
-          this.myProfile = this.loginService.getProfileFromStorage();
-        }, 300);
-      }
-    })
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          setTimeout(() => {
+            this.myProfile = this.loginService.getProfileFromStorage();
+          }, 300);
+        }
+      })
   }
 
   loadSociety(societyId: string) {
@@ -197,7 +199,7 @@ export class PricingCheckoutComponent implements OnInit {
 
       this.pricingPlanService.purchasePlan(
         this.societyId,
-        this.selectedPlan._id,
+        this.selectedPlan.id,
         'yearly' // Always yearly as per your requirement
       ).subscribe({
         next: (plan) => {
@@ -288,6 +290,10 @@ export class PricingCheckoutComponent implements OnInit {
   }
 
   cancel() {
+    if (this.societyId && this.paramHasSocietyId) {
+      this.router.navigate(['society', this.societyId, 'details'])
+      return;
+    }
     this.location.back();
   }
 }

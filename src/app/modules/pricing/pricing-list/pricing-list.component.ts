@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IPricingPlan } from '../../../interfaces';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../../../services/login.service';
 
 @Component({
@@ -8,12 +8,26 @@ import { LoginService } from '../../../services/login.service';
   templateUrl: './pricing-list.component.html',
   styleUrl: './pricing-list.component.scss'
 })
-export class PricingListComponent {
+export class PricingListComponent implements OnInit {
 
-  constructor(private router: Router, public loginService: LoginService) { }
+  societyId: string = '';
+
+  constructor(
+    private router: Router,
+    public loginService: LoginService,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.societyId = params['societyId'];
+    });
+  }
 
   gotoPricingPlanCheckout(plan: IPricingPlan) {
-    // const societyId = 'abcd699055620c4bd294ac82c4bc';
-    this.router.navigate(['pricing-plan/checkout', plan._id]);
+    if (!this.societyId)
+      this.router.navigate(['pricing-plan/checkout', plan.id]);
+    else
+      this.router.navigate(['pricing-plan/checkout', plan.id, this.societyId]);
   }
 }

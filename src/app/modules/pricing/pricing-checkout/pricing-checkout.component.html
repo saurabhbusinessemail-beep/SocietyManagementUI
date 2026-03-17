@@ -44,7 +44,7 @@
                                 <button class="btn-link" (click)="getSociety()" *ngIf="!societyDetails">
                                     Select Society
                                 </button>
-                                <button class="btn-link" (click)="getSociety()" *ngIf="societyDetails">
+                                <button class="btn-link" (click)="getSociety()" *ngIf="societyDetails && !paramHasSocietyId">
                                     Change Society
                                 </button>
                             </ng-container>

@@ -73,11 +73,11 @@
 
         <!-- Mobile Accordion (below lg) -->
         <div class="pricing-accordion-mobile">
-            <div *ngFor="let plan of pricingPlanService.plans" class="accordion-item" [class.expanded]="isExpanded(plan._id)"
+            <div *ngFor="let plan of pricingPlanService.plans" class="accordion-item" [class.expanded]="isExpanded(plan.id)"
                 [style.border-color]="plan.colors.border">
-                <button class="accordion-trigger" [class.expanded]="isExpanded(plan._id)"
-                    [style.background]="isExpanded(plan._id) ? 'linear-gradient(to right, ' + plan.colors.gradientFrom + ', ' + plan.colors.gradientTo + ')' : 'white'"
-                    (click)="togglePlan(plan._id)">
+                <button class="accordion-trigger" [class.expanded]="isExpanded(plan.id)"
+                    [style.background]="isExpanded(plan.id) ? 'linear-gradient(to right, ' + plan.colors.gradientFrom + ', ' + plan.colors.gradientTo + ')' : 'white'"
+                    (click)="togglePlan(plan.id)">
                     <span class="accordion-indicator" [style.background-color]="plan.colors.primary"></span>
                     <div class="icon-wrapper small" [style.background-color]="plan.colors.light">
                         <span class="icon small" [ngClass]="'icon-' + plan.icon"
@@ -90,7 +90,7 @@
                                 [style.color]="'white'">{{ plan.badge }}</span>
                         </div>
                         <div class="accordion-price">
-                            <ng-container *ngIf="plan.price !== 'Free' && isExpanded(plan._id)">
+                            <ng-container *ngIf="plan.price !== 'Free' && isExpanded(plan.id)">
                                 <span class="price-symbol-small" [style.color]="plan.colors.primary">{{ plan.priceSuffix
                                     }}</span>
                                 <span class="price-amount-small" [style.color]="plan.colors.primary">
@@ -106,11 +106,11 @@
                     <span class="feature-count" [style.background-color]="plan.colors.light"
                         [style.color]="plan.colors.primary">{{ getIncludedCount(plan) }}</span>
                     <span class="icon-chevron-down" [style.background-color]="plan.colors.primary"
-                        [class.rotated]="isExpanded(plan._id)"></span>
+                        [class.rotated]="isExpanded(plan.id)"></span>
                 </button>
 
                 <!-- Expanded Content -->
-                <div class="accordion-content" *ngIf="isExpanded(plan._id)"
+                <div class="accordion-content" *ngIf="isExpanded(plan.id)"
                     [style.border-top-color]="plan.colors.border">
                     <div class="accordion-content-inner">
                         <div class="features-grid">
