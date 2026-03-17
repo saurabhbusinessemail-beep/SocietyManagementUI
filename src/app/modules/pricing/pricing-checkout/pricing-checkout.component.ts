@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
+import { IChangePlanCalculation, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
@@ -30,6 +30,12 @@ export class PricingCheckoutComponent implements OnInit {
   myProfile?: IMyProfile;
   showSocietySelectModal = false;
   tentativeTotalPrice: number = 0;
+
+  // Change plan related properties
+  isChangePlan = false;
+  currentPlanDetails?: any;
+  changePlanCalculation?: IChangePlanCalculation;
+  showChangePlanSummary = false;
 
   // Payment methods
   paymentMethods = [
@@ -67,17 +73,60 @@ export class PricingCheckoutComponent implements OnInit {
   ngOnInit(): void {
     // Get My Profile
     this.myProfile = this.loginService.getProfileFromStorage();
+
     // Get societyId and plan from route/state
     this.route.params.subscribe(params => {
       this.societyId = params['societyId'];
       if (this.societyId) {
         this.paramHasSocietyId = true;
         this.loadSociety(this.societyId);
+
+        // Check if this is a change plan by looking for current plan
+        this.checkForCurrentPlan();
       }
 
       this.selectedPlan = this.pricingPlanService.plans.find(p => p.id === params['planId']);
       if (this.selectedPlan) this.calculatePrice();
       else this.router.navigate(['/']);
+    });
+  }
+
+  checkForCurrentPlan(): void {
+    this.pricingPlanService.getCurrentPlan(this.societyId).subscribe({
+      next: response => {
+        if (response) {
+          this.currentPlanDetails = response;
+
+          // Check if current plan is Basic/Free
+          const isCurrentPlanFree = this.currentPlanDetails.price === 'Free' ||
+            this.currentPlanDetails.planName === 'Basic';
+
+          // If current plan is not free, this is a change plan
+          if (!isCurrentPlanFree) {
+            this.isChangePlan = true;
+            this.calculateChangePrice();
+          }
+        }
+      },
+      error: (err) => {
+        // No current plan found - this is a new purchase
+        console.log('No current plan found - new purchase');
+      }
+    });
+  }
+
+  calculateChangePrice(): void {
+    if (!this.selectedPlan || !this.societyId) return;
+
+    this.pricingPlanService.calculateChangePrice(this.societyId, this.selectedPlan.id).subscribe({
+      next: response => {
+        this.changePlanCalculation = response;
+        this.totalPrice = this.changePlanCalculation?.calculation?.amountToPay ?? 0;
+        this.showChangePlanSummary = true;
+      },
+      error: (err) => {
+        console.error('Error calculating change price:', err);
+      }
     });
   }
 
@@ -100,6 +149,9 @@ export class PricingCheckoutComponent implements OnInit {
         this.societyDetails = society;
         this.societyLoading = false;
         this.calculatePrice();
+
+        // After society loads, check for current plan again
+        this.checkForCurrentPlan();
       },
       error: (error) => {
         this.societyLoading = false;
@@ -197,23 +249,43 @@ export class PricingCheckoutComponent implements OnInit {
 
       this.isProcessing = true;
 
-      this.pricingPlanService.purchasePlan(
-        this.societyId,
-        this.selectedPlan.id,
-        'yearly' // Always yearly as per your requirement
-      ).subscribe({
-        next: (plan) => {
-          this.societyPlan = plan;
-          this.purchaseComplete = true;
-          this.isProcessing = false;
-          // Optionally redirect to success page
-        },
-        error: (error) => {
-          console.error('Purchase failed:', error);
-          this.isProcessing = false;
-          // Show error message
-        }
-      });
+      if (this.isChangePlan && this.changePlanCalculation) {
+        // Use change plan API
+        this.pricingPlanService.changePlan(
+          this.societyId,
+          this.selectedPlan.id,
+          'yearly',
+          this.selectedPaymentMethod,
+          { upiId: this.upiForm.get('upiId')?.value }
+        ).subscribe({
+          next: (plan) => {
+            this.societyPlan = plan;
+            this.purchaseComplete = true;
+            this.isProcessing = false;
+          },
+          error: (error) => {
+            console.error('Change plan failed:', error);
+            this.isProcessing = false;
+          }
+        });
+      } else {
+        // Use new purchase API
+        this.pricingPlanService.purchasePlan(
+          this.societyId,
+          this.selectedPlan.id,
+          'yearly'
+        ).subscribe({
+          next: (plan) => {
+            this.societyPlan = plan;
+            this.purchaseComplete = true;
+            this.isProcessing = false;
+          },
+          error: (error) => {
+            console.error('Purchase failed:', error);
+            this.isProcessing = false;
+          }
+        });
+      }
 
     } catch (err) {
       console.log('Error ', err);
@@ -229,7 +301,6 @@ export class PricingCheckoutComponent implements OnInit {
 
   onSocietySelected(society: ISociety): void {
     this.societyId = society._id;
-    // this.societyDetails = society;
     this.calculatePrice();
   }
 
@@ -265,7 +336,7 @@ export class PricingCheckoutComponent implements OnInit {
   }
 
   changePlan() {
-    this.router.navigateByUrl('/pricing-plan/list')
+    this.router.navigate(['pricing-plan/list', this.societyId])
   }
 
   getLoggedIn() {

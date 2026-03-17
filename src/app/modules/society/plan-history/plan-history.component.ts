@@ -12,7 +12,7 @@ import { IMyProfile, IPlanHistoryItem } from '../../../interfaces';
 export class PlanHistoryComponent implements OnInit {
   societyId: string = '';
   plans: IPlanHistoryItem[] = [];
-  pagination: any = {};
+  pagination: { pages: number } = { pages: 1 };
   isLoading = true;
   error: string | null = null;
   myProfile?: IMyProfile;
@@ -40,9 +40,11 @@ export class PlanHistoryComponent implements OnInit {
     this.currentPage = page;
 
     this.planService.getPlanHistory(this.societyId, page, this.limit).subscribe({
-      next: (response: any) => {
-        this.plans = response.data.plans;
-        this.pagination = response.data.pagination;
+      next: response => {
+        this.plans = response.data ?? [];
+        this.pagination = {
+          pages: Math.ceil(response.total / this.limit)
+        };
         this.isLoading = false;
       },
       error: (err) => {

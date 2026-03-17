@@ -44,7 +44,8 @@
                                 <button class="btn-link" (click)="getSociety()" *ngIf="!societyDetails">
                                     Select Society
                                 </button>
-                                <button class="btn-link" (click)="getSociety()" *ngIf="societyDetails && !paramHasSocietyId">
+                                <button class="btn-link" (click)="getSociety()"
+                                    *ngIf="societyDetails && !paramHasSocietyId">
                                     Change Society
                                 </button>
                             </ng-container>
@@ -93,6 +94,44 @@
                         </div>
                     </div>
 
+                    <!-- Change Plan Summary -->
+                    <div class="summary-section change-plan-summary" *ngIf="isChangePlan && changePlanCalculation">
+                        <h3>Plan Change Summary</h3>
+                        <div class="change-plan-details">
+                            <div class="plan-comparison">
+                                <div class="current-plan">
+                                    <span class="label">Current Plan:</span>
+                                    <span class="value">{{ changePlanCalculation.currentPlan.name }}</span>
+                                    <span class="sub-value">(₹{{ changePlanCalculation.currentPlan.price }}/flat)</span>
+                                </div>
+                                <div class="arrow">→</div>
+                                <div class="new-plan">
+                                    <span class="label">New Plan:</span>
+                                    <span class="value">{{ changePlanCalculation.newPlan.name }}</span>
+                                    <span class="sub-value">(₹{{ changePlanCalculation.newPlan.price }}/flat)</span>
+                                </div>
+                            </div>
+
+                            <div class="calculation-details">
+                                <div class="detail-row">
+                                    <span>Remaining value from current plan:</span>
+                                    <span>₹{{ changePlanCalculation.calculation.remainingValue | number:'1.2-2' }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>New plan value:</span>
+                                    <span>₹{{ changePlanCalculation.calculation.newPlanValue | number:'1.2-2' }}</span>
+                                </div>
+                                <div class="detail-row total">
+                                    <span>{{ changePlanCalculation.calculation.paymentReason }}</span>
+                                    <span class="amount"
+                                        [class.zero]="changePlanCalculation.calculation.amountToPay === 0">
+                                        ₹{{ changePlanCalculation.calculation.amountToPay | number:'1.2-2' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Included Features -->
                     <div class="summary-section" *ngIf="selectedPlan">
                         <h3>Included Features</h3>
@@ -129,9 +168,9 @@
                         <div class="price-row">
                             <span>Total (Full Year)</span>
                             <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
-                            <span class="original-price" *ngIf="isCouponApplied">₹{{ originalPrice }}</span>
+                            <span class="original-price" *ngIf="isCouponApplied">₹{{ (changePlanCalculation?.calculation?.amountToPay ?? originalPrice) | number:'1.2-2' }}</span>
                             <span class="final-price" [class.discounted]="isCouponApplied">
-                                ₹{{ societyDetails ? totalPrice : tentativeTotalPrice }}
+                                ₹{{ (societyDetails ? totalPrice : tentativeTotalPrice) | number:'1.2-2' }}
                             </span>
                         </div>
                         <p class="price-note" *ngIf="!societyDetails">

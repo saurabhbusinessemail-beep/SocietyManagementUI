@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IPricingPlan, ISocietyPlan } from '../interfaces';
+import { IChangePlanCalculation, ICurrentPlanResponse, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -221,18 +221,18 @@ export class PricingPlanService {
      * Get society's current active plan
      * @param societyId - Society ID
      */
-    getCurrentPlan(societyId: string): Observable<ISocietyPlan> {
-        return this.http.get<ISocietyPlan>(`${this.baseUrl}/current-plan/${societyId}`);
+    getCurrentPlan(societyId: string): Observable<ICurrentPlanResponse> {
+        return this.http.get<ICurrentPlanResponse>(`${this.baseUrl}/current-plan/${societyId}`);
     }
 
-    getPlanHistory(societyId: string, page: number = 1, limit: number = 10): Observable<any> {
-        return this.http.get(`${this.baseUrl}/history/${societyId}`, {
+    getPlanHistory(societyId: string, page: number = 1, limit: number = 10): Observable<IPagedResponse<IPlanHistoryItem>> {
+        return this.http.get<IPagedResponse<IPlanHistoryItem>>(`${this.baseUrl}/history/${societyId}`, {
             params: { page: page.toString(), limit: limit.toString() }
         });
     }
 
-    calculateChangePrice(societyId: string, newPlanId: string): Observable<any> {
-        return this.http.post(`${this.baseUrl}/calculate-change`, { societyId, newPlanId });
+    calculateChangePrice(societyId: string, newPlanId: string): Observable<IChangePlanCalculation> {
+        return this.http.post<IChangePlanCalculation>(`${this.baseUrl}/calculate-change`, { societyId, newPlanId });
     }
 
     changePlan(societyId: string, newPlanId: string, billingCycle: string = 'yearly', paymentMethod?: string, paymentDetails?: any): Observable<any> {

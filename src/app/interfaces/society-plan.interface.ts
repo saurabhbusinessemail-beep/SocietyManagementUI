@@ -89,3 +89,33 @@ export interface IPlanHistoryItem extends ISocietyPlan {
         };
     };
 }
+
+export interface IChangePlanCalculation {
+  currentPlan: {
+    id: string;
+    name: string;
+    price: string;
+    value: number;
+    startDate: string;
+    daysUsed: number;
+    usedValue: number;
+    remainingValue: number;
+  };
+  newPlan: {
+    id: string;
+    name: string;
+    price: string;
+    value: number;
+  };
+  flatCount: number;
+  calculation: {
+    amountToPay: number;
+    paymentReason: string;
+    isOlderThanOneMonth: boolean;
+    daysUsed: number;
+    totalDays: number;
+    usedValue: number;
+    remainingValue: number;
+    newPlanValue: number;
+  };
+}
