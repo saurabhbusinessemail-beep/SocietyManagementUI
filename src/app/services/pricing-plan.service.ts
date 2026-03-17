@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IChangePlanCalculation, ICurrentPlanResponse, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan } from '../interfaces';
+import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
     providedIn: 'root'
@@ -206,10 +207,17 @@ export class PricingPlanService {
 
     /**
      * Purchase a plan for a society
-     * @param societyId - Society ID
-     * @param planId - Plan ID to purchase
-     * @param billingCycle - 'monthly' or 'yearly' (default: 'yearly')
+     * Invalidate current plan and history caches
      */
+    @InvalidateCache({
+        methods: [
+            'PricingPlanService.getCurrentPlan*',
+            'PricingPlanService.getPlanHistory*'
+        ],
+        matchParams: true,
+        paramIndices: [0], // Invalidate based on societyId
+        groups: ['pricing-plans']
+    })
     purchasePlan(societyId: string, planId: string, billingCycle: 'monthly' | 'yearly' = 'yearly', couponCode?: string): Observable<ISocietyPlan> {
         const payload: any = { planId, billingCycle };
         if (couponCode) {
@@ -223,12 +231,30 @@ export class PricingPlanService {
 
     /**
      * Get society's current active plan
-     * @param societyId - Society ID
+     * Cache current plan for 5 minutes
      */
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0],
+        group: 'pricing-plans'
+    })
     getCurrentPlan(societyId: string): Observable<ICurrentPlanResponse> {
         return this.http.get<ICurrentPlanResponse>(`${this.baseUrl}/current-plan/${societyId}`);
     }
 
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0, 1, 2],
+        paramKeys: {
+            1: ['page'],
+            2: ['limit']
+        },
+        group: 'pricing-plans',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [societyId, page = 1, limit = 10] = args;
+            return `${methodName}_${societyId}_page${page}_limit${limit}`;
+        }
+    })
     getPlanHistory(societyId: string, page: number = 1, limit: number = 10): Observable<IPagedResponse<IPlanHistoryItem>> {
         return this.http.get<IPagedResponse<IPlanHistoryItem>>(`${this.baseUrl}/history/${societyId}`, {
             params: { page: page.toString(), limit: limit.toString() }
@@ -243,6 +269,15 @@ export class PricingPlanService {
         return this.http.post<IChangePlanCalculation>(`${this.baseUrl}/calculate-change`, payload);
     }
 
+    @InvalidateCache({
+        methods: [
+            'PricingPlanService.getCurrentPlan*',
+            'PricingPlanService.getPlanHistory*'
+        ],
+        matchParams: true,
+        paramIndices: [0], // Invalidate based on societyId
+        groups: ['pricing-plans']
+    })
     changePlan(societyId: string, newPlanId: string, billingCycle: string = 'yearly', paymentMethod?: string, paymentDetails?: any, couponCode?: string): Observable<any> {
         const payload: any = {
             newPlanId,
@@ -256,6 +291,19 @@ export class PricingPlanService {
         return this.http.post(`${this.baseUrl}/change/${societyId}`, payload);
     }
 
+    /**
+     * Validate coupon code
+     * Cache coupon validation for 1 hour (coupons don't change often)
+     */
+    @Cacheable({
+        // ttl: 3600000, // 1 hour
+        paramIndices: [0, 1],
+        paramKeys: {
+            0: ['couponCode'],
+            1: ['amount']
+        },
+        group: 'pricing-plans'
+    })
     validateCoupon(couponCode: string, amount: number): Observable<any> {
         return this.http.post(`${this.baseUrl}/validate-coupon`, { couponCode, amount });
     }

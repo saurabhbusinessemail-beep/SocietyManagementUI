@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IBEResponseFormat, IDemoBooking, IDemoBookingFilters, IPagedResponse, ITimeSlotAvailability } from '../interfaces';
 import { Observable } from 'rxjs';
+import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,38 +15,78 @@ export class DemoService {
 
   /**
    * Create a new demo booking
-   * @param bookingData - The booking data (Partial IDemoBooking)
-   * @returns Observable with IBEResponseFormat containing the created booking
+   * Invalidate all demo lists and dashboard stats when adding a new booking
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*',
+      'DemoService.getStatusStats*',
+      'DemoService.getSourceStats*',
+      'DemoService.getBookingsByDateRange*'
+    ],
+    groups: ['demos']
+  })
   bookDemo(bookingData: Partial<IDemoBooking>): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(this.apiUrl, bookingData);
   }
 
   /**
    * Get booking by ID
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing the booking
+   * Cache individual booking for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    paramIndices: [0],
+    group: 'demos'
+  })
   getBookingById(id: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.get<IBEResponseFormat<IDemoBooking>>(`${this.apiUrl}/${id}`);
   }
 
   /**
    * Get booking by reference number
-   * @param reference - Booking reference (e.g., DEMO-240315-1234)
-   * @returns Observable with IBEResponseFormat containing the booking
+   * Cache individual booking for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    paramIndices: [0],
+    group: 'demos'
+  })
   getBookingByReference(reference: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.get<IBEResponseFormat<IDemoBooking>>(`${this.apiUrl}/reference/${reference}`);
   }
 
   /**
    * Get all bookings with pagination and filters
-   * @param filters - Filter criteria (status, source, date range, search)
-   * @param page - Page number
-   * @param limit - Items per page
-   * @returns Observable with IPagedResponse containing bookings array
+   * Cache based on filters and pagination parameters
    */
+  @Cacheable({
+    // ttl: 60000, // 1 minute (shorter TTL for list views)
+    paramIndices: [0, 1, 2],
+    paramKeys: {
+      0: ['status', 'source', 'startDate', 'endDate', 'search'], // Extract specific filter keys
+      1: ['page'], // Extract page
+      2: ['limit'] // Extract limit
+    },
+    group: 'demos',
+    keyGenerator: (methodName: string, args: any[]) => {
+      const [filters = {}, page = 1, limit = 10] = args;
+      // Create a deterministic key based on all filter values
+      const filterKey = JSON.stringify({
+        status: filters.status,
+        source: filters.source,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        search: filters.search,
+        page,
+        limit
+      });
+      return `${methodName}_${filterKey}`;
+    }
+  })
   getAllBookings(
     filters: IDemoBookingFilters = {},
     page: number = 1,
@@ -67,10 +108,17 @@ export class DemoService {
 
   /**
    * Check available time slots for a specific date
-   * @param date - Date to check (YYYY-MM-DD)
-   * @param maxPerSlot - Optional max bookings per slot
-   * @returns Observable with IBEResponseFormat containing slot availability
+   * Cache slot availability for 30 seconds (frequently changing)
    */
+  @Cacheable({
+    // ttl: 30000, // 30 seconds
+    paramIndices: [0, 1],
+    paramKeys: {
+      0: ['date'],
+      1: ['maxPerSlot']
+    },
+    group: 'demos'
+  })
   checkSlotAvailability(
     date: string,
     maxPerSlot?: number
@@ -88,10 +136,23 @@ export class DemoService {
 
   /**
    * Update an existing booking
-   * @param id - Booking ID
-   * @param updateData - Data to update
-   * @returns Observable with IBEResponseFormat containing updated booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getBookingByReference',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*',
+      'DemoService.getBookingsByDateRange*',
+      'DemoService.getBookingTimeline*'
+    ],
+    matchParams: true,
+    paramIndices: [0], // Use ID for matching
+    groups: ['demos']
+  })
   updateBooking(
     id: string,
     updateData: Partial<IDemoBooking>
@@ -101,12 +162,23 @@ export class DemoService {
 
   /**
    * Reschedule a demo
-   * @param id - Booking ID
-   * @param newDate - New preferred date
-   * @param newTime - New preferred time
-   * @param reason - Reason for rescheduling
-   * @returns Observable with IBEResponseFormat containing updated booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*',
+      'DemoService.getBookingsByDateRange*',
+      'DemoService.getAvailabilityCalendar*',
+      'DemoService.checkSlotAvailability*',
+      'DemoService.checkTimeSlotAvailability*'
+    ],
+    matchParams: true,
+    paramIndices: [0], // Use ID for matching
+    groups: ['demos']
+  })
   rescheduleDemo(
     id: string,
     newDate: string,
@@ -121,11 +193,21 @@ export class DemoService {
 
   /**
    * Complete a demo
-   * @param id - Booking ID
-   * @param feedback - Optional feedback from customer
-   * @param rating - Optional rating (1-5)
-   * @returns Observable with IBEResponseFormat containing completed booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   completeDemo(
     id: string,
     feedback?: string,
@@ -139,10 +221,21 @@ export class DemoService {
 
   /**
    * Cancel a demo
-   * @param id - Booking ID
-   * @param reason - Reason for cancellation
-   * @returns Observable with IBEResponseFormat containing cancelled booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   cancelDemo(
     id: string,
     reason?: string
@@ -155,9 +248,19 @@ export class DemoService {
 
   /**
    * Mark a booking as converted to customer
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing updated booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   markAsConverted(id: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(
       `${this.apiUrl}/${id}/convert`,
@@ -167,10 +270,17 @@ export class DemoService {
 
   /**
    * Add a follow-up note to a booking
-   * @param id - Booking ID
-   * @param note - Follow-up note text
-   * @returns Observable with IBEResponseFormat containing updated booking
+   * Invalidate specific booking and timeline
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getBookingTimeline*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   addFollowUpNote(id: string, note: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(
       `${this.apiUrl}/${id}/notes`,
@@ -180,10 +290,19 @@ export class DemoService {
 
   /**
    * Assign a booking to a team member
-   * @param id - Booking ID
-   * @param userId - User ID to assign to
-   * @returns Observable with IBEResponseFormat containing updated booking
+   * Invalidate specific booking and lists
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   assignTo(id: string, userId: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(
       `${this.apiUrl}/${id}/assign`,
@@ -193,19 +312,30 @@ export class DemoService {
 
   /**
    * Get dashboard statistics
-   * @returns Observable with IBEResponseFormat containing stats
+   * Cache stats for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    group: 'demos'
+  })
   getDashboardStats(): Observable<IBEResponseFormat<any>> {
     return this.http.get<IBEResponseFormat<any>>(`${this.apiUrl}/dashboard/stats`);
   }
 
   /**
    * Get bookings by date range
-   * @param startDate - Start date (YYYY-MM-DD)
-   * @param endDate - End date (YYYY-MM-DD)
-   * @param status - Optional status filter
-   * @returns Observable with IBEResponseFormat containing bookings array
+   * Cache based on date range and status
    */
+  @Cacheable({
+    // ttl: 60000, // 1 minute
+    paramIndices: [0, 1, 2],
+    paramKeys: {
+      0: ['startDate'],
+      1: ['endDate'],
+      2: ['status']
+    },
+    group: 'demos'
+  })
   getBookingsByDateRange(
     startDate: string,
     endDate: string,
@@ -224,27 +354,59 @@ export class DemoService {
 
   /**
    * Delete a single booking
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing success status
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*',
+      'DemoService.getBookingsByDateRange*',
+      'DemoService.getStatusStats*',
+      'DemoService.getSourceStats*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   deleteBooking(id: string): Observable<IBEResponseFormat<any>> {
     return this.http.delete<IBEResponseFormat<any>>(`${this.apiUrl}/${id}`);
   }
 
   /**
    * Bulk delete multiple bookings
-   * @param ids - Array of booking IDs to delete
-   * @returns Observable with IBEResponseFormat containing deleted count
+   * Invalidate all demo caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*',
+      'DemoService.getBookingsByDateRange*',
+      'DemoService.getStatusStats*',
+      'DemoService.getSourceStats*'
+    ],
+    groups: ['demos']
+  })
   bulkDeleteBookings(ids: string[]): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(`${this.apiUrl}/bulk-delete`, { ids });
   }
 
   /**
    * Export bookings to CSV/Excel
-   * @param filters - Optional filters to apply before export
-   * @returns Observable with blob data for file download
+   * Cache exports for 10 minutes (exports don't change frequently)
    */
+  @Cacheable({
+    // ttl: 600000, // 10 minutes
+    paramIndices: [0],
+    paramKeys: {
+      0: ['status', 'source', 'startDate', 'endDate']
+    },
+    group: 'demos'
+  })
   exportBookings(filters?: IDemoBookingFilters): Observable<Blob> {
     let params = new HttpParams();
 
@@ -264,25 +426,37 @@ export class DemoService {
 
   /**
    * Get booking statistics by status
-   * @returns Observable with IBEResponseFormat containing status counts
+   * Cache stats for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    group: 'demos'
+  })
   getStatusStats(): Observable<IBEResponseFormat<any>> {
     return this.http.get<IBEResponseFormat<any>>(`${this.apiUrl}/stats/status`);
   }
 
   /**
    * Get booking statistics by source
-   * @returns Observable with IBEResponseFormat containing source counts
+   * Cache stats for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    group: 'demos'
+  })
   getSourceStats(): Observable<IBEResponseFormat<any>> {
     return this.http.get<IBEResponseFormat<any>>(`${this.apiUrl}/stats/source`);
   }
 
   /**
    * Get upcoming demos for the next X days
-   * @param days - Number of days to look ahead
-   * @returns Observable with IBEResponseFormat containing upcoming bookings
+   * Cache upcoming demos for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    paramIndices: [0],
+    group: 'demos'
+  })
   getUpcomingDemos(days: number = 7): Observable<IBEResponseFormat<IDemoBooking[]>> {
     return this.http.get<IBEResponseFormat<IDemoBooking[]>>(`${this.apiUrl}/upcoming`, {
       params: new HttpParams().set('days', days.toString())
@@ -291,16 +465,19 @@ export class DemoService {
 
   /**
    * Get today's demos
-   * @returns Observable with IBEResponseFormat containing today's bookings
+   * Cache today's demos for 1 minute (frequently changing)
    */
+  @Cacheable({
+    // ttl: 60000, // 1 minute
+    group: 'demos'
+  })
   getTodaysDemos(): Observable<IBEResponseFormat<IDemoBooking[]>> {
     return this.http.get<IBEResponseFormat<IDemoBooking[]>>(`${this.apiUrl}/today`);
   }
 
   /**
    * Send reminder for a demo
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing success status
+   * No cache invalidation needed (read operation)
    */
   sendReminder(id: string): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(`${this.apiUrl}/${id}/remind`, {});
@@ -308,8 +485,7 @@ export class DemoService {
 
   /**
    * Bulk send reminders for demos
-   * @param ids - Array of booking IDs
-   * @returns Observable with IBEResponseFormat containing sent count
+   * No cache invalidation needed (read operation)
    */
   bulkSendReminders(ids: string[]): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(`${this.apiUrl}/bulk-remind`, { ids });
@@ -317,19 +493,30 @@ export class DemoService {
 
   /**
    * Get booking history/timeline
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing timeline events
+   * Cache timeline for 5 minutes
    */
+  @Cacheable({
+    // ttl: 300000, // 5 minutes
+    paramIndices: [0],
+    group: 'demos'
+  })
   getBookingTimeline(id: string): Observable<IBEResponseFormat<any[]>> {
     return this.http.get<IBEResponseFormat<any[]>>(`${this.apiUrl}/${id}/timeline`);
   }
 
   /**
    * Check if a specific time slot is available
-   * @param date - Date to check
-   * @param time - Time slot to check
-   * @returns Observable with IBEResponseFormat containing availability status
+   * Cache slot availability for 30 seconds
    */
+  @Cacheable({
+    // ttl: 30000, // 30 seconds
+    paramIndices: [0, 1],
+    paramKeys: {
+      0: ['date'],
+      1: ['time']
+    },
+    group: 'demos'
+  })
   checkTimeSlotAvailability(date: string, time: string): Observable<IBEResponseFormat<{ available: boolean }>> {
     return this.http.get<IBEResponseFormat<{ available: boolean }>>(
       `${this.apiUrl}/check-slot`,
@@ -339,10 +526,17 @@ export class DemoService {
 
   /**
    * Get all available time slots for a date range
-   * @param startDate - Start date
-   * @param endDate - End date
-   * @returns Observable with IBEResponseFormat containing availability for each date
+   * Cache availability calendar for 1 minute
    */
+  @Cacheable({
+    // ttl: 60000, // 1 minute
+    paramIndices: [0, 1],
+    paramKeys: {
+      0: ['startDate'],
+      1: ['endDate']
+    },
+    group: 'demos'
+  })
   getAvailabilityCalendar(startDate: string, endDate: string): Observable<IBEResponseFormat<any[]>> {
     let params = new HttpParams()
       .set('startDate', startDate)
@@ -353,10 +547,21 @@ export class DemoService {
 
   /**
    * Reject a demo booking
-   * @param id - Booking ID
-   * @param reason - Reason for rejection
-   * @returns Observable with IBEResponseFormat containing rejected booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   rejectDemo(id: string, reason?: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(
       `${this.apiUrl}/${id}/reject`,
@@ -366,9 +571,21 @@ export class DemoService {
 
   /**
    * Confirm a demo booking (after approval)
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing confirmed booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   confirmDemo(id: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(
       `${this.apiUrl}/${id}/confirm`,
@@ -378,9 +595,21 @@ export class DemoService {
 
   /**
    * Mark demo as no-show
-   * @param id - Booking ID
-   * @returns Observable with IBEResponseFormat containing updated booking
+   * Invalidate specific booking and all list caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getBookingById',
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    matchParams: true,
+    paramIndices: [0],
+    groups: ['demos']
+  })
   markAsNoShow(id: string): Observable<IBEResponseFormat<IDemoBooking>> {
     return this.http.post<IBEResponseFormat<IDemoBooking>>(
       `${this.apiUrl}/${id}/no-show`,
@@ -390,19 +619,36 @@ export class DemoService {
 
   /**
    * Bulk approve multiple bookings
-   * @param ids - Array of booking IDs to approve
-   * @returns Observable with IBEResponseFormat containing results
+   * Invalidate all demo caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    groups: ['demos']
+  })
   bulkApproveBookings(ids: string[]): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(`${this.apiUrl}/bulk-approve`, { ids });
   }
 
   /**
    * Bulk reject multiple bookings
-   * @param ids - Array of booking IDs to reject
-   * @param reason - Reason for rejection
-   * @returns Observable with IBEResponseFormat containing results
+   * Invalidate all demo caches
    */
+  @InvalidateCache({
+    methods: [
+      'DemoService.getAllBookings*',
+      'DemoService.getDashboardStats*',
+      'DemoService.getStatusStats*',
+      'DemoService.getUpcomingDemos*',
+      'DemoService.getTodaysDemos*'
+    ],
+    groups: ['demos']
+  })
   bulkRejectBookings(ids: string[], reason?: string): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(`${this.apiUrl}/bulk-reject`, { ids, reason });
   }

@@ -80,6 +80,20 @@ export class SocietyService {
         return this.http.get<IPagedResponse<ISociety>>(this.baseUrl);
     }
 
+    @Cacheable({
+        // ttl: 120000, // 2 minutes
+        paramIndices: [0, 1, 2],
+        paramKeys: {
+            0: ['page'],
+            1: ['limit'],
+            2: ['searchString']
+        },
+        group: 'societies',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [page = 1, limit = 10, searchString = ''] = args;
+            return `${methodName}_page${page}_limit${limit}_search${searchString}`;
+        }
+    })
     getAllUnApprovedSocieties(page: number, limit: number, searchString: string = '') {
         return this.http.post<IPagedResponse<ISociety>>(`${this.baseUrl}/unApproved`,
             { searchString },
@@ -91,6 +105,21 @@ export class SocietyService {
             }
         );
     }
+
+    @Cacheable({
+        // ttl: 120000, // 2 minutes
+        paramIndices: [0, 1, 2],
+        paramKeys: {
+            0: ['page'],
+            1: ['limit'],
+            2: ['searchString']
+        },
+        group: 'societies',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [page = 1, limit = 10, searchString = ''] = args;
+            return `${methodName}_page${page}_limit${limit}_search${searchString}`;
+        }
+    })
 
     getMySocietiesForApproval(page: number, limit: number, searchString: string = '') {
         return this.http.post<IPagedResponse<ISociety>>(`${this.baseUrl}/mySocietiesForApproval`,
@@ -104,11 +133,31 @@ export class SocietyService {
         );
     }
 
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getAllSocieties*',
+            'SocietyService.getAllUnApprovedSocieties*',
+            'SocietyService.getMySocietiesForApproval*',
+            'SocietyService.searchSocieties*'
+        ],
+        matchParams: false, // Don't match params as approval affects multiple lists
+        groups: ['societies']
+    })
     approveSociety(id: string) {
         const payload = { approved: true };
         return this.http.patch<IPagedResponse<ISociety>>(`${this.baseUrl}/${id}`, payload);
     }
 
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getAllSocieties*',
+            'SocietyService.getAllUnApprovedSocieties*',
+            'SocietyService.getMySocietiesForApproval*',
+            'SocietyService.searchSocieties*'
+        ],
+        matchParams: false, // Don't match params as rejection affects multiple lists
+        groups: ['societies']
+    })
     rejectSociety(id: string) {
         const payload = { approved: false };
         return this.http.patch<IPagedResponse<ISociety>>(`${this.baseUrl}/${id}`, payload);
