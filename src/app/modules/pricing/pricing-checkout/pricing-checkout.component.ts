@@ -28,6 +28,7 @@ export class PricingCheckoutComponent implements OnInit {
   societyPlan: ISocietyPlan | null = null;
   myProfile?: IMyProfile;
   showSocietySelectModal = false;
+  tentativeTotalPrice: number = 0;
 
   // Payment methods
   paymentMethods = [
@@ -38,6 +39,7 @@ export class PricingCheckoutComponent implements OnInit {
   ];
 
   selectedPaymentMethod: string = 'upi';
+  societyLoading = false;
 
   // Form groups
   couponForm: FormGroup;
@@ -68,19 +70,39 @@ export class PricingCheckoutComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.societyId = params['societyId'];
       if (this.societyId) {
-        this.societyService.getSociety(this.societyId).subscribe({
-          next: (society) => {
-            this.societyDetails = society;
-          },
-          error: (error) => {
-            console.error('Error fetching society:', error);
-          }
-        });
+        this.loadSociety(this.societyId);
       }
 
       this.selectedPlan = this.pricingPlanService.plans.find(p => p._id === params['planId']);
       if (this.selectedPlan) this.calculatePrice();
       else this.router.navigate(['/']);
+    });
+  }
+
+  triggerLogin() {
+    this.loginService.loginAndReturn()
+    .pipe(take(1))
+    .subscribe({
+      next: response => {
+        setTimeout(() => {
+          this.myProfile = this.loginService.getProfileFromStorage();
+        }, 300);
+      }
+    })
+  }
+
+  loadSociety(societyId: string) {
+    this.societyLoading = true;
+    this.societyService.getSociety(this.societyId).subscribe({
+      next: (society) => {
+        this.societyDetails = society;
+        this.societyLoading = false;
+        this.calculatePrice();
+      },
+      error: (error) => {
+        this.societyLoading = false;
+        console.error('Error fetching society:', error);
+      }
     });
   }
 
@@ -91,11 +113,23 @@ export class PricingCheckoutComponent implements OnInit {
     if (this.selectedPlan.price === 'Free') {
       this.originalPrice = 0;
       this.totalPrice = 0;
+      this.tentativeTotalPrice = 0;
       return;
     }
 
     // Convert price string to number
-    this.originalPrice = parseInt(this.selectedPlan.price) * 12; // Yearly price
+    const pricePerFlat = parseInt(this.selectedPlan.price);
+
+    if (this.societyDetails?.numberOfFlats) {
+      // Actual price with known flats
+      this.originalPrice = pricePerFlat * this.societyDetails.numberOfFlats * 12;
+      this.tentativeTotalPrice = this.originalPrice;
+    } else {
+      // Tentative price - assume at least 10 flats for estimation
+      this.originalPrice = pricePerFlat * 10 * 12;
+      this.tentativeTotalPrice = this.originalPrice;
+    }
+
     this.totalPrice = this.originalPrice;
   }
 
@@ -191,10 +225,28 @@ export class PricingCheckoutComponent implements OnInit {
     }
   }
 
+  onSocietySelected(society: ISociety): void {
+    this.societyId = society._id;
+    // this.societyDetails = society;
+    this.calculatePrice();
+  }
+
+  confirmSelectedSociety() {
+    if (!this.societyId) return;
+
+    this.showSocietySelectModal = false;
+    this.loadSociety(this.societyId);
+  }
+
   // Helper to check if current step is valid
   isStepValid(): boolean {
+    // Disable next button if society details not loaded
+    if (!this.societyDetails && this.currentStep === 1) {
+      return false;
+    }
+
     if (this.currentStep === 1) {
-      return true; // No validation needed for step 1
+      return true; // Society details are loaded
     } else if (this.currentStep === 2) {
       return this.selectedPaymentMethod === 'upi'; // Only UPI enabled
     } else if (this.currentStep === 3) {

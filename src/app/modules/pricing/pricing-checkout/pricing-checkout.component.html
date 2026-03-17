@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
+<app-layout [hideMoreActions]="true" (needLogin)="triggerLogin()">
     <div class="checkout-container">
         <!-- Stepper -->
         <div class="stepper">
@@ -26,7 +26,7 @@
             <div class="success-icon">✓</div>
             <h2>Purchase Successful!</h2>
             <p>Your plan has been activated successfully.</p>
-            <button class="btn btn-primary" [routerLink]="['/society', societyId, 'dashboard']">Go to Dashboard</button>
+            <button class="btn btn-primary" [routerLink]="['/dashboard']">Go to Dashboard</button>
         </div>
 
         <!-- Checkout Content -->
@@ -38,23 +38,39 @@
                 <div class="order-summary">
                     <!-- Society Details -->
                     <div class="summary-section">
-                        <h3>Society Details</h3>
-                        <div class="society-info" *ngIf="societyDetails">
+                        <div class="plan-header">
+                            <h3>Society Details</h3>
+                            <ng-container *ngIf="myProfile">
+                                <button class="btn-link" (click)="getSociety()" *ngIf="!societyDetails">
+                                    Select Society
+                                </button>
+                                <button class="btn-link" (click)="getSociety()" *ngIf="societyDetails">
+                                    Change Society
+                                </button>
+                            </ng-container>
+                        </div>
+
+                        <!-- Not Logged In -->
+                        <div class="society-info login-required" *ngIf="!myProfile">
+                            <p>Login to select a society</p>
+                            <button class="btn btn-primary btn-sm" (click)="triggerLogin()">Login</button>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div class="society-info loading" *ngIf="myProfile && societyLoading">
+                            <p>Loading society details...</p>
+                        </div>
+
+                        <!-- Society Details Available -->
+                        <div class="society-info" *ngIf="myProfile && societyDetails && !societyLoading">
                             <p><strong>Name:</strong> {{ societyDetails.societyName }}</p>
                             <p><strong>Buildings:</strong> {{ societyDetails.numberOfBuildings }}</p>
                             <p><strong>Flats:</strong> {{ societyDetails.numberOfFlats }}</p>
-                            <!-- <p *ngIf="societyDetails.gpsLocation?.formattedAddress">
-                            <strong>Address:</strong> {{ societyDetails.gpsLocation.formattedAddress }}
-                        </p>
-                        <p *ngIf="societyDetails.gpsLocation?.city">
-                            <strong>City:</strong> {{ societyDetails.gpsLocation.city }}
-                        </p>
-                        <p *ngIf="societyDetails.gpsLocation?.state">
-                            <strong>State:</strong> {{ societyDetails.gpsLocation.state }}
-                        </p>
-                        <p *ngIf="societyDetails.gpsLocation?.pincode">
-                            <strong>Pincode:</strong> {{ societyDetails.gpsLocation.pincode }}
-                        </p> -->
+                        </div>
+
+                        <!-- No Society Selected (Logged In) -->
+                        <div class="society-info no-society" *ngIf="myProfile && !societyDetails && !societyLoading">
+                            <p>No society selected. Please select a society to continue.</p>
                         </div>
                     </div>
 
@@ -109,15 +125,21 @@
                         </div>
                     </div>
 
-                    <!-- Price Summary -->
                     <div class="price-summary">
                         <div class="price-row">
                             <span>Total (Full Year)</span>
+                            <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
                             <span class="original-price" *ngIf="isCouponApplied">₹{{ originalPrice }}</span>
-                            <span class="final-price" [class.discounted]="isCouponApplied">₹{{ totalPrice }}</span>
+                            <span class="final-price" [class.discounted]="isCouponApplied">
+                                ₹{{ societyDetails ? totalPrice : tentativeTotalPrice }}
+                            </span>
                         </div>
-                        <p class="price-note" *ngIf="totalPrice === 0">Your payment will be ₹0. Click Next to complete
-                            purchase.</p>
+                        <p class="price-note" *ngIf="!societyDetails">
+                            *Based on estimated 10 flats. Final price will be calculated after society selection.
+                        </p>
+                        <p class="price-note" *ngIf="totalPrice === 0 && societyDetails">
+                            Your payment will be ₹0. Click Next to complete purchase.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -195,11 +217,11 @@
             <button class="close-btn" (click)="closeModal()">×</button>
         </div>
         <div class="modal-body">
-            <ui-society-search></ui-society-search>
+            <ui-society-search (selectionChange)="onSocietySelected($event)"></ui-society-search>
         </div>
         <div class="modal-footer">
             <button class="cancel-btn" (click)="closeModal()">Cancel</button>
-            <button class="confirm-btn">Select</button>
+            <button class="confirm-btn" (click)="confirmSelectedSociety()">Select</button>
         </div>
     </div>
 </div>

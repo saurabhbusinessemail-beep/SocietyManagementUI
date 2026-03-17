@@ -634,8 +634,7 @@
 
 
     .cancel-btn,
-    .confirm-btn
-    {
+    .confirm-btn {
         padding: $sp-sm $sp-lg;
         border-radius: $btn-border-radius-md;
         font-size: $font-size-sm;
@@ -693,4 +692,81 @@
     .modal-content {
         max-width: 600px;
     }
+}
+
+.society-info {
+    background-color: $color-light-gray;
+    padding: $sp;
+    border-radius: $input-border-radius;
+
+    p {
+        margin-bottom: $sp-xs;
+        font-size: $font-size-sm;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        strong {
+            font-weight: 600;
+            color: $color-black;
+            min-width: 80px;
+            display: inline-block;
+        }
+    }
+
+    &.loading {
+        opacity: 0.7;
+
+        p {
+            color: $color-help-text;
+            font-style: italic;
+        }
+    }
+
+    &.no-society {
+        background-color: rgba($color-error-header, 0.1);
+        border: 1px solid $color-error-header;
+
+        p {
+            color: $color-error-header;
+            margin: 0;
+        }
+    }
+
+    &.login-required {
+        background-color: rgba($color-amber, 0.1);
+        border: 1px solid $color-amber;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $sp;
+
+        p {
+            color: $color-black;
+            margin: 0;
+            font-size: $font-size-sm;
+        }
+
+        .btn-sm {
+            padding: $sp-xs $sp;
+            font-size: $font-size-xs;
+            min-width: auto;
+        }
+    }
+}
+
+.tentative-badge {
+    font-size: $font-size-xs;
+    background-color: $color-amber;
+    color: $color-black;
+    padding: 2px $sp-xs;
+    border-radius: $btn-border-radius-sm;
+    margin-right: $sp;
+}
+
+.btn-sm {
+  padding: $sp-xs $sp;
+  font-size: $font-size-xs;
+  border-radius: $btn-border-radius-sm;
 }
