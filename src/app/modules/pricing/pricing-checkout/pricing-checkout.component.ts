@@ -66,7 +66,6 @@ export class PricingCheckoutComponent implements OnInit {
     this.myProfile = this.loginService.getProfileFromStorage();
     // Get societyId and plan from route/state
     this.route.params.subscribe(params => {
-      console.log('params = ', params)
       this.societyId = params['societyId'];
       if (this.societyId) {
         this.societyService.getSociety(this.societyId).subscribe({
@@ -221,7 +220,6 @@ export class PricingCheckoutComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: (response) => {
-            console.log('my profile = ', this.myProfile)
             resolve(response)
           },
           error: err => reject(err)
