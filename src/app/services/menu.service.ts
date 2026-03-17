@@ -34,6 +34,7 @@ export class MenuService {
 
   clearMenu() {
     this.selectedMenu.next(undefined);
+    this.userMenus.next([]);
   }
 
   syncSelectedMenuWithCurrentUrl(skipCurrentUrlMatch = false) {
