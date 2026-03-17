@@ -65,7 +65,7 @@
                         [style.background]="plan.colors.buttonFrom ? 'linear-gradient(to right, ' + plan.colors.buttonFrom + ', ' + plan.colors.buttonTo + ')' : ''"
                         [style.background-color]="!plan.colors.buttonFrom ? (plan.colors.button || plan.colors.primary) : ''"
                         [style.color]="'white'" [style.box-shadow]="'0 4px 6px -1px ' + plan.colors.light">
-                        {{ plan.buttonText }}
+                        Choose {{ plan.name }}
                     </button>
                 </div>
             </div>
@@ -157,7 +157,7 @@
                             [style.background]="plan.colors.buttonFrom ? 'linear-gradient(to right, ' + plan.colors.buttonFrom + ', ' + plan.colors.buttonTo + ')' : ''"
                             [style.background-color]="!plan.colors.buttonFrom ? (plan.colors.button || plan.colors.primary) : ''"
                             [style.color]="'white'" [style.box-shadow]="'0 4px 6px -1px ' + plan.colors.light">
-                            Get Started with {{ plan.name }}
+                            Choose {{ plan.name }}
                         </button>
                     </div>
                 </div>
