@@ -20,6 +20,7 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     societyName: new FormControl<string>(''),
     gpsLocation: new FormControl<UILocationResult | undefined>(undefined),
     numberOfBuildings: new FormControl<number>(1),
+    numberOfFlats: new FormControl<number>(1),
   });
 
   myProfile?: IMyProfile;
@@ -64,15 +65,29 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
   };
   buildingCountConfig = {
     id: 'numberOfBuildings',
-    label: 'Number Of Buildings',
+    label: 'Buildings Count',
     placeholder: 'Enter Count Of Buildings',
     validations: [
       { name: 'required', validator: Validators.required },
       { name: 'min', validator: Validators.min(2) }
     ],
     errorMessages: {
-      required: 'Society Name is required',
+      required: 'Building count is required',
       min: 'Value cannot be less than 2.'
+    }
+  };
+
+  flatCountConfig = {
+    id: 'numberOfFlats',
+    label: 'Flats Count',
+    placeholder: 'Enter Count Of Flats',
+    validations: [
+      { name: 'required', validator: Validators.required },
+      { name: 'min', validator: Validators.min(1) }
+    ],
+    errorMessages: {
+      required: 'Flat count is required',
+      min: 'Value cannot be less than 1.'
     }
   };
 

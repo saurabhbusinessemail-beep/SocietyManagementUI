@@ -16,12 +16,17 @@
 
                 <ui-checklist [formControl]="isMultipleBuildings" [config]="multiBuildingConfig"
                     [options]="multiBuildingOptions" helpText="You can select multiple options" [smColumns]="12"
-                    [mdColumns]="4" [lgColumns]="3">
+                    [mdColumns]="4" [lgColumns]="4">
                 </ui-checklist>
 
 
                 <ui-text-box formControlName="numberOfBuildings" [config]="buildingCountConfig" type="number"
-                    [smColumns]="12" [mdColumns]="8" [lgColumns]="5">
+                    [smColumns]="12" [mdColumns]="4" [lgColumns]="2">
+                </ui-text-box>
+
+
+                <ui-text-box formControlName="numberOfFlats" [config]="flatCountConfig" type="number"
+                    [smColumns]="12" [mdColumns]="4" [lgColumns]="2">
                 </ui-text-box>
             </div>
 

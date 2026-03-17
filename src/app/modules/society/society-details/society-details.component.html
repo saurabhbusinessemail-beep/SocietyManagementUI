@@ -54,7 +54,7 @@
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Flats</span>
-                        <span class="stat-value">{{ flats.length }}</span>
+                        <span class="stat-value">{{ society?.numberOfFlats ?? 1 }}</span>
                         <ui-button label="Manage" type="only-content" [disable]="!canViewFlats"
                             (clicked)="gotoFlatManager()">
                         </ui-button>

@@ -15,7 +15,7 @@ import { ComplaintService } from '../../../services/complaint.service';
 export class SocietyDetailsComponent implements OnInit {
 
   society?: ISociety;
-  flats: IFlat[] = [];
+  // flats: IFlat[] = [];
   parkings: IParking[] = [];
   complaints?: IComplaintStats;
   // features: ISocietyFeature[] = [];
@@ -100,7 +100,7 @@ export class SocietyDetailsComponent implements OnInit {
 
 
           // if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
-          this.loadFlats(this.society._id);
+          // this.loadFlats(this.society._id);
           this.loadComplaints(this.society._id);
           this.loadParkings(this.society._id);
           // this.loadFeatures(this.society._id);
@@ -112,17 +112,17 @@ export class SocietyDetailsComponent implements OnInit {
 
 
   /** Step 3: Load flats separately */
-  loadFlats(societyId: string): void {
-    this.societyService.getFlats(societyId, undefined, { limit: 10000 })
-      .pipe(take(1))
-      .subscribe({
-        next: response => {
-          if (!response.success) return;
+  // loadFlats(societyId: string): void {
+  //   this.societyService.getFlats(societyId, undefined, { limit: 10000 })
+  //     .pipe(take(1))
+  //     .subscribe({
+  //       next: response => {
+  //         if (!response.success) return;
 
-          this.flats = response.data;
-        }
-      });
-  }
+  //         this.flats = response.data;
+  //       }
+  //     });
+  // }
 
 
   /** Step 4: Complaints by society */
