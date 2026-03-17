@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IChangePlanCalculation, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
+import { IChangePlanCalculation, ICurrentPlanResponse, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
@@ -33,7 +33,7 @@ export class PricingCheckoutComponent implements OnInit {
 
   // Change plan related properties
   isChangePlan = false;
-  currentPlanDetails?: any;
+  currentPlanDetails?: ICurrentPlanResponse;
   changePlanCalculation?: IChangePlanCalculation;
   showChangePlanSummary = false;
 

@@ -91,7 +91,7 @@ export interface IPlanHistoryItem extends ISocietyPlan {
 }
 
 export interface IChangePlanCalculation {
-  currentPlan: {
+  currentPlan?: {
     id: string;
     name: string;
     price: string;
