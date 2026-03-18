@@ -13,28 +13,12 @@ export class PricingDetailsComponent {
 
   expandedPlanId: string | null = null;
 
-  features = [
-    { name: 'Add Buildings' },
-    { name: 'Number of Flats' },
-    { name: 'Gate Entries' },
-    { name: 'Announcements' },
-    { name: 'Smart Gate Pass' },
-    { name: 'Visitor Management' },
-    { name: 'Tenant Management' },
-    { name: 'Flat Member Management' },
-    { name: 'Complaints' },
-    { name: 'Events' },
-    { name: 'Parking / Vehicle' },
-    { name: 'Communication' },
-    { name: 'Maintenance' },
-    { name: 'Offers & Festivals' }
-  ];
 
   constructor(public pricingPlanService: PricingPlanService) {}
 
   getIncludedCount(plan: IPricingPlan): string {
     const count = plan.features.filter(f => f.included).length;
-    return `${count}/${this.features.length}`;
+    return `${count}/${this.pricingPlanService.features.length}`;
   }
 
   togglePlan(planId: string): void {

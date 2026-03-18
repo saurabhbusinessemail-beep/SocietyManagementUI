@@ -1,4 +1,5 @@
 export interface IPricingFeature {
+    key: string;
     name: string;
     value?: string;
     included: boolean;

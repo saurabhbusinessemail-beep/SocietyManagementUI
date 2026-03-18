@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IChangePlanCalculation, ICurrentPlanResponse, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan } from '../interfaces';
+import { IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
@@ -11,6 +11,23 @@ import { Cacheable, InvalidateCache } from '../decorators';
 export class PricingPlanService {
     private baseUrl = `${environment.apiBaseUrl}/pricing-plan`; // Adjust base URL as per your API structure
 
+
+    features: IFeature[] = [
+        { key: 'number_of_buildings', name: 'Number of Buildings' },
+        { key: 'number_of_flats', name: 'Number of Flats' },
+        { key: 'gate_entries', name: 'Gate Entries' },
+        { key: 'announcements', name: 'Announcements' },
+        { key: 'smart_gate_pass', name: 'Smart Gate Pass' },
+        { key: 'visitor_management', name: 'Visitor Management' },
+        { key: 'tenant_management', name: 'Tenant Management' },
+        { key: 'flat_member_management', name: 'Flat Member Management' },
+        { key: 'complaints', name: 'Complaints' },
+        { key: 'vehicle', name: 'Vehicle' },
+        { key: 'parking', name: 'Parking' },
+        { key: 'communication', name: 'Communication' },
+        { key: 'maintenance', name: 'Maintenance' },
+        { key: 'offers_on_festivals', name: 'Offers On Festivals' }
+    ];
     plans: IPricingPlan[] = [
         {
             id: 'basic',
@@ -31,20 +48,20 @@ export class PricingPlanService {
                 gradientTo: '#f8fafc',
             },
             features: [
-                { name: 'Add Buildings', value: '1 Building', included: true },
-                { name: 'Number of Flats', value: '10–12 Flats', included: true },
-                { name: 'Gate Entries', included: true },
-                { name: 'Announcements', included: true },
-                { name: 'Smart Gate Pass', included: false },
-                { name: 'Visitor Management', included: false },
-                { name: 'Tenant Management', included: false },
-                { name: 'Flat Member Management', included: false },
-                { name: 'Complaints', included: false },
-                { name: 'Events', included: false },
-                { name: 'Parking / Vehicle', included: false },
-                { name: 'Communication', included: false },
-                { name: 'Maintenance', included: false },
-                { name: 'Offers & Festivals', included: false }
+                { key: 'number_of_buildings', name: 'Number of Buildings', value: '1 Building', included: true },
+                { key: 'number_of_flats', name: 'Number of Flats', value: '10 Flats', included: true },
+                { key: 'gate_entries', name: 'Gate Entries', included: true },
+                { key: 'announcements', name: 'Announcements', included: true },
+                { key: 'smart_gate_pass', name: 'Smart Gate Pass', included: false },
+                { key: 'visitor_management', name: 'Visitor Management', included: false },
+                { key: 'tenant_management', name: 'Tenant Management', included: false },
+                { key: 'flat_member_management', name: 'Flat Member Management', included: false },
+                { key: 'complaints', name: 'Complaints', included: false },
+                { key: 'events', name: 'Events', included: false },
+                { key: 'parking_vehicle', name: 'Parking / Vehicle', included: false },
+                { key: 'communication', name: 'Communication', included: false },
+                { key: 'maintenance', name: 'Maintenance', included: false },
+                { key: 'offers_on_festivals', name: 'Offers On Festivals', included: false }
             ]
         },
         {
@@ -68,20 +85,20 @@ export class PricingPlanService {
                 gradientTo: '#eff6ff'      // blue-50
             },
             features: [
-                { name: 'Add Buildings', value: 'Unlimited', included: true },
-                { name: 'Number of Flats', value: 'Unlimited', included: true },
-                { name: 'Gate Entries', included: true },
-                { name: 'Announcements', included: true },
-                { name: 'Smart Gate Pass', included: true },
-                { name: 'Visitor Management', included: true },
-                { name: 'Tenant Management', included: true },
-                { name: 'Flat Member Management', included: true },
-                { name: 'Complaints', included: false },
-                { name: 'Events', included: false },
-                { name: 'Parking / Vehicle', included: false },
-                { name: 'Communication', included: false },
-                { name: 'Maintenance', included: false },
-                { name: 'Offers & Festivals', included: true }
+                { key: 'number_of_buildings', name: 'Number of Buildings', value: 'Unlimited', included: true },
+                { key: 'number_of_flats', name: 'Number of Flats', value: 'Unlimited', included: true },
+                { key: 'gate_entries', name: 'Gate Entries', included: true },
+                { key: 'announcements', name: 'Announcements', included: true },
+                { key: 'smart_gate_pass', name: 'Smart Gate Pass', included: true },
+                { key: 'visitor_management', name: 'Visitor Management', included: true },
+                { key: 'tenant_management', name: 'Tenant Management', included: true },
+                { key: 'flat_member_management', name: 'Flat Member Management', included: true },
+                { key: 'complaints', name: 'Complaints', included: false },
+                { key: 'events', name: 'Events', included: false },
+                { key: 'parking_vehicle', name: 'Parking / Vehicle', included: false },
+                { key: 'communication', name: 'Communication', included: false },
+                { key: 'maintenance', name: 'Maintenance', included: false },
+                { key: 'offers_on_festivals', name: 'Offers On Festivals', included: true }
             ]
         },
         {
@@ -108,20 +125,20 @@ export class PricingPlanService {
                 gradientTo: '#fffbeb'      // amber-50
             },
             features: [
-                { name: 'Add Buildings', value: 'Unlimited', included: true },
-                { name: 'Number of Flats', value: 'Unlimited', included: true },
-                { name: 'Gate Entries', included: true },
-                { name: 'Announcements', included: true },
-                { name: 'Smart Gate Pass', included: true },
-                { name: 'Visitor Management', included: true },
-                { name: 'Tenant Management', included: true },
-                { name: 'Flat Member Management', included: true },
-                { name: 'Complaints', included: true },
-                { name: 'Events', included: true },
-                { name: 'Parking / Vehicle', included: true },
-                { name: 'Communication', included: false },
-                { name: 'Maintenance', included: false },
-                { name: 'Offers & Festivals', included: true }
+                { key: 'number_of_buildings', name: 'Number of Buildings', value: 'Unlimited', included: true },
+                { key: 'number_of_flats', name: 'Number of Flats', value: 'Unlimited', included: true },
+                { key: 'gate_entries', name: 'Gate Entries', included: true },
+                { key: 'announcements', name: 'Announcements', included: true },
+                { key: 'smart_gate_pass', name: 'Smart Gate Pass', included: true },
+                { key: 'visitor_management', name: 'Visitor Management', included: true },
+                { key: 'tenant_management', name: 'Tenant Management', included: true },
+                { key: 'flat_member_management', name: 'Flat Member Management', included: true },
+                { key: 'complaints', name: 'Complaints', included: true },
+                { key: 'events', name: 'Events', included: true },
+                { key: 'parking_vehicle', name: 'Parking / Vehicle', included: true },
+                { key: 'communication', name: 'Communication', included: false },
+                { key: 'maintenance', name: 'Maintenance', included: false },
+                { key: 'offers_on_festivals', name: 'Offers On Festivals', included: true }
             ]
         },
         {
@@ -145,20 +162,20 @@ export class PricingPlanService {
                 gradientTo: '#f5f3ff'      // violet-50
             },
             features: [
-                { name: 'Add Buildings', value: 'Unlimited', included: true },
-                { name: 'Number of Flats', value: 'Unlimited', included: true },
-                { name: 'Gate Entries', included: true },
-                { name: 'Announcements', included: true },
-                { name: 'Smart Gate Pass', included: true },
-                { name: 'Visitor Management', included: true },
-                { name: 'Tenant Management', included: true },
-                { name: 'Flat Member Management', included: true },
-                { name: 'Complaints', included: true },
-                { name: 'Events', included: true },
-                { name: 'Parking / Vehicle', included: true },
-                { name: 'Communication', included: true },
-                { name: 'Maintenance', included: false },
-                { name: 'Offers & Festivals', included: true }
+                { key: 'number_of_buildings', name: 'Number of Buildings', value: 'Unlimited', included: true },
+                { key: 'number_of_flats', name: 'Number of Flats', value: 'Unlimited', included: true },
+                { key: 'gate_entries', name: 'Gate Entries', included: true },
+                { key: 'announcements', name: 'Announcements', included: true },
+                { key: 'smart_gate_pass', name: 'Smart Gate Pass', included: true },
+                { key: 'visitor_management', name: 'Visitor Management', included: true },
+                { key: 'tenant_management', name: 'Tenant Management', included: true },
+                { key: 'flat_member_management', name: 'Flat Member Management', included: true },
+                { key: 'complaints', name: 'Complaints', included: true },
+                { key: 'events', name: 'Events', included: true },
+                { key: 'parking_vehicle', name: 'Parking / Vehicle', included: true },
+                { key: 'communication', name: 'Communication', included: true },
+                { key: 'maintenance', name: 'Maintenance', included: false },
+                { key: 'offers_on_festivals', name: 'Offers On Festivals', included: true }
             ]
         },
         {
@@ -185,20 +202,20 @@ export class PricingPlanService {
                 gradientTo: '#f0fdfa'      // teal-50
             },
             features: [
-                { name: 'Add Buildings', value: 'Unlimited', included: true },
-                { name: 'Number of Flats', value: 'Unlimited', included: true },
-                { name: 'Gate Entries', included: true },
-                { name: 'Announcements', included: true },
-                { name: 'Smart Gate Pass', included: true },
-                { name: 'Visitor Management', included: true },
-                { name: 'Tenant Management', included: true },
-                { name: 'Flat Member Management', included: true },
-                { name: 'Complaints', included: true },
-                { name: 'Events', included: true },
-                { name: 'Parking / Vehicle', included: true },
-                { name: 'Communication', included: true },
-                { name: 'Maintenance', included: true },
-                { name: 'Offers & Festivals', included: true }
+                { key: 'number_of_buildings', name: 'Number of Buildings', value: 'Unlimited', included: true },
+                { key: 'number_of_flats', name: 'Number of Flats', value: 'Unlimited', included: true },
+                { key: 'gate_entries', name: 'Gate Entries', included: true },
+                { key: 'announcements', name: 'Announcements', included: true },
+                { key: 'smart_gate_pass', name: 'Smart Gate Pass', included: true },
+                { key: 'visitor_management', name: 'Visitor Management', included: true },
+                { key: 'tenant_management', name: 'Tenant Management', included: true },
+                { key: 'flat_member_management', name: 'Flat Member Management', included: true },
+                { key: 'complaints', name: 'Complaints', included: true },
+                { key: 'events', name: 'Events', included: true },
+                { key: 'parking_vehicle', name: 'Parking / Vehicle', included: true },
+                { key: 'communication', name: 'Communication', included: true },
+                { key: 'maintenance', name: 'Maintenance', included: true },
+                { key: 'offers_on_festivals', name: 'Offers On Festivals', included: true }
             ]
         }
     ];
