@@ -11,6 +11,7 @@ import { PushNotificationService } from './services/push-notification.service';
 import { ColdStartService } from './services/cold-start.service';
 import { App } from '@capacitor/app';
 import { UserService } from './services/user.service';
+import { PricingPlanService } from './services/pricing-plan.service';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private FcmTokenService: FcmTokenService,
     public consoleService: ConsoleCaptureService,
     private pushNotificationService: PushNotificationService,
-    private coldStartService: ColdStartService
+    private coldStartService: ColdStartService,
+    private pricingPlanService: PricingPlanService
   ) { }
 
   async ngOnInit() {
@@ -70,6 +72,10 @@ export class AppComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (this.router.url === '/dashboard/user')
         this.menuService.syncSelectedMenuWithCurrentUrl(true);
+
+      console.log('Refreshing')
+      this.pricingPlanService.refreshFeatures().pipe(take(1)).subscribe();
+      this.pricingPlanService.refreshPlans().pipe(take(1)).subscribe();
     }, 100);
 
     // Listen for app resume events
