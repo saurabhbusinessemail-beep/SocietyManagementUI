@@ -637,3 +637,123 @@
         }
     }
 }
+
+
+.plan-banner {
+    background-color: $color-dark-blue;
+    color: $color-white;
+    padding: $sp-sm $sp-md;
+    border-radius: $btn-border-radius-md;
+    margin-bottom: $sp-lg;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    .plan-name {
+        font-weight: 600;
+        font-size: $font-size-sm;
+    }
+
+    .plan-usage {
+        font-size: $font-size-xs;
+        background-color: rgba($color-white, 0.2);
+        padding: $sp-xs $sp-sm;
+        border-radius: $btn-border-radius-sm;
+    }
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $sp-xl;
+    min-height: 300px;
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid $color-border;
+        border-top-color: $color-dark-blue;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: $sp-md;
+    }
+
+    p {
+        color: $color-help-text;
+        font-size: $font-size-base;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.feature-unavailable-card {
+    background-color: $color-light-gray;
+    border: 1px dashed $color-border;
+
+    .unavailable-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: $sp-lg;
+        text-align: center;
+        gap: $sp-md;
+
+        .lock-icon {
+            width: 24px;
+            height: 24px;
+            color: $color-help-text;
+            margin-bottom: $sp-xs;
+        }
+
+        p {
+            color: $color-help-text;
+            font-size: $font-size-sm;
+            margin: 0 0 $sp-sm 0;
+        }
+
+        ui-button {
+            margin-top: $sp-xs;
+        }
+    }
+
+    &:hover {
+        border-color: $color-dark-blue;
+        background-color: lighten($color-light-gray, 2%);
+
+        .lock-icon {
+            color: $color-dark-blue;
+        }
+    }
+}
+
+// Responsive adjustments
+@include mobile {
+    .plan-banner {
+        flex-direction: column;
+        gap: $sp-xs;
+        text-align: center;
+    }
+
+    .feature-unavailable-card {
+        .unavailable-message {
+            padding: $sp-md;
+
+            p {
+                font-size: $font-size-xs;
+            }
+        }
+    }
+}

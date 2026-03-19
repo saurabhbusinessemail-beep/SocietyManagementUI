@@ -59,6 +59,7 @@ export class GatePassListComponent implements OnInit, OnDestroy {
     this.selectedFIlter = selectedFIlter;
     const societyId = selectedFIlter.societyId;
     const flatId = selectedFIlter.flatId;
+    this.gatepasses = [];
 
     this.gatepassService.getGattePasses(societyId, flatId)
       .pipe(take(1))

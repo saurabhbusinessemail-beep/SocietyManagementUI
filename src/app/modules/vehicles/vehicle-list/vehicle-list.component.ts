@@ -157,6 +157,7 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
         switchMap(selectedFilter => {
           if (!selectedFilter.flatId) return of({ data: [], success: false } as IBEResponseFormat<IVehicle[]>);
 
+          this.vehicles = [];
           return this.vehicleService.getVehicles(selectedFilter.flatId)
         })
       )

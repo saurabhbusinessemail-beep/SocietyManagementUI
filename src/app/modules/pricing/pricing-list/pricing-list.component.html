@@ -1,3 +1,3 @@
-<app-layout [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" (needLogin)="loginService.simpleLogin()">
     <app-pricing-details (getStartedWithPlanId)="gotoPricingPlanCheckout($event)"></app-pricing-details>
 </app-layout>

@@ -6,7 +6,7 @@
             <h2 class="society-name">{{ society?.societyName }}</h2>
             <div class="header-actions">
                 <div class="plan-info" *ngIf="currentPlan" (click)="gotoPlanEdit()">
-                    <span class="plan-badge">Plan: {{ currentPlan.planName }}</span>
+                    <span class="plan-badge">Plan: {{ currentPlan.planName || 'No Plan' }}</span>
                 </div>
                 <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
                     <app-icon name="edit"></app-icon>
@@ -14,8 +14,14 @@
             </div>
         </div>
 
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="!featuresLoaded">
+            <div class="spinner"></div>
+            <p>Loading society details...</p>
+        </div>
+
         <!-- Dashboard Grid -->
-        <div class="dashboard-grid">
+        <div class="dashboard-grid" *ngIf="featuresLoaded">
 
             <!-- Admin Card -->
             <div class="dashboard-card">
@@ -25,9 +31,10 @@
                     </ui-button>
                 </div>
                 <div class="list">
-                    <ui-chip *ngFor="let a of adminIds" [value]="(a.name ?? '') + '' + a.phoneNumber"
+                    <ui-chip *ngFor="let a of adminIds" [value]="(a.name ?? '') + ' ' + a.phoneNumber"
                         [crossAction]="canDeleteAdmin" (crossClicked)="removeAdmin(a)">
                     </ui-chip>
+                    <div class="empty-message" *ngIf="adminIds.length === 0">No admins added</div>
                 </div>
             </div>
 
@@ -40,9 +47,10 @@
                     </ui-button>
                 </div>
                 <div class="list">
-                    <ui-chip *ngFor="let s of managerIds" [value]="(s.name ?? '') + '' + s.phoneNumber"
+                    <ui-chip *ngFor="let s of managerIds" [value]="(s.name ?? '') + ' ' + s.phoneNumber"
                         [crossAction]="canDeleteManager" (crossClicked)="removeSecretary(s)">
                     </ui-chip>
+                    <div class="empty-message" *ngIf="managerIds.length === 0">No secretaries added</div>
                 </div>
             </div>
 
@@ -68,42 +76,59 @@
             </div>
 
             <!-- Parkings Card -->
-            <div class="dashboard-card">
+            <div class="dashboard-card" *ngIf="parkingFeatureAvailable; else parkingNotAvailable">
                 <div class="card-header">
                     <span class="card-title">Parkings</span>
                     <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety"
-                        (clicked)="gotoParkingManager()">
+                        (clicked)="gotoParkingManager()" [disable]="!canViewParkings">
                     </ui-button>
                 </div>
                 <div class="badge-container">
                     <div class="badge done">Added: {{ parkings.length }}</div>
                 </div>
             </div>
+            <ng-template #parkingNotAvailable>
+                <div class="dashboard-card feature-unavailable-card">
+                    <div class="card-header">
+                        <span class="card-title">Parkings</span>
+                    </div>
+                    <div class="unavailable-message">
+                        <app-icon name="lock" class="lock-icon" size="xl"></app-icon>
+                        <p>Your current plan does not support Parking feature.</p>
+                        <ui-button label="Upgrade Plan" type="primary" (clicked)="gotoPlanEdit()"
+                            *ngIf="canUpdateSociety">
+                        </ui-button>
+                    </div>
+                </div>
+            </ng-template>
 
-            <!-- Complaints Card -->
-            <div class="dashboard-card">
+            <!-- Complaints Card - Conditional based on plan -->
+            <div class="dashboard-card" *ngIf="complaintsFeatureAvailable; else complaintsNotAvailable">
                 <div class="card-header">
                     <span class="card-title">Complaints</span>
                     <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoComplaints()">
                     </ui-button>
                 </div>
                 <div class="badge-container">
-                    <div class="badge pending">Pending: {{ complaints?.pending }}</div>
-                    <div class="badge done">Completed: {{ complaints?.completed }}</div>
+                    <div class="badge pending" *ngIf="complaints">Pending: {{ complaints.pending }}</div>
+                    <div class="badge done" *ngIf="complaints">Completed: {{ complaints.completed }}</div>
+                    <div class="no-data" *ngIf="!complaints">No complaints data</div>
                 </div>
             </div>
-
-            <!-- Active Features Card -->
-            <!-- <div class="dashboard-card">
-                <div class="card-header">
-                    <span class="card-title">Active Features</span>
-                    <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety">
-                    </ui-button>
+            <ng-template #complaintsNotAvailable>
+                <div class="dashboard-card feature-unavailable-card">
+                    <div class="card-header">
+                        <span class="card-title">Complaints</span>
+                    </div>
+                    <div class="unavailable-message">
+                        <app-icon name="lock" class="lock-icon" size="xl"></app-icon>
+                        <p>Your current plan does not support Complaints feature.</p>
+                        <ui-button label="Upgrade Plan" type="primary" (clicked)="gotoPlanEdit()"
+                            *ngIf="canUpdateSociety">
+                        </ui-button>
+                    </div>
                 </div>
-                <div class="features">
-                   
-                </div>
-            </div> -->
+            </ng-template>
 
         </div> <!-- end dashboard-grid -->
 

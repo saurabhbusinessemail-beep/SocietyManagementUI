@@ -3,7 +3,7 @@
 
         <!-- Error State -->
         <div class="error-state" *ngIf="error && !isLoading && announcementId">
-            <app-icon name="error" size="lg"></app-icon>
+            <app-icon name="error" size="xl"></app-icon>
             <p>{{ error }}</p>
             <ui-button label="Try Again" type="primary" (clicked)="getAnnouncement(announcementId)">
             </ui-button>

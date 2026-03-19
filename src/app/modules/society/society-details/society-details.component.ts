@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { IComplaintStats, IFlat, IParking, ISociety, IUser } from '../../../interfaces';
+import { IComplaintStats, ICurrentPlanResponse, IFlat, IParking, ISociety, IUser } from '../../../interfaces';
 import { PERMISSIONS } from '../../../constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
-import { take } from 'rxjs';
+import { take, forkJoin, of } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { ComplaintService } from '../../../services/complaint.service';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-society-details',
@@ -16,12 +17,17 @@ import { PricingPlanService } from '../../../services/pricing-plan.service';
 export class SocietyDetailsComponent implements OnInit {
 
   society?: ISociety;
-  currentPlan?: any;
+  currentPlan?: ICurrentPlanResponse;
   parkings: IParking[] = [];
   complaints?: IComplaintStats;
   // features: ISocietyFeature[] = [];
   managerIds: IUser[] = [];
   adminIds: IUser[] = [];
+
+  // Feature availability flags
+  parkingFeatureAvailable: boolean = false;
+  complaintsFeatureAvailable: boolean = false;
+  featuresLoaded: boolean = false;
 
   get canUpdateSociety(): boolean {
     return this.loginService.hasPermission(PERMISSIONS.society_update, this.society?._id);
@@ -101,36 +107,74 @@ export class SocietyDetailsComponent implements OnInit {
           }, [] as IUser[]);
 
 
-          // if (this.society.buildingIds) this.loadBuildings(this.society.buildingIds);
-          // this.loadFlats(this.society._id);
-          this.loadComplaints(this.society._id);
-          this.loadParkings(this.society._id);
-          this.loadCurrentPlan(this.society._id);
-          // this.loadFeatures(this.society._id);
-          // this.loadSecretaries(this.society._id);
+          // First load current plan to check feature availability
+          this.loadCurrentPlan(societyId);
         },
         error: err => console.log('Error while getting society details')
       });
   }
 
+  loadCurrentPlan(societyId: string): void {
+    this.planService.getCurrentPlan(societyId).subscribe({
+      next: response => {
+        this.currentPlan = response;
+        
+        // Check feature availability from current plan
+        if (this.currentPlan?.features) {
+          this.checkFeatureAvailability(this.currentPlan.features);
+        }
+        
+        // Now load data based on feature availability
+        this.loadFeatureSpecificData(societyId);
+        this.featuresLoaded = true;
+      },
+      error: (err) => {
+        console.log('No active plan found');
+        this.currentPlan = undefined;
+        this.featuresLoaded = true;
+        // Even without plan, load data (might be free tier with basic features)
+        this.loadFeatureSpecificData(societyId);
+      }
+    });
+  }
 
-  /** Step 3: Load flats separately */
-  // loadFlats(societyId: string): void {
-  //   this.societyService.getFlats(societyId, undefined, { limit: 10000 })
-  //     .pipe(take(1))
-  //     .subscribe({
-  //       next: response => {
-  //         if (!response.success) return;
+  /**
+   * Check which features are available in the current plan
+   */
+  checkFeatureAvailability(features: any[]): void {
+    // Check for parking feature (multiple possible keys)
+    this.parkingFeatureAvailable = features.some(f => 
+      (f.key === 'parking' || f.key === 'parking_vehicle' || f.key === 'vehicle') && f.included === true
+    );
+    
+    // Check for complaints feature
+    this.complaintsFeatureAvailable = features.some(f => 
+      f.key === 'complaints' && f.included === true
+    );
+    
+    console.log('Feature availability:', {
+      parking: this.parkingFeatureAvailable,
+      complaints: this.complaintsFeatureAvailable
+    });
+  }
 
-  //         this.flats = response.data;
-  //       }
-  //     });
-  // }
+  /**
+   * Load data only for features that are available in the current plan
+   */
+  loadFeatureSpecificData(societyId: string): void {
+    // Load complaints only if feature is available
+    if (this.complaintsFeatureAvailable) {
+      this.loadComplaints(societyId);
+    }
+    
+    // Load parkings only if feature is available
+    if (this.parkingFeatureAvailable) {
+      this.loadParkings(societyId);
+    }
+  }
 
-
-  /** Step 4: Complaints by society */
+  /** Load complaints by society */
   loadComplaints(societyId: string): void {
-    // 🔁 Replace with API call later
     this.complaintService.getComplaints(societyId, undefined, undefined, undefined, { limit: 50000 })
       .pipe(take(1))
       .subscribe({
@@ -146,7 +190,7 @@ export class SocietyDetailsComponent implements OnInit {
   }
 
 
-  /** Step 5: Parkings by society */
+  /** Load parkings by society */
   loadParkings(societyId: string): void {
     this.societyService.getParkings(societyId, undefined, { limit: 50000 })
       .pipe(take(1))
@@ -156,18 +200,7 @@ export class SocietyDetailsComponent implements OnInit {
 
           this.parkings = response.data;
         }
-      })
-  }
-
-  loadCurrentPlan(societyId: string): void {
-    this.planService.getCurrentPlan(societyId).subscribe({
-      next: (response: any) => {
-        this.currentPlan = response;
-      },
-      error: (err) => {
-        console.log('No active plan found');
-      }
-    });
+      });
   }
 
   gotoPlanEdit(): void {
@@ -195,11 +228,15 @@ export class SocietyDetailsComponent implements OnInit {
   }
 
   gotoParkingManager() {
-    this.router.navigate(['/society', this.society?._id, 'parkings']);
+    if (this.parkingFeatureAvailable) {
+      this.router.navigate(['/society', this.society?._id, 'parkings']);
+    }
   }
 
   gotoComplaints() {
-    this.router.navigate(['/complaints']);
+    if (this.complaintsFeatureAvailable) {
+      this.router.navigate(['/complaints'], { queryParams: { societyId: this.society?._id } });
+    }
   }
 
   async removeSecretary(user: IUser) {

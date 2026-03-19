@@ -137,6 +137,7 @@ export class AnnouncementListComponent implements OnInit {
 
   loadAnnouncements(selectedFIlter: IAnnouncementFilters) {
     this.selectedFIlter = selectedFIlter;
+    this.announcements = [];
     if (selectedFIlter.societyId === undefined) return;
 
     this.resetSelectedSocietyRole(selectedFIlter.societyId);

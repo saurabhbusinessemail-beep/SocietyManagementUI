@@ -28,6 +28,7 @@ export class TenantListComponent implements OnInit {
     this.selectedFIlter = selectedFIlter;
     const societyId = selectedFIlter.societyId;
     const flatId = selectedFIlter.flatId;
+    this.tenants = [];
 
     this.societyService.myTenants(societyId, flatId)
       .pipe(take(1))

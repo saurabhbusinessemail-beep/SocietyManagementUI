@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { take, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { SocietyService } from '../../../services/society.service'; // adjust path as needed
+import { SocietyService } from '../../../services/society.service';
 import {
   IFlatMember,
   IFlat,
@@ -15,15 +16,18 @@ import {
   IVehicle,
   IParking,
   IMyProfile,
-  IConfirmationPopupDataConfig
-} from '../../../interfaces'; // adjust path as needed
+  IConfirmationPopupDataConfig,
+  ICurrentPlanResponse
+} from '../../../interfaces';
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { GatePassService } from '../../../services/gate-pass.service';
 import { LoginService } from '../../../services/login.service';
 import { WindowService } from '../../../services/window.service';
+import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { ResidingTypes } from '../../../constants';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { VehicleService } from '../../../services/vehicle.service';
 
 @Component({
   selector: 'app-flat-details',
@@ -35,7 +39,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   flatMemberId?: string;
   flatMember?: IFlatMember;
   myProfile?: IMyProfile;
-
+  currentPlan?: ICurrentPlanResponse;
 
   @ViewChild('confirmationTemplate') confirmationTemplate!: TemplateRef<any>;
   currentDialogRef: MatDialogRef<any> | null = null;
@@ -46,6 +50,15 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     showSelf: false,
     showTenant: false
   }
+
+  // Feature availability flags
+  membersFeatureAvailable: boolean = false; // Added members feature flag
+  vehiclesFeatureAvailable: boolean = false;
+  parkingFeatureAvailable: boolean = false;
+  complaintsFeatureAvailable: boolean = false;
+  gateEntriesFeatureAvailable: boolean = false;
+  gatePassesFeatureAvailable: boolean = false;
+  featuresLoaded: boolean = false;
 
   // Related data arrays (populated via API calls)
   members: IFlatMember[] = [];           // other residents of the same flat
@@ -96,7 +109,9 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     private gatepassService: GatePassService,
     private loginService: LoginService,
     private windowService: WindowService,
-    private dialog: MatDialog
+    private planService: PricingPlanService,
+    private dialog: MatDialog,
+    private vehicleService: VehicleService
   ) { }
 
   ngOnInit(): void {
@@ -108,8 +123,6 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.loadFlatMember(this.flatMemberId);
-    // After loading flat member, you can fetch related data using its flatId/societyId
-    // e.g., this.loadRelatedData();
   }
 
   loadFlatMember(flatMemberId: string): void {
@@ -118,19 +131,91 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.flatMember = response;
-          // Once flat member is loaded, fetch related data
-          this.loadRelatedData();
+
+          // Get societyId from flat member
+          const societyId = typeof this.flatMember.societyId === 'string'
+            ? this.flatMember.societyId
+            : this.flatMember.societyId._id;
+
+          // Load current plan to check feature availability
+          this.loadCurrentPlan(societyId);
         },
         error: (err) => {
           console.error('Failed to load flat member', err);
-          // Optionally navigate back or show error
+          this.featuresLoaded = true; // Set to true to hide loading state
+        }
+      });
+  }
+
+  loadCurrentPlan(societyId: string): void {
+    this.planService.getCurrentPlan(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: (response: ICurrentPlanResponse | null) => {
+          this.currentPlan = response || undefined;
+
+          // Check feature availability from current plan
+          if (this.currentPlan?.planDetails?.features) {
+            this.checkFeatureAvailability(this.currentPlan.planDetails.features);
+          }
+
+          // Now load data based on feature availability
+          this.loadRelatedData();
+          this.featuresLoaded = true;
+        },
+        error: (err) => {
+          console.log('Error loading current plan');
+          this.currentPlan = undefined;
+          this.featuresLoaded = true;
+          // Even without plan, load data (might be free tier with basic features)
+          this.loadRelatedData();
         }
       });
   }
 
   /**
-   * Fetch all related data for the flat (members, complaints, gate entries, etc.)
-   * You'll need to implement these service methods according to your API.
+   * Check which features are available in the current plan
+   */
+  checkFeatureAvailability(features: Array<{ included: boolean; name: string; value?: string }>): void {
+    // Map feature names to keys (based on your feature keys)
+    this.membersFeatureAvailable = features.some(f =>
+      (f.name.toLowerCase().includes('flat member') || 
+       f.name === 'Flat Member Management' || 
+       f.name.toLowerCase().includes('member')) && f.included === true
+    );
+
+    this.vehiclesFeatureAvailable = features.some(f =>
+      (f.name.toLowerCase().includes('vehicle') || f.name.toLowerCase() === 'vehicle') && f.included === true
+    );
+
+    this.parkingFeatureAvailable = features.some(f =>
+      (f.name.toLowerCase().includes('parking') || f.name === 'Parking' || f.name === 'Parking / Vehicle') && f.included === true
+    );
+
+    this.complaintsFeatureAvailable = features.some(f =>
+      f.name.toLowerCase().includes('complaint') && f.included === true
+    );
+
+    this.gateEntriesFeatureAvailable = features.some(f =>
+      (f.name.toLowerCase().includes('gate entry') || f.name === 'Gate Entries') && f.included === true
+    );
+
+    this.gatePassesFeatureAvailable = features.some(f =>
+      (f.name.toLowerCase().includes('gate pass') || f.name === 'Smart Gate Pass') && f.included === true
+    );
+
+    console.log('Feature availability:', {
+      members: this.membersFeatureAvailable,
+      vehicles: this.vehiclesFeatureAvailable,
+      parking: this.parkingFeatureAvailable,
+      complaints: this.complaintsFeatureAvailable,
+      gateEntries: this.gateEntriesFeatureAvailable,
+      gatePasses: this.gatePassesFeatureAvailable
+    });
+  }
+
+  /**
+   * Fetch all related data for the flat based on feature availability
    */
   private loadRelatedData(): void {
     if (!this.flatMember) return;
@@ -143,13 +228,32 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       ? this.flatMember.societyId
       : this.flatMember.societyId._id;
 
-    // Example calls – replace with actual service methods
-    this.getFlatMembers(societyId, flatId);
-    this.getComplaints(societyId, flatId)
-    this.getGateEntries(societyId, flatId);
-    this.getGatePasses(societyId, flatId);
-    // this.societyService.getVehiclesByFlat(flatId).subscribe(data => this.vehicles = data);
-    this.getGateParkings(societyId, flatId);
+    // Load members only if feature is available
+    if (this.membersFeatureAvailable) {
+      this.getFlatMembers(societyId, flatId);
+    }
+
+    // Load data only for features that are available
+    if (this.complaintsFeatureAvailable) {
+      this.getComplaints(societyId, flatId);
+    }
+
+    if (this.gateEntriesFeatureAvailable) {
+      this.getGateEntries(societyId, flatId);
+    }
+
+    if (this.gatePassesFeatureAvailable) {
+      this.getGatePasses(societyId, flatId);
+    }
+
+    // For vehicles and parking, check individual features
+    if (this.vehiclesFeatureAvailable) {
+      this.getVehicles(societyId, flatId);
+    }
+
+    if (this.parkingFeatureAvailable) {
+      this.getParkings(societyId, flatId);
+    }
   }
 
   getFlatMembers(societyId: string, flatId: string) {
@@ -169,7 +273,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.complaints = response.data
+          this.complaints = response.data || [];
         }
       });
   }
@@ -198,7 +302,18 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  getGateParkings(societyId: string, flatId: string) {
+  getVehicles(societyId: string, flatId: string) {
+    this.vehicles = [];
+    this.vehicleService.getVehicles(flatId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.vehicles = response.data || [];
+        }
+      });
+  }
+
+  getParkings(societyId: string, flatId: string) {
     this.societyService.getParkingsByFlat(societyId, flatId)
       .pipe(take(1))
       .subscribe({
@@ -242,8 +357,11 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       if ('email' in createdBy) return createdBy.email ?? 'N/A';
       return 'Unknown';
     }
-    // It's a string ID – show truncated
     return `ID: ${createdBy.substring(0, 6)}...`;
+  }
+
+  getPlanDisplayName(): string {
+    return this.currentPlan?.planDetails?.name || 'No Plan';
   }
 
   resetDialogData(): void {
@@ -273,8 +391,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleChangeResidingTypeClick() {
-    const popupConfig = this.resetDialogData();
-
+    this.resetDialogData();
     this.currentDialogRef = this.dialog.open(this.confirmationTemplate);
   }
 
@@ -290,7 +407,6 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   handleVaccantClick() {
     if (!this.flatMember) return;
 
-    // If current status is OWNER then only disable current members
     if (this.flatMember.residingType === ResidingTypes.Self) {
       this.societyService.moveOutOwner(this.flatMember._id)
         .pipe(take(1))
@@ -305,21 +421,18 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // if current status is TENANT then move out tenant
     if (this.flatMember.residingType === ResidingTypes.Tenant) {
       this.societyService.moveOutTenant(this.flatMember._id)
         .pipe(take(1))
         .subscribe({
           next: response => {
             if (!response.success) return;
-
             if (this.flatMember) this.loadFlatMember(this.flatMember._id);
           },
           complete: () => this.cancelResidingTypeChange()
         });
       return;
     }
-
   }
 
   handleSelfClick() {
@@ -330,40 +443,53 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           if (!response.success) return;
-
           if (this.flatMember) this.loadFlatMember(this.flatMember._id);
         },
         complete: () => this.cancelResidingTypeChange()
       });
-    // If current is VACCANT then activate all members and change residing type to self
-    // if current is TENANT then vaccate tenant and then activate all members and change residing type to self
   }
 
   manageResidents() {
-    this.router.navigateByUrl('/members/list')
+    if (!this.membersFeatureAvailable) return;
+    this.router.navigateByUrl('/members/list');
   }
 
   manageVehicles() {
-    if (!this.flatMember) return;
+    if (!this.vehiclesFeatureAvailable || !this.flatMember) return;
 
-    const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id
+    const flatId = typeof this.flatMember.flatId === 'string'
+      ? this.flatMember.flatId
+      : this.flatMember.flatId._id;
 
     this.router.navigate(['vehicles', flatId, 'list']);
   }
 
   manageComplaints() {
-    this.router.navigateByUrl('/complaints/list')
+    if (!this.complaintsFeatureAvailable) return;
+    this.router.navigateByUrl('/complaints/list');
   }
 
   manageGateEntries() {
-    this.router.navigateByUrl('/visitors/list')
+    if (!this.gateEntriesFeatureAvailable) return;
+    this.router.navigateByUrl('/visitors/list');
   }
 
   manageGatePasses() {
-    this.router.navigateByUrl('/gatepass/list')
+    if (!this.gatePassesFeatureAvailable) return;
+    this.router.navigateByUrl('/gatepass/list');
+  }
+
+  gotoPlanUpgrade() {
+    if (!this.flatMember) return;
+
+    const societyId = typeof this.flatMember.societyId === 'string'
+      ? this.flatMember.societyId
+      : this.flatMember.societyId._id;
+
+    this.router.navigate(['society/current-plan', societyId]);
   }
 
   ngOnDestroy(): void {
-    // this.currentDialogRef.cle
+    this.currentDialogRef?.close();
   }
 }

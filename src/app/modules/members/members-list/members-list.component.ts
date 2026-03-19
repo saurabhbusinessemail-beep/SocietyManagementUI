@@ -29,6 +29,7 @@ export class MembersListComponent implements OnInit {
     this.selectedFIlter = selectedFIlter;
     const societyId = selectedFIlter.societyId;
     const flatId = selectedFIlter.flatId;
+    this.members = [];
 
     this.societyService.myFlatMembers(societyId, flatId)
       .pipe(take(1))

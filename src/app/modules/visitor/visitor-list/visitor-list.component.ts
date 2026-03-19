@@ -58,6 +58,7 @@ export class VisitorListComponent implements OnInit {
 
   loadGateEntries(selectedFilter: IVisitorFilter) {
     this.selectedFIlter = selectedFilter;
+    this.gateEntries = [];
 
     const date = this.selectedDateControl.value ? new Date(this.selectedDateControl.value) : undefined;
     this.gateEntryService.getAllMyGateEntries(selectedFilter.societyId, selectedFilter.flatId, undefined, date)
