@@ -6,7 +6,7 @@
         <div class="plan-banner" *ngIf="currentPlan" (click)="gotoPlanUpgrade()">
             <span class="plan-name">Plan: {{ getPlanDisplayName() }}</span>
             <span class="plan-usage" *ngIf="currentPlan.usage">
-                {{ currentPlan.usage.usedPercentage }}% used ({{ currentPlan.usage.remainingDays }} days remaining)
+                {{ currentPlan.usage.remainingDays }} days remaining
             </span>
         </div>
 

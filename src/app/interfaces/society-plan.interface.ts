@@ -1,4 +1,4 @@
-import { IPricingPlan } from "./pricing.interface";
+import { IPricingFeature, IPricingPlan } from "./pricing.interface";
 import { ISociety } from "./society.interface";
 import { IUser } from "./user.interface";
 
@@ -10,14 +10,7 @@ export interface ISocietyPlan {
     price: string;
     period?: string;
     featureCount?: string;
-    features: Array<{
-        featureKey: string;
-        name: string;
-        included: boolean;
-        currentUsage: number;
-        limit: number;
-        hasLimit: boolean;
-    }>;
+    features: IPricingFeature[];
     startDate: Date;
     endDate?: Date;
     isActive: boolean;
@@ -62,11 +55,7 @@ export interface ICurrentPlanResponse extends ISocietyPlan {
             buttonFrom?: string;
             buttonTo?: string;
         };
-        features: Array<{
-            included: boolean;
-            name: string;
-            value?: string;
-        }>;
+        features: IPricingFeature[];
     };
     usage: {
         daysUsed: number;

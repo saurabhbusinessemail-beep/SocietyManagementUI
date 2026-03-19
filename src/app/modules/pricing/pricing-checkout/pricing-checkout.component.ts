@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IChangePlanCalculation, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
+import { IChangePlanCalculation, ICurrentPlanResponse, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
@@ -35,7 +35,7 @@ export class PricingCheckoutComponent implements OnInit {
 
   // Change plan related properties
   isChangePlan = false;
-  currentPlanDetails?: any;
+  currentPlanDetails?: ICurrentPlanResponse;
   changePlanCalculation?: IChangePlanCalculation;
   showChangePlanSummary = false;
   showRemoveCoupon: boolean = false;
@@ -80,6 +80,8 @@ export class PricingCheckoutComponent implements OnInit {
     // Get societyId and plan from route/state
     this.route.params.subscribe(params => {
       this.societyId = params['societyId'];
+      this.selectedPlan = this.pricingPlanService.plans.find(p => p.id === params['planId']);
+      
       if (this.societyId) {
         this.paramHasSocietyId = true;
         this.loadSociety(this.societyId);
@@ -88,7 +90,6 @@ export class PricingCheckoutComponent implements OnInit {
         this.checkForCurrentPlan();
       }
 
-      this.selectedPlan = this.pricingPlanService.plans.find(p => p.id === params['planId']);
       if (this.selectedPlan) this.calculatePrice();
       else this.router.navigate(['/']);
     });
@@ -99,6 +100,8 @@ export class PricingCheckoutComponent implements OnInit {
       next: response => {
         if (response) {
           this.currentPlanDetails = response;
+
+          console.log('this.currentPlanDetails = ', this.currentPlanDetails)
 
           // Check if current plan is Basic/Free
           const isCurrentPlanFree = this.currentPlanDetails.price === 'Free' ||
@@ -119,11 +122,14 @@ export class PricingCheckoutComponent implements OnInit {
   }
 
   calculateChangePrice(couponCode?: string): void {
+    console.log('calculateChangePrice = ',this.selectedPlan, this.societyId )
     if (!this.selectedPlan || !this.societyId) return;
 
     this.pricingPlanService.calculateChangePrice(this.societyId, this.selectedPlan.id, couponCode).subscribe({
       next: response => {
         this.changePlanCalculation = response;
+
+        console.log('this.changePlanCalculation = ', this.changePlanCalculation)
         this.totalPrice = this.changePlanCalculation?.calculation?.finalAmount ?? 0;
         this.originalPrice = this.changePlanCalculation?.calculation?.amountToPay ?? 0;
         this.discountAmount = this.changePlanCalculation?.calculation?.discount ?? 0;

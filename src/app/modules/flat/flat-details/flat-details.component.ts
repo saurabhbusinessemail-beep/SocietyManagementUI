@@ -17,7 +17,8 @@ import {
   IParking,
   IMyProfile,
   IConfirmationPopupDataConfig,
-  ICurrentPlanResponse
+  ICurrentPlanResponse,
+  IPricingFeature
 } from '../../../interfaces';
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
@@ -25,7 +26,7 @@ import { GatePassService } from '../../../services/gate-pass.service';
 import { LoginService } from '../../../services/login.service';
 import { WindowService } from '../../../services/window.service';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
-import { ResidingTypes } from '../../../constants';
+import { FEATURES, ResidingTypes } from '../../../constants';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VehicleService } from '../../../services/vehicle.service';
 
@@ -176,32 +177,30 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   /**
    * Check which features are available in the current plan
    */
-  checkFeatureAvailability(features: Array<{ included: boolean; name: string; value?: string }>): void {
-    // Map feature names to keys (based on your feature keys)
+  checkFeatureAvailability(features: IPricingFeature[]): void {
+    // Check features using keys from FEATURES enum
     this.membersFeatureAvailable = features.some(f =>
-      (f.name.toLowerCase().includes('flat member') || 
-       f.name === 'Flat Member Management' || 
-       f.name.toLowerCase().includes('member')) && f.included === true
+      f.key === FEATURES.FLAT_MEMBER_MANAGEMENT && f.included === true
     );
 
     this.vehiclesFeatureAvailable = features.some(f =>
-      (f.name.toLowerCase().includes('vehicle') || f.name.toLowerCase() === 'vehicle') && f.included === true
+      f.key === FEATURES.VEHICLE && f.included === true
     );
 
     this.parkingFeatureAvailable = features.some(f =>
-      (f.name.toLowerCase().includes('parking') || f.name === 'Parking' || f.name === 'Parking / Vehicle') && f.included === true
+      f.key === FEATURES.PARKING && f.included === true
     );
 
     this.complaintsFeatureAvailable = features.some(f =>
-      f.name.toLowerCase().includes('complaint') && f.included === true
+      f.key === FEATURES.COMPLAINTS && f.included === true
     );
 
     this.gateEntriesFeatureAvailable = features.some(f =>
-      (f.name.toLowerCase().includes('gate entry') || f.name === 'Gate Entries') && f.included === true
+      f.key === FEATURES.GATE_ENTRIES && f.included === true
     );
 
     this.gatePassesFeatureAvailable = features.some(f =>
-      (f.name.toLowerCase().includes('gate pass') || f.name === 'Smart Gate Pass') && f.included === true
+      f.key === FEATURES.SMART_GATE_PASS && f.included === true
     );
 
     console.log('Feature availability:', {

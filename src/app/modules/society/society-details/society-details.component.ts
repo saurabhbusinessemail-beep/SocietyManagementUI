@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IComplaintStats, ICurrentPlanResponse, IFlat, IParking, ISociety, IUser } from '../../../interfaces';
-import { PERMISSIONS } from '../../../constants';
+import { IComplaintStats, ICurrentPlanResponse, IFlat, IParking, IPricingFeature, ISociety, IUser } from '../../../interfaces';
+import { FEATURES, PERMISSIONS } from '../../../constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { take, forkJoin, of } from 'rxjs';
@@ -118,12 +118,12 @@ export class SocietyDetailsComponent implements OnInit {
     this.planService.getCurrentPlan(societyId).subscribe({
       next: response => {
         this.currentPlan = response;
-        
+
         // Check feature availability from current plan
         if (this.currentPlan?.features) {
           this.checkFeatureAvailability(this.currentPlan.features);
         }
-        
+
         // Now load data based on feature availability
         this.loadFeatureSpecificData(societyId);
         this.featuresLoaded = true;
@@ -141,17 +141,17 @@ export class SocietyDetailsComponent implements OnInit {
   /**
    * Check which features are available in the current plan
    */
-  checkFeatureAvailability(features: any[]): void {
-    // Check for parking feature (multiple possible keys)
-    this.parkingFeatureAvailable = features.some(f => 
-      (f.key === 'parking' || f.key === 'parking_vehicle' || f.key === 'vehicle') && f.included === true
+  checkFeatureAvailability(features: IPricingFeature[]): void {
+    // Check for parking feature using FEATURES enum
+    this.parkingFeatureAvailable = features.some(f =>
+      f.key === FEATURES.PARKING && f.included === true
     );
-    
-    // Check for complaints feature
-    this.complaintsFeatureAvailable = features.some(f => 
-      f.key === 'complaints' && f.included === true
+
+    // Check for complaints feature using FEATURES enum
+    this.complaintsFeatureAvailable = features.some(f =>
+      f.key === FEATURES.COMPLAINTS && f.included === true
     );
-    
+
     console.log('Feature availability:', {
       parking: this.parkingFeatureAvailable,
       complaints: this.complaintsFeatureAvailable
@@ -166,7 +166,7 @@ export class SocietyDetailsComponent implements OnInit {
     if (this.complaintsFeatureAvailable) {
       this.loadComplaints(societyId);
     }
-    
+
     // Load parkings only if feature is available
     if (this.parkingFeatureAvailable) {
       this.loadParkings(societyId);

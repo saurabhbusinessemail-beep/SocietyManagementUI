@@ -3,6 +3,11 @@ export interface IPricingFeature {
     name: string;
     value?: string;
     included: boolean;
+
+
+    currentUsage: number;
+    limit: number;
+    hasLimit: boolean;
 }
 
 export interface IPricingPlan {
