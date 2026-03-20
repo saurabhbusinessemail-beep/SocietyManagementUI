@@ -168,6 +168,6 @@ export class SocietyCardComponent {
    * Check if plan is expired
    */
   isExpired(): boolean {
-    return this.getRemainingDays() <= 0;
+    return this.plan?.planDetails.id !== 'basic' && this.getRemainingDays() <= 0;
   }
 }

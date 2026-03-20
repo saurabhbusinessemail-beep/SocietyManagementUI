@@ -68,15 +68,23 @@
             <span class="label">Plan Status</span>
             <div class="expiry-info" [class.expiring-soon]="isExpiringSoon()" [class.expired]="isExpired()">
                 <span class="icon icon-calendar"></span>
-                <span *ngIf="getRemainingDays() > 0">
-                    {{ getRemainingDays() }} days remaining
-                </span>
-                <span *ngIf="getRemainingDays() <= 0" class="expired-text">
-                    Plan Expired
-                </span>
-                <span *ngIf="isExpiringSoon()" class="warning-badge">
-                    Expiring Soon
-                </span>
+                <ng-container *ngIf="plan?.planDetails?.id !== 'basic'">
+                    <span *ngIf="getRemainingDays() > 0">
+                        {{ getRemainingDays() }} days remaining
+                    </span>
+                    <span *ngIf="getRemainingDays() <= 0" class="expired-text">
+                        Plan Expired
+                    </span>
+                    <span *ngIf="isExpiringSoon()" class="warning-badge">
+                        Expiring Soon
+                    </span>
+                </ng-container>
+
+                <ng-container *ngIf="plan?.planDetails?.id === 'basic'">
+                    <span>
+                        Unlimited
+                    </span>
+                </ng-container>
             </div>
         </div>
 

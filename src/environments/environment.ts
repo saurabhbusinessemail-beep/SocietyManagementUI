@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:3000/api/v1',
-  googleMapsAPIKey: 'AIzaSyCKmnbWMEfLyMYsW8K4GVAqeL_OsqtespE', // 'AIzaSyASef_eQn4ThvxBhviL3mYFk9kr2btU48I'
+  googleMapsAPIKey: 'AIzaSyDX5bmhvA0GJFoIcKQZk7QlcY_UBPmAe-w', // 'AIzaSyATWBuJR2f19r-z750u8HWcbjmBKIQygyc', // 'AIzaSyASef_eQn4ThvxBhviL3mYFk9kr2btU48I'
 };
