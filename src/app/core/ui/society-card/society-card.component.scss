@@ -53,6 +53,18 @@
                 font-weight: 500;
                 letter-spacing: 0.3px;
             }
+
+            .flat-count {
+                display: inline-block;
+                font-size: $font-size-xs;
+                color: $color-white;
+                background-color: $status-pending;
+                padding: $sp-xs $sp-sm;
+                border-radius: $btn-border-radius-sm;
+                font-weight: 500;
+                letter-spacing: 0.3px;
+                margin-left: $sp-sm;
+            }
         }
 
         .header-right {
