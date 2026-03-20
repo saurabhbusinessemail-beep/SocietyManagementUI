@@ -10,6 +10,17 @@ export interface IPricingFeature {
     hasLimit: boolean;
 }
 
+export interface IDurationOption {
+    value: number;
+    unit: 'months' | 'years';
+    discount: number;
+}
+
+export interface IAllowedDurations {
+    months: number[];
+    years: number[];
+}
+
 export interface IPricingPlan {
     id: string;
     name: string;
@@ -39,4 +50,6 @@ export interface IPricingPlan {
     isPopular?: boolean;
     isBestValue?: boolean;
     featureCount?: string;
+    allowedDurations?: IAllowedDurations;
+    durationOptions?: IDurationOption[];
 }

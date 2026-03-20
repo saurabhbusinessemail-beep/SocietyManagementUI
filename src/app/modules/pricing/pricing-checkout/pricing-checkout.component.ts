@@ -1,19 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+// pricing-checkout.component.ts - Fixed version
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IChangePlanCalculation, ICurrentPlanResponse, IMyProfile, IPricingPlan, ISociety, ISocietyPlan } from '../../../interfaces';
+import {
+  IChangePlanCalculation,
+  ICurrentPlanResponse,
+  IMyProfile,
+  IPricingPlan,
+  ISociety,
+  ISocietyPlan,
+  IDurationPrice,
+  IPlanDurationsResponse
+} from '../../../interfaces';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
 import { Location } from '@angular/common';
-import { take } from 'rxjs';
+import { take, takeUntil, finalize, switchMap, map } from 'rxjs/operators';
+import { Subject, forkJoin, of, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-pricing-checkout',
   templateUrl: './pricing-checkout.component.html',
   styleUrls: ['./pricing-checkout.component.scss']
 })
-export class PricingCheckoutComponent implements OnInit {
+export class PricingCheckoutComponent implements OnInit, OnDestroy {
   currentStep: number = 1;
   societyId: string = '';
   paramHasSocietyId = false;
@@ -33,12 +45,21 @@ export class PricingCheckoutComponent implements OnInit {
   showSocietySelectModal = false;
   tentativeTotalPrice: number = 0;
 
+  // Duration related properties
+  selectedDurationValue: number = 0;
+  selectedDurationUnit: 'months' | 'years' = 'months';
+  availableDurations: IPlanDurationsResponse | null = null;
+  isLoadingDurations: boolean = false;
+  showDurationSelector: boolean = false;
+  isDurationLoaded: boolean = false;
+
   // Change plan related properties
   isChangePlan = false;
   currentPlanDetails?: ICurrentPlanResponse;
   changePlanCalculation?: IChangePlanCalculation;
   showChangePlanSummary = false;
   showRemoveCoupon: boolean = false;
+  isCurrentPlanLoading: boolean = false;
 
   // Payment methods
   paymentMethods = [
@@ -54,6 +75,9 @@ export class PricingCheckoutComponent implements OnInit {
   // Form groups
   couponForm: FormGroup;
   upiForm: FormGroup;
+
+  // Destroy subject for cleanup
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -78,69 +102,229 @@ export class PricingCheckoutComponent implements OnInit {
     this.myProfile = this.loginService.getProfileFromStorage();
 
     // Get societyId and plan from route/state
-    this.route.params.subscribe(params => {
-      this.societyId = params['societyId'];
-      this.selectedPlan = this.pricingPlanService.plans.find(p => p.id === params['planId']);
-      
-      if (this.societyId) {
-        this.paramHasSocietyId = true;
-        this.loadSociety(this.societyId);
+    this.route.params.pipe(
+      takeUntil(this.destroy$),
+      switchMap(params => {
+        this.societyId = params['societyId'];
+        const planId = params['planId'];
 
-        // Check if this is a change plan by looking for current plan
-        this.checkForCurrentPlan();
+        if (this.societyId) {
+          this.paramHasSocietyId = true;
+          this.loadSociety(this.societyId);
+        }
+
+        // Wait for plans to load before selecting the plan
+        return this.waitForPlansToLoad(planId);
+      })
+    ).subscribe({
+      next: (plan) => {
+        this.selectedPlan = plan;
+        if (this.selectedPlan) {
+          this.loadAvailableDurations();
+        } else {
+          console.error('Plan not found');
+          this.router.navigate(['/']);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading plan:', error);
+        this.router.navigate(['/']);
       }
-
-      if (this.selectedPlan) this.calculatePrice();
-      else this.router.navigate(['/']);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private waitForPlansToLoad(planId: string): Observable<IPricingPlan | undefined> {
+    // Check if plans are already loaded
+    if (this.pricingPlanService.plans.length > 0) {
+      const plan = this.pricingPlanService.plans.find(p => p.id === planId);
+      return of(plan);
+    }
+
+    // Wait for plans to load
+    return this.pricingPlanService.getPlanById(planId).pipe(
+      take(1)
+    );
+  }
+
+  loadAvailableDurations(): void {
+    if (!this.selectedPlan) return;
+
+    // Skip duration loading for free plans
+    if (this.selectedPlan.price === 'Free') {
+      this.showDurationSelector = false;
+      this.calculatePrice();
+      return;
+    }
+
+    this.isLoadingDurations = true;
+    this.pricingPlanService.getPlanDurations(this.selectedPlan.id, this.societyId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.isLoadingDurations = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.availableDurations = response;
+          this.showDurationSelector = this.hasDurationOptions();
+          this.isDurationLoaded = true;
+
+          // Set default duration only after durations are loaded
+          this.setDefaultDuration();
+
+          // Calculate initial price
+          this.calculatePrice();
+
+          // Now check for current plan (if society is loaded)
+          if (this.societyId && this.societyDetails) {
+            this.checkForCurrentPlan();
+          }
+        },
+        error: (error) => {
+          console.error('Error loading durations:', error);
+          this.showDurationSelector = false;
+        }
+      });
+  }
+
+  setDefaultDuration(): void {
+    if (!this.availableDurations) return;
+
+    // Reset duration values
+    this.selectedDurationValue = 0;
+
+    // Prefer 1 year if available
+    if (this.availableDurations.data.durations.years?.length) {
+      const defaultYear = this.availableDurations.data.durations.years.find(y => y.value === 1);
+      if (defaultYear) {
+        this.selectedDurationValue = 1;
+        this.selectedDurationUnit = 'years';
+      } else {
+        this.selectedDurationValue = this.availableDurations.data.durations.years[0].value;
+        this.selectedDurationUnit = 'years';
+      }
+    }
+    // Otherwise use months
+    else if (this.availableDurations.data.durations.months?.length) {
+      this.selectedDurationValue = this.availableDurations.data.durations.months[0].value;
+      this.selectedDurationUnit = 'months';
+    }
+  }
+
+  hasDurationOptions(): boolean {
+    if (!this.availableDurations) return false;
+    return (this.availableDurations.data.durations.months?.length > 0 ||
+      this.availableDurations.data.durations.years?.length > 0);
+  }
+
+  getDurationLabel(duration: IDurationPrice): string {
+    if (duration.unit === 'months') {
+      return `${duration.value} Month${duration.value > 1 ? 's' : ''}`;
+    }
+    return `${duration.value} Year${duration.value > 1 ? 's' : ''}`;
+  }
+
+  getFormattedPrice(amount: number): string {
+    return '₹' + amount.toLocaleString('en-IN');
+  }
+
+  onDurationChange(): void {
+    // Only recalculate if we have valid duration
+    if (this.selectedDurationValue === 0) return;
+
+    this.calculatePrice();
+
+    // Reset coupon when duration changes
+    if (this.isCouponApplied) {
+      this.removeCoupon();
+    }
+
+    // Recalculate change plan price if in change plan mode
+    if (this.isChangePlan && this.societyId && this.selectedPlan) {
+      this.calculateChangePrice();
+    }
+  }
+
+  getSelectedDurationPrice(): IDurationPrice | undefined {
+    if (!this.availableDurations) return undefined;
+
+    if (this.selectedDurationUnit === 'months') {
+      return this.availableDurations.data.durations.months.find(
+        d => d.value === this.selectedDurationValue
+      );
+    } else {
+      return this.availableDurations.data.durations.years.find(
+        d => d.value === this.selectedDurationValue
+      );
+    }
   }
 
   checkForCurrentPlan(): void {
-    this.pricingPlanService.getCurrentPlan(this.societyId).subscribe({
-      next: response => {
-        if (response) {
-          this.currentPlanDetails = response;
+    if (!this.societyId || !this.selectedPlan || this.selectedPlan.price === 'Free') {
+      return;
+    }
 
-          console.log('this.currentPlanDetails = ', this.currentPlanDetails)
+    this.isCurrentPlanLoading = true;
+    this.pricingPlanService.getCurrentPlan(this.societyId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.isCurrentPlanLoading = false;
+        })
+      )
+      .subscribe({
+        next: response => {
+          if (response && response._id) {
+            this.currentPlanDetails = response;
 
-          // Check if current plan is Basic/Free
-          const isCurrentPlanFree = this.currentPlanDetails.price === 'Free' ||
-            this.currentPlanDetails.planName === 'Basic';
+            // Check if current plan is Basic/Free
+            const isCurrentPlanFree = response.price === 'Free' ||
+              response.planName === 'Basic';
 
-          // If current plan is not free, this is a change plan
-          if (!isCurrentPlanFree) {
-            this.isChangePlan = true;
-            this.calculateChangePrice();
+            // If current plan is not free and we have valid duration, this is a change plan
+            if (!isCurrentPlanFree && this.selectedDurationValue !== 0) {
+              this.isChangePlan = true;
+              this.calculateChangePrice();
+            }
           }
+        },
+        error: (err) => {
+          // No current plan found - this is a new purchase
+          console.log('No current plan found - new purchase');
         }
-      },
-      error: (err) => {
-        // No current plan found - this is a new purchase
-        console.log('No current plan found - new purchase');
-      }
-    });
+      });
   }
 
   calculateChangePrice(couponCode?: string): void {
-    console.log('calculateChangePrice = ',this.selectedPlan, this.societyId )
-    if (!this.selectedPlan || !this.societyId) return;
+    if (!this.selectedPlan || !this.societyId || this.selectedDurationValue === 0) return;
 
-    this.pricingPlanService.calculateChangePrice(this.societyId, this.selectedPlan.id, couponCode).subscribe({
-      next: response => {
-        this.changePlanCalculation = response;
-
-        console.log('this.changePlanCalculation = ', this.changePlanCalculation)
-        this.totalPrice = this.changePlanCalculation?.calculation?.finalAmount ?? 0;
-        this.originalPrice = this.changePlanCalculation?.calculation?.amountToPay ?? 0;
-        this.discountAmount = this.changePlanCalculation?.calculation?.discount ?? 0;
-        this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
-        this.showChangePlanSummary = true;
-      },
-      error: (err) => {
-        console.error('Error calculating change price:', err);
-        this.couponMessage = err.error?.message || 'Error applying coupon';
-      }
-    });
+    this.pricingPlanService.calculateChangePrice(
+      this.societyId,
+      this.selectedPlan.id,
+      this.selectedDurationValue,
+      this.selectedDurationUnit,
+      couponCode
+    ).pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: response => {
+          this.changePlanCalculation = response;
+          this.totalPrice = this.changePlanCalculation?.calculation?.finalAmount ?? 0;
+          this.originalPrice = this.changePlanCalculation?.calculation?.amountToPay ?? 0;
+          this.discountAmount = this.changePlanCalculation?.calculation?.discount ?? 0;
+          this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
+          this.showChangePlanSummary = true;
+        },
+        error: (err) => {
+          console.error('Error calculating change price:', err);
+          this.couponMessage = err.error?.message || 'Error applying coupon';
+        }
+      });
   }
 
   triggerLogin() {
@@ -157,26 +341,32 @@ export class PricingCheckoutComponent implements OnInit {
 
   loadSociety(societyId: string) {
     this.societyLoading = true;
-    this.societyService.getSociety(this.societyId).subscribe({
-      next: (society) => {
-        this.societyDetails = society;
-        this.societyLoading = false;
-        this.calculatePrice();
+    this.societyService.getSociety(this.societyId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.societyLoading = false;
+        })
+      )
+      .subscribe({
+        next: (society) => {
+          this.societyDetails = society;
 
-        // After society loads, check for current plan again
-        this.checkForCurrentPlan();
-      },
-      error: (error) => {
-        this.societyLoading = false;
-        console.error('Error fetching society:', error);
-      }
-    });
+          // After society loads, reload durations with society ID
+          if (this.selectedPlan) {
+            this.loadAvailableDurations();
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching society:', error);
+        }
+      });
   }
 
   calculatePrice(): void {
     if (!this.selectedPlan) return;
 
-    // Parse price - handle 'Free' case
+    // Handle free plans
     if (this.selectedPlan.price === 'Free') {
       this.originalPrice = 0;
       this.totalPrice = 0;
@@ -184,20 +374,29 @@ export class PricingCheckoutComponent implements OnInit {
       return;
     }
 
-    // Convert price string to number
-    const pricePerFlat = parseInt(this.selectedPlan.price);
+    // Don't calculate if duration not selected
+    if (this.selectedDurationValue === 0) return;
 
-    if (this.societyDetails?.numberOfFlats) {
-      // Actual price with known flats
-      this.originalPrice = pricePerFlat * this.societyDetails.numberOfFlats * 12;
-      this.tentativeTotalPrice = this.originalPrice;
-    } else {
-      // Tentative price - assume at least 10 flats for estimation
-      this.originalPrice = pricePerFlat * 10 * 12;
-      this.tentativeTotalPrice = this.originalPrice;
+    // Get selected duration price
+    const selectedDurationPrice = this.getSelectedDurationPrice();
+
+    if (selectedDurationPrice) {
+      if (this.societyDetails?.numberOfFlats) {
+        // Calculate price based on selected duration and actual flat count
+        // The price from API already includes flat count, so use directly
+        this.originalPrice = selectedDurationPrice.baseAmount;
+        this.totalPrice = selectedDurationPrice.finalAmount;
+        this.discountAmount = selectedDurationPrice.discount > 0 ? selectedDurationPrice.baseAmount - selectedDurationPrice.finalAmount : 0;
+        this.discountPercentage = selectedDurationPrice.discount;
+        this.tentativeTotalPrice = selectedDurationPrice.baseAmount;
+      } else {
+        // Tentative price with default flat count (from API response)
+        const flatCount = this.availableDurations?.data.flatCount || 10;
+        this.originalPrice = selectedDurationPrice.baseAmount;
+        this.tentativeTotalPrice = selectedDurationPrice.baseAmount;
+        this.totalPrice = selectedDurationPrice.finalAmount;
+      }
     }
-
-    this.totalPrice = this.originalPrice;
   }
 
   applyCoupon(): void {
@@ -211,40 +410,42 @@ export class PricingCheckoutComponent implements OnInit {
     // Determine amount to apply coupon on
     let amountToDiscount = this.isChangePlan && this.changePlanCalculation
       ? (this.changePlanCalculation.calculation?.amountToPay ?? 0)
-      : (this.societyDetails ? this.originalPrice : this.tentativeTotalPrice);
+      : this.totalPrice;
 
-    this.pricingPlanService.validateCoupon(this.couponCode, amountToDiscount).subscribe({
-      next: (response) => {
-        if (response.valid) {
-          if (this.isChangePlan) {
-            // Recalculate change price with coupon
-            this.calculateChangePrice(this.couponCode);
+    this.pricingPlanService.validateCoupon(this.couponCode, amountToDiscount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.valid) {
+            if (this.isChangePlan) {
+              // Recalculate change price with coupon
+              this.calculateChangePrice(this.couponCode);
+            } else {
+              // Update new purchase price
+              this.discountAmount = response.discount;
+              this.totalPrice = response.finalAmount;
+              this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
+            }
+            this.isCouponApplied = true;
+            this.showRemoveCoupon = true;
+            this.couponForm.get('couponCode')?.disable();
+            this.couponMessage = 'Coupon applied successfully!';
           } else {
-            // Update new purchase price
-            this.discountAmount = response.discount;
-            this.totalPrice = response.finalAmount;
-            this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
+            this.couponMessage = response.message || 'Coupon not found';
+            this.isCouponApplied = false;
+            this.showRemoveCoupon = false;
+            this.discountAmount = 0;
+            this.discountPercentage = 0;
           }
-          this.isCouponApplied = true;
-          this.showRemoveCoupon = true;
-          this.couponForm.get('couponCode')?.disable();
-          this.couponMessage = 'Coupon applied successfully!';
-        } else {
-          this.couponMessage = response.message || 'Coupon not found';
+        },
+        error: (err) => {
+          this.couponMessage = err.error?.message || 'Error applying coupon';
           this.isCouponApplied = false;
           this.showRemoveCoupon = false;
           this.discountAmount = 0;
           this.discountPercentage = 0;
         }
-      },
-      error: (err) => {
-        this.couponMessage = err.error?.message || 'Error applying coupon';
-        this.isCouponApplied = false;
-        this.showRemoveCoupon = false;
-        this.discountAmount = 0;
-        this.discountPercentage = 0;
-      }
-    });
+      });
   }
 
   removeCoupon(): void {
@@ -261,7 +462,7 @@ export class PricingCheckoutComponent implements OnInit {
       this.calculateChangePrice();
     } else {
       // Reset to original price
-      this.totalPrice = this.originalPrice;
+      this.calculatePrice();
     }
   }
 
@@ -303,53 +504,68 @@ export class PricingCheckoutComponent implements OnInit {
       }
       if (!this.societyId) {
         this.getSociety();
+        return;
       }
       if (!this.selectedPlan || !this.societyId) return;
+
+      // Validate duration for paid plans
+      if (this.selectedPlan.price !== 'Free' && this.selectedDurationValue === 0) {
+        this.couponMessage = 'Please select a valid duration';
+        return;
+      }
 
       this.isProcessing = true;
 
       if (this.isChangePlan && this.changePlanCalculation) {
-        // Use change plan API with coupon if applied
+        // Use change plan API with duration
         this.pricingPlanService.changePlan(
           this.societyId,
           this.selectedPlan.id,
-          'yearly',
+          this.selectedDurationValue,
+          this.selectedDurationUnit,
           this.selectedPaymentMethod,
           { upiId: this.upiForm.get('upiId')?.value },
           this.isCouponApplied ? this.couponCode : undefined
-        ).subscribe({
-          next: (plan) => {
-            this.societyPlan = plan;
-            this.purchaseComplete = true;
-            this.isProcessing = false;
-          },
-          error: (error) => {
-            console.error('Change plan failed:', error);
-            this.isProcessing = false;
-          }
-        });
+        ).pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (plan) => {
+              this.societyPlan = plan;
+              this.purchaseComplete = true;
+              this.isProcessing = false;
+            },
+            error: (error) => {
+              console.error('Change plan failed:', error);
+              this.couponMessage = error.error?.message || 'Failed to change plan';
+              this.isProcessing = false;
+            }
+          });
       } else {
-        // Use new purchase API with coupon if applied
+        // Use new purchase API with duration
         this.pricingPlanService.purchasePlan(
           this.societyId,
           this.selectedPlan.id,
-          'yearly',
+          this.selectedDurationValue,
+          this.selectedDurationUnit,
+          undefined,
           this.isCouponApplied ? this.couponCode : undefined
-        ).subscribe({
-          next: (plan) => {
-            this.societyPlan = plan;
-            this.purchaseComplete = true;
-            this.isProcessing = false;
-          },
-          error: (error) => {
-            console.error('Purchase failed:', error);
-            this.isProcessing = false;
-          }
-        });
+        ).pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (plan) => {
+              this.societyPlan = plan;
+              this.purchaseComplete = true;
+              this.isProcessing = false;
+            },
+            error: (error) => {
+              console.error('Purchase failed:', error);
+              this.couponMessage = error.error?.message || 'Failed to purchase plan';
+              this.isProcessing = false;
+            }
+          });
       }
 
     } catch (err) {
       console.log('Error ', err);
+      this.isProcessing = false;
     }
   }
 
@@ -372,24 +588,28 @@ export class PricingCheckoutComponent implements OnInit {
     this.loadSociety(this.societyId);
   }
 
-  // Helper to check if current step is valid
   isStepValid(): boolean {
-    // Disable next button if society details not loaded
     if (!this.societyDetails && this.currentStep === 1) {
       return false;
     }
 
+    // Validate duration selection for paid plans
+    if (this.currentStep === 1 && this.selectedPlan && this.selectedPlan.price !== 'Free') {
+      if (!this.isDurationLoaded || this.selectedDurationValue === 0) {
+        return false;
+      }
+    }
+
     if (this.currentStep === 1) {
-      return true; // Society details are loaded
+      return true;
     } else if (this.currentStep === 2) {
-      return this.selectedPaymentMethod === 'upi'; // Only UPI enabled
+      return this.selectedPaymentMethod === 'upi';
     } else if (this.currentStep === 3) {
       return this.upiForm.valid;
     }
     return false;
   }
 
-  // Get step status for stepper
   getStepStatus(step: number): 'active' | 'completed' | 'pending' {
     if (this.currentStep === step) return 'active';
     if (step < this.currentStep) return 'completed';

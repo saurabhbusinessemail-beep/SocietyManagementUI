@@ -92,6 +92,73 @@
                                 <p class="plan-billed">Billed annually</p>
                             </div>
                         </div>
+
+                        <!-- Duration Selection (for paid plans) -->
+                        <div class="summary-section"
+                            *ngIf="selectedPlan && selectedPlan.price !== 'Free' && showDurationSelector && !isLoadingDurations">
+                            <h3>Select Duration</h3>
+                            <div class="duration-selector">
+                                <!-- Month Options -->
+                                <div class="duration-group"
+                                    *ngIf="availableDurations && availableDurations.data.durations.months?.length">
+                                    <label class="duration-group-label">Months</label>
+                                    <div class="duration-options">
+                                        <div *ngFor="let duration of availableDurations && availableDurations.data.durations.months"
+                                            class="duration-option"
+                                            [class.selected]="selectedDurationUnit === 'months' && selectedDurationValue === duration.value"
+                                            (click)="selectedDurationUnit = 'months'; selectedDurationValue = duration.value; onDurationChange()">
+                                            <div class="duration-value">{{ duration.value }} Month{{ duration.value > 1
+                                                ? 's' : '' }}</div>
+                                            <div class="duration-price">
+                                                <span class="original-price" *ngIf="duration.discount > 0">{{
+                                                    getFormattedPrice(duration.baseAmount) }}</span>
+                                                <span class="final-price">{{ getFormattedPrice(duration.finalAmount)
+                                                    }}</span>
+                                                <span class="discount-badge" *ngIf="duration.discount > 0">Save {{
+                                                    duration.discount }}%</span>
+                                            </div>
+                                            <div class="duration-savings" *ngIf="duration.savings">Save {{
+                                                getFormattedPrice(duration.savings) }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Year Options -->
+                                <div class="duration-group"
+                                    *ngIf="availableDurations && availableDurations.data.durations.years.length">
+                                    <label class="duration-group-label">Years</label>
+                                    <div class="duration-options">
+                                        <div *ngFor="let duration of (availableDurations?.data?.durations?.years ?? [])"
+                                            class="duration-option"
+                                            [class.selected]="selectedDurationUnit === 'years' && selectedDurationValue === duration.value"
+                                            (click)="selectedDurationUnit = 'years'; selectedDurationValue = duration.value; onDurationChange()">
+                                            <div class="duration-value">{{ duration.value }} Year{{ duration.value > 1 ?
+                                                's' : '' }}</div>
+                                            <div class="duration-price">
+                                                <span class="original-price" *ngIf="duration.discount > 0">
+                                                    {{ getFormattedPrice(duration.baseAmount) }}
+                                                </span>
+                                                <span class="final-price">
+                                                    {{ getFormattedPrice(duration.finalAmount) }}
+                                                </span>
+                                                <span class="discount-badge" *ngIf="duration.discount > 0">
+                                                    Save {{ duration.discount }}%
+                                                </span>
+                                            </div>
+                                            <div class="duration-monthly" *ngIf="duration.monthlyEquivalent">
+                                                ~ {{ getFormattedPrice(duration.monthlyEquivalent) }}/month
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loading state for durations -->
+                        <div class="summary-section" *ngIf="isLoadingDurations">
+                            <h3>Loading available durations...</h3>
+                            <div class="loading-spinner"></div>
+                        </div>
                     </div>
 
                     <!-- Change Plan Summary -->
@@ -174,7 +241,7 @@
 
                     <div class="price-summary">
                         <div class="price-row">
-                            <span>Total (Full Year)</span>
+                            <span>Total</span>
                             <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
                             <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
                                 <span class="original-price">₹{{ originalPrice | number:'1.2-2' }}</span>

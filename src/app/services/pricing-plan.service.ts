@@ -1,15 +1,17 @@
+// pricing-plan.service.ts - Add duration-related methods
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IBEResponseFormat, IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan } from '../interfaces';
+import { IBEResponseFormat, IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan, IPlanDurationsResponse } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PricingPlanService {
-    private baseUrl = `${environment.apiBaseUrl}/pricing-plan`; // Adjust base URL as per your API structure
+    private baseUrl = `${environment.apiBaseUrl}/pricing-plan`;
 
     features: IFeature[] = [];
     plans: IPricingPlan[] = [];
@@ -17,7 +19,6 @@ export class PricingPlanService {
     constructor(private http: HttpClient) { }
 
     @Cacheable({
-        // ttl: 3600000, // 1 hour
         group: 'pricing-plans',
         keyGenerator: () => 'features'
     })
@@ -36,7 +37,6 @@ export class PricingPlanService {
     }
 
     @Cacheable({
-        // ttl: 3600000, // 1 hour
         group: 'pricing-plans',
         keyGenerator: () => 'plans'
     })
@@ -53,6 +53,14 @@ export class PricingPlanService {
                 }),
                 shareReplay(1)
             );
+    }
+
+    getPlanDurations(planId: string, societyId?: string): Observable<IPlanDurationsResponse> {
+        let url = `${this.baseUrl}/plans/${planId}/durations`;
+        if (societyId) {
+            url += `?societyId=${societyId}`;
+        }
+        return this.http.get<IPlanDurationsResponse>(url);
     }
 
     getFeatures(): Observable<IFeature[]> {
@@ -99,21 +107,32 @@ export class PricingPlanService {
         return this.loadPlans();
     }
 
-    /**
-     * Purchase a plan for a society
-     * Invalidate current plan and history caches
-     */
+    // Updated purchase method with duration
     @InvalidateCache({
         methods: [
             'PricingPlanService.getCurrentPlan*',
             'PricingPlanService.getPlanHistory*'
         ],
         matchParams: true,
-        paramIndices: [0], // Invalidate based on societyId
+        paramIndices: [0],
         groups: ['pricing-plans']
     })
-    purchasePlan(societyId: string, planId: string, billingCycle: 'monthly' | 'yearly' = 'yearly', couponCode?: string): Observable<ISocietyPlan> {
-        const payload: any = { planId, billingCycle };
+    purchasePlan(
+        societyId: string,
+        planId: string,
+        durationValue: number,
+        durationUnit: 'months' | 'years',
+        startDate?: Date,
+        couponCode?: string
+    ): Observable<ISocietyPlan> {
+        const payload: any = {
+            planId,
+            durationValue,
+            durationUnit
+        };
+        if (startDate) {
+            payload.startDate = startDate;
+        }
         if (couponCode) {
             payload.couponCode = couponCode;
         }
@@ -123,12 +142,7 @@ export class PricingPlanService {
         );
     }
 
-    /**
-     * Get society's current active plan
-     * Cache current plan for 5 minutes
-     */
     @Cacheable({
-        // ttl: 300000, // 5 minutes
         paramIndices: [0],
         group: 'pricing-plans'
     })
@@ -137,7 +151,6 @@ export class PricingPlanService {
     }
 
     @Cacheable({
-        // ttl: 300000, // 5 minutes
         paramIndices: [0, 1, 2],
         paramKeys: {
             1: ['page'],
@@ -155,8 +168,20 @@ export class PricingPlanService {
         });
     }
 
-    calculateChangePrice(societyId: string, newPlanId: string, couponCode?: string): Observable<IChangePlanCalculation> {
-        const payload: any = { societyId, newPlanId };
+    // Updated calculateChangePrice with duration
+    calculateChangePrice(
+        societyId: string,
+        newPlanId: string,
+        durationValue: number,
+        durationUnit: 'months' | 'years',
+        couponCode?: string
+    ): Observable<IChangePlanCalculation> {
+        const payload: any = {
+            societyId,
+            newPlanId,
+            durationValue,
+            durationUnit
+        };
         if (couponCode) {
             payload.couponCode = couponCode;
         }
@@ -169,13 +194,22 @@ export class PricingPlanService {
             'PricingPlanService.getPlanHistory*'
         ],
         matchParams: true,
-        paramIndices: [0], // Invalidate based on societyId
+        paramIndices: [0],
         groups: ['pricing-plans']
     })
-    changePlan(societyId: string, newPlanId: string, billingCycle: string = 'yearly', paymentMethod?: string, paymentDetails?: any, couponCode?: string): Observable<any> {
+    changePlan(
+        societyId: string,
+        newPlanId: string,
+        durationValue: number,
+        durationUnit: 'months' | 'years',
+        paymentMethod?: string,
+        paymentDetails?: any,
+        couponCode?: string
+    ): Observable<any> {
         const payload: any = {
             newPlanId,
-            billingCycle,
+            durationValue,
+            durationUnit,
             paymentMethod,
             paymentDetails
         };
@@ -185,12 +219,7 @@ export class PricingPlanService {
         return this.http.post(`${this.baseUrl}/change/${societyId}`, payload);
     }
 
-    /**
-     * Validate coupon code
-     * Cache coupon validation for 1 hour (coupons don't change often)
-     */
     @Cacheable({
-        // ttl: 3600000, // 1 hour
         paramIndices: [0, 1],
         paramKeys: {
             0: ['couponCode'],
