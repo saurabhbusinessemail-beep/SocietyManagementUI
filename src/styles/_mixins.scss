@@ -3,15 +3,15 @@
 @import './variables';
 
 @mixin desktop {
-  @media (min-width: $break-laptop) { @content; }
+  @media (min-width: $break-desktop) { @content; }
 }
 
 @mixin tablet {
-  @media (min-width: $break-tablet) and (max-width: calc($break-laptop - 1px)) { @content; }
+  @media (min-width: $break-mobile) and (max-width: calc($break-desktop - 1px)) { @content; }
 }
 
 @mixin mobile {
-  @media (max-width: calc($break-tablet - 1px)) { @content; }
+  @media (max-width: calc($break-mobile - 1px)) { @content; }
 }
 
 @mixin fluid-font($desktop, $tablet, $mobile) {

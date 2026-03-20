@@ -41,6 +41,7 @@ import { MyFlatMemberCardComponent } from './my-flat-member-card/my-flat-member-
 import { ComplaintCardComponent } from './complaint-card/complaint-card.component';
 import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component';
 import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
+import { CircularDisplayComponent } from './circular-display/circular-display.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
     MyFlatMemberCardComponent,
     ComplaintCardComponent,
     GatePassCardComponent,
-    VehicleCardComponent
+    VehicleCardComponent,
+    CircularDisplayComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -118,7 +120,8 @@ import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
     MyFlatMemberCardComponent,
     ComplaintCardComponent,
     GatePassCardComponent,
-    VehicleCardComponent
+    VehicleCardComponent,
+    CircularDisplayComponent
   ],
   providers: [MatDatepickerModule]
 })

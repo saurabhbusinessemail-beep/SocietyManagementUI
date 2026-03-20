@@ -3,7 +3,10 @@
         <img src="../../../../assets/banner.png" class="banner-image">
     </div>
     <form [formGroup]="fb" class="user-form">
-        <ui-form-layout [title]="role ? '' : 'JOIN AS'" [showAsSection]="!role" [colorTheme]="!role ? 'gradient-modern-ui' : ''">
+
+        <!-- JOIN US -->
+        <ui-form-layout [title]="role ? '' : 'JOIN AS'" [showAsSection]="!role"
+            [colorTheme]="!role ? 'gradient-modern-ui' : ''">
 
             <ng-container *ngIf="!role">
                 <div class="no-mobile no-tablet" [lgColumns]="3"></div>
@@ -122,6 +125,34 @@
                 </section>
 
             </ng-container>
+
+        </ui-form-layout>
+
+
+        <!-- Socities Section -->
+        <ui-form-layout [title]="'Socities'" [showAsSection]="true" colorTheme="gradient-light-airy"
+            *ngIf="!role && societies.length > 0">
+
+            <ng-container *ngFor="let s of societies">
+                <ui-circular-display [label]="s.societyName" [smColumns]="4" [mdColumns]="3" [lgColumns]="2">
+                </ui-circular-display>
+            </ng-container>
+
+        </ui-form-layout>
+        <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
+            *ngIf="!role && societies.length === 0">
+
+            <div class="empty-societies-placeholder" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <div class="placeholder-content">
+                    <div class="placeholder-icon">
+                        <app-icon name="building" size="xl"></app-icon>
+                    </div>
+                    <h3 class="placeholder-title">No Societies Yet</h3>
+                    <p class="placeholder-description">Get started by registering your society</p>
+                    <ui-button label="New Registeration" type="primary" (clicked)="navigateToAddSociety()">
+                    </ui-button>
+                </div>
+            </div>
 
         </ui-form-layout>
     </form>

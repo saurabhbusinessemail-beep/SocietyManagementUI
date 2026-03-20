@@ -1,0 +1,21 @@
+<div class="circular-container" [ngClass]="getContainerClass()" [style.background-color]="containerBackground"
+    [style.border-color]="iconColor">
+    <div class="circular-display" [ngClass]="getSizeClass()" [style.background-color]="backgroundColor">
+        <!-- Show projected content if available -->
+        <ng-container *ngIf="shouldShowProjected(); else showInitials">
+            <ng-content></ng-content>
+        </ng-container>
+
+        <!-- Show initials if no projected content and label exists -->
+        <ng-template #showInitials>
+            <span class="initials-text" [style.color]="iconColor">
+                {{ initials }}
+            </span>
+        </ng-template>
+    </div>
+
+    <!-- Show label below the circle if enabled -->
+    <span class="label-text" *ngIf="showLabel && label" [style.color]="iconColor">
+        {{ label }}
+    </span>
+</div>

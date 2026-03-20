@@ -8,7 +8,7 @@ import { LoginService } from '../../../services/login.service';
 import { NewUserService } from '../../../services/new-user.service';
 import { MenuService } from '../../../services/menu.service';
 import { SocietyRoles } from '../../../types';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -55,6 +55,7 @@ export class UserComponent implements OnInit, OnDestroy {
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>({ value: null, disabled: true });
   radioFormControl = new FormControl<string>({ value: 'user', disabled: true });
 
+  societies: ISociety[] = [];
   buildings: IBuilding[] = [];
   flats: IFlat[] = [];
 
@@ -197,17 +198,20 @@ export class UserComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private newUserService: NewUserService,
     private menuService: MenuService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.loadSocieties();
+
     this.route.params.pipe(take(1))
-    .subscribe(params => {
-      console.log('params = ', params)
-      if (params?.['role'] && [SocietyRoles.owner.toString(),SocietyRoles.tenant.toString(),SocietyRoles.security.toString()].includes(params['role'])) {
-        this.role = params['role']
-      }
-    })
+      .subscribe(params => {
+        console.log('params = ', params)
+        if (params?.['role'] && [SocietyRoles.owner.toString(), SocietyRoles.tenant.toString(), SocietyRoles.security.toString()].includes(params['role'])) {
+          this.role = params['role']
+        }
+      })
 
     this.fb.get('society')?.valueChanges
       .pipe(takeUntil(this.isComponentActive))
@@ -295,6 +299,17 @@ export class UserComponent implements OnInit, OnDestroy {
       })
   }
 
+  loadSocieties() {
+    this.societyService.getAllSocieties()
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.societies = response.data ?? [];
+        },
+        error: () => console.log('Error while getting societies')
+      });
+  }
+
   resetAndDisable(column: string) {
     this.fb.get(column)?.reset();
     this.fb.get(column)?.disable();
@@ -331,6 +346,10 @@ export class UserComponent implements OnInit, OnDestroy {
           this.flats = response.data;
         }
       })
+  }
+
+  navigateToAddSociety() {
+    this.router.navigate(['society-public', ['add']]);
   }
 
   save() {
