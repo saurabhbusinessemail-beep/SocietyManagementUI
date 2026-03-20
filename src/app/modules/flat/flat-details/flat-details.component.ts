@@ -126,6 +126,21 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     this.loadFlatMember(this.flatMemberId);
   }
 
+  getPlanDurationDisplay(): string {
+    if (!this.currentPlan?.selectedDuration) return '';
+
+    const { value, unit } = this.currentPlan.selectedDuration;
+    if (unit === 'months') {
+      return `${value} Month${value > 1 ? 's' : ''}`;
+    }
+    return `${value} Year${value > 1 ? 's' : ''}`;
+  }
+
+  getPlanRemainingDays(): number {
+    if (!this.currentPlan?.usage?.remainingDays) return 0;
+    return this.currentPlan.usage.remainingDays;
+  }
+
   loadFlatMember(flatMemberId: string): void {
     this.societyService.getFlatMemberDetails(flatMemberId)
       .pipe(take(1))

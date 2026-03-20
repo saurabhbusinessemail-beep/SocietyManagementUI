@@ -79,6 +79,16 @@
                             </span>
                         </div>
                     </div>
+                    <div class="duration-info" *ngIf="currentPlan.selectedDuration">
+                        <div class="duration-details">
+                            <span class="label">Plan Duration:</span>
+                            <span class="value duration-badge">{{ getDurationDisplay() }}</span>
+                        </div>
+                        <div class="duration-details" *ngIf="getTotalDays() > 0">
+                            <span class="label">Total Days:</span>
+                            <span class="value">{{ getTotalDays() }} days</span>
+                        </div>
+                    </div>
 
                     <!-- Usage Progress -->
                     <div class="usage-section">

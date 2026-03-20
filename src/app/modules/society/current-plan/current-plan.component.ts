@@ -1,11 +1,10 @@
+// current-plan.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISociety, IMyProfile, ICurrentPlanResponse } from '../../../interfaces';
 import { LoginService } from '../../../services/login.service';
 import { SocietyService } from '../../../services/society.service';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
-
-// Extended interface for the API response
 
 @Component({
   selector: 'app-current-plan',
@@ -22,6 +21,28 @@ export class CurrentPlanComponent implements OnInit {
 
   get purchaseByName(): string | undefined {
     return this.currentPlan && typeof this.currentPlan.purchasedBy !== 'string' ? this.currentPlan.purchasedBy?.name : ''
+  }
+
+  // Helper to get duration display text
+  getDurationDisplay(): string {
+    if (!this.currentPlan?.selectedDuration) return 'Not specified';
+
+    const { value, unit } = this.currentPlan.selectedDuration;
+    if (unit === 'months') {
+      return `${value} Month${value > 1 ? 's' : ''}`;
+    }
+    return `${value} Year${value > 1 ? 's' : ''}`;
+  }
+
+  // Calculate total days from start and end dates
+  getTotalDays(): number {
+    if (!this.currentPlan?.startDate || !this.currentPlan?.endDate) return 0;
+
+    const start = new Date(this.currentPlan.startDate);
+    const end = new Date(this.currentPlan.endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   }
 
   constructor(
@@ -56,7 +77,7 @@ export class CurrentPlanComponent implements OnInit {
 
     // Get current plan
     this.planService.getCurrentPlan(this.societyId).subscribe({
-      next: (response: any) => {
+      next: (response: ICurrentPlanResponse) => {
         this.currentPlan = response;
         this.isLoading = false;
       },
@@ -87,9 +108,5 @@ export class CurrentPlanComponent implements OnInit {
       case 'failed': return 'status-failed';
       default: return '';
     }
-  }
-
-  getFeatureIcon(feature: any): string {
-    return feature.featureKey.replace(/_/g, '-');
   }
 }

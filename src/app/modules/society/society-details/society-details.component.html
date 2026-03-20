@@ -7,6 +7,12 @@
             <div class="header-actions">
                 <div class="plan-info" *ngIf="currentPlan" (click)="gotoPlanEdit()">
                     <span class="plan-badge">Plan: {{ currentPlan.planName || 'No Plan' }}</span>
+                    <span class="plan-duration" *ngIf="currentPlan.selectedDuration">
+                        ({{ getPlanDurationDisplay() }})
+                    </span>
+                    <span class="plan-remaining" *ngIf="getPlanRemainingDays() > 0">
+                        • {{ getPlanRemainingDays() }} days left
+                    </span>
                 </div>
                 <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
                     <app-icon name="edit"></app-icon>

@@ -80,6 +80,20 @@ export class SocietyDetailsComponent implements OnInit {
     }
   }
 
+  getPlanDurationDisplay(): string {
+    if (!this.currentPlan?.selectedDuration) return 'No Plan';
+
+    const { value, unit } = this.currentPlan.selectedDuration;
+    if (unit === 'months') {
+      return `${value} Month${value > 1 ? 's' : ''}`;
+    }
+    return `${value} Year${value > 1 ? 's' : ''}`;
+  }
+
+  getPlanRemainingDays(): number {
+    if (!this.currentPlan?.usage?.remainingDays) return 0;
+    return this.currentPlan.usage.remainingDays;
+  }
 
   /**
   * Step 1: Load society basic info
