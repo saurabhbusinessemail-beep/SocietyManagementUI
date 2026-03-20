@@ -15,11 +15,11 @@ export class IconsService {
   private preloadIcons() {
     const iconList = [
       '2W', '3W', '4W', '6W',
-      'abacus', 'account', 'account-circle', 'announcement', 'approve', 'approve-reject', 'arrow-down', 'arrow-left', 'back', 'block-icon', 'building',
+      'abacus', 'account', 'account-circle', 'admin', 'announcement', 'approve', 'approve-reject', 'arrow-down', 'arrow-left', 'back', 'block-icon', 'building',
       'calendar', 'call', 'clear', 'close', 'comment', 'complaint', 'dashboard', 'delete', 'demo', 'double-arrow-right', 'down-arrow',
-      'download', 'edit', 'exit', 'expire', 'filter', 'gateentry', 'gatepass', 'help', 'home', 'in-progress', 'invalid',
+      'download', 'edit', 'exit', 'expire', 'filter', 'gateentry', 'gatepass', 'goto', 'help', 'home', 'in-progress', 'invalid',
       'location-color', 'lock', 'logout-icon', 'member', 'menu-icon', 'menu', 'more-vert', 'multi-select-on', 'multi-select', 'pin', 'publish', 'qr-code', 'reject',
-      'resolved', 'search', 'security', 'setting', 'society-icon', 'tenant', 'user-icon', 'valid', 'vehicle', 'visitor'
+      'resolved', 'search', 'secretary', 'security', 'setting', 'society-icon', 'tenant', 'upgrade', 'user-icon', 'valid', 'vehicle', 'visitor'
     ];
 
     iconList.forEach((icon, index) => {

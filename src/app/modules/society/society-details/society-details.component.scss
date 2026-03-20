@@ -1,183 +1,135 @@
+// society-details.component.scss
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-.society-details-container {
-    max-width: 1400px;
+.society-detail-page {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: $sp-md $sp;
 
-    .society-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: $sp-xl;
-        padding-bottom: $sp-md;
-        border-bottom: 2px solid $color-border;
-
-        .society-name {
-            margin: 0;
-            font-size: $font-size-xxl;
-            font-weight: 600;
-            color: $color-dark-blue;
-
-            @include tablet {
-                font-size: $font-size-xl;
-            }
-
-            @include mobile {
-                font-size: $font-size-lg;
-            }
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: $sp;
-
-            .plan-info {
-                cursor: pointer;
-
-                .plan-badge {
-                    background-color: $color-dark-blue;
-                    color: $color-white;
-                    padding: $sp-xs $sp;
-                    border-radius: $btn-border-radius-sm;
-                    font-size: $font-size-xs;
-                    font-weight: 600;
-                    transition: all 0.2s ease;
-
-                    &:hover {
-                        opacity: 0.9;
-                        transform: translateY(-1px);
-                    }
-                }
-            }
-        }
+    @include tablet {
+        padding: $sp-lg $sp-md;
     }
 
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: $sp-lg;
-
-        @include tablet {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    .dashboard-card {
-        background-color: $color-white;
-        border: 1px solid $color-border;
-        border-radius: $btn-border-radius-md;
-        padding: $sp;
-        box-shadow: 0 2px 8px rgba($color-black, 0.05);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-        &:hover {
-            box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
-            border-color: $color-border-highlight;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: $sp-md;
-            padding-bottom: $sp-sm;
-            border-bottom: 1px solid $color-border;
-
-            .card-title {
-                font-size: $font-size-lg;
-                font-weight: 600;
-                color: $color-dark-blue;
-            }
-
-            ::ng-deep ui-button button {
-                padding: $sp-xs $sp-sm;
-                font-size: $font-size-xs;
-            }
-        }
-
-        .list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: $sp-sm;
-        }
-
-        .badge-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: $sp-md;
-        }
-
-        .badge {
-            padding: $sp-sm $sp-md;
-            border-radius: $btn-border-radius-sm;
-            font-weight: 600;
-            font-size: $font-size-sm;
-
-            &.pending {
-                background-color: $status-pending;
-                color: $color-white;
-            }
-
-            &.done {
-                background-color: $status-approved;
-                color: $color-white;
-            }
-        }
-
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: $sp-sm;
-        }
-    }
-
-    .stats-card {
-        background-color: $color-light-gray;
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: $sp-md;
-
-            .stat-item {
-                display: flex;
-                flex-direction: column;
-                gap: $sp-xs;
-                background-color: $color-white;
-                padding: $sp-md;
-                border-radius: $btn-border-radius-sm;
-                border: 1px solid $color-border;
-
-                .stat-label {
-                    font-size: $font-size-xs;
-                    color: $color-help-text;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                }
-
-                .stat-value {
-                    font-size: $font-size-xxl;
-                    font-weight: 700;
-                    color: $color-dark-blue;
-                    line-height: 1.2;
-                }
-
-                ::ng-deep ui-button button {
-                    align-self: flex-start;
-                    margin-top: $sp-xs;
-                    padding: $sp-xs $sp-sm;
-                    font-size: $font-size-xs;
-                }
-            }
-        }
+    @include desktop {
+        padding: $sp-xl $sp-md;
     }
 }
 
-// Add to society-details.component.scss
+// Header Section
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-md;
+    margin-bottom: $sp-xl;
 
-.loading-state {
+    .icon-button {
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        border: 1px solid #e5e7eb; // gray-200
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #eef2ff; // indigo-50
+        }
+
+        app-icon {
+            width: 13px;
+            height: 13px;
+            color: #6b7280; // gray-500
+        }
+    }
+
+    @include tablet {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: $sp;
+    }
+
+    .header-info {
+        .society-title {
+            font-size: $font-size-xxl;
+            font-weight: 800;
+            color: #4f46e5; // indigo-600
+            letter-spacing: -0.025em;
+            margin: 0 0 $sp-xs 0;
+            display: flex;
+            gap: $sp;
+
+            @include tablet {
+                font-size: 30px; // sm:text-3xl
+            }
+        }
+
+        .society-subtitle {
+            font-size: $font-size-xs;
+            color: #9ca3af; // gray-400
+            margin: 0;
+        }
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: $sp-sm;
+        flex-wrap: wrap;
+
+        .plan-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: $sp-sm;
+            flex-wrap: wrap;
+            cursor: pointer;
+
+            .plan-badge-primary {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background-color: #4f46e5; // indigo-600
+                color: white;
+                font-size: $font-size-xs;
+                font-weight: 700;
+                padding: $sp-xs $sp;
+                border-radius: 9999px;
+
+                .plan-dot {
+                    width: 6px;
+                    height: 6px;
+                    background-color: #818cf8; // indigo-300
+                    border-radius: 50%;
+                }
+            }
+
+            .plan-duration-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                background-color: #f3f4f6; // gray-100
+                color: #4b5563; // gray-600
+                font-size: $font-size-xs;
+                font-weight: 500;
+                padding: $sp-xs $sp;
+                border-radius: 9999px;
+
+                app-icon {
+                    width: 12px;
+                    height: 12px;
+                }
+            }
+        }
+
+    }
+}
+
+// Loading State
+.loading-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -188,15 +140,15 @@
     .spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid $color-border;
-        border-top-color: $color-dark-blue;
+        border: 3px solid #e5e7eb;
+        border-top-color: #4f46e5;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: $sp-md;
     }
 
     p {
-        color: $color-help-text;
+        color: #9ca3af;
         font-size: $font-size-base;
     }
 }
@@ -207,87 +159,578 @@
     }
 }
 
-.empty-message {
-    color: $color-help-text;
-    font-size: $font-size-sm;
-    padding: $sp-sm 0;
-    font-style: italic;
-}
+// Stats Grid (4 cards)
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $sp-md;
+    margin-bottom: $sp-xl;
 
-.no-data {
-    color: $color-help-text;
-    font-size: $font-size-sm;
-    padding: $sp-sm 0;
-}
+    @include tablet {
+        grid-template-columns: repeat(4, 1fr);
+        gap: $sp-lg;
+    }
 
-.feature-unavailable-card {
-    background-color: $color-light-gray;
-    border: 1px dashed $color-border;
-
-    .unavailable-message {
+    .stat-card {
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: $sp-md;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding: $sp-lg;
-        text-align: center;
         gap: $sp-md;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.2s;
 
-        .lock-icon {
-            width: 32px;
-            height: 32px;
-            color: $color-help-text;
-            margin-bottom: $sp-xs;
+        &:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        p {
-            color: $color-help-text;
-            font-size: $font-size-sm;
-            margin: 0 0 $sp-sm 0;
-        }
+        .stat-icon-wrapper {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
 
-        ui-button {
-            margin-top: $sp-xs;
-        }
-    }
-
-    &:hover {
-        border-color: $color-dark-blue;
-        background-color: lighten($color-light-gray, 2%);
-
-        .lock-icon {
-            color: $color-dark-blue;
-        }
-    }
-}
-
-// Update existing badge styles
-.badge {
-    padding: $sp-sm $sp-md;
-    border-radius: $btn-border-radius-sm;
-    font-weight: 600;
-    font-size: $font-size-sm;
-
-    &.pending {
-        background-color: $status-pending;
-        color: $color-white;
-    }
-
-    &.done {
-        background-color: $status-approved;
-        color: $color-white;
-    }
-}
-
-// Responsive adjustments
-@include mobile {
-    .feature-unavailable-card {
-        .unavailable-message {
-            padding: $sp-md;
-
-            p {
-                font-size: $font-size-xs;
+            app-icon {
+                width: 16px;
+                height: 16px;
             }
         }
+
+        .stat-details {
+            .stat-label {
+                font-size: 11px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #9ca3af;
+                margin: 0 0 2px 0;
+            }
+
+            .stat-value {
+                font-size: 20px;
+                font-weight: 800;
+                margin: 0;
+                line-height: 1.2;
+            }
+        }
+
+        &--indigo {
+            .stat-icon-wrapper {
+                background-color: #eef2ff;
+
+                app-icon {
+                    color: #4f46e5;
+                }
+            }
+
+            .stat-value {
+                color: #4f46e5;
+            }
+        }
+
+        &--blue {
+            .stat-icon-wrapper {
+                background-color: #eff6ff;
+
+                app-icon {
+                    color: #3b82f6;
+                }
+            }
+
+            .stat-value {
+                color: #2563eb;
+            }
+        }
+
+        &--amber {
+            .stat-icon-wrapper {
+                background-color: #fffbeb;
+
+                app-icon {
+                    color: #f59e0b;
+                }
+            }
+
+            .stat-value {
+                color: #d97706;
+            }
+        }
+
+        &--green {
+            .stat-icon-wrapper {
+                background-color: #f0fdf4;
+
+                app-icon {
+                    color: #22c55e;
+                }
+            }
+
+            .stat-value {
+                color: #16a34a;
+            }
+        }
+    }
+}
+
+// Two column grid layout
+.two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $sp-lg;
+    margin-bottom: $sp-xl;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+// Info Cards (Admins & Secretaries)
+.info-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $sp-md $sp-lg;
+        border-bottom: 1px solid #f3f4f6;
+
+        .card-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+
+            .card-icon {
+                width: 15px;
+                height: 15px;
+
+                &--amber {
+                    color: #f59e0b;
+                }
+
+                &--green {
+                    color: #22c55e;
+                }
+            }
+
+            .card-title {
+                font-size: $font-size-sm;
+                font-weight: 700;
+                color: #1f2937;
+                margin: 0;
+            }
+        }
+
+        .manage-button {
+            display: inline-flex;
+            align-items: center;
+            gap: $sp-xs;
+            font-size: $font-size-xs;
+            font-weight: 600;
+            color: #4f46e5;
+            background-color: #eef2ff;
+            border: 1px solid #c7d2fe;
+            padding: $sp-xs $sp;
+            border-radius: 9999px;
+            transition: all 0.2s;
+            cursor: pointer;
+
+            @include tablet {
+                font-size: $font-size-base;
+            }
+
+            @include desktop {
+                font-size: $font-size-lg;
+            }
+
+            // app-icon {
+            //     width: 11px;
+            //     height: 11px;
+            // }
+
+            &:hover {
+                background-color: #e0e7ff;
+            }
+        }
+    }
+
+    .card-content {
+        padding: $sp-md $sp-lg;
+
+        .list-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp-sm;
+            padding: $sp-xs 0;
+        }
+
+        .user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: $sp-sm;
+            background-color: #eef2ff;
+            border: 1px solid #c7d2fe;
+            color: #4f46e5;
+            font-size: $font-size-xs;
+            font-weight: 500;
+            padding: $sp-xs $sp;
+            border-radius: 9999px;
+
+            .remove-chip {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                display: inline-flex;
+                align-items: center;
+                transition: color 0.2s;
+
+                app-icon {
+                    width: 12px;
+                    height: 12px;
+                    color: #4f46e5;
+                }
+
+                &:hover app-icon {
+                    color: #ef4444;
+                }
+            }
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            color: #9ca3af;
+            font-size: $font-size-sm;
+            padding: $sp-sm 0;
+
+            .empty-icon {
+                width: 32px;
+                height: 32px;
+                background-color: #f3f4f6;
+                border-radius: 9999px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                app-icon {
+                    width: 14px;
+                    height: 14px;
+                    color: #9ca3af;
+                }
+            }
+        }
+    }
+}
+
+// Action Cards (Buildings & Flats)
+.action-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: $sp-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s;
+
+    &:hover {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-content {
+        display: flex;
+        align-items: center;
+        gap: $sp-md;
+
+        .action-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            app-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            &--indigo {
+                background-color: #eef2ff;
+
+                app-icon {
+                    color: #4f46e5;
+                }
+            }
+
+            &--blue {
+                background-color: #eff6ff;
+
+                app-icon {
+                    color: #3b82f6;
+                }
+            }
+        }
+
+        .action-text {
+            .action-label {
+                font-size: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #9ca3af;
+                margin: 0 0 2px 0;
+            }
+
+            .action-value {
+                font-size: 36px;
+                font-weight: 800;
+                margin: 0;
+                line-height: 1;
+
+                @include tablet {
+                    font-size: 40px;
+                }
+            }
+        }
+    }
+
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        gap: $sp-xs;
+        font-size: $font-size-xs;
+        font-weight: 600;
+        color: #6b7280;
+        background-color: #f9fafb;
+        border: 1px solid #e5e7eb;
+        padding: $sp-xs $sp;
+        border-radius: 9999px;
+        transition: all 0.2s;
+        cursor: pointer;
+
+        app-icon {
+            width: 11px;
+            height: 11px;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #f3f4f6;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}
+
+// Feature Grid (Parking, Complaints, Communication)
+.feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $sp-lg;
+    margin-top: $sp-lg;
+
+    @include tablet {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.feature-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s;
+
+    &:hover {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-header {
+        display: flex;
+        align-items: center;
+        gap: $sp-sm;
+        padding: $sp-md $sp-lg;
+        border-bottom: 1px solid #f3f4f6;
+
+        .feature-icon {
+            width: 15px;
+            height: 15px;
+
+            &--purple {
+                color: #8b5cf6;
+            }
+
+            &--red {
+                color: #f87171;
+            }
+
+            &--orange {
+                color: #fb923c;
+            }
+        }
+
+        .feature-title {
+            font-size: $font-size-sm;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+    }
+
+    .feature-stats {
+        padding: $sp-md $sp-lg;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $sp-md;
+
+        .stat-badge {
+            padding: $sp-sm $sp-md;
+            border-radius: $btn-border-radius-sm;
+            font-weight: 600;
+            font-size: $font-size-sm;
+
+            &--success {
+                background-color: #22c55e;
+                color: white;
+            }
+
+            &--warning {
+                background-color: #f59e0b;
+                color: white;
+            }
+
+            &--neutral {
+                background-color: #f3f4f6;
+                color: #6b7280;
+            }
+        }
+    }
+
+    .feature-manage-btn {
+        margin: 0 $sp-lg $sp-lg $sp-lg;
+        width: calc(100% - 2 * #{$sp-lg});
+        background-color: #f3f4f6;
+        border: none;
+        padding: $sp-sm;
+        border-radius: 9999px;
+        font-size: $font-size-xs;
+        font-weight: 600;
+        color: #4b5563;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: #e5e7eb;
+        }
+    }
+
+    // Locked state styling
+    &--locked {
+        .locked-content {
+            padding: $sp-xl $sp-lg $sp-lg;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: $sp-md;
+
+            .locked-icon-wrapper {
+                width: 56px;
+                height: 56px;
+                background-color: #f3f4f6;
+                border-radius: 9999px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .locked-icon {
+                    width: 32px;
+                    height: 32px;
+                    color: #9ca3af;
+                }
+            }
+
+            .locked-message {
+                font-size: $font-size-sm;
+                color: #6b7280;
+                margin: 0;
+                max-width: 200px;
+            }
+
+            .upgrade-button {
+                display: inline-flex;
+                align-items: center;
+                gap: $sp-xs;
+                background-color: #4f46e5;
+                color: white;
+                font-size: $font-size-xs;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                padding: $sp-sm $sp-lg;
+                border-radius: 9999px;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.2s;
+
+                app-icon {
+                    width: 13px;
+                    height: 13px;
+                }
+
+                &:hover {
+                    background-color: #4338ca;
+                }
+            }
+        }
+    }
+}
+
+// Responsive adjustments for smaller devices
+@include mobile {
+    .stats-grid {
+        gap: $sp;
+    }
+
+    .stat-card {
+        padding: $sp;
+
+        .stat-icon-wrapper {
+            width: 32px;
+            height: 32px;
+
+            app-icon {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        .stat-details .stat-value {
+            font-size: 18px;
+        }
+    }
+
+    .action-card .action-content .action-value {
+        font-size: 28px;
+    }
+
+    .feature-card--locked .locked-content {
+        padding: $sp-lg;
     }
 }

@@ -1,8 +1,36 @@
 <div class="society-card">
-    <!-- Header: Society name and basic info -->
+    <!-- Header: Society name and plan badge -->
     <div class="card-header" (click)="clicked.emit()">
-        <h3 class="society-name">{{ society.societyName }}</h3>
-        <span class="building-count">Buildings: {{ society.numberOfBuildings }}</span>
+        <div class="header-left">
+            <h3 class="society-name">{{ society.societyName }}</h3>
+            <span class="building-count">Buildings: {{ society.numberOfBuildings }}</span>
+        </div>
+        <div class="header-right">
+            <!-- Plan Badge - Responsive: icon only on mobile, full badge on tablet/desktop -->
+            <div class="plan-badge-wrapper" *ngIf="plan">
+                <!-- Mobile: Icon only with tooltip -->
+                <div class="plan-badge-mobile" [title]="getPlanDisplayName()"
+                    [style.backgroundColor]="getPlanBadgeColor()">
+                    <span class="icon" [ngClass]="'icon-' + getPlanIcon()" [style.color]="getPlanTextColor()"></span>
+                </div>
+                <!-- Tablet/Desktop: Full badge with icon + plan name -->
+                <div class="plan-badge-desktop" [style.backgroundColor]="getPlanBadgeColor()">
+                    <span class="icon" [ngClass]="'icon-' + getPlanIcon()" [style.color]="getPlanTextColor()"></span>
+                    <span class="plan-name" [style.color]="getPlanTextColor()">
+                        {{ getPlanDisplayName() }}
+                    </span>
+                </div>
+            </div>
+            <div class="plan-badge-wrapper" *ngIf="!plan">
+                <div class="plan-badge-mobile no-plan" title="No Active Plan">
+                    <span class="icon icon-alert-circle"></span>
+                </div>
+                <div class="plan-badge-desktop no-plan">
+                    <span class="icon icon-alert-circle"></span>
+                    <span class="plan-name">No Plan</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Main content grid (responsive via CSS) -->
@@ -32,6 +60,23 @@
                     {{ manager }}<span *ngIf="!last">, </span>
                 </span>
                 <span *ngIf="getManagerIdsDisplay().length === 0" class="empty">—</span>
+            </div>
+        </div>
+
+        <!-- Plan Info - Expiry details -->
+        <div class="detail-item plan-expiry-item" *ngIf="plan">
+            <span class="label">Plan Status</span>
+            <div class="expiry-info" [class.expiring-soon]="isExpiringSoon()" [class.expired]="isExpired()">
+                <span class="icon icon-calendar"></span>
+                <span *ngIf="getRemainingDays() > 0">
+                    {{ getRemainingDays() }} days remaining
+                </span>
+                <span *ngIf="getRemainingDays() <= 0" class="expired-text">
+                    Plan Expired
+                </span>
+                <span *ngIf="isExpiringSoon()" class="warning-badge">
+                    Expiring Soon
+                </span>
             </div>
         </div>
 

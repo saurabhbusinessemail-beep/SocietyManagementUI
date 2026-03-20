@@ -9,39 +9,146 @@
     margin-bottom: $sp-md;
     box-shadow: 0 2px 6px rgba($color-black, 0.08);
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
 
     &:hover {
         border-color: $color-border-highlight;
         box-shadow: 0 4px 12px rgba($color-dark-blue, 0.1);
     }
 
+    &:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+
     // Header section
     .card-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         margin-bottom: $sp-sm;
         padding-bottom: $sp-sm;
         border-bottom: 1px solid $color-border;
+        gap: $sp;
 
-        .society-name {
-            margin: 0;
-            font-weight: 600;
-            @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
-            color: $color-dark-blue; // primary brand color
+        .header-left {
+            flex: 1;
+            min-width: 0;
+
+            .society-name {
+                margin: 0 0 $sp-xs 0;
+                font-weight: 600;
+                @include fluid-font($page-header-desktop, $page-header-tablet, $page-header-mobile);
+                color: $color-dark-blue;
+                word-break: break-word;
+            }
+
+            .building-count {
+                display: inline-block;
+                font-size: $font-size-xs;
+                color: $color-white;
+                background-color: $status-active;
+                padding: $sp-xs $sp-sm;
+                border-radius: $btn-border-radius-sm;
+                font-weight: 500;
+                letter-spacing: 0.3px;
+            }
         }
 
-        .building-count {
-            font-size: $font-size-sm;
-            color: $color-white; // white text on status background
-            background-color: $status-active; // green for active indicator
-            padding: $sp-xs $sp-sm;
-            border-radius: $btn-border-radius-sm;
-            font-weight: 500;
-            letter-spacing: 0.3px;
+        .header-right {
+            flex-shrink: 0;
 
-            // Could optionally change color based on number of buildings
-            // e.g., if zero, use $status-inactive – but that would require a binding
+            .plan-badge-wrapper {
+
+                .plan-badge-mobile,
+                .plan-badge-desktop {
+                    display: flex;
+                    align-items: center;
+                    gap: $sp-xs;
+                    border-radius: $btn-border-radius-sm;
+                    transition: all 0.2s ease;
+
+                    .icon {
+                        display: inline-block;
+                        width: 14px;
+                        height: 14px;
+                        background-color: currentColor;
+                        flex-shrink: 0;
+                    }
+
+                    .plan-name {
+                        font-size: $font-size-xs;
+                        font-weight: 600;
+                        white-space: nowrap;
+                    }
+                }
+
+                // No plan variant
+                .no-plan {
+                    background-color: $color-help-text !important;
+                    opacity: 0.7;
+
+                    .icon,
+                    .plan-name {
+                        color: $color-white !important;
+                    }
+                }
+
+                // Mobile: Show only icon (circular badge)
+                .plan-badge-mobile {
+                    padding: $sp-xs;
+                    border-radius: 50%;
+                    width: 32px;
+                    height: 32px;
+                    justify-content: center;
+
+                    .icon {
+                        width: 16px;
+                        height: 16px;
+                    }
+                }
+
+                // Desktop/Tablet: Show full badge with icon + name
+                .plan-badge-desktop {
+                    padding: $sp-xs $sp;
+
+                    .icon {
+                        width: 12px;
+                        height: 12px;
+                    }
+                }
+
+                // Hide desktop badge on mobile, hide mobile badge on desktop/tablet
+                @include mobile {
+                    .plan-badge-desktop {
+                        display: none;
+                    }
+
+                    .plan-badge-mobile {
+                        display: flex;
+                    }
+                }
+
+                @include tablet {
+                    .plan-badge-desktop {
+                        display: flex;
+                    }
+
+                    .plan-badge-mobile {
+                        display: none;
+                    }
+                }
+
+                @include desktop {
+                    .plan-badge-desktop {
+                        display: flex;
+                    }
+
+                    .plan-badge-mobile {
+                        display: none;
+                    }
+                }
+            }
         }
     }
 
@@ -62,13 +169,13 @@
         .detail-item {
             display: flex;
             flex-direction: column;
-            min-width: 0; // helps truncation work
+            min-width: 0;
             padding: $sp-xs 0;
 
             .label {
                 font-size: $font-size-xs;
                 font-weight: 600;
-                color: $color-help-text; // muted label color
+                color: $color-help-text;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: $sp-xs;
@@ -98,12 +205,50 @@
                 }
             }
 
-            // Creation and modification timestamps – use note color
-            &:has(.label:contains('Created')),
-            &:has(.label:contains('Last Modified')) {
-                .value {
-                    color: $color-note-gray;
+            // Plan expiry styling
+            .expiry-info {
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+                font-size: $font-size-sm;
+                color: $color-help-text;
+                flex-wrap: wrap;
+
+                .icon {
+                    display: inline-block;
+                    width: 14px;
+                    height: 14px;
+                    background-color: currentColor;
+                    flex-shrink: 0;
+                }
+
+                &.expiring-soon {
+                    color: $status-pending;
+
+                    .icon {
+                        background-color: $status-pending;
+                    }
+                }
+
+                &.expired {
+                    color: $status-rejected;
+
+                    .icon {
+                        background-color: $status-rejected;
+                    }
+                }
+
+                .expired-text {
+                    font-weight: 600;
+                }
+
+                .warning-badge {
+                    background-color: $status-pending;
+                    color: $color-white;
+                    padding: 2px $sp-sm;
+                    border-radius: $btn-border-radius-sm;
                     font-size: $font-size-xs;
+                    font-weight: 600;
                 }
             }
         }
@@ -113,18 +258,35 @@
             @include tablet {
                 grid-column: span 2;
             }
+
             @include desktop {
                 grid-column: span 3;
             }
 
             .address-value {
-                font-weight: 500; // slightly more emphasis
+                font-weight: 500;
+            }
+        }
+
+        // Plan expiry item spans appropriately
+        .plan-expiry-item {
+            @include tablet {
+                grid-column: span 2;
             }
         }
     }
 
+    // Creation and modification timestamps
+    .detail-item:first-child,
+    .detail-item:nth-child(5) {
+        .value {
+            color: $color-note-gray;
+            font-size: $font-size-xs;
+        }
+    }
+
     // Optional: settings JSON styling
-    .detail-item:has(.label:contains('Settings')) {
+    .detail-item:last-child:has(.label:contains('Settings')) {
         .value {
             background-color: $color-light-gray;
             padding: $sp-xs $sp-sm;
@@ -132,6 +294,83 @@
             font-family: monospace;
             font-size: $font-size-xs;
             color: $color-dark-blue;
+        }
+    }
+}
+
+// Additional responsive adjustments
+@include mobile {
+    .society-card {
+        padding: $sp;
+
+        .card-header {
+            .header-left {
+                .society-name {
+                    font-size: $font-size-base;
+                }
+            }
+        }
+
+        .card-details {
+            gap: $sp;
+
+            .detail-item {
+                .label {
+                    font-size: 10px;
+                }
+
+                .value,
+                .value-list {
+                    font-size: $font-size-xs;
+                }
+
+                .expiry-info {
+                    font-size: $font-size-xs;
+
+                    .icon {
+                        width: 12px;
+                        height: 12px;
+                    }
+
+                    .warning-badge {
+                        font-size: 10px;
+                        padding: 2px $sp-xs;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Tablet specific adjustments
+@include tablet {
+    .society-card {
+        .card-details {
+            .detail-item {
+                .expiry-info {
+                    .warning-badge {
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Additional responsive adjustments
+@include mobile {
+    .society-card {
+        .card-header {
+            .header-right {
+                .plan-badge-wrapper {
+                    .plan-badge-mobile {
+                        .icon {
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                }
+            }
         }
     }
 }

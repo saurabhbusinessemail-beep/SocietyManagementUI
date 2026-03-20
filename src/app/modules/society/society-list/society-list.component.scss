@@ -1,38 +1,30 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-.society-name {
-    color: $color-dark-blue;
-    font-weight: 600;
-    text-decoration: none;
-    line-height: 1.2;
+.plans-loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $sp-sm;
+  padding: $sp-md;
+  background-color: $color-light-gray;
+  border-radius: $btn-border-radius-md;
+  margin-bottom: $sp-md;
+  color: $color-help-text;
+  font-size: $font-size-sm;
 
-    // @include fluid-font(18px, 16px, 15px);
-
-    &:hover {
-        text-decoration: underline;
-    }
+  .loading-spinner-small {
+    width: 20px;
+    height: 20px;
+    border: 2px solid $color-border;
+    border-top-color: $color-dark-blue;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
 }
 
-.society-meta {
-    display: flex;
-    gap: 18px;
-    color: $color-black;
-    opacity: 0.85;
-
-    @include mobile {
-        gap: 12px;
-        flex-wrap: wrap;
-    }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-.society-address {
-    color: $color-note-gray;
-    line-height: 1.4;
-    max-width: 520px;
-
-    @include desktop {
-        max-width: 680px;
-    }
-}
-

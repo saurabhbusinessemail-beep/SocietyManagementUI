@@ -7,9 +7,18 @@
   </ng-container>
 
   <ui-form-layout>
+    <!-- Loading indicator for plans -->
+    <div *ngIf="loadingPlans" class="plans-loading-overlay" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+      <div class="loading-spinner-small"></div>
+      <span>Loading plan information...</span>
+    </div>
+
     <ng-container *ngFor="let s of societies">
-      <ui-society-card [society]="s"  [smColumns]="12" [mdColumns]="6" [lgColumns]="6" (clicked)="handleSocietyClick(s)">
-      </ui-society-card>
+      <ng-container *ngIf="societyPlans.get(s._id)">
+        <ui-society-card [society]="s" [plan]="societyPlans.get(s._id)" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+          (clicked)="handleSocietyClick(s)">
+        </ui-society-card>
+      </ng-container>
     </ng-container>
 
   </ui-form-layout>

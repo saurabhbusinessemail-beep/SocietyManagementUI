@@ -1,142 +1,270 @@
 <app-layout [hideMoreActions]="true" [showBackButton]="true">
-    <div class="society-details-container">
+    <div class="society-detail-page">
 
-        <!-- Society Header with Edit Button -->
-        <div class="society-header">
-            <h2 class="society-name">{{ society?.societyName }}</h2>
+        <!-- Header Section -->
+        <div class="page-header">
+            <div class="header-info">
+                <h1 class="society-title">
+                    {{ society?.societyName || 'Society' }}
+
+                    <!-- Edit Button -->
+                    <button class="icon-button" (click)="gotoEditSociety()" *ngIf="canUpdateSociety">
+                        <app-icon name="edit"></app-icon>
+                    </button>
+                </h1>
+                <p class="society-subtitle">Society Dashboard</p>
+            </div>
             <div class="header-actions">
-                <div class="plan-info" *ngIf="currentPlan" (click)="gotoPlanEdit()">
-                    <span class="plan-badge">Plan: {{ currentPlan.planName || 'No Plan' }}</span>
-                    <span class="plan-duration" *ngIf="currentPlan.selectedDuration">
-                        ({{ getPlanDurationDisplay() }})
+                <!-- Plan Badge & Info -->
+                <div class="plan-chip" *ngIf="currentPlan" (click)="gotoPlanEdit()">
+                    <span class="plan-badge-primary">
+                        <span class="plan-dot"></span>
+                        Plan: {{ currentPlan.planName || 'No Plan' }}
                     </span>
-                    <span class="plan-remaining" *ngIf="getPlanRemainingDays() > 0">
-                        • {{ getPlanRemainingDays() }} days left
+                    <span class="plan-duration-badge" *ngIf="currentPlan.selectedDuration">
+                        <app-icon name="calendar"></app-icon>
+                        {{ getPlanDurationDisplay() }} • {{ getPlanRemainingDays() }} days left
                     </span>
+                    <!-- Edit Button -->
+                    <button class="icon-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
+                        <app-icon name="edit"></app-icon>
+                    </button>
                 </div>
-                <ui-button type="only-content" label="" (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety">
-                    <app-icon name="edit"></app-icon>
-                </ui-button>
             </div>
         </div>
 
         <!-- Loading State -->
-        <div class="loading-state" *ngIf="!featuresLoaded">
+        <div class="loading-container" *ngIf="!featuresLoaded">
             <div class="spinner"></div>
             <p>Loading society details...</p>
         </div>
 
-        <!-- Dashboard Grid -->
-        <div class="dashboard-grid" *ngIf="featuresLoaded">
+        <!-- Main Content -->
+        <div class="content-wrapper" *ngIf="featuresLoaded">
 
-            <!-- Admin Card -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <span class="card-title">Admins</span>
-                    <ui-button label="Manage" type="only-content" *ngIf="canViewAdmin" (clicked)="gotoSocietyAdmins()">
-                    </ui-button>
-                </div>
-                <div class="list">
-                    <ui-chip *ngFor="let a of adminIds" [value]="(a.name ?? '') + ' ' + a.phoneNumber"
-                        [crossAction]="canDeleteAdmin" (crossClicked)="removeAdmin(a)">
-                    </ui-chip>
-                    <div class="empty-message" *ngIf="adminIds.length === 0">No admins added</div>
-                </div>
-            </div>
-
-            <!-- Secretaries Card -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <span class="card-title">Secretaries</span>
-                    <ui-button label="Manage" type="only-content" *ngIf="canViewManager"
-                        (clicked)="gotoSocietyManageers()">
-                    </ui-button>
-                </div>
-                <div class="list">
-                    <ui-chip *ngFor="let s of managerIds" [value]="(s.name ?? '') + ' ' + s.phoneNumber"
-                        [crossAction]="canDeleteManager" (crossClicked)="removeSecretary(s)">
-                    </ui-chip>
-                    <div class="empty-message" *ngIf="managerIds.length === 0">No secretaries added</div>
-                </div>
-            </div>
-
-            <!-- Stats Card -->
-            <div class="dashboard-card stats-card">
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">Buildings</span>
-                        <span class="stat-value">{{ society?.numberOfBuildings }}</span>
-                        <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety"
-                            (clicked)="gotoBuildingManager()"
-                            [disable]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
-                        </ui-button>
+            <!-- Stats Grid: Buildings, Flats, Admins, Secretaries -->
+            <div class="stats-grid">
+                <!-- Building Stat -->
+                <div class="stat-card stat-card--indigo">
+                    <div class="stat-icon-wrapper">
+                        <app-icon name="home"></app-icon>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Flats</span>
-                        <span class="stat-value">{{ society?.numberOfFlats ?? 1 }}</span>
-                        <ui-button label="Manage" type="only-content" [disable]="!canViewFlats"
-                            (clicked)="gotoFlatManager()">
-                        </ui-button>
+                    <div class="stat-details">
+                        <p class="stat-label">Buildings</p>
+                        <p class="stat-value">{{ society?.numberOfBuildings || 0 }}</p>
+                    </div>
+                </div>
+                <!-- Flats Stat -->
+                <div class="stat-card stat-card--blue">
+                    <div class="stat-icon-wrapper">
+                        <app-icon name="building"></app-icon>
+                    </div>
+                    <div class="stat-details">
+                        <p class="stat-label">Flats</p>
+                        <p class="stat-value">{{ society?.numberOfFlats || 0 }}</p>
+                    </div>
+                </div>
+                <!-- Admins Stat -->
+                <div class="stat-card stat-card--amber">
+                    <div class="stat-icon-wrapper">
+                        <app-icon name="admin"></app-icon>
+                    </div>
+                    <div class="stat-details">
+                        <p class="stat-label">Admins</p>
+                        <p class="stat-value">{{ adminIds.length }}</p>
+                    </div>
+                </div>
+                <!-- Secretaries Stat -->
+                <div class="stat-card stat-card--green">
+                    <div class="stat-icon-wrapper">
+                        <app-icon name="secretary"></app-icon>
+                    </div>
+                    <div class="stat-details">
+                        <p class="stat-label">Secretaries</p>
+                        <p class="stat-value">{{ managerIds.length }}</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Parkings Card -->
-            <div class="dashboard-card" *ngIf="parkingFeatureAvailable; else parkingNotAvailable">
-                <div class="card-header">
-                    <span class="card-title">Parkings</span>
-                    <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety"
-                        (clicked)="gotoParkingManager()" [disable]="!canViewParkings">
-                    </ui-button>
-                </div>
-                <div class="badge-container">
-                    <div class="badge done">Added: {{ parkings.length }}</div>
-                </div>
-            </div>
-            <ng-template #parkingNotAvailable>
-                <div class="dashboard-card feature-unavailable-card">
+            <!-- Admins & Secretaries Cards Row -->
+            <div class="two-column-grid">
+                <!-- Admins Card -->
+                <div class="info-card">
                     <div class="card-header">
-                        <span class="card-title">Parkings</span>
+                        <div class="card-title-wrapper">
+                            <app-icon name="admin" class="card-icon card-icon--amber"></app-icon>
+                            <h2 class="card-title">Admins</h2>
+                        </div>
+                        <button class="manage-button" (click)="gotoSocietyAdmins()" *ngIf="canViewAdmin">
+                            Manage <app-icon name="goto" size="md"></app-icon>
+                        </button>
                     </div>
-                    <div class="unavailable-message">
-                        <app-icon name="lock" class="lock-icon" size="xl"></app-icon>
-                        <p>Your current plan does not support Parking feature.</p>
-                        <ui-button label="Upgrade Plan" type="primary" (clicked)="gotoPlanEdit()"
-                            *ngIf="canUpdateSociety">
-                        </ui-button>
+                    <div class="card-content">
+                        <div class="list-items" *ngIf="adminIds.length > 0; else noAdmins">
+                            <div class="user-chip" *ngFor="let a of adminIds">
+                                <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span>
+                                <!-- <button class="remove-chip" *ngIf="canDeleteAdmin" (click)="removeAdmin(a)">
+                                    <app-icon name="delete"></app-icon>
+                                </button> -->
+                            </div>
+                        </div>
+                        <ng-template #noAdmins>
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <app-icon name="user-icon"></app-icon>
+                                </div>
+                                <span>No admins added</span>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
-            </ng-template>
 
-            <!-- Complaints Card - Conditional based on plan -->
-            <div class="dashboard-card" *ngIf="complaintsFeatureAvailable; else complaintsNotAvailable">
-                <div class="card-header">
-                    <span class="card-title">Complaints</span>
-                    <ui-button label="Manage" type="only-content" *ngIf="canUpdateSociety" (clicked)="gotoComplaints()">
-                    </ui-button>
-                </div>
-                <div class="badge-container">
-                    <div class="badge pending" *ngIf="complaints">Pending: {{ complaints.pending }}</div>
-                    <div class="badge done" *ngIf="complaints">Completed: {{ complaints.completed }}</div>
-                    <div class="no-data" *ngIf="!complaints">No complaints data</div>
+                <!-- Secretaries Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <div class="card-title-wrapper">
+                            <app-icon name="secretary" class="card-icon card-icon--green"></app-icon>
+                            <h2 class="card-title">Secretaries</h2>
+                        </div>
+                        <button class="manage-button" (click)="gotoSocietyManageers()" *ngIf="canViewManager">
+                            Manage <app-icon name="goto" size="md"></app-icon>
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <div class="list-items" *ngIf="managerIds.length > 0; else noSecretaries">
+                            <div class="user-chip" *ngFor="let s of managerIds">
+                                <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
+                                <!-- <button class="remove-chip" *ngIf="canDeleteManager" (click)="removeSecretary(s)">
+                                    <app-icon name="delete"></app-icon>
+                                </button> -->
+                            </div>
+                        </div>
+                        <ng-template #noSecretaries>
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <app-icon name="user-icon"></app-icon>
+                                </div>
+                                <span>No secretaries added</span>
+                            </div>
+                        </ng-template>
+                    </div>
                 </div>
             </div>
-            <ng-template #complaintsNotAvailable>
-                <div class="dashboard-card feature-unavailable-card">
-                    <div class="card-header">
-                        <span class="card-title">Complaints</span>
+
+            <!-- Buildings & Flats Management Row -->
+            <div class="two-column-grid">
+                <!-- Buildings Card -->
+                <div class="action-card">
+                    <div class="action-content">
+                        <div class="action-icon-wrapper action-icon-wrapper--indigo">
+                            <app-icon name="home" complaint></app-icon>
+                        </div>
+                        <div class="action-text">
+                            <p class="action-label">BUILDINGS</p>
+                            <p class="action-value">{{ society?.numberOfBuildings || 0 }}</p>
+                        </div>
                     </div>
-                    <div class="unavailable-message">
-                        <app-icon name="lock" class="lock-icon" size="xl"></app-icon>
-                        <p>Your current plan does not support Complaints feature.</p>
-                        <ui-button label="Upgrade Plan" type="primary" (clicked)="gotoPlanEdit()"
-                            *ngIf="canUpdateSociety">
-                        </ui-button>
-                    </div>
+                    <button class="action-button" (click)="gotoBuildingManager()"
+                        [disabled]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
+                        Manage <app-icon name="goto" size="md"></app-icon>
+                    </button>
                 </div>
-            </ng-template>
 
-        </div> <!-- end dashboard-grid -->
+                <!-- Flats Card -->
+                <div class="action-card">
+                    <div class="action-content">
+                        <div class="action-icon-wrapper action-icon-wrapper--blue">
+                            <app-icon name="building"></app-icon>
+                        </div>
+                        <div class="action-text">
+                            <p class="action-label">FLATS</p>
+                            <p class="action-value">{{ society?.numberOfFlats ?? 1 }}</p>
+                        </div>
+                    </div>
+                    <button class="action-button" (click)="gotoFlatManager()" [disabled]="!canViewFlats">
+                        Manage <app-icon name="goto" size="md"></app-icon>
+                    </button>
+                </div>
+            </div>
 
-    </div> <!-- end society-details-container -->
+            <!-- Feature Cards Row (Parking, Complaints, Communication) -->
+            <div class="feature-grid">
+                <!-- Parking Card -->
+                <div class="feature-card" *ngIf="parkingFeatureAvailable; else parkingLocked">
+                    <div class="feature-header">
+                        <app-icon name="vehicle" class="feature-icon feature-icon--purple"></app-icon>
+                        <h2 class="feature-title">Parkings</h2>
+                    </div>
+                    <div class="feature-stats">
+                        <div class="stat-badge stat-badge--success">
+                            Added: {{ parkings.length }}
+                        </div>
+                    </div>
+                    <button class="feature-manage-btn" (click)="gotoParkingManager()"
+                        *ngIf="canUpdateSociety && canViewParkings">
+                        Manage
+                    </button>
+                </div>
+                <ng-template #parkingLocked>
+                    <div class="feature-card feature-card--locked">
+                        <div class="feature-header">
+                            <app-icon name="vehicle" class="feature-icon feature-icon--purple"></app-icon>
+                            <h2 class="feature-title">Parkings</h2>
+                        </div>
+                        <div class="locked-content">
+                            <div class="locked-icon-wrapper">
+                                <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
+                            </div>
+                            <p class="locked-message">Your current plan does not support the Parking feature.</p>
+                            <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
+                                Upgrade Plan <app-icon name="upgrade"></app-icon>
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- Complaints Card -->
+                <div class="feature-card" *ngIf="complaintsFeatureAvailable; else complaintsLocked">
+                    <div class="feature-header">
+                        <app-icon name="complaint" class="feature-icon feature-icon--red"></app-icon>
+                        <h2 class="feature-title">Complaints</h2>
+                    </div>
+                    <div class="feature-stats" *ngIf="complaints; else noComplaints">
+                        <div class="stat-badge stat-badge--warning">
+                            Pending: {{ complaints.pending }}
+                        </div>
+                        <div class="stat-badge stat-badge--success">
+                            Completed: {{ complaints.completed }}
+                        </div>
+                    </div>
+                    <ng-template #noComplaints>
+                        <div class="feature-stats">
+                            <div class="stat-badge stat-badge--neutral">No complaints data</div>
+                        </div>
+                    </ng-template>
+                    <button class="feature-manage-btn" (click)="gotoComplaints()" *ngIf="canUpdateSociety">
+                        Manage
+                    </button>
+                </div>
+                <ng-template #complaintsLocked>
+                    <div class="feature-card feature-card--locked">
+                        <div class="feature-header">
+                            <app-icon name="complaint" class="feature-icon feature-icon--red"></app-icon>
+                            <h2 class="feature-title">Complaints</h2>
+                        </div>
+                        <div class="locked-content">
+                            <div class="locked-icon-wrapper">
+                                <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
+                            </div>
+                            <p class="locked-message">Your current plan does not support the Complaints feature.</p>
+                            <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
+                                Upgrade Plan <app-icon name="upgrade"></app-icon>
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div> <!-- end content-wrapper -->
+    </div> <!-- end society-detail-page -->
 </app-layout>
