@@ -1,5 +1,5 @@
 <div class="circular-container" [ngClass]="getContainerClass()" [style.background-color]="containerBackground"
-    [style.border-color]="iconColor">
+    [style.border-color]="iconColor" (click)="onClicked.emit()">
     <div class="circular-display" [ngClass]="getSizeClass()" [style.background-color]="backgroundColor">
         <!-- Show projected content if available -->
         <ng-container *ngIf="shouldShowProjected(); else showInitials">

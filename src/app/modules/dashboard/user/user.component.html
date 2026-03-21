@@ -134,7 +134,7 @@
             *ngIf="!role && societies.length > 0">
 
             <ng-container *ngFor="let s of societies">
-                <ui-circular-display [label]="s.societyName" [smColumns]="4" [mdColumns]="3" [lgColumns]="2">
+                <ui-circular-display [label]="s.societyName" [smColumns]="4" [mdColumns]="3" [lgColumns]="2" (onClicked)="handleSocietyClick(s)">
                 </ui-circular-display>
             </ng-container>
 

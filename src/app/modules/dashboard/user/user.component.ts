@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IBuilding, IFlat, IPhoneContactFlat, ISociety, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { Subject, take, takeUntil } from 'rxjs';
 import { SocietyService } from '../../../services/society.service';
-import { ResidingTypeList, ResidingTypes } from '../../../constants';
+import { ownerMemberTenanRoles, ResidingTypeList, ResidingTypes } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { NewUserService } from '../../../services/new-user.service';
 import { MenuService } from '../../../services/menu.service';
@@ -349,7 +349,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   navigateToAddSociety() {
-    this.router.navigate(['society-public', ['add']]);
+    this.router.navigate(['society-public', 'add']);
   }
 
   save() {
@@ -494,6 +494,29 @@ export class UserComponent implements OnInit, OnDestroy {
         // this.router.navigateByUrl('/dashboard');
 
       })
+  }
+
+
+  handleSocietyClick(society: ISociety) {
+    const profile = this.loginService.getProfileFromStorage();
+    if (!profile) return;
+
+    if (profile.user.role === 'admin') {
+      this.router.navigate(['/society', society._id, 'details']);
+      return;
+    }
+
+    const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles
+    if (!societyRoles) return;
+
+    const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === SocietyRoles.manager);
+    const hasNonManagerialRole = societyRoles.some(sr => ownerMemberTenanRoles.includes(sr.name));
+
+    if (hasManagerialRole) {
+      this.router.navigate(['/society', society._id, 'details']);
+    } else if (hasNonManagerialRole) {
+      this.router.navigate(['/myflats', society._id, 'list']);
+    }
   }
 
   ngOnDestroy(): void {

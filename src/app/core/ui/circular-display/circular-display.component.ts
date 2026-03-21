@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterContentInit } from '@angular/core';
+import { Component, Input, OnInit, AfterContentInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'ui-circular-display',
@@ -13,6 +13,8 @@ export class CircularDisplayComponent implements OnInit, AfterContentInit {
   @Input() containerBackground: string = 'rgba(255, 255, 255, 0.6)';
   @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md';
   @Input() variant: 'default' | 'bordered' | 'shadow' = 'default';
+
+  @Output() onClicked = new EventEmitter<void>();
 
   initials: string = '';
   private hasContent: boolean = false;
