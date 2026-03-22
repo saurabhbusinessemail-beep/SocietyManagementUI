@@ -1,19 +1,18 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true">
+<app-layout [showBackButton]="true" [title]="society?.societyName || 'Society'">
+
+    <ng-container moreActions>
+        <ui-button (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety" label="Edit Society" type="only-content">
+            <app-icon name="edit"></app-icon>
+        </ui-button>
+        <ui-button (clicked)="gotoPlanEdit()" *ngIf="canUpdateSociety" label="Edit Plan" type="only-content">
+            <app-icon name="edit"></app-icon>
+        </ui-button>
+    </ng-container>
+
     <div class="society-detail-page">
 
         <!-- Header Section -->
         <div class="page-header">
-            <div class="header-info">
-                <h1 class="society-title">
-                    {{ society?.societyName || 'Society' }}
-
-                    <!-- Edit Button -->
-                    <button class="icon-button" (click)="gotoEditSociety()" *ngIf="canUpdateSociety">
-                        <app-icon name="edit"></app-icon>
-                    </button>
-                </h1>
-                <p class="society-subtitle">Society Dashboard</p>
-            </div>
             <div class="header-actions">
                 <!-- Plan Badge & Info -->
                 <div class="plan-chip" *ngIf="currentPlan" (click)="gotoPlanEdit()">
@@ -25,10 +24,6 @@
                         <app-icon name="calendar"></app-icon>
                         {{ getPlanDurationDisplay() }} • {{ getPlanRemainingDays() }} days left
                     </span>
-                    <!-- Edit Button -->
-                    <button class="icon-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
-                        <app-icon name="edit"></app-icon>
-                    </button>
                 </div>
             </div>
         </div>

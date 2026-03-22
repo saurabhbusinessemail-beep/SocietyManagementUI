@@ -16,7 +16,7 @@
     .center {
         flex: 1;
         display: flex;
-        justify-content: center;
+        justify-content: left;
         overflow: hidden;
 
         .title {
@@ -91,9 +91,12 @@
     }
 
     .menu-icon {
-        width: 1.5rem; // w-6
-        height: 1.5rem; // h-6
-        stroke: currentColor;
+        width: auto;
+        height: 65px;
+
+        @include mobile {
+            height: 42px;
+        }
     }
 
     // responsive icon color depending on header background

@@ -97,6 +97,26 @@ body {
     background: url(./assets/header-background.png);
 }
 
+// Divider
+.standard-divider {
+    height: 1px;
+    width: 100%;
+    background: $color-border;
+    margin: 0;
+
+    @include mobile {
+        margin-bottom: $sp;
+    }
+
+    @include tablet {
+        margin-bottom: $sp-md;
+    }
+
+    @include mobile {
+        margin-bottom: $sp-md;
+    }
+}
+
 // Icon style helper
 .icon {
     display: inline-flex;
@@ -173,6 +193,11 @@ body {
     cursor: pointer;
     border: solid 1px $color-black;
 
+    .label {
+        flex: 1 auto;
+        text-align: left;
+    }
+
     &:disabled {
         background: $color-disable-background !important;
         border-color: $color-disable-background;
@@ -244,14 +269,17 @@ textarea {
 
     @include mobile {
         font-size: $page-header-mobile;
+        margin: $sp-sm 0 $sp-sm 0;
     }
 
     @include tablet {
         font-size: $page-header-tablet;
+        margin: $sp-md 0 $sp 0;
     }
 
     @include desktop {
         font-size: $page-header-desktop;
+        margin: $sp-lg 0 $sp-md 0;
     }
 }
 

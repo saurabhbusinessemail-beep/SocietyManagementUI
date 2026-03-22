@@ -154,6 +154,15 @@
             .brand-icon {
                 font-size: 20px;
                 padding: $sp-sm;
+
+                .menu-icon {
+                    width: auto;
+                    height: 65px;
+
+                    @include mobile {
+                        height: 42px;
+                    }
+                }
             }
 
             .menu-close {

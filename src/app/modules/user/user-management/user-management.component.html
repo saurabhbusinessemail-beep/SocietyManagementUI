@@ -1,10 +1,11 @@
 <!-- user-management.component.html -->
-<app-layout>
-    <div class="user-management">
-        <!-- Header -->
-        <div class="user-header">
+<app-layout title="Users">
+
+    <ng-container moreActions>
             <ui-button label="Add User" (clicked)="openAddModal()"></ui-button>
-        </div>
+    </ng-container>
+
+    <div class="user-management">
 
         <!-- Search and Filters -->
         <div class="filters-section">

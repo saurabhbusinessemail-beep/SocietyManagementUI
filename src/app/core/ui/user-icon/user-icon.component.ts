@@ -10,7 +10,6 @@ import { IMyProfile } from '../../../interfaces';
 })
 export class UserIconComponent implements OnInit {
 
-  @Input() hideMoreActions: boolean = false;
   @Input() loggedInUserProfile?: IMyProfile
   @Output() needLogin = new EventEmitter<void>();
   open = false;

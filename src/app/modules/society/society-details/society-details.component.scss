@@ -16,12 +16,6 @@
     }
 }
 
-// Header Section
-.page-header {
-    display: flex;
-    flex-direction: column;
-    gap: $sp-md;
-    margin-bottom: $sp-xl;
 
     .icon-button {
         width: 32px;
@@ -46,6 +40,15 @@
         }
     }
 
+
+// Header Section
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-md;
+    margin-bottom: $sp-xl;
+
+
     @include tablet {
         flex-direction: row;
         align-items: center;
@@ -57,7 +60,7 @@
         .society-title {
             font-size: $font-size-xxl;
             font-weight: 800;
-            color: #4f46e5; // indigo-600
+            color: $color-dark-blue; // indigo-600
             letter-spacing: -0.025em;
             margin: 0 0 $sp-xs 0;
             display: flex;

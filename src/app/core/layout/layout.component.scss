@@ -4,29 +4,89 @@
 .layout-container {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
+    /* Full viewport height */
     overflow: hidden;
 }
 
 app-header {
-    flex: 0 0 auto; /* fixed height */
+    flex: 0 0 auto;
+    /* fixed height */
     z-index: 1000;
 }
 
 app-footer {
-    flex: 0 0 auto; /* fixed height */
+    flex: 0 0 auto;
+    /* fixed height */
     z-index: 1000;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h1 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: $color-black;
+        margin: 0;
+        color: $color-dark-blue;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: $sp;
+    }
+
+    .title-container {
+        display: flex;
+        flex-direction: column;
+
+        .subtitle {
+            margin: 0px;
+            color: $color-help-text;
+        }
+    }
+}
+
+.standard-divider {
+    margin-bottom: $sp-sm;
 }
 
 .layout-main {
     flex: 1;
     display: flex;
-    overflow: hidden; /* prevent outer scroll */
+    overflow: hidden;
+    /* prevent outer scroll */
+}
+
+.layout-body-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    /* only this scrolls */
+    padding: $sp-md;
+    position: relative;
 }
 
 .layout-body {
     flex: 1;
-    overflow-y: auto; /* only this scrolls */
-    padding: $sp-md;
+    overflow-y: auto;
+    /* only this scrolls */
     position: relative;
+}
+
+.mobile-actions {
+    display: flex;
+    flex-direction: column;
+    padding: $sp-sm;
+    gap: $sp;
+
+    ::ng-deep {
+        .btn {
+            width: 100% !important;
+        }
+    }
 }

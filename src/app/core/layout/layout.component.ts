@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, ContentChild, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { IMenu, IMyProfile } from '../../interfaces';
 import { MenuService } from '../../services/menu.service';
 import { WindowService } from '../../services/window.service';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class LayoutComponent implements OnInit {
 
   @Input() title?: string;
+  @Input() subTitle?: string;
   @Input() menuItems: IMenu[] = [];
   @Input() hideMoreActions: boolean = false;
   @Input() navMenuItems: string[] = [];
@@ -22,9 +23,19 @@ export class LayoutComponent implements OnInit {
   @Output() needLogin = new EventEmitter<void>();
   @Output() menuItemClick = new EventEmitter<string>();
 
+  @ContentChild('moreActions') moreActions!: TemplateRef<any>;
+
 
   get loggedInUserProfile(): IMyProfile | undefined {
     return this.logginService.getProfileFromStorage();
+  }
+
+  get screenMode() {
+    return this.windowServic.mode.value
+  }
+
+  get isMobileMode() {
+    return this.screenMode === 'mobile';
   }
 
   constructor(

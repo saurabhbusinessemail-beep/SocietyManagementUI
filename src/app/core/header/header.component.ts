@@ -14,8 +14,7 @@ import { IMyProfile } from '../../interfaces';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() title: string = '';
-  @Input() hideMoreActions: boolean = false;
+  // @Input() title: string = '';
   @Input() loggedInUserProfile?: IMyProfile
   @Input() showSocietyFilter = false;
   @Input() showBackButton = false;

@@ -8,7 +8,7 @@
         <div class="brand" (click)="toggleMenu()" *ngIf="windowService.mode.value !== 'desktop' && windowService.mode.value !== 'tablet'">
             <div class="brand-icon">
                 <span class="logo-mobile">
-                    <span class="n-bold">GMS</span>
+                    <img class="icon menu-icon" src="assets/logo.png">
                 </span>
                 <app-icon name="double-arrow-right" color="white" *ngIf="!this.open"></app-icon>
             </div>

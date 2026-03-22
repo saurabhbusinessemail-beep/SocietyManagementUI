@@ -1,13 +1,9 @@
 <div class="layout-container">
 
     <!-- HEADER -->
-    <app-header (toggleMenu)="menu.toggleMenu()" [title]="title ?? menuService.pageTitle"
-        [hideMoreActions]="hideMoreActions" [loggedInUserProfile]="loggedInUserProfile" [navMenuItems]="navMenuItems"
-        [extendedMenuTemplate]="extendedMenuTemplate" [showBackButton]="showBackButton" (needLogin)="needLogin.emit()"
-        (menuItemClick)="menuItemClick.emit($event)" (goHome)="goHome()">
-        <ng-container moreActions>
-            <ng-content select="[moreActions]"></ng-content>
-        </ng-container>
+    <app-header (toggleMenu)="menu.toggleMenu()" [loggedInUserProfile]="loggedInUserProfile"
+        [navMenuItems]="navMenuItems" [extendedMenuTemplate]="extendedMenuTemplate" [showBackButton]="showBackButton"
+        (needLogin)="needLogin.emit()" (menuItemClick)="menuItemClick.emit($event)" (goHome)="goHome()">
     </app-header>
 
     <div class="layout-main">
@@ -15,9 +11,40 @@
         <!-- LEFT MENU -->
         <app-menu #menu [menuItems]="menuService.userMenus.value"></app-menu>
 
-        <!-- BODY AREA (scrollable only here) -->
-        <div class="layout-body" appLoadingOverlay [useHttpInterceptor]="true">
-            <ng-content></ng-content>
+        <div class="layout-body-container">
+
+            <div class="page-header-container">
+                <!-- [title]="title ?? menuService.pageTitle" -->
+                <div class="page-header" *ngIf="title || !hideMoreActions">
+                    <div class="title-container">
+                        <h1>{{ title ?? menuService.pageTitle }}</h1>
+                        <h6 *ngIf="subTitle" class="subtitle">{{ subTitle }}</h6>
+                    </div>
+
+                    <div class="header-actions" *ngIf="!hideMoreActions">
+                        <ng-container *ngIf="!isMobileMode">
+                            <ng-container *ngTemplateOutlet="projectedActions"></ng-container>
+                        </ng-container>
+
+                        <ui-button label="" type="only-content" *ngIf="isMobileMode" [matMenuTriggerFor]="actionMenu">
+                            <app-icon name="more-vert">
+                            </app-icon>
+                        </ui-button>
+                        <mat-menu #actionMenu>
+                            <div class="mobile-actions">
+                                <ng-container *ngTemplateOutlet="projectedActions"></ng-container>
+                            </div>
+                        </mat-menu>
+                    </div>
+                </div>
+                <div class="standard-divider" *ngIf="!hideMoreActions"></div>
+            </div>
+
+            <!-- BODY AREA (scrollable only here) -->
+            <div class="layout-body" appLoadingOverlay [useHttpInterceptor]="true">
+                <ng-content></ng-content>
+            </div>
+
         </div>
 
     </div>
@@ -27,3 +54,7 @@
     </app-footer>
 
 </div>
+
+<ng-template #projectedActions>
+    <ng-content select="[moreActions]"></ng-content>
+</ng-template>

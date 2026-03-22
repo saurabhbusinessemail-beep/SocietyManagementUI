@@ -1,13 +1,14 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true" (needLogin)="loginService.simpleLogin()">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" title="Current Plan"
+    (needLogin)="loginService.simpleLogin()">
+
+    <ng-container moreActions>
+        <ui-button label="View History" type="only-content" (clicked)="viewHistory()">
+        </ui-button>
+        <ui-button label="Change Plan" type="only-content" (clicked)="changePlan()">
+        </ui-button>
+    </ng-container>
+
     <div class="plan-container">
-        <!-- Header -->
-        <div class="page-header">
-            <h1>Current Plan</h1>
-            <div class="header-actions">
-                <button class="btn btn-secondary" (click)="viewHistory()">View History</button>
-                <button class="btn btn-primary" (click)="changePlan()">Change Plan</button>
-            </div>
-        </div>
 
         <!-- Not Logged In -->
         <div class="login-message" *ngIf="!myProfile">

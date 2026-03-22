@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!canAddParking" [title]="pageTitle" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddParking" title="Parkings" [subTitle]="pageSubTitle" [showBackButton]="true">
     
     <ng-container moreActions>
         <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
@@ -15,10 +15,6 @@
                         <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
                             *ngIf="!society">
                         </ui-society-search>
-
-                        <ui-label [valueText]="society.societyName" [config]="societyNameConfig" direction="horizontal"
-                            valueType="info" [smColumns]="12" [mdColumns]="10" [lgColumns]="10" *ngIf="society">
-                        </ui-label>
 
                     </ui-form-layout>
                 </div>

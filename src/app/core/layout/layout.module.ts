@@ -8,7 +8,9 @@ import { MenuModule } from '../menu/menu.module';
 import { FormLayoutComponent } from './form-layout/form-layout.component';
 import { DirectiveModule } from '../../directives/directive.module';
 import { AddEditPopupComponent } from './add-edit-popup/add-edit-popup.component';
-
+import { IconModule } from '../icons/icon.module';
+import { UiModule } from '../ui/ui.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -23,7 +25,10 @@ import { AddEditPopupComponent } from './add-edit-popup/add-edit-popup.component
     MenuModule,
     FooterModule,
     BodyModule,
-    DirectiveModule
+    DirectiveModule,
+    IconModule,
+    UiModule,
+    MatMenuModule
   ],
   exports: [LayoutComponent, FormLayoutComponent, AddEditPopupComponent]
 })

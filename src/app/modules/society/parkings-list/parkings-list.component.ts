@@ -120,10 +120,10 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
     return ctrl && ctrl.value ? ctrl.value as keyof typeof VehicleTypes : undefined;
   }
 
-  get pageTitle(): string | undefined {
-    if (!this.society) return 'Parkings';
+  get pageSubTitle(): string | undefined {
+    if (!this.society) return '';
 
-    return 'Parkings: ' + this.society.societyName;
+    return this.society.societyName;
   }
 
   get buildingOptions(): IUIDropdownOption<string>[] {
