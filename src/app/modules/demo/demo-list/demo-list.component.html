@@ -1,10 +1,6 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="false" (needLogin)="loginService.simpleLogin()">
+<app-layout title="Demo Requests" subTitle="Track, manage, and follow up on all incoming demo booking requests."
+    [hideMoreActions]="true" [showBackButton]="false" (needLogin)="loginService.simpleLogin()">
     <div class="demo-list-container">
-        <!-- Header -->
-        <div class="list-header">
-            <h1 class="page-title">Demo Requests</h1>
-            <p class="page-subtitle">Track, manage, and follow up on all incoming demo booking requests.</p>
-        </div>
 
         <!-- Stats Cards -->
         <div class="stats-grid">
