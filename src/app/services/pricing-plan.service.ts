@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IBEResponseFormat, IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan, IPlanDurationsResponse } from '../interfaces';
+import { IBEResponseFormat, IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan, IPlanDurationsResponse, IPaymentVerificationPayload } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
@@ -12,6 +12,7 @@ import { Cacheable, InvalidateCache } from '../decorators';
 })
 export class PricingPlanService {
     private baseUrl = `${environment.apiBaseUrl}/pricing-plan`;
+    private razorPayBaseURL = `${environment.apiBaseUrl}/payments`;
 
     features: IFeature[] = [];
     plans: IPricingPlan[] = [];
@@ -229,5 +230,9 @@ export class PricingPlanService {
     })
     validateCoupon(couponCode: string, amount: number): Observable<any> {
         return this.http.post(`${this.baseUrl}/validate-coupon`, { couponCode, amount });
+    }
+
+    verifyPayment(payload: IPaymentVerificationPayload): Observable<IBEResponseFormat> {
+        return this.http.post<IBEResponseFormat>(`${this.razorPayBaseURL}/verify`, payload);
     }
 }

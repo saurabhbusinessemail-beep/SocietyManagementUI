@@ -1,5 +1,3 @@
-// pricing-checkout.component.ts - Fixed version
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,8 +15,11 @@ import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
 import { Location } from '@angular/common';
-import { take, takeUntil, finalize, switchMap, map } from 'rxjs/operators';
-import { Subject, forkJoin, of, Observable } from 'rxjs';
+import { take, takeUntil, finalize, switchMap } from 'rxjs/operators';
+import { Subject, of, Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+
+declare const Razorpay: any;
 
 @Component({
   selector: 'app-pricing-checkout',
@@ -26,7 +27,7 @@ import { Subject, forkJoin, of, Observable } from 'rxjs';
   styleUrls: ['./pricing-checkout.component.scss']
 })
 export class PricingCheckoutComponent implements OnInit, OnDestroy {
-  currentStep: number = 1;
+  // Properties (all existing)
   societyId: string = '';
   paramHasSocietyId = false;
   societyDetails?: ISociety;
@@ -61,22 +62,11 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   showRemoveCoupon: boolean = false;
   isCurrentPlanLoading: boolean = false;
 
-  // Payment methods
-  paymentMethods = [
-    { id: 'upi', name: 'UPI', disabled: false },
-    { id: 'card', name: 'Credit/Debit Card', disabled: true },
-    { id: 'netbanking', name: 'Net Banking', disabled: true },
-    { id: 'wallet', name: 'Wallet', disabled: true }
-  ];
-
-  selectedPaymentMethod: string = 'upi';
   societyLoading = false;
 
   // Form groups
   couponForm: FormGroup;
-  upiForm: FormGroup;
 
-  // Destroy subject for cleanup
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -88,20 +78,12 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private location: Location,
   ) {
-    this.couponForm = this.fb.group({
-      couponCode: ['']
-    });
-
-    this.upiForm = this.fb.group({
-      upiId: ['', [Validators.required, Validators.pattern(/^[\w\.\-_]{2,}@[a-zA-Z]{2,}$/)]]
-    });
+    this.couponForm = this.fb.group({ couponCode: [''] });
   }
 
   ngOnInit(): void {
-    // Get My Profile
     this.myProfile = this.loginService.getProfileFromStorage();
 
-    // Get societyId and plan from route/state
     this.route.params.pipe(
       takeUntil(this.destroy$),
       switchMap(params => {
@@ -113,7 +95,6 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
           this.loadSociety(this.societyId);
         }
 
-        // Wait for plans to load before selecting the plan
         return this.waitForPlansToLoad(planId);
       })
     ).subscribe({
@@ -139,22 +120,16 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   }
 
   private waitForPlansToLoad(planId: string): Observable<IPricingPlan | undefined> {
-    // Check if plans are already loaded
     if (this.pricingPlanService.plans.length > 0) {
       const plan = this.pricingPlanService.plans.find(p => p.id === planId);
       return of(plan);
     }
-
-    // Wait for plans to load
-    return this.pricingPlanService.getPlanById(planId).pipe(
-      take(1)
-    );
+    return this.pricingPlanService.getPlanById(planId).pipe(take(1));
   }
 
   loadAvailableDurations(): void {
     if (!this.selectedPlan) return;
 
-    // Skip duration loading for free plans
     if (this.selectedPlan.price === 'Free') {
       this.showDurationSelector = false;
       this.calculatePrice();
@@ -165,23 +140,16 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     this.pricingPlanService.getPlanDurations(this.selectedPlan.id, this.societyId)
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => {
-          this.isLoadingDurations = false;
-        })
+        finalize(() => this.isLoadingDurations = false)
       )
       .subscribe({
         next: (response) => {
           this.availableDurations = response;
           this.showDurationSelector = this.hasDurationOptions();
           this.isDurationLoaded = true;
-
-          // Set default duration only after durations are loaded
           this.setDefaultDuration();
-
-          // Calculate initial price
           this.calculatePrice();
 
-          // Now check for current plan (if society is loaded)
           if (this.societyId && this.societyDetails) {
             this.checkForCurrentPlan();
           }
@@ -196,10 +164,8 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   setDefaultDuration(): void {
     if (!this.availableDurations) return;
 
-    // Reset duration values
     this.selectedDurationValue = 0;
 
-    // Prefer 1 year if available
     if (this.availableDurations.data.durations.years?.length) {
       const defaultYear = this.availableDurations.data.durations.years.find(y => y.value === 1);
       if (defaultYear) {
@@ -209,9 +175,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
         this.selectedDurationValue = this.availableDurations.data.durations.years[0].value;
         this.selectedDurationUnit = 'years';
       }
-    }
-    // Otherwise use months
-    else if (this.availableDurations.data.durations.months?.length) {
+    } else if (this.availableDurations.data.durations.months?.length) {
       this.selectedDurationValue = this.availableDurations.data.durations.months[0].value;
       this.selectedDurationUnit = 'months';
     }
@@ -235,17 +199,14 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   }
 
   onDurationChange(): void {
-    // Only recalculate if we have valid duration
     if (this.selectedDurationValue === 0) return;
 
     this.calculatePrice();
 
-    // Reset coupon when duration changes
     if (this.isCouponApplied) {
       this.removeCoupon();
     }
 
-    // Recalculate change plan price if in change plan mode
     if (this.isChangePlan && this.societyId && this.selectedPlan) {
       this.calculateChangePrice();
     }
@@ -274,30 +235,21 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     this.pricingPlanService.getCurrentPlan(this.societyId)
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => {
-          this.isCurrentPlanLoading = false;
-        })
+        finalize(() => this.isCurrentPlanLoading = false)
       )
       .subscribe({
         next: response => {
           if (response && response._id) {
             this.currentPlanDetails = response;
+            const isCurrentPlanFree = response.price === 'Free' || response.planName === 'Basic';
 
-            // Check if current plan is Basic/Free
-            const isCurrentPlanFree = response.price === 'Free' ||
-              response.planName === 'Basic';
-
-            // If current plan is not free and we have valid duration, this is a change plan
             if (!isCurrentPlanFree && this.selectedDurationValue !== 0) {
               this.isChangePlan = true;
               this.calculateChangePrice();
             }
           }
         },
-        error: (err) => {
-          // No current plan found - this is a new purchase
-          console.log('No current plan found - new purchase');
-        }
+        error: () => { /* No current plan - new purchase */ }
       });
   }
 
@@ -331,42 +283,35 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     this.loginService.loginAndReturn()
       .pipe(take(1))
       .subscribe({
-        next: response => {
+        next: () => {
           setTimeout(() => {
             this.myProfile = this.loginService.getProfileFromStorage();
           }, 300);
         }
-      })
+      });
   }
 
   loadSociety(societyId: string) {
     this.societyLoading = true;
-    this.societyService.getSociety(this.societyId)
+    this.societyService.getSociety(societyId)
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => {
-          this.societyLoading = false;
-        })
+        finalize(() => this.societyLoading = false)
       )
       .subscribe({
         next: (society) => {
           this.societyDetails = society;
-
-          // After society loads, reload durations with society ID
           if (this.selectedPlan) {
             this.loadAvailableDurations();
           }
         },
-        error: (error) => {
-          console.error('Error fetching society:', error);
-        }
+        error: (error) => console.error('Error fetching society:', error)
       });
   }
 
   calculatePrice(): void {
     if (!this.selectedPlan) return;
 
-    // Handle free plans
     if (this.selectedPlan.price === 'Free') {
       this.originalPrice = 0;
       this.totalPrice = 0;
@@ -374,23 +319,18 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Don't calculate if duration not selected
     if (this.selectedDurationValue === 0) return;
 
-    // Get selected duration price
     const selectedDurationPrice = this.getSelectedDurationPrice();
 
     if (selectedDurationPrice) {
       if (this.societyDetails?.numberOfFlats) {
-        // Calculate price based on selected duration and actual flat count
-        // The price from API already includes flat count, so use directly
         this.originalPrice = selectedDurationPrice.baseAmount;
         this.totalPrice = selectedDurationPrice.finalAmount;
         this.discountAmount = selectedDurationPrice.discount > 0 ? selectedDurationPrice.baseAmount - selectedDurationPrice.finalAmount : 0;
         this.discountPercentage = selectedDurationPrice.discount;
         this.tentativeTotalPrice = selectedDurationPrice.baseAmount;
       } else {
-        // Tentative price with default flat count (from API response)
         const flatCount = this.availableDurations?.data.flatCount || 10;
         this.originalPrice = selectedDurationPrice.baseAmount;
         this.tentativeTotalPrice = selectedDurationPrice.baseAmount;
@@ -407,7 +347,6 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Determine amount to apply coupon on
     let amountToDiscount = this.isChangePlan && this.changePlanCalculation
       ? (this.changePlanCalculation.calculation?.amountToPay ?? 0)
       : this.totalPrice;
@@ -418,10 +357,8 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
         next: (response) => {
           if (response.valid) {
             if (this.isChangePlan) {
-              // Recalculate change price with coupon
               this.calculateChangePrice(this.couponCode);
             } else {
-              // Update new purchase price
               this.discountAmount = response.discount;
               this.totalPrice = response.finalAmount;
               this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
@@ -458,121 +395,9 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     this.discountPercentage = 0;
 
     if (this.isChangePlan) {
-      // Recalculate without coupon
       this.calculateChangePrice();
     } else {
-      // Reset to original price
       this.calculatePrice();
-    }
-  }
-
-  nextStep(): void {
-    if (this.currentStep === 1) {
-      // Step 1 validation
-      if (this.totalPrice === 0) {
-        // Complete purchase directly
-        this.completePurchase();
-      } else {
-        this.currentStep = 2;
-      }
-    } else if (this.currentStep === 2) {
-      // Step 2 validation
-      if (this.selectedPaymentMethod === 'upi') {
-        this.currentStep = 3;
-      }
-    } else if (this.currentStep === 3) {
-      // Step 3 validation
-      if (this.upiForm.valid) {
-        this.completePurchase();
-      } else {
-        this.upiForm.markAllAsTouched();
-      }
-    }
-  }
-
-  previousStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
-    }
-  }
-
-  async completePurchase() {
-    try {
-      this.myProfile = this.loginService.getProfileFromStorage();
-      if (!this.myProfile) {
-        await this.getLoggedIn();
-      }
-      if (!this.societyId) {
-        this.getSociety();
-        return;
-      }
-      if (!this.selectedPlan || !this.societyId) return;
-
-      // Validate duration for paid plans
-      if (this.selectedPlan.price !== 'Free' && this.selectedDurationValue === 0) {
-        this.couponMessage = 'Please select a valid duration';
-        return;
-      }
-
-      this.isProcessing = true;
-
-      if (this.isChangePlan && this.changePlanCalculation) {
-        // Use change plan API with duration
-        this.pricingPlanService.changePlan(
-          this.societyId,
-          this.selectedPlan.id,
-          this.selectedDurationValue,
-          this.selectedDurationUnit,
-          this.selectedPaymentMethod,
-          { upiId: this.upiForm.get('upiId')?.value },
-          this.isCouponApplied ? this.couponCode : undefined
-        ).pipe(takeUntil(this.destroy$))
-          .subscribe({
-            next: (plan) => {
-              this.societyPlan = plan;
-              this.purchaseComplete = true;
-              this.isProcessing = false;
-            },
-            error: (error) => {
-              console.error('Change plan failed:', error);
-              this.couponMessage = error.error?.message || 'Failed to change plan';
-              this.isProcessing = false;
-            }
-          });
-      } else {
-        // Use new purchase API with duration
-        this.pricingPlanService.purchasePlan(
-          this.societyId,
-          this.selectedPlan.id,
-          this.selectedDurationValue,
-          this.selectedDurationUnit,
-          undefined,
-          this.isCouponApplied ? this.couponCode : undefined
-        ).pipe(takeUntil(this.destroy$))
-          .subscribe({
-            next: (plan) => {
-              this.societyPlan = plan;
-              this.purchaseComplete = true;
-              this.isProcessing = false;
-            },
-            error: (error) => {
-              console.error('Purchase failed:', error);
-              this.couponMessage = error.error?.message || 'Failed to purchase plan';
-              this.isProcessing = false;
-            }
-          });
-      }
-
-    } catch (err) {
-      console.log('Error ', err);
-      this.isProcessing = false;
-    }
-  }
-
-  selectPaymentMethod(methodId: string): void {
-    const method = this.paymentMethods.find(m => m.id === methodId);
-    if (method && !method.disabled) {
-      this.selectedPaymentMethod = methodId;
     }
   }
 
@@ -583,41 +408,12 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
 
   confirmSelectedSociety() {
     if (!this.societyId) return;
-
     this.showSocietySelectModal = false;
     this.loadSociety(this.societyId);
   }
 
-  isStepValid(): boolean {
-    if (!this.societyDetails && this.currentStep === 1) {
-      return false;
-    }
-
-    // Validate duration selection for paid plans
-    if (this.currentStep === 1 && this.selectedPlan && this.selectedPlan.price !== 'Free') {
-      if (!this.isDurationLoaded || this.selectedDurationValue === 0) {
-        return false;
-      }
-    }
-
-    if (this.currentStep === 1) {
-      return true;
-    } else if (this.currentStep === 2) {
-      return this.selectedPaymentMethod === 'upi';
-    } else if (this.currentStep === 3) {
-      return this.upiForm.valid;
-    }
-    return false;
-  }
-
-  getStepStatus(step: number): 'active' | 'completed' | 'pending' {
-    if (this.currentStep === step) return 'active';
-    if (step < this.currentStep) return 'completed';
-    return 'pending';
-  }
-
   changePlan() {
-    this.router.navigate(['pricing-plan/list', this.societyId])
+    this.router.navigate(['pricing-plan/list', this.societyId]);
   }
 
   getLoggedIn() {
@@ -625,11 +421,9 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
       this.loginService.loginAndReturn()
         .pipe(take(1))
         .subscribe({
-          next: (response) => {
-            resolve(response)
-          },
-          error: err => reject(err)
-        })
+          next: resolve,
+          error: reject
+        });
     });
   }
 
@@ -643,9 +437,161 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
 
   cancel() {
     if (this.societyId && this.paramHasSocietyId) {
-      this.router.navigate(['society', this.societyId, 'details'])
+      this.router.navigate(['society', this.societyId, 'details']);
       return;
     }
     this.location.back();
+  }
+
+  // New validation method (replaces isStepValid)
+  isCheckoutValid(): boolean {
+    if (!this.societyDetails) return false;
+    if (this.selectedPlan && this.selectedPlan.price !== 'Free') {
+      if (!this.isDurationLoaded || this.selectedDurationValue === 0) return false;
+    }
+    // No payment method validation needed because Razorpay handles it
+    return true;
+  }
+
+  // Main entry point for payment
+  processPayment(): void {
+    if (this.isProcessing) return;
+
+    if (!this.myProfile) {
+      this.triggerLogin();
+      return;
+    }
+    if (!this.societyId) {
+      this.getSociety();
+      return;
+    }
+    if (!this.selectedPlan) return;
+    if (this.selectedPlan.price !== 'Free' && this.selectedDurationValue === 0) {
+      this.couponMessage = 'Please select a valid duration';
+      return;
+    }
+
+    this.isProcessing = true;
+
+    // Call the appropriate service method
+    const purchaseObservable = this.isChangePlan
+      ? this.pricingPlanService.changePlan(
+        this.societyId,
+        this.selectedPlan.id,
+        this.selectedDurationValue,
+        this.selectedDurationUnit,
+        undefined,           // paymentMethod not needed – Razorpay handles it
+        undefined,           // paymentDetails not needed
+        this.isCouponApplied ? this.couponCode : undefined
+      )
+      : this.pricingPlanService.purchasePlan(
+        this.societyId,
+        this.selectedPlan.id,
+        this.selectedDurationValue,
+        this.selectedDurationUnit,
+        undefined,
+        this.isCouponApplied ? this.couponCode : undefined
+      );
+
+    purchaseObservable.pipe(take(1)).subscribe({
+      next: (societyPlan: ISocietyPlan) => {
+        this.societyPlan = societyPlan;
+
+        // If amount is 0, we are done
+        if (this.totalPrice === 0) {
+          this.purchaseComplete = true;
+          this.isProcessing = false;
+        } else {
+          // Expect societyPlan to have razorpayOrderId
+          if (societyPlan.razorpayOrderId) {
+            this.openRazorpayCheckout(societyPlan);
+          } else {
+            this.couponMessage = 'Unable to initiate payment. No order ID received.';
+            this.isProcessing = false;
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Purchase failed:', error);
+        this.couponMessage = error.error?.message || 'Failed to initiate purchase. Please try again.';
+        this.isProcessing = false;
+      }
+    });
+  }
+
+  private openRazorpayCheckout(societyPlan: ISocietyPlan): void {
+    // We need the Razorpay key – assume it's returned in societyPlan.razorpayKeyId
+    // If not, you may get it from environment or a separate API
+    const keyId = (societyPlan as any).razorpayKeyId || environment.RAZORPAY_KEY_ID;
+
+    const options = {
+      key: keyId,
+      amount: societyPlan.totalAmount || this.totalPrice * 100, // amount in paise
+      currency: 'INR',
+      name: 'Your App Name',
+      description: `Payment for ${this.selectedPlan?.name} Plan`,
+      order_id: societyPlan.razorpayOrderId,
+      handler: (response: any) => {
+        // After payment success, verify on backend
+        this.verifyPayment(response, societyPlan);
+      },
+      prefill: {
+        name: this.myProfile?.user?.name || '',
+        email: this.myProfile?.user?.email || '',
+        // contact: optional, can be left out
+      },
+      theme: { color: '#3399cc' },
+      modal: {
+        ondismiss: () => {
+          this.isProcessing = false;
+          this.couponMessage = 'Payment cancelled.';
+        }
+      }
+    };
+
+    this.loadRazorpayScript().then(() => {
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }).catch(() => {
+      this.isProcessing = false;
+      this.couponMessage = 'Failed to load payment gateway. Please check your connection.';
+    });
+  }
+
+  private loadRazorpayScript(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (typeof Razorpay !== 'undefined') {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve();
+      script.onerror = () => reject();
+      document.body.appendChild(script);
+    });
+  }
+
+  private verifyPayment(paymentResponse: any, societyPlan: ISocietyPlan): void {
+    // Call backend to verify payment and finalize purchase
+    this.pricingPlanService.verifyPayment({
+      razorpay_order_id: paymentResponse.razorpay_order_id,
+      razorpay_payment_id: paymentResponse.razorpay_payment_id,
+      razorpay_signature: paymentResponse.razorpay_signature,
+      societyPlanId: societyPlan._id
+    }).pipe(takeUntil(this.destroy$), finalize(() => this.isProcessing = false))
+      .subscribe({
+        next: (result) => {
+          if (result.success) {
+            this.purchaseComplete = true;
+          } else {
+            this.couponMessage = result.message || 'Payment verification failed. Please contact support.';
+          }
+        },
+        error: (error) => {
+          console.error('Verification error:', error);
+          this.couponMessage = error.error?.message || 'Payment verification failed.';
+        }
+      });
   }
 }

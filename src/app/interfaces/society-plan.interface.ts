@@ -31,6 +31,7 @@ export interface ISocietyPlan {
   notes?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  razorpayOrderId?: string;
 }
 
 export interface ICurrentPlanResponse extends ISocietyPlan {
@@ -146,4 +147,11 @@ export interface IPlanDurationsResponse {
       years: IDurationPrice[];
     };
   };
+}
+
+export interface IPaymentVerificationPayload {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  societyPlanId: string;
 }

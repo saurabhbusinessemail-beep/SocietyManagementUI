@@ -11,95 +11,8 @@
     }
 }
 
-// Stepper
-.stepper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: $sp-xl;
-
-    @include mobile {
-        margin-bottom: $sp-lg;
-    }
-}
-
-.stepper-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-
-    &.active .stepper-number {
-        background-color: $color-dark-blue;
-        color: $color-white;
-        border-color: $color-dark-blue;
-    }
-
-    &.completed .stepper-number {
-        background-color: $status-active;
-        color: $color-white;
-        border-color: $status-active;
-        position: relative;
-
-        &::after {
-            content: '✓';
-            font-size: $font-size-sm;
-        }
-
-        span {
-            display: none;
-        }
-    }
-}
-
-.stepper-number {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: $color-white;
-    border: 2px solid $color-border;
-    color: $color-note-gray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    margin-bottom: $sp-xs;
-    transition: all 0.3s ease;
-
-    @include mobile {
-        width: 28px;
-        height: 28px;
-        font-size: $font-size-xs;
-    }
-}
-
-.stepper-label {
-    font-size: $font-size-xs;
-    color: $color-note-gray;
-    text-align: center;
-
-    @include mobile {
-        display: none;
-    }
-}
-
-.stepper-line {
-    width: 60px;
-    height: 2px;
-    background-color: $color-border;
-    margin: 0 $sp-xs;
-
-    &.completed {
-        background-color: $status-active;
-    }
-
-    @include mobile {
-        width: 30px;
-    }
-}
-
-// Step Content
-.step-content {
+// New styles for single page layout
+.checkout-content {
     background-color: $color-white;
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
@@ -111,19 +24,41 @@
     }
 }
 
-.step-title {
+.section-title {
     font-size: $font-size-lg;
     color: $color-black;
     margin-bottom: $sp-lg;
     font-weight: 600;
+    border-bottom: 2px solid $color-border;
+    padding-bottom: $sp-sm;
 
     @include mobile {
         font-size: $font-size-base;
-        margin-bottom: $sp;
     }
 }
 
-// Order Summary
+.order-summary-section {
+    margin-bottom: $sp-xl;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp;
+    margin-top: $sp-xl;
+
+    @include mobile {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+// ==================== EXISTING STYLES (unchanged) ====================
+
+// Summary Section
 .summary-section {
     margin-bottom: $sp-lg;
     padding-bottom: $sp-lg;
@@ -323,150 +258,6 @@
     margin-top: $sp-xs;
 }
 
-// Payment Methods
-.payment-methods {
-    display: flex;
-    flex-direction: column;
-    gap: $sp;
-}
-
-.payment-method {
-    display: flex;
-    align-items: center;
-    gap: $sp;
-    padding: $sp;
-    border: 2px solid $color-border;
-    border-radius: $btn-border-radius-md;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover:not(.disabled) {
-        border-color: $color-dark-blue;
-    }
-
-    &.selected {
-        border-color: $color-dark-blue;
-        background-color: rgba($color-dark-blue, 0.05);
-    }
-
-    &.disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        background-color: $color-disable-background;
-    }
-}
-
-.method-radio {
-    width: 20px;
-    height: 20px;
-    border: 2px solid $color-border;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    .radio-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: $color-dark-blue;
-    }
-}
-
-.method-info {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.method-name {
-    font-size: $font-size-base;
-    font-weight: 500;
-    color: $color-black;
-}
-
-.method-status {
-    font-size: $font-size-xs;
-    color: $color-note-gray;
-}
-
-.payment-note {
-    font-size: $font-size-xs;
-    color: $color-help-text;
-    margin-top: $sp;
-    text-align: center;
-}
-
-// Payment Details
-.upi-form {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.form-group {
-    margin-bottom: $sp;
-
-    label {
-        display: block;
-        font-size: $font-size-sm;
-        color: $color-black;
-        margin-bottom: $sp-xs;
-    }
-
-    .mandatory {
-        color: $color-mandatory;
-    }
-
-    input {
-        width: 100%;
-        padding: $input-padding-desktop;
-        border: 1px solid $color-border;
-        border-radius: $input-border-radius;
-        font-size: $font-size-sm;
-
-        &:focus {
-            outline: none;
-            border-color: $color-dark-blue;
-        }
-
-        &.ng-invalid.ng-touched {
-            border-color: $color-error-header;
-        }
-    }
-}
-
-.error-message {
-    font-size: $font-size-xs;
-    color: $color-error-header;
-    margin-top: $sp-xs;
-}
-
-.coming-soon {
-    text-align: center;
-    padding: $sp-xl;
-    background-color: $color-light-gray;
-    border-radius: $input-border-radius;
-    color: $color-note-gray;
-    font-size: $font-size-base;
-}
-
-// Step Actions
-.step-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: $sp;
-
-    @include mobile {
-        flex-direction: column;
-
-        button {
-            width: 100%;
-        }
-    }
-}
-
 // Buttons
 .btn {
     padding: $input-padding-desktop $sp-lg;
@@ -537,7 +328,6 @@
 }
 
 // ==================== MODAL STYLES ====================
-
 .custom-modal {
     position: fixed;
     top: 0;
@@ -622,8 +412,6 @@
         }
     }
 
-
-
     .cancel-btn,
     .confirm-btn {
         padding: $sp-sm $sp-lg;
@@ -678,13 +466,13 @@
     }
 }
 
-// View Modal Specific
 .view-modal {
     .modal-content {
         max-width: 600px;
     }
 }
 
+// Society info
 .society-info {
     background-color: $color-light-gray;
     padding: $sp;
