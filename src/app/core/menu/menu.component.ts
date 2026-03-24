@@ -32,7 +32,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   toggleMenu() {
     // Desktop: toggle collapse/expand
-    if (this.windowService.mode.value === 'desktop') { this.open = !this.open; return; }
+    if (this.windowService.mode.value === 'desktop') { this.open = true; return; }
     // Tablet/mobile: open overlay/drawer
     this.open = !this.open;
   }

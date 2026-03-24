@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination } from '../interfaces';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
+import { DropDownControl } from '../types';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SocietyService {
+
+    private _selectedSocietyFilter = new BehaviorSubject<DropDownControl>(undefined);
+    selectedSocietyFilter = this._selectedSocietyFilter.asObservable();
 
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
@@ -43,6 +47,14 @@ export class SocietyService {
             label: buildingNumber + flatNumber + societyName,
             value: flat._id
         } as IUIDropdownOption
+    }
+
+    selectSocietyFilter(option: IUIDropdownOption) {
+        this._selectedSocietyFilter.next(option);
+    }
+
+    clearSocietyFilter() {
+        this._selectedSocietyFilter.next(undefined);
     }
 
 

@@ -47,6 +47,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   };
 
 
+  private selectedSocietyFilter?: DropDownControl;
   isFilterOpen = false;
   myProfile?: IMyProfile;
   private search$ = new Subject<string>();
@@ -82,6 +83,10 @@ export class FilterComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.societyService.selectedSocietyFilter
+      .pipe(take(1))
+      .subscribe(selectedSocietyFilter => this.selectedSocietyFilter = selectedSocietyFilter)
+
     // Build form group with only visible controls
     let formConfigs: (IUIControlConfig<DropDownControl> | IUIControlConfig<DateControl>)[] = [];
     if (!this.hideSocietySearch) formConfigs.push(this.societiesSearchConfig);
@@ -100,10 +105,19 @@ export class FilterComponent implements OnInit, OnDestroy {
     if (!this.hideFlatSearch) this.subscribeToFlatSelection();
     if (!this.hideSocietySearch) {
       this.subscribeToSocietySelection(this.myProfile);
-      if (this.myProfile.user.role === 'admin')
+
+      if (this.myProfile.user.role === 'admin') {
         this.subscribeToSocietySearch();
+
+        if (this.selectedSocietyFilter) {
+          this.societiesSearchConfig.dropDownOptions = [this.selectedSocietyFilter];
+          this.societiesSearchConfig.formControl?.setValue(this.selectedSocietyFilter);
+        }
+
+      }
       else
         this.loadMySocities(this.myProfile);
+
     } else {
       // If society hidden but flat visible, load flats without society
       if (!this.hideFlatSearch) {
@@ -154,13 +168,17 @@ export class FilterComponent implements OnInit, OnDestroy {
               .map(s => s.societyId));
             socities = socities.filter(s => managerSocities.has(s._id));
           }
-          this.societiesSearchConfig.dropDownOptions = socities.map(s => ({
+
+          const dropDownOptions = socities.map(s => ({
             label: s.societyName,
             value: s._id
           } as IUIDropdownOption));
+          this.societiesSearchConfig.dropDownOptions = dropDownOptions;
 
           if (socities.length > 0 && this.loadFirstSociety) {
-            this.societiesSearchConfig.formControl?.setValue({ label: socities[0].societyName, value: socities[0]._id });
+            const selectedSocietyOption = dropDownOptions.find(opt => opt.value === this.selectedSocietyFilter?.value) ?? { label: socities[0].societyName, value: socities[0]._id };
+            if (selectedSocietyOption)
+              this.societiesSearchConfig.formControl?.setValue(selectedSocietyOption);
           } else {
             // Only load default flats if flat is visible
             if (!this.hideFlatSearch) {
@@ -247,6 +265,10 @@ export class FilterComponent implements OnInit, OnDestroy {
             if ((isAdmin || isManager) && !this.supressAdminManageFlats) this.loadSocietyFlats(selectedSociety.value)
             else if (isFlatMember) this.loadAllMyFlats(selectedSociety.value)
           }
+
+          // Globally save selected society
+          this.societyService.selectSocietyFilter(selectedSociety)
+
         } else {
           if (!this.hideFlatSearch) {
             this.loadDefaultFlats(myProfile);
@@ -287,7 +309,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.flatSearchConfig.dropDownOptions = this.getUniqueOptions(societyFlats);
     }
 
-      const flatOptions = this.flatSearchConfig.dropDownOptions ?? [];
+    const flatOptions = this.flatSearchConfig.dropDownOptions ?? [];
     if (this.loadFirstFlat && flatOptions.length > 0) {
       this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
     }

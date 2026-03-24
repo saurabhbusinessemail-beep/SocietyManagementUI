@@ -15,14 +15,14 @@
 
             background: $color-dark-blue;
             color: $color-white;
-            height: 100vh;
+            // height: 100vh;
             padding: $sp-lg;
             position: relative;
             left: 0;
             top: 0;
             display: flex;
             flex-direction: column;
-            max-height: 100vh;
+            // max-height: 100vh;
         }
 
         .brand-text {
@@ -99,38 +99,7 @@
         width: 0;
 
         .menu-inner {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            transform: translateY(-100%);
-            transition: transform 0.18s;
-            display: flex;
-            flex-direction: column;
-            max-height: 100vh;
-            display: flex;
-            flex-direction: column;
-
-            .menu-item div {
-                flex-direction: column;
-
-                .label {
-                    text-align: center;
-                }
-            }
-        }
-
-        &.open {
-            .menu-inner {
-                transform: translateY(0);
-                background: $color-dark-blue;
-                color: $color-white;
-                padding: $sp-lg;
-            }
-
-            .backdrop {
-                display: block;
-            }
+            display: none;
         }
     }
 
@@ -179,7 +148,7 @@
             gap: $sp-sm;
             overflow-y: auto;
             flex: 1 auto;
-            padding-bottom: 200px;
+            // padding-bottom: 200px;
 
             @include mobile {
                 display: grid;
