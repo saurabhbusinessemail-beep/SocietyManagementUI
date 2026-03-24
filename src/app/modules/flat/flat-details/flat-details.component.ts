@@ -172,7 +172,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
           // Check feature availability from current plan
           if (this.currentPlan?.planDetails?.features) {
-            this.checkFeatureAvailability(this.currentPlan.planDetails.features);
+            this.checkFeatureAvailability(this.currentPlan);
           }
 
           // Now load data based on feature availability
@@ -192,29 +192,31 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   /**
    * Check which features are available in the current plan
    */
-  checkFeatureAvailability(features: IPricingFeature[]): void {
+  checkFeatureAvailability(currentPlan: ICurrentPlanResponse): void {
+    const isExpired = currentPlan.isExpired;
+
     // Check features using keys from FEATURES enum
-    this.membersFeatureAvailable = features.some(f =>
+    this.membersFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.FLAT_MEMBER_MANAGEMENT && f.included === true
     );
 
-    this.vehiclesFeatureAvailable = features.some(f =>
+    this.vehiclesFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.VEHICLE && f.included === true
     );
 
-    this.parkingFeatureAvailable = features.some(f =>
+    this.parkingFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.PARKING && f.included === true
     );
 
-    this.complaintsFeatureAvailable = features.some(f =>
+    this.complaintsFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.COMPLAINTS && f.included === true
     );
 
-    this.gateEntriesFeatureAvailable = features.some(f =>
+    this.gateEntriesFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.GATE_ENTRIES && f.included === true
     );
 
-    this.gatePassesFeatureAvailable = features.some(f =>
+    this.gatePassesFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.SMART_GATE_PASS && f.included === true
     );
 

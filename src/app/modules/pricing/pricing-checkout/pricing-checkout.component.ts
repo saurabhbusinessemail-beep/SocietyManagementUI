@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -77,6 +77,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     private pricingPlanService: PricingPlanService,
     private societyService: SocietyService,
     private location: Location,
+    private ngZone: NgZone,
   ) {
     this.couponForm = this.fb.group({ couponCode: [''] });
   }
@@ -520,9 +521,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   }
 
   private openRazorpayCheckout(societyPlan: ISocietyPlan): void {
-    // We need the Razorpay key – assume it's returned in societyPlan.razorpayKeyId
-    // If not, you may get it from environment or a separate API
-    const keyId = (societyPlan as any).razorpayKeyId || environment.RAZORPAY_KEY_ID;
+    const keyId = environment.RAZORPAY_KEY_ID;
 
     const options = {
       key: keyId,
@@ -579,14 +578,20 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
       razorpay_payment_id: paymentResponse.razorpay_payment_id,
       razorpay_signature: paymentResponse.razorpay_signature,
       societyPlanId: societyPlan._id
-    }).pipe(takeUntil(this.destroy$), finalize(() => this.isProcessing = false))
+    }).pipe(takeUntil(this.destroy$), finalize(() => {
+      this.ngZone.run(() => {
+        this.isProcessing = false;
+      });
+    }))
       .subscribe({
         next: (result) => {
-          if (result.success) {
-            this.purchaseComplete = true;
-          } else {
-            this.couponMessage = result.message || 'Payment verification failed. Please contact support.';
-          }
+          this.ngZone.run(() => {
+            if (result.success) {
+              this.purchaseComplete = true;
+            } else {
+              this.couponMessage = result.message || 'Payment verification failed. Please contact support.';
+            }
+          });
         },
         error: (error) => {
           console.error('Verification error:', error);

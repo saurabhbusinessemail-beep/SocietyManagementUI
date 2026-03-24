@@ -32,6 +32,7 @@ export interface ISocietyPlan {
   createdAt?: Date;
   updatedAt?: Date;
   razorpayOrderId?: string;
+  isExpired?: boolean
 }
 
 export interface ICurrentPlanResponse extends ISocietyPlan {

@@ -135,7 +135,7 @@ export class SocietyDetailsComponent implements OnInit {
 
         // Check feature availability from current plan
         if (this.currentPlan?.features) {
-          this.checkFeatureAvailability(this.currentPlan.features);
+          this.checkFeatureAvailability(this.currentPlan);
         }
 
         // Now load data based on feature availability
@@ -155,14 +155,16 @@ export class SocietyDetailsComponent implements OnInit {
   /**
    * Check which features are available in the current plan
    */
-  checkFeatureAvailability(features: IPricingFeature[]): void {
+  checkFeatureAvailability(plan: ICurrentPlanResponse): void {
+    const isExpired = plan.isExpired;
+
     // Check for parking feature using FEATURES enum
-    this.parkingFeatureAvailable = features.some(f =>
+    this.parkingFeatureAvailable = !isExpired && plan.features.some(f =>
       f.key === FEATURES.PARKING && f.included === true
     );
 
     // Check for complaints feature using FEATURES enum
-    this.complaintsFeatureAvailable = features.some(f =>
+    this.complaintsFeatureAvailable = !isExpired && plan.features.some(f =>
       f.key === FEATURES.COMPLAINTS && f.included === true
     );
 

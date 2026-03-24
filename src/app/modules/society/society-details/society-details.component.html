@@ -22,7 +22,7 @@
                     </span>
                     <span class="plan-duration-badge" *ngIf="currentPlan.selectedDuration">
                         <app-icon name="calendar"></app-icon>
-                        {{ getPlanDurationDisplay() }} • {{ getPlanRemainingDays() }} days left
+                        {{ getPlanRemainingDays() }} day{{ getPlanRemainingDays() > 1 ? 's' : '' }} left
                     </span>
                 </div>
             </div>
