@@ -26,7 +26,7 @@ import { GatePassService } from '../../../services/gate-pass.service';
 import { LoginService } from '../../../services/login.service';
 import { WindowService } from '../../../services/window.service';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
-import { FEATURES, ResidingTypes } from '../../../constants';
+import { FEATURES, PERMISSIONS, ResidingTypes } from '../../../constants';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VehicleService } from '../../../services/vehicle.service';
 
@@ -99,6 +99,22 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   get residingButtonText(): string {
     const residingType = this.flatMember?.residingType ?? ''
     return this.windowService.mode.value === 'mobile' ? residingType : 'Residing: ' + residingType
+  }
+
+  get currentSocietyId(): string | undefined {
+    if (!this.flatMember) return undefined;
+
+    const societyId = this.flatMember.societyId;
+    if (typeof societyId === 'string') {
+      return societyId;
+    } else if (societyId && typeof societyId === 'object' && '_id' in societyId) {
+      return societyId._id;
+    }
+    return undefined;
+  }
+
+  get canUpdateSociety(): boolean {
+    return this.loginService.hasPermission(PERMISSIONS.society_update, this.currentSocietyId);
   }
 
   constructor(

@@ -282,7 +282,7 @@
                             </svg>
                         </div>
                         <p>Your current plan does not support Resident management.</p>
-                        <button class="upgrade-btn" (click)="gotoPlanUpgrade()">
+                        <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
                             Upgrade Plan
                             <app-icon name="upgrade" size="sm"></app-icon>
                         </button>
@@ -350,7 +350,7 @@
                                     </svg>
                                 </div>
                                 <p>Your current plan does not support Vehicle management.</p>
-                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()">
+                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
                                     Upgrade Plan
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
@@ -404,7 +404,7 @@
                                     </svg>
                                 </div>
                                 <p>Your current plan does not support Parking management.</p>
-                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()">
+                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
                                     Upgrade Plan
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
@@ -479,7 +479,7 @@
                                     </svg>
                                 </div>
                                 <p>Your current plan does not support Complaints.</p>
-                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()">
+                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
                                     Upgrade Plan
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
@@ -568,7 +568,7 @@
                                     </svg>
                                 </div>
                                 <p>Your current plan does not support Gate Entries.</p>
-                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()">
+                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
                                     Upgrade Plan
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
@@ -642,7 +642,7 @@
                                     </svg>
                                 </div>
                                 <p>Your current plan does not support Gate Passes.</p>
-                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()">
+                                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
                                     Upgrade Plan
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>

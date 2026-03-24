@@ -924,6 +924,11 @@
             &:hover {
                 background-color: #4338ca;
             }
+
+            &:disabled {
+                background-color: $color-disable-background;
+                color: $color-note-gray;
+            }
         }
     }
 }

@@ -17,28 +17,28 @@
 }
 
 
-    .icon-button {
-        width: 32px;
-        height: 32px;
-        border-radius: 9999px;
-        border: 1px solid #e5e7eb; // gray-200
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        cursor: pointer;
+.icon-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    border: 1px solid #e5e7eb; // gray-200
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
 
-        &:hover {
-            background-color: #eef2ff; // indigo-50
-        }
-
-        app-icon {
-            width: 13px;
-            height: 13px;
-            color: #6b7280; // gray-500
-        }
+    &:hover {
+        background-color: #eef2ff; // indigo-50
     }
+
+    app-icon {
+        width: 13px;
+        height: 13px;
+        color: #6b7280; // gray-500
+    }
+}
 
 
 // Header Section
@@ -219,6 +219,28 @@
                 font-weight: 800;
                 margin: 0;
                 line-height: 1.2;
+            }
+        }
+
+        &.disabled {
+            background-color: $color-disable-background;
+
+            .stat-details {
+                .stat-label {
+                    color: $color-help-text !important;
+                }
+            }
+
+            .stat-icon-wrapper {
+                background-color: $color-disable-background !important;
+
+                app-icon {
+                    color: $color-help-text !important;
+                }
+            }
+
+            .stat-value {
+                color: $color-help-text !important;
             }
         }
 

@@ -4,7 +4,7 @@
         <ui-button (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety" label="Edit Society" type="only-content">
             <app-icon name="edit"></app-icon>
         </ui-button>
-        <ui-button (clicked)="gotoPlanEdit()" *ngIf="canUpdateSociety" label="Edit Plan" type="only-content">
+        <ui-button (clicked)="gotoPlanEdit()" *ngIf="canUpdateSociety" label="Current Plan" type="only-content">
             <app-icon name="edit"></app-icon>
         </ui-button>
     </ng-container>
@@ -38,9 +38,11 @@
         <div class="content-wrapper" *ngIf="featuresLoaded">
 
             <!-- Stats Grid: Buildings, Flats, Admins, Secretaries -->
-            <div class="stats-grid">
+            <div class="stats-grid no-tablet no-desktop">
                 <!-- Building Stat -->
-                <div class="stat-card stat-card--indigo">
+                <div class="stat-card stat-card--indigo"
+                    (click)="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1 ? null : gotoBuildingManager()"
+                    [class.disabled]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
                     <div class="stat-icon-wrapper">
                         <app-icon name="home"></app-icon>
                     </div>
@@ -50,33 +52,13 @@
                     </div>
                 </div>
                 <!-- Flats Stat -->
-                <div class="stat-card stat-card--blue">
+                <div class="stat-card stat-card--blue" (click)="gotoFlatManager()">
                     <div class="stat-icon-wrapper">
                         <app-icon name="building"></app-icon>
                     </div>
                     <div class="stat-details">
                         <p class="stat-label">Flats</p>
                         <p class="stat-value">{{ society?.numberOfFlats || 0 }}</p>
-                    </div>
-                </div>
-                <!-- Admins Stat -->
-                <div class="stat-card stat-card--amber">
-                    <div class="stat-icon-wrapper">
-                        <app-icon name="admin"></app-icon>
-                    </div>
-                    <div class="stat-details">
-                        <p class="stat-label">Admins</p>
-                        <p class="stat-value">{{ adminIds.length }}</p>
-                    </div>
-                </div>
-                <!-- Secretaries Stat -->
-                <div class="stat-card stat-card--green">
-                    <div class="stat-icon-wrapper">
-                        <app-icon name="secretary"></app-icon>
-                    </div>
-                    <div class="stat-details">
-                        <p class="stat-label">Secretaries</p>
-                        <p class="stat-value">{{ managerIds.length }}</p>
                     </div>
                 </div>
             </div>
@@ -147,7 +129,7 @@
             </div>
 
             <!-- Buildings & Flats Management Row -->
-            <div class="two-column-grid">
+            <div class="two-column-grid no-mobile">
                 <!-- Buildings Card -->
                 <div class="action-card">
                     <div class="action-content">
