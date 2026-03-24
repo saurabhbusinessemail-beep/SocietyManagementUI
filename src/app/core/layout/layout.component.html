@@ -2,8 +2,8 @@
 
     <!-- HEADER -->
     <app-header (toggleMenu)="menu.toggleMenu()" [loggedInUserProfile]="loggedInUserProfile"
-        [navMenuItems]="navMenuItems" [extendedMenuTemplate]="extendedMenuTemplate" [showBackButton]="showBackButton"
-        (needLogin)="needLogin.emit()" (menuItemClick)="menuItemClick.emit($event)" (goHome)="goHome()">
+        [navMenuItems]="navMenuItems" [extendedMenuTemplate]="extendedMenuTemplate" (needLogin)="needLogin.emit()"
+        (menuItemClick)="menuItemClick.emit($event)" (goHome)="goHome()">
     </app-header>
 
     <div class="layout-main">
@@ -50,7 +50,7 @@
     </div>
 
     <!-- FOOTER -->
-    <app-footer *ngIf="showBackButton" (backButtonClicked)="goBack()">
+    <app-footer *ngIf="showBackButton || backButtonURL" (backButtonClicked)="goBack()">
     </app-footer>
 
 </div>

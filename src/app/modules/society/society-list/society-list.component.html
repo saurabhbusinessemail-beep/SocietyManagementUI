@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!canAddSociety" title="Societies">
+<app-layout [hideMoreActions]="!canAddSociety" title="Societies" backButtonURL="/dashboard/user">
 
   <ng-container moreActions>
     <ui-button *ngIf="canAddSociety" label="Add Society" type="primary" routerLink="../add" [smColumns]="1"

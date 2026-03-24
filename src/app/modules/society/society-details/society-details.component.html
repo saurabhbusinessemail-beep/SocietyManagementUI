@@ -1,4 +1,4 @@
-<app-layout [showBackButton]="true" [title]="society?.societyName || 'Society'">
+<app-layout [showBackButton]="true" [title]="society?.societyName || 'Society'" backButtonURL="/society/list">
 
     <ng-container moreActions>
         <ui-button (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety" label="Edit Society" type="only-content">

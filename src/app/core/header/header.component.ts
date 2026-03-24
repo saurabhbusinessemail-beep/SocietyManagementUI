@@ -17,7 +17,6 @@ export class HeaderComponent implements OnInit {
   // @Input() title: string = '';
   @Input() loggedInUserProfile?: IMyProfile
   @Input() showSocietyFilter = false;
-  @Input() showBackButton = false;
   @Input() navMenuItems: string[] = [];
   @Input() extendedMenuTemplate?: TemplateRef<any>;
   @Output() menuItemClick = new EventEmitter<string>();

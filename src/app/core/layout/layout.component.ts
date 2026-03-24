@@ -19,6 +19,7 @@ export class LayoutComponent implements OnInit {
   @Input() hideMoreActions: boolean = false;
   @Input() navMenuItems: string[] = [];
   @Input() showBackButton = false;
+  @Input() backButtonURL?: string | string[];
   @Input() extendedMenuTemplate?: TemplateRef<any>;
   @Output() needLogin = new EventEmitter<void>();
   @Output() menuItemClick = new EventEmitter<string>();
@@ -58,7 +59,12 @@ export class LayoutComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    if (!this.backButtonURL)
+      this.location.back();
+    else {
+      const url = typeof this.backButtonURL === 'string' ? [this.backButtonURL] : this.backButtonURL;
+      if (url) this.router.navigate(url);
+    }
   }
 
   goHome() {
