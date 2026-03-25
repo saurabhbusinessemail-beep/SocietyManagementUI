@@ -2,10 +2,15 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination } from '../interfaces';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
-import { DropDownControl } from '../types';
+import { DropDownControl, SocietyRoles } from '../types';
+import { LoginService } from './login.service';
+import { Router } from '@angular/router';
+import { ownerMemberTenanRoles, securityRoles } from '../constants';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectionListPopupComponent } from '../core/selection-list-popup/selection-list-popup.component';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +23,17 @@ export class SocietyService {
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
-    constructor(private http: HttpClient, private paginationService: PaginationService) { }
+    get selectedSocietyFilterValue(): DropDownControl {
+        return this._selectedSocietyFilter.value;
+    }
+
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private paginationService: PaginationService,
+        private loginService: LoginService,
+        private dialog: MatDialog
+    ) { }
 
     convertFlatMemberToDropdownOption(flatMember: IFlatMember, societyId?: string): IUIDropdownOption {
         const buildingNumber = flatMember.flatId
@@ -49,12 +64,77 @@ export class SocietyService {
         } as IUIDropdownOption
     }
 
-    selectSocietyFilter(option: IUIDropdownOption) {
+    selectSocietyFilter(option: DropDownControl) {
         this._selectedSocietyFilter.next(option);
     }
 
     clearSocietyFilter() {
         this._selectedSocietyFilter.next(undefined);
+    }
+
+    handleSocietyClick(society: ISociety) {
+        const profile = this.loginService.getProfileFromStorage();
+        if (!profile) return;
+
+        if (profile.user.role === 'admin') {
+            this.router.navigate(['/society', society._id, 'details']);
+            this.selectSocietyFilter({ label: society.societyName, value: society._id } as IUIDropdownOption)
+            return;
+        }
+
+        const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles
+        if (!societyRoles) return;
+
+        const hasManagerialRole = societyRoles.some(sr => sr.name === SocietyRoles.societyadmin || sr.name === SocietyRoles.manager);
+        const hasNonManagerialRole = societyRoles.some(sr => ownerMemberTenanRoles.includes(sr.name));
+        const hasSecurityRole = societyRoles.some(sr => securityRoles.includes(sr.name));
+
+        const options: IUIDropdownOption<string>[] = [];
+
+        if (hasManagerialRole) {
+            options.push({
+                label: 'Society Details',
+                value: `/society/${society._id}/details`
+            });
+            // this.router.navigate(['/society', society._id, 'details']);
+
+        }
+        if (hasNonManagerialRole) {
+            options.push({
+                label: `Flats from ${society.societyName}`,
+                value: `/myflats/${society._id}/list`
+            });
+            // this.router.navigate(['/myflats', society._id, 'list']);
+
+        }
+        if (hasSecurityRole) {
+            options.push({
+                label: `Flats from ${society.societyName}`,
+                value: `/gateentry/dashboard/${society._id}`
+            });
+            // this.router.navigate(['gateentry/dashboard', society._id]);
+
+        }
+
+        if (options.length === 0) return;
+
+        if (options.length === 1) {
+            this.router.navigateByUrl(options[0].value);
+            this.selectSocietyFilter({ label: society.societyName, value: society._id } as IUIDropdownOption)
+            return;
+        }
+
+        const ref = this.dialog.open(SelectionListPopupComponent, {
+            data: options
+        })
+        ref.afterClosed().pipe(take(1))
+            .subscribe((route: string) => {
+                console.log('route = ', route)
+                if (route) {
+                    this.router.navigateByUrl(route);
+                    this.selectSocietyFilter({ label: society.societyName, value: society._id } as IUIDropdownOption)
+                }
+            })
     }
 
 

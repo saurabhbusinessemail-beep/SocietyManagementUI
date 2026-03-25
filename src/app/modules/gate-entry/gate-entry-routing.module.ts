@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'dashboard',
     component: SecurityComponent
   },
+  {
+    path: 'dashboard/:societyId',
+    component: SecurityComponent
+  },
 ];
 
 @NgModule({

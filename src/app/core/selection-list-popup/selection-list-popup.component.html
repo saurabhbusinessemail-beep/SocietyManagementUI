@@ -1,0 +1,23 @@
+<div class="popup-container">
+    <!-- Header -->
+    <div class="popup-header">
+        <h2 class="popup-title">Select an Option</h2>
+
+        <button class="close-button" (click)="close()" aria-label="Close dialog">
+            ✕
+        </button>
+    </div>
+
+    <!-- Options -->
+    <div class="options-list">
+        @for (option of options; track option.value) {
+        <div 
+            class="option-item" 
+            [class.disabled]="option.disabled"
+            (click)="!option.disabled && selectOption(option.value)"
+        >
+            {{ option.label }}
+        </div>
+        }
+    </div>
+</div>

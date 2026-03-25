@@ -9,7 +9,7 @@
     <div class="layout-main">
 
         <!-- LEFT MENU -->
-        <app-menu #menu [menuItems]="menuService.userMenus.value"></app-menu>
+        <app-menu #menu [menuItems]="(menuService.filteredMenus | async) ?? []"></app-menu>
 
         <div class="layout-body-container">
 

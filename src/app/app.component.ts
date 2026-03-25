@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './services/menu.service';
-import { filter, take } from 'rxjs';
+import { filter, map, mergeMap, of, take } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -12,6 +12,8 @@ import { ColdStartService } from './services/cold-start.service';
 import { App } from '@capacitor/app';
 import { UserService } from './services/user.service';
 import { PricingPlanService } from './services/pricing-plan.service';
+import { SocietyService } from './services/society.service';
+import { ICurrentPlanResponse } from './interfaces';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
   firstRouteLoad = true;
   show = false;
   title = 'SocietyManagementUI';
-  dialogRef?: MatDialogRef<UserNameInputPopupComponent, any>
+  dialogRef?: MatDialogRef<UserNameInputPopupComponent, any>;
+
+  societyPricingPlans: { [societyId: string]: ICurrentPlanResponse } = {};
 
   constructor(
     private router: Router,
@@ -35,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public consoleService: ConsoleCaptureService,
     private pushNotificationService: PushNotificationService,
     private coldStartService: ColdStartService,
-    private pricingPlanService: PricingPlanService
+    private pricingPlanService: PricingPlanService,
+    private societService: SocietyService,
   ) { }
 
   async ngOnInit() {
@@ -43,31 +48,44 @@ export class AppComponent implements OnInit, OnDestroy {
     await this.FcmTokenService.init();
     await this.pushNotificationService.initialize();
 
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd)
-      )
-      .subscribe((event: NavigationEnd) => {
+    this.loginService.loggedInUser.pipe(filter(val => !!val))
+      .subscribe(() => this.checkAndAskForUserName());
 
-        this.menuService.userMenus//.pipe(take(1))
-          .subscribe(res => {
-            this.checkAndAskForUserName();
+    this.menuService.userMenus.subscribe(() => this.filterMenus());
 
-            // // No sync with URL change for some URLs
-            // const excludeURLs = ['/profile'];
-            // if (excludeURLs.includes(this.router.url)) {
-            //   this.menuService.selectedMenu.next(undefined);
-            //   return;
-            // }
+    this.societService.selectedSocietyFilter
+      .pipe(mergeMap(selectedSociety => {
+        if (selectedSociety)
+          return this.getSocietyPricingPlan(selectedSociety?.value)
+        return of([]);
+      }))
+      .subscribe(() => this.filterMenus());
 
-            // if (this.firstRouteLoad && res.length > 0 && this.router.url === '/dashboard/user') {
-            //   this.menuService.syncSelectedMenuWithCurrentUrl(true);
-            //   this.firstRouteLoad = false;
-            // }
-            // else
-            //   this.menuService.syncSelectedMenuWithCurrentUrl();
-          });
-      })
+    // this.router.events
+    //   .pipe(
+    //     filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    //   )
+    //   .subscribe((event: NavigationEnd) => {
+
+    // this.menuService._userMenus//.pipe(take(1))
+    //   .subscribe(res => {
+    //     this.checkAndAskForUserName();
+
+    // // No sync with URL change for some URLs
+    // const excludeURLs = ['/profile'];
+    // if (excludeURLs.includes(this.router.url)) {
+    //   this.menuService.selectedMenu.next(undefined);
+    //   return;
+    // }
+
+    // if (this.firstRouteLoad && res.length > 0 && this.router.url === '/dashboard/user') {
+    //   this.menuService.syncSelectedMenuWithCurrentUrl(true);
+    //   this.firstRouteLoad = false;
+    // }
+    // else
+    //   this.menuService.syncSelectedMenuWithCurrentUrl();
+    // });
+    // })
 
     setTimeout(() => {
       if (this.router.url === '/dashboard/user')
@@ -144,5 +162,34 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Clean up listeners when app is destroyed
     this.pushNotificationService.removeAllListeners();
+  }
+
+  getSocietyPricingPlan(societyId: string) {
+    return this.pricingPlanService.getCurrentPlan(societyId).pipe(
+      map(response => {
+        this.societyPricingPlans[societyId] = response;
+      }),
+      take(1)
+    )
+  }
+
+  filterMenus() {
+    const selectedSociety = this.societService.selectedSocietyFilterValue;
+    const allMenus = this.menuService.userMenusValue;
+    const selectedPricingPlan = selectedSociety ? this.societyPricingPlans[selectedSociety.value] : undefined;
+
+    const filteredMenus = allMenus.filter(menu => {
+      if (menu.mandatorFeatureAccess) { // menu that needs society level access
+        if (!selectedPricingPlan) return false; // if no society is selected then no need to menus that need society level access
+
+        // update logic to check pricing plan and menu
+        return selectedPricingPlan.features.some(f => f.key === menu.mandatorFeatureAccess && f.included);
+
+      } else {
+        return true;
+      }
+    });
+
+    this.menuService.setFilteredMenus(filteredMenus);
   }
 }

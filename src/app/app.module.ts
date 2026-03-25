@@ -13,6 +13,7 @@ import { PendingHttpInterceptor } from './interceptors/pending-http.interceptor'
 import { ApiTrackerService } from './services/api-tracker.service';
 import { environment } from '../environments/environment';
 import { ApiTrackerInterceptor } from './interceptors/api-tracker.interceptor';
+import { SelectionListPopupModule } from './core/selection-list-popup/selection-list-popup.module';
 
 export function initTracker(tracker: ApiTrackerService) {
   return () => {
@@ -32,7 +33,8 @@ export function initTracker(tracker: ApiTrackerService) {
     BrowserModule,
     AppRoutingModule,
     IconModule,
-    UserNamePopupModule
+    UserNamePopupModule,
+    SelectionListPopupModule
   ],
   providers: [
     provideAnimationsAsync(),

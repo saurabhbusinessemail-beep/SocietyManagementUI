@@ -10,3 +10,7 @@ export const ownerMemberTenanRoles: string[] = [
     SocietyRoles.owner,
     SocietyRoles.tenant
 ]
+
+export const securityRoles: string[] = [
+    SocietyRoles.security
+]

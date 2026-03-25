@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, forkJoin, of } from 'rxjs';
-import { ISociety, ICurrentPlanResponse } from '../../../interfaces';
-import { PERMISSIONS, ownerMemberTenanRoles } from '../../../constants';
+import { ISociety, ICurrentPlanResponse, IUIDropdownOption } from '../../../interfaces';
+import { PERMISSIONS, ownerMemberTenanRoles, securityRoles } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { SocietyRoles } from '../../../types';
@@ -33,6 +33,7 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.societyService.selectSocietyFilter(undefined);
     this.loadSocieties();
   }
 
@@ -96,25 +97,7 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   }
 
   handleSocietyClick(society: ISociety) {
-    const profile = this.loginService.getProfileFromStorage();
-    if (!profile) return;
-
-    if (profile.user.role === 'admin') {
-      this.router.navigate(['/society', society._id, 'details']);
-      return;
-    }
-
-    const societyRoles = profile.socities.find(s => s.societyId === society._id)?.societyRoles
-    if (!societyRoles) return;
-
-    const hasManagerialRole = societyRoles.some(sr => sr.name === 'societyadmin' || sr.name === SocietyRoles.manager);
-    const hasNonManagerialRole = societyRoles.some(sr => ownerMemberTenanRoles.includes(sr.name));
-
-    if (hasManagerialRole) {
-      this.router.navigate(['/society', society._id, 'details']);
-    } else if (hasNonManagerialRole) {
-      this.router.navigate(['/myflats', society._id, 'list']);
-    }
+    this.societyService.handleSocietyClick(society);
   }
 
   ngOnDestroy(): void {

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, map, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, of, switchMap, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
-import { IBEResponseFormat, IMenu, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
+import { IBEResponseFormat, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
 import { ClearCache } from '../decorators';
 import { LoginPopupComponent } from '../core/login-popup/login-popup.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,6 +17,9 @@ export class LoginService {
 
     private baseUrl = `${environment.apiBaseUrl}/auth`;
     public otpReceived = new Subject<string>();
+
+    private _loggedInUser = new BehaviorSubject<IMyProfile | undefined>(undefined);
+    public loggedInUser = this._loggedInUser.asObservable();
 
     constructor(
         private http: HttpClient,
@@ -59,11 +62,7 @@ export class LoginService {
         return this.http.get<IMyProfileResponse>(`${this.baseUrl}/me`, { headers })
             .pipe(tap(response => {
                 if (response && response.success && response.profile.allMenus) {
-                    const allMenus: IMenu[] = [
-                        this.menuService.dashboardMenu,
-                        ...response.profile.allMenus,
-                    ];
-                    this.menuService.userMenus.next(allMenus);
+                    this.menuService.setMenus(response.profile.allMenus);
                 }
             }));
     }
@@ -117,6 +116,7 @@ export class LoginService {
         localStorage.removeItem('my_profile');
         localStorage.removeItem('profilePicture');
         this.menuService.clearMenu();
+        this._loggedInUser.next(undefined);
         this.router.navigateByUrl('/');
     }
 
@@ -132,6 +132,7 @@ export class LoginService {
     }
 
     saveProfileToStorage(profile: IMyProfile) {
+        this._loggedInUser.next(profile);
         localStorage.setItem('my_profile', JSON.stringify(profile));
     }
 

@@ -1,0 +1,188 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.popup-container {
+    background: $color-white;
+    border-radius: $btn-border-radius-md;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    width: 100%;
+
+    /* Desktop */
+    @include desktop {
+        max-width: 420px;
+    }
+
+    /* Tablet */
+    @include tablet {
+        max-width: 360px;
+    }
+
+    /* Mobile */
+    @include mobile {
+        max-width: 95vw;
+        border-radius: $btn-border-radius-sm;
+    }
+}
+
+/* ---------- HEADER ---------- */
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid $color-border;
+    background: $color-header-footer;
+
+    /* Desktop */
+    @include desktop {
+        padding: $sp-md $sp-xl;
+    }
+
+    /* Tablet */
+    @include tablet {
+        padding: $sp $sp-lg;
+    }
+
+    /* Mobile */
+    @include mobile {
+        padding: $sp $sp-md;
+    }
+}
+
+.popup-title {
+    margin: 0;
+    font-family: $font-family-base;
+    font-weight: 600;
+    color: $color-dark-blue;
+
+    @include fluid-font($font-size-lg, $font-size-lg, $font-size-base);
+}
+
+/* ---------- CLOSE BUTTON ---------- */
+.close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    cursor: pointer;
+
+    background: transparent;
+    color: $color-note-gray;
+
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    /* Desktop */
+    @include desktop {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    /* Tablet */
+    @include tablet {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+    }
+
+    /* Mobile (bigger touch target) */
+    @include mobile {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+
+    &:hover {
+        background: $color-light-gray;
+        color: $color-dark-blue;
+    }
+
+    &:active {
+        transform: scale(0.92);
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+/* ---------- OPTIONS LIST ---------- */
+.options-list {
+    display: flex;
+    flex-direction: column;
+
+    /* Handle short lists nicely */
+    justify-content: center;
+
+    /* Desktop */
+    @include desktop {
+        padding: $sp-lg;
+        gap: $sp;
+    }
+
+    /* Tablet */
+    @include tablet {
+        padding: $sp-md;
+        gap: $sp-sm;
+    }
+
+    /* Mobile */
+    @include mobile {
+        padding: $sp;
+        gap: $sp-sm;
+    }
+}
+
+/* ---------- OPTION ITEM ---------- */
+.option-item {
+    text-align: center;
+    font-family: $font-family-base;
+
+    border-radius: $btn-border-radius-sm;
+    border: 1px solid $color-border;
+
+    background: $color-white;
+    color: $color-black;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    /* Desktop */
+    @include desktop {
+        padding: $sp $sp-lg;
+        font-size: $font-size-base;
+    }
+
+    /* Tablet */
+    @include tablet {
+        padding: $sp $sp-md;
+        font-size: $font-size-base;
+    }
+
+    /* Mobile (larger touch area) */
+    @include mobile {
+        padding: $sp-md;
+        font-size: $font-size-lg;
+    }
+
+    &:hover:not(.disabled) {
+        background: rgba($color-dark-blue, 0.08);
+        border-color: $color-dark-blue;
+        color: $color-dark-blue;
+    }
+
+    &:active:not(.disabled) {
+        background: rgba($color-dark-blue, 0.15);
+        transform: scale(0.97);
+    }
+
+    &.disabled {
+        color: $color-disable-background;
+        background: $color-light-gray;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}

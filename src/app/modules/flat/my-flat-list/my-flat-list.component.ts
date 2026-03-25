@@ -46,6 +46,14 @@ export class MyFlatListComponent implements OnInit {
       .subscribe({
         next: response => {
           this.flatMembers = response.data ?? [];
+          if (societyId) {
+            this.flatMembers = this.flatMembers.filter(f => {
+              if ((typeof f.societyId !== 'string' && f.societyId._id === societyId) || f.societyId === societyId)
+                return true;
+              else
+                return false;
+            })
+          }
         }
       });
   }

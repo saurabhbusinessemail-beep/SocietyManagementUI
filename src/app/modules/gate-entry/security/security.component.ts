@@ -162,8 +162,11 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   loadDefaultSociety() {
+    const selectedSociety = this.societyService.selectedSocietyFilterValue;
+
     if (this.societyOptions.length > 0) {
-      this.entryForm.get('society')?.setValue(this.societyOptions[0]);
+      const selectedSocietyOption = this.societyOptions.find(opt => opt.value === selectedSociety?.value) ?? this.societyOptions[0];
+      this.entryForm.get('society')?.setValue(selectedSocietyOption);
       this.loadPendingApprovals();
     }
   }
