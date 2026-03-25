@@ -108,6 +108,90 @@
             }
         }
 
+        .society-selector {
+            padding: $sp-md;
+            border-bottom: 1px solid $color-border;
+            background: $color-white;
+            position: relative;
+
+            .selector-label {
+                font-size: $font-size-sm;
+                font-weight: 500;
+                color: $color-help-text;
+                margin-bottom: $sp-xs;
+            }
+
+            .selector-wrapper {
+                position: relative;
+            }
+
+            .selector-button {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: $color-light-gray;
+                border: 1px solid $color-border;
+                border-radius: $btn-border-radius-md;
+                padding: $sp-sm $sp;
+                cursor: pointer;
+                font-size: $font-size-base;
+                color: $color-black;
+
+                .selected-text {
+                    flex: 1;
+                    text-align: left;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .chevron {
+                    transition: transform 0.2s;
+                    width: 20px;
+                    height: 20px;
+
+                    &.rotate {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .options-list {
+                position: absolute;
+                top: calc(100% + 4px);
+                left: 0;
+                right: 0;
+                background: $color-white;
+                border: 1px solid $color-border;
+                border-radius: $btn-border-radius-md;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                z-index: 1;
+                max-height: 200px;
+                overflow-y: auto;
+
+                .option-item {
+                    padding: $sp-sm $sp;
+                    cursor: pointer;
+                    font-size: $font-size-base;
+                    color: $color-black;
+
+                    &:hover {
+                        background: $color-light-gray;
+                    }
+
+                    &.clear-option {
+                        border-bottom: 1px solid $color-border;
+                        color: $color-error-dark;
+
+                        &:hover {
+                            background: $color-error-light;
+                        }
+                    }
+                }
+            }
+        }
+
         .dropdown-divider {
             height: 1px;
             background: $color-border;
@@ -155,7 +239,8 @@
                     }
 
                     .menu-icon,
-                    svg, app-icon {
+                    svg,
+                    app-icon {
                         color: $icon-on-light-highlight;
                         width: 20px;
                         height: 20px;
@@ -210,4 +295,10 @@
 
 .user-menu-page {
     animation: slideUp 0.3s ease;
+}
+
+::ng-deep {
+    .layout-body-container {
+        padding: 0px !important;
+    }
 }

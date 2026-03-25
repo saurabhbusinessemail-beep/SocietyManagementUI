@@ -1,7 +1,5 @@
 <app-layout title="" [hideMoreActions]="true" [showBackButton]="true">
-
     <div class="user-menu-page">
-
         <div class="dropdown-content">
             <div class="dropdown-header">
                 <div class="user-avatar">
@@ -13,28 +11,41 @@
                 </div>
             </div>
 
+            <!-- Society dropdown -->
+            <div class="society-selector" *ngIf="!loading">
+                <div class="selector-label">Selected Society</div>
+                <div class="selector-wrapper" (click)="toggleDropdown()">
+                    <button class="selector-button">
+                        <span class="selected-text">
+                            {{ selectedSociety?.label || 'Select a society' }}
+                        </span>
+                        <app-icon name="down-arrow" class="chevron" [class.rotate]="showDropdown"></app-icon>
+                    </button>
+                </div>
+                <div class="options-list" *ngIf="showDropdown">
+                    <div class="option-item clear-option" (click)="clearSociety(); $event.stopPropagation()">
+                        <span>Clear selection</span>
+                    </div>
+                    <div class="option-item" *ngFor="let opt of societyOptions"
+                        (click)="selectSociety(opt); $event.stopPropagation()">
+                        {{ opt.label }}
+                    </div>
+                </div>
+            </div>
             <div class="dropdown-divider"></div>
 
             <ul class="dropdown-menu">
-
                 <ng-container *ngIf="filteredMenus.length > 0">
-
                     <ng-container *ngFor="let menu of filteredMenus">
-
                         <li class="menu-item">
                             <button class="menu-btn" (click)="onMenuClick(menu)">
                                 <app-icon [name]="menu.icon ?? ''" size="xl"></app-icon>
-                                <span>
-                                    {{ menu.menuName }}
-                                </span>
+                                <span>{{ menu.menuName }}</span>
                             </button>
                         </li>
-
                     </ng-container>
-
                     <div class="dropdown-divider"></div>
                 </ng-container>
-
 
                 <li class="menu-item">
                     <button class="menu-btn" (click)="onRegisterSocietyClick()">
