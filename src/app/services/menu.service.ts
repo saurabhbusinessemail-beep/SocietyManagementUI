@@ -34,6 +34,10 @@ export class MenuService {
     return this._userMenus.value;
   }
 
+  get filteredMenusValue(): IMenu[] {
+    return this._filteredMenus.value;
+  }
+
   constructor(private router: Router) { }
 
   setMenus(menus: IMenu[]) {

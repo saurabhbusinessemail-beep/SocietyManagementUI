@@ -6,11 +6,14 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { LayoutModule } from '../../core/layout/layout.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '../../core/ui/ui.module';
+import { UserMenuPageComponent } from './user-menu-page/user-menu-page.component';
+import { IconModule } from '../../core/icons/icon.module';
 
 
 @NgModule({
   declarations: [
-    UserManagementComponent
+    UserManagementComponent,
+    UserMenuPageComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +21,8 @@ import { UiModule } from '../../core/ui/ui.module';
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    UiModule
+    UiModule,
+    IconModule
   ]
 })
 export class UserModule { }

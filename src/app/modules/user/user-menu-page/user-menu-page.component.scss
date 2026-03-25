@@ -1,0 +1,213 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.user-menu-page {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $color-white;
+    z-index: $z-user-dropdown;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; // prevent overall scroll, content scrolls inside
+
+    // Header with back button and title
+    .menu-header {
+        display: flex;
+        align-items: center;
+        padding: $sp-md;
+        border-bottom: 1px solid $color-border;
+        background: $color-white;
+        flex-shrink: 0;
+
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: $sp;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            app-icon {
+                width: 24px;
+                height: 24px;
+                color: $color-black;
+            }
+        }
+
+        h2 {
+            margin: 0;
+            font-size: $font-size-lg;
+            font-weight: 600;
+            color: $color-black;
+        }
+    }
+
+    // Content area that scrolls – exactly the same as original .user-dropdown
+    .dropdown-content {
+        flex: 1;
+        overflow-y: auto;
+        background: $color-white;
+
+        // Reuse all dropdown inner styles from the original component
+        .dropdown-header {
+            padding: $sp-md;
+            display: flex;
+            align-items: center;
+            gap: $sp;
+            background: linear-gradient(135deg, $color-header-footer 0%, rgba($color-sky, 0.3) 100%);
+
+            .user-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background: $color-white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid $color-dark-blue;
+
+                app-icon {
+                    color: $color-dark-blue;
+                }
+            }
+
+            .user-info {
+                flex: 1;
+                min-width: 0;
+
+                .user-name {
+                    margin: 0 0 $sp-xs;
+                    font-size: $font-size-base;
+                    font-weight: 600;
+                    color: $color-black;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    @include mobile {
+                        font-size: $font-size-sm;
+                    }
+                }
+
+                .user-details {
+                    margin: 0;
+                    font-size: $font-size-sm;
+                    color: $color-help-text;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    @include mobile {
+                        font-size: $font-size-xs;
+                    }
+                }
+            }
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: $color-border;
+            margin: 0;
+        }
+
+        .dropdown-menu {
+            margin: 0;
+            padding: $sp-sm 0;
+            list-style: none;
+
+            .menu-item {
+                margin: 0;
+
+                &:hover {
+                    background: $color-light-gray;
+                }
+
+                .menu-btn {
+                    width: 100%;
+                    padding: $sp $sp-md;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: $sp;
+                    text-align: left;
+                    font-size: $font-size-base;
+                    color: $color-black;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        color: $color-dark-blue;
+                    }
+
+                    &:focus {
+                        outline: none;
+                        background: $color-light-gray;
+                    }
+
+                    @include mobile {
+                        padding: 10px $sp;
+                        font-size: $font-size-sm;
+                    }
+
+                    .menu-icon,
+                    svg, app-icon {
+                        color: $icon-on-light-highlight;
+                        width: 20px;
+                        height: 20px;
+                        flex-shrink: 0;
+                    }
+
+                    span {
+                        flex: 1;
+                    }
+                }
+
+                &.logout-item {
+                    .menu-btn {
+                        color: $color-error-dark;
+
+                        &:hover {
+                            color: $color-error-header;
+                            background: $color-error-light;
+                        }
+
+                        .menu-icon {
+                            color: $color-error-dark;
+                        }
+                    }
+                }
+            }
+        }
+
+        .dropdown-footer {
+            padding: $sp-sm $sp-md;
+            background: $color-light-gray;
+            text-align: center;
+
+            .version-text {
+                color: $color-help-text;
+                font-size: $font-size-xs;
+            }
+        }
+    }
+}
+
+// Optional: add a subtle slide‑in animation
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.user-menu-page {
+    animation: slideUp 0.3s ease;
+}
