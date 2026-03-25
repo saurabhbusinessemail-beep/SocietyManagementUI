@@ -90,7 +90,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
   tabControl = new FormControl<string>('entry');
   tabsConfig: IUIControlConfig = {
     id: 'tab',
-    label: 'Setting Tabs'
+    label: ''
   };
   tabsOptions: IUIDropdownOption[] = [
     { value: 'entry', label: 'Entry' },
