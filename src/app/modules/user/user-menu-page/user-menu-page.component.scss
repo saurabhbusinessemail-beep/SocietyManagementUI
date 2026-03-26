@@ -130,13 +130,19 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                background: $color-light-gray;
-                border: 1px solid $color-border;
-                border-radius: $btn-border-radius-md;
+                background: $color-white;
+                border: 0;
+                border-bottom: 1px solid $color-border;
                 padding: $sp-sm $sp;
                 cursor: pointer;
                 font-size: $font-size-base;
                 color: $color-black;
+
+                &.opened {
+                    border: 1px solid $color-border;
+                    border-bottom: 0px;
+                    background-color: $color-light-gray;
+                }
 
                 .selected-text {
                     flex: 1;
@@ -159,16 +165,18 @@
 
             .options-list {
                 position: absolute;
-                top: calc(100% + 4px);
+                top: calc(100% - 14px);
                 left: 0;
                 right: 0;
-                background: $color-white;
+                background: $color-light-gray;
                 border: 1px solid $color-border;
-                border-radius: $btn-border-radius-md;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                border-top: 0;
+                box-shadow: 0 17px 10px rgba(0, 0, 0, 0.1);
                 z-index: 1;
                 max-height: 200px;
                 overflow-y: auto;
+                margin-left: $sp-md;
+                margin-right: $sp-md;
 
                 .option-item {
                     padding: $sp-sm $sp;

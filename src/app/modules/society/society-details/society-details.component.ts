@@ -168,10 +168,10 @@ export class SocietyDetailsComponent implements OnInit {
       f.key === FEATURES.COMPLAINTS && f.included === true
     );
 
-    console.log('Feature availability:', {
-      parking: this.parkingFeatureAvailable,
-      complaints: this.complaintsFeatureAvailable
-    });
+    // console.log('Feature availability:', {
+    //   parking: this.parkingFeatureAvailable,
+    //   complaints: this.complaintsFeatureAvailable
+    // });
   }
 
   /**

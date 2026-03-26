@@ -236,14 +236,14 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       f.key === FEATURES.SMART_GATE_PASS && f.included === true
     );
 
-    console.log('Feature availability:', {
-      members: this.membersFeatureAvailable,
-      vehicles: this.vehiclesFeatureAvailable,
-      parking: this.parkingFeatureAvailable,
-      complaints: this.complaintsFeatureAvailable,
-      gateEntries: this.gateEntriesFeatureAvailable,
-      gatePasses: this.gatePassesFeatureAvailable
-    });
+    // console.log('Feature availability:', {
+    //   members: this.membersFeatureAvailable,
+    //   vehicles: this.vehiclesFeatureAvailable,
+    //   parking: this.parkingFeatureAvailable,
+    //   complaints: this.complaintsFeatureAvailable,
+    //   gateEntries: this.gateEntriesFeatureAvailable,
+    //   gatePasses: this.gatePassesFeatureAvailable
+    // });
   }
 
   /**

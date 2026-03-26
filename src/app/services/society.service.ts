@@ -129,7 +129,6 @@ export class SocietyService {
         })
         ref.afterClosed().pipe(take(1))
             .subscribe((route: string) => {
-                console.log('route = ', route)
                 if (route) {
                     this.router.navigateByUrl(route);
                     this.selectSocietyFilter({ label: society.societyName, value: society._id } as IUIDropdownOption)

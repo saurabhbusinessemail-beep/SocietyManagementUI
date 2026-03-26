@@ -1,5 +1,6 @@
 <div class="user-root" style="position:relative;">
-    <button class="icon user-btn" (click)="toggle()" [attr.aria-expanded]="open" aria-label="User menu">
+    <button class="icon user-btn" (click)="toggle()" [attr.aria-expanded]="open"
+        [class.userMenuRouteLoaded]="userMenuRouteLoaded" aria-label="User menu">
         <app-icon name="account"></app-icon>
     </button>
 

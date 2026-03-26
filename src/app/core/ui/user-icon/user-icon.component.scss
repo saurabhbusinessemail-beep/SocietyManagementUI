@@ -15,7 +15,7 @@
         align-items: center;
         justify-content: center;
 
-        &:hover {
+        &:hover, &.userMenuRouteLoaded {
             background: $color-light-gray;
 
             app-icon {

@@ -209,7 +209,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(take(1))
       .subscribe(params => {
-        console.log('params = ', params)
         if (params?.['role'] && [SocietyRoles.owner.toString(), SocietyRoles.tenant.toString(), SocietyRoles.security.toString()].includes(params['role'])) {
           this.role = params['role']
         }

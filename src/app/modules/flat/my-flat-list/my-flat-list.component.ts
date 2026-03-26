@@ -23,7 +23,7 @@ export class MyFlatListComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.societyId = this.route.snapshot.paramMap.get('id') ?? this.societyService.selectedSocietyFilterValue?.value;
     if (this.societyId) {
       this.loadSociety(this.societyId);
     }

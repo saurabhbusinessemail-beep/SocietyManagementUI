@@ -2,6 +2,7 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { IMyProfile } from '../../../interfaces';
+import { Location } from '@angular/common';
 import { WindowService } from '../../../services/window.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class UserIconComponent implements OnInit {
   @Input() loggedInUserProfile?: IMyProfile
   @Output() needLogin = new EventEmitter<void>();
   open = false;
+  userMenuRouteLoaded = false;
 
   get myProfile(): IMyProfile | undefined {
     return this.loginService.getProfileFromStorage()
@@ -22,26 +24,26 @@ export class UserIconComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
+    if (this.router.url === '/user/menu')
+      this.userMenuRouteLoaded = true;
   }
 
   toggle() {
-    // if (this.loggedInUserProfile)
-    //   this.open = !this.open;
-    // else
-    //   this.needLogin.emit();
     if (!this.loggedInUserProfile) {
       this.needLogin.emit();
       return;
     }
 
-    // Check if we're on mobile
     if (this.windowService.mode.value === 'mobile') {
-      // Navigate to the new menu page instead of opening dropdown
+      if (!this.userMenuRouteLoaded)
       this.router.navigateByUrl('/user/menu');
+    else
+      this.location.back();
     } else {
       // Desktop: toggle the dropdown
       this.open = !this.open;
