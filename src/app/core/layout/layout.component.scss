@@ -89,12 +89,21 @@ app-footer {
 .mobile-actions {
     display: flex;
     flex-direction: column;
-    padding: $sp-sm;
-    gap: $sp;
+    min-width: 150px;
+    // padding: $sp-sm;
+    // gap: $sp;
 
-    ::ng-deep {
-        .btn {
-            width: 100% !important;
-        }
+    // ::ng-deep {
+    //     .btn {
+    //         width: 100% !important;
+    //     }
+    // }
+}
+
+.mobile-action-panel {}
+
+::ng-deep {
+    .mat-mdc-menu-panel {
+        border-radius: 17px !important;
     }
 }

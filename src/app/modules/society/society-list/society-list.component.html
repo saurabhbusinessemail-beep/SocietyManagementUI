@@ -1,9 +1,13 @@
 <app-layout [hideMoreActions]="!canAddSociety" title="Societies" backButtonURL="/dashboard/user">
 
   <ng-container moreActions>
-    <ui-button *ngIf="canAddSociety" label="Add Society" type="primary" routerLink="../add" [smColumns]="1"
+    <!-- <ui-button *ngIf="canAddSociety" label="Add Society" type="primary" routerLink="../add" [smColumns]="1"
       [mdColumns]="1" [lgColumns]="1">
-    </ui-button>
+    </ui-button> -->
+
+    <ul class="page-menu-list" *ngIf="canAddSociety">
+      <li class="page-menu" routerLink="../add">Add Society</li>
+    </ul>
   </ng-container>
 
   <ui-form-layout>

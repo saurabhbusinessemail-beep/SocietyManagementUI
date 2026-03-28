@@ -1,8 +1,12 @@
 <app-layout [hideMoreActions]="!canAddParking" title="Parkings" [subTitle]="pageSubTitle" [showBackButton]="true">
-    
+
     <ng-container moreActions>
-        <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
-        </ui-button>
+        <!-- <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
+        </ui-button> -->
+
+        <ul class="page-menu-list" *ngIf="canAddParking">
+            <li class="page-menu" (click)="openAddDialog()">Add Parking</li>
+        </ul>
     </ng-container>
 
     <form [formGroup]="fb">

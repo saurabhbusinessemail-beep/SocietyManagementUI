@@ -2,8 +2,12 @@
     [showBackButton]="true">
 
     <ng-container moreActions>
-        <ui-button label="Add Manager" type="primary" (clicked)="openAddDialog()">
-        </ui-button>
+        <!-- <ui-button label="Add Manager" type="primary" (clicked)="openAddDialog()">
+        </ui-button> -->
+
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="openAddDialog()">Add Manager</li>
+        </ul>
     </ng-container>
 
     <ui-form-layout>

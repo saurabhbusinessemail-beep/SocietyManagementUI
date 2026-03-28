@@ -387,6 +387,44 @@ body {
     }
 }
 
+.page-menu-list {
+    list-style: none;
+    padding-inline: 0;
+
+    @include tablet {
+        display: flex;
+    }
+
+    @include desktop {
+        display: flex;
+    }
+
+    .page-menu {
+        padding: $sp;
+        color: $color-dark-blue;
+        font-size: $font-size-base;
+        font-weight: 400;
+
+        @include mobile {
+            border-top: solid 1px $color-light-gray;
+
+            &:last-child {
+                border-bottom: solid 1px $color-light-gray;
+            }
+        }
+
+        @include tablet {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        @include desktop {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}
+
 // Optional: Add animation for content
 @keyframes fadeIn {
     from {

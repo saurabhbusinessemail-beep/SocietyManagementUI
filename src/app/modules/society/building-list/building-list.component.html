@@ -1,13 +1,18 @@
-<app-layout [hideMoreActions]="!canAddBuildings" title="Buildings"
-    [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
+<app-layout title="Buildings" [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
 
     <ng-container moreActions>
-        <ui-button label="Add Building" type="primary" (clicked)="openAddDialog()">
+        <!-- <ui-button label="Add Building" type="primary" (clicked)="openAddDialog()">
         </ui-button>
         <ui-button label="Flats" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewFlats()">
         </ui-button>
         <ui-button label="Parkings" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewParkings()">
-        </ui-button>
+        </ui-button> -->
+
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="openAddDialog()" *ngIf="canAddBuildings">Add Building</li>
+            <li class="page-menu" (click)="gotoViewFlats()">Manage Flats</li>
+            <li class="page-menu" (click)="gotoViewParkings()">Manage Parkings</li>
+        </ul>
     </ng-container>
 
     <ui-form-layout>

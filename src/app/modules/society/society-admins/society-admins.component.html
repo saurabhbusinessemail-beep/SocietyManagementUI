@@ -1,8 +1,13 @@
-<app-layout [hideMoreActions]="!canAddSocietyAdmin" title="Admins" [subTitle]="this.society?.societyName" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddSocietyAdmin" title="Admins" [subTitle]="this.society?.societyName"
+    [showBackButton]="true">
 
     <ng-container moreActions>
-        <ui-button label="Add Admin" type="primary" (clicked)="openAddDialog()">
-        </ui-button>
+        <!-- <ui-button label="Add Admin" type="primary" (clicked)="openAddDialog()">
+        </ui-button> -->
+
+        <ul class="page-menu-list" *ngIf="canAddSocietyAdmin">
+            <li class="page-menu" (click)="openAddDialog()">Add Admin</li>
+        </ul>
     </ng-container>
 
     <ui-form-layout>

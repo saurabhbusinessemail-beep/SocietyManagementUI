@@ -1,8 +1,13 @@
 <app-layout [hideMoreActions]="isAdmin" title="Pending Approvals">
 
     <ng-container moreActions>
-        <ui-button label="New Request" type="primary" (clicked)="gotoAddSociety()">
-        </ui-button>
+        <!-- <ui-button label="New Request" type="primary" (clicked)="gotoAddSociety()">
+        </ui-button> -->
+
+
+        <ul class="page-menu-list" *ngIf="!isAdmin">
+            <li class="page-menu" (click)="gotoAddSociety()">New Request</li>
+        </ul>
     </ng-container>
 
     <!-- Search Bar -->

@@ -1,9 +1,14 @@
-<app-layout [hideMoreActions]="!isFlatMember" title="Complaints" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [hideMoreActions]="!isFlatMember" title="Complaints"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
-        <ui-button label="New Complaint" type="primary" (clicked)="openAddComplaint()" [smColumns]="1" [mdColumns]="1"
+        <!-- <ui-button label="New Complaint" type="primary" (clicked)="openAddComplaint()" [smColumns]="1" [mdColumns]="1"
             [lgColumns]="1">
-        </ui-button>
+        </ui-button> -->
+
+        <ul class="page-menu-list" *ngIf="isFlatMember">
+            <li class="page-menu" (click)="openAddComplaint()">New Complaint</li>
+        </ul>
     </ng-container>
 
 

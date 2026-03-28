@@ -26,11 +26,13 @@
                             <ng-container *ngTemplateOutlet="projectedActions"></ng-container>
                         </ng-container>
 
-                        <ui-button label="" type="only-content" *ngIf="isMobileMode" [matMenuTriggerFor]="actionMenu">
+                        <!-- <ui-button label="" type="only-content" *ngIf="isMobileMode" [matMenuTriggerFor]="actionMenu">
                             <app-icon name="more-vert">
                             </app-icon>
-                        </ui-button>
-                        <mat-menu #actionMenu>
+                        </ui-button> -->
+                        <app-icon name="more-vert" *ngIf="isMobileMode" [matMenuTriggerFor]="actionMenu">
+                        </app-icon>
+                        <mat-menu #actionMenu panelClass="mobile-action-panel">
                             <div class="mobile-actions">
                                 <ng-container *ngTemplateOutlet="projectedActions"></ng-container>
                             </div>

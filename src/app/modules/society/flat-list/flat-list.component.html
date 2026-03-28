@@ -3,8 +3,11 @@
 
 
     <ng-container moreActions>
-        <ui-button label="Add Flat" type="primary" (clicked)="openAddDialog()">
-        </ui-button>
+        <!-- <ui-button label="Add Flat" type="primary" (clicked)="openAddDialog()">
+        </ui-button> -->
+        <ul class="page-menu-list" *ngIf="canAddFlat">
+            <li class="page-menu" (click)="openAddDialog()">Add Flat</li>
+        </ul>
     </ng-container>
 
     <form [formGroup]="fb">
