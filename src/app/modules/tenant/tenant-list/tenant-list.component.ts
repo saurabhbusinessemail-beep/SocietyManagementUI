@@ -35,7 +35,7 @@ export class TenantListComponent implements OnInit {
       .subscribe({
         next: response => {
           this.tenants = response.data;
-          this.loadTenants(this.selectedFIlter)
+          // this.loadTenants(this.selectedFIlter)
         }
       });
   }

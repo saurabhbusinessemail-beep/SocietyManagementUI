@@ -26,13 +26,13 @@
 
         <!-- Role badges (residingType + boolean flags) -->
         <div class="roles">
-            <!-- <span *ngIf="member.residingType" class="role-badge" [ngClass]="member.residingType.toLowerCase()">
-                {{ member.residingType }}
-            </span> -->
-            <span *ngIf="member.isOwner" class="role-badge owner">Owner</span>
-            <span *ngIf="member.isTenant" class="role-badge tenant">Tenant</span>
-            <span *ngIf="member.isMember" class="role-badge member">Member</span>
-            <span *ngIf="member.isTenantMember" class="role-badge tenant-member">Tenant Member</span>
+            <span *ngIf="member.residingType" class="role-badge" [ngClass]="member.residingType.toLowerCase()">
+                Currently Residing: {{ member.residingType }}
+            </span>
+            <span *ngIf="member.isOwner" class="role-badge owner">I am Owner</span>
+            <span *ngIf="member.isTenant" class="role-badge tenant">I am Tenant</span>
+            <span *ngIf="member.isMember" class="role-badge member">I am Member</span>
+            <span *ngIf="member.isTenantMember" class="role-badge tenant-member">I am Tenant Member</span>
         </div>
 
         <!-- Flat & Society info (grid) -->
