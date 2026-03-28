@@ -183,7 +183,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if (!selectedPricingPlan) return false; // if no society is selected then no need to menus that need society level access
 
         // update logic to check pricing plan and menu
-        return selectedPricingPlan.features.some(f => f.key === menu.mandatorFeatureAccess && f.included);
+        return selectedPricingPlan.features?.some(f => f.key === menu.mandatorFeatureAccess && f.included);
 
       } else {
         return true;
