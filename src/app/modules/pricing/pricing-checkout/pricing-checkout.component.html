@@ -163,17 +163,17 @@
                         <div class="calculation-details">
                             <div class="detail-row">
                                 <span>Remaining value from current plan:</span>
-                                <span>₹{{ changePlanCalculation.calculation.remainingValue | number:'1.2-2'
+                                <span>{{ getFormattedPrice(changePlanCalculation.calculation.remainingValue)
                                     }}</span>
                             </div>
                             <div class="detail-row">
                                 <span>New plan value:</span>
-                                <span>₹{{ changePlanCalculation.calculation.newPlanValue | number:'1.2-2' }}</span>
+                                <span>{{ getFormattedPrice(changePlanCalculation.calculation.newPlanValue) }}</span>
                             </div>
                             <div class="detail-row total">
                                 <span>{{ changePlanCalculation.calculation.paymentReason }}</span>
                                 <span class="amount" [class.zero]="changePlanCalculation.calculation.amountToPay === 0">
-                                    ₹{{ changePlanCalculation.calculation.amountToPay | number:'1.2-2' }}
+                                    {{ getFormattedPrice(changePlanCalculation.calculation.amountToPay) }}
                                 </span>
                             </div>
                         </div>
@@ -223,11 +223,11 @@
                         <span>Total</span>
                         <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
                         <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
-                            <span class="original-price">₹{{ originalPrice | number:'1.2-2' }}</span>
-                            <span class="discount-badge">-{{ discountPercentage | number:'1.0-0' }}%</span>
+                            <span class="original-price">{{ getFormattedPrice(originalPrice) }}</span>
+                            <span class="discount-badge">-{{ getFormattedPrice(discountPercentage) }}%</span>
                         </div>
                         <span class="final-price" [class.discounted]="isCouponApplied">
-                            ₹{{ totalPrice | number:'1.2-2' }}
+                            {{ getFormattedPrice(totalPrice) }}
                         </span>
                     </div>
                     <p class="price-note"

@@ -196,7 +196,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   }
 
   getFormattedPrice(amount: number): string {
-    return '₹' + amount.toLocaleString('en-IN');
+    return '₹' + Math.ceil(amount).toLocaleString('en-IN');
   }
 
   onDurationChange(): void {
