@@ -727,6 +727,13 @@
     }
 }
 
+
+
+.out-of {
+    color: $color-disable-background;
+    font-size: 0.8rem;
+}
+
 // Responsive adjustments for smaller devices
 @include mobile {
     .stats-grid {

@@ -10,6 +10,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../../../services/dialog.service';
 import { WindowService } from '../../../services/window.service';
 import { ListBase } from '../../../directives/list-base.directive';
+import { UILabelValueType } from '../../../types';
 
 @Component({
   selector: 'app-flat-list',
@@ -164,6 +165,10 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
     id: 'appendFloorNumber',
     label: 'Append Floor Number',
   };
+  pendingFlatssConfig: IUIControlConfig = {
+    id: 'pendingFlats',
+    label: 'Pending Flats To Add'
+  };
 
   selectedTab = 'addFlat';
   tabsOptions: IUIDropdownOption[] = [
@@ -234,6 +239,19 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
 
   get canDeleteFlat() {
     return this.loginService.hasPermission(PERMISSIONS.flat_delete, this.societyId);
+  }
+
+  get pendingFlatsToAdd(): number {
+    return (this.society?.numberOfFlats ?? 0) - this.flats.length;
+  }
+
+  get pendingBuildingType(): UILabelValueType {
+    if (this.pendingFlatsToAdd < 0)
+      return 'error';
+    else if (this.pendingFlatsToAdd > 0)
+      return 'active';
+    else
+      return 'info'
   }
 
   constructor(

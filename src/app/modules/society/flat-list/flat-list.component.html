@@ -13,6 +13,12 @@
     <form [formGroup]="fb">
         <ui-form-layout>
 
+            <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
+                <ui-label [valueText]="pendingFlatsToAdd" [config]="pendingFlatssConfig" direction="horizontal"
+                    [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                </ui-label>
+            </div>
+
             <div class="flex" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
                 <div class="flex-auto flex flex-gap">

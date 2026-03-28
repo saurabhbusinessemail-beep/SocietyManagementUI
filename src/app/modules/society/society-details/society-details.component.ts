@@ -29,6 +29,9 @@ export class SocietyDetailsComponent implements OnInit {
   complaintsFeatureAvailable: boolean = false;
   featuresLoaded: boolean = false;
 
+  addedBuildings = 0;
+  addedFlats = 0;
+
   get canUpdateSociety(): boolean {
     return this.loginService.hasPermission(PERMISSIONS.society_update, this.society?._id);
   }
@@ -182,6 +185,10 @@ export class SocietyDetailsComponent implements OnInit {
    * Load data only for features that are available in the current plan
    */
   loadFeatureSpecificData(societyId: string): void {
+    // Load flat and building counts not dependent on plan
+    this.loadBuilldingsCount(societyId);
+    this.loadFlatCounts(societyId);
+
     // Load complaints only if feature is available
     if (this.complaintsFeatureAvailable) {
       this.loadComplaints(societyId);
@@ -207,6 +214,30 @@ export class SocietyDetailsComponent implements OnInit {
           }
         }
       });
+  }
+
+  /* Load buildings by society */
+  loadBuilldingsCount(societyId: string) {
+    this.societyService.getBuildingsCount(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (response.success)
+            this.addedBuildings = response.data ?? 0;
+        }
+      })
+  }
+
+  /* Load flats by society */
+  loadFlatCounts(societyId: string) {
+    this.societyService.getFlatsCount(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (response.success)
+            this.addedFlats = response.data ?? 0;
+        }
+      })
   }
 
 

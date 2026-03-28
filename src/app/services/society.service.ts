@@ -286,7 +286,9 @@ export class SocietyService {
             'SocietyService.getAllSocieties*',
             'SocietyService.searchSocieties*',
             'SocietyService.getBuildings*',
+            'SocietyService.getBuildingsCount*',
             'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
             'SocietyService.getParkings*',
             'SocietyService.getParkingsByFlat*'
         ],
@@ -399,11 +401,23 @@ export class SocietyService {
         return this.http.get<IPagedResponse<IBuilding>>(`${this.baseUrl}/${societyId}/buildings`);
     }
 
+    // Get all buildings in society
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0],
+        group: 'buildings'
+    })
+    getBuildingsCount(societyId: string): Observable<IBEResponseFormat<number>> {
+        return this.http.get<IBEResponseFormat<number>>(`${this.baseUrl}/${societyId}/buildingsCount`);
+    }
+
     // Add new building
     @InvalidateCache({
         methods: [
             'SocietyService.getBuildings*',
-            'SocietyService.getFlats*'
+            'SocietyService.getBuildingsCount*',
+            'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
         ],
         groups: ['buildings', 'flats']
     })
@@ -416,7 +430,9 @@ export class SocietyService {
         methods: [
             'SocietyService.getBuilding',
             'SocietyService.getBuildings*',
-            'SocietyService.getFlats*'
+            'SocietyService.getBuildingsCount*',
+            'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
         ],
         matchParams: true,
         paramIndices: [0, 1],
@@ -431,7 +447,9 @@ export class SocietyService {
         methods: [
             'SocietyService.getBuilding',
             'SocietyService.getBuildings*',
+            'SocietyService.getBuildingsCount*',
             'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
             'SocietyService.getParkings*',
             'SocietyService.getParkingsByFlat*'
         ],
@@ -474,10 +492,30 @@ export class SocietyService {
             return this.http.get<IPagedResponse<IFlat>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/flats`, { params });
     }
 
+    // Get all flats count in a building or society
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0, 1],
+        group: 'flats',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [societyId, buildingId] = args;
+            return `${methodName}_${societyId}_${buildingId || 'all'}`;
+        }
+    })
+    getFlatsCount(societyId: string, buildingId?: string, options: IPagination = {}) {
+        let params = this.paginationService.createPaginationParams(options);
+
+        if (!buildingId)
+            return this.http.get<IBEResponseFormat<number>>(`${this.baseUrl}/${societyId}/flatsCount`, { params });
+        else
+            return this.http.get<IBEResponseFormat<number>>(`${this.baseUrl}/${societyId}/buildings/${buildingId}/flatsCount`, { params });
+    }
+
     // Add One Flat
     @InvalidateCache({
         methods: [
             'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
             'SocietyService.myFlats*',
             'SocietyService.myFlatMembers*',
             'SocietyService.myTenants*'
@@ -492,6 +530,7 @@ export class SocietyService {
     @InvalidateCache({
         methods: [
             'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
             'SocietyService.myFlats*',
             'SocietyService.myFlatMembers*',
             'SocietyService.myTenants*'
@@ -507,6 +546,7 @@ export class SocietyService {
         methods: [
             'SocietyService.getFlat',
             'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
             'SocietyService.myFlats*',
             'SocietyService.myFlatMembers*',
             'SocietyService.myTenants*',

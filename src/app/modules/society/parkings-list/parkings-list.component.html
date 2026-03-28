@@ -106,7 +106,7 @@
             <ng-container actions>
 
                 <ui-button label="Auto Gen" type="only-content" (clicked)="generateParking()"
-                    *ngIf="selectedParkingType && selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1">
+                    *ngIf="selectedParkingType && ((selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1) || (society?.numberOfBuildings ?? 0) === 1)">
                 </ui-button>
 
                 <ui-button label="Cancel" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
