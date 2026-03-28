@@ -10,6 +10,7 @@ export class EmptyRecordsComponent {
   @Input() singular = 'society';
   @Input() plural = 'societies';
   @Input() hideAddButton = false;
+  @Input() hideMessage = false;
   @Input() routerLink?: string;
   @Output() addClicked = new EventEmitter<void>();
 

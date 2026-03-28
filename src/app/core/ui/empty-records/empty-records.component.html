@@ -4,6 +4,6 @@
         <!-- If no projected icon, show default? We can also have an optional fallback -->
     </div>
     <h2 class="empty-societies__title">{{ title }}</h2>
-    <p class="empty-societies__message">{{ message }}</p>
+    <p class="empty-societies__message" *ngIf="!hideMessage">{{ message }}</p>
     <button *ngIf="!hideAddButton" class="empty-societies__button" (click)="onAddClick()">{{ buttonText }}</button>
 </div>
