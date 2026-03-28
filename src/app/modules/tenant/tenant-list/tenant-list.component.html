@@ -21,6 +21,13 @@
                 </ui-flat-member-card>
             </ng-container>
 
+            <ng-container *ngIf="tenants.length === 0">
+                <app-empty-records singular="tenant" plural="tenants" routerLink="../add" [smColumns]="12"
+                    [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="tenant" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
         </ui-form-layout>
     </div>
 </app-layout>

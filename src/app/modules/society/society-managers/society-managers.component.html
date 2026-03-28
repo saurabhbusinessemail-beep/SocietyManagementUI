@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!canAddSocietyManager" title="Managers" [subTitle]="this.society?.societyName"
+<app-layout [hideMoreActions]="!canAddSocietyManager" title="Secretaries" [subTitle]="this.society?.societyName"
     [showBackButton]="true">
 
     <ng-container moreActions>
@@ -23,6 +23,13 @@
                 [selected]="selectedIds.has(manager._id)" [showDelete]="canDeleteSocietyManager && !selectMode"
                 (selectedChange)="onSelectionChange(manager._id, $event)" (delete)="removeSecretary(manager)">
             </ui-manager-card>
+        </ng-container>
+
+        <ng-container *ngIf="managers.length === 0">
+            <app-empty-records singular="secretary" plural="secretaries" [hideAddButton]="!canAddSocietyManager"
+                (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <app-icon icon name="secretary" size="xxl"></app-icon>
+            </app-empty-records>
         </ng-container>
 
     </ui-form-layout>

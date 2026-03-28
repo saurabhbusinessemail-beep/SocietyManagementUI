@@ -1,12 +1,17 @@
 <app-layout [showBackButton]="true" [title]="society?.societyName || 'Society'" backButtonURL="/society/list">
 
     <ng-container moreActions>
-        <ui-button (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety" label="Edit Society" type="only-content">
+        <!-- <ui-button (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety" label="Edit Society" type="only-content">
             <app-icon name="edit"></app-icon>
         </ui-button>
         <ui-button (clicked)="gotoPlanEdit()" *ngIf="canUpdateSociety" label="Current Plan" type="only-content">
             <app-icon name="edit"></app-icon>
-        </ui-button>
+        </ui-button> -->
+
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="gotoEditSociety()">Edit Society</li>
+            <li class="page-menu" (click)="gotoPlanEdit()">Current Plan</li>
+        </ul>
     </ng-container>
 
     <div class="society-detail-page">
@@ -44,7 +49,7 @@
                     (click)="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1 ? null : gotoBuildingManager()"
                     [class.disabled]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
                     <div class="stat-icon-wrapper">
-                        <app-icon name="home"></app-icon>
+                        <app-icon name="building"></app-icon>
                     </div>
                     <div class="stat-details">
                         <p class="stat-label">Buildings</p>
@@ -54,7 +59,7 @@
                 <!-- Flats Stat -->
                 <div class="stat-card stat-card--blue" (click)="gotoFlatManager()">
                     <div class="stat-icon-wrapper">
-                        <app-icon name="building"></app-icon>
+                        <app-icon name="home"></app-icon>
                     </div>
                     <div class="stat-details">
                         <p class="stat-label">Flats</p>

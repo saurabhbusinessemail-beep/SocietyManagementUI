@@ -39,6 +39,13 @@
             </ui-building-card>
         </ng-container>
 
+        <ng-container *ngIf="buildings.length === 0">
+            <app-empty-records singular="building" plural="buildings"
+                (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <app-icon icon name="building" size="xxl"></app-icon>
+            </app-empty-records>
+        </ng-container>
+
     </ui-form-layout>
 
 </app-layout>

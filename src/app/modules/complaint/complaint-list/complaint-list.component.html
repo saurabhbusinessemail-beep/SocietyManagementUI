@@ -37,6 +37,13 @@
 
             </ng-container>
 
+            <ng-container *ngIf="complaints.length === 0">
+                <app-empty-records singular="complaint" plural="complaints" [hideAddButton]="!isFlatMember"
+                    (addClicked)="openAddComplaint()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="complaint" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
         </ui-form-layout>
     </div>
 

@@ -1,8 +1,4 @@
-<app-layout title="Plan History" [showBackButton]="true" (needLogin)="loginService.simpleLogin()">
-
-    <ng-container moreActions>
-            <ui-button label="Back to Current Plan" (clicked)="goToCurrentPlan()" type="only-content"></ui-button>
-    </ng-container>
+<app-layout title="Plan History" [showBackButton]="true" [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
 
     <div class="history-container">
 

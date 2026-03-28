@@ -47,6 +47,13 @@
 
             </ng-container>
 
+            <ng-container *ngIf="parkings.length === 0">
+                <app-empty-records singular="parking" plural="parkings" [hideAddButton]="!canAddParking"
+                    (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="vehicle" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
         </ui-form-layout>
     </form>
 

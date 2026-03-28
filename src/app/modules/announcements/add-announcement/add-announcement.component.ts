@@ -161,7 +161,7 @@ export class AddAnnouncementComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private loginService: LoginService,
     private announcementService: AnnouncementService,
     private route: ActivatedRoute

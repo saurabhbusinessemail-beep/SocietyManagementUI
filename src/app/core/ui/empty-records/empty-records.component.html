@@ -1,0 +1,9 @@
+<div class="empty-societies">
+    <div class="empty-societies__icon-wrapper">
+        <ng-content select="[icon]"></ng-content>
+        <!-- If no projected icon, show default? We can also have an optional fallback -->
+    </div>
+    <h2 class="empty-societies__title">{{ title }}</h2>
+    <p class="empty-societies__message">{{ message }}</p>
+    <button *ngIf="!hideAddButton" class="empty-societies__button" (click)="onAddClick()">{{ buttonText }}</button>
+</div>

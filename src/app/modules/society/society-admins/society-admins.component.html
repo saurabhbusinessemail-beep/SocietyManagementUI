@@ -25,6 +25,13 @@
             </ui-manager-card>
         </ng-container>
 
+        <ng-container *ngIf="admins.length === 0">
+            <app-empty-records singular="admin" plural="admins" [hideAddButton]="!canAddSocietyAdmin" (click)="openAddDialog()"
+                [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <app-icon icon name="admin" size="xxl"></app-icon>
+            </app-empty-records>
+        </ng-container>
+
     </ui-form-layout>
 
 

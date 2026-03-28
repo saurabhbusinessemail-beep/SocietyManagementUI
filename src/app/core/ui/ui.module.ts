@@ -42,6 +42,7 @@ import { ComplaintCardComponent } from './complaint-card/complaint-card.componen
 import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component';
 import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
 import { CircularDisplayComponent } from './circular-display/circular-display.component';
+import { EmptyRecordsComponent } from './empty-records/empty-records.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { CircularDisplayComponent } from './circular-display/circular-display.co
     ComplaintCardComponent,
     GatePassCardComponent,
     VehicleCardComponent,
-    CircularDisplayComponent
+    CircularDisplayComponent,
+    EmptyRecordsComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -121,7 +123,8 @@ import { CircularDisplayComponent } from './circular-display/circular-display.co
     ComplaintCardComponent,
     GatePassCardComponent,
     VehicleCardComponent,
-    CircularDisplayComponent
+    CircularDisplayComponent,
+    EmptyRecordsComponent
   ],
   providers: [MatDatepickerModule]
 })
