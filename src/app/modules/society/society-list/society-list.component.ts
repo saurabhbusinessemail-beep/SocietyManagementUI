@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take, forkJoin, of } from 'rxjs';
-import { ISociety, ICurrentPlanResponse, IUIDropdownOption } from '../../../interfaces';
-import { PERMISSIONS, ownerMemberTenanRoles, securityRoles } from '../../../constants';
+import { ISociety, ICurrentPlanResponse } from '../../../interfaces';
+import { PERMISSIONS } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { SocietyRoles } from '../../../types';

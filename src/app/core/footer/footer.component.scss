@@ -3,16 +3,6 @@
 .app-footer {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: $color-dark-blue;
-    background-color: $color-white;
-
-    .center {
-        display: flex;
-        gap: $sp-md;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        color: #7ec8ff;
-    }
+    justify-content: space-around;
+    color: $color-white;
 }

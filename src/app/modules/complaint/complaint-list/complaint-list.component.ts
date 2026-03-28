@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 import { Subject, take } from 'rxjs';
 import { ComplaintService } from '../../../services/complaint.service';
 import { adminManagerRoles } from '../../../constants';
+import { SocietyService } from '../../../services/society.service';
 
 interface IComplaintFilter {
   societyId?: string, flatId?: string, complaintType?: string
@@ -55,7 +56,8 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private complaintService: ComplaintService
+    private complaintService: ComplaintService,
+    public societyService: SocietyService
   ) { }
 
   ngOnInit(): void {

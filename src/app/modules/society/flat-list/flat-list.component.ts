@@ -210,12 +210,6 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
     return this.fb.get('building')?.value ?? undefined;
   }
 
-  get pageTitle(): string | undefined {
-    if (!this.society) return 'Flats';
-
-    return 'Flats: ' + this.society.societyName
-  }
-
   get flatTypeOptions(): IUIDropdownOption<FlatTypes>[] {
     return FlatTypeList.map(ft => {
       return {
@@ -244,7 +238,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private loginService: LoginService,
     private dialog: MatDialog,
     dialogService: DialogService,

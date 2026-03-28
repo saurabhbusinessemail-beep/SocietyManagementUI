@@ -1,73 +1,102 @@
-<div class="flat-member-card" (click)="toggleSelection($event)">
-    <div class="card-header">
-        <div class="header-left">
-            <div class="selection-checkbox" *ngIf="selectMode">
-                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+<div class="flat-member-card" (click)="clicked.emit()">
+    <!-- Selection checkbox (if selectMode) -->
+    <div class="selection-overlay" *ngIf="selectMode">
+        <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)"
+            (click)="$event.stopPropagation()">
+    </div>
+
+    <div class="card-container">
+        <!-- Header with avatar and info -->
+        <div class="card-header">
+            <div class="avatar" [style.background-color]="getAvatarBgColor()" [style.color]="getAvatarColor()">
+                {{ getUserInitials() }}
             </div>
-            <div class="member-info">
-                <h3 class="member-name" (click)="clicked.emit()">{{ getFlatDisplay() }}</h3>
-                <span *ngIf="member.residingType" class="residing-badge" [ngClass]="member.residingType.toLowerCase()">
-                    {{ member.residingType }}
-                </span>
+            <div class="info">
+                <div class="name-row">
+                    <div class="name-details">
+                        <p class="name">{{ getUserName() }}</p>
+                        <p class="contact">{{ getContact() }}</p>
+                    </div>
+                    <span class="status-badge" [ngClass]="member.status">
+                        {{ member.status }}
+                    </span>
+                </div>
             </div>
         </div>
+
+        <!-- Role badges (residingType + boolean flags) -->
+        <div class="roles">
+            <!-- <span *ngIf="member.residingType" class="role-badge" [ngClass]="member.residingType.toLowerCase()">
+                {{ member.residingType }}
+            </span> -->
+            <span *ngIf="member.isOwner" class="role-badge owner">Owner</span>
+            <span *ngIf="member.isTenant" class="role-badge tenant">Tenant</span>
+            <span *ngIf="member.isMember" class="role-badge member">Member</span>
+            <span *ngIf="member.isTenantMember" class="role-badge tenant-member">Tenant Member</span>
+        </div>
+
+        <!-- Flat & Society info (grid) -->
+        <div class="details-grid">
+            <div class="flat-info-card">
+                <p class="label">Flat</p>
+                <p class="value">{{ getFlatNumber() }}</p>
+                <p class="extra">{{ getFlatExtra() }}</p>
+            </div>
+            <div class="society-info-card">
+                <p class="label">Society</p>
+                <p class="value">{{ getSocietyName() }}</p>
+                <p class="extra">{{ getSocietyFlatsCount() }} flats</p>
+            </div>
+        </div>
+
+        <!-- Lease details (if tenant) -->
+        <div class="lease-card" *ngIf="member.isTenant && member.leaseStart && member.leaseEnd">
+            <div class="lease-header">
+                <span class="lease-title">Lease Period</span>
+                <span class="rent-amount" *ngIf="member.rentAmount">{{ member.rentAmount | currency:'INR' }}/mo</span>
+            </div>
+            <p class="lease-dates">{{ member.leaseStart | date:'yyyy-MM-dd' }} → {{ member.leaseEnd | date:'yyyy-MM-dd'
+                }}</p>
+        </div>
+
+        <!-- Plan card (if plan input provided) -->
+        <div class="plan-card" *ngIf="plan">
+            <div class="plan-header">
+                <div class="plan-name">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                        </path>
+                    </svg>
+                    <span>{{ plan.name }}</span>
+                </div>
+                <div class="plan-meta">
+                    <span class="plan-status" [ngClass]="plan.status">{{ plan.status }}</span>
+                    <span class="plan-price">{{ plan.price | currency:'INR' }}/year</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents section -->
+        <div class="documents-section" *ngIf="getDocumentCount() > 0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span>{{ getDocumentCount() }} document{{ getDocumentCount() !== 1 ? 's' : '' }}</span>
+            <div class="document-tags">
+                <span *ngFor="let doc of getDocumentList() | slice:0:3" class="document-tag"
+                    [title]="getDocumentDisplayName(doc)">
+                    {{ truncateText(getDocumentDisplayName(doc), 12) }}
+                </span>
+                <span *ngIf="getDocumentCount() > 3" class="document-tag">+{{ getDocumentCount() - 3 }}</span>
+            </div>
+        </div>
+
+        <!-- Optional actions (edit/delete) -->
         <div class="actions" *ngIf="showEdit || showDelete">
             <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
             <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
-        </div>
-    </div>
-
-    <div class="card-details">
-        <!-- Quick info row: contact and status -->
-        <!-- <div class="quick-info">
-            <div class="contact">
-                <i>📞</i> {{ member.contact }}
-            </div>
-            <span class="status-badge" [ngClass]="member.status">{{ member.status }}</span>
-        </div> -->
-
-        <!-- Location block: flat and society -->
-        <div class="location-block">
-            <div class="location-item">
-                <i>🏘️</i>
-                <span class="label">Society:</span>
-                <span class="value">{{ getSocietyDisplay() }}</span>
-            </div>
-        </div>
-
-        <!-- Roles section -->
-        <div class="roles-section">
-            <div class="role-chips">
-                <span *ngIf="member.isOwner" class="chip owner">Owner</span>
-                <span *ngIf="member.isTenant" class="chip tenant">Tenant</span>
-                <span *ngIf="member.isMember" class="chip member">Member</span>
-                <span *ngIf="member.isTenantMember" class="chip tenant-member">Tenant Member</span>
-                <span *ngIf="!member.isOwner && !member.isTenant && !member.isMember && !member.isTenantMember">—</span>
-            </div>
-        </div>
-
-        <!-- Lease info card (only if tenant) -->
-        <div class="lease-card" *ngIf="member.isTenant">
-            <div class="lease-header">
-                <span class="lease-title">Lease Details</span>
-                <span class="rent-amount" *ngIf="member.rentAmount">{{ member.rentAmount | currency:'INR' }}</span>
-            </div>
-            <div class="lease-dates">
-                <div class="date-item" *ngIf="member.leaseStart">
-                    <div class="label">Start</div>
-                    <div class="value">{{ member.leaseStart | date:'mediumDate' }}</div>
-                </div>
-                <div class="date-item" *ngIf="member.leaseEnd">
-                    <div class="label">End</div>
-                    <div class="value">{{ member.leaseEnd | date:'mediumDate' }}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Creation info -->
-        <div class="creation-info">
-            <span>Created {{ member.createdOn | date:'mediumDate' }} by {{ getCreatedByDisplay() }}</span>
-            <span *ngIf="member.modifiedOn"> • Modified {{ member.modifiedOn | date:'mediumDate' }}</span>
         </div>
     </div>
 </div>

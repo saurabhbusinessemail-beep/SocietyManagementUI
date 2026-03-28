@@ -120,6 +120,10 @@ export class SocietyDetailsComponent implements OnInit {
             return arr;
           }, [] as IUser[]);
 
+          // select society if not selected
+          if (!this.societyService.selectedSocietyFilterValue)
+            this.societyService.selectSocietyFilter({ label: this.society.societyName, value: this.society._id })
+
 
           // First load current plan to check feature availability
           this.loadCurrentPlan(societyId);

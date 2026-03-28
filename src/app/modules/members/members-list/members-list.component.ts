@@ -19,7 +19,7 @@ export class MembersListComponent implements OnInit {
   selectedFIlter: IMemberFilter = {};
   members: IFlatMember[] = [];
 
-  constructor(private societyService: SocietyService, private dialogService: DialogService) { }
+  constructor(public societyService: SocietyService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
 

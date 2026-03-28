@@ -1,20 +1,16 @@
-<app-layout [hideMoreActions]="!canAddBuildings" [title]="pageTitle" [showBackButton]="true">
-    
+<app-layout [hideMoreActions]="!canAddBuildings" title="Buildings"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
+
     <ng-container moreActions>
         <ui-button label="Add Building" type="primary" (clicked)="openAddDialog()">
+        </ui-button>
+        <ui-button label="Flats" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewFlats()">
+        </ui-button>
+        <ui-button label="Parkings" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewParkings()">
         </ui-button>
     </ng-container>
 
     <ui-form-layout>
-
-        <div class="flex" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-            <div class="flex-auto flex flex-gap">
-                <ui-button label="Flats" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewFlats()">
-                </ui-button>
-                <ui-button label="Parkings" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewParkings()">
-                </ui-button>
-            </div>
-        </div>
 
         <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
             <ui-label [valueText]="pendingBuildingsToAdd" [config]="pendingBuildingsConfig" direction="horizontal"

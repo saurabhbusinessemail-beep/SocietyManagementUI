@@ -1,6 +1,7 @@
-<app-layout [hideMoreActions]="!canAddFlat" [title]="pageTitle" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddFlat" title="Flats"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
 
-    
+
     <ng-container moreActions>
         <ui-button label="Add Flat" type="primary" (clicked)="openAddDialog()">
         </ui-button>

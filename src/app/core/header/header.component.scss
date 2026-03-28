@@ -5,12 +5,12 @@
     // padding: $sp-sm $sp-lg;
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: space-between;
     gap: $sp-lg;
 
     @include mobile {
-        height: 54px;
+        height: 80px;
     }
 
     .left {
@@ -41,7 +41,6 @@
         align-items: center;
         gap: $sp-sm;
         padding: $sp-sm $sp-lg;
-        height: 100%;
     }
 
     .app-logo {

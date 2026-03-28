@@ -7,6 +7,7 @@ import { AnnouncementCategoryTypesText, AnnouncementCategoryTypes, AnnouncementP
 import { LoginService } from '../../../services/login.service';
 import { SocietyRoles } from '../../../types';
 import { Router } from '@angular/router';
+import { SocietyService } from '../../../services/society.service';
 
 @Component({
   selector: 'app-announcement-list',
@@ -128,7 +129,8 @@ export class AnnouncementListComponent implements OnInit {
   constructor(
     private announcementService: AnnouncementService,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    public societyService: SocietyService
   ) { }
 
   ngOnInit(): void {

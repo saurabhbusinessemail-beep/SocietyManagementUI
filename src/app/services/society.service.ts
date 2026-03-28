@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse } from '../interfaces';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
@@ -532,9 +532,9 @@ export class SocietyService {
     })
     myFlats(societyId?: string) {
         if (!societyId)
-            return this.http.get<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myFlats`);
+            return this.http.get<IPagedResponse<IMyFlatResponse>>(`${this.flatsBaseUrl}/myFlats`);
         else
-            return this.http.get<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
+            return this.http.get<IPagedResponse<IMyFlatResponse>>(`${this.flatsBaseUrl}/${societyId}/myFlats`);
     }
 
     // Get flat and its member details

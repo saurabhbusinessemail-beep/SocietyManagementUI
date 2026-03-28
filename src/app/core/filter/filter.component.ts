@@ -130,7 +130,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   getAllFields(): string[] {
     const formValue = this.filterFormGroup?.value;
-    return Object.keys(formValue ?? {})
+    return Object.keys(formValue ?? {}).filter(k => k !== 'societyId')
   }
 
   getFieldLabel(colId: string) {

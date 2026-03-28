@@ -4,7 +4,7 @@ import { IFlatMember } from '../../../interfaces';
 @Component({
   selector: 'ui-my-flat-member-card',
   templateUrl: './my-flat-member-card.component.html',
-  styleUrl: './my-flat-member-card.component.scss'
+  styleUrls: ['./my-flat-member-card.component.scss']
 })
 export class MyFlatMemberCardComponent {
   @Input() member!: IFlatMember;
@@ -12,14 +12,128 @@ export class MyFlatMemberCardComponent {
   @Input() showDelete = false;
   @Input() selectMode = false;
   @Input() selected = false;
+  @Input() plan?: { name: string; price: number; status: string }; // optional plan data
 
   @Output() edit = new EventEmitter<IFlatMember>();
   @Output() delete = new EventEmitter<IFlatMember>();
   @Output() selectedChange = new EventEmitter<boolean>();
   @Output() clicked = new EventEmitter<void>();
 
-  // Helper methods to resolve objects
+  // --- Helper methods for avatar and truncation ---
 
+  truncateText(text: string, maxLength: number = 12): string {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength - 3) + '...';
+  }
+
+  getAvatarColor(): string {
+    const initials = this.getUserInitials();
+    if (!initials || initials === '?') return '#6B6880';
+    let hash = 0;
+    for (let i = 0; i < initials.length; i++) {
+      hash = initials.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+    return '#' + '00000'.substring(0, 6 - color.length) + color;
+  }
+
+  getAvatarBgColor(): string {
+    return this.getAvatarColor() + '18'; // 10% opacity
+  }
+
+  // --- Existing helper methods (preserved) ---
+
+  getUserInitials(): string {
+    const user = this.member.userId;
+    if (user && typeof user === 'object' && 'name' in user && user.name) {
+      const parts = user.name.split(' ');
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+      return user.name.substring(0, 2).toUpperCase();
+    }
+    return '?';
+  }
+
+  getUserName(): string {
+    const user = this.member.userId;
+    if (user && typeof user === 'object' && 'name' in user && user.name) {
+      return user.name;
+    }
+    if (user && typeof user === 'object' && 'email' in user && user.email) {
+      return user.email;
+    }
+    return 'Unknown';
+  }
+
+  getContact(): string {
+    return this.member.contact || '—';
+  }
+
+  getFlatNumber(): string {
+    const flat = this.member.flatId;
+    if (flat && typeof flat === 'object' && 'flatNumber' in flat) {
+      return flat.flatNumber;
+    }
+    return '—';
+  }
+
+  getFlatType(): string {
+    const flat = this.member.flatId;
+    if (flat && typeof flat === 'object' && 'flatType' in flat && flat.flatType) {
+      return flat.flatType;
+    }
+    return '';
+  }
+
+  getFloor(): string {
+    const flat = this.member.flatId;
+    if (flat && typeof flat === 'object' && 'floor' in flat && flat.floor !== undefined) {
+      return String(flat.floor);
+    }
+    return '';
+  }
+
+  getFlatExtra(): string {
+    const type = this.getFlatType();
+    const floor = this.getFloor();
+    if (type && floor) return `${type} · Floor ${floor}`;
+    if (type) return type;
+    if (floor) return `Floor ${floor}`;
+    return '';
+  }
+
+  getSocietyName(): string {
+    const society = this.member.societyId;
+    if (society && typeof society === 'object' && 'societyName' in society) {
+      return society.societyName;
+    }
+    return '—';
+  }
+
+  getSocietyFlatsCount(): number {
+    const society = this.member.societyId;
+    if (society && typeof society === 'object' && 'numberOfFlats' in society) {
+      return society.numberOfFlats;
+    }
+    return 0;
+  }
+
+  getDocumentList(): any[] {
+    return this.member.documents || [];
+  }
+
+  getDocumentCount(): number {
+    return this.getDocumentList().length;
+  }
+
+  getDocumentDisplayName(doc: any): string {
+    // Assuming document has a name or filename property
+    return doc.name || doc.filename || 'doc';
+  }
+
+  
   getFlatDisplay(): string {
     const flat = this.member.flatId;
     if (!flat) return '—';

@@ -1,4 +1,4 @@
-<app-layout title="Members">
+<app-layout title="Members" [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
         <ui-button label="New Member" type="primary" routerLink="../add">
         </ui-button>

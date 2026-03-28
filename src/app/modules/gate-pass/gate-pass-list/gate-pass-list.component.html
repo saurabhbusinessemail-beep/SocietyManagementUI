@@ -1,4 +1,4 @@
-<app-layout title="Gate Pass">
+<app-layout title="Gate Pass" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
         <ui-button label="Add Pass" type="primary" routerLink="../add">

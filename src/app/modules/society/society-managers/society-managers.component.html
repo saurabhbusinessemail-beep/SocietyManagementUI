@@ -1,10 +1,11 @@
-<app-layout [hideMoreActions]="!canAddSocietyManager" [title]="managerName" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddSocietyManager" title="Managers" [subTitle]="this.society?.societyName"
+    [showBackButton]="true">
 
     <ng-container moreActions>
         <ui-button label="Add Manager" type="primary" (clicked)="openAddDialog()">
         </ui-button>
     </ng-container>
-    
+
     <ui-form-layout>
 
         <!-- Multi Select -->

@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!canAddSocietyAdmin" [title]="adminName" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddSocietyAdmin" title="Admins" [subTitle]="this.society?.societyName" [showBackButton]="true">
 
     <ng-container moreActions>
         <ui-button label="Add Admin" type="primary" (clicked)="openAddDialog()">

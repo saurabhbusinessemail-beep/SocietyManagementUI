@@ -26,7 +26,7 @@
             </ng-container>
 
 
-            <ng-container *ngIf="role">
+            <div *ngIf="role" class="user-form-controls ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="2" >
 
                 <!-- Society -->
                 <div class="no-mobile no-tablet" [lgColumns]="3"></div>
@@ -124,7 +124,7 @@
 
                 </section>
 
-            </ng-container>
+            </div>
 
         </ui-form-layout>
 
@@ -134,7 +134,7 @@
             *ngIf="!role && societies.length > 0">
 
             <ng-container *ngFor="let s of societies">
-                <ui-circular-display [label]="s.societyName" [smColumns]="4" [mdColumns]="3" [lgColumns]="2" (onClicked)="handleSocietyClick(s)">
+                <ui-circular-display [label]="s.societyName" [smColumns]="6" [mdColumns]="3" [lgColumns]="2" (onClicked)="handleSocietyClick(s)">
                 </ui-circular-display>
             </ng-container>
 

@@ -1,8 +1,7 @@
 <footer class="app-footer">
-    <div class="center">
 
-        <app-icon size="xxl" name="back" (click)="handleBackButtonClick()">
-        </app-icon>
+    <ng-container *ngFor="let menu of topTwoMenus">
+        <app-icon [name]="menu.icon ?? ''" size="xl" (click)="navigateToMenu(menu)"></app-icon>
+    </ng-container>
 
-    </div>
 </footer>

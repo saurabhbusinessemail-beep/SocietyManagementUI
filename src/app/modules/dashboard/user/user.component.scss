@@ -36,6 +36,20 @@
             text-align: center;
         }
     }
+
+    .user-form-controls {
+        @include mobile {
+            padding: $input-padding-mobile;
+        }
+
+        @include tablet {
+            padding: $input-padding-desktop;
+        }
+
+        @include desktop {
+            padding: $input-padding-desktop;
+        }
+    }
 }
 
 .empty-societies-placeholder {

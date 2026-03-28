@@ -10,6 +10,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DropDownControl } from '../../../types';
 import { VehicleTypeList } from '../../../constants';
 import { VehicleService } from '../../../services/vehicle.service';
+import { SocietyService } from '../../../services/society.service';
 
 interface IVehicleFilter {
   flatId?: string
@@ -88,7 +89,8 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     private dialog: MatDialog,
     dialogService: DialogService,
     private windowService: WindowService,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    public societyService: SocietyService
   ) {
     super(dialogService);
   }

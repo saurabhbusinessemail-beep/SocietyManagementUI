@@ -53,12 +53,6 @@ export class SocietyAdminsComponent extends ListBase implements OnDestroy {
     { label: 'By Contact', value: 'contact' }
   ];
 
-  get adminName(): string {
-    if (!this.society) return 'Admins';
-
-    return 'Admins: ' + this.society.societyName;
-  }
-
   get showUserSearch(): boolean {
     return this.radioFormControl.value === 'user' ? true : false;
   }

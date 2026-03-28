@@ -15,12 +15,12 @@
 
     <ui-form-layout>
 
-        <ui-select2 [formControl]="societiesSearchConfig.formControl" [config]="societiesSearchConfig"
+        <!-- <ui-select2 [formControl]="societiesSearchConfig.formControl" [config]="societiesSearchConfig"
             [options]="societiesSearchConfig.dropDownOptions ?? []" placeholder="Search Society"
             (searchChange)="onSocietySearch($event)" [smColumns]="societyControlSizes[0]"
             [mdColumns]="societyControlSizes[1]" [lgColumns]="societyControlSizes[2]"
             *ngIf="societiesSearchConfig.formControl && showSocietySearch">
-        </ui-select2>
+        </ui-select2> -->
 
         <ui-select2 [formControl]="flatSearchConfig.formControl" [config]="flatSearchConfig"
             [options]="flatSearchConfig.dropDownOptions ?? []" placeholder="Search Flat"

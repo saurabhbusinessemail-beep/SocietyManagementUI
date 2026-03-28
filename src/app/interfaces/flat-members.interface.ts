@@ -22,3 +22,7 @@ export interface IFlatMember extends IDefaultFields {
     documents: any;
     status: 'active' | 'expired' | 'terminated'
 }
+
+export interface IMyFlatResponse extends IFlatMember {
+    tenant?: IFlatMember;
+}

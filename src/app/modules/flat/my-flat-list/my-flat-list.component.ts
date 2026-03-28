@@ -15,15 +15,17 @@ export class MyFlatListComponent implements OnInit {
   society?: ISociety;
   flatMembers: IFlatMember[] = [];
 
-  get pageTitle(): string {
-    return (this.society ? this.society.societyName : 'My') + ' Flats';
-  }
-
   constructor(private societyService: SocietyService, private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit() {
-    this.societyId = this.route.snapshot.paramMap.get('id') ?? this.societyService.selectedSocietyFilterValue?.value;
+    this.societyId = this.route.snapshot.paramMap.get('id')!;
+
+    if (this.societyService.selectedSocietyFilterValue?.value && !this.societyId) {
+      this.router.navigateByUrl(`myflats/${this.societyService.selectedSocietyFilterValue?.value}/list`);
+
+    }
+
     if (this.societyId) {
       this.loadSociety(this.societyId);
     }
@@ -36,6 +38,9 @@ export class MyFlatListComponent implements OnInit {
       .subscribe({
         next: response => {
           this.society = response;
+          if (!this.societyService.selectedSocietyFilterValue?.value && this.society) {
+            this.societyService.selectSocietyFilter({ label: this.society.societyName, value: this.society._id });
+          }
         }
       })
   }

@@ -5,6 +5,7 @@ import { GatePassService } from '../../../services/gate-pass.service';
 import { MatDialog } from '@angular/material/dialog';
 import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
 import { DialogService } from '../../../services/dialog.service';
+import { SocietyService } from '../../../services/society.service';
 
 interface IGatePassFilter {
   societyId?: string, flatId?: string
@@ -26,7 +27,8 @@ export class GatePassListComponent implements OnInit, OnDestroy {
   constructor(
     private gatepassService: GatePassService,
     private dialog: MatDialog,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    public societyService: SocietyService
   ) { }
 
   ngOnInit(): void {

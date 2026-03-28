@@ -5,7 +5,8 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { GateEntryStatus, UILabelValueType } from '../../../types';
 import { FormControl } from '@angular/forms';
 import { LoginService } from '../../../services/login.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SocietyService } from '../../../services/society.service';
 
 interface IVisitorFilter {
   societyId?: string, flatId?: string, createdOn?: Date
@@ -37,7 +38,8 @@ export class VisitorListComponent implements OnInit {
   constructor(
     private gateEntryService: GateEntryService,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    public societyService: SocietyService
   ) { }
 
   ngOnInit(): void {

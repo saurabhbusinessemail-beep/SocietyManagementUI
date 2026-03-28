@@ -93,12 +93,6 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
     managerId: new FormControl<ISelectedUser | null>({ value: null, disabled: true }, [Validators.required])
   });
 
-  get pageTitle(): string | undefined {
-    if (!this.society) return 'Buildings';
-
-    return 'Buildings: ' + this.society.societyName
-  }
-
   get showUserSearch(): boolean {
     return this.radioFormControl.value === 'user' ? true : false;
   }
@@ -148,7 +142,7 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
 
   constructor(
     private loginService: LoginService,
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,

@@ -1,4 +1,4 @@
-<app-layout title="Vehicles">
+<app-layout title="Vehicles" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
         <ui-button label="New Vehicle" type="primary" (clicked)="openAddDialog()" [smColumns]="1" [mdColumns]="1"

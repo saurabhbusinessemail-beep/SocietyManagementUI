@@ -1,4 +1,4 @@
-<app-layout title="Tenant Management">
+<app-layout title="Tenant Management" [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
         <ui-button label="New Tenant" type="primary" routerLink="../add">
         </ui-button>

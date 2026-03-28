@@ -27,11 +27,19 @@ app-footer {
     justify-content: space-between;
 
     h1 {
-        font-size: 1.2rem;
+        font-size: 0.8rem;
         font-weight: 600;
         color: $color-black;
         margin: 0;
         color: $color-dark-blue;
+
+        @include tablet {
+            font-size: 1rem;
+        }
+
+        @include desktop {
+            font-size: 1.3rem;
+        }
     }
 
     .header-actions {

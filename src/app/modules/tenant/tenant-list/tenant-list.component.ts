@@ -18,7 +18,7 @@ export class TenantListComponent implements OnInit {
   selectedFIlter: ITenantsFilter = {};
   tenants: IFlatMember[] = [];
 
-  constructor(private societyService: SocietyService, private dialogService: DialogService) { }
+  constructor(public societyService: SocietyService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
 
