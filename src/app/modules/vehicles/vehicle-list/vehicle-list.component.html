@@ -1,9 +1,12 @@
 <app-layout title="Vehicles" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
-        <ui-button label="New Vehicle" type="primary" (clicked)="openAddDialog()" [smColumns]="1" [mdColumns]="1"
+        <!-- <ui-button label="New Vehicle" type="primary" (clicked)="openAddDialog()" [smColumns]="1" [mdColumns]="1"
             [lgColumns]="1">
-        </ui-button>
+        </ui-button> -->
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="openAddDialog()">New Vehicle</li>
+        </ul>
     </ng-container>
 
 
