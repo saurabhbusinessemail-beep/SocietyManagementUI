@@ -2,11 +2,10 @@
 @import '../../../styles/mixins';
 
 .filter-container {
-    padding: $sp;
-    background-color: $color-light-gray;
-    border-radius: $btn-border-radius-lg;
-    border: solid 1px $color-border;
-    margin-bottom: $sp-md;
+    padding-top: $sp;
+    padding-bottom: $sp;
+    background-color: $color-white;
+    border: 0px;
 
     .selected-filter-info {
         display: grid;
@@ -17,10 +16,19 @@
             ui-label {
                 white-space: nowrap;
             }
+
             label {
                 border-left: solid 1px $color-sky;
                 padding-left: 5px;
             }
         }
+    }
+
+    &.opened {
+        padding: $sp;
+        background-color: $color-light-gray;
+        border-radius: $btn-border-radius-lg;
+        margin-bottom: $sp-md;
+        border: solid 1px $color-border;
     }
 }
