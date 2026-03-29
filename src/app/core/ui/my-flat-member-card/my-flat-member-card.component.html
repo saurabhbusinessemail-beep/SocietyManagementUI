@@ -1,56 +1,150 @@
-<div class="flat-member-card" (click)="clicked.emit()">
-    <!-- Selection checkbox (if selectMode) -->
+<div class="flat-member-card" [class.disabled]="isDisabled" (click)="onCardClick()">
+    <!-- Selection checkbox -->
     <div class="selection-overlay" *ngIf="selectMode">
         <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)"
             (click)="$event.stopPropagation()">
     </div>
 
     <div class="card-container">
-        <!-- Header with avatar and info -->
+        <!-- Header: Title + Status Badge -->
         <div class="card-header">
-            <div class="avatar" [style.background-color]="getAvatarBgColor()" [style.color]="getAvatarColor()">
-                {{ getUserInitials() }}
+            <div>
+                <h3 class="flat-title">{{ getFlatNumber() }}</h3>
+                <p class="scenario-label" *ngIf="isOwnerWithTenant">My flat is rented.</p>
+                <p class="scenario-label" *ngIf="member.isOwner && member.residingType === 'Self'">It's My Flat</p>
+                <p class="scenario-label" *ngIf="member.isOwner && member.residingType === 'Vacant'">Myflat is vaccant
+                </p>
+                <p class="scenario-label" *ngIf="member.isTenant && !isTenantOrMember && showTenantMessage">Renting this
+                    flat</p>
+                <p class="scenario-label" *ngIf="member.isTenantMember">Renting this flat</p>
             </div>
-            <div class="info">
-                <div class="name-row">
-                    <div class="name-details">
-                        <p class="name">{{ getUserName() }}</p>
-                        <p class="contact">{{ getContact() }}</p>
-                    </div>
-                    <span class="status-badge" [ngClass]="member.status">
-                        {{ member.status }}
-                    </span>
+            <span class="status-badge" [ngClass]="statusBadgeClass">{{ statusBadgeText }}</span>
+        </div>
+
+        <!-- Context Messages -->
+        <div class="context-message" *ngIf="showVacantMessage">
+            <p class="message vacant">This flat is currently vacant</p>
+        </div>
+        <div class="context-message" *ngIf="showSelfMessage">
+            <p class="message self">Currently I am residing in this flat</p>
+        </div>
+        <div class="context-message" *ngIf="showTenantMessage">
+            <p class="message tenant">Currently I am residing in this flat</p>
+        </div>
+        <div class="context-message" *ngIf="showTenantExpiredMessage">
+            <p class="message expired">Owner has started living here. You are no longer living here.</p>
+        </div>
+        <div class="context-message" *ngIf="showOtherTenantMessage">
+            <p class="message expired">Another tenant is currently living in this flat.</p>
+        </div>
+
+        <!-- Flat & Society Information (two columns) -->
+        <div class="info-grid">
+            <!-- Flat Information -->
+            <div class="info-card flat-info">
+                <div class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                        <path
+                            d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    </svg>
+                </div>
+                <div class="content">
+                    <p class="label">Flat Information</p>
+                    <p class="value">Floor {{ getFloor() }}<span *ngIf="getBuildingName()">, Building {{
+                            getBuildingName() }}</span></p>
+                </div>
+            </div>
+
+            <!-- Society Information -->
+            <div class="info-card society-info">
+                <div class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                        <path d="M9 22v-4h6v4" />
+                        <path d="M8 6h.01" />
+                        <path d="M16 6h.01" />
+                        <path d="M12 6h.01" />
+                        <path d="M12 10h.01" />
+                        <path d="M12 14h.01" />
+                        <path d="M16 10h.01" />
+                        <path d="M16 14h.01" />
+                        <path d="M8 10h.01" />
+                        <path d="M8 14h.01" />
+                    </svg>
+                </div>
+                <div class="content">
+                    <p class="label">Society Information</p>
+                    <p class="value">{{ getSocietyName() }}</p>
+                    <p class="extra">{{ getSocietyBuildingsCount() }} Buildings, {{ getSocietyFlatsCount() }} Flats</p>
                 </div>
             </div>
         </div>
 
-        <!-- Role badges (residingType + boolean flags) -->
-        <div class="roles">
-            <span *ngIf="member.residingType" class="role-badge" [ngClass]="member.residingType.toLowerCase()">
-                Currently Residing: {{ member.residingType }}
-            </span>
-            <span *ngIf="member.isOwner" class="role-badge owner">I am Owner</span>
-            <span *ngIf="member.isTenant" class="role-badge tenant">I am Tenant</span>
-            <span *ngIf="member.isMember" class="role-badge member">I am Member</span>
-            <span *ngIf="member.isTenantMember" class="role-badge tenant-member">I am Tenant Member</span>
+        <!-- Owner Information -->
+        <div class="owner-section" *ngIf="showOwnerInfo">
+            <div class="section-header">
+                <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg></div>
+                <h4>Owner Information</h4>
+            </div>
+            <div class="user-details">
+                <div class="avatar" [style.background-color]="getAvatarBgColor(ownerUser)"
+                    [style.color]="getAvatarColor(ownerUser)">
+                    {{ getUserInitials(ownerUser) }}
+                </div>
+                <div class="info">
+                    <p class="name">{{ getUserName(ownerUser) }}</p>
+                    <div class="contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>{{ getContact(ownerUser) }}</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Flat & Society info (grid) -->
-        <div class="details-grid">
-            <div class="flat-info-card">
-                <p class="label">Flat</p>
-                <p class="value">{{ getFlatNumber() }}</p>
-                <p class="extra">{{ getFlatExtra() }}</p>
+        <!-- Tenant Information (hidden for previous tenants to protect privacy) -->
+        <div class="tenant-section" *ngIf="showTenantInfo">
+            <div class="section-header">
+                <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg></div>
+                <h4>Tenant Information</h4>
             </div>
-            <div class="society-info-card">
-                <p class="label">Society</p>
-                <p class="value">{{ getSocietyName() }}</p>
-                <p class="extra">{{ getSocietyFlatsCount() }} flats</p>
+            <div class="user-details">
+                <div class="avatar" [style.background-color]="getAvatarBgColor(tenantUser)"
+                    [style.color]="getAvatarColor(tenantUser)">
+                    {{ getUserInitials(tenantUser) }}
+                </div>
+                <div class="info">
+                    <p class="name">{{ getUserName(tenantUser) }}</p>
+                    <div class="contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>{{ getContact(tenantUser) }}</div>
+                    <div class="lease" *ngIf="member.tenant?.leaseStart && member.tenant?.leaseEnd">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M8 2v4" />
+                            <path d="M16 2v4" />
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <path d="M3 10h18" />
+                        </svg>
+                        Lease: {{ leaseStartDate }} – {{ leaseEndDate }}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Lease details (if tenant) -->
-        <div class="lease-card" *ngIf="member.isTenant && member.leaseStart && member.leaseEnd">
+        <!-- Lease details for the current user if they are a tenant (simple case) -->
+        <div class="lease-card"
+            *ngIf="member.isTenant && member.leaseStart && member.leaseEnd && !showTenantInfo && !isPreviousTenantWithOtherTenant">
             <div class="lease-header">
                 <span class="lease-title">Lease Period</span>
                 <span class="rent-amount" *ngIf="member.rentAmount">{{ member.rentAmount | currency:'INR' }}/mo</span>
@@ -59,14 +153,13 @@
                 }}</p>
         </div>
 
-        <!-- Plan card (if plan input provided) -->
+        <!-- Plan card -->
         <div class="plan-card" *ngIf="plan">
             <div class="plan-header">
                 <div class="plan-name">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path
-                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
-                        </path>
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
                     <span>{{ plan.name }}</span>
                 </div>
@@ -79,9 +172,9 @@
 
         <!-- Documents section -->
         <div class="documents-section" *ngIf="getDocumentCount() > 0">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
             </svg>
             <span>{{ getDocumentCount() }} document{{ getDocumentCount() !== 1 ? 's' : '' }}</span>
             <div class="document-tags">
@@ -93,7 +186,7 @@
             </div>
         </div>
 
-        <!-- Optional actions (edit/delete) -->
+        <!-- Actions -->
         <div class="actions" *ngIf="showEdit || showDelete">
             <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
             <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>

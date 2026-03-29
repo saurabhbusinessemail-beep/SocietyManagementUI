@@ -20,9 +20,10 @@ export interface IFlatMember extends IDefaultFields {
     leaseEnd?: Date;
     rentAmount?: number;
     documents: any;
-    status: 'active' | 'expired' | 'terminated'
+    status: 'active' | 'expired' | 'terminated';
 }
 
 export interface IMyFlatResponse extends IFlatMember {
     tenant?: IFlatMember;
+    owner?: IFlatMember
 }

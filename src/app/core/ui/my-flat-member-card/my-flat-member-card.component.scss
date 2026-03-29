@@ -11,7 +11,7 @@
     cursor: pointer;
 
     &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
 
     .selection-overlay {
@@ -20,7 +20,7 @@
         left: $sp-sm;
         z-index: 1;
 
-        input[type="checkbox"] {
+        input[type='checkbox'] {
             width: 18px;
             height: 18px;
             cursor: pointer;
@@ -34,214 +34,259 @@
         @include tablet {
             padding: $sp-lg;
         }
+
+        @include desktop {
+            padding: $sp-lg;
+        }
     }
 
+    // Header with title and badge
     .card-header {
         display: flex;
+        justify-content: space-between;
         align-items: flex-start;
-        gap: $sp-md;
         margin-bottom: $sp-md;
+        flex-wrap: wrap;
+        gap: $sp-sm;
 
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: $btn-border-radius-md;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: $font-family-base;
-            font-weight: 700;
-            font-size: $font-size-sm;
-            flex-shrink: 0;
-            background: rgba(184, 137, 58, 0.1);
-            color: #b8893a;
-        }
+        .flat-title {
+            font-size: $font-size-xl;
+            font-weight: 500;
+            color: #344e41;
+            margin: 0 0 $sp-xs 0;
 
-        .info {
-            flex: 1;
-            min-width: 0;
-
-            .name-row {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                gap: $sp-sm;
-
-                .name-details {
-                    min-width: 0;
-
-                    .name {
-                        font-weight: 700;
-                        font-size: $font-size-base;
-                        color: #111118;
-                        margin: 0 0 $sp-xs 0;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-
-                    .contact {
-                        font-size: $font-size-xs;
-                        color: #6b6880;
-                        margin: 0;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-                }
-
-                .status-badge {
-                    font-size: 10px;
-                    font-weight: 600;
-                    padding: $sp-xs $sp-sm;
-                    border-radius: 20px;
-                    text-transform: capitalize;
-                    flex-shrink: 0;
-
-                    &.active {
-                        background-color: $status-active;
-                        color: $color-white;
-                    }
-
-                    &.expired {
-                        background-color: $status-expired;
-                        color: $color-white;
-                    }
-
-                    &.terminated {
-                        background-color: $status-rejected;
-                        color: $color-white;
-                    }
-                }
+            @include mobile {
+                font-size: $font-size-lg;
             }
         }
-    }
 
-    .roles {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: $sp-md;
+        .scenario-label {
+            font-size: $font-size-xs;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+            color: #5c6d63;
+            margin: 0;
+        }
 
-        .role-badge {
+        .status-badge {
             font-size: 10px;
             font-weight: 600;
             padding: $sp-xs $sp-sm;
             border-radius: 20px;
-            background-color: $color-light-gray;
-            color: $color-dark-blue;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
 
-            &.self {
+            &.status-self {
                 background-color: $status-active;
                 color: $color-white;
             }
 
-            &.tenant {
+            &.status-tenant {
                 background-color: $status-pending;
                 color: $color-white;
             }
 
-            &.vacant {
+            &.status-vacant {
                 background-color: $status-inactive;
                 color: $color-white;
             }
-
-            &.owner {
-                background-color: rgba(37, 99, 235, 0.1);
-                color: #2563eb;
-                border: 1px solid rgba(37, 99, 235, 0.2);
-            }
-
-            &.member {
-                background-color: rgba(22, 163, 74, 0.1);
-                color: #16a34a;
-                border: 1px solid rgba(22, 163, 74, 0.2);
-            }
-
-            &.tenant-member {
-                background-color: rgba(217, 119, 6, 0.1);
-                color: #d97706;
-                border: 1px solid rgba(217, 119, 6, 0.2);
-            }
         }
     }
 
-    .details-grid {
+    // Context message (vacant/self/tenant)
+    .context-message {
+        border-radius: $btn-border-radius-md;
+        padding: $sp-md;
+        margin-bottom: $sp-md;
+
+        .message {
+            font-size: $font-size-sm;
+            font-weight: 500;
+            margin: 0;
+
+            &.vacant {
+                color: #bc4749;
+            }
+
+            &.self {
+                color: #3a5a40;
+            }
+
+            &.tenant {
+                color: #3a5a40;
+            }
+        }
+
+        // Different backgrounds per type (optional, from reference)
+        &:has(.vacant) {
+            background-color: rgba(188, 71, 73, 0.05);
+            border: 1px solid rgba(188, 71, 73, 0.1);
+        }
+
+        &:has(.self),
+        &:has(.tenant) {
+            background-color: rgba(58, 90, 64, 0.05);
+            border: 1px solid rgba(58, 90, 64, 0.1);
+        }
+    }
+
+    // Two-column grid for flat & society info
+    .info-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: $sp-md;
         margin-bottom: $sp-md;
 
-        .flat-info-card,
-        .society-info-card {
-            border-radius: $btn-border-radius-md;
+        @include tablet {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .info-card {
+            display: flex;
+            align-items: flex-start;
+            gap: $sp-sm;
             padding: $sp-md;
-        }
+            border-radius: $btn-border-radius-md;
 
-        .flat-info-card {
-            background: rgba(184, 137, 58, 0.05);
-            border: 1px solid rgba(184, 137, 58, 0.15);
-
-            .label {
-                font-size: 10px;
-                color: #6b6880;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-bottom: $sp-xs;
+            .icon svg {
+                width: 20px;
+                height: 20px;
+                stroke-width: 1.5;
             }
 
-            .value {
-                font-weight: 700;
-                font-size: $font-size-base;
-                color: #b8893a;
-                margin: 0;
+            .content {
+                flex: 1;
+
+                .label {
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2em;
+                    font-weight: 600;
+                    color: #5c6d63;
+                    margin: 0 0 $sp-xs 0;
+                }
+
+                .value {
+                    font-size: $font-size-base;
+                    font-weight: 500;
+                    color: #344e41;
+                    margin: 0;
+                    line-height: 1.4;
+                }
+
+                .extra {
+                    font-size: $font-size-xs;
+                    color: #5c6d63;
+                    margin-top: $sp-xs;
+                }
             }
 
-            .extra {
-                font-size: 10px;
-                color: #6b6880;
-                margin-top: $sp-xs;
-            }
-        }
+            &.flat-info {
+                background-color: rgba(163, 177, 138, 0.1);
+                border: 1px solid rgba(163, 177, 138, 0.2);
 
-        .society-info-card {
-            background: $color-white;
-            border: 1px solid rgba(17, 17, 24, 0.07);
-
-            .label {
-                font-size: 10px;
-                color: #6b6880;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-bottom: $sp-xs;
+                .icon svg {
+                    stroke: #3a5a40;
+                }
             }
 
-            .value {
-                font-weight: 600;
-                font-size: $font-size-xs;
-                color: #111118;
-                line-height: 1.3;
-                margin: 0;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
+            &.society-info {
+                background-color: rgba(221, 161, 94, 0.1);
+                border: 1px solid rgba(221, 161, 94, 0.2);
 
-            .extra {
-                font-size: 10px;
-                color: #6b6880;
-                margin-top: $sp-xs;
+                .icon svg {
+                    stroke: #dda15e;
+                }
             }
         }
     }
 
+    // Owner / Tenant sections
+    .owner-section,
+    .tenant-section {
+        border-top: 1px solid rgba(17, 17, 24, 0.07);
+        padding-top: $sp-md;
+        margin-top: $sp-md;
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+            margin-bottom: $sp-md;
+
+            .icon svg {
+                width: 18px;
+                height: 18px;
+                stroke: #5c6d63;
+            }
+
+            h4 {
+                font-size: $font-size-xs;
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+                font-weight: 600;
+                color: #5c6d63;
+                margin: 0;
+            }
+        }
+
+        .user-details {
+            display: flex;
+            align-items: center;
+            gap: $sp-md;
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: $btn-border-radius-md;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: $font-size-sm;
+                flex-shrink: 0;
+                background: rgba(184, 137, 58, 0.1);
+                color: #b8893a;
+            }
+
+            .info {
+                flex: 1;
+
+                .name {
+                    font-size: $font-size-base;
+                    font-weight: 600;
+                    color: #344e41;
+                    margin: 0 0 $sp-xs 0;
+                }
+
+                .contact,
+                .lease {
+                    display: flex;
+                    align-items: center;
+                    gap: $sp-xs;
+                    font-size: $font-size-xs;
+                    color: #5c6d63;
+                    margin-top: $sp-xs;
+
+                    svg {
+                        width: 12px;
+                        height: 12px;
+                        stroke: #5c6d63;
+                    }
+                }
+            }
+        }
+    }
+
+    // Lease card (simple)
     .lease-card {
         border-radius: $btn-border-radius-md;
         border: 1px solid rgba(124, 58, 237, 0.15);
         background: rgba(124, 58, 237, 0.05);
         padding: $sp-md;
-        margin-bottom: $sp-md;
+        margin-top: $sp-md;
 
         .lease-header {
             display: flex;
@@ -271,12 +316,13 @@
         }
     }
 
+    // Plan card (unchanged)
     .plan-card {
         border-radius: $btn-border-radius-md;
         border: 1px solid rgba(184, 137, 58, 0.15);
         background: rgba(184, 137, 58, 0.05);
         padding: $sp-sm $sp-md;
-        margin-bottom: $sp-md;
+        margin-top: $sp-md;
 
         .plan-header {
             display: flex;
@@ -328,12 +374,13 @@
         }
     }
 
+    // Documents section (unchanged)
     .documents-section {
         display: flex;
         align-items: center;
         gap: $sp-sm;
         flex-wrap: wrap;
-        margin-bottom: $sp-md;
+        margin-top: $sp-md;
 
         svg {
             width: 12px;
@@ -366,6 +413,7 @@
         }
     }
 
+    // Action buttons (unchanged)
     .actions {
         display: flex;
         justify-content: flex-end;
@@ -404,4 +452,31 @@
             }
         }
     }
+}
+
+.flat-member-card.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .selection-overlay input,
+    .actions button {
+        pointer-events: none;
+    }
+}
+
+.flat-member-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    // background-color: $color-disable-background;
+
+    .selection-overlay input,
+    .actions button {
+        pointer-events: none;
+    }
+}
+
+.context-message .message.expired {
+    color: #bc4749;
 }
