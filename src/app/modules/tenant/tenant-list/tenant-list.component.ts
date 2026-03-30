@@ -3,6 +3,7 @@ import { Subject, take } from 'rxjs';
 import { IFlatMember } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { DialogService } from '../../../services/dialog.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface ITenantsFilter {
   societyId?: string, flatId?: string
@@ -17,11 +18,14 @@ export class TenantListComponent implements OnInit {
 
   selectedFIlter: ITenantsFilter = {};
   tenants: IFlatMember[] = [];
+  routeFlatId?: string;
 
-  constructor(public societyService: SocietyService, private dialogService: DialogService) { }
+  constructor(public societyService: SocietyService, private dialogService: DialogService,
+    private route: ActivatedRoute, private router: Router
+  ) { }
 
   ngOnInit(): void {
-
+    this.routeFlatId = this.route.snapshot.paramMap.get('flatId') ?? '';
   }
 
   loadTenants(selectedFIlter: ITenantsFilter) {
@@ -75,5 +79,20 @@ export class TenantListComponent implements OnInit {
           this.loadTenants(this.selectedFIlter)
         }
       })
+  }
+
+  async openAddTenant() {
+    console.log('this.selectedFIlter.societyId = ', this.selectedFIlter);
+    const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
+    const flatId = this.routeFlatId ?? this.selectedFIlter.flatId;
+
+    if (societyId && flatId)
+      this.router.navigate(['tenants', societyId, 'add', flatId]);
+    else if (societyId)
+      this.router.navigate(['tenants', societyId, 'add']);
+    else if (flatId)
+      this.router.navigate(['tenants', 'add', flatId]);
+    else
+      this.router.navigate(['tenants', 'add']);
   }
 }

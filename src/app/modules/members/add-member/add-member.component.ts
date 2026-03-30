@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { SocietyService } from '../../../services/society.service';
 import { NewUserService } from '../../../services/new-user.service';
 import { take } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-member',
@@ -43,6 +44,9 @@ export class AddMemberComponent implements OnInit {
       required: 'Select any flat'
     }
   };
+
+  routeSocietyId?: string;
+  routeFlatId?: string;
 
   flatMembers: IFlatMember[] = [];
   flatOptions: IUIDropdownOption[] = [];
@@ -87,12 +91,15 @@ export class AddMemberComponent implements OnInit {
   constructor(
     private location: Location,
     private societyService: SocietyService,
-    private newUserService: NewUserService
+    private newUserService: NewUserService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     const societyId = this.societyService.selectedSocietyFilterValue?.value;
-    this.loadAllMyFlats(societyId);
+    this.routeSocietyId = this.route.snapshot.paramMap.get('id') ?? this.societyService.selectedSocietyFilterValue?.value;
+    this.routeFlatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
+    this.loadAllMyFlats(this.routeSocietyId ?? societyId);
   }
 
   loadAllMyFlats(societyId?: string) {
@@ -104,8 +111,16 @@ export class AddMemberComponent implements OnInit {
 
         this.flatMembers = response.data;
         this.flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
+
         if (this.flatOptions.length > 0) {
-          this.flatControl.setValue(this.flatOptions[0]);
+          if (this.routeFlatId) {
+            const flat = this.flatOptions.find(f => f.value === this.routeFlatId);
+            if (flat) {
+              this.flatControl?.setValue(flat);
+              this.flatControl?.disable();
+            }
+          } else
+            this.flatControl?.setValue(this.flatOptions[0]);
         }
       });
   }

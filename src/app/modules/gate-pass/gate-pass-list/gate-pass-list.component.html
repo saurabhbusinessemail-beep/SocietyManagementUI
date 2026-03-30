@@ -1,8 +1,6 @@
 <app-layout title="Gate Pass" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
-        <!-- <ui-button label="Add Pass" type="primary" routerLink="../add">
-        </ui-button> -->
 
         <ul class="page-menu-list">
             <li class="page-menu" (click)="openAddGatePass()">New Pass</li>
@@ -11,7 +9,7 @@
 
     <div class="flex-col full-h">
         <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [loadFirstSociety]="true" [loadFirstFlat]="true"
-            [supressAdminManageFlats]="true" [loadFirstSociety]="true"
+            [supressAdminManageFlats]="true" [loadFirstSociety]="true" [selectedFlatId]="routeFlatId"
             (filterChanged)="handleSelectedFilterChanged($event)">
         </app-filter>
 
@@ -26,7 +24,7 @@
             </ng-container>
 
             <ng-container *ngIf="gatepasses.length === 0">
-                <app-empty-records singular="gate pass" plural="gate passes" routerLink="../add" [smColumns]="12"
+                <app-empty-records singular="gate pass" plural="gate passes" (addClicked)="openAddGatePass()" [smColumns]="12"
                     [mdColumns]="12" [lgColumns]="12">
                     <app-icon icon name="gatepass" size="xxl"></app-icon>
                 </app-empty-records>

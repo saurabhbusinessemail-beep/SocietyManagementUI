@@ -19,7 +19,7 @@ export class DialogService {
   constructor(private dialog: MatDialog) { }
 
 
-  showConfirmation(data: IConfirmationPopupDataConfig): Observable<any> {
+  showConfirmation(data: IConfirmationPopupDataConfig, timeout = 3000 ): Observable<any> {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
@@ -32,7 +32,7 @@ export class DialogService {
 
     setTimeout(() => {
       this.dialogRef?.close();
-    }, 3000);
+    }, timeout);
 
     this.dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
       this.dialogRef = undefined;

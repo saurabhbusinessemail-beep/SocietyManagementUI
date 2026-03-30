@@ -14,11 +14,19 @@ const routes: Routes = [
     component: GatePassListComponent
   },
   {
+    path: ':flatId/list',
+    component: GatePassListComponent
+  },
+  {
     path: 'add',
     component: AddGatePassComponent
   },
   {
     path: ':id/add',
+    component: AddGatePassComponent
+  },
+  {
+    path: ':id/add/:flatId',
     component: AddGatePassComponent
   },
 ];

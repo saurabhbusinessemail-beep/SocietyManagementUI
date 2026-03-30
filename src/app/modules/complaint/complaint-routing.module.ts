@@ -15,6 +15,10 @@ const routes: Routes = [
     component: ComplaintListComponent,
   },
   {
+    path: ':flatId/list',
+    component: ComplaintListComponent,
+  },
+  {
     path: 'filter',
     component: ComplaintFilterComponent,
   },

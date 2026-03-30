@@ -33,6 +33,7 @@ export class AddGatePassComponent implements OnInit {
   radioFormControl = new FormControl<string>('user');
 
   societyId?: string;
+  flatId?: string;
 
   flatMembers: IFlatMember[] = [];
   flatOptions: IUIDropdownOption[] = [];
@@ -127,6 +128,7 @@ export class AddGatePassComponent implements OnInit {
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id') ?? undefined;
+    this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
     this.loadAllMyFlats(this.societyId);
   }
 
@@ -140,7 +142,14 @@ export class AddGatePassComponent implements OnInit {
         this.flatMembers = response.data;
         this.flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
         if (this.flatOptions.length > 0) {
-          this.fb.get('flat')?.setValue(this.flatOptions[0]);
+          if (this.flatId) {
+            const flat = this.flatOptions.find(f => f.value === this.flatId);
+            if (flat) {
+              this.fb.get('flat')?.setValue(flat);
+              this.fb.get('flat')?.disable();
+            }
+          } else
+            this.fb.get('flat')?.setValue(this.flatOptions[0]);
         }
       });
   }

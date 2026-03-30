@@ -1,24 +1,6 @@
 <app-layout [hideMoreActions]="true" [title]="pageTitle" [showBackButton]="true">
     <div class="flat-details-container">
 
-        <!-- Plan Info Banner (if plan exists) -->
-        <!-- <div class="plan-banner" *ngIf="currentPlan">
-            <span class="plan-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z" />
-                </svg>
-                Plan: {{ getPlanDisplayName() }}
-            </span>
-            <span class="plan-duration" *ngIf="getPlanDurationDisplay()">
-                ({{ getPlanDurationDisplay() }})
-            </span>
-            <span class="plan-usage" *ngIf="currentPlan.usage">
-                • {{ currentPlan.usage.remainingDays }} days remaining
-            </span>
-        </div> -->
-
         <!-- Loading State -->
         <div class="loading-state" *ngIf="!featuresLoaded">
             <div class="spinner"></div>
@@ -411,6 +393,68 @@
                             </div>
                         </div>
                     </ng-template>
+
+                    <!-- Tenant Section -->
+                    <ng-container *ngIf="isTenantResiding">
+                        <div class="section-card"
+                            *ngIf="tenantManagementFeatureAvailable; else tenantFeatureNotAvailable">
+                            <div class="section-header">
+                                <div class="section-title-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                                        <path d="M6 6h12v3h-4v9h-4V9H6V6z" />
+                                    </svg>
+                                    <h3 class="section-title">Tenant</h3>
+                                </div>
+                                <button class="manage-btn" (click)="manageTenants()">
+                                    Manage
+                                    <app-icon name="goto" size="md"></app-icon>
+                                </button>
+                            </div>
+                            <div class="parking-list" *ngIf="tenants.length; else notenant">
+                                <div class="parking-item" *ngFor="let tenant of tenants">
+                                    <span class="parking-number">{{ tenant.name }}</span>
+                                    <span class="parking-type">{{ tenant.contact }}</span>
+                                </div>
+                            </div>
+                            <ng-template #notenant>
+                                <div class="empty-state">No tenant present.</div>
+                            </ng-template>
+                        </div>
+                        <ng-template #tenantFeatureNotAvailable>
+                            <div class="section-card feature-unavailable">
+                                <div class="section-header">
+                                    <div class="section-title-wrapper">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="18" height="18" x="3" y="3" rx="2" />
+                                            <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
+                                        </svg>
+                                        <h3 class="section-title">Tenant</h3>
+                                    </div>
+                                </div>
+                                <div class="unavailable-content">
+                                    <div class="locked-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 6 6 18" />
+                                            <path d="m6 6 12 12" />
+                                        </svg>
+                                    </div>
+                                    <p>Your current plan does not support Tenant management.</p>
+                                    <button class="upgrade-btn" (click)="gotoPlanUpgrade()"
+                                        [disabled]="!canUpdateSociety">
+                                        Upgrade Plan
+                                        <app-icon name="upgrade" size="sm"></app-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-container>
                 </div>
 
                 <!-- Right Column -->

@@ -98,55 +98,7 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
   ngOnInit() {
     this.flatId = this.route.snapshot.paramMap.get('flatId')!;
     this.subscribeToFilterChanged();
-    this.waitToSelectFlatUntillFlatListLoaded()
-      .then(res => {
-        if (this.flatId) {
-          this.selectFlatAndDisable(this.flatId);
-        }
-      })
-      .catch(err => { });
   }
-
-  waitToSelectFlatUntillFlatListLoaded() {
-    return new Promise<void>((resolve, reject) => {
-      // Check if array already has items
-      if (this.flatSearchConfig.dropDownOptions && this.flatSearchConfig.dropDownOptions.length > 0) {
-        resolve();
-        return;
-      }
-
-      // Set timeout
-      const timeoutId = setTimeout(() => {
-        cleanup();
-        reject(); // Resolve on timeout
-      }, 20000); // 20 seconds
-
-      // Subscribe to array changes (if using an observable)
-      // This is one approach - depends on how your array updates
-      const intervalId = setInterval(() => {
-        if (this.flatSearchConfig.dropDownOptions && this.flatSearchConfig.dropDownOptions.length > 0) {
-          cleanup();
-          resolve();
-        }
-      }, 100); // Check every 100ms
-
-      // Cleanup function
-      const cleanup = () => {
-        clearTimeout(timeoutId);
-        clearInterval(intervalId);
-      };
-    });
-  }
-
-  selectFlatAndDisable(flatId: string) {
-    const selectedFlat = this.flatSearchConfig.dropDownOptions?.find(ddo => ddo.value === flatId)
-    if (!selectedFlat) return;
-
-    this.flatSearchConfig.formControl?.setValue(selectedFlat, { emitEvent: false });
-    this.flatSearchConfig.formControl?.disable();
-    this.societiesSearchConfig.formControl?.disable();
-  }
-
   handleFilterChange(selectedFilter: IVehicleFilter) {
     this.selectedFilterChanged.next(selectedFilter);
   }

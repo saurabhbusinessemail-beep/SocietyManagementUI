@@ -14,7 +14,23 @@ const routes: Routes = [
     component: MembersListComponent,
   },
   {
+    path: ':flatId/list',
+    component: MembersListComponent,
+  },
+  {
     path: 'add',
+    component: AddMemberComponent,
+  },
+  {
+    path: ':id/add',
+    component: AddMemberComponent,
+  },
+  {
+    path: ':id/add/:flatId',
+    component: AddMemberComponent,
+  },
+  {
+    path: 'add/:flatId',
     component: AddMemberComponent,
   },
 ];

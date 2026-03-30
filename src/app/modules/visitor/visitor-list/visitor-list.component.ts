@@ -24,6 +24,7 @@ export class VisitorListComponent implements OnInit {
   flatOptions: IUIDropdownOption[] = [];
 
   myProfile?: IMyProfile;
+  routeFlatId?: string;
   isComponentActive = new Subject<void>();
 
   selectedFIlter: IVisitorFilter = {};
@@ -39,7 +40,8 @@ export class VisitorListComponent implements OnInit {
     private gateEntryService: GateEntryService,
     private loginService: LoginService,
     private router: Router,
-    public societyService: SocietyService
+    public societyService: SocietyService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +50,7 @@ export class VisitorListComponent implements OnInit {
       this.router.navigateByUrl('/');
       return;
     }
+    this.routeFlatId = this.route.snapshot.paramMap.get('flatId') ?? '';
   }
 
   getGateEntryStatusColorName(gateEntry: IGateEntry): string {

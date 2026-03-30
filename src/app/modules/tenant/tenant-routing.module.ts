@@ -14,8 +14,24 @@ const routes: Routes = [
     component: TenantListComponent
   },
   {
+    path: ':flatId/list',
+    component: TenantListComponent
+  },
+  {
     path: 'add',
     component: AddTenantComponent
+  },
+  {
+    path: ':id/add',
+    component: AddTenantComponent,
+  },
+  {
+    path: ':id/add/:flatId',
+    component: AddTenantComponent,
+  },
+  {
+    path: 'add/:flatId',
+    component: AddTenantComponent,
   },
 ];
 

@@ -149,12 +149,15 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
         if (!response.success) return;
 
         this.flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
-        if (this.flatOptions.length === 1) {
-          this.fb.get('flat')?.setValue(this.flatOptions[0]);
-        }
-        else if (this.flatId) {
-          const flat = this.flatOptions.find(f => f.value === this.flatId);
-          if (flat) this.fb.get('flat')?.setValue(flat);
+        if (this.flatOptions.length > 0) {
+          if (this.flatId) {
+            const flat = this.flatOptions.find(f => f.value === this.flatId);
+            if (flat) {
+              this.fb.get('flat')?.setValue(flat);
+              this.fb.get('flat')?.disable();
+            }
+          } else
+            this.fb.get('flat')?.setValue(this.flatOptions[0]);
         }
       });
   }

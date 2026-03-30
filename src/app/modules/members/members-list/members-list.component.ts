@@ -4,6 +4,7 @@ import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
 import { SocietyRoles } from '../../../types';
 import { DialogService } from '../../../services/dialog.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface IMemberFilter {
   societyId?: string, flatId?: string
@@ -18,11 +19,15 @@ export class MembersListComponent implements OnInit {
 
   selectedFIlter: IMemberFilter = {};
   members: IFlatMember[] = [];
+  routeFlatId?: string;
 
-  constructor(public societyService: SocietyService, private dialogService: DialogService) { }
+  constructor(public societyService: SocietyService, private dialogService: DialogService,
+    private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-
+    this.route.params.subscribe(params => {
+      this.routeFlatId = params['flatId'];
+    });
   }
 
   loadMembers(selectedFIlter: IMemberFilter) {
@@ -50,6 +55,21 @@ export class MembersListComponent implements OnInit {
       .subscribe({
         next: () => this.loadMembers(this.selectedFIlter)
       });
+  }
+
+  async openAddMember() {
+    console.log('this.selectedFIlter.societyId = ', this.selectedFIlter);
+    const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
+    const flatId = this.selectedFIlter.flatId;
+
+    if (societyId && flatId)
+      this.router.navigate(['members', societyId, 'add', flatId]);
+    else if (societyId)
+      this.router.navigate(['members', societyId, 'add']);
+    else if (flatId)
+      this.router.navigate(['members', 'add', flatId]);
+    else
+      this.router.navigate(['members', 'add']);
   }
 
   allowDelete(flatMember: IFlatMember): boolean {

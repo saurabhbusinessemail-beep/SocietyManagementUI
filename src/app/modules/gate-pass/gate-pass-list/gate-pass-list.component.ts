@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
 import { DialogService } from '../../../services/dialog.service';
 import { SocietyService } from '../../../services/society.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface IGatePassFilter {
   societyId?: string, flatId?: string
@@ -23,6 +23,7 @@ export class GatePassListComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   gatepasses: IGatePass[] = [];
 
+  routeFlatId?: string;
   selectedFilterChanged = new BehaviorSubject<IGatePassFilter | undefined>(undefined);
 
   constructor(
@@ -30,10 +31,12 @@ export class GatePassListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private dialogService: DialogService,
     public societyService: SocietyService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.routeFlatId = this.route.snapshot.paramMap.get('flatId') ?? '';
     this.subscribeToSelectedFilterChanged();
   }
 
@@ -56,7 +59,7 @@ export class GatePassListComponent implements OnInit, OnDestroy {
 
   async openAddGatePass() {
     const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
-    const flatId = this.selectedFIlter.flatId;
+    const flatId = this.routeFlatId ?? this.selectedFIlter.flatId;
 
     if (societyId && flatId)
       this.router.navigate(['gatepass', societyId, 'add', flatId]);

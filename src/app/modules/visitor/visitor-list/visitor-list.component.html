@@ -3,7 +3,8 @@
 
     <div class="flex-col full-h">
         <app-filter [dateControlConfigs]="[selectedDateControlConfig]" [loadFirstSociety]="true" [loadFirstFlat]="true"
-            [smColumns]="12" [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadGateEntries($event)">
+            [selectedFlatId]="routeFlatId" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            (filterChanged)="loadGateEntries($event)">
 
             <ui-date [formControl]="selectedDateControl" [config]="{id: '', label: 'Date'}" [smColumns]="12"
                 [mdColumns]="2" [lgColumns]="2">

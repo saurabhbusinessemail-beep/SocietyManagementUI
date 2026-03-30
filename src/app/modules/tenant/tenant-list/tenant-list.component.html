@@ -1,15 +1,13 @@
 <app-layout title="Tenant Management" [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
-        <!-- <ui-button label="New Tenant" type="primary" routerLink="../add">
-        </ui-button> -->
         <ul class="page-menu-list">
-            <li class="page-menu" routerLink="../add">New Tenant</li>
+            <li class="page-menu" (click)="openAddTenant()">New Tenant</li>
         </ul>
     </ng-container>
 
     <div class="flex-col full-h">
-        <app-filter [smColumns]="12" [mdColumns]="12" [loadFirstSociety]="true" [loadFirstFlat]="true" [lgColumns]="12"
-            (filterChanged)="loadTenants($event)">
+        <app-filter [loadFirstSociety]="true" [loadFirstFlat]="true" [selectedFlatId]="routeFlatId" [smColumns]="12"
+            [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadTenants($event)">
         </app-filter>
 
         <ui-form-layout class="flex-auto">
@@ -22,7 +20,7 @@
             </ng-container>
 
             <ng-container *ngIf="tenants.length === 0">
-                <app-empty-records singular="tenant" plural="tenants" routerLink="../add" [smColumns]="12"
+                <app-empty-records singular="tenant" plural="tenants" (addClicked)="openAddTenant()" [smColumns]="12"
                     [mdColumns]="12" [lgColumns]="12">
                     <app-icon icon name="tenant" size="xxl"></app-icon>
                 </app-empty-records>

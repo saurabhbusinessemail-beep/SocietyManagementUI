@@ -22,6 +22,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() flatControlSizes: number[] = [12, 5, 5];
   @Input() loadFirstSociety = false;
   @Input() loadFirstFlat = false;
+  @Input() selectedFlatId?: string;
   @Input() filterByRoles: string[] = [];
   @Input() hideFlatSearch: boolean = false;
   @Input() hideSocietySearch: boolean = false;
@@ -83,7 +84,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/');
       return;
     }
-    
+
     this.subscribeToInterimFilterChanged();
 
     this.societyService.selectedSocietyFilter
@@ -133,13 +134,13 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   subscribeToInterimFilterChanged() {
     this.filterChangedInterim.pipe(debounceTime(100), takeUntil(this.isComponentActive))
-    .subscribe(updatedFilter => {
-      this.filterChanged.emit(updatedFilter);
-    })
+      .subscribe(updatedFilter => {
+        this.filterChanged.emit(updatedFilter);
+      })
   }
 
   getAllFields(): string[] {
-    const formValue = this.filterFormGroup?.value;
+    const formValue = this.filterFormGroup?.getRawValue();
     return Object.keys(formValue ?? {}).filter(k => k !== 'societyId')
   }
 
@@ -149,7 +150,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   getFieldValue(colId: string) {
-    const formValue: any = this.filterFormGroup?.value;
+    const formValue: any = this.filterFormGroup?.getRawValue();
 
     if (this.allDropDownConfig.find(c => c.id === colId))
       return formValue[colId]?.value;
@@ -158,7 +159,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   getFieldText(colId: string) {
-    const formValue: any = this.filterFormGroup?.value;
+    const formValue: any = this.filterFormGroup?.getRawValue();
 
     if (this.allDropDownConfig.find(c => c.id === colId))
       return formValue[colId]?.label ?? 'ALL';
@@ -320,9 +321,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     const flatOptions = this.flatSearchConfig.dropDownOptions ?? [];
-    if (this.loadFirstFlat && flatOptions.length > 0) {
-      this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
-    }
+    // if (this.loadFirstFlat && flatOptions.length > 0) {
+    //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+    // }
+    if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
 
     this.emitSelectedFilter();
   }
@@ -354,9 +356,10 @@ export class FilterComponent implements OnInit, OnDestroy {
           if (populate) {
             this.flatSearchConfig.dropDownOptions = flatOptions;
 
-            if (this.loadFirstFlat && flatOptions.length > 0) {
-              this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
-            }
+            // if (this.loadFirstFlat && flatOptions.length > 0) {
+            //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+            // }
+            if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
             this.emitSelectedFilter();
           }
           resolve(flatOptions);
@@ -380,9 +383,10 @@ export class FilterComponent implements OnInit, OnDestroy {
           if (populate) {
             this.flatSearchConfig.dropDownOptions = flatOptions;
 
-            if (this.loadFirstFlat && flatOptions.length > 0) {
-              this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
-            }
+            // if (this.loadFirstFlat && flatOptions.length > 0) {
+            //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+            // }
+            if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
             this.emitSelectedFilter();
           }
           resolve(flatOptions);
@@ -397,9 +401,20 @@ export class FilterComponent implements OnInit, OnDestroy {
       .subscribe(() => this.emitSelectedFilter());
   }
 
+  loadFirstOrDefaultFlat(flatOptions: IUIDropdownOption[]) {
+    if (!this.loadFirstFlat) return;
+
+    const selectedFlat = !this.selectedFlatId ? flatOptions[0] : flatOptions.find(f => f.value === this.selectedFlatId);
+    if (selectedFlat)
+      this.flatSearchConfig.formControl?.setValue({ label: selectedFlat.label, value: selectedFlat.value });
+
+    if (this.selectedFlatId)
+      this.flatSearchConfig.formControl?.disable();
+  }
+
   emitSelectedFilter() {
     setTimeout(() => {
-      const formValue: any = this.filterFormGroup?.value;
+      const formValue: any = this.filterFormGroup?.getRawValue();
       if (!formValue) return;
 
       const newFilter = Object.keys(formValue).reduce((acc, colId) => {

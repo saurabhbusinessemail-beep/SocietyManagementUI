@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IComplaint, IFlat, IMyProfile, ISociety, ISocietyRole, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { LoginService } from '../../../services/login.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subject, take } from 'rxjs';
 import { ComplaintService } from '../../../services/complaint.service';
@@ -41,6 +41,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
   selectedFIlter: IComplaintFilter = {};
   isFlatMember: boolean = false;
+  routeFlatId?: string;
 
   protected isComponentActive = new Subject<void>();
 
@@ -57,7 +58,8 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private router: Router,
     private complaintService: ComplaintService,
-    public societyService: SocietyService
+    public societyService: SocietyService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +68,8 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/');
       return;
     }
+
+    this.routeFlatId = this.route.snapshot.paramMap.get('flatId') ?? '';
   }
 
   getSociety(complaint: IComplaint): ISociety | undefined {
@@ -100,7 +104,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
   async openAddComplaint() {
     const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
-    const flatId = this.selectedFIlter.flatId;
+    const flatId = this.routeFlatId ?? this.selectedFIlter.flatId;
 
     if (societyId && flatId)
       this.router.navigate(['complaints', societyId, 'add', flatId]);

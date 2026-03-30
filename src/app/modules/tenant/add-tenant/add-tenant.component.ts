@@ -7,6 +7,7 @@ import { take } from 'rxjs';
 import { ResidingTypes } from '../../../constants';
 import { NewUserService } from '../../../services/new-user.service';
 import { DialogService } from '../../../services/dialog.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-tenant',
@@ -75,6 +76,9 @@ export class AddTenantComponent implements OnInit {
     placeholder: 'Enter Rent Amount'
   };
 
+  societyId?: string;
+  flatId?: string;
+
   flatMembers: IFlatMember[] = [];
   flatOptions: IUIDropdownOption[] = [];
   radioOptions: IUIDropdownOption[] = [
@@ -120,12 +124,15 @@ export class AddTenantComponent implements OnInit {
     private location: Location,
     private societyService: SocietyService,
     private newUserService: NewUserService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     const societyId = this.societyService.selectedSocietyFilterValue?.value;
-    this.loadAllMyFlats(societyId);
+    this.societyId = this.route.snapshot.paramMap.get('id') ?? societyId;
+    this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
+    this.loadAllMyFlats(this.societyId);
   }
 
   loadAllMyFlats(societyId?: string) {
@@ -138,7 +145,14 @@ export class AddTenantComponent implements OnInit {
         this.flatMembers = response.data;
         this.flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
         if (this.flatOptions.length > 0) {
-          this.fb.get('flat')?.setValue(this.flatOptions[0]);
+          if (this.flatId) {
+            const flat = this.flatOptions.find(f => f.value === this.flatId);
+            if (flat) {
+              this.fb.get('flat')?.setValue(flat);
+              this.fb.get('flat')?.disable();
+            }
+          } else
+            this.fb.get('flat')?.setValue(this.flatOptions[0]);
         }
       });
   }

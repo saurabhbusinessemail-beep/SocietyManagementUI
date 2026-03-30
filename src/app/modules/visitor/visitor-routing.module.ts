@@ -12,6 +12,10 @@ const routes: Routes = [
     path: 'list',
     component: VisitorListComponent
   },
+  {
+    path: ':flatId/list',
+    component: VisitorListComponent
+  },
 ];
 
 @NgModule({

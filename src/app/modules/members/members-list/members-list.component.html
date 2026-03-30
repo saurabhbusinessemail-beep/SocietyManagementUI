@@ -1,15 +1,13 @@
 <app-layout title="Members" [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
-        <!-- <ui-button label="New Member" type="primary" routerLink="../add">
-        </ui-button> -->
         <ul class="page-menu-list">
-            <li class="page-menu" routerLink="../add">New Member</li>
+            <li class="page-menu" (click)="openAddMember()">New Member</li>
         </ul>
     </ng-container>
 
     <div class="flex-col full-h">
         <app-filter [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [loadFirstSociety]="true" [loadFirstFlat]="true"
-            (filterChanged)="loadMembers($event)">
+            [selectedFlatId]="routeFlatId" (filterChanged)="loadMembers($event)">
         </app-filter>
 
         <ui-form-layout class="flex-auto">
@@ -21,7 +19,7 @@
             </ng-container>
 
             <ng-container *ngIf="members.length === 0">
-                <app-empty-records singular="members" plural="members" routerLink="../add" [smColumns]="12"
+                <app-empty-records singular="members" plural="members" (addClicked)="openAddMember()" [smColumns]="12"
                     [mdColumns]="12" [lgColumns]="12">
                     <app-icon icon name="member" size="xxl"></app-icon>
                 </app-empty-records>
