@@ -7,7 +7,7 @@
         <ui-button label="Change Plan" type="only-content" (clicked)="changePlan()">
         </ui-button> -->
 
-         <ul class="page-menu-list">
+        <ul class="page-menu-list">
             <li class="page-menu" (click)="viewHistory()">View History</li>
             <li class="page-menu" (click)="changePlan()">Change Plan</li>
         </ul>
@@ -113,6 +113,7 @@
                     <div class="dates-section">
                         <p><strong>Started:</strong> {{ currentPlan.startDate | date:'mediumDate' }}</p>
                         <p><strong>Ends:</strong> {{ currentPlan.usage.endDate | date:'mediumDate' }}</p>
+                        <p><strong>Allowed Flats Count:</strong> {{ currentPlan.flatsCount }}</p>
                         <p><strong>Auto Renew:</strong> {{ currentPlan.autoRenew ? 'Yes' : 'No' }}</p>
                     </div>
 

@@ -10,6 +10,7 @@ export interface ISelectedDuration {
 export interface ISocietyPlan {
   _id: string;
   societyId: string | ISociety;
+  flatsCount: number;
   planId: string | IPricingPlan;
   planName: string;
   price: string;
