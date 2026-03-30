@@ -222,12 +222,12 @@ export class MyFlatMemberCardComponent {
   // --------------------------------------------------------------------------
   get leaseStartDate(): string {
     if (!this.member.leaseStart) return '';
-    return this.member.leaseStart.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+    return new Date(this.member.leaseStart).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
   }
 
   get leaseEndDate(): string {
     if (!this.member.leaseEnd) return '';
-    return this.member.leaseEnd.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+    return new Date(this.member.leaseEnd).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
   }
 
   // --------------------------------------------------------------------------

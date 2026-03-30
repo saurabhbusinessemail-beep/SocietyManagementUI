@@ -99,7 +99,7 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   }
 
   async openAddComplaint() {
-    const societyId = this.selectedFIlter.societyId;
+    const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
     const flatId = this.selectedFIlter.flatId;
 
     if (societyId && flatId)

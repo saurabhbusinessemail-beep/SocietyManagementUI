@@ -4,7 +4,7 @@ import { IBEResponseFormat, IFlatMember, IPhoneContactFlat, ISelectedUser, IUICo
 import { SocietyService } from '../../../services/society.service';
 import { Observable, forkJoin, take } from 'rxjs';
 import { GatePassService } from '../../../services/gate-pass.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 function minArrayLength(min: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -31,6 +31,8 @@ export class AddGatePassComponent implements OnInit {
   userSearchFormControl = new FormControl<IUser | null>({ value: null, disabled: false });
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>(null);
   radioFormControl = new FormControl<string>('user');
+
+  societyId?: string;
 
   flatMembers: IFlatMember[] = [];
   flatOptions: IUIDropdownOption[] = [];
@@ -119,11 +121,13 @@ export class AddGatePassComponent implements OnInit {
   constructor(
     private societyService: SocietyService,
     private gatePassService: GatePassService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.loadAllMyFlats();
+    this.societyId = this.route.snapshot.paramMap.get('id') ?? undefined;
+    this.loadAllMyFlats(this.societyId);
   }
 
   loadAllMyFlats(societyId?: string) {

@@ -91,7 +91,8 @@ export class AddMemberComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadAllMyFlats();
+    const societyId = this.societyService.selectedSocietyFilterValue?.value;
+    this.loadAllMyFlats(societyId);
   }
 
   loadAllMyFlats(societyId?: string) {

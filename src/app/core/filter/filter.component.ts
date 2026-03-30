@@ -46,6 +46,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     dropDownOptions: []
   };
 
+  private filterChangedInterim = new Subject<any>();
 
   private selectedSocietyFilter?: DropDownControl;
   isFilterOpen = false;
@@ -82,6 +83,8 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/');
       return;
     }
+    
+    this.subscribeToInterimFilterChanged();
 
     this.societyService.selectedSocietyFilter
       .pipe(take(1))
@@ -126,6 +129,13 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     this.subscribeToOtherControlChanges();
+  }
+
+  subscribeToInterimFilterChanged() {
+    this.filterChangedInterim.pipe(debounceTime(100), takeUntil(this.isComponentActive))
+    .subscribe(updatedFilter => {
+      this.filterChanged.emit(updatedFilter);
+    })
   }
 
   getAllFields(): string[] {
@@ -397,7 +407,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
         return acc;
       }, {} as any);
-      this.filterChanged.emit(newFilter);
+      this.filterChangedInterim.next(newFilter);
     }, 100);
   }
 

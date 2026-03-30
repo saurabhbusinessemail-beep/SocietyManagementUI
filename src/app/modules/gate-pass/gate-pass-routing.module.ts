@@ -17,6 +17,10 @@ const routes: Routes = [
     path: 'add',
     component: AddGatePassComponent
   },
+  {
+    path: ':id/add',
+    component: AddGatePassComponent
+  },
 ];
 
 @NgModule({

@@ -187,8 +187,8 @@ export class AddAnnouncementComponent implements OnInit {
             .map(s => s.societyId));
           const societies = (response.data ?? []).filter(s => managerSocities.has(s._id));
 
-          this.societies = societies;
-          this.societyOptions = societies.map(s => ({
+          this.societies = !this.societyService.selectedSocietyFilterValue ? societies : societies.filter(s => s._id === this.societyService.selectedSocietyFilterValue?.value);
+          this.societyOptions = this.societies.map(s => ({
             label: s.societyName,
             value: s._id
           } as IUIDropdownOption));

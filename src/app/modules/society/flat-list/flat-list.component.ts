@@ -264,6 +264,8 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
   ) { super(dialogService) }
 
   ngOnInit(): void {
+    this.subscribeToChange();
+
     this.societyId = this.route.snapshot.paramMap.get('id')!;
     this.buildingId = this.route.snapshot.paramMap.get('buildingId')!;
 
@@ -275,8 +277,6 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
       }
 
     }
-
-    this.subscribeToChange();
   }
 
   loadSociety(societyId: string) {
@@ -287,14 +287,14 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
           this.society = response;
           this.fb.get('society')?.setValue(response);
 
-          if (this.society.numberOfBuildings > 1) {
-            this.loadSocietyBuildings(societyId);
-            this.fb.get('building')?.enable();
-            // this.subscribeToChange();
-          } else {
-            this.loadFlats(societyId);
-            this.fb.get('building')?.disable();
-          }
+          // if (this.society.numberOfBuildings > 1) {
+          //   this.loadSocietyBuildings(societyId);
+          //   this.fb.get('building')?.enable();
+          //   // this.subscribeToChange();
+          // } else {
+          //   this.loadFlats(societyId);
+          //   this.fb.get('building')?.disable();
+          // }
         }
       })
   }
@@ -306,6 +306,10 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.buildings = response.data;
+          if (this.buildings.length > 0) {
+            const b = this.buildings[0];
+            this.fb.get('building')?.setValue(b._id);
+          }
         }
       })
   }
@@ -340,9 +344,9 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(society => {
         this.buildings = [];
-        this.fb.get('building')?.reset();
+        this.fb.get('building')?.reset(undefined, { emitEvent: false });
         this.flats = [];
-        this.fb.get('building')?.enable();
+        this.fb.get('building')?.enable({ emitEvent: false });
         if (!society) return;
 
         if (society.numberOfBuildings > 1) {
@@ -351,7 +355,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
         else {
           this.loadFlats(society._id);
           setTimeout(() => {
-            this.fb.get('building')?.disable();
+            this.fb.get('building')?.disable({ emitEvent: false });
           });
         }
       });

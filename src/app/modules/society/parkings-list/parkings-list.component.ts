@@ -171,6 +171,8 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
   ) { super(dialogService) }
 
   ngOnInit(): void {
+    this.subscribeToChange();
+
     this.societyId = this.route.snapshot.paramMap.get('id')!;
     this.buildingId = this.route.snapshot.paramMap.get('buildingId')!;
 
@@ -182,8 +184,6 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
       }
 
     }
-
-    this.subscribeToChange();
   }
 
   loadSociety(societyId: string) {
@@ -194,15 +194,15 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
           this.society = response;
           this.fb.get('society')?.setValue(response);
 
-          if (this.society.numberOfBuildings > 1) {
-            this.loadSocietyBuildings(societyId);
-            this.fb.get('building')?.enable();
-            // this.subscribeToChange();
-          } else {
-            this.loadFlats(societyId);
-            this.loadParkings(societyId);
-            this.fb.get('building')?.disable();
-          }
+          // if (this.society.numberOfBuildings > 1) {
+          //   this.loadSocietyBuildings(societyId);
+          //   this.fb.get('building')?.enable();
+          //   // this.subscribeToChange();
+          // } else {
+          //   this.loadFlats(societyId);
+          //   this.loadParkings(societyId);
+          //   this.fb.get('building')?.disable();
+          // }
         }
       })
   }
@@ -214,6 +214,10 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
       .subscribe({
         next: response => {
           this.buildings = response.data;
+          if (this.buildings.length > 0) {
+            const b = this.buildings[0];
+            this.fb.get('building')?.setValue(b._id);
+          }
         }
       })
   }
@@ -365,7 +369,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
 
     const parkingTypeName = VehicleTypes[parkingType];
 
-    if(!await this.dialogService.confirmToProceed(`Parkings will be created automatically for all pending flats which do not have ${parkingTypeName} parking yet`)) return;
+    if (!await this.dialogService.confirmToProceed(`Parkings will be created automatically for all pending flats which do not have ${parkingTypeName} parking yet`)) return;
 
     // Find flats with pending parkings
     const flatsWithoutParking = this.flats.filter(f => !this.parkings.some(p => p.flatId === f._id && p.parkingType === parkingType));

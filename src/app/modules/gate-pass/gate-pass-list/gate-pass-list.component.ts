@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { QRViewerComponent } from '../../../core/qrviewer/qrviewer.component';
 import { DialogService } from '../../../services/dialog.service';
 import { SocietyService } from '../../../services/society.service';
+import { Router } from '@angular/router';
 
 interface IGatePassFilter {
   societyId?: string, flatId?: string
@@ -28,7 +29,8 @@ export class GatePassListComponent implements OnInit, OnDestroy {
     private gatepassService: GatePassService,
     private dialog: MatDialog,
     private dialogService: DialogService,
-    public societyService: SocietyService
+    public societyService: SocietyService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +52,16 @@ export class GatePassListComponent implements OnInit, OnDestroy {
 
         this.loadGatePasses(selectedFIlter);
       })
+  }
+
+  async openAddGatePass() {
+    const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
+    const flatId = this.selectedFIlter.flatId;
+
+    if (societyId && flatId)
+      this.router.navigate(['gatepass', societyId, 'add', flatId]);
+    else if (societyId)
+      this.router.navigate(['gatepass', societyId, 'add']);
   }
 
 
