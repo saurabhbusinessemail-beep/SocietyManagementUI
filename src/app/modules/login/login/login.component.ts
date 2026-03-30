@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { WindowService } from '../../../services/window.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../services/login.service';
-import { IPricingPlan } from '../../../interfaces';
+import { IPricingPlan, IUsageMetric } from '../../../interfaces';
+import { MiscService } from '../../../services/misc.service';
 
 interface IFeatures {
   iconName: string;
@@ -55,6 +56,8 @@ enum PageSections {
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy {
+
+  usageMetric?: IUsageMetric;
   isComponentActive = new Subject<void>();
 
   features: IFeatures[] = [
@@ -260,10 +263,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private loginService: LoginService,
     private windowService: WindowService,
-    private router: Router
+    private router: Router,
+    private miscService: MiscService
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.getUsageMetric();
+  }
 
   generateHref(item: string): string {
     return item.toLowerCase().replace(/\s+/g, '-');
@@ -271,6 +277,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   scrollToElement(element: HTMLElement) {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  getUsageMetric() {
+    this.miscService.getUsageMetric()
+      .pipe(take(1))
+      .subscribe(res => {
+        if (res.success && res.data)
+          this.usageMetric = { flatsCount: res.data.flatsCount, membersCount: res.data.membersCount, societyCount: res.data.societyCount }
+      })
   }
 
   simpleLogin() {

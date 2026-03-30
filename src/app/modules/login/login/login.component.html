@@ -120,17 +120,17 @@
         <div class="stats-container">
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-number">500+</div>
+                    <div class="stat-number">{{ usageMetric?.societyCount ?? 0 }}+</div>
                     <div class="stat-label">Societies Managed</div>
                 </div>
 
                 <div class="stat-item">
-                    <div class="stat-number">10,000+</div>
+                    <div class="stat-number">{{ usageMetric?.flatsCount ?? 0 }}+</div>
                     <div class="stat-label">Flats Registered</div>
                 </div>
 
                 <div class="stat-item">
-                    <div class="stat-number">50,000+</div>
+                    <div class="stat-number">{{ usageMetric?.membersCount }}+</div>
                     <div class="stat-label">Happy Residents</div>
                 </div>
 
@@ -177,7 +177,8 @@
         </div>
     </section>
 
-    <app-pricing-details [attr.name]="generateHref(PageSections.PRICING)" (getStartedWithPlanId)="gotoPricingPlanCheckout($event)"></app-pricing-details>
+    <app-pricing-details [attr.name]="generateHref(PageSections.PRICING)"
+        (getStartedWithPlanId)="gotoPricingPlanCheckout($event)"></app-pricing-details>
 
     <div [attr.id]="generateHref(PageSections.JOINAS)" class="join-as-container"
         [attr.name]="generateHref(PageSections.JOINAS)">
