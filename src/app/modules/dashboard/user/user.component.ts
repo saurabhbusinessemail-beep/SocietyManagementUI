@@ -491,7 +491,10 @@ export class UserComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.menuService.syncSelectedMenuWithCurrentUrl(true);
+        if (this.menuService.userMenusValue.length > 1) {
+          this.menuService.selectAndLoadMenu(this.menuService.userMenusValue[1])
+        } else
+          this.menuService.syncSelectedMenuWithCurrentUrl(true);
         // this.router.navigateByUrl('/dashboard');
 
       })

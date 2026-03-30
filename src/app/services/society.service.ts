@@ -109,7 +109,7 @@ export class SocietyService {
         }
         if (hasSecurityRole) {
             options.push({
-                label: `Flats from ${society.societyName}`,
+                label: `Gate entry for ${society.societyName}`,
                 value: `/gateentry/dashboard/${society._id}`
             });
             // this.router.navigate(['gateentry/dashboard', society._id]);

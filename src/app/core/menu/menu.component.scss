@@ -58,7 +58,7 @@
         width: calc($menu-width-icons + env(scrollbar-width));
 
         .menu-inner {
-            background: $color-dark-blue;
+            background: url("../../../assets/header-background.png");
             padding: $sp-sm;
             position: relative;
             left: 0;
