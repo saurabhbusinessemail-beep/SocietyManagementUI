@@ -1,0 +1,345 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+// All styles are naturally encapsulated by Angular (Emulated ViewEncapsulation)
+// No ViewEncapsulation.None used.
+
+.coupon-management {
+    padding: $sp-md;
+
+    .filters {
+        display: flex;
+        gap: $sp-md;
+        margin-bottom: $sp-lg;
+        flex-wrap: wrap;
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: $sp-sm;
+
+            label {
+                font-weight: 500;
+            }
+
+            select {
+                padding: $input-padding-mobile $sp;
+                border: 1px solid $color-border;
+                border-radius: $input-border-radius;
+                background: white;
+            }
+        }
+    }
+
+    .loading,
+    .error-message {
+        padding: $sp;
+        text-align: center;
+    }
+
+    .error-message {
+        color: $color-error-dark;
+        background: $color-error-light;
+        border-radius: $btn-border-radius-sm;
+    }
+
+    // Desktop table
+    .desktop-table {
+        display: none;
+
+        @include desktop {
+            display: block;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            th,
+            td {
+                padding: $sp;
+                border-bottom: 1px solid $color-border;
+                text-align: left;
+            }
+
+            th {
+                background: $color-light-gray;
+                font-weight: 600;
+            }
+
+            .status-badge {
+                display: inline-block;
+                padding: 2px $sp-sm;
+                border-radius: $btn-border-radius-sm;
+                font-size: $font-size-xs;
+                font-weight: 500;
+
+                &.active {
+                    background: $status-active;
+                    color: white;
+                }
+
+                &.inactive {
+                    background: $status-inactive;
+                    color: white;
+                }
+            }
+
+            .actions {
+                display: flex;
+                gap: $sp-sm;
+
+                .icon-btn {
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 1.2rem;
+                    padding: 0 $sp-xs;
+
+                    &:hover {
+                        transform: scale(1.1);
+                    }
+                }
+            }
+        }
+    }
+
+    // Mobile/Tablet cards
+    .card-list {
+        display: grid;
+        gap: $sp-md;
+
+        @include tablet {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include mobile {
+            grid-template-columns: 1fr;
+        }
+
+        .coupon-card {
+            background: white;
+            border: 1px solid $color-border;
+            border-radius: $btn-border-radius-md;
+            padding: $sp-md;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: $sp;
+                font-size: $font-size-lg;
+                font-weight: 600;
+
+                .status-badge {
+                    font-size: $font-size-xs;
+                    padding: 2px $sp-sm;
+                    border-radius: $btn-border-radius-sm;
+
+                    &.active {
+                        background: $status-active;
+                        color: white;
+                    }
+
+                    &.inactive {
+                        background: $status-inactive;
+                        color: white;
+                    }
+                }
+            }
+
+            .card-body {
+                display: flex;
+                flex-direction: column;
+                gap: $sp-xs;
+                margin-bottom: $sp;
+                font-size: $font-size-sm;
+
+                span {
+                    font-weight: 500;
+                    color: $color-note-gray;
+                }
+            }
+
+            .card-actions {
+                display: flex;
+                gap: $sp;
+
+                button {
+                    flex: 1;
+                    padding: $sp-xs $sp-sm;
+                    background: $color-dark-blue;
+                    color: white;
+                    border: none;
+                    border-radius: $btn-border-radius-sm;
+                    cursor: pointer;
+
+                    &.danger {
+                        background: $color-error-header;
+                    }
+
+                    &:hover {
+                        opacity: 0.9;
+                    }
+                }
+            }
+        }
+    }
+
+    // Discount tester
+    .discount-tester {
+        margin-top: $sp-xl;
+        padding: $sp-md;
+        background: $color-light-gray;
+        border-radius: $btn-border-radius-md;
+
+        h3 {
+            margin-top: 0;
+            font-size: $font-size-lg;
+        }
+
+        .tester-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $sp;
+            align-items: flex-end;
+
+            input,
+            select {
+                padding: $input-padding-mobile;
+                border: 1px solid $color-border;
+                border-radius: $input-border-radius;
+            }
+
+            button {
+                padding: $input-padding-mobile $sp-md;
+            }
+        }
+
+        .test-result {
+            margin-top: $sp;
+            padding: $sp;
+            background: white;
+            border-radius: $btn-border-radius-sm;
+
+            p {
+                margin: $sp-xs 0;
+            }
+        }
+    }
+
+    // MODAL – forced to appear as popup even inside app-layout
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999; // higher than any layout header (usually 1000)
+        // Ensure it's not clipped by any ancestor
+        overflow: visible;
+
+        .modal-content {
+            background: white;
+            border-radius: $btn-border-radius-lg;
+            padding: $sp-lg;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            // Optional: add a slight shadow for depth
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            // Ensure relative positioning for internal absolute elements if needed
+            position: relative;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: $font-size-xl;
+        }
+
+        .form-group {
+            margin-bottom: $sp-md;
+
+            label {
+                display: block;
+                margin-bottom: $sp-xs;
+                font-weight: 500;
+            }
+
+            input,
+            select {
+                width: 100%;
+                padding: $input-padding-mobile;
+                border: 1px solid $color-border;
+                border-radius: $input-border-radius;
+            }
+
+            small {
+                color: $color-error-dark;
+                font-size: $font-size-xs;
+            }
+
+            &.checkbox label {
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+
+                input {
+                    width: auto;
+                }
+            }
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: $sp;
+            margin-top: $sp-lg;
+
+            button {
+                padding: $sp-sm $sp-md;
+                border-radius: $btn-border-radius-sm;
+                cursor: pointer;
+            }
+
+            .btn-cancel {
+                background: $btn-bg-cancel;
+                color: $btn-text-cancel;
+                border: none;
+            }
+
+            .btn-primary {
+                background: $btn-bg-primary;
+                color: $btn-text-primary;
+                border: none;
+
+                &:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}
+
+// Helper for button outside .coupon-management (e.g., in app-layout's moreActions)
+.btn-primary {
+    background: $btn-bg-primary;
+    color: $btn-text-primary;
+    border: none;
+    border-radius: $btn-border-radius-sm;
+    padding: $sp-sm $sp-md;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}

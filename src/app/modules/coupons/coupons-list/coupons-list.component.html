@@ -1,0 +1,158 @@
+<app-layout title="Coupon Management">
+    <ng-container moreActions>
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="openCreateModal()">Create Coupon</li>
+        </ul>
+    </ng-container>
+
+    <div class="coupon-management">
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label>Status</label>
+                <select (change)="loadCoupons($any($event.target).value === 'true' ? true : undefined, undefined)">
+                    <option value="">All</option>
+                    <option value="true">Active only</option>
+                    <option value="false">Inactive only</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Plan</label>
+                <select (change)="loadCoupons(undefined, $any($event.target).value || undefined)">
+                    <option value="">All plans</option>
+                    <option *ngFor="let plan of plans" [value]="plan.id">{{ plan.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Loading & error -->
+        <div *ngIf="isLoading" class="loading">Loading...</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+        <!-- Coupons list (responsive) -->
+        <div class="coupons-list">
+            <!-- Desktop table -->
+            <div class="desktop-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Plan</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let coupon of coupons">
+                            <td>{{ coupon.code }}</td>
+                            <td>{{ coupon.type }}</td>
+                            <td>{{ coupon.value }}{{ coupon.type === 'percentage' ? '%' : '₹' }}</td>
+                            <td>{{ getPlanName(coupon.planId) || 'All plans' }}</td>
+                            <td>
+                                <span class="status-badge" [class.active]="coupon.isActive"
+                                    [class.inactive]="!coupon.isActive">
+                                    {{ coupon.isActive ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <button class="icon-btn edit" (click)="openEditModal(coupon)">✏️</button>
+                                <button class="icon-btn delete" (click)="deleteCoupon(coupon)">🗑️</button>
+                                <button class="icon-btn toggle" (click)="toggleActive(coupon)">
+                                    {{ coupon.isActive ? '🔴' : '🟢' }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile / Tablet cards -->
+            <div class="card-list">
+                <div class="coupon-card" *ngFor="let coupon of coupons">
+                    <div class="card-header">
+                        <strong>{{ coupon.code }}</strong>
+                        <span class="status-badge" [class.active]="coupon.isActive" [class.inactive]="!coupon.isActive">
+                            {{ coupon.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div><span>Type:</span> {{ coupon.type }}</div>
+                        <div><span>Value:</span> {{ coupon.value }}{{ coupon.type === 'percentage' ? '%' : '₹' }}</div>
+                        <div><span>Plan:</span> {{ getPlanName(coupon.planId) || 'All plans' }}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-small" (click)="openEditModal(coupon)">Edit</button>
+                        <button class="btn-small danger" (click)="deleteCoupon(coupon)">Delete</button>
+                        <button class="btn-small" (click)="toggleActive(coupon)">{{ coupon.isActive ? 'Deactivate' :
+                            'Activate' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discount Tester -->
+        <div class="discount-tester">
+            <h3>Test Coupon Discount</h3>
+            <div class="tester-fields">
+                <input [(ngModel)]="testCouponCode" placeholder="Coupon code" />
+                <input type="number" [(ngModel)]="testAmount" placeholder="Amount" />
+                <select [(ngModel)]="testPlanId">
+                    <option [value]="null">Any plan</option>
+                    <option *ngFor="let plan of plans" [value]="plan.id">{{ plan.name }}</option>
+                </select>
+                <button class="btn-primary" (click)="testDiscount()">Calculate</button>
+            </div>
+            <div *ngIf="discountTestResult" class="test-result">
+                <p>Discount: ₹{{ discountTestResult.discount }}</p>
+                <p>Final amount: ₹{{ discountTestResult.finalAmount }}</p>
+            </div>
+        </div>
+
+        <!-- Modal for Create/Edit (inside app-layout) -->
+        <div class="modal" *ngIf="showModal" (click.self)="closeModal()">
+            <div class="modal-content">
+                <h2>{{ editingCoupon ? 'Edit Coupon' : 'Create Coupon' }}</h2>
+                <form [formGroup]="couponForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label>Code *</label>
+                        <input formControlName="code" placeholder="e.g. SAVE20" />
+                        <small *ngIf="formControls['code'].invalid && formControls['code'].touched">
+                            Uppercase letters, numbers, underscore only.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>Type *</label>
+                        <select formControlName="type">
+                            <option value="percentage">Percentage (%)</option>
+                            <option value="fixed">Fixed (₹)</option>
+                            <option value="direct">Direct (Final amount = value)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Value *</label>
+                        <input type="number" formControlName="value" step="1" />
+                        <small *ngIf="formControls['type'].value === 'percentage'">Between 0 and 100</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Restrict to Plan (optional)</label>
+                        <select formControlName="planId">
+                            <option [value]="null">All plans</option>
+                            <option *ngFor="let plan of plans" [value]="plan.id">{{ plan.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label>
+                            <input type="checkbox" formControlName="isActive" /> Active
+                        </label>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary" [disabled]="couponForm.invalid">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</app-layout>

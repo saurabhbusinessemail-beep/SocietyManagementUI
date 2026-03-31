@@ -6,6 +6,7 @@ export interface IMenu extends IDefaultFields {
     menuName: string;
     icon?: string;
     mandatorFeatureAccess?: string;
+    onlyForSuperAdmin?: boolean;
     relativePath?: string;
     sortOrder?: number;
 }

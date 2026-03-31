@@ -352,7 +352,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
       ? (this.changePlanCalculation.calculation?.amountToPay ?? 0)
       : this.totalPrice;
 
-    this.pricingPlanService.validateCoupon(this.couponCode, amountToDiscount)
+    this.pricingPlanService.validateCoupon(this.couponCode, amountToDiscount, this.selectedPlan?.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {

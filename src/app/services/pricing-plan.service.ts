@@ -220,16 +220,8 @@ export class PricingPlanService {
         return this.http.post(`${this.baseUrl}/change/${societyId}`, payload);
     }
 
-    @Cacheable({
-        paramIndices: [0, 1],
-        paramKeys: {
-            0: ['couponCode'],
-            1: ['amount']
-        },
-        group: 'pricing-plans'
-    })
-    validateCoupon(couponCode: string, amount: number): Observable<any> {
-        return this.http.post(`${this.baseUrl}/validate-coupon`, { couponCode, amount });
+    validateCoupon(couponCode: string, amount: number, planId?: string): Observable<any> {
+        return this.http.post(`${this.baseUrl}/validate-coupon`, { couponCode, amount, planId });
     }
 
     verifyPayment(payload: IPaymentVerificationPayload): Observable<IBEResponseFormat> {

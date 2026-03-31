@@ -90,6 +90,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/pricing/pricing.module').then(module => module.PricingModule)
   },
   {
+    path: 'coupons',
+    loadChildren: () => import('./modules/coupons/coupons.module').then(module => module.CouponsModule)
+  },
+  {
     path: 'unauthorized',
     loadChildren: () => import('./modules/unauthorized/unauthorized.module').then(module => module.UnauthorizedModule)
   },
