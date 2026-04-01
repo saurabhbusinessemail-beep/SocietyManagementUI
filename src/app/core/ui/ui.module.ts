@@ -17,7 +17,6 @@ import { UserSearchComponent } from './user-search/user-search.component';
 import { ContactSearchComponent } from './contact-search/contact-search.component';
 import { LocationSearchComponent } from './location-search/location-search.component';
 import { DirectiveModule } from '../../directives/directive.module';
-import { GeoSearchComponent } from './geo-search/geo-search.component';
 import { CardComponent } from './card/card.component';
 import { ChipComponent } from './chip/chip.component';
 import { SocietySearchComponent } from './society-search/society-search.component';
@@ -59,7 +58,6 @@ import { EmptyRecordsComponent } from './empty-records/empty-records.component';
     UserSearchComponent,
     ContactSearchComponent,
     LocationSearchComponent,
-    GeoSearchComponent,
     CardComponent,
     ChipComponent,
     SocietySearchComponent,
@@ -102,7 +100,6 @@ import { EmptyRecordsComponent } from './empty-records/empty-records.component';
     UserSearchComponent,
     ContactSearchComponent,
     LocationSearchComponent,
-    GeoSearchComponent,
     CardComponent,
     ChipComponent,
     SocietySearchComponent,

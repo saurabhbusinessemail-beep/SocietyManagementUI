@@ -14,7 +14,7 @@ export class SearchBoxComponent
   implements OnInit, OnDestroy {
 
   @Input() options: IUIDropdownOption[] = [];
-
+  @Input() defaultSelectedValue?: IUIDropdownOption;
   @Output() searchChange = new EventEmitter<string>();
 
   searchText = '';
@@ -33,12 +33,17 @@ export class SearchBoxComponent
         this.searchChange.emit(value);
         this.isOpen = !!value;
       });
+    setTimeout(() => {
+      if (this.defaultSelectedValue) {
+        this.onSelect(this.defaultSelectedValue);
+      }
+    }, 100);
   }
 
   onInput(value: string): void {
     this.searchText = value;
     this.search$.next(value);
-    this.updateValue(null);
+    this.updateValue('');
   }
 
   onSelect(option: IUIDropdownOption): void {
@@ -48,9 +53,9 @@ export class SearchBoxComponent
   }
 
   clear(): void {
-    this.searchText = '';
+    this.searchText = ' ';
     this.isOpen = false;
-    this.updateValue(null);
+    this.updateValue('');
     this.searchChange.emit('');
   }
 

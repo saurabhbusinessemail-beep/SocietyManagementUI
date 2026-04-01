@@ -5,8 +5,15 @@
     <div class="login-card">
         <form class="login-form" (ngSubmit)="sendOtp()" [formGroup]="loginForm">
             <div class="form-group">
+                <label for="countryCode">Ext.</label>
+                <ui-search-box formControlName="country" [config]="countryConfig"
+                    [options]="userService.filteredCountryCallingOptions"
+                    [defaultSelectedValue]="userService.defaultCountry_INDIA" (searchChange)="onSearchChange($event)">
+                </ui-search-box>
+            </div>
+            <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" class="input" formControlName="phone" placeholder="Enter phone number" />
+                <input type="tel" id="phone" class="input" appAutoFocus formControlName="phone" placeholder="Enter phone number" />
             </div>
 
             <button type="submit" class="btn primary login-btn" [disabled]="loginForm.invalid || isLoading">

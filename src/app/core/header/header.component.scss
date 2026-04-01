@@ -87,8 +87,17 @@
         align-items: center;
         justify-content: center;
 
+        svg {
+            height: 30px !important;
+            color: $color-amber;
+        }
+
         &:hover {
             background-color: #f3f4f6; // hover:bg-muted - adjust color as needed
+
+            svg {
+                color: $color-dark-blue;
+            }
         }
 
         &:focus {

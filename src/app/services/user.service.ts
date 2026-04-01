@@ -1,11 +1,11 @@
-// user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUser } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
-import { IBEResponseFormat, IOTPVerificationResponse, IPagedResponse } from '../interfaces';
+import { IBEResponseFormat, IOTPVerificationResponse, IPagedResponse, IUIDropdownOption } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
+import { countries } from '../constants';
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +14,14 @@ export class UserService {
 
     private profilePictureStorageKey = 'profilePicture';
     private baseUrl = `${environment.apiBaseUrl}/users`; // Adjust based on your API URL
+
+    countries = countries;
+    countryCallingOptions: IUIDropdownOption<string>[] = countries.map(c => ({
+        label: `${c.callingCode} ${c.countryName} (${c.countryCode})`,
+        value: c.callingCode
+    } as IUIDropdownOption));
+    filteredCountryCallingOptions: IUIDropdownOption[] = this.countryCallingOptions;
+    defaultCountry_INDIA = this.countryCallingOptions.find(o => o.value === '+91');
 
     constructor(private http: HttpClient) { }
 

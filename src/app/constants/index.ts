@@ -2,7 +2,6 @@ export * from './announcement.constant';
 export * from './complaint-type.constant';
 export * from './country.constant';
 export * from './demo.constant';
-export * from './district.constant';
 export * from './feature.contant';
 export * from './flat-type.contant';
 export * from './notification-type.constant';

@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconModule } from '../icons/icon.module';
 import { PipeModule } from '../../pipes/pipes.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { UiModule } from '../ui/ui.module';
+import { DirectiveModule } from '../../directives/directive.module';
 
 
 
@@ -18,7 +20,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     ReactiveFormsModule,
     IconModule,
     PipeModule,
-    MatDialogModule
+    MatDialogModule,
+    UiModule,
+    DirectiveModule
   ]
 })
 export class LoginPopupModule { }

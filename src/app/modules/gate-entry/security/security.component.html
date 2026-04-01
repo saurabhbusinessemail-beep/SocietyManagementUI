@@ -42,8 +42,16 @@
                         <div class="no-mobile no-tablet" [lgColumns]="2"></div>
                         <!-- Visitor Name -->
                         <ui-text-box formControlName="visitorName" [config]="visitorNameConfig" [smColumns]="12"
-                            [mdColumns]="6" [lgColumns]="4">
+                            [mdColumns]="6" [lgColumns]="8">
                         </ui-text-box>
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+
+                        <div class="no-mobile no-tablet" [lgColumns]="2"></div>
+                        <!-- Visitor Country -->
+                        <ui-search-box formControlName="visitorCountry" [config]="visitorCountryConfig"
+                            [options]="userService.filteredCountryCallingOptions" [defaultSelectedValue]="loginService.loggedInUserCountryCallingOption"
+                            (searchChange)="onSearchChange($event)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                        </ui-search-box>
 
                         <!-- Visitor Contact -->
                         <ui-text-box formControlName="visitorContact" [config]="visitorContactConfig" [smColumns]="12"
@@ -76,7 +84,7 @@
                                 [disable]="!isFlatSelected || !isSocietySelected || entryForm.invalid">
                             </ui-button>
                             <ui-button label="Self Approve" type="only-content" (clicked)="selfApprove()"
-                                [disable]="isFlatSelected || !isSocietySelected || entryForm.invalid">
+                                [disable]="!isSocietySelected || entryForm.invalid">
                             </ui-button>
                         </section>
                         <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
@@ -100,8 +108,8 @@
                     <ui-form-layout>
                         <ng-container *ngFor="let gateEntry of pendingExits">
                             <app-gate-entry-card [gateEntry]="gateEntry" (openDetails)="openGateEntryDetails(gateEntry)"
-                                (markExit)="markGateExit(gateEntry)" [showApprovalAction]="true" [smColumns]="12" [mdColumns]="6"
-                                [lgColumns]="6">
+                                (markExit)="markGateExit(gateEntry)" [showApprovalAction]="true" [smColumns]="12"
+                                [mdColumns]="6" [lgColumns]="6">
                             </app-gate-entry-card>
                         </ng-container>
                     </ui-form-layout>

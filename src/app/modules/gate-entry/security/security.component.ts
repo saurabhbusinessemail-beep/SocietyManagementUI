@@ -11,6 +11,8 @@ import { DialogService } from '../../../services/dialog.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { LoginService } from '../../../services/login.service';
 import { GateEntryPopupComponent } from '../../../core/ui/gate-entry-popup/gate-entry-popup.component';
+import { UserService } from '../../../services/user.service';
+import { countries } from '../../../constants';
 
 @Component({
   selector: 'app-security',
@@ -52,6 +54,19 @@ export class SecurityComponent implements OnInit, OnDestroy {
     ],
     errorMessages: {
       required: 'Visitor\'s name is required'
+    }
+  };
+  visitorCountryConfig: IUIControlConfig = {
+    id: 'visitorCountry',
+    label: 'Ext.',
+    validations: [
+      {
+        name: 'required',
+        validator: Validators.required
+      }
+    ],
+    errorMessages: {
+      required: 'Visitor\'s contact is required'
     }
   };
   visitorContactConfig: IUIControlConfig = {
@@ -106,6 +121,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
     visitorName: new FormControl<string | null>(null),
     visitorContact: new FormControl<string | null>(null),
+    visitorCountry: new FormControl<string | null>(null),
 
     vehicleNumber: new FormControl<string | null>(null),
     purpose: new FormControl<string | null>(null)
@@ -120,12 +136,13 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private loginService: LoginService,
+    public loginService: LoginService,
     private societyService: SocietyService,
     private gatePassService: GatePassService,
     private gateEntryService: GateEntryService,
     private dialog: MatDialog,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    public userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -133,6 +150,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
     this.subscribeToSocietyChange();
     this.loadSocities();
     this.loadPendingExists();
+    this.entryForm.get('visitorCountry')?.setValue(this.loginService.loggedInUserCountry?.callingCode ?? '')
   }
 
   getGateEntrySociety(gateEntry: IGateEntry): ISociety | undefined {
@@ -242,6 +260,14 @@ export class SecurityComponent implements OnInit, OnDestroy {
           this.pendingExits = response.data;
         }
       });
+  }
+
+  onSearchChange(searchText?: string) {
+    const str = searchText?.toLocaleLowerCase();
+    this.userService.filteredCountryCallingOptions = this.userService.countryCallingOptions.filter(o => {
+      if (!str) return true;
+      return o.value.toLocaleLowerCase().indexOf(str) >= 0 || o.label.toLocaleLowerCase().indexOf(str) >= 0
+    });
   }
 
   resendNotification(gateEntry: IGateEntry) {

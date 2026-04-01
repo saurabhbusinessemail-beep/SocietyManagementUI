@@ -4,13 +4,16 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Subject, takeUntil, take } from 'rxjs';
 import { FcmTokenService } from '../../services/fcm-token.service';
 import { LoginService } from '../../services/login.service';
+import { countries } from '../../constants';
+import { ICountry, IUIControlConfig, IUIDropdownOption } from '../../interfaces';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login-popup',
   templateUrl: './login-popup.component.html',
   styleUrl: './login-popup.component.scss'
 })
-export class LoginPopupComponent  implements OnInit, OnDestroy {
+export class LoginPopupComponent implements OnInit, OnDestroy {
   @Output() loginSuccess = new EventEmitter<string>();
   @Output() close = new EventEmitter<void>();
 
@@ -26,13 +29,26 @@ export class LoginPopupComponent  implements OnInit, OnDestroy {
   countdownInterval: any;
   otpError = false;
 
+  countryConfig: IUIControlConfig = {
+    id: 'country',
+    label: '',
+  }
+  defaultCountry_INDIA?: IUIDropdownOption;
+
+
+
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private fcmTokenService: FcmTokenService,
-    private dialogRef: MatDialogRef<LoginPopupComponent>
+    private dialogRef: MatDialogRef<LoginPopupComponent>,
+    public userService: UserService
   ) {
+
+    this.defaultCountry_INDIA = this.userService.countryCallingOptions.find(o => o.value === 'IN');
+
     this.loginForm = this.fb.group({
+      country: this.fb.control<string | undefined>(this.defaultCountry_INDIA?.value, Validators.required),
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
 
@@ -43,6 +59,14 @@ export class LoginPopupComponent  implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribeToOTPNotification();
+  }
+
+  onSearchChange(searchText?: string) {
+    const str = searchText?.toLocaleLowerCase();
+    this.userService.filteredCountryCallingOptions = this.userService.countryCallingOptions.filter(o => {
+      if (!str) return true;
+      return o.value.toLocaleLowerCase().indexOf(str) >= 0 || o.label.toLocaleLowerCase().indexOf(str) >= 0
+    });
   }
 
   subscribeToOTPNotification() {
@@ -62,7 +86,9 @@ export class LoginPopupComponent  implements OnInit, OnDestroy {
 
     this.isLoading = true;
     const fcmToken = this.fcmTokenService.fcmToken;
-    this.loginService.sendOTP(this.loginForm.value.phone, fcmToken)
+    const formValue = this.loginForm.value;
+    const phoneNumber = formValue.country + formValue.phone
+    this.loginService.sendOTP(phoneNumber, fcmToken)
       .pipe(take(1))
       .subscribe({
         next: () => {
@@ -100,7 +126,9 @@ export class LoginPopupComponent  implements OnInit, OnDestroy {
     this.isVerifying = true;
     this.otpError = false;
 
-    this.loginService.verifyOTP(this.loginForm.value.phone, this.otpForm.value.otp)
+    const formValue = this.loginForm.value;
+    const phoneNumber = formValue.country + formValue.phone;
+    this.loginService.verifyOTP(phoneNumber, this.otpForm.value.otp)
       .pipe(take(1))
       .subscribe({
         next: (response) => {

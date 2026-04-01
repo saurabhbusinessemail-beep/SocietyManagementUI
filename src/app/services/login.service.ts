@@ -4,11 +4,12 @@ import { BehaviorSubject, Observable, Subject, map, of, switchMap, take, tap } f
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
-import { IBEResponseFormat, IMyProfile, IMyProfileResponse, IOTPVerificationResponse } from '../interfaces';
+import { IBEResponseFormat, ICountry, IMyProfile, IMyProfileResponse, IOTPVerificationResponse, IUIDropdownOption } from '../interfaces';
 import { ClearCache } from '../decorators';
 import { LoginPopupComponent } from '../core/login-popup/login-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FcmTokenService } from './fcm-token.service';
+import { countries } from '../constants';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,18 @@ export class LoginService {
 
     private _loggedInUser = new BehaviorSubject<IMyProfile | undefined>(undefined);
     public loggedInUser = this._loggedInUser.asObservable();
+
+    get loggedInUserCountry(): ICountry | undefined {
+        if (!this._loggedInUser.value) return;
+
+        return countries.find(c => this._loggedInUser.value?.user.phoneNumber.indexOf(c.callingCode) === 0)
+    }
+    get loggedInUserCountryCallingOption(): IUIDropdownOption | undefined {
+        return !this.loggedInUserCountry ? undefined : {
+            label: `${this.loggedInUserCountry.callingCode} ${this.loggedInUserCountry.countryName} (${this.loggedInUserCountry.countryCode})`,
+            value: this.loggedInUserCountry.callingCode
+        }
+    }
 
     constructor(
         private http: HttpClient,
