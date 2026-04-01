@@ -1,4 +1,5 @@
-<app-layout title="Plan History" [showBackButton]="true" [hideMoreActions]="true" (needLogin)="loginService.simpleLogin()">
+<app-layout title="Plan History" [showBackButton]="true" [hideMoreActions]="true"
+    (needLogin)="loginService.simpleLogin()">
 
     <div class="history-container">
 
@@ -42,7 +43,7 @@
                         <div class="plan-meta">
                             <div class="meta-item">
                                 <span class="label">Price:</span>
-                                <span class="value">₹{{ plan.price }}/flat</span>
+                                <span class="value">{{ getCurrentPriceNumber(plan) | formattedPrice }}/flat</span>
                             </div>
                             <div class="meta-item">
                                 <span class="label">Period:</span>
@@ -58,7 +59,7 @@
                             </div>
                             <div class="meta-item">
                                 <span class="label">Amount Paid:</span>
-                                <span class="value paid">₹{{ plan.finalAmount | number:'1.2-2' }}</span>
+                                <span class="value paid">{{ (plan.finalAmount ?? 0) | formattedPrice }}</span>
                             </div>
                             <div class="meta-item">
                                 <span class="label">Payment:</span>

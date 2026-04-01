@@ -68,7 +68,7 @@
                         </div>
                         <div class="plan-info">
                             <h4>{{ selectedPlan.name }} Plan</h4>
-                            <p class="plan-price">₹{{ selectedPlan.price }}/flat per month</p>
+                            <p class="plan-price">{{ +selectedPlan.price | formattedPrice }}/flat per month</p>
                             <p class="plan-billed">Billed annually</p>
                         </div>
                     </div>
@@ -90,15 +90,17 @@
                                         <div class="duration-value">{{ duration.value }} Month{{ duration.value > 1
                                             ? 's' : '' }}</div>
                                         <div class="duration-price">
-                                            <span class="original-price" *ngIf="duration.discount > 0">{{
-                                                getFormattedPrice(duration.baseAmount) }}</span>
-                                            <span class="final-price">{{ getFormattedPrice(duration.finalAmount)
-                                                }}</span>
+                                            <span class="original-price" *ngIf="duration.discount > 0">
+                                                {{ duration.baseAmount | formattedPrice }}
+                                            </span>
+                                            <span class="final-price">
+                                                {{ duration.finalAmount | formattedPrice }}</span>
                                             <span class="discount-badge" *ngIf="duration.discount > 0">Save {{
                                                 duration.discount }}%</span>
                                         </div>
-                                        <div class="duration-savings" *ngIf="duration.savings">Save {{
-                                            getFormattedPrice(duration.savings) }}</div>
+                                        <div class="duration-savings" *ngIf="duration.savings">
+                                            Save {{ duration.savings | formattedPrice }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,17 +118,17 @@
                                             's' : '' }}</div>
                                         <div class="duration-price">
                                             <span class="original-price" *ngIf="duration.discount > 0">
-                                                {{ getFormattedPrice(duration.baseAmount) }}
+                                                {{ duration.baseAmount | formattedPrice }}
                                             </span>
                                             <span class="final-price">
-                                                {{ getFormattedPrice(duration.finalAmount) }}
+                                                {{ duration.finalAmount | formattedPrice }}
                                             </span>
                                             <span class="discount-badge" *ngIf="duration.discount > 0">
                                                 Save {{ duration.discount }}%
                                             </span>
                                         </div>
                                         <div class="duration-monthly" *ngIf="duration.monthlyEquivalent">
-                                            ~ {{ getFormattedPrice(duration.monthlyEquivalent) }}/month
+                                            ~ {{ duration.monthlyEquivalent | formattedPrice }}/month
                                         </div>
                                     </div>
                                 </div>
@@ -150,30 +152,32 @@
                             <div class="current-plan">
                                 <span class="label">Current Plan:</span>
                                 <span class="value">{{ changePlanCalculation.currentPlan.name }}</span>
-                                <span class="sub-value">(₹{{ changePlanCalculation.currentPlan.price }}/flat)</span>
+                                <span class="sub-value">({{ +changePlanCalculation.currentPlan.price | formattedPrice
+                                    }}/flat)</span>
                             </div>
                             <div class="arrow">→</div>
                             <div class="new-plan">
                                 <span class="label">New Plan:</span>
                                 <span class="value">{{ changePlanCalculation.newPlan.name }}</span>
-                                <span class="sub-value">(₹{{ changePlanCalculation.newPlan.price }}/flat)</span>
+                                <span class="sub-value">({{ +changePlanCalculation.newPlan.price | formattedPrice
+                                    }}/flat)</span>
                             </div>
                         </div>
 
                         <div class="calculation-details">
                             <div class="detail-row">
                                 <span>Remaining value from current plan:</span>
-                                <span>{{ getFormattedPrice(changePlanCalculation.calculation.remainingValue)
+                                <span>{{ changePlanCalculation.calculation.remainingValue |formattedPrice
                                     }}</span>
                             </div>
                             <div class="detail-row">
                                 <span>New plan value:</span>
-                                <span>{{ getFormattedPrice(changePlanCalculation.calculation.newPlanValue) }}</span>
+                                <span>{{ changePlanCalculation.calculation.newPlanValue | formattedPrice }}</span>
                             </div>
                             <div class="detail-row total">
                                 <span>{{ changePlanCalculation.calculation.paymentReason }}</span>
                                 <span class="amount" [class.zero]="changePlanCalculation.calculation.amountToPay === 0">
-                                    {{ getFormattedPrice(changePlanCalculation.calculation.amountToPay) }}
+                                    {{ changePlanCalculation.calculation.amountToPay | formattedPrice }}
                                 </span>
                             </div>
                         </div>
@@ -223,11 +227,11 @@
                         <span>Total</span>
                         <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
                         <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
-                            <span class="original-price">{{ getFormattedPrice(originalPrice) }}</span>
-                            <span class="discount-badge">-{{ getFormattedPrice(discountPercentage) }}%</span>
+                            <span class="original-price">{{ originalPrice | formattedPrice }}</span>
+                            <span class="discount-badge">-{{ discountPercentage | formattedPrice }}%</span>
                         </div>
                         <span class="final-price" [class.discounted]="isCouponApplied">
-                            {{ getFormattedPrice(totalPrice) }}
+                            {{ totalPrice | formattedPrice }}
                         </span>
                     </div>
                     <p class="price-note"
@@ -238,7 +242,7 @@
                         *Based on estimated 10 flats. Final price will be calculated after society selection.
                     </p>
                     <p class="price-note" *ngIf="totalPrice === 0 && societyDetails">
-                        Your payment will be ₹0. Click Complete Purchase to finish.
+                        Your payment will be {{0 | formattedPrice}}. Click Complete Purchase to finish.
                     </p>
                 </div>
             </div>

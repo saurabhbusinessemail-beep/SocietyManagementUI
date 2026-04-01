@@ -68,3 +68,17 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.btn-link {
+    background: none;
+    border: none;
+    color: $color-dark-blue;
+    cursor: pointer;
+    font-size: $font-size-xs;
+    text-decoration: underline;
+    padding: $sp-xs;
+
+    &:hover {
+        color: darken($color-dark-blue, 10%);
+    }
+}

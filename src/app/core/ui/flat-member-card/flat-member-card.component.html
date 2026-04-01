@@ -48,7 +48,7 @@
 
             <div class="info-row" *ngIf="member.rentAmount">
                 <label>Rent</label>
-                <span>₹ {{ member.rentAmount }}</span>
+                <span>{{ member.rentAmount | formattedPrice }}</span>
             </div>
 
         </ng-container>

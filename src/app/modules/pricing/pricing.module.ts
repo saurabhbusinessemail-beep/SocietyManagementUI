@@ -8,6 +8,7 @@ import { LayoutModule } from "../../core/layout/layout.module";
 import { PricingListComponent } from './pricing-list/pricing-list.component';
 import { PricingDetailModule } from '../../core/pricing/pricing.module';
 import { UiModule } from '../../core/ui/ui.module';
+import { PipeModule } from "../../pipes/pipes.module";
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { UiModule } from '../../core/ui/ui.module';
     ReactiveFormsModule,
     LayoutModule,
     PricingDetailModule,
-    UiModule
+    UiModule,
+    PipeModule
 ]
 })
 export class PricingModule { }

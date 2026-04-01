@@ -22,22 +22,8 @@ export class LoginService {
     private _loggedInUser = new BehaviorSubject<IMyProfile | undefined>(undefined);
     public loggedInUser = this._loggedInUser.asObservable();
 
-    get loggedInUserCountry(): ICountry | undefined {
-        if (!this._loggedInUser.value) return;
-
-        return countries.find(c => this._loggedInUser.value?.user.phoneNumber.indexOf(c.callingCode) === 0)
-    }
-    get loggedInUserCountryCallingOption(): IUIDropdownOption | undefined {
-        return !this.loggedInUserCountry ? undefined : {
-            label: `${this.loggedInUserCountry.callingCode} ${this.loggedInUserCountry.countryName} (${this.loggedInUserCountry.countryCode})`,
-            value: this.loggedInUserCountry.callingCode
-        }
-    }
-    get loggedInUserCountryCurrency(): ICurrency | undefined {
-        return !this.loggedInUserCountry ? undefined : {
-            currency: this.loggedInUserCountry.currency,
-            currencySymbol: this.loggedInUserCountry.currencySymbol
-        }
+    get loggedInUserValue() {
+        return this._loggedInUser.value;
     }
 
     constructor(

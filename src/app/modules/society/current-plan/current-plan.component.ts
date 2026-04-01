@@ -23,6 +23,10 @@ export class CurrentPlanComponent implements OnInit {
     return this.currentPlan && typeof this.currentPlan.purchasedBy !== 'string' ? this.currentPlan.purchasedBy?.name : ''
   }
 
+  get currentPriceNumber() {
+    return !this.currentPlan || isNaN(+(this.currentPlan.price ?? '')) ? 0 : +this.currentPlan.price
+  }
+
   // Helper to get duration display text
   getDurationDisplay(): string {
     if (!this.currentPlan?.selectedDuration) return 'Not specified';

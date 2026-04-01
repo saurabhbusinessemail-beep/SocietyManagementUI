@@ -75,11 +75,11 @@
                 <div class="plan-body">
                     <!-- Price Info with Amount Paid -->
                     <div class="price-info">
-                        <div class="price">₹{{ currentPlan.price }}/flat per month</div>
+                        <div class="price">{{ currentPriceNumber | formattedPrice }}/flat per month</div>
                         <div class="billing">Billed {{ currentPlan.billingCycle }}</div>
                         <div class="amount-paid">
                             <span class="label">Amount Paid:</span>
-                            <span class="value paid">₹{{ currentPlan.finalAmount | number:'1.2-2' }}</span>
+                            <span class="value paid">{{ (currentPlan.finalAmount ?? 0) | formattedPrice }}</span>
                             <span class="payment-status" [class]="getPaymentStatusClass(currentPlan.paymentStatus)">
                                 {{ currentPlan.paymentStatus | titlecase }}
                             </span>

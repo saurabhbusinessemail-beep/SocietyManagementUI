@@ -7,13 +7,22 @@
             <div class="form-group">
                 <label for="countryCode">Ext.</label>
                 <ui-search-box formControlName="country" [config]="countryConfig"
-                    [options]="userService.filteredCountryCallingOptions"
-                    [defaultSelectedValue]="userService.defaultCountry_INDIAOption" (searchChange)="onSearchChange($event)">
+                    *ngIf="!countryService.storageHasDefaultCountry || changeCountryNeeded"
+                    [options]="countryService.filteredCountryCallingOptions"
+                    [defaultSelectedValue]="countryService.defaultCountry_Option"
+                    (searchChange)="onSearchChange($event)">
                 </ui-search-box>
+                <label *ngIf="countryService.storageHasDefaultCountry && !changeCountryNeeded" class="flex">
+                    <span class="flex-auto"> {{ countryService.defaultCountry_Option?.label }} </span>
+                    <span>
+                        <button class="btn-link" (click)="changeCountryNeeded = true">Change Plan</button>
+                    </span>
+                </label>
             </div>
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" class="input" appAutoFocus formControlName="phone" placeholder="Enter phone number" />
+                <input type="tel" id="phone" class="input" appAutoFocus formControlName="phone"
+                    placeholder="Enter phone number" />
             </div>
 
             <button type="submit" class="btn primary login-btn" [disabled]="loginForm.invalid || isLoading">

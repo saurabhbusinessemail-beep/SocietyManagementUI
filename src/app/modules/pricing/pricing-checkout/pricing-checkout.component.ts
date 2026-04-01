@@ -195,10 +195,6 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     return `${duration.value} Year${duration.value > 1 ? 's' : ''}`;
   }
 
-  getFormattedPrice(amount: number): string {
-    return '₹' + Math.ceil(amount).toLocaleString('en-IN');
-  }
-
   onDurationChange(): void {
     if (this.selectedDurationValue === 0) return;
 

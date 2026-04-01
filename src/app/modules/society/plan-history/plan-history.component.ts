@@ -70,4 +70,8 @@ export class PlanHistoryComponent implements OnInit {
       default: return '';
     }
   }
+  
+  getCurrentPriceNumber(plan: IPlanHistoryItem) {
+    return isNaN(+(plan.price ?? '')) ? 0 : +plan
+  }
 }

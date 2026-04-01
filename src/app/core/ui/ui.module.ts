@@ -42,6 +42,7 @@ import { GatePassCardComponent } from './gate-pass-card/gate-pass-card.component
 import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
 import { CircularDisplayComponent } from './circular-display/circular-display.component';
 import { EmptyRecordsComponent } from './empty-records/empty-records.component';
+import { PipeModule } from "../../pipes/pipes.module";
 
 @NgModule({
   declarations: [
@@ -85,8 +86,9 @@ import { EmptyRecordsComponent } from './empty-records/empty-records.component';
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
     DirectiveModule, MatDatepickerModule, MatNativeDateModule,
-    FormsModule, NgSelectModule
-  ],
+    FormsModule, NgSelectModule,
+    PipeModule
+],
   exports: [TextBoxComponent,
     DropDownComponent,
     SearchBoxComponent,

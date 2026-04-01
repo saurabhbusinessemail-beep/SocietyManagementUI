@@ -11,8 +11,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
 import { LoginService } from '../../../services/login.service';
 import { GateEntryPopupComponent } from '../../../core/ui/gate-entry-popup/gate-entry-popup.component';
-import { UserService } from '../../../services/user.service';
-import { countries } from '../../../constants';
+import { CountryService } from '../../../services/country.service';
 
 @Component({
   selector: 'app-security',
@@ -142,7 +141,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
     private gateEntryService: GateEntryService,
     private dialog: MatDialog,
     private dialogService: DialogService,
-    public userService: UserService
+    public countryService: CountryService
   ) { }
 
   ngOnInit(): void {
@@ -150,7 +149,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
     this.subscribeToSocietyChange();
     this.loadSocities();
     this.loadPendingExists();
-    this.entryForm.get('visitorCountry')?.setValue(this.loginService.loggedInUserCountry?.callingCode ?? '')
+    this.entryForm.get('visitorCountry')?.setValue(this.countryService.loggedInUserCountry?.callingCode ?? '')
   }
 
   getGateEntrySociety(gateEntry: IGateEntry): ISociety | undefined {
@@ -263,10 +262,10 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   onSearchChange(searchText?: string) {
-    const str = searchText?.toLocaleLowerCase();
-    this.userService.filteredCountryCallingOptions = this.userService.countryCallingOptions.filter(o => {
+    const str = searchText?.toLowerCase();
+    this.countryService.filteredCountryCallingOptions = this.countryService.countryCallingOptions.filter(o => {
       if (!str) return true;
-      return o.value.toLocaleLowerCase().indexOf(str) >= 0 || o.label.toLocaleLowerCase().indexOf(str) >= 0
+      return o.value.toLowerCase().indexOf(str) >= 0 || o.label.toLowerCase().indexOf(str) >= 0
     });
   }
 

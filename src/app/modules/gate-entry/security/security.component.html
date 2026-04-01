@@ -49,7 +49,7 @@
                         <div class="no-mobile no-tablet" [lgColumns]="2"></div>
                         <!-- Visitor Country -->
                         <ui-search-box formControlName="visitorCountry" [config]="visitorCountryConfig"
-                            [options]="userService.filteredCountryCallingOptions" [defaultSelectedValue]="loginService.loggedInUserCountryCallingOption"
+                            [options]="countryService.filteredCountryCallingOptions" [defaultSelectedValue]="countryService.loggedInUserCountryCallingOption"
                             (searchChange)="onSearchChange($event)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
                         </ui-search-box>
 

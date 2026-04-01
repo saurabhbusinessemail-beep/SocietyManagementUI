@@ -7,6 +7,7 @@ import { LoginService } from '../../services/login.service';
 import { countries } from '../../constants';
 import { ICountry, IUIControlConfig, IUIDropdownOption } from '../../interfaces';
 import { UserService } from '../../services/user.service';
+import { CountryService } from '../../services/country.service';
 
 @Component({
   selector: 'app-login-popup',
@@ -28,27 +29,24 @@ export class LoginPopupComponent implements OnInit, OnDestroy {
   countdown = this.countDownTimer;
   countdownInterval: any;
   otpError = false;
+  changeCountryNeeded = false;
 
   countryConfig: IUIControlConfig = {
     id: 'country',
     label: '',
+    placeholder: 'Eg: +91 India (IN)'
   }
-  defaultCountry_INDIAOption?: IUIDropdownOption;
-
-
 
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private fcmTokenService: FcmTokenService,
     private dialogRef: MatDialogRef<LoginPopupComponent>,
-    public userService: UserService
+    public countryService: CountryService
   ) {
 
-    this.defaultCountry_INDIAOption = this.userService.countryCallingOptions.find(o => o.value === 'IN');
-
     this.loginForm = this.fb.group({
-      country: this.fb.control<string | undefined>(this.defaultCountry_INDIAOption?.value, Validators.required),
+      country: this.fb.control<string | undefined>(this.countryService.defaultCountry_Option?.value, Validators.required),
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
 
@@ -62,10 +60,11 @@ export class LoginPopupComponent implements OnInit, OnDestroy {
   }
 
   onSearchChange(searchText?: string) {
-    const str = searchText?.toLocaleLowerCase();
-    this.userService.filteredCountryCallingOptions = this.userService.countryCallingOptions.filter(o => {
+    const str = searchText?.trim()?.toLowerCase().toString();
+    this.countryService.filteredCountryCallingOptions = this.countryService.countryCallingOptions.filter(o => {
       if (!str) return true;
-      return o.value.toLocaleLowerCase().indexOf(str) >= 0 || o.label.toLocaleLowerCase().indexOf(str) >= 0
+      const result = o.value.toLowerCase().indexOf(str) >= 0 || o.label.toLowerCase().indexOf(str) >= 0;
+      return result;
     });
   }
 
@@ -95,6 +94,7 @@ export class LoginPopupComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.step = 'otp';
           this.startCountdown();
+          this.countryService.updateDefaultCountryByCallingCode(formValue.country);
         },
         error: err => {
           this.isLoading = false;

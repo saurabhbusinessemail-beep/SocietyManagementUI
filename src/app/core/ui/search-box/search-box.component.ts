@@ -53,7 +53,7 @@ export class SearchBoxComponent
   }
 
   clear(): void {
-    this.searchText = ' ';
+    this.searchText = '';
     this.isOpen = false;
     this.updateValue('');
     this.searchChange.emit('');

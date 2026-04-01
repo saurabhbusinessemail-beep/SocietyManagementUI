@@ -1,5 +1,5 @@
 import { ResidingTypes } from "../constants";
-import { IDefaultFields, IFlat, ISociety, IUser } from "./";
+import { ICurrency, IDefaultFields, IFlat, ISociety, IUser } from "./";
 
 export interface IFlatMember extends IDefaultFields {
     _id: string;
@@ -18,6 +18,7 @@ export interface IFlatMember extends IDefaultFields {
 
     leaseStart?: Date;
     leaseEnd?: Date;
+    rentCurrency?: ICurrency;
     rentAmount?: number;
     documents: any;
     status: 'active' | 'expired' | 'terminated';

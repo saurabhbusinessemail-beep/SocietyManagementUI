@@ -4,9 +4,10 @@ import { UserNamePipe } from './user-name.pope';
 import { SmartDatePipe } from './smart-date.pip2';
 import { DatePipe } from '@angular/common';
 import { FilterByStatusPipe } from './filter-by-status.pipe';
+import { FormattedPricePipe } from './formatted-price.pipe';
 @NgModule({
-  declarations: [TimeFormatPipe, UserNamePipe, SmartDatePipe, FilterByStatusPipe],
-  exports: [TimeFormatPipe, UserNamePipe, SmartDatePipe, FilterByStatusPipe],
-  providers: [TimeFormatPipe, UserNamePipe, SmartDatePipe, DatePipe]
+  declarations: [TimeFormatPipe, UserNamePipe, SmartDatePipe, FilterByStatusPipe, FormattedPricePipe],
+  exports: [TimeFormatPipe, UserNamePipe, SmartDatePipe, FilterByStatusPipe, FormattedPricePipe],
+  providers: [TimeFormatPipe, UserNamePipe, SmartDatePipe, DatePipe, FormattedPricePipe]
 })
 export class PipeModule { }

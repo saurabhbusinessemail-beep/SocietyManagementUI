@@ -3,9 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUser } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
-import { IBEResponseFormat, ICurrency, IOTPVerificationResponse, IPagedResponse, IUIDropdownOption } from '../interfaces';
+import { IBEResponseFormat, IOTPVerificationResponse, IPagedResponse, IUIDropdownOption } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
-import { countries } from '../constants';
 
 @Injectable({
     providedIn: 'root'
@@ -13,20 +12,7 @@ import { countries } from '../constants';
 export class UserService {
 
     private profilePictureStorageKey = 'profilePicture';
-    private baseUrl = `${environment.apiBaseUrl}/users`; // Adjust based on your API URL
-
-    countries = countries;
-    countryCallingOptions: IUIDropdownOption<string>[] = countries.map(c => ({
-        label: `${c.callingCode} ${c.countryName} (${c.countryCode})`,
-        value: c.callingCode
-    } as IUIDropdownOption));
-    filteredCountryCallingOptions: IUIDropdownOption[] = this.countryCallingOptions;
-    defaultCountry_INDIA = this.countries.find(o => o.callingCode === '+91');
-    defaultCountry_INDIAOption = this.countryCallingOptions.find(o => o.value === '+91');
-    defaultCurrency_RUPEE: ICurrency = {
-        currency: this.defaultCountry_INDIA?.currency ?? 'INR',
-        currencySymbol: this.defaultCountry_INDIA?.currencySymbol ?? '₹'
-    }
+    private baseUrl = `${environment.apiBaseUrl}/users`;
 
     constructor(private http: HttpClient) { }
 

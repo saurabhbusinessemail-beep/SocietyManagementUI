@@ -28,8 +28,9 @@
 
                     <!-- Price -->
                     <div class="price-wrapper" *ngIf="plan.price !== 'Free'">
-                        <span class="price-symbol" [style.color]="plan.colors.primary">{{ plan.priceSuffix }}</span>
-                        <span class="price-amount" [style.color]="plan.colors.primary">{{ plan.price }}</span>
+                        <!-- <span class="price-symbol" [style.color]="plan.colors.primary">{{ plan.priceSuffix }}</span> -->
+                        <span class="price-amount" [style.color]="plan.colors.primary">{{ +plan.price | formattedPrice
+                            }}</span>
                         <div class="price-info">
                             <span class="price-note">{{ plan.priceNote }}</span>
                             <span class="price-period">{{ plan.period }}</span>
@@ -73,8 +74,8 @@
 
         <!-- Mobile Accordion (below lg) -->
         <div class="pricing-accordion-mobile">
-            <div *ngFor="let plan of pricingPlanService.plans" class="accordion-item" [class.expanded]="isExpanded(plan.id)"
-                [style.border-color]="plan.colors.border">
+            <div *ngFor="let plan of pricingPlanService.plans" class="accordion-item"
+                [class.expanded]="isExpanded(plan.id)" [style.border-color]="plan.colors.border">
                 <button class="accordion-trigger" [class.expanded]="isExpanded(plan.id)"
                     [style.background]="isExpanded(plan.id) ? 'linear-gradient(to right, ' + plan.colors.gradientFrom + ', ' + plan.colors.gradientTo + ')' : 'white'"
                     (click)="togglePlan(plan.id)">
@@ -91,10 +92,10 @@
                         </div>
                         <div class="accordion-price">
                             <ng-container *ngIf="plan.price !== 'Free' && isExpanded(plan.id)">
-                                <span class="price-symbol-small" [style.color]="plan.colors.primary">{{ plan.priceSuffix
-                                    }}</span>
+                                <!-- <span class="price-symbol-small" [style.color]="plan.colors.primary">{{ plan.priceSuffix
+                                    }}</span> -->
                                 <span class="price-amount-small" [style.color]="plan.colors.primary">
-                                    {{ plan.price }}
+                                    {{ +plan.price | formattedPrice}}
                                 </span>
                                 <span class="price-note-small">{{ plan.priceNote }}</span>
                             </ng-container>
