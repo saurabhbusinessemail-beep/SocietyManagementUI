@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subject, map, of, switchMap, take, tap } f
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
-import { IBEResponseFormat, ICountry, IMyProfile, IMyProfileResponse, IOTPVerificationResponse, IUIDropdownOption } from '../interfaces';
+import { IBEResponseFormat, ICountry, ICurrency, IMyProfile, IMyProfileResponse, IOTPVerificationResponse, IUIDropdownOption } from '../interfaces';
 import { ClearCache } from '../decorators';
 import { LoginPopupComponent } from '../core/login-popup/login-popup.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,6 +31,12 @@ export class LoginService {
         return !this.loggedInUserCountry ? undefined : {
             label: `${this.loggedInUserCountry.callingCode} ${this.loggedInUserCountry.countryName} (${this.loggedInUserCountry.countryCode})`,
             value: this.loggedInUserCountry.callingCode
+        }
+    }
+    get loggedInUserCountryCurrency(): ICurrency | undefined {
+        return !this.loggedInUserCountry ? undefined : {
+            currency: this.loggedInUserCountry.currency,
+            currencySymbol: this.loggedInUserCountry.currencySymbol
         }
     }
 

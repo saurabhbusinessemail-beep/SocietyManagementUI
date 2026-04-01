@@ -33,7 +33,7 @@ export class LoginPopupComponent implements OnInit, OnDestroy {
     id: 'country',
     label: '',
   }
-  defaultCountry_INDIA?: IUIDropdownOption;
+  defaultCountry_INDIAOption?: IUIDropdownOption;
 
 
 
@@ -45,10 +45,10 @@ export class LoginPopupComponent implements OnInit, OnDestroy {
     public userService: UserService
   ) {
 
-    this.defaultCountry_INDIA = this.userService.countryCallingOptions.find(o => o.value === 'IN');
+    this.defaultCountry_INDIAOption = this.userService.countryCallingOptions.find(o => o.value === 'IN');
 
     this.loginForm = this.fb.group({
-      country: this.fb.control<string | undefined>(this.defaultCountry_INDIA?.value, Validators.required),
+      country: this.fb.control<string | undefined>(this.defaultCountry_INDIAOption?.value, Validators.required),
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
 
