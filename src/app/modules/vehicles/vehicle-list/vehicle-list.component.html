@@ -19,18 +19,28 @@
 
         <ui-form-layout class="flex-auto">
 
-            <ng-container *ngFor=" let vehicle of vehicles">
-                <ui-vehicle-card [vehicle]="vehicle" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
-                    [showDelete]="true" (delete)="deleteVehicle(vehicle)">
-                </ui-vehicle-card>
+            <ng-container *ngIf="!loadingVehicles">
+
+                <ng-container *ngFor=" let vehicle of vehicles">
+                    <ui-vehicle-card [vehicle]="vehicle" [actionInProgress]="loadingVehicleAction[vehicle._id]"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [showDelete]="true"
+                        (delete)="deleteVehicle(vehicle)">
+                    </ui-vehicle-card>
+                </ng-container>
+
+                <ng-container *ngIf="vehicles.length === 0">
+                    <app-empty-records singular="vehicle" plural="vehicles" (click)="openAddDialog()" [smColumns]="12"
+                        [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="vehicle" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
+
             </ng-container>
 
-            <ng-container *ngIf="vehicles.length === 0">
-                <app-empty-records singular="vehicle" plural="vehicles" (click)="openAddDialog()" [smColumns]="12"
-                    [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="vehicle" size="xxl"></app-icon>
-                </app-empty-records>
-            </ng-container>
+
+            <ui-loading *ngIf="loadingVehicles" message="Loading vehicles" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
         </ui-form-layout>
     </div>

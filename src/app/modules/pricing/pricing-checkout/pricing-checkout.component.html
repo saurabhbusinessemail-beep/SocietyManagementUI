@@ -205,7 +205,11 @@
                     <h3>Apply Coupon</h3>
                     <div class="coupon-form">
                         <form [formGroup]="couponForm">
-                            <div class="coupon-input-group">
+
+                            <ui-loading *ngIf="validatingCoupon" message="Validating Coupon">
+                            </ui-loading>
+
+                            <div class="coupon-input-group" *ngIf="!validatingCoupon">
                                 <input type="text" formControlName="couponCode" placeholder="Enter coupon code">
                                 <div class="coupon-actions">
                                     <button type="button" class="btn btn-secondary" (click)="applyCoupon()"
@@ -223,27 +227,35 @@
                 </div>
 
                 <div class="price-summary">
-                    <div class="price-row">
-                        <span>Total</span>
-                        <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
-                        <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
-                            <span class="original-price">{{ originalPrice | formattedPrice }}</span>
-                            <span class="discount-badge">-{{ discountPercentage | formattedPrice }}%</span>
+
+                    <ui-loading *ngIf="calculatingChange" message="Calculating price change">
+                    </ui-loading>
+
+                    <ng-container *ngIf="!calculatingChange">
+
+                        <div class="price-row">
+                            <span>Total</span>
+                            <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
+                            <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
+                                <span class="original-price">{{ originalPrice | formattedPrice }}</span>
+                                <span class="discount-badge">-{{ discountPercentage | formattedPrice }}%</span>
+                            </div>
+                            <span class="final-price" [class.discounted]="isCouponApplied">
+                                {{ totalPrice | formattedPrice }}
+                            </span>
                         </div>
-                        <span class="final-price" [class.discounted]="isCouponApplied">
-                            {{ totalPrice | formattedPrice }}
-                        </span>
-                    </div>
-                    <p class="price-note"
-                        *ngIf="isCouponApplied && isChangePlan && changePlanCalculation?.calculation?.couponCode">
-                        Coupon {{ changePlanCalculation?.calculation?.couponCode }} applied
-                    </p>
-                    <p class="price-note" *ngIf="!societyDetails">
-                        *Based on estimated 10 flats. Final price will be calculated after society selection.
-                    </p>
-                    <p class="price-note" *ngIf="totalPrice === 0 && societyDetails">
-                        Your payment will be {{0 | formattedPrice}}. Click Complete Purchase to finish.
-                    </p>
+                        <p class="price-note"
+                            *ngIf="isCouponApplied && isChangePlan && changePlanCalculation?.calculation?.couponCode">
+                            Coupon {{ changePlanCalculation?.calculation?.couponCode }} applied
+                        </p>
+                        <p class="price-note" *ngIf="!societyDetails">
+                            *Based on estimated 10 flats. Final price will be calculated after society selection.
+                        </p>
+                        <p class="price-note" *ngIf="totalPrice === 0 && societyDetails">
+                            Your payment will be {{0 | formattedPrice}}. Click Complete Purchase to finish.
+                        </p>
+
+                    </ng-container>
                 </div>
             </div>
 
@@ -253,7 +265,7 @@
                     Cancel
                 </button>
                 <button class="btn btn-primary" (click)="processPayment()"
-                    [disabled]="!isCheckoutValid() || isProcessing">
+                    [disabled]="!isCheckoutValid() || isProcessing || calculatingChange || validatingCoupon">
                     <span *ngIf="!isProcessing">{{ totalPrice === 0 ? 'Complete Purchase' : 'Pay Now' }}</span>
                     <span *ngIf="isProcessing">Processing...</span>
                 </button>
@@ -262,7 +274,6 @@
     </div>
 </app-layout>
 
-<!-- Society Selection Modal (unchanged) -->
 <div class="custom-modal view-modal" *ngIf="showSocietySelectModal">
     <div class="modal-overlay" (click)="closeModal()"></div>
     <div class="modal-content">

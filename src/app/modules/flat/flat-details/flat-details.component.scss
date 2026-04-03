@@ -1070,3 +1070,14 @@
         }
     }
 }
+
+::ng-deep {
+    .loading-overlay {
+        align-items: inherit !important;
+        justify-content: inherit !important;
+        padding: inherit !important;
+        margin-bottom: inherit !important;
+        font-size: inherit !important;
+        width: auto !important;
+    }
+}

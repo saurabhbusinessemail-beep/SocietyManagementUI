@@ -1,17 +1,18 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-.plans-loading-overlay {
+.loading-overlay {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: $sp-sm;
   padding: $sp-md;
-  background-color: $color-light-gray;
+  background-color: $color-white;
   border-radius: $btn-border-radius-md;
   margin-bottom: $sp-md;
   color: $color-help-text;
   font-size: $font-size-sm;
+  width: 100%;
 
   .loading-spinner-small {
     width: 20px;
@@ -26,12 +27,5 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-::ng-deep {
-  .loading-overlay {
-    padding: 0px !important;
-    margin: 0px !important;
   }
 }

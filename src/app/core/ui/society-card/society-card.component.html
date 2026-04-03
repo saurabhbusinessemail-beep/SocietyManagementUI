@@ -8,28 +8,36 @@
         </div>
         <div class="header-right">
             <!-- Plan Badge - Responsive: icon only on mobile, full badge on tablet/desktop -->
-            <div class="plan-badge-wrapper" *ngIf="plan">
-                <!-- Mobile: Icon only with tooltip -->
-                <div class="plan-badge-mobile" [title]="getPlanDisplayName()"
-                    [style.backgroundColor]="getPlanBadgeColor()">
-                    <span class="icon" [ngClass]="'icon-' + getPlanIcon()" [style.color]="getPlanTextColor()"></span>
+            <ng-container *ngIf="!loadingPlans">
+                <div class="plan-badge-wrapper" *ngIf="plan">
+                    <!-- Mobile: Icon only with tooltip -->
+                    <div class="plan-badge-mobile" [title]="getPlanDisplayName()"
+                        [style.backgroundColor]="getPlanBadgeColor()">
+                        <span class="icon" [ngClass]="'icon-' + getPlanIcon()"
+                            [style.color]="getPlanTextColor()"></span>
+                    </div>
+                    <!-- Tablet/Desktop: Full badge with icon + plan name -->
+                    <div class="plan-badge-desktop" [style.backgroundColor]="getPlanBadgeColor()">
+                        <span class="icon" [ngClass]="'icon-' + getPlanIcon()"
+                            [style.color]="getPlanTextColor()"></span>
+                        <span class="plan-name" [style.color]="getPlanTextColor()">
+                            {{ getPlanDisplayName() }}
+                        </span>
+                    </div>
                 </div>
-                <!-- Tablet/Desktop: Full badge with icon + plan name -->
-                <div class="plan-badge-desktop" [style.backgroundColor]="getPlanBadgeColor()">
-                    <span class="icon" [ngClass]="'icon-' + getPlanIcon()" [style.color]="getPlanTextColor()"></span>
-                    <span class="plan-name" [style.color]="getPlanTextColor()">
-                        {{ getPlanDisplayName() }}
-                    </span>
+                <div class="plan-badge-wrapper" *ngIf="!plan">
+                    <div class="plan-badge-mobile no-plan" title="No Active Plan">
+                        <span class="icon icon-alert-circle"></span>
+                    </div>
+                    <div class="plan-badge-desktop no-plan">
+                        <span class="icon icon-alert-circle"></span>
+                        <span class="plan-name">No Plan</span>
+                    </div>
                 </div>
-            </div>
-            <div class="plan-badge-wrapper" *ngIf="!plan">
-                <div class="plan-badge-mobile no-plan" title="No Active Plan">
-                    <span class="icon icon-alert-circle"></span>
-                </div>
-                <div class="plan-badge-desktop no-plan">
-                    <span class="icon icon-alert-circle"></span>
-                    <span class="plan-name">No Plan</span>
-                </div>
+            </ng-container>
+            <div class="plan-badge-wrapper" *ngIf="loadingPlans">
+                <ui-loading message="" [onlyMessage]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                </ui-loading>
             </div>
         </div>
     </div>

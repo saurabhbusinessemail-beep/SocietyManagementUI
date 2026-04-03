@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ListBase } from '../../../directives/list-base.directive';
-import { BehaviorSubject, debounceTime, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, debounceTime, filter, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { IBEResponseFormat, IUIControlConfig, IUIDropdownOption, IVehicle } from '../../../interfaces';
@@ -26,6 +26,10 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
   flatId?: string;
   vehicles: IVehicle[] = [];
   isFlatMember: boolean = false;
+
+
+  loadingVehicles = true;
+  loadingVehicleAction: { [memberId: string]: boolean } = {};
 
   isComponentActive = new Subject<void>();
   selectedFilterChanged = new BehaviorSubject<IVehicleFilter>({});
@@ -100,6 +104,7 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     this.subscribeToFilterChanged();
   }
   handleFilterChange(selectedFilter: IVehicleFilter) {
+    console.log('handleFilterChange = ', selectedFilter)
     this.selectedFilterChanged.next(selectedFilter);
   }
 
@@ -108,18 +113,25 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
       .pipe(
         takeUntil(this.isComponentActive),
         debounceTime(300),
+        tap(selectedFilter => {
+            this.vehicles = [];
+        }),
+        filter(selectedFilter => !!selectedFilter.flatId), // Only proceed when flatId exists
         switchMap(selectedFilter => {
-          if (!selectedFilter.flatId) return of({ data: [], success: false } as IBEResponseFormat<IVehicle[]>);
-
-          this.vehicles = [];
-          return this.vehicleService.getVehicles(selectedFilter.flatId)
+          this.loadingVehicles = true;
+          return this.vehicleService.getVehicles(selectedFilter.flatId ?? '');
         })
       )
       .subscribe({
         next: response => {
-          if (!response.success) return;
-
-          this.vehicles = response.data ?? [];
+          this.loadingVehicles = false;
+          if (response?.success) {
+            this.vehicles = response.data ?? [];
+          }
+        },
+        error: err => {
+          this.loadingVehicles = false;
+          // Optionally handle error (e.g., show toast)
         }
       });
   }
@@ -183,12 +195,16 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
 
     if (!await this.dialogService.confirmDelete('Delete Vehicle', `Are you sure you want to delete vehicle ${vehicle.vehicleNumber} ?`)) return;
 
+    this.loadingVehicleAction[vehicle._id] = true;
     this.deleteOneRecord(vehicle._id)
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.loadingVehicleAction[vehicle._id] = false;
           this.refreshList();
-        }
+        },
+        error: err =>
+          this.loadingVehicleAction[vehicle._id] = false
       })
   }
 

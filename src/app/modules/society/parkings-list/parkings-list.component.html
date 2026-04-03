@@ -12,46 +12,70 @@
     <form [formGroup]="fb">
         <ui-form-layout>
 
-            <div class="flex flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
-                <div class="flex-auto flex flex-gap">
-                    <ui-form-layout class="full-w">
-                        <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-                            *ngIf="!society">
-                        </ui-society-search>
+            <ui-loading *ngIf="loadingSociety" message="Loading society information" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
-                    </ui-form-layout>
+            <ui-loading *ngIf="loadingSocietyBuildings" message="Loading society buildings" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-loading>
+
+            <ui-loading *ngIf="loadingBuilding" message="Loading building information" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
+
+            <ui-loading *ngIf="loadingFlats" message="Loading flats" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            </ui-loading>
+
+            <ui-loading *ngIf="loadingParkings" message="Loading parkings" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
+
+            <ng-container *ngIf="!loadingSociety && !loadingSocietyBuildings && !loadingBuilding && !loadingFlats && !loadingParkings">
+                <div class="flex flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+
+                    <div class="flex-auto flex flex-gap">
+                        <ui-form-layout class="full-w">
+                            <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12"
+                                [lgColumns]="12" *ngIf="!society">
+                            </ui-society-search>
+
+                        </ui-form-layout>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Building Drop Down -->
-            <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
-                    placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-                </ui-drop-down>
-            </ui-form-layout>
+                <!-- Building Drop Down -->
+                <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
+                        [options]="buildingOptions" placeholder="Select Building" [smColumns]="12" [mdColumns]="6"
+                        [lgColumns]="6">
+                    </ui-drop-down>
+                </ui-form-layout>
 
-            <!-- Multi Select -->
-            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
-                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
-                (delete)="deleteAllSelectedRecords()">
-            </ui-multi-select>
+                <!-- Multi Select -->
+                <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                    [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                    (delete)="deleteAllSelectedRecords()">
+                </ui-multi-select>
 
-            <ng-container *ngFor="let parking of parkings">
-                <ui-parking-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [parking]="parking"
-                    [showEdit]="canUpdateParking && !selectMode" [showDelete]="canDeleteParking && !selectMode"
-                    [selectMode]="selectMode" [selected]="selectedIds.has(parking._id)"
-                    (selectedChange)="onSelectionChange(parking._id, $event)" (edit)="openEditDialog(parking)"
-                    (delete)="deleteParking(parking)">
-                </ui-parking-card>
+                <ng-container *ngFor="let parking of parkings">
+                    <ui-parking-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [parking]="parking"
+                        [showEdit]="canUpdateParking && !selectMode" [showDelete]="canDeleteParking && !selectMode"
+                        [selectMode]="selectMode" [selected]="selectedIds.has(parking._id)"
+                        (selectedChange)="onSelectionChange(parking._id, $event)" (edit)="openEditDialog(parking)"
+                        (delete)="deleteParking(parking)">
+                    </ui-parking-card>
 
-            </ng-container>
+                </ng-container>
 
-            <ng-container *ngIf="parkings.length === 0">
-                <app-empty-records singular="parking" plural="parkings" [hideAddButton]="!canAddParking"
-                    (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="vehicle" size="xxl"></app-icon>
-                </app-empty-records>
+                <ng-container *ngIf="parkings.length === 0">
+                    <app-empty-records singular="parking" plural="parkings" [hideAddButton]="!canAddParking"
+                        (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="vehicle" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
+
             </ng-container>
 
         </ui-form-layout>

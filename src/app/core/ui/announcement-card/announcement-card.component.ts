@@ -11,6 +11,7 @@ export class AnnouncementCardComponent {
 
   @Input() announcement!: IAnnouncement;
   @Input() viewerRole: 'admin' | SocietyRoles = SocietyRoles.member;
+  @Input() actionInProgress = false;
   @Output() deleteAnnouncement = new EventEmitter<IAnnouncement>();
   @Output() editAnnouncement = new EventEmitter<IAnnouncement>();
   @Output() viewAnnouncement = new EventEmitter<IAnnouncement>();

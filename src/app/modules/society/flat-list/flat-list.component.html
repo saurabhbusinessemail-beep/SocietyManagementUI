@@ -13,54 +13,74 @@
     <form [formGroup]="fb">
         <ui-form-layout>
 
-            <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
-                <ui-label [valueText]="pendingFlatsToAdd" [config]="pendingFlatssConfig" direction="horizontal"
-                    [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
-                </ui-label>
-            </div>
 
-            <div class="flex" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <ui-loading *ngIf="loadingSociety" message="Loading society information" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
-                <div class="flex-auto flex flex-gap">
-                    <ui-form-layout class="full-w">
-                        <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-                            *ngIf="!society">
-                        </ui-society-search>
+            <ui-loading *ngIf="loadingSocietyBuildings" message="Loading society buildings" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-loading>
 
-                    </ui-form-layout>
+            <ui-loading *ngIf="loadingBuilding" message="Loading building information" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
+
+            <ui-loading *ngIf="loadingFlats" message="Loading flats" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            </ui-loading>
+
+            <ng-container *ngIf="!loadingSociety && !loadingSocietyBuildings && !loadingBuilding && !loadingFlats">
+
+                <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
+                    <ui-label [valueText]="pendingFlatsToAdd" [config]="pendingFlatssConfig" direction="horizontal"
+                        [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                    </ui-label>
                 </div>
-            </div>
 
-            <!-- Building Drop Down -->
-            <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
-                placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-            </ui-drop-down>
+                <div class="flex" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
-            <!-- Floor -->
-            <ui-drop-down [formControl]="floorControl" [config]="floorFilterConfig" [options]="filterOptions"
-                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-            </ui-drop-down>
+                    <div class="flex-auto flex flex-gap">
+                        <ui-form-layout class="full-w">
+                            <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12"
+                                [lgColumns]="12" *ngIf="!society">
+                            </ui-society-search>
 
-            <!-- Multi Select -->
-            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
-                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
-                (delete)="deleteAllSelectedRecords()">
-            </ui-multi-select>
+                        </ui-form-layout>
+                    </div>
+                </div>
 
-            <ng-container *ngFor="let flat of flats">
-                <ui-flat-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [flat]="flat"
-                    *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()"
-                    [selectMode]="selectMode" [selected]="selectedIds.has(flat._id)"
-                    (selectedChange)="onSelectionChange(flat._id, $event)" [showDelete]="canDeleteFlat && !selectMode"
-                    (delete)="deleteFlat(flat)">
-                </ui-flat-card>
-            </ng-container>
+                <!-- Building Drop Down -->
+                <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
+                    placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                </ui-drop-down>
 
-            <ng-container *ngIf="flats.length === 0">
-                <app-empty-records singular="flat" plural="flats" [hideAddButton]="!canAddFlat"
-                    (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="home" size="xxl"></app-icon>
-                </app-empty-records>
+                <!-- Floor -->
+                <ui-drop-down [formControl]="floorControl" [config]="floorFilterConfig" [options]="filterOptions"
+                    [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                </ui-drop-down>
+
+                <!-- Multi Select -->
+                <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                    [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                    (delete)="deleteAllSelectedRecords()">
+                </ui-multi-select>
+
+                <ng-container *ngFor="let flat of flats">
+                    <ui-flat-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [flat]="flat"
+                        *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()"
+                        [selectMode]="selectMode" [selected]="selectedIds.has(flat._id)"
+                        (selectedChange)="onSelectionChange(flat._id, $event)"
+                        [showDelete]="canDeleteFlat && !selectMode" (delete)="deleteFlat(flat)">
+                    </ui-flat-card>
+                </ng-container>
+
+                <ng-container *ngIf="flats.length === 0">
+                    <app-empty-records singular="flat" plural="flats" [hideAddButton]="!canAddFlat"
+                        (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="home" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
+
             </ng-container>
 
         </ui-form-layout>

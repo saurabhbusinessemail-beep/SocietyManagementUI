@@ -12,24 +12,33 @@
 
     <ui-form-layout>
 
-        <!-- Multi Select -->
-        <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
-            [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
-            (delete)="deleteAllSelectedRecords()">
-        </ui-multi-select>
+        <ui-loading *ngIf="loading" message="Loading society managers" [smColumns]="12" [mdColumns]="12"
+            [lgColumns]="12">
+        </ui-loading>
 
-        <ng-container *ngFor="let manager of managers">
-            <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [selectMode]="selectMode"
-                [selected]="selectedIds.has(manager._id)" [showDelete]="canDeleteSocietyManager && !selectMode"
-                (selectedChange)="onSelectionChange(manager._id, $event)" (delete)="removeSecretary(manager)">
-            </ui-manager-card>
-        </ng-container>
+        <ng-container *ngIf="!loading">
 
-        <ng-container *ngIf="managers.length === 0">
-            <app-empty-records singular="secretary" plural="secretaries" [hideAddButton]="!canAddSocietyManager"
-                (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <app-icon icon name="secretary" size="xxl"></app-icon>
-            </app-empty-records>
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
+            <ng-container *ngFor="let manager of managers">
+                <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(manager._id)"
+                    [showDelete]="canDeleteSocietyManager && !selectMode"
+                    (selectedChange)="onSelectionChange(manager._id, $event)" (delete)="removeSecretary(manager)">
+                </ui-manager-card>
+            </ng-container>
+
+            <ng-container *ngIf="managers.length === 0">
+                <app-empty-records singular="secretary" plural="secretaries" [hideAddButton]="!canAddSocietyManager"
+                    (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="secretary" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
         </ng-container>
 
     </ui-form-layout>

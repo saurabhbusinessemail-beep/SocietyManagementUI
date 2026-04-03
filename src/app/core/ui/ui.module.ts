@@ -43,6 +43,7 @@ import { VehicleCardComponent } from './vehicle-card/vehicle-card.component';
 import { CircularDisplayComponent } from './circular-display/circular-display.component';
 import { EmptyRecordsComponent } from './empty-records/empty-records.component';
 import { PipeModule } from "../../pipes/pipes.module";
+import { LoadingDataComponent } from './loading-data/loading-data.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { PipeModule } from "../../pipes/pipes.module";
     GatePassCardComponent,
     VehicleCardComponent,
     CircularDisplayComponent,
-    EmptyRecordsComponent
+    EmptyRecordsComponent,
+    LoadingDataComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -123,7 +125,8 @@ import { PipeModule } from "../../pipes/pipes.module";
     GatePassCardComponent,
     VehicleCardComponent,
     CircularDisplayComponent,
-    EmptyRecordsComponent
+    EmptyRecordsComponent,
+    LoadingDataComponent
   ],
   providers: [MatDatepickerModule]
 })

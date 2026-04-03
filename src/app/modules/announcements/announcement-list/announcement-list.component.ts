@@ -22,6 +22,9 @@ export class AnnouncementListComponent implements OnInit {
   announcements: IAnnouncement[] = [];
   selectedFIlter?: IAnnouncementFilters;
 
+  loadingAnnouncements = true;
+  loadingAnnouncementAction: { [annoucementId: string]: boolean } = {};
+
   categoryControl = new FormControl<IUIDropdownOption | undefined>(undefined);
   categoryConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
     id: 'category',
@@ -147,13 +150,18 @@ export class AnnouncementListComponent implements OnInit {
       selectedFIlter.status = 'published'
     }
 
+    this.loadingAnnouncements = true;
     this.announcementService.getSocietyAnnouncements(selectedFIlter)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.loadingAnnouncements = false;
           if (!response.success) return;
 
           this.announcements = response.data;
+        },
+        error: err => {
+          this.loadingAnnouncements = false;
         }
       });
   }
@@ -186,26 +194,32 @@ export class AnnouncementListComponent implements OnInit {
   }
 
   deleteAnnouncement(announcement: IAnnouncement) {
+    this.loadingAnnouncementAction[announcement._id] = true;
     this.announcementService.deleteAnnouncement(announcement._id)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.loadingAnnouncementAction[announcement._id] = false;
           if (!response.success || !this.selectedFIlter) return;
 
           this.loadAnnouncements(this.selectedFIlter)
-        }
+        },
+        error: err => this.loadingAnnouncementAction[announcement._id] = false
       })
   }
 
   togglePinAnnouncement(announcement: IAnnouncement) {
+    this.loadingAnnouncementAction[announcement._id] = true;
     this.announcementService.togglePinAnnouncement(announcement._id)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.loadingAnnouncementAction[announcement._id] = false;
           if (!response.success || !this.selectedFIlter) return;
 
           this.loadAnnouncements(this.selectedFIlter)
-        }
+        },
+        error: err => this.loadingAnnouncementAction[announcement._id] = false
       })
   }
 }

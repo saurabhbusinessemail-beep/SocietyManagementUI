@@ -23,6 +23,9 @@ export class GatePassListComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   gatepasses: IGatePass[] = [];
 
+  loadingGatePasses = true;
+  loadingGatePassActions: { [gatePassId: string]: boolean } = {};
+
   routeFlatId?: string;
   selectedFilterChanged = new BehaviorSubject<IGatePassFilter | undefined>(undefined);
 
@@ -77,12 +80,17 @@ export class GatePassListComponent implements OnInit, OnDestroy {
     const societyId = selectedFIlter.societyId;
     const flatId = selectedFIlter.flatId;
     this.gatepasses = [];
+    this.loadingGatePasses = true;
 
     this.gatepassService.getGattePasses(societyId, flatId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.gatepasses = response.data;
+          this.loadingGatePasses = false;
+        },
+        error: err => {
+          this.loadingGatePasses = false;
         }
       });
   }
@@ -92,12 +100,19 @@ export class GatePassListComponent implements OnInit, OnDestroy {
 
     if (!await this.dialogService.confirmDelete('Delete Gate Pass', `Are you sure you want to delete this gate pass ${forUser}?`)) return;
 
+    this.loadingGatePassActions[gatePass._id] = true;
     this.gatepassService.deleteGatePass(gatePass._id)
       .pipe(take(1))
-      .subscribe(response => {
-        if (!response.success) return;
+      .subscribe({
+        next: response => {
+          if (!response.success) return;
 
-        this.loadGatePasses(this.selectedFIlter);
+          this.loadingGatePassActions[gatePass._id] = false;
+          this.loadGatePasses(this.selectedFIlter);
+        },
+        error: err => {
+          this.loadingGatePassActions[gatePass._id] = false;
+        }
       })
   }
 

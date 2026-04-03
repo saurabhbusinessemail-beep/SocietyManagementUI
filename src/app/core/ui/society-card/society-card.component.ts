@@ -10,6 +10,7 @@ export class SocietyCardComponent {
 
   @Input() society!: ISociety;
   @Input() plan?: ICurrentPlanResponse;
+  @Input() loadingPlans = false;
   @Output() clicked = new EventEmitter<void>();
 
   /**

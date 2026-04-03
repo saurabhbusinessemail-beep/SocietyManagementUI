@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SocietyService } from '../../../services/society.service';
-import { Subject, take, forkJoin, of } from 'rxjs';
+import { Subject, take, forkJoin, of, merge } from 'rxjs';
 import { ISociety, ICurrentPlanResponse } from '../../../interfaces';
 import { PERMISSIONS } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
@@ -19,7 +19,9 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   societies: ISociety[] = [];
   societyPlans: Map<string, ICurrentPlanResponse> = new Map();
-  loadingPlans: boolean = false;
+
+  loadingSocieties = false;
+  loadingPlans: { [societyId: string]: boolean } = {};
 
   get canAddSociety(): boolean {
     return this.loginService.hasPermission(PERMISSIONS.society_add);
@@ -38,21 +40,26 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   }
 
   loadSocieties() {
+    this.loadingSocieties = true;
     this.societyService.getAllSocieties()
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.societies = response.data ?? [];
+          this.loadingSocieties = false;
           this.loadPlansForSocieties();
         },
-        error: () => console.log('Error while getting societies')
+        error: () => {
+          console.log('Error while getting societies')
+          this.loadingSocieties = false;
+        }
       });
   }
 
   loadPlansForSocieties() {
     if (this.societies.length === 0) return;
 
-    this.loadingPlans = true;
+    this.societies.forEach(s => this.loadingPlans[s._id] = true);
     const planRequests = this.societies.map(society =>
       this.planService.getCurrentPlan(society._id).pipe(
         take(1),
@@ -60,19 +67,16 @@ export class SocietyListComponent implements OnInit, OnDestroy {
       )
     );
 
-    forkJoin(planRequests).subscribe({
-      next: (plans) => {
-        plans.forEach((plan, index) => {
-          if (plan) {
-            this.societyPlans.set(this.societies[index]._id, plan);
+    merge(...planRequests).pipe(take(this.societies.length))
+      .subscribe({
+        next: response => {
+          if (response) {
+            const societyId = typeof response.societyId === 'string' ? response.societyId : response.societyId._id
+            this.societyPlans.set(societyId, response);
+            this.loadingPlans[societyId] = false;
           }
-        });
-        this.loadingPlans = false;
-      },
-      error: () => {
-        this.loadingPlans = false;
-      }
-    });
+        }
+      })
   }
 
   getPlanDisplay(societyId: string): string {

@@ -1,35 +1,44 @@
 <div class="filter-container" [class.opened]="isFilterOpen">
 
-    <div class="flex flex-end" *ngIf="windowService.mode.value === 'mobile'">
+    <ng-container *ngIf="!loadingSocities && !loadingMyFlats && !loadingSocietyFlats">
 
-        <div class="flex-auto selected-filter-info" *ngIf="!isFilterOpen">
-            <ng-container *ngFor="let colId of getAllFields()">
-                <ui-label [config]="{id: '', label: getFieldLabel(colId)}" [valueText]="getFieldText(colId)">
-                </ui-label>
-            </ng-container>
+        <div class="flex flex-end" *ngIf="windowService.mode.value === 'mobile'">
+
+            <div class="flex-auto selected-filter-info" *ngIf="!isFilterOpen">
+                <ng-container *ngFor="let colId of getAllFields()">
+                    <ui-label [config]="{id: '', label: getFieldLabel(colId)}" [valueText]="getFieldText(colId)">
+                    </ui-label>
+                </ng-container>
+            </div>
+
+            <app-icon name="clear" size="md" *ngIf="isFilterOpen" (click)="isFilterOpen=false"></app-icon>
+            <app-icon name="filter" size="md" *ngIf="!isFilterOpen" (click)="isFilterOpen=true"></app-icon>
         </div>
 
-        <app-icon name="clear" size="md" *ngIf="isFilterOpen" (click)="isFilterOpen=false"></app-icon>
-        <app-icon name="filter" size="md" *ngIf="!isFilterOpen" (click)="isFilterOpen=true"></app-icon>
-    </div>
+        <ui-form-layout>
 
-    <ui-form-layout>
-
-        <!-- <ui-select2 [formControl]="societiesSearchConfig.formControl" [config]="societiesSearchConfig"
+            <!-- <ui-select2 [formControl]="societiesSearchConfig.formControl" [config]="societiesSearchConfig"
             [options]="societiesSearchConfig.dropDownOptions ?? []" placeholder="Search Society"
             (searchChange)="onSocietySearch($event)" [smColumns]="societyControlSizes[0]"
             [mdColumns]="societyControlSizes[1]" [lgColumns]="societyControlSizes[2]"
             *ngIf="societiesSearchConfig.formControl && showSocietySearch">
         </ui-select2> -->
 
-        <ui-select2 [formControl]="flatSearchConfig.formControl" [config]="flatSearchConfig"
-            [options]="flatSearchConfig.dropDownOptions ?? []" placeholder="Search Flat"
-            [smColumns]="flatControlSizes[0]" [mdColumns]="flatControlSizes[1]" [lgColumns]="flatControlSizes[2]"
-            *ngIf="showFlatSearch && flatSearchConfig.formControl">
-        </ui-select2>
+            <ui-select2 [formControl]="flatSearchConfig.formControl" [config]="flatSearchConfig"
+                [options]="flatSearchConfig.dropDownOptions ?? []" placeholder="Search Flat"
+                [smColumns]="flatControlSizes[0]" [mdColumns]="flatControlSizes[1]" [lgColumns]="flatControlSizes[2]"
+                *ngIf="showFlatSearch && flatSearchConfig.formControl">
+            </ui-select2>
 
-        <ng-container *ngIf="windowService.mode.value !== 'mobile' || isFilterOpen">
-            <ng-content></ng-content>
-        </ng-container>
-    </ui-form-layout>
+            <ng-container *ngIf="windowService.mode.value !== 'mobile' || isFilterOpen">
+                <ng-content></ng-content>
+            </ng-container>
+        </ui-form-layout>
+
+    </ng-container>
+
+    <ui-loading *ngIf="loadingSocities || loadingMyFlats || loadingSocietyFlats" message="Loading Filters"
+        [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+    </ui-loading>
+
 </div>

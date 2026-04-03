@@ -1,24 +1,19 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { take } from 'rxjs';
 
 import { SocietyService } from '../../../services/society.service';
 import {
   IFlatMember,
   IFlat,
   ISociety,
-  IBuilding,
-  IUser,
   IComplaint,
   IGateEntry,
   IGatePass,
   IVehicle,
   IParking,
   IMyProfile,
-  IConfirmationPopupDataConfig,
-  ICurrentPlanResponse,
-  IPricingFeature
+  ICurrentPlanResponse
 } from '../../../interfaces';
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
@@ -61,7 +56,6 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   gateEntriesFeatureAvailable: boolean = false;
   gatePassesFeatureAvailable: boolean = false;
   tenantManagementFeatureAvailable: boolean = false;
-  featuresLoaded: boolean = false;
 
   // Related data arrays (populated via API calls)
   members: IFlatMember[] = [];           // other residents of the same flat
@@ -71,6 +65,18 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   vehicles: IVehicle[] = [];
   parkings: IParking[] = [];
   tenants: IFlatMember[] = [];
+
+  loadingFlatMember = true;
+  loadingPlan = true;
+
+  loadingOtherFlatMembers = true;
+  loadingComplaints = true;
+  laodingGateEntries = true;
+  loadingGatePasses = true;
+  loadingVehicles = true; //
+  loadingParkings = true;
+  loadingTenants = true;
+
 
   get pageTitle(): string {
     if (this.flatMember && typeof this.flatMember.flatId !== 'string') {
@@ -172,6 +178,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadFlatMember(flatMemberId: string): void {
+    this.loadingFlatMember = true;
     this.societyService.getFlatMemberDetails(flatMemberId)
       .pipe(take(1))
       .subscribe({
@@ -182,18 +189,20 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           const societyId = typeof this.flatMember.societyId === 'string'
             ? this.flatMember.societyId
             : this.flatMember.societyId._id;
+          this.loadingFlatMember = false;
 
           // Load current plan to check feature availability
           this.loadCurrentPlan(societyId);
         },
         error: (err) => {
+          this.loadingFlatMember = false;
           console.error('Failed to load flat member', err);
-          this.featuresLoaded = true; // Set to true to hide loading state
         }
       });
   }
 
   loadCurrentPlan(societyId: string): void {
+    this.loadingPlan = true;
     this.planService.getCurrentPlan(societyId)
       .pipe(take(1))
       .subscribe({
@@ -204,15 +213,15 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           if (this.currentPlan?.planDetails?.features) {
             this.checkFeatureAvailability(this.currentPlan);
           }
+          this.loadingPlan = false;
 
           // Now load data based on feature availability
           this.loadRelatedData();
-          this.featuresLoaded = true;
         },
         error: (err) => {
+          this.loadingPlan = false;
           console.log('Error loading current plan');
           this.currentPlan = undefined;
-          this.featuresLoaded = true;
           // Even without plan, load data (might be free tier with basic features)
           this.loadRelatedData();
         }
@@ -229,30 +238,37 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     this.membersFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.FLAT_MEMBER_MANAGEMENT && f.included === true
     );
+    if (!this.membersFeatureAvailable) this.loadingOtherFlatMembers = false;
 
     this.vehiclesFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.VEHICLE && f.included === true
     );
+    if (!this.vehiclesFeatureAvailable) this.loadingVehicles = false;
 
     this.parkingFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.PARKING && f.included === true
     );
+    if (!this.parkingFeatureAvailable) this.loadingParkings = false;
 
     this.complaintsFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.COMPLAINTS && f.included === true
     );
+    if (!this.complaintsFeatureAvailable) this.loadingComplaints = false;
 
     this.gateEntriesFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.GATE_ENTRIES && f.included === true
     );
+    if (!this.gateEntriesFeatureAvailable) this.laodingGateEntries = false;
 
     this.gatePassesFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.SMART_GATE_PASS && f.included === true
     );
+    if (!this.gatePassesFeatureAvailable) this.loadingGatePasses = false;
 
     this.tenantManagementFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.TENANT_MANAGEMENT && f.included === true
     );
+    if (!this.tenantManagementFeatureAvailable) this.loadingTenants = false;
 
     // console.log('Feature availability:', {
     //   members: this.membersFeatureAvailable,
@@ -311,6 +327,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   getFlatMembers(societyId: string, flatId: string) {
+    this.loadingOtherFlatMembers = true;
     this.societyService.myFlatMembers(societyId, flatId)
       .pipe(take(1))
       .subscribe({
@@ -318,21 +335,31 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           if (!response.success) return;
 
           this.members = response.data;
+          this.loadingOtherFlatMembers = false;
+        },
+        error: err => {
+          this.loadingOtherFlatMembers = false;
         }
       })
   }
 
   getComplaints(societyId: string, flatId: string) {
+    this.loadingComplaints = true;
     this.complaintService.getComplaints(societyId, flatId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.complaints = response.data || [];
+          this.loadingComplaints = false;
+        },
+        error: err => {
+          this.loadingComplaints = false;
         }
       });
   }
 
   getGateEntries(societyId: string, flatId: string) {
+    this.laodingGateEntries = true;
     this.gateEntryService.getAllMyGateEntries(societyId, flatId)
       .pipe(take(1))
       .subscribe({
@@ -340,11 +367,16 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           if (!response.success) return;
 
           this.gateEntries = response.data;
+          this.laodingGateEntries = false;
+        },
+        error: err => {
+          this.laodingGateEntries = false;
         }
       });
   }
 
   getGatePasses(societyId: string, flatId: string) {
+    this.loadingGatePasses = true;
     this.gatepassService.getGattePasses(societyId, flatId)
       .pipe(take(1))
       .subscribe({
@@ -352,22 +384,32 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           if (!response.success) return;
 
           this.gatePasses = response.data;
+          this.loadingGatePasses = false;
+        },
+        error: err => {
+          this.loadingGatePasses = false;
         }
       });
   }
 
   getVehicles(societyId: string, flatId: string) {
+    this.loadingVehicles = true;
     this.vehicles = [];
     this.vehicleService.getVehicles(flatId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.vehicles = response.data || [];
+          this.loadingVehicles = false;
+        },
+        error: err => {
+          this.loadingVehicles = false;
         }
       });
   }
 
   getParkings(societyId: string, flatId: string) {
+    this.loadingParkings = true;
     this.societyService.getParkingsByFlat(societyId, flatId)
       .pipe(take(1))
       .subscribe({
@@ -375,11 +417,16 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           if (!response.success) return;
 
           this.parkings = response.data;
+          this.loadingParkings = false;
+        },
+        error: err => {
+          this.loadingParkings = false;
         }
       })
   }
 
   getTenants(societyId: string, flatId: string) {
+    this.loadingTenants = true;
     this.societyService.myTenants(societyId, flatId)
       .pipe(take(1))
       .subscribe({
@@ -387,6 +434,10 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           if (!response.success) return;
 
           this.tenants = response.data.filter(t => t.status === 'active');
+          this.loadingTenants = false;
+        },
+        error: err => {
+          this.loadingTenants = false;
         }
       })
   }
@@ -467,7 +518,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
   handleTenantClick() {
     this.cancelResidingTypeChange();
-    
+
     if (this.tenantManagementFeatureAvailable)
       this.router.navigateByUrl('/tenants/add');
 

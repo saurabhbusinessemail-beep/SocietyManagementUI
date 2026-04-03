@@ -27,7 +27,14 @@ export class SocietyDetailsComponent implements OnInit {
   // Feature availability flags
   parkingFeatureAvailable: boolean = false;
   complaintsFeatureAvailable: boolean = false;
-  featuresLoaded: boolean = false;
+
+
+  loadingSociety = true;
+  loadingPlan = true;
+  loadingComplaints = true;
+  loadingBuildings = true;
+  loadingFlats = true;
+  loadingParkings = true;
 
   addedBuildings = 0;
   addedFlats = 0;
@@ -103,6 +110,7 @@ export class SocietyDetailsComponent implements OnInit {
   * (contains buildingIds & flatIds only)
   */
   loadSociety(societyId: string): void {
+    this.loadingSociety = true;
     this.societyService.getSociety(societyId)
       .pipe(take(1))
       .subscribe({
@@ -128,35 +136,44 @@ export class SocietyDetailsComponent implements OnInit {
             this.societyService.selectSocietyFilter({ label: this.society.societyName, value: this.society._id })
 
 
+          this.loadingSociety = false;
+
           // First load current plan to check feature availability
           this.loadCurrentPlan(societyId);
         },
-        error: err => console.log('Error while getting society details')
+        error: err => {
+          this.loadingSociety = false;
+          console.log('Error while getting society details');
+        }
       });
   }
 
   loadCurrentPlan(societyId: string): void {
-    this.planService.getCurrentPlan(societyId).subscribe({
-      next: response => {
-        this.currentPlan = response;
+    this.loadingPlan = true;
+    this.planService.getCurrentPlan(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.currentPlan = response;
 
-        // Check feature availability from current plan
-        if (this.currentPlan?.features) {
-          this.checkFeatureAvailability(this.currentPlan);
+          // Check feature availability from current plan
+          if (this.currentPlan?.features) {
+            this.checkFeatureAvailability(this.currentPlan);
+          }
+
+          this.loadingPlan = false;
+
+          // Now load data based on feature availability
+          this.loadFeatureSpecificData(societyId);
+        },
+        error: (err) => {
+          console.log('No active plan found');
+          this.currentPlan = undefined;
+          this.loadingPlan = false;
+          // Even without plan, load data (might be free tier with basic features)
+          this.loadFeatureSpecificData(societyId);
         }
-
-        // Now load data based on feature availability
-        this.loadFeatureSpecificData(societyId);
-        this.featuresLoaded = true;
-      },
-      error: (err) => {
-        console.log('No active plan found');
-        this.currentPlan = undefined;
-        this.featuresLoaded = true;
-        // Even without plan, load data (might be free tier with basic features)
-        this.loadFeatureSpecificData(societyId);
-      }
-    });
+      });
   }
 
   /**
@@ -192,16 +209,21 @@ export class SocietyDetailsComponent implements OnInit {
     // Load complaints only if feature is available
     if (this.complaintsFeatureAvailable) {
       this.loadComplaints(societyId);
+    } else {
+      this.loadingComplaints = false;
     }
 
     // Load parkings only if feature is available
     if (this.parkingFeatureAvailable) {
       this.loadParkings(societyId);
+    } else {
+      this.loadingParkings = false;
     }
   }
 
   /** Load complaints by society */
   loadComplaints(societyId: string): void {
+    this.loadingComplaints = true;
     this.complaintService.getComplaints(societyId, undefined, undefined, undefined, { limit: 50000 })
       .pipe(take(1))
       .subscribe({
@@ -212,30 +234,44 @@ export class SocietyDetailsComponent implements OnInit {
             pending: response.data.filter(d => ['submitted', 'approved', 'in_progress'].includes(d.status)).length,
             completed: response.data.filter(d => ['resolved', 'closed', 'rejected'].includes(d.status)).length
           }
+          this.loadingComplaints = false;
+        },
+        error: err => {
+          this.loadingComplaints = false;
         }
       });
   }
 
   /* Load buildings by society */
   loadBuilldingsCount(societyId: string) {
+    this.loadingBuildings = true;
     this.societyService.getBuildingsCount(societyId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           if (response.success)
             this.addedBuildings = response.data ?? 0;
+          this.loadingBuildings = false;
+        },
+        error: err => {
+          this.loadingBuildings = false;
         }
       })
   }
 
   /* Load flats by society */
   loadFlatCounts(societyId: string) {
+    this.loadingFlats = true;
     this.societyService.getFlatsCount(societyId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           if (response.success)
             this.addedFlats = response.data ?? 0;
+          this.loadingFlats = false;
+        },
+        error: err => {
+          this.loadingFlats = false;
         }
       })
   }
@@ -243,6 +279,7 @@ export class SocietyDetailsComponent implements OnInit {
 
   /** Load parkings by society */
   loadParkings(societyId: string): void {
+    this.loadingParkings = true;
     this.societyService.getParkings(societyId, undefined, { limit: 50000 })
       .pipe(take(1))
       .subscribe({
@@ -250,6 +287,10 @@ export class SocietyDetailsComponent implements OnInit {
           if (!response.success) return;
 
           this.parkings = response.data;
+          this.loadingParkings = false;
+        },
+        error: err => {
+          this.loadingParkings = false;
         }
       });
   }

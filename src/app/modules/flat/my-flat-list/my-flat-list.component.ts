@@ -15,6 +15,9 @@ export class MyFlatListComponent implements OnInit {
   society?: ISociety;
   flatMembers: IFlatMember[] = [];
 
+  loadingSociety = false;
+  loadingFlatMembers = false;
+
   constructor(private societyService: SocietyService, private route: ActivatedRoute,
     private router: Router) { }
 
@@ -33,6 +36,7 @@ export class MyFlatListComponent implements OnInit {
   }
 
   loadSociety(societyId: string) {
+    this.loadingSociety = true;
     this.societyService.getSociety(societyId)
       .pipe(take(1))
       .subscribe({
@@ -41,11 +45,16 @@ export class MyFlatListComponent implements OnInit {
           if (!this.societyService.selectedSocietyFilterValue?.value && this.society) {
             this.societyService.selectSocietyFilter({ label: this.society.societyName, value: this.society._id });
           }
+          this.loadingSociety = false;
+        },
+        error: err => {
+          this.loadingSociety = false;
         }
       })
   }
 
   loadMyFlats(societyId?: string) {
+    this.loadingFlatMembers = true;
     this.societyService.myFlats(societyId)
       .pipe(take(1))
       .subscribe({
@@ -59,6 +68,10 @@ export class MyFlatListComponent implements OnInit {
                 return false;
             })
           }
+          this.loadingFlatMembers = false;
+        },
+        error: err => {
+          this.loadingFlatMembers = false;
         }
       });
   }

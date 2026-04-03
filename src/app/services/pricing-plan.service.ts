@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IBEResponseFormat, IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan, IPlanDurationsResponse, IPaymentVerificationPayload } from '../interfaces';
+import { IBEResponseFormat, IChangePlanCalculation, ICurrentPlanResponse, IFeature, IPagedResponse, IPlanHistoryItem, IPricingPlan, ISocietyPlan, IPlanDurationsResponse, IPaymentVerificationPayload, IExchangeRateResponse } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
@@ -218,6 +218,13 @@ export class PricingPlanService {
             payload.couponCode = couponCode;
         }
         return this.http.post(`${this.baseUrl}/change/${societyId}`, payload);
+    }
+
+    @Cacheable({
+        group: 'pricing-plans'
+    })
+    getCurrencyExchangeRates(currency: string = 'INR'): Observable<IExchangeRateResponse> {
+        return this.http.get<IExchangeRateResponse>(`${this.baseUrl}/exchange/${currency}`);
     }
 
     validateCoupon(couponCode: string, amount: number, planId?: string): Observable<any> {

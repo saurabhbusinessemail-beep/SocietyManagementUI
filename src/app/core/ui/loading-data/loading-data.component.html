@@ -1,0 +1,7 @@
+<div class="loading-overlay" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+    <div class="loading-spinner-small"></div>
+    <span>
+        {{message}}
+        <ng-container *ngIf="!onlyMessage">...</ng-container>
+    </span>
+</div>

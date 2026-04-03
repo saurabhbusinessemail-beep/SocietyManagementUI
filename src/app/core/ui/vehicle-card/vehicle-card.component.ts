@@ -13,6 +13,7 @@ export class VehicleCardComponent {
   @Input() showDelete = false;
   @Input() selectMode = false;
   @Input() selected = false;
+  @Input() actionInProgress = false;
 
   @Output() edit = new EventEmitter<IVehicle>();
   @Output() delete = new EventEmitter<IVehicle>();

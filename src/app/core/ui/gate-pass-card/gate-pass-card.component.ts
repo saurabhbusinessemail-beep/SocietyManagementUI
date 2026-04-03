@@ -11,6 +11,7 @@ export class GatePassCardComponent {
   @Input() showDelete = false;
   @Input() selectMode = false;
   @Input() selected = false;
+  @Input() actionInProgress = false;
 
   @Output() delete = new EventEmitter<IGatePass>();
   @Output() showQR = new EventEmitter<IGatePass>();

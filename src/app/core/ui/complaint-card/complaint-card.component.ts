@@ -12,6 +12,7 @@ export class ComplaintCardComponent {
   @Input() showDelete = false;
   @Input() selectMode = false;
   @Input() selected = false;
+  @Input() actionInProgress = false;
 
   // Permission flags for status change buttons
   @Input() canApprove = false;

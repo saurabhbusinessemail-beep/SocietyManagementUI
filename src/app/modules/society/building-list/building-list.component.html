@@ -1,13 +1,6 @@
 <app-layout title="Buildings" [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
 
     <ng-container moreActions>
-        <!-- <ui-button label="Add Building" type="primary" (clicked)="openAddDialog()">
-        </ui-button>
-        <ui-button label="Flats" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewFlats()">
-        </ui-button>
-        <ui-button label="Parkings" type="only-content" *ngIf="canViewFlats" (clicked)="gotoViewParkings()">
-        </ui-button> -->
-
         <ul class="page-menu-list">
             <li class="page-menu" (click)="openAddDialog()" *ngIf="canAddBuildings">Add Building</li>
             <li class="page-menu" (click)="gotoViewFlats()">Manage Flats</li>
@@ -17,33 +10,40 @@
 
     <ui-form-layout>
 
-        <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
-            <ui-label [valueText]="pendingBuildingsToAdd" [config]="pendingBuildingsConfig" direction="horizontal"
-                [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
-            </ui-label>
-        </div>
 
-        <!-- Multi Select -->
-        <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
-            [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
-            (delete)="deleteAllSelectedRecords()">
-        </ui-multi-select>
+        <ui-loading *ngIf="loading" message="Loading buildings" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        </ui-loading>
 
-        <!-- Building cards -->
-        <ng-container *ngFor="let building of buildings">
-            <ui-building-card [building]="building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
-                [selectMode]="selectMode" [selected]="selectedIds.has(building._id)"
-                [showDelete]="canDeleteBuildings && !selectMode" [showEdit]="canUpdateBuildings && !selectMode"
-                (selectedChange)="onSelectionChange(building._id, $event)" (delete)="deleteBuilding(building)"
-                (edit)="openEditDialog(building)">
-            </ui-building-card>
-        </ng-container>
+        <ng-container *ngIf="!loading">
+            <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
+                <ui-label [valueText]="pendingBuildingsToAdd" [config]="pendingBuildingsConfig" direction="horizontal"
+                    [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                </ui-label>
+            </div>
 
-        <ng-container *ngIf="buildings.length === 0">
-            <app-empty-records singular="building" plural="buildings"
-                (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <app-icon icon name="building" size="xxl"></app-icon>
-            </app-empty-records>
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
+            <!-- Building cards -->
+            <ng-container *ngFor="let building of buildings">
+                <ui-building-card [building]="building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(building._id)"
+                    [showDelete]="canDeleteBuildings && !selectMode" [showEdit]="canUpdateBuildings && !selectMode"
+                    (selectedChange)="onSelectionChange(building._id, $event)" (delete)="deleteBuilding(building)"
+                    (edit)="openEditDialog(building)">
+                </ui-building-card>
+            </ng-container>
+
+            <ng-container *ngIf="buildings.length === 0">
+                <app-empty-records singular="building" plural="buildings" (addClicked)="openAddDialog()"
+                    [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="building" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
         </ng-container>
 
     </ui-form-layout>

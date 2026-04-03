@@ -252,6 +252,7 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
       .subscribe({
         next: response => {
           this.buildings = response.data;
+          this.loading = false;
         },
         error: () => {
           this.loading = false;

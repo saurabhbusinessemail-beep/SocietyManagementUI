@@ -24,25 +24,34 @@
 
         <ui-form-layout class="flex-auto">
 
-            <ng-container *ngFor=" let complaint of complaints">
+            <ng-container *ngIf="!loadingComplaints">
+                <ng-container *ngFor=" let complaint of complaints">
 
-                <ui-complaint-card [complaint]="complaint" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
-                    [canApprove]="isStatusTransitionAllowed(complaint, 'approved') && amIManagerOfSociety(complaint)"
-                    [canReject]="isStatusTransitionAllowed(complaint, 'rejected') && amIManagerOfSociety(complaint)"
-                    [canMoveToProgress]="isStatusTransitionAllowed(complaint, 'in_progress') && amIManagerOfSociety(complaint)"
-                    [canMarkResolved]="isStatusTransitionAllowed(complaint, 'resolved') && amIManagerOfSociety(complaint)"
-                    [canClose]="isStatusTransitionAllowed(complaint, 'closed') && isMyComplaint(complaint)"
-                    (statusChange)="changeStatus(complaint, $event)">
-                </ui-complaint-card>
+                    <ui-complaint-card [complaint]="complaint" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                        [canApprove]="isStatusTransitionAllowed(complaint, 'approved') && amIManagerOfSociety(complaint)"
+                        [canReject]="isStatusTransitionAllowed(complaint, 'rejected') && amIManagerOfSociety(complaint)"
+                        [canMoveToProgress]="isStatusTransitionAllowed(complaint, 'in_progress') && amIManagerOfSociety(complaint)"
+                        [canMarkResolved]="isStatusTransitionAllowed(complaint, 'resolved') && amIManagerOfSociety(complaint)"
+                        [showDelete]="isMyComplaint(complaint)" [actionInProgress]="loadingComplaintActions[complaint._id]"
+                        [canClose]="isStatusTransitionAllowed(complaint, 'closed') && isMyComplaint(complaint)"
+                        (delete)="deleteComplaint(complaint)" (statusChange)="changeStatus(complaint, $event)">
+                    </ui-complaint-card>
+
+                </ng-container>
+
+                <ng-container *ngIf="complaints.length === 0">
+                    <app-empty-records singular="complaint" plural="complaints" [hideAddButton]="!isFlatMember"
+                        (addClicked)="openAddComplaint()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="complaint" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
 
             </ng-container>
 
-            <ng-container *ngIf="complaints.length === 0">
-                <app-empty-records singular="complaint" plural="complaints" [hideAddButton]="!isFlatMember"
-                    (addClicked)="openAddComplaint()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="complaint" size="xxl"></app-icon>
-                </app-empty-records>
-            </ng-container>
+
+            <ui-loading *ngIf="loadingComplaints" message="Loading complaints" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
         </ui-form-layout>
     </div>

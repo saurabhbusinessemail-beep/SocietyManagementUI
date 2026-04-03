@@ -76,19 +76,27 @@
         </div>
 
         <div class="action-buttons">
-            <!-- Pin/Unpin Button - Admin/Manager only -->
-            <ui-button [label]="announcement.isPinned ? 'Unpin' : 'Pin'" type="only-content" (clicked)="onPinClick()"
-                *ngIf="isAdminView && announcement.status === 'published'">
-            </ui-button>
 
-            <!-- Edit Button - Show for draft or admin/manager -->
-            <ui-button label="Edit" type="only-content" (clicked)="onEditClick()"
-                *ngIf="isAdminView && announcement.status === 'draft'">
-            </ui-button>
+            <ng-container *ngIf="!actionInProgress">
+                <!-- Pin/Unpin Button - Admin/Manager only -->
+                <ui-button [label]="announcement.isPinned ? 'Unpin' : 'Pin'" type="only-content"
+                    (clicked)="onPinClick()" *ngIf="isAdminView && announcement.status === 'published'">
+                </ui-button>
 
-            <!-- Delete Button -->
-            <app-icon name="delete" size="md" class="error-icon" (click)="onDeleteClick()" *ngIf="isAdminView">
-            </app-icon>
+                <!-- Edit Button - Show for draft or admin/manager -->
+                <ui-button label="Edit" type="only-content" (clicked)="onEditClick()"
+                    *ngIf="isAdminView && announcement.status === 'draft'">
+                </ui-button>
+
+                <!-- Delete Button -->
+                <app-icon name="delete" size="md" class="error-icon" (click)="onDeleteClick()" *ngIf="isAdminView">
+                </app-icon>
+
+            </ng-container>
+
+
+            <ui-loading *ngIf="actionInProgress" message="" [onlyMessage]="true">
+            </ui-loading>
         </div>
     </div>
 

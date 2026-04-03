@@ -63,6 +63,8 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   isCurrentPlanLoading: boolean = false;
 
   societyLoading = false;
+  validatingCoupon = false;
+  calculatingChange = false;
 
   // Form groups
   couponForm: FormGroup;
@@ -253,6 +255,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
   calculateChangePrice(couponCode?: string): void {
     if (!this.selectedPlan || !this.societyId || this.selectedDurationValue === 0) return;
 
+    this.calculatingChange = true;
     this.pricingPlanService.calculateChangePrice(
       this.societyId,
       this.selectedPlan.id,
@@ -268,8 +271,10 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
           this.discountAmount = this.changePlanCalculation?.calculation?.discount ?? 0;
           this.discountPercentage = this.originalPrice > 0 ? (this.discountAmount / this.originalPrice) * 100 : 0;
           this.showChangePlanSummary = true;
+          this.calculatingChange = false;
         },
         error: (err) => {
+          this.calculatingChange = false;
           console.error('Error calculating change price:', err);
           this.couponMessage = err.error?.message || 'Error applying coupon';
         }
@@ -348,6 +353,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
       ? (this.changePlanCalculation.calculation?.amountToPay ?? 0)
       : this.totalPrice;
 
+    this.validatingCoupon = true;
     this.pricingPlanService.validateCoupon(this.couponCode, amountToDiscount, this.selectedPlan?.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -371,6 +377,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
             this.discountAmount = 0;
             this.discountPercentage = 0;
           }
+          this.validatingCoupon = false;
         },
         error: (err) => {
           this.couponMessage = err.error?.message || 'Error applying coupon';
@@ -378,6 +385,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
           this.showRemoveCoupon = false;
           this.discountAmount = 0;
           this.discountPercentage = 0;
+          this.validatingCoupon = false;
         }
       });
   }

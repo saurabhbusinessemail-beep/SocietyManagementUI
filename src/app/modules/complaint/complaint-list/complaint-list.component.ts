@@ -7,6 +7,7 @@ import { Subject, take } from 'rxjs';
 import { ComplaintService } from '../../../services/complaint.service';
 import { adminManagerRoles } from '../../../constants';
 import { SocietyService } from '../../../services/society.service';
+import { DialogService } from '../../../services/dialog.service';
 
 interface IComplaintFilter {
   societyId?: string, flatId?: string, complaintType?: string
@@ -43,6 +44,9 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   isFlatMember: boolean = false;
   routeFlatId?: string;
 
+  loadingComplaints = false;
+  loadingComplaintActions: { [complaintId: string]: boolean } = {};
+
   protected isComponentActive = new Subject<void>();
 
   complaintTypeControl = new FormControl<IUIDropdownOption | undefined | null>(this.complaintTypeOptions[0]);
@@ -59,7 +63,8 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     private router: Router,
     private complaintService: ComplaintService,
     public societyService: SocietyService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -119,11 +124,16 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   loadComplaints(selectedFilter: IComplaintFilter) {
     this.selectedFIlter = selectedFilter;
     this.complaints = [];
+    this.loadingComplaints = true;
     this.complaintService.getComplaints(selectedFilter.societyId, selectedFilter.flatId, selectedFilter.complaintType)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.complaints = response.data
+          this.complaints = response.data;
+          this.loadingComplaints = false;
+        },
+        error: err => {
+          this.loadingComplaints = false;
         }
       });
   }
@@ -131,11 +141,33 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   changeStatus(complaint: IComplaint, newStatus: string) {
     if (!this.isStatusTransitionAllowed(complaint, newStatus)) return;
 
+    this.loadingComplaintActions[complaint._id] = true;
     this.complaintService.changeStatus(complaint._id, newStatus)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.loadingComplaintActions[complaint._id] = false;
           if (response.success) this.loadComplaints(this.selectedFIlter);
+        },
+        error: err => {
+          this.loadingComplaintActions[complaint._id] = false;
+        }
+      })
+  }
+
+  async deleteComplaint(complaint: IComplaint) {
+    if (!await this.dialogService.confirmDelete('Delete Complaint', `Are you sure you want to delete flat "${complaint.title}" ?`)) return;
+
+    this.loadingComplaintActions[complaint._id] = true;
+    this.complaintService.deleteComplaint(complaint._id)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.loadingComplaintActions[complaint._id] = false;
+          this.loadComplaints(this.selectedFIlter);
+        },
+        error: err => {
+          this.loadingComplaintActions[complaint._id] = false;
         }
       })
   }

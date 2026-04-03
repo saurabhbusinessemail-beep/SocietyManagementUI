@@ -12,24 +12,33 @@
 
     <ui-form-layout>
 
-        <!-- Multi Select -->
-        <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
-            [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
-            (delete)="deleteAllSelectedRecords()">
-        </ui-multi-select>
 
-        <ng-container *ngFor="let admin of admins">
-            <ui-manager-card [user]="admin" [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [selectMode]="selectMode"
-                [selected]="selectedIds.has(admin._id)" [showDelete]="canDeleteSocietyAdmin && !selectMode"
-                (selectedChange)="onSelectionChange(admin._id, $event)" (delete)="removeAdmin(admin)">
-            </ui-manager-card>
-        </ng-container>
+        <ui-loading *ngIf="loading" message="Loading society admins" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+        </ui-loading>
 
-        <ng-container *ngIf="admins.length === 0">
-            <app-empty-records singular="admin" plural="admins" [hideAddButton]="!canAddSocietyAdmin" (click)="openAddDialog()"
-                [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <app-icon icon name="admin" size="xxl"></app-icon>
-            </app-empty-records>
+        <ng-container *ngIf="!loading">
+
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
+            <ng-container *ngFor="let admin of admins">
+                <ui-manager-card [user]="admin" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(admin._id)"
+                    [showDelete]="canDeleteSocietyAdmin && !selectMode"
+                    (selectedChange)="onSelectionChange(admin._id, $event)" (delete)="removeAdmin(admin)">
+                </ui-manager-card>
+            </ng-container>
+
+            <ng-container *ngIf="admins.length === 0">
+                <app-empty-records singular="admin" plural="admins" [hideAddButton]="!canAddSocietyAdmin"
+                    (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="admin" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
         </ng-container>
 
     </ui-form-layout>

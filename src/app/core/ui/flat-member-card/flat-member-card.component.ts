@@ -15,6 +15,8 @@ export class FlatMemberCardComponent {
   @Input() member!: IFlatMember;
   @Input() viewerRole: 'admin' | SocietyRoles.manager | SocietyRoles.owner | SocietyRoles.tenant | SocietyRoles.member = SocietyRoles.owner;
   @Input() showDelete = false;
+  @Input() actionInProgress = false;
+  @Input() showMoveInOut = false;
   @Output() deleteMember = new EventEmitter<IFlatMember>();
   @Output() moveInMember = new EventEmitter<void>();
   @Output() moveOutMember = new EventEmitter<Date>();
@@ -62,19 +64,31 @@ export class FlatMemberCardComponent {
   @ViewChild('endDate', { static: true }) endDateTemplate!: TemplateRef<any>;
 
   get showMoveOut(): boolean {
-    return !this.member.leaseEnd && this.viewerRole === 'owner' && this.member.status === 'active' && this.member.residingType === ResidingTypes.Tenant
-  }
+    if (!this.showMoveInOut) return false;
 
-  get showMoveIn(): boolean {
+    const today = new Date();
     const startDate = (this.member.leaseStart ? new Date(this.member.leaseStart) : new Date());
     const endDate = (this.member.leaseEnd ? new Date(this.member.leaseEnd) : new Date());
-    const today = new Date();
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(0, 0, 0, 0);
     today.setHours(0, 0, 0, 0);
-    const isOverlap = startDate <= today && today >= endDate;
+    const isOverlap = startDate <= today && today <= endDate;
 
-    return isOverlap && this.viewerRole === 'owner' && this.member.status === 'active' && this.member.residingType !== ResidingTypes.Tenant
+    return isOverlap && this.viewerRole === 'owner' && this.member.status === 'active' // && this.member.residingType === ResidingTypes.Tenant
+  }
+
+  get showMoveIn(): boolean {
+    if (!this.showMoveInOut) return false;
+    
+    const today = new Date();
+    const startDate = (this.member.leaseStart ? new Date(this.member.leaseStart) : new Date());
+    const endDate = (this.member.leaseEnd ? new Date(this.member.leaseEnd) : new Date());
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    const isInFuture = startDate > today;
+
+    return isInFuture && this.viewerRole === 'owner' && this.member.status === 'active' // && this.member.residingType !== ResidingTypes.Tenant
   }
 
   constructor(private dialog: MatDialog) { }

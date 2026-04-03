@@ -1,64 +1,23 @@
 <app-layout [hideMoreActions]="true" [title]="pageTitle" [showBackButton]="true">
     <div class="flat-details-container">
 
-        <!-- Loading State -->
-        <div class="loading-state" *ngIf="!featuresLoaded">
-            <div class="spinner"></div>
-            <p>Loading flat details...</p>
-        </div>
-
-        <ng-container *ngIf="featuresLoaded">
-            <!-- Flat Information Card -->
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="header-left">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                            <path
-                                d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        </svg>
-                        <h2 class="card-title">Flat Information</h2>
-                    </div>
-                    <div class="header-right">
-                        <!-- Residing Type Badges - Desktop -->
-                        <div class="residing-badges desktop-badges">
-                            <span class="residing-badge self" *ngIf="flatMember?.residingType === 'Self'">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                    <path d="m9 12 2 2 4-4" />
-                                </svg>
-                                Self
-                            </span>
-                            <span class="residing-badge vacant" *ngIf="flatMember?.residingType === 'Vacant'">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="m12 8 6-3-6-3v10" />
-                                    <path
-                                        d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12" />
-                                    <path d="m6.49 12.85 11.02 6.3" />
-                                    <path d="M17.51 12.85 6.5 19.15" />
-                                </svg>
-                                Vacant
-                            </span>
-                            <span class="residing-badge tenant" *ngIf="flatMember?.residingType === 'Tenant'">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="m16 11 2 2 4-4" />
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                </svg>
-                                Tenant
-                            </span>
-                        </div>
-                        <!-- Mobile Badge -->
-                        <span class="residing-badge mobile-badge self" *ngIf="flatMember?.residingType === 'Self'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
+        <!-- Flat Information Card -->
+        <div class="info-card">
+            <div class="card-header">
+                <div class="header-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                        <path
+                            d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    </svg>
+                    <h2 class="card-title">Flat Information</h2>
+                </div>
+                <div class="header-right" *ngIf="!loadingFlatMember">
+                    <!-- Residing Type Badges - Desktop -->
+                    <div class="residing-badges desktop-badges">
+                        <span class="residing-badge self" *ngIf="flatMember?.residingType === 'Self'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
                                 <path
@@ -67,193 +26,217 @@
                             </svg>
                             Self
                         </span>
-                        <button class="edit-button" (click)="handleChangeResidingTypeClick()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                        <span class="residing-badge vacant" *ngIf="flatMember?.residingType === 'Vacant'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
+                                <path d="m12 8 6-3-6-3v10" />
                                 <path
-                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                                <path d="m15 5 4 4" />
+                                    d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12" />
+                                <path d="m6.49 12.85 11.02 6.3" />
+                                <path d="M17.51 12.85 6.5 19.15" />
                             </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Flat Details Grid -->
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <div class="detail-label">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                            Vacant
+                        </span>
+                        <span class="residing-badge tenant" *ngIf="flatMember?.residingType === 'Tenant'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
-                                <path d="M10 12h4" />
-                                <path d="M10 8h4" />
-                                <path d="M14 21v-3a2 2 0 0 0-4 0v3" />
-                                <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
-                                <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" />
-                            </svg>
-                            SOCIETY
-                        </div>
-                        <p class="detail-value">{{ getSociety()?.societyName || '—' }}</p>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <line x1="4" x2="20" y1="9" y2="9" />
-                                <line x1="4" x2="20" y1="15" y2="15" />
-                                <line x1="10" x2="8" y1="3" y2="21" />
-                                <line x1="16" x2="14" y1="3" y2="21" />
-                            </svg>
-                            FLAT NUMBER
-                        </div>
-                        <p class="detail-value">{{ getflat()?.flatNumber || '—' }}</p>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" />
-                                <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" />
-                                <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />
-                            </svg>
-                            FLOOR
-                        </div>
-                        <p class="detail-value">{{ getflat()?.floor || '—' }}</p>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                                <path
-                                    d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                            </svg>
-                            FLAT TYPE
-                        </div>
-                        <p class="detail-value">{{ getflat()?.flatType || '—' }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Member Profile Card (if viewing other member) -->
-            <div class="profile-card" *ngIf="flatMember && showFlatMemberProfile">
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        <span class="avatar-initials">{{ getInitials(flatMember.name) }}</span>
-                    </div>
-                    <div class="profile-info">
-                        <h3 class="profile-name">{{ flatMember.name }}</h3>
-                        <div class="profile-meta">
-                            <span class="role-badge" [ngClass]="flatMember.residingType?.toLowerCase()">
-                                {{ flatMember.residingType }}
-                            </span>
-                            <span class="status-badge" [ngClass]="flatMember.status">
-                                {{ flatMember.status }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="profile-contact">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
-                        </svg>
-                        <span class="contact-number">{{ flatMember.contact }}</span>
-                    </div>
-                </div>
-
-                <!-- Role Chips -->
-                <div class="role-chips">
-                    <span *ngIf="flatMember.isOwner" class="chip owner">Owner</span>
-                    <span *ngIf="flatMember.isTenant" class="chip tenant">Tenant</span>
-                    <span *ngIf="flatMember.isMember" class="chip member">Member</span>
-                    <span *ngIf="flatMember.isTenantMember" class="chip tenant-member">Tenant Member</span>
-                </div>
-
-                <!-- Lease Details (if tenant) -->
-                <div class="lease-details" *ngIf="flatMember.isTenant">
-                    <div class="lease-item" *ngIf="flatMember.leaseStart">
-                        <span class="lease-label">Lease Start</span>
-                        <span class="lease-value">{{ flatMember.leaseStart | date:'mediumDate' }}</span>
-                    </div>
-                    <div class="lease-item" *ngIf="flatMember.leaseEnd">
-                        <span class="lease-label">Lease End</span>
-                        <span class="lease-value">{{ flatMember.leaseEnd | date:'mediumDate' }}</span>
-                    </div>
-                    <div class="lease-item" *ngIf="flatMember.rentAmount">
-                        <span class="lease-label">Rent</span>
-                        <span class="lease-value rent">{{ flatMember.rentAmount | currency:'INR' }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Residents Section -->
-            <div class="section-card" *ngIf="membersFeatureAvailable; else residentsNotAvailable">
-                <div class="section-header">
-                    <div class="section-title-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                            <path d="M16 3.128a4 4 0 0 1 0 7.744" />
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                            <circle cx="9" cy="7" r="4" />
-                        </svg>
-                        <h3 class="section-title">Residents</h3>
-                    </div>
-                    <button class="manage-btn" (click)="manageResidents()">
-                        Manage
-                        <app-icon name="goto" size="md"></app-icon>
-                    </button>
-                </div>
-                <div class="resident-list" *ngIf="members?.length; else noResidents">
-                    <div class="resident-item" *ngFor="let member of members">
-                        <div class="resident-info">
-                            <div class="resident-avatar">
-                                <span class="avatar-letter">{{ getInitials(member.name) }}</span>
-                            </div>
-                            <div class="resident-details">
-                                <p class="resident-name">{{ member.name }}</p>
-                                <span class="resident-role" *ngIf="member.isOwner">Owner</span>
-                                <span class="resident-role" *ngIf="member.isTenant">Tenant</span>
-                                <span class="resident-role"
-                                    *ngIf="member.isMember && !member.isOwner && !member.isTenant">Member</span>
-                            </div>
-                        </div>
-                        <div class="resident-contact">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
-                            </svg>
-                            <span>{{ member.contact }}</span>
-                        </div>
-                    </div>
-                </div>
-                <ng-template #noResidents>
-                    <div class="empty-state">No residents found.</div>
-                </ng-template>
-            </div>
-            <ng-template #residentsNotAvailable>
-                <div class="section-card feature-unavailable">
-                    <div class="section-header">
-                        <div class="section-title-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                                <path d="m16 11 2 2 4-4" />
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                <path d="M16 3.128a4 4 0 0 1 0 7.744" />
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                                 <circle cx="9" cy="7" r="4" />
                             </svg>
-                            <h3 class="section-title">Residents</h3>
+                            Tenant
+                        </span>
+                    </div>
+                    <!-- Mobile Badge -->
+                    <span class="residing-badge mobile-badge self" *ngIf="flatMember?.residingType === 'Self'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                            <path d="m9 12 2 2 4-4" />
+                        </svg>
+                        Self
+                    </span>
+                    <button class="edit-button" (click)="handleChangeResidingTypeClick()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                            <path d="m15 5 4 4" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Flat Details Grid -->
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10 12h4" />
+                            <path d="M10 8h4" />
+                            <path d="M14 21v-3a2 2 0 0 0-4 0v3" />
+                            <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
+                            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" />
+                        </svg>
+                        SOCIETY
+                    </div>
+                    <p class="detail-value" *ngIf="!loadingFlatMember">{{ getSociety()?.societyName || '—' }}</p>
+                    <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
+
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" x2="20" y1="9" y2="9" />
+                            <line x1="4" x2="20" y1="15" y2="15" />
+                            <line x1="10" x2="8" y1="3" y2="21" />
+                            <line x1="16" x2="14" y1="3" y2="21" />
+                        </svg>
+                        FLAT NUMBER
+                    </div>
+                    <p class="detail-value" *ngIf="!loadingFlatMember">{{ getflat()?.flatNumber || '—' }}</p>
+                    <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" />
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" />
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />
+                        </svg>
+                        FLOOR
+                    </div>
+                    <p class="detail-value" *ngIf="!loadingFlatMember">{{ getflat()?.floor || '—' }}</p>
+                    <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                            <path
+                                d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        </svg>
+                        FLAT TYPE
+                    </div>
+                    <p class="detail-value" *ngIf="!loadingFlatMember">{{ getflat()?.flatType || '—' }}</p>
+                    <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Member Profile Card (if viewing other member) -->
+        <div class="profile-card" *ngIf="flatMember && showFlatMemberProfile">
+
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <span class="avatar-initials">{{ getInitials(flatMember.name) }}</span>
+                </div>
+                <div class="profile-info">
+                    <h3 class="profile-name">{{ flatMember.name }}</h3>
+                    <div class="profile-meta">
+                        <span class="role-badge" [ngClass]="flatMember.residingType?.toLowerCase()">
+                            {{ flatMember.residingType }}
+                        </span>
+                        <span class="status-badge" [ngClass]="flatMember.status">
+                            {{ flatMember.status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-contact">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+                    </svg>
+                    <span class="contact-number">{{ flatMember.contact }}</span>
+                </div>
+            </div>
+
+            <!-- Role Chips -->
+            <div class="role-chips">
+                <span *ngIf="flatMember.isOwner" class="chip owner">Owner</span>
+                <span *ngIf="flatMember.isTenant" class="chip tenant">Tenant</span>
+                <span *ngIf="flatMember.isMember" class="chip member">Member</span>
+                <span *ngIf="flatMember.isTenantMember" class="chip tenant-member">Tenant Member</span>
+            </div>
+
+            <!-- Lease Details (if tenant) -->
+            <div class="lease-details" *ngIf="flatMember.isTenant">
+                <div class="lease-item" *ngIf="flatMember.leaseStart">
+                    <span class="lease-label">Lease Start</span>
+                    <span class="lease-value">{{ flatMember.leaseStart | date:'mediumDate' }}</span>
+                </div>
+                <div class="lease-item" *ngIf="flatMember.leaseEnd">
+                    <span class="lease-label">Lease End</span>
+                    <span class="lease-value">{{ flatMember.leaseEnd | date:'mediumDate' }}</span>
+                </div>
+                <div class="lease-item" *ngIf="flatMember.rentAmount">
+                    <span class="lease-label">Rent</span>
+                    <span class="lease-value rent">{{ flatMember.rentAmount | currency:'INR' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Residents Section -->
+        <div class="section-card" [class.feature-unavailable]="!membersFeatureAvailable && !loadingOtherFlatMembers">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                        <circle cx="9" cy="7" r="4" />
+                    </svg>
+                    <h3 class="section-title">Residents</h3>
+                </div>
+                <button class="manage-btn" (click)="manageResidents()" [disabled]="loadingOtherFlatMembers">
+                    Manage
+                    <app-icon name="goto" size="md"></app-icon>
+                </button>
+            </div>
+            <ng-container *ngIf="!loadingOtherFlatMembers">
+
+                <ng-container *ngIf="membersFeatureAvailable; else residentsNotAvailable">
+                    <div class="resident-list" *ngIf="members.length; else noResidents">
+                        <div class="resident-item" *ngFor="let member of members">
+                            <div class="resident-info">
+                                <div class="resident-avatar">
+                                    <span class="avatar-letter">{{ getInitials(member.name) }}</span>
+                                </div>
+                                <div class="resident-details">
+                                    <p class="resident-name">{{ member.name }}</p>
+                                    <span class="resident-role" *ngIf="member.isOwner">Owner</span>
+                                    <span class="resident-role" *ngIf="member.isTenant">Tenant</span>
+                                    <span class="resident-role"
+                                        *ngIf="member.isMember && !member.isOwner && !member.isTenant">Member</span>
+                                </div>
+                            </div>
+                            <div class="resident-contact">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+                                </svg>
+                                <span>{{ member.contact }}</span>
+                            </div>
                         </div>
                     </div>
+                    <ng-template #noResidents>
+                        <div class="empty-state">No residents found.</div>
+                    </ng-template>
+                </ng-container>
+
+                <ng-template #residentsNotAvailable>
                     <div class="unavailable-content">
                         <div class="locked-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
@@ -269,59 +252,53 @@
                             <app-icon name="upgrade" size="sm"></app-icon>
                         </button>
                     </div>
-                </div>
-            </ng-template>
+                </ng-template>
 
-            <!-- Two Column Layout for remaining sections -->
-            <div class="two-column-layout">
-                <!-- Left Column -->
-                <div class="column">
-                    <!-- Vehicles Section -->
-                    <div class="section-card" *ngIf="vehiclesFeatureAvailable; else vehiclesNotAvailable">
-                        <div class="section-header">
-                            <div class="section-title-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
-                                    <circle cx="7" cy="17" r="2" />
-                                    <path d="M9 17h6" />
-                                    <circle cx="17" cy="17" r="2" />
-                                </svg>
-                                <h3 class="section-title">Vehicles</h3>
-                            </div>
-                            <button class="manage-btn" (click)="manageVehicles()">
-                                Manage
-                                <app-icon name="goto" size="md"></app-icon>
-                            </button>
+            </ng-container>
+            <div class="resident-list" *ngIf="loadingOtherFlatMembers">
+                <ui-loading message="Loading"></ui-loading>
+            </div>
+        </div>
+
+        <!-- Two Column Layout for remaining sections -->
+        <div class="two-column-layout">
+            <!-- Left Column -->
+            <div class="column">
+                <!-- Vehicles Section -->
+                <div class="section-card" [class.feature-unavailable]="!vehiclesFeatureAvailable && !loadingVehicles">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+                                <circle cx="7" cy="17" r="2" />
+                                <path d="M9 17h6" />
+                                <circle cx="17" cy="17" r="2" />
+                            </svg>
+                            <h3 class="section-title">Vehicles</h3>
                         </div>
-                        <div class="vehicle-list" *ngIf="vehicles?.length; else noVehicles">
-                            <div class="vehicle-item" *ngFor="let vehicle of vehicles">
-                                <span class="vehicle-number">{{ vehicle.vehicleNumber }}</span>
-                                <span class="vehicle-type">{{ vehicle.vehicleType }}</span>
-                            </div>
-                        </div>
-                        <ng-template #noVehicles>
-                            <div class="empty-state">No vehicles registered.</div>
-                        </ng-template>
+                        <button class="manage-btn" (click)="manageVehicles()" [disabled]="loadingVehicles">
+                            Manage
+                            <app-icon name="goto" size="md"></app-icon>
+                        </button>
                     </div>
-                    <ng-template #vehiclesNotAvailable>
-                        <div class="section-card feature-unavailable">
-                            <div class="section-header">
-                                <div class="section-title-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path
-                                            d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
-                                        <circle cx="7" cy="17" r="2" />
-                                        <path d="M9 17h6" />
-                                        <circle cx="17" cy="17" r="2" />
-                                    </svg>
-                                    <h3 class="section-title">Vehicles</h3>
+                    <ng-container *ngIf="!loadingVehicles">
+
+                        <ng-container *ngIf="vehiclesFeatureAvailable; else vehiclesNotAvailable">
+                            <div class="vehicle-list" *ngIf="vehicles.length; else noVehicles">
+                                <div class="vehicle-item" *ngFor="let vehicle of vehicles">
+                                    <span class="vehicle-number">{{ vehicle.vehicleNumber }}</span>
+                                    <span class="vehicle-type">{{ vehicle.vehicleType }}</span>
                                 </div>
                             </div>
+                            <ng-template #noVehicles>
+                                <div class="empty-state">No vehicles registered.</div>
+                            </ng-template>
+                        </ng-container>
+
+                        <ng-template #vehiclesNotAvailable>
                             <div class="unavailable-content">
                                 <div class="locked-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
@@ -337,45 +314,42 @@
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
-                        </div>
-                    </ng-template>
-
-                    <!-- Parking Section -->
-                    <div class="section-card" *ngIf="parkingFeatureAvailable; else parkingNotAvailable">
-                        <div class="section-header">
-                            <div class="section-title-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                                    <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
-                                </svg>
-                                <h3 class="section-title">Parking</h3>
-                            </div>
-                        </div>
-                        <div class="parking-list" *ngIf="parkings?.length; else noParking">
-                            <div class="parking-item" *ngFor="let parking of parkings">
-                                <span class="parking-number">#{{ parking.parkingNumber }}</span>
-                                <span class="parking-type">{{ parking.parkingType }}</span>
-                            </div>
-                        </div>
-                        <ng-template #noParking>
-                            <div class="empty-state">No parking assigned.</div>
                         </ng-template>
+
+                    </ng-container>
+                    <div class="vehicle-list" *ngIf="loadingVehicles">
+                        <ui-loading message="Loading"></ui-loading>
                     </div>
-                    <ng-template #parkingNotAvailable>
-                        <div class="section-card feature-unavailable">
-                            <div class="section-header">
-                                <div class="section-title-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <rect width="18" height="18" x="3" y="3" rx="2" />
-                                        <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
-                                    </svg>
-                                    <h3 class="section-title">Parking</h3>
+                </div>
+
+                <!-- Parking Section -->
+                <div class="section-card" [class.feature-unavailable]="!parkingFeatureAvailable && !loadingParkings">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="2" />
+                                <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
+                            </svg>
+                            <h3 class="section-title">Parking</h3>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="!loadingParkings">
+
+                        <ng-container *ngIf="parkingFeatureAvailable; else parkingNotAvailable">
+                            <div class="parking-list" *ngIf="parkings.length; else noParking">
+                                <div class="parking-item" *ngFor="let parking of parkings">
+                                    <span class="parking-number">#{{ parking.parkingNumber }}</span>
+                                    <span class="parking-type">{{ parking.parkingType }}</span>
                                 </div>
                             </div>
+                            <ng-template #noParking>
+                                <div class="empty-state">No parking assigned.</div>
+                            </ng-template>
+                        </ng-container>
+
+                        <ng-template #parkingNotAvailable>
                             <div class="unavailable-content">
                                 <div class="locked-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
@@ -391,51 +365,49 @@
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
-                        </div>
-                    </ng-template>
+                        </ng-template>
 
-                    <!-- Tenant Section -->
-                    <ng-container *ngIf="isTenantResiding">
-                        <div class="section-card"
-                            *ngIf="tenantManagementFeatureAvailable; else tenantFeatureNotAvailable">
-                            <div class="section-header">
-                                <div class="section-title-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <rect width="18" height="18" x="3" y="3" rx="2" />
-                                        <path d="M6 6h12v3h-4v9h-4V9H6V6z" />
-                                    </svg>
-                                    <h3 class="section-title">Tenant</h3>
-                                </div>
-                                <button class="manage-btn" (click)="manageTenants()">
-                                    Manage
-                                    <app-icon name="goto" size="md"></app-icon>
-                                </button>
+
+                    </ng-container>
+                    <div class="parking-list" *ngIf="loadingParkings">
+                        <ui-loading message="Loading"></ui-loading>
+                    </div>
+                </div>
+
+                <!-- Tenant Section -->
+                <ng-container *ngIf="isTenantResiding">
+                    <div class="section-card" [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingTenants">
+                        <div class="section-header">
+                            <div class="section-title-wrapper">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M6 6h12v3h-4v9h-4V9H6V6z" />
+                                </svg>
+                                <h3 class="section-title">Tenant</h3>
                             </div>
-                            <div class="parking-list" *ngIf="tenants.length; else notenant">
-                                <div class="parking-item" *ngFor="let tenant of tenants">
-                                    <span class="parking-number">{{ tenant.name }}</span>
-                                    <span class="parking-type">{{ tenant.contact }}</span>
-                                </div>
-                            </div>
-                            <ng-template #notenant>
-                                <div class="empty-state">No tenant present.</div>
-                            </ng-template>
+                            <button class="manage-btn" (click)="manageTenants()" [disabled]="!loadingTenants">
+                                Manage
+                                <app-icon name="goto" size="md"></app-icon>
+                            </button>
                         </div>
-                        <ng-template #tenantFeatureNotAvailable>
-                            <div class="section-card feature-unavailable">
-                                <div class="section-header">
-                                    <div class="section-title-wrapper">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <rect width="18" height="18" x="3" y="3" rx="2" />
-                                            <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
-                                        </svg>
-                                        <h3 class="section-title">Tenant</h3>
+                        <ng-container *ngIf="!loadingTenants">
+
+                            <ng-container *ngIf="tenantManagementFeatureAvailable; else tenantFeatureNotAvailable">
+                                <div class="parking-list" *ngIf="tenants.length; else notenant">
+                                    <div class="parking-item" *ngFor="let tenant of tenants">
+                                        <span class="parking-number">{{ tenant.name }}</span>
+                                        <span class="parking-type">{{ tenant.contact }}</span>
                                     </div>
                                 </div>
+                                <ng-template #notenant>
+                                    <div class="empty-state">No tenant present.</div>
+                                </ng-template>
+                            </ng-container>
+
+
+                            <ng-template #tenantFeatureNotAvailable>
                                 <div class="unavailable-content">
                                     <div class="locked-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
@@ -452,67 +424,66 @@
                                         <app-icon name="upgrade" size="sm"></app-icon>
                                     </button>
                                 </div>
-                            </div>
-                        </ng-template>
-                    </ng-container>
-                </div>
+                            </ng-template>
 
-                <!-- Right Column -->
-                <div class="column">
-                    <!-- Complaints Section -->
-                    <div class="section-card" *ngIf="complaintsFeatureAvailable; else complaintsNotAvailable">
-                        <div class="section-header">
-                            <div class="section-title-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
-                                    <path d="M12 15h.01" />
-                                    <path d="M12 7v4" />
-                                </svg>
-                                <h3 class="section-title">Complaints</h3>
-                            </div>
-                            <button class="manage-btn" (click)="manageComplaints()">
-                                Manage
-                                <app-icon name="goto" size="md"></app-icon>
-                            </button>
+                        </ng-container>
+                        <div class="parking-list" *ngIf="loadingTenants">
+                            <ui-loading message="Loading"></ui-loading>
                         </div>
-                        <div class="complaint-list" *ngIf="complaints?.length; else noComplaints">
-                            <div class="complaint-item" *ngFor="let complaint of complaints">
-                                <div class="complaint-header">
-                                    <span class="complaint-title">{{ complaint.title }}</span>
-                                    <span class="priority-badge" [ngClass]="complaint.priority">
-                                        {{ complaint.priority }}
-                                    </span>
-                                </div>
-                                <div class="complaint-meta">
-                                    <span class="status-badge-small" [ngClass]="complaint.status">
-                                        {{ complaint.status }}
-                                    </span>
-                                    <span class="complaint-date">{{ complaint.createdOn | date:'mediumDate' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <ng-template #noComplaints>
-                            <div class="empty-state">No complaints filed.</div>
-                        </ng-template>
                     </div>
-                    <ng-template #complaintsNotAvailable>
-                        <div class="section-card feature-unavailable">
-                            <div class="section-header">
-                                <div class="section-title-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path
-                                            d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
-                                        <path d="M12 15h.01" />
-                                        <path d="M12 7v4" />
-                                    </svg>
-                                    <h3 class="section-title">Complaints</h3>
+                </ng-container>
+            </div>
+
+            <!-- Right Column -->
+            <div class="column">
+                <!-- Complaints Section -->
+                <div class="section-card"
+                    [class.feature-unavailable]="!complaintsFeatureAvailable && !loadingComplaints">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+                                <path d="M12 15h.01" />
+                                <path d="M12 7v4" />
+                            </svg>
+                            <h3 class="section-title">Complaints</h3>
+                        </div>
+                        <button class="manage-btn" (click)="manageComplaints()" [disabled]="loadingComplaints">
+                            Manage
+                            <app-icon name="goto" size="md"></app-icon>
+                        </button>
+                    </div>
+
+                    <ng-container *ngIf="!loadingComplaints">
+
+                        <ng-container *ngIf="complaintsFeatureAvailable; else complaintsNotAvailable">
+                            <div class="complaint-list" *ngIf="complaints.length; else noComplaints">
+                                <div class="complaint-item" *ngFor="let complaint of complaints">
+                                    <div class="complaint-header">
+                                        <span class="complaint-title">{{ complaint.title }}</span>
+                                        <span class="priority-badge" [ngClass]="complaint.priority">
+                                            {{ complaint.priority }}
+                                        </span>
+                                    </div>
+                                    <div class="complaint-meta">
+                                        <span class="status-badge-small" [ngClass]="complaint.status">
+                                            {{ complaint.status }}
+                                        </span>
+                                        <span class="complaint-date">{{ complaint.createdOn | date:'mediumDate'
+                                            }}</span>
+                                    </div>
                                 </div>
                             </div>
+                            <ng-template #noComplaints>
+                                <div class="empty-state">No complaints filed.</div>
+                            </ng-template>
+                        </ng-container>
+
+
+                        <ng-template #complaintsNotAvailable>
                             <div class="unavailable-content">
                                 <div class="locked-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
@@ -528,80 +499,74 @@
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
-                        </div>
-                    </ng-template>
+                        </ng-template>
 
-                    <!-- Gate Entries Section -->
-                    <div class="section-card" *ngIf="gateEntriesFeatureAvailable; else gateEntriesNotAvailable">
-                        <div class="section-header">
-                            <div class="section-title-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M11 20H2" />
-                                    <path
-                                        d="M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z" />
-                                    <path d="M11 4H8a2 2 0 0 0-2 2v14" />
-                                    <path d="M14 12h.01" />
-                                    <path d="M22 20h-3" />
-                                </svg>
-                                <h3 class="section-title">Gate Entries</h3>
-                            </div>
-                            <button class="manage-btn" (click)="manageGateEntries()">
-                                Manage
-                                <app-icon name="goto" size="md"></app-icon>
-                            </button>
+                    </ng-container>
+                    <div class="complaint-list" *ngIf="loadingComplaints">
+                        <ui-loading message="Loading"></ui-loading>
+                    </div>
+                </div>
+
+                <!-- Gate Entries Section -->
+                <div class="section-card"
+                    [class.feature-unavailable]="!gateEntriesFeatureAvailable && !laodingGateEntries">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M11 20H2" />
+                                <path
+                                    d="M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z" />
+                                <path d="M11 4H8a2 2 0 0 0-2 2v14" />
+                                <path d="M14 12h.01" />
+                                <path d="M22 20h-3" />
+                            </svg>
+                            <h3 class="section-title">Gate Entries</h3>
                         </div>
-                        <div class="gate-list" *ngIf="gateEntries?.length; else noGateEntries">
-                            <div class="gate-item" *ngFor="let entry of gateEntries">
-                                <div class="gate-header">
-                                    <span class="visitor-name">{{ entry.visitorName || 'Visitor' }}</span>
-                                    <span class="gate-status" [ngClass]="entry.status">{{ entry.status }}</span>
-                                </div>
-                                <div class="gate-details" *ngIf="entry.entryTime">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <polyline points="12 6 12 12 16 14" />
-                                    </svg>
-                                    <span>{{ entry.entryTime | date:'short' }}</span>
-                                    <span *ngIf="entry.vehicleNumber">
+                        <button class="manage-btn" (click)="manageGateEntries()" [disabled]="laodingGateEntries">
+                            Manage
+                            <app-icon name="goto" size="md"></app-icon>
+                        </button>
+                    </div>
+                    <ng-container *ngIf="!laodingGateEntries">
+
+                        <ng-container *ngIf="gateEntriesFeatureAvailable; else gateEntriesNotAvailable">
+                            <div class="gate-list" *ngIf="gateEntries.length; else noGateEntries">
+                                <div class="gate-item" *ngFor="let entry of gateEntries">
+                                    <div class="gate-header">
+                                        <span class="visitor-name">{{ entry.visitorName || 'Visitor' }}</span>
+                                        <span class="gate-status" [ngClass]="entry.status">{{ entry.status }}</span>
+                                    </div>
+                                    <div class="gate-details" *ngIf="entry.entryTime">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path
-                                                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
-                                            <circle cx="7" cy="17" r="2" />
-                                            <path d="M9 17h6" />
-                                            <circle cx="17" cy="17" r="2" />
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
                                         </svg>
-                                        {{ entry.vehicleNumber }}
-                                    </span>
+                                        <span>{{ entry.entryTime | date:'short' }}</span>
+                                        <span *ngIf="entry.vehicleNumber">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+                                                <circle cx="7" cy="17" r="2" />
+                                                <path d="M9 17h6" />
+                                                <circle cx="17" cy="17" r="2" />
+                                            </svg>
+                                            {{ entry.vehicleNumber }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <ng-template #noGateEntries>
-                            <div class="empty-state">No gate entries found.</div>
-                        </ng-template>
-                    </div>
-                    <ng-template #gateEntriesNotAvailable>
-                        <div class="section-card feature-unavailable">
-                            <div class="section-header">
-                                <div class="section-title-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M11 20H2" />
-                                        <path
-                                            d="M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z" />
-                                        <path d="M11 4H8a2 2 0 0 0-2 2v14" />
-                                        <path d="M14 12h.01" />
-                                        <path d="M22 20h-3" />
-                                    </svg>
-                                    <h3 class="section-title">Gate Entries</h3>
-                                </div>
-                            </div>
+                            <ng-template #noGateEntries>
+                                <div class="empty-state">No gate entries found.</div>
+                            </ng-template>
+                        </ng-container>
+
+                        <ng-template #gateEntriesNotAvailable>
                             <div class="unavailable-content">
                                 <div class="locked-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
@@ -617,65 +582,63 @@
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
-                        </div>
-                    </ng-template>
-
-                    <!-- Gate Passes Section -->
-                    <div class="section-card" *ngIf="gatePassesFeatureAvailable; else gatePassesNotAvailable">
-                        <div class="section-header">
-                            <div class="section-title-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
-                                    <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
-                                </svg>
-                                <h3 class="section-title">Gate Passes</h3>
-                            </div>
-                            <button class="manage-btn" (click)="manageGatePasses()">
-                                Manage
-                                <app-icon name="goto" size="md"></app-icon>
-                            </button>
-                        </div>
-                        <div class="gatepass-list" *ngIf="gatePasses?.length; else noGatePasses">
-                            <div class="gatepass-item" *ngFor="let pass of gatePasses">
-                                <div class="gatepass-info">
-                                    <div class="gatepass-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path
-                                                d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
-                                            <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
-                                        </svg>
-                                    </div>
-                                    <div class="gatepass-details">
-                                        <p class="gatepass-label">OTP</p>
-                                        <p class="gatepass-otp">{{ pass.otp }}</p>
-                                    </div>
-                                </div>
-                                <span class="gatepass-date">{{ pass.expectedDate | date:'mediumDate' }}</span>
-                            </div>
-                        </div>
-                        <ng-template #noGatePasses>
-                            <div class="empty-state">No gate passes.</div>
                         </ng-template>
+
+                    </ng-container>
+                    <div class="gate-list" *ngIf="laodingGateEntries">
+                        <ui-loading message="Loading"></ui-loading>
                     </div>
-                    <ng-template #gatePassesNotAvailable>
-                        <div class="section-card feature-unavailable">
-                            <div class="section-header">
-                                <div class="section-title-wrapper">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path
-                                            d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
-                                        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
-                                    </svg>
-                                    <h3 class="section-title">Gate Passes</h3>
+                </div>
+
+                <!-- Gate Passes Section -->
+                <div class="section-card"
+                    [class.feature-unavailable]="!gatePassesFeatureAvailable && !loadingGatePasses">
+                    <div class="section-header">
+                        <div class="section-title-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
+                                <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+                            </svg>
+                            <h3 class="section-title">Gate Passes</h3>
+                        </div>
+                        <button class="manage-btn" (click)="manageGatePasses()" [disabled]="loadingGatePasses">
+                            Manage
+                            <app-icon name="goto" size="md"></app-icon>
+                        </button>
+                    </div>
+                    <ng-container *ngIf="!loadingGatePasses">
+
+                        <ng-container *ngIf="gatePassesFeatureAvailable; else gatePassesNotAvailable">
+                            <div class="gatepass-list" *ngIf="gatePasses.length; else noGatePasses">
+                                <div class="gatepass-item" *ngFor="let pass of gatePasses">
+                                    <div class="gatepass-info">
+                                        <div class="gatepass-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
+                                                <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+                                            </svg>
+                                        </div>
+                                        <div class="gatepass-details">
+                                            <p class="gatepass-label">OTP</p>
+                                            <p class="gatepass-otp">{{ pass.otp }}</p>
+                                        </div>
+                                    </div>
+                                    <span class="gatepass-date">{{ pass.expectedDate | date:'mediumDate' }}</span>
                                 </div>
                             </div>
+                            <ng-template #noGatePasses>
+                                <div class="empty-state">No gate passes.</div>
+                            </ng-template>
+                        </ng-container>
+
+
+                        <ng-template #gatePassesNotAvailable>
                             <div class="unavailable-content">
                                 <div class="locked-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
@@ -691,18 +654,22 @@
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
-                        </div>
-                    </ng-template>
+                        </ng-template>
+
+                    </ng-container>
+                    <div class="gatepass-list" *ngIf="loadingGatePasses">
+                        <ui-loading message="Loading"></ui-loading>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Footer Meta -->
-            <div class="footer-meta" *ngIf="flatMember">
-                <p>Created {{ flatMember.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
-                    <span *ngIf="flatMember.modifiedOn"> • Modified {{ flatMember.modifiedOn | date:'medium' }}</span>
-                </p>
-            </div>
-        </ng-container>
+        <!-- Footer Meta -->
+        <div class="footer-meta" *ngIf="flatMember">
+            <p>Created {{ flatMember.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
+                <span *ngIf="flatMember.modifiedOn"> • Modified {{ flatMember.modifiedOn | date:'medium' }}</span>
+            </p>
+        </div>
 
     </div>
 </app-layout>
@@ -729,4 +696,11 @@
                 (click)="handleVaccantClick()">Vacant</button>
         </div>
     </div>
+</ng-template>
+
+<ng-template #loadingFlatInfo>
+    <p class="detail-value">
+        <ui-loading message="" [onlyMessage]="true">
+        </ui-loading>
+    </p>
 </ng-template>

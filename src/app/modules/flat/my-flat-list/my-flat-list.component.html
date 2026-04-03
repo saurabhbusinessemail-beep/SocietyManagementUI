@@ -2,10 +2,24 @@
 
     <ui-form-layout>
 
-        <ng-container *ngFor="let flatMember of flatMembers">
 
-            <ui-my-flat-member-card [smColumns]="12" [mdColumns]="12" [lgColumns]="4" [member]="flatMember" (clicked)="gotoFlatDetails(flatMember)">
-            </ui-my-flat-member-card>
+        <ui-loading *ngIf="loadingSociety" message="Loading society information" [smColumns]="12" [mdColumns]="12"
+            [lgColumns]="12">
+        </ui-loading>
+
+        <ui-loading *ngIf="loadingFlatMembers" message="Loading my flats" [smColumns]="12" [mdColumns]="12"
+            [lgColumns]="12">
+        </ui-loading>
+
+        <ng-container *ngIf="!loadingSociety && !loadingFlatMembers">
+
+            <ng-container *ngFor="let flatMember of flatMembers">
+
+                <ui-my-flat-member-card [smColumns]="12" [mdColumns]="12" [lgColumns]="4" [member]="flatMember"
+                    (clicked)="gotoFlatDetails(flatMember)">
+                </ui-my-flat-member-card>
+
+            </ng-container>
 
         </ng-container>
 

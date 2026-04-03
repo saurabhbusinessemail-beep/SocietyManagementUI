@@ -55,6 +55,10 @@ export class UserComponent implements OnInit, OnDestroy {
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>({ value: null, disabled: true });
   radioFormControl = new FormControl<string>({ value: 'user', disabled: true });
 
+  isSocitiesLoading = false;
+  isSavingOwner = false;
+  isSavingTenant = false;
+  isSavingSecurity = false;
   societies: ISociety[] = [];
   buildings: IBuilding[] = [];
   flats: IFlat[] = [];
@@ -301,13 +305,18 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   loadSocieties() {
+    this.isSocitiesLoading = true;
     this.societyService.getAllSocieties()
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.societies = response.data ?? [];
+          this.isSocitiesLoading = false;
         },
-        error: () => console.log('Error while getting societies')
+        error: () => {
+          console.log('Error while getting societies');
+          this.isSocitiesLoading = false;
+        }
       });
   }
 
@@ -435,6 +444,7 @@ export class UserComponent implements OnInit, OnDestroy {
     let payload = this.getOwnerPayload();
     if (!payload) return;
 
+    this.isSavingOwner = true;
     const formValue = this.fb.getRawValue();
     if (formValue.residingType === ResidingTypes.Tenant) {
       this.saveTenant();
@@ -446,7 +456,11 @@ export class UserComponent implements OnInit, OnDestroy {
         next: response => {
           if (!response.success || !response.token) return;
 
-          this.updateUserToken(response.token)
+          this.updateUserToken(response.token);
+          this.isSavingOwner = false;
+        },
+        error: err => {
+          this.isSavingOwner = false;
         }
       });
   }
@@ -455,13 +469,18 @@ export class UserComponent implements OnInit, OnDestroy {
     let payload = this.getTenantPayload();
     if (!payload) return;
 
+    this.isSavingTenant = true;
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
           if (!response.success || !response.token) return;
 
-          this.updateUserToken(response.token)
+          this.updateUserToken(response.token);
+          this.isSavingTenant = false;
+        },
+        error: err => {
+          this.isSavingTenant = false;
         }
       });
   }
@@ -470,13 +489,18 @@ export class UserComponent implements OnInit, OnDestroy {
     const payload = this.generateSecurityPayload();
     if (!payload) return;
 
+    this.isSavingSecurity = true;
     this.newUserService.newSecurity(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
           if (!response.success || !response.token) return;
 
-          this.updateUserToken(response.token)
+          this.updateUserToken(response.token);
+          this.isSavingSecurity = false;
+        },
+        error: err => {
+          this.isSavingSecurity = false;
         }
       });
   }

@@ -14,21 +14,29 @@
         </app-filter>
 
         <ui-form-layout class="flex-auto">
-            <ng-container *ngFor="let gatepass of gatepasses">
+            <ng-container *ngIf="!loadingGatePasses">
 
-                <ui-gate-pass-card [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [gatePass]="gatepass"
-                    [showDelete]="!gatepass.isAssignedBySociety" (showQR)="showQR(gatepass)"
-                    (delete)="deletePass(gatepass)">
-                </ui-gate-pass-card>
+                <ng-container *ngFor="let gatepass of gatepasses">
+                    <ui-gate-pass-card [gatePass]="gatepass" [actionInProgress]="loadingGatePassActions[gatepass._id]"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="6" [showDelete]="!gatepass.isAssignedBySociety"
+                        (showQR)="showQR(gatepass)" (delete)="deletePass(gatepass)">
+                    </ui-gate-pass-card>
+
+                </ng-container>
+
+                <ng-container *ngIf="gatepasses.length === 0">
+                    <app-empty-records singular="gate pass" plural="gate passes" (addClicked)="openAddGatePass()"
+                        [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="gatepass" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
 
             </ng-container>
 
-            <ng-container *ngIf="gatepasses.length === 0">
-                <app-empty-records singular="gate pass" plural="gate passes" (addClicked)="openAddGatePass()" [smColumns]="12"
-                    [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="gatepass" size="xxl"></app-icon>
-                </app-empty-records>
-            </ng-container>
+
+            <ui-loading *ngIf="loadingGatePasses" message="Loading gate passes" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
         </ui-form-layout>
     </div>

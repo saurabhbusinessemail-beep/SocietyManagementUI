@@ -12,12 +12,20 @@
             </span>
         </div>
         <div class="header-actions">
-            <button class="qr-btn" (click)="onShowQR($event)" title="Show QR">
-                <span class="qr-icon">📱</span> QR
-            </button>
-            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" title="Delete">
-                <span class="delete-icon">🗑️</span> Delete
-            </button>
+            <ng-container *ngIf="!actionInProgress">
+
+                <button class="qr-btn" (click)="onShowQR($event)" title="Show QR">
+                    <span class="qr-icon">📱</span> QR
+                </button>
+                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" title="Delete">
+                    <span class="delete-icon">🗑️</span> Delete
+                </button>
+
+            </ng-container>
+
+            <ui-loading *ngIf="actionInProgress" message="" [onlyMessage]="true">
+            </ui-loading>
+
         </div>
     </div>
 

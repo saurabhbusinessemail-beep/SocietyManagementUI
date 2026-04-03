@@ -1,13 +1,6 @@
 <app-layout [showBackButton]="true" [title]="society?.societyName || 'Society'" backButtonURL="/society/list">
 
     <ng-container moreActions>
-        <!-- <ui-button (clicked)="gotoEditSociety()" *ngIf="canUpdateSociety" label="Edit Society" type="only-content">
-            <app-icon name="edit"></app-icon>
-        </ui-button>
-        <ui-button (clicked)="gotoPlanEdit()" *ngIf="canUpdateSociety" label="Current Plan" type="only-content">
-            <app-icon name="edit"></app-icon>
-        </ui-button> -->
-
         <ul class="page-menu-list">
             <li class="page-menu" (click)="gotoEditSociety()">Edit Society</li>
             <li class="page-menu" (click)="gotoPlanEdit()">Current Plan</li>
@@ -20,27 +13,27 @@
         <div class="page-header">
             <div class="header-actions">
                 <!-- Plan Badge & Info -->
-                <div class="plan-chip" *ngIf="currentPlan" (click)="gotoPlanEdit()">
-                    <span class="plan-badge-primary">
-                        <span class="plan-dot"></span>
-                        Plan: {{ currentPlan.planName || 'No Plan' }}
-                    </span>
-                    <span class="plan-duration-badge" *ngIf="currentPlan.selectedDuration">
-                        <app-icon name="calendar"></app-icon>
-                        {{ getPlanRemainingDays() }} day{{ getPlanRemainingDays() > 1 ? 's' : '' }} left
-                    </span>
+                <div class="plan-chip" (click)="gotoPlanEdit()">
+
+                    <ng-container *ngIf="!loadingPlan && currentPlan">
+                        <span class="plan-badge-primary">
+                            <span class="plan-dot"></span>
+                            Plan: {{ currentPlan.planName || 'No Plan' }}
+                        </span>
+                        <span class="plan-duration-badge" *ngIf="currentPlan.selectedDuration">
+                            <app-icon name="calendar"></app-icon>
+                            {{ getPlanRemainingDays() }} day{{ getPlanRemainingDays() > 1 ? 's' : '' }} left
+                        </span>
+                    </ng-container>
+
+                    <ui-loading *ngIf="loadingPlan" message="Loading plan">
+                    </ui-loading>
                 </div>
             </div>
         </div>
 
-        <!-- Loading State -->
-        <div class="loading-container" *ngIf="!featuresLoaded">
-            <div class="spinner"></div>
-            <p>Loading society details...</p>
-        </div>
-
         <!-- Main Content -->
-        <div class="content-wrapper" *ngIf="featuresLoaded">
+        <div class="content-wrapper">
 
             <!-- Stats Grid: Buildings, Flats, Admins, Secretaries -->
             <div class="stats-grid no-tablet no-desktop">
@@ -54,8 +47,12 @@
                     <div class="stat-details">
                         <p class="stat-label">Buildings</p>
                         <p class="stat-value">
-                            {{ addedBuildings }}
-                            <span class="out-of"> / {{ society?.numberOfBuildings || 0 }}</span>
+                            <ng-container *ngIf="!loadingBuildings">
+                                {{ addedBuildings }}
+                                <span class="out-of"> / {{ society?.numberOfBuildings || 0 }}</span>
+                            </ng-container>
+                            <ui-loading *ngIf="loadingBuildings" message="Loading">
+                            </ui-loading>
                         </p>
                     </div>
                 </div>
@@ -67,8 +64,12 @@
                     <div class="stat-details">
                         <p class="stat-label">Flats</p>
                         <p class="stat-value">
-                            {{ addedFlats }}
-                            <span class="out-of"> / {{ society?.numberOfFlats || 0 }}</span>
+                            <ng-container *ngIf="!loadingFlats">
+                                {{ addedFlats }}
+                                <span class="out-of"> / {{ society?.numberOfFlats || 0 }}</span>
+                            </ng-container>
+                            <ui-loading *ngIf="loadingFlats" message="Loading">
+                            </ui-loading>
                         </p>
                     </div>
                 </div>
@@ -83,27 +84,30 @@
                             <app-icon name="admin" class="card-icon card-icon--amber"></app-icon>
                             <h2 class="card-title">Admins</h2>
                         </div>
-                        <button class="manage-button" (click)="gotoSocietyAdmins()" *ngIf="canViewAdmin">
+                        <button class="manage-button" (click)="gotoSocietyAdmins()" *ngIf="canViewAdmin"
+                            [disabled]="loadingSociety">
                             Manage <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
                     <div class="card-content">
-                        <div class="list-items" *ngIf="adminIds.length > 0; else noAdmins">
-                            <div class="user-chip" *ngFor="let a of adminIds">
-                                <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span>
-                                <!-- <button class="remove-chip" *ngIf="canDeleteAdmin" (click)="removeAdmin(a)">
-                                    <app-icon name="delete"></app-icon>
-                                </button> -->
-                            </div>
-                        </div>
-                        <ng-template #noAdmins>
-                            <div class="empty-state">
-                                <div class="empty-icon">
-                                    <app-icon name="user-icon"></app-icon>
+                        <ng-container *ngIf="!loadingSociety">
+                            <div class="list-items" *ngIf="adminIds.length > 0; else noAdmins">
+                                <div class="user-chip" *ngFor="let a of adminIds">
+                                    <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span>
                                 </div>
-                                <span>No admins added</span>
                             </div>
-                        </ng-template>
+                            <ng-template #noAdmins>
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <app-icon name="user-icon"></app-icon>
+                                    </div>
+                                    <span>No admins added</span>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+
+                        <ui-loading *ngIf="loadingSociety" message="Loading">
+                        </ui-loading>
                     </div>
                 </div>
 
@@ -114,27 +118,32 @@
                             <app-icon name="secretary" class="card-icon card-icon--green"></app-icon>
                             <h2 class="card-title">Secretaries</h2>
                         </div>
-                        <button class="manage-button" (click)="gotoSocietyManageers()" *ngIf="canViewManager">
+                        <button class="manage-button" (click)="gotoSocietyManageers()" *ngIf="canViewManager"
+                            [disabled]="loadingSociety">
                             Manage <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
                     <div class="card-content">
-                        <div class="list-items" *ngIf="managerIds.length > 0; else noSecretaries">
-                            <div class="user-chip" *ngFor="let s of managerIds">
-                                <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
-                                <!-- <button class="remove-chip" *ngIf="canDeleteManager" (click)="removeSecretary(s)">
+                        <ng-container *ngIf="!loadingSociety">
+                            <div class="list-items" *ngIf="managerIds.length > 0; else noSecretaries">
+                                <div class="user-chip" *ngFor="let s of managerIds">
+                                    <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
+                                    <!-- <button class="remove-chip" *ngIf="canDeleteManager" (click)="removeSecretary(s)">
                                     <app-icon name="delete"></app-icon>
                                 </button> -->
-                            </div>
-                        </div>
-                        <ng-template #noSecretaries>
-                            <div class="empty-state">
-                                <div class="empty-icon">
-                                    <app-icon name="user-icon"></app-icon>
                                 </div>
-                                <span>No secretaries added</span>
                             </div>
-                        </ng-template>
+                            <ng-template #noSecretaries>
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <app-icon name="user-icon"></app-icon>
+                                    </div>
+                                    <span>No secretaries added</span>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                        <ui-loading *ngIf="loadingSociety" message="Loading">
+                        </ui-loading>
                     </div>
                 </div>
             </div>
@@ -150,15 +159,20 @@
                         <div class="action-text">
                             <p class="action-label">BUILDINGS</p>
                             <p class="action-value">
-                                {{ society && society.numberOfBuildings > 1 ? addedBuildings : 1 }}
-                                <span class="out-of" *ngIf="society && society.numberOfBuildings > 1">
-                                    / {{ society.numberOfBuildings || 0 }}
-                                </span>
+                                <ng-container *ngIf="!loadingBuildings">
+                                    {{ society && society.numberOfBuildings > 1 ? addedBuildings : 1 }}
+                                    <span class="out-of" *ngIf="society && society.numberOfBuildings > 1">
+                                        / {{ society.numberOfBuildings || 0 }}
+                                    </span>
+                                </ng-container>
+
+                                <ui-loading *ngIf="loadingBuildings" message="Loading">
+                                </ui-loading>
                             </p>
                         </div>
                     </div>
                     <button class="action-button" (click)="gotoBuildingManager()"
-                        [disabled]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
+                        [disabled]="loadingBuildings || !canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
                         Manage <app-icon name="goto" size="md"></app-icon>
                     </button>
                 </div>
@@ -172,14 +186,20 @@
                         <div class="action-text">
                             <p class="action-label">FLATS</p>
                             <p class="action-value">
-                                {{addedFlats }}
-                                <span class="out-of">
-                                    / {{ society?.numberOfFlats || 0 }}
-                                </span>
+                                <ng-container *ngIf="!loadingFlats">
+                                    {{addedFlats }}
+                                    <span class="out-of">
+                                        / {{ society?.numberOfFlats || 0 }}
+                                    </span>
+                                </ng-container>
+
+                                <ui-loading *ngIf="loadingFlats" message="Loading">
+                                </ui-loading>
                             </p>
                         </div>
                     </div>
-                    <button class="action-button" (click)="gotoFlatManager()" [disabled]="!canViewFlats">
+                    <button class="action-button" (click)="gotoFlatManager()"
+                        [disabled]="!loadingFlats || !canViewFlats">
                         Manage <app-icon name="goto" size="md"></app-icon>
                     </button>
                 </div>
@@ -188,79 +208,85 @@
             <!-- Feature Cards Row (Parking, Complaints, Communication) -->
             <div class="feature-grid">
                 <!-- Parking Card -->
-                <div class="feature-card" *ngIf="parkingFeatureAvailable; else parkingLocked">
+                <div class="feature-card" [class.feature-card--locked]="!parkingFeatureAvailable && !loadingParkings">
                     <div class="feature-header">
                         <app-icon name="vehicle" class="feature-icon feature-icon--purple"></app-icon>
                         <h2 class="feature-title">Parkings</h2>
                     </div>
-                    <div class="feature-stats">
-                        <div class="stat-badge stat-badge--success">
-                            Added: {{ parkings.length }}
+                    <ng-container *ngIf="!loadingParkings">
+
+                        <div class="feature-stats" *ngIf="parkingFeatureAvailable; else parkingLocked">
+                            <ng-container *ngIf="parkings.length > 0; else noParkings">
+                                <div class="stat-badge stat-badge--success">
+                                    Added: {{ parkings.length }}
+                                </div>
+                            </ng-container>
+                            <ng-template #noParkings>
+                                <div class="stat-badge stat-badge--neutral">No parkings data</div>
+                            </ng-template>
                         </div>
-                    </div>
-                    <button class="feature-manage-btn" (click)="gotoParkingManager()"
+                        <ng-template #parkingLocked>
+                            <div class="locked-content">
+                                <div class="locked-icon-wrapper">
+                                    <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
+                                </div>
+                                <p class="locked-message">Your current plan does not support the Parking feature.</p>
+                                <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
+                                    Upgrade Plan <app-icon name="upgrade"></app-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                    <ui-loading *ngIf="loadingParkings" message="Loading">
+                    </ui-loading>
+                    <button class="feature-manage-btn" (click)="gotoParkingManager()" [disabled]="loadingParkings"
                         *ngIf="canUpdateSociety && canViewParkings">
                         Manage
                     </button>
                 </div>
-                <ng-template #parkingLocked>
-                    <div class="feature-card feature-card--locked">
-                        <div class="feature-header">
-                            <app-icon name="vehicle" class="feature-icon feature-icon--purple"></app-icon>
-                            <h2 class="feature-title">Parkings</h2>
-                        </div>
-                        <div class="locked-content">
-                            <div class="locked-icon-wrapper">
-                                <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
-                            </div>
-                            <p class="locked-message">Your current plan does not support the Parking feature.</p>
-                            <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
-                                Upgrade Plan <app-icon name="upgrade"></app-icon>
-                            </button>
-                        </div>
-                    </div>
-                </ng-template>
 
                 <!-- Complaints Card -->
-                <div class="feature-card" *ngIf="complaintsFeatureAvailable; else complaintsLocked">
+                <div class="feature-card" [class.feature-card--locked]="!complaintsFeatureAvailable && !loadingComplaints">
                     <div class="feature-header">
                         <app-icon name="complaint" class="feature-icon feature-icon--red"></app-icon>
                         <h2 class="feature-title">Complaints</h2>
                     </div>
-                    <div class="feature-stats" *ngIf="complaints; else noComplaints">
-                        <div class="stat-badge stat-badge--warning">
-                            Pending: {{ complaints.pending }}
+                    <ng-container *ngIf="!loadingComplaints">
+
+                        <div class="feature-stats" *ngIf="complaintsFeatureAvailable; else complaintsLocked">
+                            <ng-container *ngIf="complaints; else noComplaints">
+                                <div class="stat-badge stat-badge--warning">
+                                    Pending: {{ complaints.pending }}
+                                </div>
+                                <div class="stat-badge stat-badge--success">
+                                    Completed: {{ complaints.completed }}
+                                </div>
+                            </ng-container>
+                            <ng-template #noComplaints>
+                                <div class="stat-badge stat-badge--neutral">No complaints data</div>
+                            </ng-template>
                         </div>
-                        <div class="stat-badge stat-badge--success">
-                            Completed: {{ complaints.completed }}
-                        </div>
-                    </div>
-                    <ng-template #noComplaints>
-                        <div class="feature-stats">
-                            <div class="stat-badge stat-badge--neutral">No complaints data</div>
-                        </div>
-                    </ng-template>
-                    <button class="feature-manage-btn" (click)="gotoComplaints()" *ngIf="canUpdateSociety">
+
+                        <ng-template #complaintsLocked>
+                            <div class="locked-content">
+                                <div class="locked-icon-wrapper">
+                                    <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
+                                </div>
+                                <p class="locked-message">Your current plan does not support the Complaints feature.</p>
+                                <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
+                                    Upgrade Plan <app-icon name="upgrade"></app-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+
+                    </ng-container>
+                    <ui-loading *ngIf="loadingComplaints" message="Loading">
+                    </ui-loading>
+                    <button class="feature-manage-btn" (click)="gotoComplaints()" [disabled]="loadingComplaints"
+                        *ngIf="canUpdateSociety">
                         Manage
                     </button>
                 </div>
-                <ng-template #complaintsLocked>
-                    <div class="feature-card feature-card--locked">
-                        <div class="feature-header">
-                            <app-icon name="complaint" class="feature-icon feature-icon--red"></app-icon>
-                            <h2 class="feature-title">Complaints</h2>
-                        </div>
-                        <div class="locked-content">
-                            <div class="locked-icon-wrapper">
-                                <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
-                            </div>
-                            <p class="locked-message">Your current plan does not support the Complaints feature.</p>
-                            <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
-                                Upgrade Plan <app-icon name="upgrade"></app-icon>
-                            </button>
-                        </div>
-                    </div>
-                </ng-template>
             </div>
 
         </div> <!-- end content-wrapper -->

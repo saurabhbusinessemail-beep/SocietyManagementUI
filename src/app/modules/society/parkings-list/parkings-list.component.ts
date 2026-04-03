@@ -26,6 +26,11 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
   flats: IFlat[] = [];
   parkings: IParking[] = [];
 
+  loadingSociety = false;
+  loadingSocietyBuildings = false;
+  loadingBuilding = false;
+  loadingFlats = false;
+  loadingParkings = false;
 
   @ViewChild('parkingTemplate') parkingTemplate!: TemplateRef<any>;
   currentDialogRef: MatDialogRef<any> | null = null;
@@ -187,6 +192,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
   }
 
   loadSociety(societyId: string) {
+    this.loadingSociety = true;
     this.societyService.getSociety(societyId)
       .pipe(take(1))
       .subscribe({
@@ -203,12 +209,16 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
           //   this.loadParkings(societyId);
           //   this.fb.get('building')?.disable();
           // }
+          this.loadingSociety = false;
+        },
+        error: err => {
+          this.loadingSociety = false;
         }
       })
   }
 
   loadSocietyBuildings(societyId: string) {
-
+    this.loadingSocietyBuildings = true;
     this.societyService.getBuildings(societyId)
       .pipe(take(1))
       .subscribe({
@@ -218,11 +228,16 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
             const b = this.buildings[0];
             this.fb.get('building')?.setValue(b._id);
           }
+          this.loadingSocietyBuildings = false;
+        },
+        error: err => {
+          this.loadingSocietyBuildings = false;
         }
       })
   }
 
   loadBuilding(societyId: string, buildingId: string) {
+    this.loadingBuilding = true;
     this.societyService.getBuilding(societyId, buildingId)
       .pipe(take(1))
       .subscribe({
@@ -234,26 +249,40 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
             this.fb.get('building')?.setValue(response._id);
             this.fb.get('building')?.disable();
           });
+          this.loadingBuilding = false;
+        },
+        error: err => {
+          this.loadingBuilding = false;
         }
       })
   }
 
   loadFlats(societyId: string, buildingId?: string) {
+    this.loadingFlats = true;
     this.societyService.getFlats(societyId, buildingId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.flats = response.data;
+          this.loadingFlats = false;
+        },
+        error: err => {
+          this.loadingFlats = false;
         }
       })
   }
 
   loadParkings(societyId: string, buildingId?: string) {
+    this.loadingParkings = true;
     this.societyService.getParkings(societyId, buildingId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.parkings = response.data;
+          this.loadingParkings = false;
+        },
+        error: err => {
+          this.loadingParkings = false;
         }
       })
   }

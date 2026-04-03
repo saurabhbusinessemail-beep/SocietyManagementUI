@@ -15,52 +15,73 @@
 
         <ui-form-layout class="flex-auto">
 
-            <ng-container *ngFor="let gateEntry of gateEntries">
+            <ng-container *ngIf="!loadingGateEntries">
 
-                <app-card-v2 [title]="gateEntry.visitorName ?? ''" [status]="getGateEntryStatusColorName(gateEntry)"
-                    [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                <ng-container *ngFor="let gateEntry of gateEntries">
 
-                    <ng-container card-info>
-                        <ui-label valueText="{{gateEntry.status | uppercase}}" direction="horizontal"
-                            [valueType]="getGateEntryLabelType(gateEntry)">
-                        </ui-label>
-                    </ng-container>
+                    <app-card-v2 [title]="gateEntry.visitorName ?? ''" [status]="getGateEntryStatusColorName(gateEntry)"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
 
-                    <ng-container card-body>
+                        <ng-container card-info>
+                            <ui-label valueText="{{gateEntry.status | uppercase}}" direction="horizontal"
+                                [valueType]="getGateEntryLabelType(gateEntry)">
+                            </ui-label>
+                        </ng-container>
 
-                        <!-- Contact -->
-                        <ui-label [config]="{id: '', label: 'Contact'}" [valueText]="gateEntry.visitorContact"
-                            direction="vertical" valueType="info">
-                        </ui-label>
+                        <ng-container card-body>
 
-                        <!-- Purpose -->
-                        <ui-label [config]="{id: '', label: 'Purpose'}" [valueText]="gateEntry.purpose"
-                            direction="vertical" valueType="info">
-                        </ui-label>
+                            <!-- Contact -->
+                            <ui-label [config]="{id: '', label: 'Contact'}" [valueText]="gateEntry.visitorContact"
+                                direction="vertical" valueType="info">
+                            </ui-label>
 
-                        <!-- Time -->
-                        <ui-label [config]="{id: '', label: 'Time'}" [valueText]="formatTime(gateEntry.createdOn)"
-                            direction="vertical" valueType="info">
-                        </ui-label>
-                    </ng-container>
+                            <!-- Purpose -->
+                            <ui-label [config]="{id: '', label: 'Purpose'}" [valueText]="gateEntry.purpose"
+                                direction="vertical" valueType="info">
+                            </ui-label>
 
-                    <ng-container card-actions *ngIf="gateEntry.status === 'requested'">
-                        <ui-button label="Approve" (clicked)="onApprove(gateEntry)">
-                        </ui-button>
-                        <ui-button label="Reject" type="error" (clicked)="onReject(gateEntry)">
-                        </ui-button>
-                    </ng-container>
+                            <!-- Time -->
+                            <ui-label [config]="{id: '', label: 'Time'}" [valueText]="formatTime(gateEntry.createdOn)"
+                                direction="vertical" valueType="info">
+                            </ui-label>
+                        </ng-container>
 
-                </app-card-v2>
+                        <ng-container card-actions *ngIf="gateEntry.status === 'requested'">
+                            <ng-container *ngIf="!approving && !rejecting">
+                                <ui-button label="Approve" (clicked)="onApprove(gateEntry)">
+                                </ui-button>
+                                <ui-button label="Reject" type="error" (clicked)="onReject(gateEntry)">
+                                </ui-button>
+                            </ng-container>
+
+                            <ng-container *ngIf="approving || rejecting">
+                                <ui-loading *ngIf="approving" message="Approving"
+                                    [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                                </ui-loading>
+                                <ui-loading *ngIf="rejecting" message="Rejecting"
+                                    [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                                </ui-loading>
+                            </ng-container>
+                        </ng-container>
+
+
+
+                    </app-card-v2>
+
+                </ng-container>
+
+                <ng-container *ngIf="gateEntries.length === 0">
+                    <app-empty-records singular="visitor" plural="visitors" [hideAddButton]="true" [hideMessage]="true"
+                        [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="visitor" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
 
             </ng-container>
 
-            <ng-container *ngIf="gateEntries.length === 0">
-                <app-empty-records singular="visitor" plural="visitors" [hideAddButton]="true" [hideMessage]="true"
-                    [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="visitor" size="xxl"></app-icon>
-                </app-empty-records>
-            </ng-container>
+            <ui-loading *ngIf="loadingGateEntries" message="Loading visitor's list" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
         </ui-form-layout>
 

@@ -12,18 +12,26 @@
 
         <ui-form-layout class="flex-auto">
 
-            <ng-container *ngFor="let member of members">
-                <ui-flat-member-card [member]="member" (deleteMember)="deleteMember(member)" viewerRole="admin"
-                    [showDelete]="allowDelete(member)" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-                </ui-flat-member-card>
+            <ng-container *ngIf="!loadingMember">
+                <ng-container *ngFor="let member of members">
+                    <ui-flat-member-card [member]="member" [actionInProgress]="loadingMemberAction[member._id]"
+                        (deleteMember)="deleteMember(member)" viewerRole="admin" [showDelete]="allowDelete(member)"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                    </ui-flat-member-card>
+                </ng-container>
+
+                <ng-container *ngIf="members.length === 0">
+                    <app-empty-records singular="members" plural="members" (addClicked)="openAddMember()"
+                        [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="member" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
             </ng-container>
 
-            <ng-container *ngIf="members.length === 0">
-                <app-empty-records singular="members" plural="members" (addClicked)="openAddMember()" [smColumns]="12"
-                    [mdColumns]="12" [lgColumns]="12">
-                    <app-icon icon name="member" size="xxl"></app-icon>
-                </app-empty-records>
-            </ng-container>
+
+            <ui-loading *ngIf="loadingMember" message="Loading members" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
 
         </ui-form-layout>
     </div>

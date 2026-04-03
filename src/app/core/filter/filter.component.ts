@@ -47,6 +47,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     dropDownOptions: []
   };
 
+  loadingSocities = false;
+  loadingMyFlats = false;
+  loadingSocietyFlats = false;
+
   private filterChangedInterim = new Subject<any>();
 
   private selectedSocietyFilter?: DropDownControl;
@@ -168,6 +172,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   loadMySocities(myProfile: IMyProfile) {
+    this.loadingSocities = true;
     this.societyService.getAllSocieties()
       .pipe(take(1))
       .subscribe({
@@ -196,6 +201,11 @@ export class FilterComponent implements OnInit, OnDestroy {
               this.loadDefaultFlats(myProfile);
             }
           }
+
+          this.loadingSocities = false;
+        },
+        error: err => {
+          this.loadingSocities = false;
         }
       });
   }
@@ -342,54 +352,68 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   loadAllMyFlats(societyId?: string, populate = true): Promise<IUIDropdownOption<any>[]> {
+    this.loadingMyFlats = true;
     return new Promise(resolve => {
 
       this.societyService.myFlats(societyId)
         .pipe(take(1))
-        .subscribe(response => {
-          if (!response.success) {
-            resolve([]);
-            return;
-          }
+        .subscribe({
+          next: response => {
+            if (!response.success) {
+              resolve([]);
+              return;
+            }
 
-          const flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
-          if (populate) {
-            this.flatSearchConfig.dropDownOptions = flatOptions;
+            const flatOptions = response.data.map(flatMember => this.societyService.convertFlatMemberToDropdownOption(flatMember));
+            if (populate) {
+              this.flatSearchConfig.dropDownOptions = flatOptions;
 
-            // if (this.loadFirstFlat && flatOptions.length > 0) {
-            //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
-            // }
-            if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
-            this.emitSelectedFilter();
+              // if (this.loadFirstFlat && flatOptions.length > 0) {
+              //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+              // }
+              if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
+              this.emitSelectedFilter();
+            }
+            this.loadingMyFlats = false;
+            resolve(flatOptions);
+          },
+          error: err => {
+            this.loadingMyFlats = false;
           }
-          resolve(flatOptions);
         });
 
     });
   }
 
   loadSocietyFlats(societyId: string, populate = true): Promise<IUIDropdownOption<any>[]> {
+    this.loadingSocietyFlats = true;
     return new Promise(resolve => {
 
       this.societyService.getFlats(societyId)
         .pipe(take(1))
-        .subscribe(response => {
-          if (!response.success) {
-            resolve([]);
-            return;
-          }
+        .subscribe({
+          next: response => {
+            if (!response.success) {
+              resolve([]);
+              return;
+            }
 
-          const flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.societiesSearchConfig.formControl?.value?.value));
-          if (populate) {
-            this.flatSearchConfig.dropDownOptions = flatOptions;
+            const flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.societiesSearchConfig.formControl?.value?.value));
+            if (populate) {
+              this.flatSearchConfig.dropDownOptions = flatOptions;
 
-            // if (this.loadFirstFlat && flatOptions.length > 0) {
-            //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
-            // }
-            if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
-            this.emitSelectedFilter();
+              // if (this.loadFirstFlat && flatOptions.length > 0) {
+              //   this.flatSearchConfig.formControl?.setValue({ label: flatOptions[0].label, value: flatOptions[0].value });
+              // }
+              if (this.loadFirstFlat) this.loadFirstOrDefaultFlat(flatOptions);
+              this.emitSelectedFilter();
+            }
+            this.loadingSocietyFlats = false;
+            resolve(flatOptions);
+          },
+          error: err => {
+            this.loadingSocietyFlats = false;
           }
-          resolve(flatOptions);
         });
 
     });

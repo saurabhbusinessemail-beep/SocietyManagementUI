@@ -14,6 +14,7 @@ import { UserService } from './services/user.service';
 import { PricingPlanService } from './services/pricing-plan.service';
 import { SocietyService } from './services/society.service';
 import { ICurrentPlanResponse } from './interfaces';
+import { IconsService } from './core/icons/icons.service';
 
 @Component({
   selector: 'app-root',
@@ -41,6 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private coldStartService: ColdStartService,
     private pricingPlanService: PricingPlanService,
     private societService: SocietyService,
+    private iconService: IconsService
   ) { }
 
   async ngOnInit() {

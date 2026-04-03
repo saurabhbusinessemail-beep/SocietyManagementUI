@@ -21,6 +21,9 @@ export class MembersListComponent implements OnInit {
   members: IFlatMember[] = [];
   routeFlatId?: string;
 
+  loadingMember = true;
+  loadingMemberAction: { [memberId: string]: boolean } = {};
+
   constructor(public societyService: SocietyService, private dialogService: DialogService,
     private route: ActivatedRoute, private router: Router) { }
 
@@ -36,11 +39,16 @@ export class MembersListComponent implements OnInit {
     const flatId = selectedFIlter.flatId;
     this.members = [];
 
+    this.loadingMember = true;
     this.societyService.myFlatMembers(societyId, flatId)
       .pipe(take(1))
       .subscribe({
         next: response => {
           this.members = response.data;
+          this.loadingMember = false;
+        },
+        error: err => {
+          this.loadingMember = false;
         }
       });
   }
@@ -50,10 +58,16 @@ export class MembersListComponent implements OnInit {
 
     if (!await this.dialogService.confirmDelete('Delete Flat Member', `Are you sure you want to delete flat member ${forUser}?`)) return;
 
+    this.loadingMemberAction[member._id] = true;
     this.societyService.deleteFlatMember(member._id)
       .pipe(take(1))
       .subscribe({
-        next: () => this.loadMembers(this.selectedFIlter)
+        next: () => {
+          this.loadMembers(this.selectedFIlter)
+          this.loadingMemberAction[member._id] = false;
+        },
+        error: err =>
+          this.loadingMemberAction[member._id] = false
       });
   }
 
