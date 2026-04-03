@@ -20,3 +20,8 @@ export interface IPagedResponse<T> extends IBEResponseFormat {
 export interface IMyProfileResponse extends IBEResponseFormat {
     profile: IMyProfile
 }
+
+export interface IAPISuccessUserMessage {
+    message: string;
+    action?: string;
+}

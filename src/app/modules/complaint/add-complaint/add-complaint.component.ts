@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IFlat, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { Location } from '@angular/common';
@@ -6,6 +6,7 @@ import { SocietyService } from '../../../services/society.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ComplaintService } from '../../../services/complaint.service';
+import { PendingHttpService } from '../../../services/pending-http.service';
 
 @Component({
   selector: 'app-add-complaint',
@@ -13,6 +14,12 @@ import { ComplaintService } from '../../../services/complaint.service';
   styleUrl: './add-complaint.component.scss'
 })
 export class AddComplaintComponent implements OnInit, OnDestroy {
+
+  private societyService = inject(SocietyService);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+  private complaintService = inject(ComplaintService);
+  private pendingHttpService = inject(PendingHttpService);
 
   societyId?: string;
   flatId?: string;
@@ -104,13 +111,6 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
     status: new FormControl<string>('submitted'),
   });
 
-  constructor(
-    private societyService: SocietyService,
-    private route: ActivatedRoute,
-    private location: Location,
-    private complaintService: ComplaintService
-  ) { }
-
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('id') ?? undefined;
     this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
@@ -179,15 +179,20 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
       complaintType: formValue.complaintType,
       status: formValue.status,
     };
+    this.pendingHttpService.addRequest('add-complaint', { message: 'Complaint Added' });
     this.complaintService.newComplaint(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.pendingHttpService.removeRequest('add-complaint');
           if (response.success) {
             this.cancel();
           } else {
             this.errorMessage = response.message ?? 'Failed to add complaint';
           }
+        },
+        error: err => {
+          this.pendingHttpService.removeRequest('add-complaint');
         }
       });
   }

@@ -3,7 +3,7 @@ import { ListBase } from '../../../directives/list-base.directive';
 import { BehaviorSubject, debounceTime, filter, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
-import { IBEResponseFormat, IUIControlConfig, IUIDropdownOption, IVehicle } from '../../../interfaces';
+import { IUIControlConfig, IUIDropdownOption, IVehicle } from '../../../interfaces';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WindowService } from '../../../services/window.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -29,6 +29,7 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
 
 
   loadingVehicles = true;
+  savingVehicle = false;
   loadingVehicleAction: { [memberId: string]: boolean } = {};
 
   isComponentActive = new Subject<void>();
@@ -104,7 +105,6 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     this.subscribeToFilterChanged();
   }
   handleFilterChange(selectedFilter: IVehicleFilter) {
-    console.log('handleFilterChange = ', selectedFilter)
     this.selectedFilterChanged.next(selectedFilter);
   }
 
@@ -114,7 +114,7 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
         takeUntil(this.isComponentActive),
         debounceTime(300),
         tap(selectedFilter => {
-            this.vehicles = [];
+          this.vehicles = [];
         }),
         filter(selectedFilter => !!selectedFilter.flatId), // Only proceed when flatId exists
         switchMap(selectedFilter => {
@@ -179,14 +179,19 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
       vehicleNumber: formValue.vehicleNumber,
       vehicleType: formValue.vehicleType
     }
+    this.savingVehicle = true;
     this.vehicleService.createVehicle(payload.flatId, payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.savingVehicle = false;
           if (!response.success) return;
 
           this.refreshList();
           this.closeDialog();
+        },
+        error: err => {
+          this.savingVehicle = false;
         }
       })
   }

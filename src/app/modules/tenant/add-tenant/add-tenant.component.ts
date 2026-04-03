@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IFlatMember, IPhoneContactFlat, ISelectedUser, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
@@ -8,6 +8,7 @@ import { ResidingTypes } from '../../../constants';
 import { NewUserService } from '../../../services/new-user.service';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute } from '@angular/router';
+import { PendingHttpService } from '../../../services/pending-http.service';
 
 @Component({
   selector: 'app-add-tenant',
@@ -15,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './add-tenant.component.scss'
 })
 export class AddTenantComponent implements OnInit {
+  private pendingHttpService = inject(PendingHttpService);
 
   fb = new FormGroup({
     flat: new FormControl<IUIDropdownOption | undefined>(undefined),
@@ -193,13 +195,18 @@ export class AddTenantComponent implements OnInit {
       leaseEnd: formValue.leaseEnd,
       rentAmount: formValue.rentAmount
     };
+    this.pendingHttpService.addRequest('add-tenant', { message: 'Tenant Added' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.pendingHttpService.removeRequest('add-tenant');
           if (!response.success || !response.token) return;
 
           this.location.back();
+        },
+        error: err => {
+          this.pendingHttpService.removeRequest('add-tenant');
         }
       });
   }

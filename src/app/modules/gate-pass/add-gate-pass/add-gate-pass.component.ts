@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { IBEResponseFormat, IFlatMember, IPhoneContactFlat, ISelectedUser, IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Observable, forkJoin, take } from 'rxjs';
 import { GatePassService } from '../../../services/gate-pass.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PendingHttpService } from '../../../services/pending-http.service';
 
 function minArrayLength(min: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -21,6 +22,7 @@ function minArrayLength(min: number): ValidatorFn {
   styleUrl: './add-gate-pass.component.scss'
 })
 export class AddGatePassComponent implements OnInit {
+  private pendingHttpService = inject(PendingHttpService);
 
   fb = new FormGroup({
     flat: new FormControl<IUIDropdownOption | undefined>(undefined),
@@ -203,11 +205,16 @@ export class AddGatePassComponent implements OnInit {
     });
 
 
+    this.pendingHttpService.addRequest('add-gate-pass', { message: 'Gate Pass Added' });
     forkJoin(obsArr)
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.pendingHttpService.removeRequest('add-gate-pass');
           this.router.navigateByUrl('/gatepass/list')
+        },
+        error: err => {
+          this.pendingHttpService.removeRequest('add-gate-pass');
         }
       })
   }

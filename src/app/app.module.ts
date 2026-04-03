@@ -14,6 +14,7 @@ import { ApiTrackerService } from './services/api-tracker.service';
 import { environment } from '../environments/environment';
 import { ApiTrackerInterceptor } from './interceptors/api-tracker.interceptor';
 import { SelectionListPopupModule } from './core/selection-list-popup/selection-list-popup.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export function initTracker(tracker: ApiTrackerService) {
   return () => {
@@ -34,7 +35,8 @@ export function initTracker(tracker: ApiTrackerService) {
     AppRoutingModule,
     IconModule,
     UserNamePopupModule,
-    SelectionListPopupModule
+    SelectionListPopupModule,
+    MatSnackBarModule
   ],
   providers: [
     provideAnimationsAsync(),

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IAnnouncement, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { AnnouncementCategoryTypes, AnnouncementCategoryTypesText, AnnouncementPriorityTypes, AnnouncementPriorityTypesText, adminManagerRoles } from '../../../constants';
@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { ActivatedRoute } from '@angular/router';
+import { PendingHttpService } from '../../../services/pending-http.service';
 
 @Component({
   selector: 'app-add-announcement',
@@ -15,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './add-announcement.component.scss'
 })
 export class AddAnnouncementComponent implements OnInit {
+  private pendingHttpService = inject(PendingHttpService);
 
   announcementId?: string | null;
 
@@ -279,6 +281,7 @@ export class AddAnnouncementComponent implements OnInit {
   }
 
   save(payload: any) {
+    this.pendingHttpService.addRequest('add-announcement', { message: 'Announcement Added' });
     (
       this.announcementId
         ? this.announcementService.updateAnnouncement(this.announcementId, payload)
@@ -286,9 +289,13 @@ export class AddAnnouncementComponent implements OnInit {
     ).pipe(take(1))
       .subscribe({
         next: response => {
+          this.pendingHttpService.removeRequest('add-announcement');
           if (!response.success) return;
 
           this.location.back();
+        },
+        error: err => {
+          this.pendingHttpService.removeRequest('add-announcement');
         }
       });
   }
