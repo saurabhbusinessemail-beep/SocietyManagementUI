@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
-import { ExchangeRateResolver } from './resolvers/exchange-rate.resolver';
 
 const routes: Routes = [
   {
@@ -23,13 +22,11 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(module => module.DashboardModule),
     canActivate: [AuthGuard],
-    resolve: { data: ExchangeRateResolver }
   },
   {
     path: 'society',
     loadChildren: () => import('./modules/society/society.module').then(module => module.SocietyModule),
     canActivate: [AuthGuard],
-    resolve: { data: ExchangeRateResolver }
   },
   {
     path: 'society-public',
@@ -91,12 +88,10 @@ const routes: Routes = [
   {
     path: 'pricing-plan',
     loadChildren: () => import('./modules/pricing/pricing.module').then(module => module.PricingModule),
-    resolve: { data: ExchangeRateResolver }
   },
   {
     path: 'coupons',
     loadChildren: () => import('./modules/coupons/coupons.module').then(module => module.CouponsModule),
-    resolve: { data: ExchangeRateResolver }
   },
   {
     path: 'unauthorized',

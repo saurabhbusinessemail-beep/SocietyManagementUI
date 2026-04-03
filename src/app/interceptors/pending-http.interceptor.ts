@@ -24,7 +24,7 @@ export class PendingHttpInterceptor implements HttpInterceptor {
         // this.pendingHttpService.addRequest(requestUrl);
 
         return next.handle(request).pipe(
-            delay(3000)
+            // delay(3000)
             // tap({
             //     next: (event: HttpEvent<any>) => {
             //         if (event instanceof HttpResponse || event instanceof HttpErrorResponse) {

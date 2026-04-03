@@ -1,12 +1,17 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { IAPISuccessUserMessage } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PendingHttpService {
+    private _snackBar = inject(MatSnackBar);
+    durationInSeconds = 3;
+
     private pendingCount = new BehaviorSubject<number>(0);
-    private pendingRequests = new Set<string>();
+    private pendingRequests = new Map<string, IAPISuccessUserMessage>();
 
     get pendingCount$(): Observable<number> {
         return this.pendingCount.asObservable();
@@ -16,14 +21,18 @@ export class PendingHttpService {
         return this.pendingCount.value;
     }
 
-    addRequest(url: string): void {
-        this.pendingRequests.add(url);
+    addRequest(url: string, userMessage: IAPISuccessUserMessage): void {
+        this.pendingRequests.set(url, userMessage);
         this.pendingCount.next(this.pendingRequests.size);
     }
 
-    removeRequest(url: string): void {
+    removeRequest(url: string, showUserMessage: boolean = true): void {
+        const userMessage = this.pendingRequests.get(url);
         this.pendingRequests.delete(url);
         this.pendingCount.next(this.pendingRequests.size);
+        if (showUserMessage && userMessage) {
+            this._snackBar.open(userMessage.message, userMessage.action, { duration: this.durationInSeconds * 1000 });
+        }
     }
 
     clear(): void {

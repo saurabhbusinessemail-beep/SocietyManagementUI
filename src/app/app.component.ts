@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './services/menu.service';
 import { filter, map, mergeMap, of, take } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { PricingPlanService } from './services/pricing-plan.service';
 import { SocietyService } from './services/society.service';
 import { ICurrentPlanResponse } from './interfaces';
 import { IconsService } from './core/icons/icons.service';
+import { CurrencyService } from './services/currency.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ import { IconsService } from './core/icons/icons.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private currencyService = inject(CurrencyService);
 
   firstRouteLoad = true;
   show = false;
@@ -46,6 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
+
+    this.currencyService.loadExchangeRate();
 
     await this.FcmTokenService.init();
     await this.pushNotificationService.initialize();
