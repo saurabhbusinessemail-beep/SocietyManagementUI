@@ -48,7 +48,7 @@ export class SocietyService {
         const flatNumber = typeof flatMember.flatId === 'string' ? 'No Flat Number' : (flatMember.flatId.flatNumber + ` (Floor: ${flatMember.flatId.floor})`);
 
         return {
-            label: buildingNumber + flatNumber + societyName,
+            label: buildingNumber + flatNumber, // + societyName,
             value: typeof flatMember.flatId === 'string' ? '' : flatMember.flatId._id
         } as IUIDropdownOption
     }

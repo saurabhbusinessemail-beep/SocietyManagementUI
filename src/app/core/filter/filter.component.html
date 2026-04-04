@@ -4,7 +4,7 @@
 
         <div class="flex flex-end" *ngIf="windowService.mode.value === 'mobile'">
 
-            <div class="flex-auto selected-filter-info" *ngIf="!isFilterOpen">
+            <div class="flex-auto selected-filter-info" *ngIf="!isFilterOpen" (click)="isFilterOpen=true">
                 <ng-container *ngFor="let colId of getAllFields()">
                     <ui-label [config]="{id: '', label: getFieldLabel(colId)}" [valueText]="getFieldText(colId)">
                     </ui-label>
@@ -12,7 +12,7 @@
             </div>
 
             <app-icon name="clear" size="md" *ngIf="isFilterOpen" (click)="isFilterOpen=false"></app-icon>
-            <app-icon name="filter" size="md" *ngIf="!isFilterOpen" (click)="isFilterOpen=true"></app-icon>
+            <app-icon name="filter" size="lg" *ngIf="!isFilterOpen"></app-icon>
         </div>
 
         <ui-form-layout>
