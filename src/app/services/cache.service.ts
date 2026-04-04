@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ICacheEntry } from "../interfaces";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -7,6 +8,7 @@ import { ICacheEntry } from "../interfaces";
 export class CacheService {
     private cache = new Map<string, ICacheEntry>();
     private methodGroups = new Map<string, Set<string>>();
+    private pendingObservables = new Map<string, Observable<any>>();
 
     /**
      * Generate a cache key based on method name and relevant parameters
@@ -120,6 +122,18 @@ export class CacheService {
 
     clearAll(): void {
         this.cache.clear();
+    }
+
+    getPendingObservable(key: string): Observable<any> | undefined {
+        return this.pendingObservables.get(key);
+    }
+
+    setPendingObservable(key: string, observable: Observable<any>): void {
+        this.pendingObservables.set(key, observable);
+    }
+
+    removePendingObservable(key: string): void {
+        this.pendingObservables.delete(key);
     }
 }
 

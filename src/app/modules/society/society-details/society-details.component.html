@@ -1,4 +1,4 @@
-<app-layout [showBackButton]="true" [title]="society?.societyName || 'Society'" backButtonURL="/society/list">
+<app-layout [showBackButton]="true" [pageTitle]="society?.societyName || 'Society'" backButtonURL="/society/list">
 
     <ng-container moreActions>
         <ul class="page-menu-list">
@@ -40,8 +40,8 @@
                 <!-- Building Stat -->
                 <div class="stat-card stat-card--indigo"
                     (click)="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1 ? null : gotoBuildingManager()"
-                    [class.disabled]="!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
-                    <div class="stat-icon-wrapper">
+                    [class.disabled]="!loadingBuildings && (!canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1)">
+                    <div class="stat-icon-wrapper" *ngIf="!loadingBuildings">
                         <app-icon name="building"></app-icon>
                     </div>
                     <div class="stat-details">
@@ -58,7 +58,7 @@
                 </div>
                 <!-- Flats Stat -->
                 <div class="stat-card stat-card--blue" (click)="gotoFlatManager()">
-                    <div class="stat-icon-wrapper">
+                    <div class="stat-icon-wrapper" *ngIf="!loadingFlats">
                         <app-icon name="home"></app-icon>
                     </div>
                     <div class="stat-details">

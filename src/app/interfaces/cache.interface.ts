@@ -3,6 +3,10 @@ export interface ICacheConfig {
     maxSize?: number; // Maximum entries for this cache
 }
 
+export interface IShareConfiguration {
+    shareSameObservableUntilComplete?: boolean;
+}
+
 export interface ICacheEntry<T = any> {
     data: T;
     timestamp: number;
@@ -23,6 +27,8 @@ export interface ICacheableOptions {
     maxSize?: number;
     /** Custom cache key generator */
     keyGenerator?: (methodName: string, args: any[]) => string;
+    /** Configuration for observable sharing while in-flight */
+    share?: IShareConfiguration;
 }
 
 export interface InvalidateCacheOptions {

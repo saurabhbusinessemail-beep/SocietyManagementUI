@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse } from '../interfaces';
-import { BehaviorSubject, Observable, take } from 'rxjs';
+import { BehaviorSubject, Observable, share, take } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
 import { DropDownControl, SocietyRoles } from '../types';
@@ -408,7 +408,7 @@ export class SocietyService {
         group: 'buildings'
     })
     getBuildingsCount(societyId: string): Observable<IBEResponseFormat<number>> {
-        return this.http.get<IBEResponseFormat<number>>(`${this.baseUrl}/${societyId}/buildingsCount`);
+        return this.http.get<IBEResponseFormat<number>>(`${this.baseUrl}/${societyId}/buildingsCount`).pipe(share({ resetOnComplete: true }));
     }
 
     // Add new building
