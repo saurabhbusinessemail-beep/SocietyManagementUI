@@ -15,9 +15,9 @@
 
             <div class="page-header-container">
                 <!-- [title]="title ?? menuService.pageTitle" -->
-                <div class="page-header" *ngIf="title || !hideMoreActions">
+                <div class="page-header" *ngIf="pageTitle || !hideMoreActions">
                     <div class="title-container">
-                        <h1>{{ title ?? menuService.pageTitle }}</h1>
+                        <h1>{{ pageTitle ?? menuService.pageTitle }}</h1>
                         <h6 *ngIf="subTitle" class="subtitle">{{ subTitle }}</h6>
                     </div>
 

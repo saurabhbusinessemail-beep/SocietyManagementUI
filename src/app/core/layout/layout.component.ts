@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class LayoutComponent implements OnInit {
 
-  @Input() title?: string;
+  @Input() pageTitle?: string;
   @Input() subTitle?: string;
   @Input() menuItems: IMenu[] = [];
   @Input() hideMoreActions: boolean = false;
