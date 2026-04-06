@@ -31,7 +31,7 @@ export class PendingHttpService {
         this.pendingRequests.delete(url);
         this.pendingCount.next(this.pendingRequests.size);
         if (showUserMessage && userMessage) {
-            this._snackBar.open(userMessage.message, userMessage.action, { duration: this.durationInSeconds * 1000 });
+            this._snackBar.open(userMessage.message, userMessage.action, { duration: this.durationInSeconds * 1000, panelClass: 'snackbar-success' });
         }
     }
 

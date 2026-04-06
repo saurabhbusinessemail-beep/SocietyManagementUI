@@ -20,7 +20,9 @@
 
             <ng-container *ngIf="!actionInProgress">
                 <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
-                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">
+                    <app-icon name="delete"></app-icon>
+                </button>
             </ng-container>
 
             <ui-loading *ngIf="actionInProgress" message="Completing action" [smColumns]="12" [mdColumns]="12"

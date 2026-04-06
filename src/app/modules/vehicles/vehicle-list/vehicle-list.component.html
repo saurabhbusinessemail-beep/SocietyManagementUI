@@ -52,9 +52,11 @@
         <app-add-edit-popup title="Add Vehicle" (onClose)="closeDialog();">
 
 
-            <ng-container *ngIf="!savingVehicle">
+            <ng-container>
 
-                <ui-form-layout>
+                <ui-loading message="Saving Vehicle" *ngIf="savingVehicle"></ui-loading>
+
+                <ui-form-layout *ngIf="!savingVehicle">
 
 
                     <ui-drop-down formControlName="flat" [config]="flatSearchConfig"
@@ -73,17 +75,16 @@
 
                 </ui-form-layout>
 
-                <ng-container actions>
-                    <ui-button [label]="'Cancel'" type="only-content" (clicked)="closeDialog();">
-                    </ui-button>
-                    <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
-                        (clicked)="saveVehicle()">
-                    </ui-button>
-                </ng-container>
-
             </ng-container>
 
-            <ui-loading message="Saving Vehicle" *ngIf="savingVehicle"></ui-loading>
+            <ng-container actions>
+                <ui-button [label]="'Cancel'" type="cancel" (clicked)="closeDialog();">
+                </ui-button>
+                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid || savingVehicle"
+                    (clicked)="saveVehicle()">
+                </ui-button>
+            </ng-container>
+
         </app-add-edit-popup>
 
     </form>

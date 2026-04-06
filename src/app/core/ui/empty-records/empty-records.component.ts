@@ -9,15 +9,12 @@ import { Router } from '@angular/router';
 export class EmptyRecordsComponent {
   @Input() singular = 'society';
   @Input() plural = 'societies';
+  @Input() overrideTitle?: string;
   @Input() hideAddButton = false;
   @Input() hideMessage = false;
   @Input() routerLink?: string;
   @Output() addClicked = new EventEmitter<void>();
 
-
-  // @Input() title: string = 'No societies added yet';
-  // @Input() message: string = "You haven't added any society yet. Get started by adding your first society.";
-  // @Input() buttonText: string = 'Start adding Society';
 
   get pascalCaseSingular() {
     return this.singular.split(' ').map(s => {
@@ -27,7 +24,7 @@ export class EmptyRecordsComponent {
   } 
 
   get title() {
-    return `No ${this.plural} added yet`;
+    return  this.overrideTitle ?? `No ${this.plural} added yet`;
   }
 
   get message() {

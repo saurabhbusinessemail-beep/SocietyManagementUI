@@ -12,17 +12,17 @@
                 [lgColumns]="4">
             </ui-text-box>
 
+            <ui-select2 formControlName="complaintType" [config]="complaintTypeTabsConfig" [options]="complaintTypeOptions"
+                placeholder="Select Complaint Type" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
+            </ui-select2>
+
+            <ui-select2 formControlName="priority" [config]="priorityTabsConfig" [options]="priorityOptions"
+                placeholder="Search Priority" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
+            </ui-select2>
+
             <ui-text-box formControlName="description" type="textarea" [config]="descriptionConfig" [rows]="10"
                 [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-text-box>
-
-            <ui-tabs [config]="priorityTabsConfig" [tabs]="priorityOptions" formControlName="priority" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
-            </ui-tabs>
-
-            <ui-tabs [config]="complaintTypeTabsConfig" [tabs]="complaintTypeOptions" formControlName="complaintType"
-                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
-            </ui-tabs>
 
             <ui-label [config]="errorConfig" valueType="error" [valueText]="errorMessage" *ngIf="errorMessage"
                 [smColumns]="12" [mdColumns]="12" [lgColumns]="12">

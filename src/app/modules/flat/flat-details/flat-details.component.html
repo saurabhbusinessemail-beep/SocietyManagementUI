@@ -465,12 +465,12 @@
                                     <div class="complaint-header">
                                         <span class="complaint-title">{{ complaint.title }}</span>
                                         <span class="priority-badge" [ngClass]="complaint.priority">
-                                            {{ complaint.priority }}
+                                            {{ complaint.priority | complaintPriority }}
                                         </span>
                                     </div>
                                     <div class="complaint-meta">
                                         <span class="status-badge-small" [ngClass]="complaint.status">
-                                            {{ complaint.status }}
+                                            {{ complaint.status | complaintStatus }}
                                         </span>
                                         <span class="complaint-date">{{ complaint.createdOn | date:'mediumDate'
                                             }}</span>
@@ -536,7 +536,7 @@
                                 <div class="gate-item" *ngFor="let entry of gateEntries">
                                     <div class="gate-header">
                                         <span class="visitor-name">{{ entry.visitorName || 'Visitor' }}</span>
-                                        <span class="gate-status" [ngClass]="entry.status">{{ entry.status }}</span>
+                                        <span class="gate-status" [ngClass]="entry.status">{{ entry.status | gateEntryStatus }}</span>
                                     </div>
                                     <div class="gate-details" *ngIf="entry.entryTime">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"

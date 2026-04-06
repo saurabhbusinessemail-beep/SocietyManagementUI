@@ -9,6 +9,7 @@ $break-mobile: 480px;
 // ----- Colors -----
 $color-sky: #7ec8ff;          // menus - sky blue when closed
 $color-dark-blue: #0b5394;    // menus - dark blue when opened
+$color-light-blue: #6b5fed;    // menus - dark blue when opened
 $color-header-footer: #dff2ff; // light blue for header/footer background
 $color-white: #ffffff;
 $color-black: #000000;
@@ -16,7 +17,7 @@ $color-light-gray: #f1f1f1;
 $color-note-gray: #4c4545;
 $color-border: #d0d7df;
 $color-border-highlight: #05ff01;
-$color-cancel: #d3d3d3;
+$color-cancel: #f3f4f6;
 $color-help-text: #6b7280;
 $color-disable-background: #9d9d9d;
 $color-amber: #fcd34d;
@@ -46,6 +47,7 @@ $icon-on-light-highlight: $color-dark-blue;
 
 // Buttons
 $btn-bg-primary: $color-dark-blue;
+$btn-bg-primary-light: $color-light-blue;
 $btn-text-primary: $color-white;
 $btn-bg-cancel: $color-cancel;
 $btn-text-cancel: $color-black;
@@ -78,9 +80,9 @@ $sp-lg: 20px;   // decreased from 24px
 $sp-xl: 28px;   // decreased from 32px
 
 // Inputs
-$input-padding-desktop: 10px;   // decreased from 12px
-$input-padding-mobile: 8px;     // decreased from 10px
-$input-border-radius: 5px;      // decreased from 6px
+$input-padding-desktop: 18px;   // decreased from 12px
+$input-padding-mobile: 12px;     // decreased from 10px
+$input-border-radius: 6px;      // decreased from 6px
 
 // Menu widths
 $menu-width-expanded: 220px;    // decreased from 260px

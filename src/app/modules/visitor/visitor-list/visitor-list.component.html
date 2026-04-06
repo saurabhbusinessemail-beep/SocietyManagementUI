@@ -71,7 +71,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="gateEntries.length === 0">
-                    <app-empty-records singular="visitor" plural="visitors" [hideAddButton]="true" [hideMessage]="true"
+                    <app-empty-records singular="visitor" plural="visitors" overrideTitle="Nobody has visited you yet" [hideAddButton]="true" [hideMessage]="true"
                         [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="visitor" size="xxl"></app-icon>
                     </app-empty-records>

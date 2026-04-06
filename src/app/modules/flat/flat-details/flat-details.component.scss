@@ -939,6 +939,12 @@
     grid-template-columns: 1fr;
     gap: $sp-md;
 
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: $sp-lg;
+    }
+
     @include tablet {
         grid-template-columns: 1fr 1fr;
         gap: $sp-lg;

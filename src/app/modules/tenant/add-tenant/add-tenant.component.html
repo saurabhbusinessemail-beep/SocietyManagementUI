@@ -35,7 +35,7 @@
             </ui-form-layout>
 
             <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
-                <ui-button type="only-content" label="Cancel" (clicked)="cancel()">
+                <ui-button type="cancel" label="Cancel" (clicked)="cancel()">
                 </ui-button>
                 <ui-button [isSubmit]="true" label="Save" [disable]="fb.invalid || !selectedUser" (clicked)="save()">
                 </ui-button>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, OnInit, ElementRef, HostListener, inject } from '@angular/core';
 import { UIBaseFormControl } from '../../../directives';
 import { IUIDropdownOption } from '../../../interfaces';
 import { Subject } from 'rxjs';
@@ -12,6 +12,8 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 export class SearchBoxComponent
   extends UIBaseFormControl<any>
   implements OnInit, OnDestroy {
+
+    private elementRef = inject(ElementRef);
 
   @Input() options: IUIDropdownOption[] = [];
   @Input() defaultSelectedValue?: IUIDropdownOption;
@@ -38,6 +40,28 @@ export class SearchBoxComponent
         this.onSelect(this.defaultSelectedValue);
       }
     }, 100);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    if (!this.isOpen) return;
+    const target = event.target as HTMLElement;
+    // Close only if click is outside the component's root element
+    if (!this.elementRef.nativeElement.contains(target)) {
+      this.closePopupAndCleanIfNeeded();
+    }
+  }
+
+  private closePopupAndCleanIfNeeded(): void {
+    // Close the popup
+    this.isOpen = false;
+
+    // If user typed something but didn't select any option (value is empty)
+    if (this.searchText && !this.value) {
+      this.searchText = '';
+      this.updateValue('');
+      this.searchChange.emit('');
+    }
   }
 
   onInput(value: string): void {

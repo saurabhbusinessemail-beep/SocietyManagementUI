@@ -137,6 +137,11 @@
             color: $color-black;
             line-height: 1.5;
             word-break: break-word;
+
+            max-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: justify;
         }
 
         .details-grid {
