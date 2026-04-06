@@ -6,6 +6,7 @@ import { Observable, forkJoin, take } from 'rxjs';
 import { GatePassService } from '../../../services/gate-pass.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PendingHttpService } from '../../../services/pending-http.service';
+import { Location } from '@angular/common';
 
 function minArrayLength(min: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -23,6 +24,7 @@ function minArrayLength(min: number): ValidatorFn {
 })
 export class AddGatePassComponent implements OnInit {
   private pendingHttpService = inject(PendingHttpService);
+  private location = inject(Location);
 
   fb = new FormGroup({
     flat: new FormControl<IUIDropdownOption | undefined>(undefined),
@@ -46,7 +48,7 @@ export class AddGatePassComponent implements OnInit {
 
   radioConfig: IUIControlConfig = {
     id: 'radio',
-    label: 'Radio',
+    label: 'Search',
     placeholder: 'Search By',
     validations: [
       { name: 'required', validator: Validators.required },
@@ -122,7 +124,7 @@ export class AddGatePassComponent implements OnInit {
   }
 
   constructor(
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private gatePassService: GatePassService,
     private router: Router,
     private route: ActivatedRoute
@@ -217,5 +219,9 @@ export class AddGatePassComponent implements OnInit {
           this.pendingHttpService.removeRequest('add-gate-pass');
         }
       })
+  }
+
+  cancel() {
+    this.location.back();
   }
 }

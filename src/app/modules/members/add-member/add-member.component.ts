@@ -92,7 +92,7 @@ export class AddMemberComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private newUserService: NewUserService,
     private route: ActivatedRoute
   ) { }

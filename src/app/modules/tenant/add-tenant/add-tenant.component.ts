@@ -124,7 +124,7 @@ export class AddTenantComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private newUserService: NewUserService,
     private dialogService: DialogService,
     private route: ActivatedRoute

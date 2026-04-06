@@ -9,6 +9,9 @@
                     <h3 class="user-name">{{ myProfile?.user?.name ?? 'No Name' }}</h3>
                     <p class="user-details">{{ myProfile?.user?.phoneNumber || 'No contact info' }}</p>
                 </div>
+                <div class="edit-profile">
+                    <app-icon name="edit" (click)="onProfileClick()"></app-icon>
+                </div>
             </div>
 
             <!-- Society dropdown -->

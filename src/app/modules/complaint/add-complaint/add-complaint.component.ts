@@ -15,7 +15,7 @@ import { PendingHttpService } from '../../../services/pending-http.service';
 })
 export class AddComplaintComponent implements OnInit, OnDestroy {
 
-  private societyService = inject(SocietyService);
+  public societyService = inject(SocietyService);
   private route = inject(ActivatedRoute);
   private location = inject(Location);
   private complaintService = inject(ComplaintService);

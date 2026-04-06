@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DemoService } from '../../../services/demo.service';
 import { LoginService } from '../../../services/login.service';
 import { finalize } from 'rxjs/operators';
 import { ITimeSlotAvailability, IDemoBooking, IBEResponseFormat } from '../../../interfaces';
 import { BookingSource } from '../../../constants';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-demo',
@@ -12,6 +14,9 @@ import { BookingSource } from '../../../constants';
   styleUrls: ['./book-demo.component.scss']
 })
 export class BookDemoComponent implements OnInit {
+  private _snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+
   demoForm!: FormGroup;
   selectedTime: string | null = null;
   isSubmitting = false;
@@ -184,14 +189,12 @@ export class BookDemoComponent implements OnInit {
     // if (response.data?.bookingReference) {
     //   this.bookingReference = response.data.bookingReference;
     // }
+    this.router.navigateByUrl('');
 
     // You can add a toast/notification service here
-    console.log('Booking successful:', response.message);
+    this._snackBar.open('Sent Demo Request to Admin.', undefined, { duration: 1000 })
+    
 
-    // Optional: Reset form after 3 seconds
-    setTimeout(() => {
-      this.resetForm();
-    }, 3000);
   }
 
   // Handle booking error

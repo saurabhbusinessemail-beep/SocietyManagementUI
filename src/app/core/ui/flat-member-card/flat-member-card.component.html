@@ -72,7 +72,7 @@
             </ui-button>
             <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()" *ngIf="showMoveOut">
             </ui-button>
-            <app-icon name="delete" class="error" *ngIf="showDelete" (click)="onDeleteClick()"></app-icon>
+            <app-icon name="delete" class="error" size="xl" *ngIf="showDelete" (click)="onDeleteClick()"></app-icon>
         </ng-container>
 
         <ui-loading *ngIf="actionInProgress" message="" [onlyMessage]="true">
