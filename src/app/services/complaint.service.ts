@@ -91,14 +91,7 @@ export class ComplaintService {
         return this.http.post<IPagedResponse<IComplaint>>(`${this.baseUrl}`, payload, { params });
     }
 
-    /**
-     * Check if status transition is allowed
-     * This is a pure function, so we cache it indefinitely (or very long TTL)
-     */
-    @Cacheable({
-        // ttl: 86400000, // 24 hours (rarely changes)
-        paramIndices: [0, 1] // Cache based on current and next status
-    })
+    
     isStatusTransitionAllowed(currentStatus: string, nextStatus: string): boolean {
         const branch = this.statusTree[currentStatus];
         if (!branch) return false;

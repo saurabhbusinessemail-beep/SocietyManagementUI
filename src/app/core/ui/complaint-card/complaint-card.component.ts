@@ -26,6 +26,31 @@ export class ComplaintCardComponent {
   @Output() selectedChange = new EventEmitter<boolean>();
   @Output() statusChange = new EventEmitter<string>();
 
+  getStatusIcon(): string {
+    switch (this.complaint.status) {
+      case 'submitted': return 'alert-circle';
+      case 'approved': return 'check-circle';
+      case 'in_progress': return 'play-circle';
+      case 'resolved': return 'flag';
+      case 'closed': return 'lock';
+      case 'rejected': return 'x-circle';
+      default: return 'help-circle';
+    }
+  }
+
+  getLastModifiedByDisplay(): string {
+    // Implement similar to getCreatedByDisplay using complaint.modifiedBy or lastModifiedBy
+    // For now, return a fallback or use existing logic if available
+    const modifiedBy = (this.complaint as any).modifiedBy || (this.complaint as any).lastModifiedBy;
+    if (!modifiedBy) return '—';
+    if (typeof modifiedBy === 'object') {
+      if ('name' in modifiedBy && modifiedBy.name) return modifiedBy.name;
+      if ('email' in modifiedBy) return modifiedBy.email ?? 'N/A';
+      return 'Unknown';
+    }
+    return `ID: ${this.truncateId(modifiedBy)}`;
+  }
+
   getPriorityClass(): string {
     return this.complaint.priority.toLowerCase();
   }

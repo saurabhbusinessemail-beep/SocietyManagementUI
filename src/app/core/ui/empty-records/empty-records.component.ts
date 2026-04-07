@@ -28,7 +28,7 @@ export class EmptyRecordsComponent {
   }
 
   get message() {
-    return `"You haven't added any ${this.singular} yet. Get started by adding your first ${this.singular}.`
+    return `You haven't added any ${this.singular} yet. Get started by adding your first ${this.singular}.`
   }
 
   get buttonText() {

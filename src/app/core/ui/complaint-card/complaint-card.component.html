@@ -1,46 +1,54 @@
 <div class="complaint-card">
-    <div class="card-header">
-        <div class="header-left">
-            <div class="selection-checkbox" *ngIf="selectMode">
-                <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)">
+    <!-- Card inner padding -->
+    <div class="card-inner">
+        <!-- Header row: selection + badges + edit button -->
+        <div class="card-header">
+            <div class="header-left">
+                <!-- Selection checkbox -->
+                <div class="selection-checkbox" *ngIf="selectMode">
+                    <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)" />
+                </div>
+
+                <!-- Badges container -->
+                <div class="badges">
+                    <!-- Priority badge -->
+                    <span class="priority-badge" [ngClass]="getPriorityClass()">
+                        {{ complaint.priority | complaintPriority }}
+                    </span>
+
+                    <!-- Status badge with icon -->
+                    <span class="status-badge" [ngClass]="getStatusClass()">
+                        <app-icon [name]="getStatusIcon()" size="sm"></app-icon>
+                        <span>{{ complaint.status | complaintStatus }}</span>
+                    </span>
+
+                    <!-- Type badge -->
+                    <span class="type-badge" *ngIf="complaint.complaintType">
+                        {{ complaint.complaintType }}
+                    </span>
+                </div>
             </div>
-            <div class="badges">
-                <span class="priority-badge" [ngClass]="getPriorityClass()">
-                    {{ complaint.priority }}
-                </span>
-                <span class="status-badge" [ngClass]="getStatusClass()">
-                    {{ complaint.status }}
-                </span>
-                <span class="type-badge" *ngIf="complaint.complaintType">
-                    {{ complaint.complaintType }}
-                </span>
+
+            <!-- Edit button (header actions) -->
+            <div class="header-actions" *ngIf="showEdit && !actionInProgress">
+                <button class="edit-btn" (click)="onEdit($event)">Edit</button>
+            </div>
+            <div class="header-actions" *ngIf="actionInProgress">
+                <ui-loading message="Completing action" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                </ui-loading>
             </div>
         </div>
-        <div class="header-actions" *ngIf="showEdit || showDelete">
 
-            <ng-container *ngIf="!actionInProgress">
-                <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
-                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">
-                    <app-icon name="delete"></app-icon>
-                </button>
-            </ng-container>
+        <!-- Title -->
+        <h2 class="complaint-title">{{ complaint.title }}</h2>
 
-            <ui-loading *ngIf="actionInProgress" message="Completing action" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="12">
-            </ui-loading>
-        </div>
-    </div>
-
-    <div class="card-body">
-        <h3 class="complaint-title">{{ complaint.title }}</h3>
-        <p class="complaint-description">{{ complaint.description }}</p>
-
+        <!-- Flat / Society / Assigned to (styled as compact grid) -->
         <div class="details-grid">
             <div class="detail-item">
                 <span class="label">Flat</span>
                 <span class="value">{{ getFlatDisplay() }}</span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="complaint.societyId">
                 <span class="label">Society</span>
                 <span class="value">{{ getSocietyDisplay() }}</span>
             </div>
@@ -50,55 +58,65 @@
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="action" *ngIf="canApprove || canReject || canMoveToProgress || canMarkResolved || canClose">
+        <!-- Description -->
+        <p class="complaint-description">{{ complaint.description }}</p>
 
-            <ng-container *ngIf="!actionInProgress">
-                <!-- Approve -->
-                <ui-button *ngIf="canApprove" type="only-content" label="Approve" class="approved"
-                    (clicked)="onChangeStatus('approved', $event)">
-                    <app-icon name="approve" size="md"></app-icon>
-                </ui-button>
+        <!-- Created / Modified info (two-column grid) -->
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Created by:</span>
+                {{ getCreatedByDisplay() }}
+                <span class="meta-date">• {{ complaint.createdOn | date:'MMM d, yyyy h:mm a' }}</span>
+            </div>
+            <div class="meta-item" *ngIf="complaint.modifiedOn">
+                <span class="meta-label">Last modified by:</span>
+                {{ getLastModifiedByDisplay() }}
+                <span class="meta-date">• {{ complaint.modifiedOn | date:'MMM d, yyyy h:mm a' }}</span>
+            </div>
+        </div>
 
-                <!-- Reject -->
-                <ui-button *ngIf="canReject" type="only-content" label="Reject" class="rejected"
-                    (clicked)="onChangeStatus('rejected', $event)">
-                    <app-icon name="clear" size="md"></app-icon>
-                </ui-button>
+        <!-- Action Buttons (status changes + delete) -->
+        <div class="action-row"
+            *ngIf="!actionInProgress && (canApprove || canReject || canMoveToProgress || canMarkResolved || canClose || showDelete)">
+            <!-- Status change buttons (gradient styles) -->
+            <button *ngIf="canApprove" class="action-btn action-approve" (click)="onChangeStatus('approved', $event)">
+                <app-icon name="approve" size="sm"></app-icon>
+                <span>Approve</span>
+            </button>
 
-                <!-- Move To Progress -->
-                <ui-button *ngIf="canMoveToProgress" type="only-content" label="Move To Progress" class="in_progress"
-                    (clicked)="onChangeStatus('in_progress', $event)">
-                    <app-icon name="in-progress" size="md"></app-icon>
-                </ui-button>
+            <button *ngIf="canReject" class="action-btn action-reject" (click)="onChangeStatus('rejected', $event)">
+                <app-icon name="clear" size="sm"></app-icon>
+                <span>Reject</span>
+            </button>
 
-                <!-- Mark Resolved -->
-                <ui-button *ngIf="canMarkResolved" type="only-content" label="Mark Resolved" class="resolved"
-                    (clicked)="onChangeStatus('resolved', $event)">
-                    <app-icon name="resolved" size="md"></app-icon>
-                </ui-button>
+            <button *ngIf="canMoveToProgress" class="action-btn action-progress"
+                (click)="onChangeStatus('in_progress', $event)">
+                <app-icon name="in-progress" size="sm"></app-icon>
+                <span>Move To Progress</span>
+            </button>
 
-                <!-- Close -->
-                <ui-button *ngIf="canClose" type="only-content" label="Close" class="closed"
-                    (clicked)="onChangeStatus('closed', $event)">
-                    <app-icon name="close" size="md"></app-icon>
-                </ui-button>
-            </ng-container>
+            <button *ngIf="canMarkResolved" class="action-btn action-resolved"
+                (click)="onChangeStatus('resolved', $event)">
+                <app-icon name="resolved" size="sm"></app-icon>
+                <span>Mark Resolved</span>
+            </button>
 
+            <button *ngIf="canClose" class="action-btn action-close" (click)="onChangeStatus('closed', $event)">
+                <app-icon name="close" size="sm"></app-icon>
+                <span>Close</span>
+            </button>
 
-            <ui-loading *ngIf="actionInProgress" message="Completing action" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="12">
+            <!-- Delete button (right-aligned, red outline style) -->
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">
+                <app-icon name="delete" size="sm"></app-icon>
+                <span>Delete</span>
+            </button>
+        </div>
+
+        <!-- Loading state for actions -->
+        <div class="action-row" *ngIf="actionInProgress">
+            <ui-loading message="Completing action" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
         </div>
-    </div>
-
-    <div class="card-footer">
-        <span class="created-info">
-            <span class="label">Created</span>
-            {{ complaint.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
-        </span>
-        <span class="modified-info" *ngIf="complaint.modifiedOn">
-            • Modified {{ complaint.modifiedOn | date:'medium' }}
-        </span>
     </div>
 </div>

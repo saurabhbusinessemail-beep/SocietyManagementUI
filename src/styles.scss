@@ -12,6 +12,19 @@ body,
 app-root {
     height: 100%;
     margin: 0;
+    
+
+    @include mobile {
+        font-size: $page-header-mobile;
+    }
+
+    @include tablet {
+        font-size: $page-header-tablet;
+    }
+
+    @include desktop {
+        font-size: $page-header-desktop;
+    }
 }
 
 body {
@@ -264,10 +277,17 @@ textarea {
 }
 
 .ng-select {
-    .ng-select-container {
+
+    .ng-select-container,
+    .ng-input>input {
         padding: $input-padding-mobile $input-padding-desktop !important;
         height: inherit !important;
     }
+
+    .ng-value.ng-star-inserted {
+        margin-top: 5px;
+    }
+
 }
 
 // Page header
@@ -282,17 +302,17 @@ textarea {
     }
 
     @include mobile {
-        font-size: $page-header-mobile;
+        // font-size: $page-header-mobile;
         margin: $sp-sm 0 $sp-sm 0;
     }
 
     @include tablet {
-        font-size: $page-header-tablet;
+        // font-size: $page-header-tablet;
         margin: $sp-md 0 $sp 0;
     }
 
     @include desktop {
-        font-size: $page-header-desktop;
+        // font-size: $page-header-desktop;
         margin: $sp-lg 0 $sp-md 0;
     }
 }
