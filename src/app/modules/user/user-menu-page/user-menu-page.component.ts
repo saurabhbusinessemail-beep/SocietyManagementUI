@@ -92,7 +92,7 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
   }
 
   clearSociety(): void {
-    this.societyService.clearSocietyFilter();
+    // this.societyService.clearSocietyFilter();
     this.showDropdown = false;
   }
 

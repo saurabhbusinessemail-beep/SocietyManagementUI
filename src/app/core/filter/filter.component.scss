@@ -2,10 +2,13 @@
 @import '../../../styles/mixins';
 
 .filter-container {
-    padding-top: $sp;
-    padding-bottom: $sp;
+    padding-top: 18px;
+    padding-bottom: 10px;
     background-color: $color-white;
     border: 0px;
+    border-bottom: solid 1px $color-sky;
+    border-top: solid 1px $color-sky;
+    margin-bottom: $sp-md;
 
     .selected-filter-info {
         display: grid;

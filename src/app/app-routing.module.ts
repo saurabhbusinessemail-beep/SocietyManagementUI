@@ -9,6 +9,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'join',
+    loadChildren: () => import('./modules/join-as/join-as.module').then(module => module.JoinAsModule)
+  },
+  {
     path: 'login',
     loadChildren: () => import('./modules/login/login.module').then(module => module.LoginModule),
     canActivate: [AuthGuard]

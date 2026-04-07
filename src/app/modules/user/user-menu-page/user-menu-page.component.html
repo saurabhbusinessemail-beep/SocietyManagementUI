@@ -26,10 +26,10 @@
                     </button>
                 </div>
                 <div class="options-list" *ngIf="showDropdown">
-                    <div class="option-item clear-option" (click)="clearSociety(); $event.stopPropagation()"
+                    <!-- <div class="option-item clear-option" (click)="clearSociety(); $event.stopPropagation()"
                         *ngIf="selectedSociety">
                         <span>Clear selection</span>
-                    </div>
+                    </div> -->
                     <div class="option-item" *ngFor="let opt of societyOptions"
                         (click)="selectSociety(opt); $event.stopPropagation()">
                         {{ opt.label }}

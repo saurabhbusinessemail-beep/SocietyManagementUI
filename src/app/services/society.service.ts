@@ -68,9 +68,9 @@ export class SocietyService {
         this._selectedSocietyFilter.next(option);
     }
 
-    clearSocietyFilter() {
-        this._selectedSocietyFilter.next(undefined);
-    }
+    // clearSocietyFilter() {
+    //     this._selectedSocietyFilter.next(undefined);
+    // }
 
     handleSocietyClick(society: ISociety) {
         const profile = this.loginService.getProfileFromStorage();

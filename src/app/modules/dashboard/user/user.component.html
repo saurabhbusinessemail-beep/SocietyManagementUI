@@ -1,159 +1,39 @@
+<!-- user.component.html -->
 <app-layout [hideMoreActions]="true" pageTitle="">
     <div class="banner-container">
         <img src="../../../../assets/banner.png" class="banner-image">
     </div>
-    <form [formGroup]="fb" class="user-form">
 
-        <!-- JOIN US -->
-        <ui-form-layout [title]="role ? '' : 'JOIN AS'" [showAsSection]="!role"
-            [colorTheme]="!role ? 'gradient-modern-ui' : ''">
+    <div class="user-container">
+        <!-- JOIN AS SECTION -->
+        <ui-form-layout title="JOIN AS" [showAsSection]="true" colorTheme="gradient-modern-ui">
+            <div class="no-mobile no-tablet" [lgColumns]="3"></div>
 
-            <ng-container *ngIf="!role">
-                <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+            <ui-card *ngFor="let r of roles" [smColumns]="4" [mdColumns]="4" [lgColumns]="2"
+                (click)="navigateToJoin(r.role)">
+                <div card-main>
+                    <b>{{ r.label }}</b>
+                </div>
+                <div card-icon>
+                    <app-icon [name]="r.icon" size="xxl"></app-icon>
+                </div>
+            </ui-card>
 
-                <ui-card *ngFor="let r of roles" [smColumns]="4" [mdColumns]="4" [lgColumns]="2"
-                    (click)="setRole(r.role)">
-                    <div card-main>
-                        <b>{{ r.label }}</b>
-                    </div>
-                    <div card-icon>
-                        <app-icon [name]="r.icon" size="xxl"></app-icon>
-                    </div>
-                </ui-card>
-
-
-                <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-            </ng-container>
-
-
-
-            <div *ngIf="role" class="user-form-controls ui-form-layout" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="2">
-
-                <ui-loading *ngIf="isSavingOwner || isSavingTenant || isSavingSecurity" message="Saving information"
-                    [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                </ui-loading>
-
-                <ng-container *ngIf="!isSavingOwner && !isSavingTenant && !isSavingSecurity">
-
-                    <!-- Society -->
-                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                    <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
-                    </ui-society-search>
-                    <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-
-
-                    <!-- Buildings & Flats -->
-                    <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-                        *ngIf="!isSecurity">
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                        <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
-                            [options]="buildingOptions" placeholder="Select Building" [smColumns]="12" [mdColumns]="6"
-                            [lgColumns]="3">
-                        </ui-drop-down>
-
-                        <ui-drop-down formControlName="flatId" [config]="flatIdConfig" [options]="parkingFlatOptions"
-                            placeholder="Select Flat" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
-                        </ui-drop-down>
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                    </section>
-
-                    <!-- Residence Type -->
-                    <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12" *ngIf="isOwner">
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                        <ui-radio-list formControlName="residingType" [config]="residingTypeConfig"
-                            direction="horizontal" [options]="residingTypeOptions" [smColumns]="12" [mdColumns]="6"
-                            [lgColumns]="3">
-                        </ui-radio-list>
-
-                        <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
-                            direction="horizontal" [options]="radioOptions" *ngIf="isResidingTypeTenant"
-                            [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
-                        </ui-radio-list>
-                    </section>
-
-                    <!-- Tenant Form -->
-                    <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-                        formGroupName="tenantForm" *ngIf="isResidingTypeTenant || isTenant">
-
-                        <!-- User / Contact Search -->
-                        <div class="no-mobile no-tablet" [lgColumns]="3" *ngIf="isResidingTypeTenant"></div>
-                        <ui-contact-search [formControl]="contactSearchFormControl" [smColumns]="12" [mdColumns]="12"
-                            [lgColumns]="6" *ngIf="showContactSearch && isResidingTypeTenant">
-                        </ui-contact-search>
-
-                        <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="12"
-                            [lgColumns]="6" *ngIf="showUserSearch && isResidingTypeTenant">
-                        </ui-user-search>
-                        <div class="no-mobile no-tablet" [lgColumns]="3" *ngIf="isResidingTypeTenant"></div>
-
-
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                        <ui-date formControlName="leaseStart" [config]="leaseStartConfig" [smColumns]="12"
-                            [mdColumns]="4" [lgColumns]="2">
-                        </ui-date>
-                        <ui-date formControlName="leaseEnd" [config]="leaseEndConfig" [smColumns]="12" [mdColumns]="4"
-                            [lgColumns]="2">
-                        </ui-date>
-                        <ui-text-box formControlName="rentAmount" type="number" [config]="rentAmountConfig"
-                            [smColumns]="12" [mdColumns]="4" [lgColumns]="2">
-                        </ui-text-box>
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-
-                    </section>
-
-                    <!-- Security Form -->
-                    <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-                        formGroupName="securityForm" *ngIf="isSecurity">
-
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                        <ui-date formControlName="jobStart" [config]="jobStartConfig" [smColumns]="12" [mdColumns]="4"
-                            [lgColumns]="2">
-                        </ui-date>
-                        <ui-date formControlName="jobEnd" [config]="jobEndConfig" [smColumns]="12" [mdColumns]="4"
-                            [lgColumns]="2">
-                        </ui-date>
-                        <ui-text-box formControlName="salaryAmount" type="number" [config]="salaryAmountConfig"
-                            [smColumns]="12" [mdColumns]="4" [lgColumns]="2">
-                        </ui-text-box>
-                        <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-
-
-                    </section>
-
-                    <!-- Action -->
-                    <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="9">
-
-                        <ui-button label="Cancel" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
-                            (clicked)="reset()">
-                        </ui-button>
-
-                        <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
-                            (clicked)="save()">
-                        </ui-button>
-
-                    </section>
-                </ng-container>
-
-            </div>
-
+            <div class="no-mobile no-tablet" [lgColumns]="3"></div>
         </ui-form-layout>
 
-
-        <!-- Socities Section -->
-        <ui-form-layout [title]="'Socities'" [showAsSection]="true" colorTheme="gradient-light-airy"
-            *ngIf="!role && societies.length > 0">
-
+        <!-- SOCIETIES SECTION -->
+        <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
+            *ngIf="societies.length > 0">
             <ng-container *ngFor="let s of societies">
                 <ui-circular-display [label]="s.societyName" [smColumns]="6" [mdColumns]="3" [lgColumns]="2"
                     (onClicked)="handleSocietyClick(s)">
                 </ui-circular-display>
             </ng-container>
-
         </ui-form-layout>
-        <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
-            *ngIf="!role && societies.length === 0">
 
+        <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
+            *ngIf="societies.length === 0">
             <div class="empty-societies-placeholder" *ngIf="!isSocitiesLoading" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
                 <div class="placeholder-content">
@@ -162,15 +42,14 @@
                     </div>
                     <h3 class="placeholder-title">No Societies Yet</h3>
                     <p class="placeholder-description">Get started by registering your society</p>
-                    <ui-button label="New Registeration" type="primary" (clicked)="navigateToAddSociety()">
+                    <ui-button label="New Registration" type="primary" (clicked)="navigateToAddSociety()">
                     </ui-button>
                 </div>
             </div>
 
-            <ui-loading *ngIf="isSocitiesLoading" message="Loading Socities" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="isSocitiesLoading" message="Loading Societies" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
-
         </ui-form-layout>
-    </form>
+    </div>
 </app-layout>

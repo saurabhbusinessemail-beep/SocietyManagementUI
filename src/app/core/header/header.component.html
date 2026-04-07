@@ -1,10 +1,14 @@
 <header class="app-header header-root">
-    <div class="left">
-        <img class="icon menu-icon" src="assets/logo.png"
-            (click)="onGoHomeClick()">
-    </div>
 
-    <!-- <div class="left" *ngIf="windowServic.mode.value !== 'mobile' || title === ''" appLongTouch
+    <div class="header-top"></div>
+
+    <div class="header-bottom">
+        <div class="left">
+            <img class="icon menu-icon" src="assets/logo.png" appLongTouch
+                (longTouch)="showDevButtons = !showDevButtons" (click)="onGoHomeClick()">
+        </div>
+
+        <!-- <div class="left" *ngIf="windowServic.mode.value !== 'mobile' || title === ''" appLongTouch
         (longTouch)="showDevButtons = !showDevButtons">
         <div class="app-logo">
             <span class="logo-full">
@@ -17,37 +21,35 @@
         </div>
     </div> -->
 
-    <div class="center" appLongTouch (longTouch)="showDevButtons = !showDevButtons">
-        <!-- <div *ngIf="title" class="title">
-            {{ title }}
-        </div> -->
-        <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)"
-            *ngIf="navMenuItems.length > 0" class="no-mobile">
-        </app-navbar-menu>
-    </div>
-
-    <div class="right">
-        <button (click)="showApiCalls()" *ngIf="showDevButtons">APIs</button>
-        <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
-        <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
-        <ui-user-icon [loggedInUserProfile]="loggedInUserProfile" *ngIf="loggedInUserProfile"
-            (needLogin)="needLogin.emit()">
-        </ui-user-icon>
-
-
-        <button class="navbar-menu-button no-desktop no-tablet" [matMenuTriggerFor]="menu" size="xl"
-            *ngIf="navMenuItems.length > 0" #navBarMenu="matMenuTrigger">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" class="menu-icon" aria-hidden="true">
-                <path d="M4 5h16"></path>
-                <path d="M4 12h16"></path>
-                <path d="M4 19h16"></path>
-            </svg>
-        </button>
-        <mat-menu #menu="matMenu">
+        <div class="center">
             <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)"
-                [extendedMenuTemplate]="extendedMenuTemplate">
+                *ngIf="navMenuItems.length > 0" class="no-mobile">
             </app-navbar-menu>
-        </mat-menu>
+        </div>
+
+        <div class="right">
+            <button (click)="showApiCalls()" *ngIf="showDevButtons">APIs</button>
+            <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
+            <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
+            <ui-user-icon [loggedInUserProfile]="loggedInUserProfile" *ngIf="loggedInUserProfile"
+                (needLogin)="needLogin.emit()">
+            </ui-user-icon>
+
+
+            <button class="navbar-menu-button no-desktop no-tablet" [matMenuTriggerFor]="menu" size="xl"
+                *ngIf="navMenuItems.length > 0" #navBarMenu="matMenuTrigger">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="menu-icon" aria-hidden="true">
+                    <path d="M4 5h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 19h16"></path>
+                </svg>
+            </button>
+            <mat-menu #menu="matMenu">
+                <app-navbar-menu [menuItems]="navMenuItems" (menuItemClick)="menuItemClick.emit($event)"
+                    [extendedMenuTemplate]="extendedMenuTemplate">
+                </app-navbar-menu>
+            </mat-menu>
+        </div>
     </div>
 </header>

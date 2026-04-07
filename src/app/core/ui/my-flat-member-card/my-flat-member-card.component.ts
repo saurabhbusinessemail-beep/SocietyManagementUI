@@ -68,7 +68,12 @@ export class MyFlatMemberCardComponent {
 
   get showSelfMessage(): boolean {
     // Owner living in own flat (Self) AND user is not a tenant
-    return this.member.residingType === 'Self' && !this.member.isTenant;
+    return this.member.isOwner && this.member.residingType === 'Self';
+  }
+
+  get showMemberMessage(): boolean {
+    // Owner living in own flat (Self) AND user is not a tenant
+    return this.member.isMember && this.member.residingType === 'Self';
   }
 
   get showTenantMessage(): boolean {

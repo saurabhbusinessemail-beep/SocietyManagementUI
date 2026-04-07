@@ -1,7 +1,6 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-
 ::ng-deep {
     .layout-body-container {
         padding: 0px !important;
@@ -25,30 +24,17 @@
     }
 }
 
-.user-form {
-
-    ::ng-deep {
-        .card {
-            justify-content: center !important;
-        }
-
-        .card-main {
-            text-align: center;
-        }
+.user-container {
+    @include mobile {
+        padding: $input-padding-mobile;
     }
 
-    .user-form-controls {
-        @include mobile {
-            padding: $input-padding-mobile;
-        }
+    @include tablet {
+        padding: $input-padding-desktop;
+    }
 
-        @include tablet {
-            padding: $input-padding-desktop;
-        }
-
-        @include desktop {
-            padding: $input-padding-desktop;
-        }
+    @include desktop {
+        padding: $input-padding-desktop;
     }
 }
 
@@ -100,18 +86,6 @@
     }
 }
 
-// Optional: Add hover effect for the placeholder
-.empty-societies-placeholder {
-    .placeholder-content {
-        transition: transform 0.3s ease;
-
-        &:hover {
-            transform: translateY(-4px);
-        }
-    }
-}
-
-// Responsive adjustments
 @include mobile {
     .empty-societies-placeholder {
         padding: $sp-lg;
