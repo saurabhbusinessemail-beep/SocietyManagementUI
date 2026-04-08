@@ -1,0 +1,25 @@
+<app-layout [hideMoreActions]="isAdmin" pageTitle="Pending Approvals">
+
+    <ng-container moreActions>
+        <ul class="page-menu-list" *ngIf="!isAdmin">
+            <li class="page-menu" (click)="gotoAddSociety()">New Request</li>
+        </ul>
+    </ng-container>
+
+    <ui-tabs [tabs]="tabsOptions" [tab]="routeTabId" (tabChange)="handleTabChange($event)">
+
+        <!-- Societies Approval -->
+        <ng-template uiTab="societies">
+            <app-pending-society-approvals>
+
+            </app-pending-society-approvals>
+        </ng-template>
+        
+        <!-- Flats Approval -->
+        <ng-template uiTab="flats">
+            flats
+        </ng-template>
+
+    </ui-tabs>
+
+</app-layout>

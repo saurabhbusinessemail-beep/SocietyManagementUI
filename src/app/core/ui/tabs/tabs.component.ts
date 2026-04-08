@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, EventEmitter, Input, OnChanges, Output, QueryList, SimpleChanges } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
 import { IUIDropdownOption } from '../../../interfaces';
 import { UIBaseFormControl } from '../../../directives';
 import { UITabContentDirective } from './ui-tab-directive';
@@ -10,7 +10,7 @@ import { UITabContentDirective } from './ui-tab-directive';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabsComponent extends UIBaseFormControl<string>
-  implements OnChanges, AfterContentInit {
+  implements OnInit, OnChanges, AfterContentInit {
 
 
   @Input() tabs: IUIDropdownOption[] = [];
@@ -32,8 +32,14 @@ export class TabsComponent extends UIBaseFormControl<string>
     super.ngOnChanges(changes);
 
     if (changes['tab']) {
-      this.selectTab(this.tab);
+      setTimeout(() => {
+        this.selectTab(this.tab);
+      }, 10);
     }
+  }
+
+  ngOnInit(): void {
+    this.selectTab(this.tab);
   }
 
   override writeValue(value: string): void {

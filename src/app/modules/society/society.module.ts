@@ -20,6 +20,9 @@ import { SocietyAdminsComponent } from './society-admins/society-admins.componen
 import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
 import { CurrentPlanComponent } from './current-plan/current-plan.component';
 import { PlanHistoryComponent } from './plan-history/plan-history.component';
+import { PendingApprovalComponent } from './pending-approval/pending-approval.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { PendingFlatApprovalsComponent } from './pending-flat-approvals/pending-flat-approvals.component';
 
 
 
@@ -35,7 +38,9 @@ import { PlanHistoryComponent } from './plan-history/plan-history.component';
     SocietyAdminsComponent,
     PendingSocietyApprovalsComponent,
     CurrentPlanComponent,
-    PlanHistoryComponent
+    PlanHistoryComponent,
+    PendingApprovalComponent,
+    PendingFlatApprovalsComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +52,8 @@ import { PlanHistoryComponent } from './plan-history/plan-history.component';
     IconModule,
     DirectiveModule,
     PipeModule,
-    MatDialogContent
-]
+    MatDialogContent,
+    MatTabsModule
+  ]
 })
 export class SocietyModule { }

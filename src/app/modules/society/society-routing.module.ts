@@ -13,6 +13,7 @@ import { SocietyAdminsComponent } from './society-admins/society-admins.componen
 import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
 import { CurrentPlanComponent } from './current-plan/current-plan.component';
 import { PlanHistoryComponent } from './plan-history/plan-history.component';
+import { PendingApprovalComponent } from './pending-approval/pending-approval.component';
 
 const routes: Routes = [
   // Socities
@@ -29,7 +30,17 @@ const routes: Routes = [
   },
   {
     path: 'pendingApproval',
-    component: PendingSocietyApprovalsComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'societies',
+        pathMatch: 'full'
+      },
+      {
+        path: ':tabId',
+        component: PendingApprovalComponent
+      }
+    ]
   },
   {
     path: 'add',
