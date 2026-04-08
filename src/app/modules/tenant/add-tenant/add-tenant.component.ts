@@ -132,7 +132,7 @@ export class AddTenantComponent implements OnInit {
 
   ngOnInit(): void {
     const societyId = this.societyService.selectedSocietyFilterValue?.value;
-    this.societyId = this.route.snapshot.paramMap.get('id') ?? societyId;
+    this.societyId = this.route.snapshot.paramMap.get('societyId') ?? societyId;
     this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
     this.loadAllMyFlats(this.societyId);
   }

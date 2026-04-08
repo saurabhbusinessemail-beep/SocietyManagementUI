@@ -82,7 +82,7 @@ export class SocietyDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('societyId');
     if (id) {
       this.loadSociety(id);
     } else {
@@ -130,10 +130,6 @@ export class SocietyDetailsComponent implements OnInit {
             if (typeof s !== 'string') arr.push(s);
             return arr;
           }, [] as IUser[]);
-
-          // select society if not selected
-          if (!this.societyService.selectedSocietyFilterValue)
-            this.societyService.selectSocietyFilter({ label: this.society.societyName, value: this.society._id })
 
 
           this.loadingSociety = false;

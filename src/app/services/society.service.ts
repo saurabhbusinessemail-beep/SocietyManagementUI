@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse } from '../interfaces';
-import { BehaviorSubject, Observable, share, take } from 'rxjs';
+import { BehaviorSubject, Observable, share, take, tap } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
 import { DropDownControl, SocietyRoles } from '../types';
@@ -19,12 +19,24 @@ export class SocietyService {
 
     private _selectedSocietyFilter = new BehaviorSubject<DropDownControl>(undefined);
     selectedSocietyFilter = this._selectedSocietyFilter.asObservable();
+    private _societyPlanLoading = false;
+
+    private _socities = new BehaviorSubject<ISociety[]>([]);
+    socities = this._socities.asObservable();
 
     private readonly baseUrl = `${environment.apiBaseUrl}/societies`;
     private readonly flatsBaseUrl = `${environment.apiBaseUrl}/flats`;
 
     get selectedSocietyFilterValue(): DropDownControl {
         return this._selectedSocietyFilter.value;
+    }
+
+    get societyPlanLoading() {
+        return this._societyPlanLoading;
+    }
+
+    set societyPlanLoading(val: boolean) {
+        this._societyPlanLoading = val;
     }
 
     constructor(
@@ -34,6 +46,10 @@ export class SocietyService {
         private loginService: LoginService,
         private dialog: MatDialog
     ) { }
+
+    setSocities(socities: ISociety[]) {
+        this._socities.next(socities);
+    }
 
     convertFlatMemberToDropdownOption(flatMember: IFlatMember, societyId?: string): IUIDropdownOption {
         const buildingNumber = flatMember.flatId
@@ -55,11 +71,11 @@ export class SocietyService {
 
     convertFlatToDropdownOption(flat: IFlat, societyId?: string): IUIDropdownOption {
         const buildingNumber = flat.buildingId && typeof flat.buildingId !== 'string' ? flat.buildingId.buildingNumber + ': ' : '';
-        const societyName = !societyId && flat.societyId && typeof flat.societyId !== 'string' ? '-' + flat.societyId.societyName : '';
-        const flatNumber = flat.flatNumber + ` (Floor: ${flat.floor})`;
+        // const societyName = !societyId && flat.societyId && typeof flat.societyId !== 'string' ? '-' + flat.societyId.societyName : '';
+        const flatNumber = flat.flatNumber//+ ` (Floor: ${flat.floor})`;
 
         return {
-            label: buildingNumber + flatNumber + societyName,
+            label: buildingNumber + flatNumber, // + societyName,
             value: flat._id
         } as IUIDropdownOption
     }
@@ -168,7 +184,10 @@ export class SocietyService {
         group: 'societies'
     })
     getAllSocieties(): Observable<IPagedResponse<ISociety>> {
-        return this.http.get<IPagedResponse<ISociety>>(this.baseUrl);
+        return this.http.get<IPagedResponse<ISociety>>(this.baseUrl).pipe(tap(response => {
+            if (response.success && response.data)
+                this.setSocities(response.data);
+        }));
     }
 
     @Cacheable({
@@ -354,7 +373,7 @@ export class SocietyService {
     }
 
 
-    /* MANAGER */
+    /* Society Admins */
     @InvalidateCache({
         methods: [
             'SocietyService.getSociety'

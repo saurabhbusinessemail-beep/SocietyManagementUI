@@ -139,7 +139,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private societyService: SocietyService,
+    public societyService: SocietyService,
     private complaintService: ComplaintService,
     private gateEntryService: GateEntryService,
     private gatepassService: GatePassService,

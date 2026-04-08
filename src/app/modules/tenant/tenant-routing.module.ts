@@ -22,11 +22,11 @@ const routes: Routes = [
     component: AddTenantComponent
   },
   {
-    path: ':id/add',
+    path: ':societyId/add',
     component: AddTenantComponent,
   },
   {
-    path: ':id/add/:flatId',
+    path: ':societyId/add/:flatId',
     component: AddTenantComponent,
   },
   {

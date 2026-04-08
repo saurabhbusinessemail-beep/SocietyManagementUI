@@ -38,13 +38,13 @@ const routes: Routes = [
     // data: { permission: PERMISSIONS.society_add }
   },
   {
-    path: ':id/edit',
+    path: ':societyId/edit',
     canActivate: [PermissionGuard],
     component: AddSocietyComponent,
     data: { permission: PERMISSIONS.society_update, checkSocietyId: true }
   },
   {
-    path: ':id/details',
+    path: ':societyId/details',
     canActivate: [PermissionGuard],
     component: SocietyDetailsComponent,
     data: { permission: PERMISSIONS.society_view, checkSocietyId: true }
@@ -60,7 +60,7 @@ const routes: Routes = [
 
   // Society Managers
   {
-    path: ':id/managers',
+    path: ':societyId/managers',
     canActivate: [PermissionGuard],
     component: SocietyManagersComponent,
     data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
@@ -68,7 +68,7 @@ const routes: Routes = [
 
   // Society Admins
   {
-    path: ':id/admins',
+    path: ':societyId/admins',
     canActivate: [PermissionGuard],
     component: SocietyAdminsComponent,
     data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
@@ -76,7 +76,7 @@ const routes: Routes = [
 
   // Buildings
   {
-    path: ':id/buildings',
+    path: ':societyId/buildings',
     canActivate: [PermissionGuard],
     component: BuildingListComponent,
     data: { permission: PERMISSIONS.building_view, checkSocietyId: true }
@@ -90,13 +90,13 @@ const routes: Routes = [
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
   },
   {
-    path: ':id/flats',
+    path: ':societyId/flats',
     canActivate: [PermissionGuard],
     component: FlatListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
   },
   {
-    path: ':id/buildings/:buildingId/flats',
+    path: ':societyId/buildings/:buildingId/flats',
     canActivate: [PermissionGuard],
     component: FlatListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
@@ -110,13 +110,13 @@ const routes: Routes = [
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
   },
   {
-    path: ':id/parkings',
+    path: ':societyId/parkings',
     canActivate: [PermissionGuard],
     component: ParkingsListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
   },
   {
-    path: ':id/buildings/:buildingId/parkings',
+    path: ':societyId/buildings/:buildingId/parkings',
     canActivate: [PermissionGuard],
     component: ParkingsListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }

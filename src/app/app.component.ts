@@ -1,20 +1,18 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './services/menu.service';
-import { filter, map, mergeMap, of, take } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
+import { combineLatest, filter, finalize, map, mergeMap, of, startWith, take } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserNameInputPopupComponent } from './core/user-name-popup/user-name-input-popup.component';
 import { FcmTokenService } from './services/fcm-token.service';
 import { ConsoleCaptureService } from './services/console-capture.service';
 import { PushNotificationService } from './services/push-notification.service';
-import { ColdStartService } from './services/cold-start.service';
 import { App } from '@capacitor/app';
 import { UserService } from './services/user.service';
 import { PricingPlanService } from './services/pricing-plan.service';
 import { SocietyService } from './services/society.service';
 import { ICurrentPlanResponse } from './interfaces';
-import { IconsService } from './core/icons/icons.service';
 import { CurrencyService } from './services/currency.service';
 
 @Component({
@@ -24,6 +22,7 @@ import { CurrencyService } from './services/currency.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private currencyService = inject(CurrencyService);
+  private route = inject(ActivatedRoute);
 
   firstRouteLoad = true;
   show = false;
@@ -41,10 +40,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private FcmTokenService: FcmTokenService,
     public consoleService: ConsoleCaptureService,
     private pushNotificationService: PushNotificationService,
-    private coldStartService: ColdStartService,
     private pricingPlanService: PricingPlanService,
     private societService: SocietyService,
-    private iconService: IconsService
   ) { }
 
   async ngOnInit() {
@@ -60,38 +57,26 @@ export class AppComponent implements OnInit, OnDestroy {
     this.menuService.userMenus.subscribe(() => this.filterMenus());
 
     this.societService.selectedSocietyFilter
-      .pipe(mergeMap(selectedSociety => {
-        if (selectedSociety)
-          return this.getSocietyPricingPlan(selectedSociety?.value)
-        return of([]);
-      }))
-      .subscribe(() => this.filterMenus());
+      .pipe(
+        mergeMap(selectedSociety => {
+          this.societService.societyPlanLoading = true;
+          if (selectedSociety)
+            return this.getSocietyPricingPlan(selectedSociety?.value)
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.societService.societyPlanLoading = false;
+          this.filterMenus();
+        },
+        error: () => {
+          this.societService.societyPlanLoading = false;
+        }
+      });
 
-    // this.router.events
-    //   .pipe(
-    //     filter((event): event is NavigationEnd => event instanceof NavigationEnd)
-    //   )
-    //   .subscribe((event: NavigationEnd) => {
+    this.societService.getAllSocieties().pipe(take(1)).subscribe();
 
-    // this.menuService._userMenus//.pipe(take(1))
-    //   .subscribe(res => {
-    //     this.checkAndAskForUserName();
-
-    // // No sync with URL change for some URLs
-    // const excludeURLs = ['/profile'];
-    // if (excludeURLs.includes(this.router.url)) {
-    //   this.menuService.selectedMenu.next(undefined);
-    //   return;
-    // }
-
-    // if (this.firstRouteLoad && res.length > 0 && this.router.url === '/dashboard/user') {
-    //   this.menuService.syncSelectedMenuWithCurrentUrl(true);
-    //   this.firstRouteLoad = false;
-    // }
-    // else
-    //   this.menuService.syncSelectedMenuWithCurrentUrl();
-    // });
-    // })
 
     setTimeout(() => {
       if (this.router.url === '/dashboard/user')
@@ -100,6 +85,31 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log('Refreshing')
       this.pricingPlanService.refreshFeatures().pipe(take(1)).subscribe();
       this.pricingPlanService.refreshPlans().pipe(take(1)).subscribe();
+
+
+
+      const params$ = this.router.events.pipe(
+        startWith(null),
+        filter(event => event === null || event instanceof NavigationEnd),
+        map(() => {
+          // Get the deepest active route from routerState
+          let route = this.router.routerState.snapshot.root;
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route.params; // returns { societyId: '...' } if present
+        })
+      );
+
+      combineLatest([params$, this.societService.socities])
+        .subscribe(([params, socities]) => {
+          if (socities.length > 0 && !this.societService.selectedSocietyFilterValue) {
+            const routeSocietyId = params['societyId'];
+            const firstSociety = socities[0];
+            const selectedSociety = !routeSocietyId ? firstSociety : (socities.find(s => s._id === routeSocietyId) ?? firstSociety);
+            this.societService.selectSocietyFilter({ label: selectedSociety.societyName, value: selectedSociety._id });
+          }
+        });
     }, 100);
 
     // Listen for app resume events

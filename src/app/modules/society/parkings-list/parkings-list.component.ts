@@ -178,7 +178,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
   ngOnInit(): void {
     this.subscribeToChange();
 
-    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.societyId = this.route.snapshot.paramMap.get('societyId')!;
     this.buildingId = this.route.snapshot.paramMap.get('buildingId')!;
 
     if (this.societyId) {
@@ -295,7 +295,8 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
         this.fb.get('building')?.reset();
         this.flats = [];
         this.parkings = [];
-        this.fb.get('building')?.enable();
+
+        this.fb.get('building')?.enable({ emitEvent: false });
         if (!society) return;
 
         if (society.numberOfBuildings > 1) {
@@ -305,7 +306,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
           this.loadFlats(society._id);
           this.loadParkings(society._id);
           setTimeout(() => {
-            this.fb.get('building')?.disable();
+            this.fb.get('building')?.disable({ emitEvent: false });
           });
         }
         this.resetParkingForm();
@@ -401,7 +402,8 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
     if (!await this.dialogService.confirmToProceed(`Parkings will be created automatically for all pending flats which do not have ${parkingTypeName} parking yet`)) return;
 
     // Find flats with pending parkings
-    const flatsWithoutParking = this.flats.filter(f => !this.parkings.some(p => p.flatId === f._id && p.parkingType === parkingType));
+    const getFlatId = (parking: IParking) => typeof parking.flatId === 'string' ? parking.flatId : parking.flatId?._id;
+    const flatsWithoutParking = this.flats.filter(f => !this.parkings.some(p => getFlatId(p) === f._id && p.parkingType === parkingType));
     if (flatsWithoutParking.length === 0) return;
 
     const newParkings = flatsWithoutParking.map(f => {

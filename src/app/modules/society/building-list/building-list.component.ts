@@ -151,7 +151,7 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
   ) { super(dialogService) }
 
   ngOnInit(): void {
-    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.societyId = this.route.snapshot.paramMap.get('societyId')!;
     if (!this.societyId) this.router.navigateByUrl('');
 
     this.subscribeToRadioChange()

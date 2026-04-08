@@ -81,7 +81,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
   ) { super(dialogService) }
 
   ngOnInit(): void {
-    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.societyId = this.route.snapshot.paramMap.get('societyId')!;
     if (!this.societyId) this.router.navigateByUrl('');
 
     this.loadSocietyManagers(this.societyId);

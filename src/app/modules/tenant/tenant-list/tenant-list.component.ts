@@ -104,7 +104,6 @@ export class TenantListComponent implements OnInit {
   }
 
   async openAddTenant() {
-    console.log('this.selectedFIlter.societyId = ', this.selectedFIlter);
     const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
     const flatId = this.routeFlatId ?? this.selectedFIlter.flatId;
 

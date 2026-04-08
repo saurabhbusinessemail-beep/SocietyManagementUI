@@ -22,7 +22,7 @@ export class MyFlatListComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.societyId = this.route.snapshot.paramMap.get('societyId')!;
 
     if (this.societyService.selectedSocietyFilterValue?.value && !this.societyId) {
       this.router.navigateByUrl(`myflats/${this.societyService.selectedSocietyFilterValue?.value}/list`);
@@ -42,9 +42,6 @@ export class MyFlatListComponent implements OnInit {
       .subscribe({
         next: response => {
           this.society = response;
-          if (!this.societyService.selectedSocietyFilterValue?.value && this.society) {
-            this.societyService.selectSocietyFilter({ label: this.society.societyName, value: this.society._id });
-          }
           this.loadingSociety = false;
         },
         error: err => {

@@ -15,93 +15,99 @@
             </div>
 
             <!-- Society dropdown -->
-            <div class="society-selector" *ngIf="!loading">
-                <div class="selector-label">Selected Society</div>
-                <div class="selector-wrapper" (click)="toggleDropdown()">
-                    <button class="selector-button" [class.opened]="showDropdown">
-                        <span class="selected-text">
-                            {{ selectedSociety?.label || 'Select a society' }}
-                        </span>
-                        <app-icon name="down-arrow" class="chevron" [class.rotate]="showDropdown"></app-icon>
-                    </button>
-                </div>
-                <div class="options-list" *ngIf="showDropdown">
-                    <!-- <div class="option-item clear-option" (click)="clearSociety(); $event.stopPropagation()"
-                        *ngIf="selectedSociety">
-                        <span>Clear selection</span>
-                    </div> -->
-                    <div class="option-item" *ngFor="let opt of societyOptions"
-                        (click)="selectSociety(opt); $event.stopPropagation()">
-                        {{ opt.label }}
+            <ng-container *ngIf="!loading">
+                <div class="society-selector">
+                    <div class="selector-label">Selected Society</div>
+                    <div class="selector-wrapper" (click)="toggleDropdown()">
+                        <button class="selector-button" [class.opened]="showDropdown">
+                            <span class="selected-text">
+                                {{ selectedSociety?.label || 'Select a society' }}
+                            </span>
+                            <app-icon name="down-arrow" class="chevron" [class.rotate]="showDropdown"></app-icon>
+                        </button>
+                    </div>
+                    <div class="options-list" *ngIf="showDropdown">
+                        <div class="option-item" *ngFor="let opt of societyOptions"
+                            (click)="selectSociety(opt); $event.stopPropagation()">
+                            {{ opt.label }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div>
 
-            <ul class="dropdown-menu">
-                <ng-container *ngIf="filteredMenus.length > 0">
-                    <ng-container *ngFor="let menu of filteredMenus">
-                        <li class="menu-item">
-                            <button class="menu-btn" (click)="onMenuClick(menu)">
-                                <app-icon [name]="menu.icon ?? ''" size="xl"></app-icon>
-                                <span>{{ menu.menuName }}</span>
-                            </button>
-                        </li>
+                <ul class="dropdown-menu">
+                    <ng-container *ngIf="!isPricingPlanLoading">
+                        <ng-container *ngIf="filteredMenus.length > 0">
+                            <ng-container *ngFor="let menu of filteredMenus">
+                                <li class="menu-item">
+                                    <button class="menu-btn" (click)="onMenuClick(menu)">
+                                        <app-icon [name]="menu.icon ?? ''" size="xl"></app-icon>
+                                        <span>{{ menu.menuName }}</span>
+                                    </button>
+                                </li>
+                            </ng-container>
+                            <div class="dropdown-divider"></div>
+                        </ng-container>
                     </ng-container>
+                    <ui-loading message="Loading Menu" *ngIf="isPricingPlanLoading">
+                    </ui-loading>
+
+                    <li class="menu-item">
+                        <button class="menu-btn" (click)="onRegisterSocietyClick()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="action-icon" aria-hidden="true">
+                                <path d="M10 12h4"></path>
+                                <path d="M10 8h4"></path>
+                                <path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
+                                <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                                </path>
+                                <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+                            </svg>
+                            <span>Register Society</span>
+                        </button>
+                    </li>
+
+                    <li class="menu-item">
+                        <button class="menu-btn" (click)="onDemoClick()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="action-icon" aria-hidden="true">
+                                <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5">
+                                </path>
+                                <rect x="2" y="6" width="14" height="12" rx="2"></rect>
+                            </svg>
+                            <span>Request Demo</span>
+                        </button>
+                    </li>
+
                     <div class="dropdown-divider"></div>
-                </ng-container>
 
-                <li class="menu-item">
-                    <button class="menu-btn" (click)="onRegisterSocietyClick()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="action-icon" aria-hidden="true">
-                            <path d="M10 12h4"></path>
-                            <path d="M10 8h4"></path>
-                            <path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
-                            <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
-                            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
-                        </svg>
-                        <span>Register Society</span>
-                    </button>
-                </li>
+                    <li class="menu-item" (click)="onProfileClick()">
+                        <button class="menu-btn">
+                            <app-icon name="account-circle" class="menu-icon" size="xl"></app-icon>
+                            <span>My Profile</span>
+                        </button>
+                    </li>
+                    <li class="menu-item" (click)="onHelpClick()">
+                        <button class="menu-btn">
+                            <app-icon name="help" class="menu-icon" size="xl"></app-icon>
+                            <span>Help & Support</span>
+                        </button>
+                    </li>
 
-                <li class="menu-item">
-                    <button class="menu-btn" (click)="onDemoClick()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="action-icon" aria-hidden="true">
-                            <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
-                            <rect x="2" y="6" width="14" height="12" rx="2"></rect>
-                        </svg>
-                        <span>Request Demo</span>
-                    </button>
-                </li>
+                    <div class="dropdown-divider"></div>
 
-                <div class="dropdown-divider"></div>
-
-                <li class="menu-item" (click)="onProfileClick()">
-                    <button class="menu-btn">
-                        <app-icon name="account-circle" class="menu-icon" size="xl"></app-icon>
-                        <span>My Profile</span>
-                    </button>
-                </li>
-                <li class="menu-item" (click)="onHelpClick()">
-                    <button class="menu-btn">
-                        <app-icon name="help" class="menu-icon" size="xl"></app-icon>
-                        <span>Help & Support</span>
-                    </button>
-                </li>
-
-                <div class="dropdown-divider"></div>
-
-                <li class="menu-item logout-item" (click)="logout()">
-                    <button class="menu-btn logout-btn">
-                        <app-icon name="logout-icon" class="menu-icon" size="xl"></app-icon>
-                        <span>Logout</span>
-                    </button>
-                </li>
-            </ul>
+                    <li class="menu-item logout-item" (click)="logout()">
+                        <button class="menu-btn logout-btn">
+                            <app-icon name="logout-icon" class="menu-icon" size="xl"></app-icon>
+                            <span>Logout</span>
+                        </button>
+                    </li>
+                </ul>
+            </ng-container>
+            <ui-loading message="Loading Societies" *ngIf="loading">
+            </ui-loading>
 
             <div class="dropdown-footer">
                 <ui-label [valueText]="'Version 1.0.0'" [config]="{id: 'version-label'}"

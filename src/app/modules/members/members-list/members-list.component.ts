@@ -72,7 +72,6 @@ export class MembersListComponent implements OnInit {
   }
 
   async openAddMember() {
-    console.log('this.selectedFIlter.societyId = ', this.selectedFIlter);
     const societyId = this.selectedFIlter.societyId ?? this.societyService.selectedSocietyFilterValue?.value;
     const flatId = this.selectedFIlter.flatId;
 

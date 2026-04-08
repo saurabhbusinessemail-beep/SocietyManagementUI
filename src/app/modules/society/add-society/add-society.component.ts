@@ -116,7 +116,7 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
       .subscribe(val => this.errorMessage = '');
     this.updateBuildingControl(false);
 
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('societyId');
     if (id) {
       this.fb.get('societyId')?.setValue(id);
       this.loadSocietyDetails(id);

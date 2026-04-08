@@ -116,10 +116,10 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
         tap(selectedFilter => {
           this.vehicles = [];
         }),
-        filter(selectedFilter => !!selectedFilter.flatId), // Only proceed when flatId exists
+        filter(selectedFilter => !!selectedFilter.flatId || !!this.flatId), // Only proceed when flatId exists
         switchMap(selectedFilter => {
           this.loadingVehicles = true;
-          return this.vehicleService.getVehicles(selectedFilter.flatId ?? '');
+          return this.vehicleService.getVehicles(selectedFilter.flatId ?? this.flatId ?? '');
         })
       )
       .subscribe({

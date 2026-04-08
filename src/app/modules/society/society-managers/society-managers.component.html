@@ -34,7 +34,7 @@
 
             <ng-container *ngIf="managers.length === 0">
                 <app-empty-records singular="secretary" plural="secretaries" [hideAddButton]="!canAddSocietyManager"
-                    (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                     <app-icon icon name="secretary" size="xxl"></app-icon>
                 </app-empty-records>
             </ng-container>

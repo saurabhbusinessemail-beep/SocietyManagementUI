@@ -31,11 +31,11 @@ const routes: Routes = [
     component: AddComplaintComponent,
   },
   {
-    path: ':id/add',
+    path: ':societyId/add',
     component: AddComplaintComponent,
   },
   {
-    path: ':id/add/:flatId',
+    path: ':societyId/add/:flatId',
     component: AddComplaintComponent,
   },
   {

@@ -271,7 +271,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribeToChange();
 
-    this.societyId = this.route.snapshot.paramMap.get('id')!;
+    this.societyId = this.route.snapshot.paramMap.get('societyId')!;
     this.buildingId = this.route.snapshot.paramMap.get('buildingId')!;
 
     if (this.societyId) {

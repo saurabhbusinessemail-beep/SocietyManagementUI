@@ -17,7 +17,7 @@ const routes: Routes = [
     // data: { permission: PERMISSIONS.society_view }
   },
   {
-    path: ':id/list',
+    path: ':societyId/list',
     // canActivate: [PermissionGuard],
     component: MyFlatListComponent,
     // data: { permission: PERMISSIONS.society_view }

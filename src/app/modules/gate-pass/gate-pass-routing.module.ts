@@ -22,11 +22,11 @@ const routes: Routes = [
     component: AddGatePassComponent
   },
   {
-    path: ':id/add',
+    path: ':societyId/add',
     component: AddGatePassComponent
   },
   {
-    path: ':id/add/:flatId',
+    path: ':societyId/add/:flatId',
     component: AddGatePassComponent
   },
 ];

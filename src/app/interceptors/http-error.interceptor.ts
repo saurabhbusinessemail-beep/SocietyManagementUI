@@ -44,6 +44,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     title = 'Forbidden';
                 } else if (error.status === 404) {
                     title = 'Not Found';
+                }  else if (error.status === 409) {
+                    title = 'Conflict';
                 } else if (error.status >= 500) {
                     title = 'Server Error';
                 }

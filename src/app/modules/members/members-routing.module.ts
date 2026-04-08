@@ -22,11 +22,11 @@ const routes: Routes = [
     component: AddMemberComponent,
   },
   {
-    path: ':id/add',
+    path: ':societyId/add',
     component: AddMemberComponent,
   },
   {
-    path: ':id/add/:flatId',
+    path: ':societyId/add/:flatId',
     component: AddMemberComponent,
   },
   {

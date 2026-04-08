@@ -42,7 +42,6 @@ export class UserComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // this.societyService.selectSocietyFilter(undefined);
     this.loadSocieties();
   }
 
@@ -54,11 +53,6 @@ export class UserComponent implements OnInit, OnDestroy {
         next: response => {
           this.societies = response.data ?? [];
           this.isSocitiesLoading = false;
-
-          if (this.societies.length > 0 && !this.societyService.selectedSocietyFilterValue) {
-            const s = this.societies[0];
-            this.societyService.selectSocietyFilter({ label: s.societyName, value: s._id });
-          }
         },
         error: () => {
           console.log('Error while getting societies');

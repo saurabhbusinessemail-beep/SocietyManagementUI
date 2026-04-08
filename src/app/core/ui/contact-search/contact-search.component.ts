@@ -103,7 +103,6 @@ export class ContactSearchComponent extends UIBaseFormControl<IPhoneContactFlat 
     )
       .subscribe({
         next: contacts => {
-          console.log('contacts = ', contacts)
 
           this.contacts = contacts.reduce((arr, c) => {
             c.phones?.forEach(cp => arr.push({ contactId: c.contactId, name: c.name?.display ?? '', phoneNumber: cp.number || '' }))

@@ -29,6 +29,10 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
   showDropdown = false;
   loading = true;
 
+  get isPricingPlanLoading() {
+    return this.societyService.societyPlanLoading;
+  }
+
   private subscription = new Subscription();
 
   constructor(

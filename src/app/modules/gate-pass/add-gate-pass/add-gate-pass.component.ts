@@ -131,7 +131,7 @@ export class AddGatePassComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.societyId = this.route.snapshot.paramMap.get('id') ?? undefined;
+    this.societyId = this.route.snapshot.paramMap.get('societyId') ?? undefined;
     this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
     this.loadAllMyFlats(this.societyId);
   }

@@ -35,7 +35,6 @@ export class SocietyListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // this.societyService.selectSocietyFilter(undefined);
     this.loadSocieties();
   }
 

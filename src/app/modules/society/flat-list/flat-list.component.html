@@ -76,7 +76,7 @@
 
                 <ng-container *ngIf="flats.length === 0">
                     <app-empty-records singular="flat" plural="flats" [hideAddButton]="!canAddFlat"
-                        (click)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="home" size="xxl"></app-icon>
                     </app-empty-records>
                 </ng-container>

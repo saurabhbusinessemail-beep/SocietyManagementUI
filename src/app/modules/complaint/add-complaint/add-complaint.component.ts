@@ -112,7 +112,7 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.societyId = this.route.snapshot.paramMap.get('id') ?? undefined;
+    this.societyId = this.route.snapshot.paramMap.get('societyId') ?? undefined;
     this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
 
     if (this.flatId && !this.societyId) this.loadFlatDetails(this.flatId);

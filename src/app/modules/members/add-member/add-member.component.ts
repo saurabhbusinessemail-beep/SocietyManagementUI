@@ -99,7 +99,7 @@ export class AddMemberComponent implements OnInit {
 
   ngOnInit(): void {
     const societyId = this.societyService.selectedSocietyFilterValue?.value;
-    this.routeSocietyId = this.route.snapshot.paramMap.get('id') ?? this.societyService.selectedSocietyFilterValue?.value;
+    this.routeSocietyId = this.route.snapshot.paramMap.get('societyId') ?? this.societyService.selectedSocietyFilterValue?.value;
     this.routeFlatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
     this.loadAllMyFlats(this.routeSocietyId ?? societyId);
   }
