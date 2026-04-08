@@ -54,14 +54,14 @@
 
                 <ng-container *ngIf="announcements.length === 0">
                     <app-empty-records singular="announcement" plural="announcements" [hideAddButton]="hideMoreAction"
-                        routerLink="../add" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        addRouterLink="../add" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="announcement" size="xxl"></app-icon>
                     </app-empty-records>
                 </ng-container>
 
             </ng-container>
 
-            
+
             <ui-loading *ngIf="loadingAnnouncements" message="Loading announcements" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>

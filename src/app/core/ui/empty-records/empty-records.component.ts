@@ -12,7 +12,7 @@ export class EmptyRecordsComponent {
   @Input() overrideTitle?: string;
   @Input() hideAddButton = false;
   @Input() hideMessage = false;
-  @Input() routerLink?: string;
+  @Input() addRouterLink?: string;
   @Output() addClicked = new EventEmitter<void>();
 
 
@@ -38,8 +38,8 @@ export class EmptyRecordsComponent {
   constructor(private router: Router) { }
 
   onAddClick(): void {
-    if (this.routerLink)
-      this.router.navigateByUrl(this.routerLink);
+    if (this.addRouterLink)
+      this.router.navigateByUrl(this.addRouterLink);
     else
       this.addClicked.emit();
   }
