@@ -1,1 +1,133 @@
-<p>pending-flat-approvals works!</p>
+<div class="search-container">
+    <div class="search-wrapper">
+        <i class="material-icons search-icon">search</i>
+        <input type="text" class="search-input" placeholder="Search by flat number, society, requester..."
+            [formControl]="searchControl">
+        <button class="clear-search" *ngIf="searchControl.value" (click)="clearSearch()">
+            <i class="material-icons">close</i>
+        </button>
+    </div>
+    <div class="status-filter">
+        <select [formControl]="statusControl" class="status-select">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+        </select>
+    </div>
+    <div class="status-filter">
+        <select [formControl]="viewFilterControl" class="status-select">
+            <option value="all">All</option>
+            <option value="my">My Requests</option>
+            <option value="approval">To Approve</option>
+        </select>
+    </div>
+</div>
+
+<div class="society-table">
+    <!-- Desktop Table -->
+    <div class="table-wrapper desktop">
+        <table>
+            <thead>
+                <tr>
+                    <th>Flat Number</th>
+                    <th>Society</th>
+                    <th>Requester</th>
+                    <th>Submitted</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let req of requests" [ngClass]="req.viewType">
+                    <td class="flat-cell">
+                        <div class="flat-info">
+                            <div class="icon"><i class="material-icons">home</i></div>
+                            <div class="text">
+                                <div class="number">{{ req.flatNumber || 'N/A' }}</div>
+                                <div class="type">{{ req.requestType }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="society-cell">{{ req.societyName || 'N/A' }}</td>
+                    <td class="requester-cell">
+                        <div class="requester-info">
+                            <div class="name">{{ req.requesterName || 'Unknown' }}</div>
+                            <div class="contact">{{ req.requesterContact || '' }}</div>
+                        </div>
+                    </td>
+                    <td class="submitted">{{ req.createdAt | date:'dd MMM yyyy' }}</td>
+                    <td>
+                        <span class="badge" [ngClass]="req.viewType">
+                            {{ req.viewType === 'my' ? 'My Request' : 'Approval' }}
+                        </span>
+                    </td>
+                    <td class="actions-cell">
+                        <div class="action-buttons">
+                            <button class="btn-approve" (click)="approve(req)" *ngIf="req.status === 'pending' && req.viewType === 'approval'">
+                                <i class="material-icons">check</i> Approve
+                            </button>
+                            <button class="btn-reject" (click)="reject(req)" *ngIf="req.status === 'pending' && req.viewType === 'approval'">
+                                <i class="material-icons">close</i> Reject
+                            </button>
+                            <div class="status-badge" [ngClass]="req.status" *ngIf="req.status !== 'pending'">
+                                {{ req.status | titlecase }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mobile / Tablet List -->
+    <div class="mobile-list">
+        <div class="mobile-card" *ngFor="let req of requests; let i = index">
+            <div class="mobile-header" (click)="toggleRow(i)">
+                <div class="mobile-header-left">
+                    <div class="icon small"><i class="material-icons">home</i></div>
+                    <div class="mobile-title">
+                        <div class="flat-number">{{ req.flatNumber || 'N/A' }}</div>
+                        <div class="society-name">{{ req.societyName || 'N/A' }}</div>
+                    </div>
+                </div>
+                <div class="mobile-header-right">
+                    <div class="status-badge small" [ngClass]="req.status">
+                        <i class="material-icons status-icon" *ngIf="req.status === 'approved'">check_circle</i>
+                        <i class="material-icons status-icon" *ngIf="req.status === 'rejected'">cancel</i>
+                        <i class="material-icons status-icon" *ngIf="req.status === 'pending'">hourglass_empty</i>
+                        <span class="status-text">{{ req.status | titlecase }}</span>
+                    </div>
+                    <div class="expand-icon" [ngClass]="{'inverted': expandedRow === i}">
+                        <app-icon name="arrow-down"></app-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-body" *ngIf="expandedRow === i">
+                <div class="details-grid">
+                    <div class="detail-item"><span class="detail-label">Requester</span><strong class="detail-value">{{
+                            req.requesterName || 'Unknown' }}</strong></div>
+                    <div class="detail-item"><span class="detail-label">Contact</span><strong class="detail-value">{{
+                            req.requesterContact || '-' }}</strong></div>
+                    <div class="detail-item"><span class="detail-label">Request Date</span><strong
+                            class="detail-value">{{ req.createdAt | date:'dd MMM yyyy' }}</strong></div>
+                    <div class="detail-item"><span class="detail-label">Member Type</span><strong class="detail-value">
+                            {{ req.data.isOwner ? 'Owner' : (req.data.isTenant ? 'Tenant' : (req.data.isMember ?
+                            'Member' : 'Tenant Member')) }}
+                        </strong></div>
+                </div>
+                <div class="mobile-actions" *ngIf="req.status === 'pending'">
+                    <button class="btn-approve mobile" (click)="approve(req)">Approve</button>
+                    <button class="btn-reject mobile" (click)="reject(req)">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="total > limit">
+        <button (click)="prevPage()" [disabled]="page === 1"><i class="material-icons">chevron_left</i> Prev</button>
+        <span class="page-info">Page {{ page }} of {{ Math.ceil(total/limit) }}</span>
+        <button (click)="nextPage()" [disabled]="page === Math.ceil(total/limit)">Next <i
+                class="material-icons">chevron_right</i></button>
+    </div>
+</div>
