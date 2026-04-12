@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse, ISecurity } from '../interfaces';
 import { BehaviorSubject, Observable, share, take, tap } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
@@ -396,6 +396,25 @@ export class SocietyService {
     })
     deleteSocietyAdmin(societyId: string, adminId: string): Observable<IBEResponseFormat> {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts/${adminId}`);
+    }
+
+
+    /* Society Securities */
+    @Cacheable({
+        // ttl: 300000, // 5 minutes
+        paramIndices: [0],
+    })
+    getSocietySecurities(societyId: string): Observable<IPagedResponse<ISecurity>> {
+        return this.http.get<IPagedResponse<ISecurity>>(`${this.baseUrl}/${societyId}/securities`);
+    }
+
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getSocietySecurities'
+        ]
+    })
+    deleteSocietySecurity(societyId: string, securityId: string): Observable<IBEResponseFormat> {
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/securities/${securityId}`);
     }
 
 

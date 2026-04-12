@@ -23,6 +23,7 @@ import { PlanHistoryComponent } from './plan-history/plan-history.component';
 import { PendingApprovalComponent } from './pending-approval/pending-approval.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PendingFlatApprovalsComponent } from './pending-flat-approvals/pending-flat-approvals.component';
+import { SocietySecuritiesComponent } from './society-securities/society-securities.component';
 
 
 
@@ -40,7 +41,8 @@ import { PendingFlatApprovalsComponent } from './pending-flat-approvals/pending-
     CurrentPlanComponent,
     PlanHistoryComponent,
     PendingApprovalComponent,
-    PendingFlatApprovalsComponent
+    PendingFlatApprovalsComponent,
+    SocietySecuritiesComponent
   ],
   imports: [
     CommonModule,

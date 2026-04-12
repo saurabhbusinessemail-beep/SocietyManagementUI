@@ -10,8 +10,8 @@ export class WindowService {
 
     evaluateMode() {
         const w = window.innerWidth;
-        if (w >= 992) { this.mode.next('desktop') }
-        else if (w >= 768) { this.mode.next('tablet') } // icons only
+        if (w >= 1200) { this.mode.next('desktop') }
+        else if (w >= 480) { this.mode.next('tablet') } // icons only
         else { this.mode.next('mobile') }
     }
 }

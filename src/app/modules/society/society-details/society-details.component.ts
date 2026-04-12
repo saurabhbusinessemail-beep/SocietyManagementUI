@@ -21,6 +21,7 @@ export class SocietyDetailsComponent implements OnInit {
   parkings: IParking[] = [];
   complaints?: IComplaintStats;
   // features: ISocietyFeature[] = [];
+  securities: IUser[] = [];
   managerIds: IUser[] = [];
   adminIds: IUser[] = [];
 
@@ -35,6 +36,7 @@ export class SocietyDetailsComponent implements OnInit {
   loadingBuildings = true;
   loadingFlats = true;
   loadingParkings = true;
+  loadingSecurities = true;
 
   addedBuildings = 0;
   addedFlats = 0;
@@ -133,6 +135,9 @@ export class SocietyDetailsComponent implements OnInit {
 
 
           this.loadingSociety = false;
+
+          // Securities list do not need an active Plan so load it
+          this.loadSecurities(societyId);
 
           // First load current plan to check feature availability
           this.loadCurrentPlan(societyId);
@@ -272,6 +277,29 @@ export class SocietyDetailsComponent implements OnInit {
       })
   }
 
+  /* Load Society Security */
+  loadSecurities(societyId: string) {
+    this.loadingSecurities = true;
+    this.societyService.getSocietySecurities(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.loadingSecurities = false;
+          if (!response.success || !response.data) return;
+
+          this.securities = response.data.reduce((arr, s) => {
+            if (typeof s.userId !== 'string') {
+              arr.push(s.userId);
+            }
+            return arr;
+          }, [] as IUser[]);
+        },
+        error: err => {
+          this.loadingSecurities = false;
+        }
+      })
+  }
+
 
   /** Load parkings by society */
   loadParkings(societyId: string): void {
@@ -301,6 +329,10 @@ export class SocietyDetailsComponent implements OnInit {
 
   gotoSocietyManageers() {
     this.router.navigate(['/society', this.society?._id, 'managers']);
+  }
+
+  gotoSocietySecurities() {
+    this.router.navigate(['/society', this.society?._id, 'securities']);
   }
 
   gotoSocietyAdmins() {

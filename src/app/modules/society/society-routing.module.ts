@@ -10,10 +10,10 @@ import { BuildingListComponent } from './building-list/building-list.component';
 import { FlatListComponent } from './flat-list/flat-list.component';
 import { ParkingsListComponent } from './parkings-list/parkings-list.component';
 import { SocietyAdminsComponent } from './society-admins/society-admins.component';
-import { PendingSocietyApprovalsComponent } from './pending-society-approvals/pending-society-approvals.component';
 import { CurrentPlanComponent } from './current-plan/current-plan.component';
 import { PlanHistoryComponent } from './plan-history/plan-history.component';
 import { PendingApprovalComponent } from './pending-approval/pending-approval.component';
+import { SocietySecuritiesComponent } from './society-securities/society-securities.component';
 
 const routes: Routes = [
   // Socities
@@ -82,6 +82,14 @@ const routes: Routes = [
     path: ':societyId/admins',
     canActivate: [PermissionGuard],
     component: SocietyAdminsComponent,
+    data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
+  },
+
+  // Society Securities
+  {
+    path: ':societyId/securities',
+    canActivate: [PermissionGuard],
+    component: SocietySecuritiesComponent,
     data: { permission: PERMISSIONS.society_adminContact_view, checkSocietyId: true }
   },
 

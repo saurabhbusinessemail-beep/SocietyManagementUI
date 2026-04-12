@@ -16,12 +16,8 @@
             </div>
         </div>
         <div class="actions" *ngIf="showEdit || showDelete">
-            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">
-                Edit
-            </button>
-            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">
-                Delete
-            </button>
+            <app-icon name="edit" *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)"></app-icon>
+            <app-icon name="delete" *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)"></app-icon>
         </div>
     </div>
 

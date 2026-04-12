@@ -146,6 +146,40 @@
                         </ui-loading>
                     </div>
                 </div>
+
+                <!-- Securities Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <div class="card-title-wrapper">
+                            <app-icon name="security" class="card-icon card-icon--indigo"></app-icon>
+                            <h2 class="card-title">Security Guards</h2>
+                        </div>
+                        <button class="manage-button" (click)="gotoSocietySecurities()" *ngIf="canViewManager"
+                            [disabled]="false">
+                            Manage <app-icon name="goto" size="md"></app-icon>
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <ng-container *ngIf="!loadingSecurities">
+                            <div class="list-items" *ngIf="securities.length > 0; else noSecurities">
+                                <div class="user-chip" *ngFor="let s of securities">
+                                    <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
+                                </div>
+                            </div>
+                            <ng-template #noSecurities>
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <app-icon name="user-icon"></app-icon>
+                                    </div>
+                                    <span>No securities added</span>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                        <ui-loading *ngIf="loadingSecurities" message="Loading">
+                        </ui-loading>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Buildings & Flats Management Row -->

@@ -1,0 +1,90 @@
+<app-layout [hideMoreActions]="!canAddSocietyManager" pageTitle="Securities"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
+
+    <ng-container moreActions>
+        <!-- <ui-button label="Add Manager" type="primary" (clicked)="openAddDialog()">
+        </ui-button> -->
+
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="openAddDialog()">Add Manager</li>
+        </ul>
+    </ng-container>
+
+    <ui-form-layout>
+
+        <ui-loading *ngIf="loading" message="Loading society managers" [smColumns]="12" [mdColumns]="12"
+            [lgColumns]="12">
+        </ui-loading>
+
+        <ng-container *ngIf="!loading">
+
+            <!-- Multi Select -->
+            <ui-multi-select [smColumns]="12" [mdColumns]="12" [lgColumns]="12" [selectMode]="selectMode"
+                [selectedIds]="selectedIds" [showDelete]="true" (changeSelectionMode)="toggleSelectionMode()"
+                (delete)="deleteAllSelectedRecords()">
+            </ui-multi-select>
+
+            <ng-container *ngFor="let manager of securities">
+                <ui-manager-card [user]="manager" [smColumns]="12" [mdColumns]="6" [lgColumns]="6"
+                    [selectMode]="selectMode" [selected]="selectedIds.has(manager._id)"
+                    [showDelete]="canDeleteSocietyManager && !selectMode"
+                    (selectedChange)="onSelectionChange(manager._id, $event)" (delete)="removeSecurity(manager)">
+                </ui-manager-card>
+            </ng-container>
+
+            <ng-container *ngIf="securities.length === 0">
+                <app-empty-records singular="security" plural="securities" [hideAddButton]="!canAddSocietyManager"
+                    (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                    <app-icon icon name="security" size="xxl"></app-icon>
+                </app-empty-records>
+            </ng-container>
+
+        </ng-container>
+
+    </ui-form-layout>
+
+
+</app-layout>
+
+<ng-template #managerTemplate>
+    <app-add-edit-popup title="Add Security" (onClose)="closeDialog();">
+
+        <ui-form-layout>
+            <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
+                helpText="Select current status" direction="horizontal" [options]="radioOptions" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-radio-list>
+
+
+            <ui-contact-search [formControl]="contactSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="10"
+                *ngIf="showContactSearch">
+            </ui-contact-search>
+
+            <ui-user-search [formControl]="userSearchFormControl" [smColumns]="12" [mdColumns]="8" [lgColumns]="10"
+                *ngIf="showUserSearch">
+            </ui-user-search>
+
+            <ui-date [formControl]="jobStartFormControl" [config]="jobStartConfig" [smColumns]="12" [mdColumns]="6"
+                [lgColumns]="4">
+            </ui-date>
+            <ui-date [formControl]="jobEndFormControl" [config]="jobEndConfig" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+            </ui-date>
+            <ui-text-box [formControl]="salaryFormControl" type="number" [config]="salaryAmountConfig" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="4">
+            </ui-text-box>
+
+        </ui-form-layout>
+
+        <ng-container actions>
+            <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                (clicked)="closeDialog()">
+            </ui-button>
+
+
+            <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                [disable]="fb.invalid" (clicked)="addecurity()">
+            </ui-button>
+        </ng-container>
+
+    </app-add-edit-popup>
+</ng-template>
