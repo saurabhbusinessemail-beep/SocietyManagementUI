@@ -12,6 +12,8 @@
 
 /* SEARCH CONTAINER */
 .search-container {
+    display: flex;
+    gap: $sp;
     padding: 20px 24px;
     background: $color-white;
     border-bottom: 1px solid $color-border;
