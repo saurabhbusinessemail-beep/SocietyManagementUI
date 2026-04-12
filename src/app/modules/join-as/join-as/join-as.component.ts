@@ -305,7 +305,8 @@ export class JoinAsComponent implements OnInit, OnDestroy {
   private getTenantPayload(): any {
     const formValue = this.fb.getRawValue();
     const profile = this.loginService.getProfileFromStorage();
-    if (!formValue.society || !formValue.flatId || !profile || !formValue.residingType) return null;
+    console.log('getTenantPayload = ', { profile, formValue })
+    if (!formValue.society || !formValue.flatId || !profile) return null;
 
     const selectedUser = this.showUserSearch
       ? { userId: this.userSearchFormControl.value?._id, name: this.userSearchFormControl.value?.name, contact: this.userSearchFormControl.value?.phoneNumber }
@@ -323,7 +324,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       userId: userForPayload.userId,
       name: userForPayload.name,
       contact: userForPayload.contact,
-      residingType: formValue.residingType,
+      residingType: 'Tenant',
       isTenant: true,
       leaseStart: formValue.tenantForm.leaseStart,
       leaseEnd: formValue.tenantForm.leaseEnd,
@@ -368,6 +369,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
 
   private saveTenant(): void {
     const payload = this.getTenantPayload();
+    console.log('tenant payload = ', payload)
     if (!payload) return;
 
     this.isSaving = true;

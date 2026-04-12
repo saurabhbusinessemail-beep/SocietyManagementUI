@@ -10,14 +10,17 @@
 
         <!-- Societies Approval -->
         <ng-template uiTab="societies">
-            <app-pending-society-approvals>
-
-            </app-pending-society-approvals>
+            <app-pending-society-approvals></app-pending-society-approvals>
         </ng-template>
         
         <!-- Flats Approval -->
         <ng-template uiTab="flats">
-            <app-pending-flat-approvals></app-pending-flat-approvals>
+            <app-pending-flat-approvals requestType="FlatMember"></app-pending-flat-approvals>
+        </ng-template>
+        
+        <!-- Security Approval -->
+        <ng-template uiTab="security">
+            <app-pending-flat-approvals requestType="Security"></app-pending-flat-approvals>
         </ng-template>
 
     </ui-tabs>

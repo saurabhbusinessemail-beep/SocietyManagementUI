@@ -1,7 +1,7 @@
 <div class="search-container">
     <div class="search-wrapper">
         <i class="material-icons search-icon">search</i>
-        <input type="text" class="search-input" placeholder="Search by flat number, society, requester..."
+        <input type="text" class="search-input" placeholder="Search by flat number, requester..."
             [formControl]="searchControl">
         <button class="clear-search" *ngIf="searchControl.value" (click)="clearSearch()">
             <i class="material-icons">close</i>
@@ -44,7 +44,20 @@
                             <div class="icon"><i class="material-icons">home</i></div>
                             <div class="text">
                                 <div class="number">{{ req.flatNumber || 'N/A' }}</div>
-                                <div class="type">{{ req.requestType }}</div>
+                                <div class="type">
+                                    <ng-container *ngIf="req.data.isOwner">
+                                        Owner
+                                    </ng-container>
+                                    <ng-container *ngIf="req.data.isMember">
+                                        Member
+                                    </ng-container>
+                                    <ng-container *ngIf="req.data.isTenant">
+                                        Tenant
+                                    </ng-container>
+                                    <ng-container *ngIf="req.data.isTenantMember">
+                                        Tenant member
+                                    </ng-container>
+                                </div>
                             </div>
                         </div>
                     </td>

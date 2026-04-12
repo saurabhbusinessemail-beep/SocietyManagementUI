@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { IApprovalRequest, IApprovalQueryParams, IPagedResponse } from '../../../interfaces';
@@ -16,6 +16,9 @@ interface IApprovalRequestExtended extends IApprovalRequest {
   styleUrl: './pending-flat-approvals.component.scss'
 })
 export class PendingFlatApprovalsComponent implements OnInit, OnDestroy {
+
+  @Input() requestType?: 'FlatMember' | 'Security';
+
   requests: IApprovalRequestExtended[] = [];
   page = 1;
   limit = 10;
@@ -50,7 +53,7 @@ export class PendingFlatApprovalsComponent implements OnInit, OnDestroy {
     const params: IApprovalQueryParams = {
       page: this.page,
       limit: this.limit,
-      requestType: 'FlatMember',
+      requestType: this.requestType ?? 'FlatMember',
       status: this.statusControl.value || 'pending',
       search: this.searchControl.value || undefined,
       sortBy: 'createdAt:desc'

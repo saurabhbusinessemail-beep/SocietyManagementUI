@@ -19,7 +19,8 @@ export class PendingApprovalComponent implements OnInit, OnDestroy {
   routeTabId: string = '';
   tabsOptions: IUIDropdownOption[] = [
     { label: 'Scoiety Approvals', value: 'societies' },
-    { label: 'Flat Approvals', value: 'flats' }
+    { label: 'Flat Approvals', value: 'flats' },
+    { label: 'Security Approvals', value: 'security' }
   ]
 
   isComponentActive = new Subject<void>();
