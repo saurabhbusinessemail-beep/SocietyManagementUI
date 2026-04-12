@@ -122,7 +122,7 @@ export class PricingCheckoutComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private waitForPlansToLoad(planId: string): Observable<IPricingPlan | undefined> {
+  waitForPlansToLoad(planId: string): Observable<IPricingPlan | undefined> {
     if (this.pricingPlanService.plans.length > 0) {
       const plan = this.pricingPlanService.plans.find(p => p.id === planId);
       return of(plan);
