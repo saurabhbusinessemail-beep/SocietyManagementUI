@@ -8,6 +8,13 @@
             <i class="material-icons">close</i>
         </button>
     </div>
+    <div class="status-filter">
+        <select [formControl]="statusControl" class="status-select">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+        </select>
+    </div>
 </div>
 
 <div class="society-table">
@@ -55,7 +62,7 @@
                         {{ s.createdOn | date:'dd MMM yyyy' }}
                     </td>
 
-                    <td class="actions-cell" *ngIf="!isAdmin">
+                    <td class="actions-cell" *ngIf="!isAdmin || s.isApproved || s.isRejected">
                         <div class="action-buttons">
                             <!-- Status badges for non-admin users -->
                             <div class="status-badge approved" *ngIf="s.isApproved">
@@ -73,8 +80,9 @@
                         </div>
                     </td>
 
-                    <td class="actions-cell" *ngIf="isAdmin">
+                    <td class="actions-cell" *ngIf="isAdmin && !s.isApproved && !s.isRejected">
                         <div class="action-buttons">
+
                             <button class="btn-approve" (click)="approve(s)">
                                 <i class="material-icons">check</i>
                                 Approve

@@ -21,6 +21,7 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
   total = 0;
 
   searchControl = new FormControl<string>('');
+  statusControl = new FormControl<string>('pending');
   isComponentActive = new Subject<void>();
 
   expandedRow: number | null = null;
@@ -50,12 +51,24 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
         switchMap(() => this.getUnApprovedSocietyApiCall())
       )
       .subscribe(res => this.handleUnApprovedSocietyResponse(res));
+
+    
+    this.statusControl.valueChanges
+      .pipe(
+        takeUntil(this.isComponentActive),
+        switchMap(() => this.getUnApprovedSocietyApiCall())
+      )
+      .subscribe(res => this.handleUnApprovedSocietyResponse(res));
+
+    
     this.loadUnApprovedSocieties()
   }
 
   getUnApprovedSocietyApiCall() {
-    return this.isAdmin ? this.societyService.getAllUnApprovedSocieties(this.page, this.limit, this.searchControl.value ?? '')
-    : this.societyService.getMySocietiesForApproval(this.page, this.limit, this.searchControl.value ?? '')
+    const selectedStatus = this.statusControl.value ?? 'pending';
+    const searchText = this.searchControl.value ?? '';
+    return this.isAdmin ? this.societyService.getAllUnApprovedSocieties(selectedStatus, this.page, this.limit, searchText)
+    : this.societyService.getMySocietiesForApproval(selectedStatus, this.page, this.limit, searchText)
   }
 
   loadUnApprovedSocieties() {

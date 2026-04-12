@@ -204,9 +204,9 @@ export class SocietyService {
             return `${methodName}_page${page}_limit${limit}_search${searchString}`;
         }
     })
-    getAllUnApprovedSocieties(page: number, limit: number, searchString: string = '') {
+    getAllUnApprovedSocieties(status: string | undefined = undefined, page: number, limit: number, searchString: string = '') {
         return this.http.post<IPagedResponse<ISociety>>(`${this.baseUrl}/unApproved`,
-            { searchString },
+            { searchString, status },
             {
                 params: {
                     page: page.toString(),
@@ -231,9 +231,9 @@ export class SocietyService {
         }
     })
 
-    getMySocietiesForApproval(page: number, limit: number, searchString: string = '') {
+    getMySocietiesForApproval(status: string | undefined = undefined, page: number, limit: number, searchString: string = '') {
         return this.http.post<IPagedResponse<ISociety>>(`${this.baseUrl}/mySocietiesForApproval`,
-            { searchString },
+            { searchString, status },
             {
                 params: {
                     page: page.toString(),
