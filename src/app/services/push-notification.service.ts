@@ -127,6 +127,9 @@ export class PushNotificationService {
                 setTimeout(() => {
                     this.gateEntryService.handleApprovalNotificationResponse(gateEntryId)
                 }, 100);
+            } else if (type === 'APPROVAL_REQUEST' || type === 'APPROVAL_RESPONSE') {
+                const tabId = data.requestType === 'Security' ? 'security' : 'flats';
+                this.router.navigate(['/society/pendingApproval'], { queryParams: { tabId } });
             } else if (type === 'OTP') {
                 this.loginService.otpReceived.next(data.otp);
 

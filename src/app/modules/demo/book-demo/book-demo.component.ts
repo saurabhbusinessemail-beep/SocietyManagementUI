@@ -191,9 +191,8 @@ export class BookDemoComponent implements OnInit {
     // }
     this.router.navigateByUrl('');
 
-    // You can add a toast/notification service here
     this._snackBar.open('Sent Demo Request to Admin.', undefined, { duration: 1000 })
-    
+
 
   }
 

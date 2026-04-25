@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -9,6 +9,7 @@ import { MenuService } from '../../../services/menu.service';
 import { NewUserService } from '../../../services/new-user.service';
 import { SocietyService } from '../../../services/society.service';
 import { SocietyRoles } from '../../../types';
+import { PendingHttpService } from '../../../services/pending-http.service';
 
 @Component({
   selector: 'app-join-as',
@@ -16,6 +17,9 @@ import { SocietyRoles } from '../../../types';
   styleUrl: './join-as.component.scss'
 })
 export class JoinAsComponent implements OnInit, OnDestroy {
+
+
+  private pendingHttpService = inject(PendingHttpService);
 
   role: string = '';
   isSaving = false;
@@ -356,14 +360,19 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       this.saveTenant();
     }
 
+    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Owner' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.pendingHttpService.removeRequest('join-as');
           if (response.success && response.token) this.updateUserToken(response.token);
           this.isSaving = false;
         },
-        error: () => this.isSaving = false
+        error: () => {
+          this.isSaving = false;
+          this.pendingHttpService.removeRequest('join-as');
+        }
       });
   }
 
@@ -373,14 +382,19 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     if (!payload) return;
 
     this.isSaving = true;
+    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Tenant' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.pendingHttpService.removeRequest('join-as');
           if (response.success && response.token) this.updateUserToken(response.token);
           this.isSaving = false;
         },
-        error: () => this.isSaving = false
+        error: () => {
+          this.isSaving = false;
+          this.pendingHttpService.removeRequest('join-as');
+        }
       });
   }
 
@@ -389,14 +403,19 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     if (!payload) return;
 
     this.isSaving = true;
+    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Security' });
     this.newUserService.newSecurity(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.pendingHttpService.removeRequest('join-as');
           if (response.success && response.token) this.updateUserToken(response.token);
           this.isSaving = false;
         },
-        error: () => this.isSaving = false
+        error: () => {
+          this.isSaving = false;
+          this.pendingHttpService.removeRequest('join-as');
+        }
       });
   }
 
