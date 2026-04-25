@@ -31,7 +31,7 @@ body {
     font-family: $font-family-base;
     font-size: $font-size-base;
     color: $color-black;
-    background: #ffffff;
+    background: $color-white;
     margin: 0;
     -webkit-font-smoothing: antialiased;
 }
@@ -191,7 +191,7 @@ body {
     width: 0.625rem;
     height: 0.625rem;
     display: inline-block;
-    background-color: #94a3b8;
+    background-color: $color-94a3b8;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'%3E%3C/path%3E%3Cpath d='m6 6 12 12'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'%3E%3C/path%3E%3Cpath d='m6 6 12 12'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
 }
@@ -382,7 +382,7 @@ body {
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.2s ease;
-        background: linear-gradient(transparent, rgba(255, 255, 255, 0.9));
+        background: linear-gradient(transparent, $color-rgba-24);
     }
 
     // Show fade effect only when collapsed and content exceeds height
@@ -474,7 +474,7 @@ body {
 // Dark mode support (if needed)
 @media (prefers-color-scheme: dark) {
     .height-restriction-wrapper::after {
-        background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        background: linear-gradient(transparent, $color-rgba-68);
     }
 }
 

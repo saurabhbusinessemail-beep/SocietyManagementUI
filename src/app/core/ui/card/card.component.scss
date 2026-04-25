@@ -12,7 +12,7 @@
     border-radius: 14px;
     padding: 16px 18px;
     border: 1px solid $color-light-gray;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 18px $color-rgba-22;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     margin-bottom: $sp;
     height: 135px;
@@ -21,7 +21,7 @@
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 26px $color-rgba-14;
     }
 
     &.disabled {

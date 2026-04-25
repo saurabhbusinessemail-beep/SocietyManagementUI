@@ -7,7 +7,7 @@
     border-radius: 16px;
     overflow: hidden;
     font-family: $font-family-base;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px $color-rgba-1;
 }
 
 /* SEARCH CONTAINER */
@@ -376,7 +376,7 @@
 
     &:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px $color-rgba-14;
     }
 
     &.mobile {
@@ -767,11 +767,11 @@
     }
 
     tr.my {
-        background: rgba(0, 123, 255, 0.05);
+        background: $color-rgba-62;
     }
 
     tr.approval {
-        background: rgba(40, 167, 69, 0.05);
+        background: $color-rgba-63;
     }
 }
 

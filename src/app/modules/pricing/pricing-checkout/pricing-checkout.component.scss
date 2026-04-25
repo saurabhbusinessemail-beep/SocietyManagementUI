@@ -17,7 +17,7 @@
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
     margin-bottom: $sp-lg;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px $color-rgba-14;
 
     @include mobile {
         padding: $sp;
@@ -742,7 +742,7 @@
     &:hover {
         border-color: $color-dark-blue;
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px -1px $color-rgba-14;
     }
 
     &.selected {

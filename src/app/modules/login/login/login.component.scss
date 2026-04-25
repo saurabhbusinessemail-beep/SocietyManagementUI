@@ -2,7 +2,7 @@
 @import '../../../../styles/mixins';
 
 .first-div {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 90%, #ffffff 100%), url(../../../../assets/header-background.png);
+    background: linear-gradient(to bottom, $color-rgba-56 90%, $color-white 100%), url(../../../../assets/header-background.png);
     padding-bottom: 10%;
 
     .first-div-title {
@@ -10,7 +10,7 @@
         text-align: center;
         font-size: 2.25rem;
         font-weight: 700;
-        color: #ffffff;
+        color: $color-white;
         line-height: 1.1;
         margin-bottom: 1.5rem;
         text-wrap: balance;
@@ -50,8 +50,8 @@
             outline: none;
             cursor: pointer;
 
-            background-color: #fff;
-            color: #4338ca;
+            background-color: $color-white;
+            color: $color-4338ca;
 
             border: 0;
             padding: 0.625rem 1.5rem;
@@ -61,12 +61,12 @@
             font-weight: 600;
 
             border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(30, 27, 75, 0.3);
+            box-shadow: 0 10px 15px -3px $color-rgba-57;
 
             flex-shrink: 0;
 
             &:hover {
-                background-color: rgba(255, 255, 255, 0.9);
+                background-color: $color-rgba-24;
             }
 
             &:disabled {
@@ -76,15 +76,15 @@
 
             &:focus-visible {
                 border-color: var(--ring);
-                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 0 0 3px $color-rgba-52;
             }
 
             &[aria-invalid="true"] {
                 border-color: var(--destructive);
-                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+                box-shadow: 0 0 0 3px $color-rgba-58;
 
                 .dark & {
-                    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.4);
+                    box-shadow: 0 0 0 3px $color-rgba-59;
                 }
             }
 
@@ -114,10 +114,10 @@
             transition: all 0.2s ease;
             outline: none;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
+            background: $color-rgba-60;
 
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: $color-white;
+            border: 1px solid $color-rgba-61;
 
             gap: 0.5rem;
             padding: 0.625rem 1.5rem;
@@ -128,8 +128,8 @@
             flex-shrink: 0;
 
             &:hover {
-                background: rgba(255, 255, 255, 0.1);
-                color: #fff;
+                background: $color-rgba-60;
+                color: $color-white;
             }
 
             &:disabled {
@@ -139,20 +139,20 @@
 
             &:focus-visible {
                 border-color: var(--ring);
-                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 0 0 3px $color-rgba-52;
             }
 
             &[aria-invalid="true"] {
                 border-color: var(--destructive);
-                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+                box-shadow: 0 0 0 3px $color-rgba-58;
 
                 .dark & {
-                    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.4);
+                    box-shadow: 0 0 0 3px $color-rgba-59;
                 }
             }
 
             .dark &:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: $color-rgba-60;
             }
 
             &:has(> svg) {
@@ -246,7 +246,7 @@
 .features-container {
     padding-top: 2rem;
     padding-bottom: 6rem;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0) 90%, #ffffff 100%), rgba($color-header-footer, 0.5);
+    background: linear-gradient(to top, $color-rgba-56 90%, $color-white 100%), rgba($color-header-footer, 0.5);
     border-bottom: 1px solid $color-border;
 
     .feature-title-container {
@@ -449,11 +449,11 @@
 }
 
 .bg-indigo-100 {
-    background-color: lighten(#4f46e5, 40%);
+    background-color: lighten($color-4f46e5, 40%);
 }
 
 .bg-purple-100 {
-    background-color: lighten(#9333ea, 40%);
+    background-color: lighten($color-9333ea, 40%);
 }
 
 .bg-rose-100 {
@@ -473,7 +473,7 @@
 }
 
 .bg-teal-100 {
-    background-color: lighten(#0d9488, 55%);
+    background-color: lighten($color-0d9488, 55%);
 }
 
 .bg-cyan-100 {
@@ -493,11 +493,11 @@
 }
 
 .text-indigo-600 {
-    color: darken(#4f46e5, 5%);
+    color: darken($color-4f46e5, 5%);
 }
 
 .text-purple-600 {
-    color: darken(#9333ea, 5%);
+    color: darken($color-9333ea, 5%);
 }
 
 .text-rose-600 {
@@ -517,7 +517,7 @@
 }
 
 .text-teal-600 {
-    color: darken(#0d9488, 5%);
+    color: darken($color-0d9488, 5%);
 }
 
 .text-cyan-600 {

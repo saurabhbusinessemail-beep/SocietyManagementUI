@@ -21,7 +21,7 @@
     width: 32px;
     height: 32px;
     border-radius: 9999px;
-    border: 1px solid #e5e7eb; // gray-200
+    border: 1px solid $color-e5e7eb; // gray-200
     background-color: white;
     display: flex;
     align-items: center;
@@ -30,13 +30,13 @@
     cursor: pointer;
 
     &:hover {
-        background-color: #eef2ff; // indigo-50
+        background-color: $color-eef2ff; // indigo-50
     }
 
     app-icon {
         width: 13px;
         height: 13px;
-        color: #6b7280; // gray-500
+        color: $color-help-text; // gray-500
     }
 }
 
@@ -73,7 +73,7 @@
 
         .society-subtitle {
             font-size: $font-size-xs;
-            color: #9ca3af; // gray-400
+            color: $color-9ca3af; // gray-400
             margin: 0;
         }
     }
@@ -95,7 +95,7 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                background-color: #4f46e5; // indigo-600
+                background-color: $color-4f46e5; // indigo-600
                 color: white;
                 font-size: $font-size-xs;
                 font-weight: 700;
@@ -105,7 +105,7 @@
                 .plan-dot {
                     width: 6px;
                     height: 6px;
-                    background-color: #818cf8; // indigo-300
+                    background-color: $color-818cf8; // indigo-300
                     border-radius: 50%;
                 }
             }
@@ -114,8 +114,8 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 4px;
-                background-color: #f3f4f6; // gray-100
-                color: #4b5563; // gray-600
+                background-color: $color-cancel; // gray-100
+                color: $color-4b5563; // gray-600
                 font-size: $font-size-xs;
                 font-weight: 500;
                 padding: $sp-xs $sp;
@@ -143,15 +143,15 @@
     .spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid #e5e7eb;
-        border-top-color: #4f46e5;
+        border: 3px solid $color-e5e7eb;
+        border-top-color: $color-4f46e5;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: $sp-md;
     }
 
     p {
-        color: #9ca3af;
+        color: $color-9ca3af;
         font-size: $font-size-base;
     }
 }
@@ -176,17 +176,17 @@
 
     .stat-card {
         background-color: white;
-        border: 1px solid #e5e7eb;
+        border: 1px solid $color-e5e7eb;
         border-radius: 20px;
         padding: $sp-md;
         display: flex;
         align-items: center;
         gap: $sp-md;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 2px $color-rgba-1;
         transition: box-shadow 0.2s;
 
         &:hover {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px $color-rgba-14;
         }
 
         .stat-icon-wrapper {
@@ -210,7 +210,7 @@
                 font-weight: 500;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: #9ca3af;
+                color: $color-9ca3af;
                 margin: 0 0 2px 0;
             }
 
@@ -246,57 +246,57 @@
 
         &--indigo {
             .stat-icon-wrapper {
-                background-color: #eef2ff;
+                background-color: $color-eef2ff;
 
                 app-icon {
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                 }
             }
 
             .stat-value {
-                color: #4f46e5;
+                color: $color-4f46e5;
             }
         }
 
         &--blue {
             .stat-icon-wrapper {
-                background-color: #eff6ff;
+                background-color: $color-eff6ff;
 
                 app-icon {
-                    color: #3b82f6;
+                    color: $color-3b82f6;
                 }
             }
 
             .stat-value {
-                color: #2563eb;
+                color: $color-2563eb;
             }
         }
 
         &--amber {
             .stat-icon-wrapper {
-                background-color: #fffbeb;
+                background-color: $color-fffbeb;
 
                 app-icon {
-                    color: #f59e0b;
+                    color: $color-f59e0b;
                 }
             }
 
             .stat-value {
-                color: #d97706;
+                color: $color-d97706;
             }
         }
 
         &--green {
             .stat-icon-wrapper {
-                background-color: #f0fdf4;
+                background-color: $color-f0fdf4;
 
                 app-icon {
-                    color: #22c55e;
+                    color: $color-22c55e;
                 }
             }
 
             .stat-value {
-                color: #16a34a;
+                color: $color-16a34a;
             }
         }
     }
@@ -317,9 +317,9 @@
 // Info Cards (Admins & Secretaries)
 .info-card {
     background-color: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $color-e5e7eb;
     border-radius: 20px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px $color-rgba-1;
     overflow: hidden;
 
     .card-header {
@@ -327,7 +327,7 @@
         align-items: center;
         justify-content: space-between;
         padding: $sp-md $sp-lg;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         .card-title-wrapper {
             display: flex;
@@ -339,26 +339,26 @@
                 height: 15px;
 
                 &--indigo {
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                 }
 
                 &--blue {
-                    color: #2563eb;
+                    color: $color-2563eb;
                 }
 
                 &--amber {
-                    color: #f59e0b;
+                    color: $color-f59e0b;
                 }
 
                 &--green {
-                    color: #22c55e;
+                    color: $color-22c55e;
                 }
             }
 
             .card-title {
                 font-size: $font-size-sm;
                 font-weight: 700;
-                color: #1f2937;
+                color: $color-1f2937;
                 margin: 0;
             }
         }
@@ -369,9 +369,9 @@
             gap: $sp-xs;
             font-size: $font-size-xs;
             font-weight: 600;
-            color: #4f46e5;
-            background-color: #eef2ff;
-            border: 1px solid #c7d2fe;
+            color: $color-4f46e5;
+            background-color: $color-eef2ff;
+            border: 1px solid $color-c7d2fe;
             padding: $sp-xs $sp;
             border-radius: 9999px;
             transition: all 0.2s;
@@ -391,7 +391,7 @@
             // }
 
             &:hover {
-                background-color: #e0e7ff;
+                background-color: $color-e0e7ff;
             }
         }
     }
@@ -410,9 +410,9 @@
             display: inline-flex;
             align-items: center;
             gap: $sp-sm;
-            background-color: #eef2ff;
-            border: 1px solid #c7d2fe;
-            color: #4f46e5;
+            background-color: $color-eef2ff;
+            border: 1px solid $color-c7d2fe;
+            color: $color-4f46e5;
             font-size: $font-size-xs;
             font-weight: 500;
             padding: $sp-xs $sp;
@@ -430,11 +430,11 @@
                 app-icon {
                     width: 12px;
                     height: 12px;
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                 }
 
                 &:hover app-icon {
-                    color: #ef4444;
+                    color: $color-ef4444;
                 }
             }
         }
@@ -443,14 +443,14 @@
             display: flex;
             align-items: center;
             gap: $sp-sm;
-            color: #9ca3af;
+            color: $color-9ca3af;
             font-size: $font-size-sm;
             padding: $sp-sm 0;
 
             .empty-icon {
                 width: 32px;
                 height: 32px;
-                background-color: #f3f4f6;
+                background-color: $color-cancel;
                 border-radius: 9999px;
                 display: flex;
                 align-items: center;
@@ -459,7 +459,7 @@
                 app-icon {
                     width: 14px;
                     height: 14px;
-                    color: #9ca3af;
+                    color: $color-9ca3af;
                 }
             }
         }
@@ -469,17 +469,17 @@
 // Action Cards (Buildings & Flats)
 .action-card {
     background-color: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $color-e5e7eb;
     border-radius: 20px;
     padding: $sp-lg;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px $color-rgba-1;
     transition: box-shadow 0.2s;
 
     &:hover {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px -1px $color-rgba-14;
     }
 
     .action-content {
@@ -501,18 +501,18 @@
             }
 
             &--indigo {
-                background-color: #eef2ff;
+                background-color: $color-eef2ff;
 
                 app-icon {
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                 }
             }
 
             &--blue {
-                background-color: #eff6ff;
+                background-color: $color-eff6ff;
 
                 app-icon {
-                    color: #3b82f6;
+                    color: $color-3b82f6;
                 }
             }
         }
@@ -523,7 +523,7 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: #9ca3af;
+                color: $color-9ca3af;
                 margin: 0 0 2px 0;
             }
 
@@ -546,9 +546,9 @@
         gap: $sp-xs;
         font-size: $font-size-xs;
         font-weight: 600;
-        color: #6b7280;
-        background-color: #f9fafb;
-        border: 1px solid #e5e7eb;
+        color: $color-help-text;
+        background-color: $color-f9fafb;
+        border: 1px solid $color-e5e7eb;
         padding: $sp-xs $sp;
         border-radius: 9999px;
         transition: all 0.2s;
@@ -560,7 +560,7 @@
         }
 
         &:hover:not(:disabled) {
-            background-color: #f3f4f6;
+            background-color: $color-cancel;
         }
 
         &:disabled {
@@ -584,14 +584,14 @@
 
 .feature-card {
     background-color: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $color-e5e7eb;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px $color-rgba-1;
     transition: box-shadow 0.2s;
 
     &:hover {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px -1px $color-rgba-14;
     }
 
     .feature-header {
@@ -599,29 +599,29 @@
         align-items: center;
         gap: $sp-sm;
         padding: $sp-md $sp-lg;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         .feature-icon {
             width: 15px;
             height: 15px;
 
             &--purple {
-                color: #8b5cf6;
+                color: $color-8b5cf6;
             }
 
             &--red {
-                color: #f87171;
+                color: $color-f87171;
             }
 
             &--orange {
-                color: #fb923c;
+                color: $color-fb923c;
             }
         }
 
         .feature-title {
             font-size: $font-size-sm;
             font-weight: 700;
-            color: #1f2937;
+            color: $color-1f2937;
             margin: 0;
         }
     }
@@ -639,18 +639,18 @@
             font-size: $font-size-sm;
 
             &--success {
-                background-color: #22c55e;
+                background-color: $color-22c55e;
                 color: white;
             }
 
             &--warning {
-                background-color: #f59e0b;
+                background-color: $color-f59e0b;
                 color: white;
             }
 
             &--neutral {
-                background-color: #f3f4f6;
-                color: #6b7280;
+                background-color: $color-cancel;
+                color: $color-help-text;
             }
         }
     }
@@ -658,18 +658,18 @@
     .feature-manage-btn {
         margin: 0 $sp-lg $sp-lg $sp-lg;
         width: calc(100% - 2 * #{$sp-lg});
-        background-color: #f3f4f6;
+        background-color: $color-cancel;
         border: none;
         padding: $sp-sm;
         border-radius: 9999px;
         font-size: $font-size-xs;
         font-weight: 600;
-        color: #4b5563;
+        color: $color-4b5563;
         cursor: pointer;
         transition: background-color 0.2s;
 
         &:hover {
-            background-color: #e5e7eb;
+            background-color: $color-e5e7eb;
         }
     }
 
@@ -686,7 +686,7 @@
             .locked-icon-wrapper {
                 width: 56px;
                 height: 56px;
-                background-color: #f3f4f6;
+                background-color: $color-cancel;
                 border-radius: 9999px;
                 display: flex;
                 align-items: center;
@@ -695,13 +695,13 @@
                 .locked-icon {
                     width: 32px;
                     height: 32px;
-                    color: #9ca3af;
+                    color: $color-9ca3af;
                 }
             }
 
             .locked-message {
                 font-size: $font-size-sm;
-                color: #6b7280;
+                color: $color-help-text;
                 margin: 0;
                 max-width: 200px;
             }
@@ -710,7 +710,7 @@
                 display: inline-flex;
                 align-items: center;
                 gap: $sp-xs;
-                background-color: #4f46e5;
+                background-color: $color-4f46e5;
                 color: white;
                 font-size: $font-size-xs;
                 font-weight: 700;
@@ -728,7 +728,7 @@
                 }
 
                 &:hover {
-                    background-color: #4338ca;
+                    background-color: $color-4338ca;
                 }
             }
         }

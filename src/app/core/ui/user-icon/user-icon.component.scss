@@ -45,7 +45,7 @@
     background: $color-white;
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px $color-rgba-14;
     z-index: $z-user-dropdown;
     width: 320px;
     max-width: 90vw;
@@ -208,7 +208,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: $color-rgba-13;
     z-index: calc($z-user-dropdown - 1);
     display: none;
 

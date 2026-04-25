@@ -5,13 +5,13 @@
     position: relative;
     background: $color-white;
     border-radius: $btn-border-radius-lg;
-    border: 1px solid rgba(17, 17, 24, 0.08);
+    border: 1px solid $color-rgba-36;
     overflow: hidden;
     transition: box-shadow 0.2s, border-color 0.2s;
     cursor: pointer;
 
     &:hover {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 30px $color-rgba-17;
     }
 
     .selection-overlay {
@@ -52,7 +52,7 @@
         .flat-title {
             font-size: $font-size-xl;
             font-weight: 500;
-            color: #344e41;
+            color: $color-344e41;
             margin: 0 0 $sp-xs 0;
 
             @include mobile {
@@ -65,7 +65,7 @@
             text-transform: uppercase;
             letter-spacing: 0.2em;
             font-weight: 600;
-            color: #5c6d63;
+            color: $color-5c6d63;
             margin: 0;
         }
 
@@ -107,28 +107,28 @@
             margin: 0;
 
             &.vacant {
-                color: #bc4749;
+                color: $color-bc4749;
             }
 
             &.self {
-                color: #3a5a40;
+                color: $color-3a5a40;
             }
 
             &.tenant {
-                color: #3a5a40;
+                color: $color-3a5a40;
             }
         }
 
         // Different backgrounds per type (optional, from reference)
         &:has(.vacant) {
-            background-color: rgba(188, 71, 73, 0.05);
-            border: 1px solid rgba(188, 71, 73, 0.1);
+            background-color: $color-rgba-37;
+            border: 1px solid $color-rgba-38;
         }
 
         &:has(.self),
         &:has(.tenant) {
-            background-color: rgba(58, 90, 64, 0.05);
-            border: 1px solid rgba(58, 90, 64, 0.1);
+            background-color: $color-rgba-39;
+            border: 1px solid $color-rgba-40;
         }
     }
 
@@ -164,40 +164,40 @@
                     text-transform: uppercase;
                     letter-spacing: 0.2em;
                     font-weight: 600;
-                    color: #5c6d63;
+                    color: $color-5c6d63;
                     margin: 0 0 $sp-xs 0;
                 }
 
                 .value {
                     font-size: $font-size-base;
                     font-weight: 500;
-                    color: #344e41;
+                    color: $color-344e41;
                     margin: 0;
                     line-height: 1.4;
                 }
 
                 .extra {
                     font-size: $font-size-xs;
-                    color: #5c6d63;
+                    color: $color-5c6d63;
                     margin-top: $sp-xs;
                 }
             }
 
             &.flat-info {
-                background-color: rgba(163, 177, 138, 0.1);
-                border: 1px solid rgba(163, 177, 138, 0.2);
+                background-color: $color-rgba-41;
+                border: 1px solid $color-rgba-42;
 
                 .icon svg {
-                    stroke: #3a5a40;
+                    stroke: $color-3a5a40;
                 }
             }
 
             &.society-info {
-                background-color: rgba(221, 161, 94, 0.1);
-                border: 1px solid rgba(221, 161, 94, 0.2);
+                background-color: $color-rgba-43;
+                border: 1px solid $color-rgba-44;
 
                 .icon svg {
-                    stroke: #dda15e;
+                    stroke: $color-dda15e;
                 }
             }
         }
@@ -206,7 +206,7 @@
     // Owner / Tenant sections
     .owner-section,
     .tenant-section {
-        border-top: 1px solid rgba(17, 17, 24, 0.07);
+        border-top: 1px solid $color-rgba-45;
         padding-top: $sp-md;
         margin-top: $sp-md;
 
@@ -219,7 +219,7 @@
             .icon svg {
                 width: 18px;
                 height: 18px;
-                stroke: #5c6d63;
+                stroke: $color-5c6d63;
             }
 
             h4 {
@@ -227,7 +227,7 @@
                 text-transform: uppercase;
                 letter-spacing: 0.2em;
                 font-weight: 600;
-                color: #5c6d63;
+                color: $color-5c6d63;
                 margin: 0;
             }
         }
@@ -247,8 +247,8 @@
                 font-weight: 700;
                 font-size: $font-size-sm;
                 flex-shrink: 0;
-                background: rgba(184, 137, 58, 0.1);
-                color: #b8893a;
+                background: $color-rgba-46;
+                color: $color-b8893a;
             }
 
             .info {
@@ -257,7 +257,7 @@
                 .name {
                     font-size: $font-size-base;
                     font-weight: 600;
-                    color: #344e41;
+                    color: $color-344e41;
                     margin: 0 0 $sp-xs 0;
                 }
 
@@ -267,13 +267,13 @@
                     align-items: center;
                     gap: $sp-xs;
                     font-size: $font-size-xs;
-                    color: #5c6d63;
+                    color: $color-5c6d63;
                     margin-top: $sp-xs;
 
                     svg {
                         width: 12px;
                         height: 12px;
-                        stroke: #5c6d63;
+                        stroke: $color-5c6d63;
                     }
                 }
             }
@@ -283,8 +283,8 @@
     // Lease card (simple)
     .lease-card {
         border-radius: $btn-border-radius-md;
-        border: 1px solid rgba(124, 58, 237, 0.15);
-        background: rgba(124, 58, 237, 0.05);
+        border: 1px solid $color-rgba-47;
+        background: $color-rgba-48;
         padding: $sp-md;
         margin-top: $sp-md;
 
@@ -299,19 +299,19 @@
                 font-weight: bold;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                color: #7c3aed;
+                color: $color-7c3aed;
             }
 
             .rent-amount {
                 font-size: $font-size-xs;
                 font-weight: 600;
-                color: #b8893a;
+                color: $color-b8893a;
             }
         }
 
         .lease-dates {
             font-size: $font-size-xs;
-            color: #4a4760;
+            color: $color-4a4760;
             margin: 0;
         }
     }
@@ -319,8 +319,8 @@
     // Plan card (unchanged)
     .plan-card {
         border-radius: $btn-border-radius-md;
-        border: 1px solid rgba(184, 137, 58, 0.15);
-        background: rgba(184, 137, 58, 0.05);
+        border: 1px solid $color-rgba-49;
+        background: $color-rgba-50;
         padding: $sp-sm $sp-md;
         margin-top: $sp-md;
 
@@ -339,13 +339,13 @@
                 svg {
                     width: 14px;
                     height: 14px;
-                    stroke: #b8893a;
+                    stroke: $color-b8893a;
                 }
 
                 span {
                     font-size: $font-size-xs;
                     font-weight: 600;
-                    color: #b8893a;
+                    color: $color-b8893a;
                 }
             }
 
@@ -368,7 +368,7 @@
 
                 .plan-price {
                     font-size: 10px;
-                    color: #6b6880;
+                    color: $color-6b6880;
                 }
             }
         }
@@ -385,13 +385,13 @@
         svg {
             width: 12px;
             height: 12px;
-            stroke: #6b6880;
+            stroke: $color-6b6880;
             flex-shrink: 0;
         }
 
         >span {
             font-size: 10px;
-            color: #6b6880;
+            color: $color-6b6880;
         }
 
         .document-tags {
@@ -403,8 +403,8 @@
                 font-size: 10px;
                 padding: $sp-xs $sp-sm;
                 border-radius: $btn-border-radius-sm;
-                background: rgba(17, 17, 24, 0.06);
-                color: #6b6880;
+                background: $color-rgba-51;
+                color: $color-6b6880;
                 max-width: 80px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -478,5 +478,5 @@
 }
 
 .context-message .message.expired {
-    color: #bc4749;
+    color: $color-bc4749;
 }

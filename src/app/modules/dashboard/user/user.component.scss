@@ -56,14 +56,14 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
+            background: linear-gradient(135deg, $color-rgba-54 0%, $color-rgba-28 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: $sp-sm;
 
             app-icon {
-                color: #4f46e5;
+                color: $color-4f46e5;
             }
         }
 

@@ -57,13 +57,13 @@
     padding: $sp-xl;
 
     app-icon {
-        color: #d32f2f;
+        color: $color-d32f2f;
         font-size: 48px;
         margin-bottom: $sp-lg;
     }
 
     p {
-        color: #d32f2f;
+        color: $color-d32f2f;
         font-size: $font-size-base;
         font-family: $font-family-base;
         margin-bottom: $sp-lg;
@@ -76,7 +76,7 @@
     margin: 0 auto;
     background: $color-white;
     border-radius: $btn-border-radius-lg;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 12px $color-rgba-21;
     padding: $sp-xl;
     position: relative;
 
@@ -136,23 +136,23 @@
     color: $color-note-gray;
 
     &.priority-low {
-        background: #e8f5e9;
-        color: #2e7d32;
+        background: $color-e8f5e9;
+        color: $color-2e7d32;
     }
 
     &.priority-medium {
-        background: #fff3e0;
-        color: #ef6c00;
+        background: $color-fff3e0;
+        color: $color-ef6c00;
     }
 
     &.priority-high {
-        background: #ffebee;
-        color: #c62828;
+        background: $color-ffebee;
+        color: $color-c62828;
     }
 
     &.priority-urgent {
-        background: #fce4ec;
-        color: #c2185b;
+        background: $color-fce4ec;
+        color: $color-c2185b;
     }
 
     .urgent-indicator {
@@ -171,33 +171,33 @@
     align-items: center;
 
     &.category-general {
-        background: #eef2f6;
-        color: #334e68;
+        background: $color-eef2f6;
+        color: $color-334e68;
     }
 
     &.category-maintenance {
-        background: #e1f5fe;
-        color: #0277bd;
+        background: $color-e1f5fe;
+        color: $color-0277bd;
     }
 
     &.category-event {
-        background: #f3e8ff;
-        color: #6b21a8;
+        background: $color-f3e8ff;
+        color: $color-6b21a8;
     }
 
     &.category-security {
-        background: #fee2e2;
-        color: #991b1b;
+        background: $color-fee2e2;
+        color: $color-991b1b;
     }
 
     &.category-billing {
-        background: #dcfce7;
-        color: #166534;
+        background: $color-dcfce7;
+        color: $color-166534;
     }
 
     &.category-other {
-        background: #f3f4f6;
-        color: #4b5563;
+        background: $color-cancel;
+        color: $color-4b5563;
     }
 }
 
@@ -211,18 +211,18 @@
     color: $color-note-gray;
 
     &.status-draft {
-        background: #fff8e1;
-        color: #b76e00;
+        background: $color-fff8e1;
+        color: $color-b76e00;
     }
 
     &.status-published {
-        background: #e3f2fd;
-        color: #0a558c;
+        background: $color-e3f2fd;
+        color: $color-0a558c;
     }
 
     &.status-archived {
-        background: #eeeeee;
-        color: #616161;
+        background: $color-eeeeee;
+        color: $color-616161;
     }
 }
 
@@ -251,23 +251,23 @@
 }
 
 .expiry-badge {
-    background: #ffebee;
-    color: #c62828;
+    background: $color-ffebee;
+    color: $color-c62828;
 }
 
 .draft-badge {
-    background: #fff8e1;
-    color: #b76e00;
+    background: $color-fff8e1;
+    color: $color-b76e00;
 }
 
 .archived-badge {
-    background: #eeeeee;
-    color: #616161;
+    background: $color-eeeeee;
+    color: $color-616161;
 }
 
 /* Delete Icon */
 .delete-icon {
-    color: #d32f2f;
+    color: $color-d32f2f;
     cursor: pointer;
     font-size: $font-size-lg;
     padding: 8px;
@@ -275,7 +275,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-        background: #ffebee;
+        background: $color-ffebee;
     }
 }
 

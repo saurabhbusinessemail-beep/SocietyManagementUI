@@ -17,7 +17,7 @@
 
 // Plan Banner
 .plan-banner {
-    background-color: #4f46e5;
+    background-color: $color-4f46e5;
     color: white;
     padding: $sp-sm $sp-md;
     border-radius: $btn-border-radius-md;
@@ -48,7 +48,7 @@
     .plan-duration,
     .plan-usage {
         font-size: $font-size-xs;
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: $color-rgba-55;
         padding: $sp-xs $sp-sm;
         border-radius: $btn-border-radius-sm;
     }
@@ -71,15 +71,15 @@
     .spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid #e5e7eb;
-        border-top-color: #4f46e5;
+        border: 3px solid $color-e5e7eb;
+        border-top-color: $color-4f46e5;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: $sp-md;
     }
 
     p {
-        color: #9ca3af;
+        color: $color-9ca3af;
         font-size: $font-size-base;
     }
 }
@@ -93,17 +93,17 @@
 // Info Card (Flat Information)
 .info-card {
     background-color: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $color-e5e7eb;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px $color-rgba-1;
 
     .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: $sp-md $sp-lg;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         .header-left {
             display: flex;
@@ -111,13 +111,13 @@
             gap: $sp-sm;
 
             svg {
-                stroke: #6366f1;
+                stroke: $color-6366f1;
             }
 
             .card-title {
                 font-size: $font-size-sm;
                 font-weight: 700;
-                color: #1f2937;
+                color: $color-1f2937;
                 margin: 0;
             }
         }
@@ -145,32 +145,32 @@
                     font-weight: 600;
 
                     &.self {
-                        background-color: #eef2ff;
-                        border: 1px solid #c7d2fe;
-                        color: #4f46e5;
+                        background-color: $color-eef2ff;
+                        border: 1px solid $color-c7d2fe;
+                        color: $color-4f46e5;
 
                         svg {
-                            stroke: #4f46e5;
+                            stroke: $color-4f46e5;
                         }
                     }
 
                     &.vacant {
-                        background-color: #f8fafc;
-                        border: 1px solid #e2e8f0;
-                        color: #94a3b8;
+                        background-color: $color-f8fafc;
+                        border: 1px solid $color-e2e8f0;
+                        color: $color-94a3b8;
 
                         svg {
-                            stroke: #94a3b8;
+                            stroke: $color-94a3b8;
                         }
                     }
 
                     &.tenant {
-                        background-color: #fffbeb;
-                        border: 1px solid #fde68a;
-                        color: #f59e0b;
+                        background-color: $color-fffbeb;
+                        border: 1px solid $color-fde68a;
+                        color: $color-f59e0b;
 
                         svg {
-                            stroke: #f59e0b;
+                            stroke: $color-f59e0b;
                         }
                     }
                 }
@@ -190,12 +190,12 @@
                 }
 
                 &.self {
-                    background-color: #eef2ff;
-                    border: 1px solid #c7d2fe;
-                    color: #4f46e5;
+                    background-color: $color-eef2ff;
+                    border: 1px solid $color-c7d2fe;
+                    color: $color-4f46e5;
 
                     svg {
-                        stroke: #4f46e5;
+                        stroke: $color-4f46e5;
                     }
                 }
             }
@@ -204,8 +204,8 @@
                 width: 28px;
                 height: 28px;
                 border-radius: 9999px;
-                border: 1px solid #e5e7eb;
-                background-color: #f9fafb;
+                border: 1px solid $color-e5e7eb;
+                background-color: $color-f9fafb;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -213,11 +213,11 @@
                 transition: all 0.2s;
 
                 &:hover {
-                    background-color: #eef2ff;
+                    background-color: $color-eef2ff;
                 }
 
                 svg {
-                    stroke: #6b7280;
+                    stroke: $color-help-text;
                 }
             }
         }
@@ -234,8 +234,8 @@
 
         .detail-item {
             padding: $sp-md $sp-lg;
-            border-right: 1px solid #f3f4f6;
-            border-bottom: 1px solid #f3f4f6;
+            border-right: 1px solid $color-cancel;
+            border-bottom: 1px solid $color-cancel;
 
             &:nth-child(2n) {
                 border-right: none;
@@ -243,7 +243,7 @@
 
             @include tablet {
                 &:nth-child(2n) {
-                    border-right: 1px solid #f3f4f6;
+                    border-right: 1px solid $color-cancel;
                 }
 
                 &:last-child {
@@ -259,14 +259,14 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: #9ca3af;
+                color: $color-9ca3af;
                 margin-bottom: $sp-xs;
 
                 svg {
-                    stroke: #9ca3af;
+                    stroke: $color-9ca3af;
 
                     &[stroke="currentColor"] {
-                        stroke: #9ca3af;
+                        stroke: $color-9ca3af;
                     }
                 }
             }
@@ -274,7 +274,7 @@
             .detail-value {
                 font-size: $font-size-base;
                 font-weight: 800;
-                color: #111827;
+                color: $color-111827;
                 margin: 0;
 
                 @include tablet {
@@ -288,10 +288,10 @@
 // Profile Card
 .profile-card {
     background-color: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $color-e5e7eb;
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px $color-rgba-1;
 
     .profile-header {
         display: flex;
@@ -308,17 +308,17 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background-color: #eef2ff;
+            background-color: $color-eef2ff;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid #4f46e5;
+            border: 3px solid $color-4f46e5;
             flex-shrink: 0;
 
             .avatar-initials {
                 font-size: $font-size-xl;
                 font-weight: 600;
-                color: #4f46e5;
+                color: $color-4f46e5;
                 text-transform: uppercase;
             }
         }
@@ -329,7 +329,7 @@
             .profile-name {
                 font-size: $font-size-lg;
                 font-weight: 700;
-                color: #111827;
+                color: $color-111827;
                 margin: 0 0 $sp-xs 0;
             }
 
@@ -346,17 +346,17 @@
                     text-transform: uppercase;
 
                     &.self {
-                        background-color: #22c55e;
+                        background-color: $color-22c55e;
                         color: white;
                     }
 
                     &.tenant {
-                        background-color: #f59e0b;
+                        background-color: $color-f59e0b;
                         color: white;
                     }
 
                     &.vacant {
-                        background-color: #6b7280;
+                        background-color: $color-help-text;
                         color: white;
                     }
                 }
@@ -369,15 +369,15 @@
                     color: white;
 
                     &.active {
-                        background-color: #22c55e;
+                        background-color: $color-22c55e;
                     }
 
                     &.expired {
-                        background-color: #6b7280;
+                        background-color: $color-help-text;
                     }
 
                     &.terminated {
-                        background-color: #ef4444;
+                        background-color: $color-ef4444;
                     }
                 }
             }
@@ -387,14 +387,14 @@
             display: flex;
             align-items: center;
             gap: $sp-xs;
-            background-color: #f3f4f6;
+            background-color: $color-cancel;
             padding: $sp-sm $sp-md;
             border-radius: $btn-border-radius-sm;
             font-size: $font-size-sm;
-            color: #374151;
+            color: $color-374151;
 
             svg {
-                stroke: #6b7280;
+                stroke: $color-help-text;
             }
 
             .contact-number {
@@ -421,23 +421,23 @@
             font-weight: 500;
 
             &.owner {
-                background-color: #eef2ff;
-                color: #4f46e5;
+                background-color: $color-eef2ff;
+                color: $color-4f46e5;
             }
 
             &.tenant {
-                background-color: #fffbeb;
-                color: #f59e0b;
+                background-color: $color-fffbeb;
+                color: $color-f59e0b;
             }
 
             &.member {
-                background-color: #f3f4f6;
-                color: #6b7280;
+                background-color: $color-cancel;
+                color: $color-help-text;
             }
 
             &.tenant-member {
-                background-color: #fef3c7;
-                color: #d97706;
+                background-color: $color-fef3c7;
+                color: $color-d97706;
             }
         }
     }
@@ -447,12 +447,12 @@
         flex-wrap: wrap;
         gap: $sp-lg;
         padding-top: $sp-md;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid $color-e5e7eb;
 
         .lease-item {
             .lease-label {
                 font-size: $font-size-xs;
-                color: #9ca3af;
+                color: $color-9ca3af;
                 text-transform: uppercase;
                 display: block;
                 margin-bottom: $sp-xs;
@@ -464,7 +464,7 @@
 
                 &.rent {
                     font-size: $font-size-base;
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                     font-weight: 700;
                 }
             }
@@ -475,17 +475,17 @@
 // Section Card
 .section-card {
     background-color: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $color-e5e7eb;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px $color-rgba-1;
 
     .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: $sp-md $sp-lg;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         .section-title-wrapper {
             display: flex;
@@ -493,13 +493,13 @@
             gap: $sp-sm;
 
             svg {
-                stroke: #4f46e5;
+                stroke: $color-4f46e5;
             }
 
             .section-title {
                 font-size: $font-size-sm;
                 font-weight: 700;
-                color: #1f2937;
+                color: $color-1f2937;
                 margin: 0;
             }
         }
@@ -510,9 +510,9 @@
             gap: $sp-xs;
             font-size: $font-size-xs;
             font-weight: 600;
-            color: #4f46e5;
-            background-color: #eef2ff;
-            border: 1px solid #c7d2fe;
+            color: $color-4f46e5;
+            background-color: $color-eef2ff;
+            border: 1px solid $color-c7d2fe;
             padding: $sp-xs $sp;
             border-radius: 9999px;
             cursor: pointer;
@@ -524,7 +524,7 @@
             }
 
             &:hover {
-                background-color: #e0e7ff;
+                background-color: $color-e0e7ff;
             }
         }
     }
@@ -541,7 +541,7 @@
         justify-content: space-between;
         align-items: center;
         padding: $sp-sm 0;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         &:last-child {
             border-bottom: none;
@@ -556,7 +556,7 @@
                 width: 36px;
                 height: 36px;
                 border-radius: 50%;
-                background-color: #eef2ff;
+                background-color: $color-eef2ff;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -565,7 +565,7 @@
                 .avatar-letter {
                     font-size: $font-size-sm;
                     font-weight: 700;
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                 }
             }
 
@@ -573,16 +573,16 @@
                 .resident-name {
                     font-size: $font-size-sm;
                     font-weight: 600;
-                    color: #111827;
+                    color: $color-111827;
                     margin: 0 0 2px 0;
                 }
 
                 .resident-role {
                     font-size: 11px;
                     padding: 2px $sp-sm;
-                    background-color: #eef2ff;
+                    background-color: $color-eef2ff;
                     border-radius: 9999px;
-                    color: #4f46e5;
+                    color: $color-4f46e5;
                     font-weight: 500;
                 }
             }
@@ -593,11 +593,11 @@
             align-items: center;
             gap: $sp-xs;
             font-size: $font-size-xs;
-            color: #6b7280;
+            color: $color-help-text;
             font-family: monospace;
 
             svg {
-                stroke: #9ca3af;
+                stroke: $color-9ca3af;
             }
         }
     }
@@ -607,7 +607,7 @@
         display: flex;
         justify-content: space-between;
         padding: $sp-sm 0;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         &:last-child {
             border-bottom: none;
@@ -617,13 +617,13 @@
         .parking-number {
             font-size: $font-size-sm;
             font-weight: 500;
-            color: #111827;
+            color: $color-111827;
         }
 
         .vehicle-type,
         .parking-type {
             font-size: $font-size-xs;
-            color: #6b7280;
+            color: $color-help-text;
         }
     }
 
@@ -632,7 +632,7 @@
         justify-content: space-between;
         align-items: center;
         padding: $sp-sm 0;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $color-cancel;
 
         &:last-child {
             border-bottom: none;
@@ -647,14 +647,14 @@
                 width: 36px;
                 height: 36px;
                 border-radius: $btn-border-radius-md;
-                background-color: #f0fdf4;
-                border: 1px solid #bbf7d0;
+                background-color: $color-f0fdf4;
+                border: 1px solid $color-bbf7d0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
                 svg {
-                    stroke: #14b8a6;
+                    stroke: $color-14b8a6;
                 }
             }
 
@@ -664,14 +664,14 @@
                     font-weight: 600;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
-                    color: #9ca3af;
+                    color: $color-9ca3af;
                     margin: 0 0 2px 0;
                 }
 
                 .gatepass-otp {
                     font-size: $font-size-base;
                     font-weight: 800;
-                    color: #111827;
+                    color: $color-111827;
                     font-family: monospace;
                     margin: 0;
                 }
@@ -680,7 +680,7 @@
 
         .gatepass-date {
             font-size: $font-size-xs;
-            color: #9ca3af;
+            color: $color-9ca3af;
         }
     }
 
@@ -689,7 +689,7 @@
 
         .complaint-item {
             padding: $sp-sm 0;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid $color-cancel;
 
             &:last-child {
                 border-bottom: none;
@@ -704,7 +704,7 @@
                 .complaint-title {
                     font-size: $font-size-sm;
                     font-weight: 500;
-                    color: #111827;
+                    color: $color-111827;
                 }
 
                 .priority-badge {
@@ -714,22 +714,22 @@
                     font-weight: 600;
 
                     &.low {
-                        background-color: #22c55e;
+                        background-color: $color-22c55e;
                         color: white;
                     }
 
                     &.medium {
-                        background-color: #f59e0b;
+                        background-color: $color-f59e0b;
                         color: white;
                     }
 
                     &.high {
-                        background-color: #ef4444;
+                        background-color: $color-ef4444;
                         color: white;
                     }
 
                     &.urgent {
-                        background-color: #dc2626;
+                        background-color: $color-dc2626;
                         color: white;
                     }
                 }
@@ -746,38 +746,38 @@
                     font-weight: 500;
 
                     &.submitted {
-                        background-color: #f59e0b;
+                        background-color: $color-f59e0b;
                         color: white;
                     }
 
                     &.approved {
-                        background-color: #22c55e;
+                        background-color: $color-22c55e;
                         color: white;
                     }
 
                     &.in_progress {
-                        background-color: #4f46e5;
+                        background-color: $color-4f46e5;
                         color: white;
                     }
 
                     &.resolved {
-                        background-color: #10b981;
+                        background-color: $color-10b981;
                         color: white;
                     }
 
                     &.closed {
-                        background-color: #6b7280;
+                        background-color: $color-help-text;
                         color: white;
                     }
 
                     &.rejected {
-                        background-color: #ef4444;
+                        background-color: $color-ef4444;
                         color: white;
                     }
                 }
 
                 .complaint-date {
-                    color: #9ca3af;
+                    color: $color-9ca3af;
                 }
             }
         }
@@ -788,7 +788,7 @@
 
         .gate-item {
             padding: $sp-sm 0;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid $color-cancel;
 
             &:last-child {
                 border-bottom: none;
@@ -803,7 +803,7 @@
                 .visitor-name {
                     font-size: $font-size-sm;
                     font-weight: 500;
-                    color: #111827;
+                    color: $color-111827;
                 }
 
                 .gate-status {
@@ -813,32 +813,32 @@
                     font-weight: 600;
 
                     &.requested {
-                        background-color: #f59e0b;
+                        background-color: $color-f59e0b;
                         color: white;
                     }
 
                     &.approved {
-                        background-color: #22c55e;
+                        background-color: $color-22c55e;
                         color: white;
                     }
 
                     &.rejected {
-                        background-color: #ef4444;
+                        background-color: $color-ef4444;
                         color: white;
                     }
 
                     &.cancelled {
-                        background-color: #6b7280;
+                        background-color: $color-help-text;
                         color: white;
                     }
 
                     &.expired {
-                        background-color: #9ca3af;
+                        background-color: $color-9ca3af;
                         color: white;
                     }
 
                     &.completed {
-                        background-color: #10b981;
+                        background-color: $color-10b981;
                         color: white;
                     }
                 }
@@ -849,10 +849,10 @@
                 align-items: center;
                 gap: $sp-md;
                 font-size: $font-size-xs;
-                color: #6b7280;
+                color: $color-help-text;
 
                 svg {
-                    stroke: #6b7280;
+                    stroke: $color-help-text;
                 }
             }
         }
@@ -861,9 +861,9 @@
     .empty-state {
         padding: $sp-md;
         text-align: center;
-        color: #9ca3af;
+        color: $color-9ca3af;
         font-style: italic;
-        background-color: #f9fafb;
+        background-color: $color-f9fafb;
         border-radius: $btn-border-radius-md;
         margin: $sp-md;
     }
@@ -882,20 +882,20 @@
         .locked-icon {
             width: 56px;
             height: 56px;
-            background-color: #f3f4f6;
+            background-color: $color-cancel;
             border-radius: 9999px;
             display: flex;
             align-items: center;
             justify-content: center;
 
             svg {
-                stroke: #9ca3af;
+                stroke: $color-9ca3af;
             }
         }
 
         p {
             font-size: $font-size-sm;
-            color: #6b7280;
+            color: $color-help-text;
             margin: 0;
             max-width: 240px;
         }
@@ -904,7 +904,7 @@
             display: inline-flex;
             align-items: center;
             gap: $sp-xs;
-            background-color: #4f46e5;
+            background-color: $color-4f46e5;
             color: white;
             font-size: $font-size-xs;
             font-weight: 700;
@@ -922,7 +922,7 @@
             }
 
             &:hover {
-                background-color: #4338ca;
+                background-color: $color-4338ca;
             }
 
             &:disabled {
@@ -956,11 +956,11 @@
     text-align: center;
     padding-top: $sp-md;
     margin-top: $sp-md;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid $color-e5e7eb;
 
     p {
         font-size: 11px;
-        color: #9ca3af;
+        color: $color-9ca3af;
         margin: 0;
     }
 }
@@ -978,12 +978,12 @@
         justify-content: space-between;
         align-items: center;
         padding: $sp-md $sp-lg;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid $color-e5e7eb;
 
         h2 {
             font-size: $font-size-lg;
             font-weight: 600;
-            color: #111827;
+            color: $color-111827;
             margin: 0;
         }
 
@@ -992,7 +992,7 @@
             border: none;
             font-size: $font-size-xl;
             cursor: pointer;
-            color: #9ca3af;
+            color: $color-9ca3af;
             padding: 0;
             width: 32px;
             height: 32px;
@@ -1000,7 +1000,7 @@
             transition: background-color 0.2s;
 
             &:hover {
-                background-color: #f3f4f6;
+                background-color: $color-cancel;
             }
         }
     }
@@ -1011,13 +1011,13 @@
         p {
             margin: 0;
             line-height: 1.5;
-            color: #374151;
+            color: $color-374151;
         }
 
         &.note {
             padding-top: 0;
             font-style: italic;
-            color: #6b7280;
+            color: $color-help-text;
             font-size: $font-size-sm;
         }
     }
@@ -1027,7 +1027,7 @@
         justify-content: flex-end;
         gap: $sp-sm;
         padding: $sp-md $sp-lg;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid $color-e5e7eb;
 
         button {
             padding: $sp-sm $sp-lg;
@@ -1039,38 +1039,38 @@
             border: none;
 
             &.btn-cancel {
-                background-color: #f3f4f6;
-                color: #374151;
+                background-color: $color-cancel;
+                color: $color-374151;
 
                 &:hover {
-                    background-color: #e5e7eb;
+                    background-color: $color-e5e7eb;
                 }
             }
 
             &.btn-self {
-                background-color: #4f46e5;
+                background-color: $color-4f46e5;
                 color: white;
 
                 &:hover {
-                    background-color: #4338ca;
+                    background-color: $color-4338ca;
                 }
             }
 
             &.btn-tenant {
-                background-color: #f59e0b;
+                background-color: $color-f59e0b;
                 color: white;
 
                 &:hover {
-                    background-color: #d97706;
+                    background-color: $color-d97706;
                 }
             }
 
             &.btn-vacant {
-                background-color: #6b7280;
+                background-color: $color-help-text;
                 color: white;
 
                 &:hover {
-                    background-color: #4b5563;
+                    background-color: $color-4b5563;
                 }
             }
         }
