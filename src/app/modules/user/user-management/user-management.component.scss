@@ -241,7 +241,7 @@
     }
     
     &.edit:hover {
-      background-color: rgba($status-pending, 0.15);
+      background-color: rgba(var(--status-pending-rgb), 0.15);
       border-color: $status-pending;
       
       .btn-label {
@@ -250,7 +250,7 @@
     }
     
     &.status:hover {
-      background-color: rgba($color-dark-blue, 0.15);
+      background-color: rgba(var(--color-dark-blue-rgb), 0.15);
       border-color: $color-dark-blue;
       
       .btn-label {
@@ -259,7 +259,7 @@
     }
     
     &.delete:hover {
-      background-color: rgba($status-rejected, 0.15);
+      background-color: rgba(var(--status-rejected-rgb), 0.15);
       border-color: $status-rejected;
       
       .btn-label {
@@ -280,7 +280,7 @@
     left: 0;
     right: 0;
     background-color: $color-white;
-    box-shadow: 0 -4px 12px rgba($color-black, 0.15);
+    box-shadow: 0 -4px 12px rgba(var(--color-black-rgb), 0.15);
     border-radius: $btn-border-radius-sm;
     border: 1px solid $color-border;
     z-index: $z-user-dropdown;
@@ -330,7 +330,7 @@
     top: 100%;
     background-color: $color-white;
     min-width: 120px;
-    box-shadow: 0 8px 16px rgba($color-black, 0.1);
+    box-shadow: 0 8px 16px rgba(var(--color-black-rgb), 0.1);
     border-radius: $btn-border-radius-sm;
     border: 1px solid $color-border;
     z-index: $z-user-dropdown;
@@ -372,23 +372,23 @@
 }
 
 .status-active {
-  background-color: rgba($status-active, 0.15);
+  background-color: rgba(var(--status-active-rgb), 0.15);
   color: $status-active;
 }
 
 .status-inactive {
-  background-color: rgba($status-inactive, 0.15);
+  background-color: rgba(var(--status-inactive-rgb), 0.15);
   color: $status-inactive;
 }
 
 .status-pending {
-  background-color: rgba($status-pending, 0.15);
+  background-color: rgba(var(--status-pending-rgb), 0.15);
   color: $status-pending;
 }
 
 .status-rejected,
 .status-blocked {
-  background-color: rgba($status-rejected, 0.15);
+  background-color: rgba(var(--status-rejected-rgb), 0.15);
   color: $status-rejected;
 }
 
@@ -451,17 +451,17 @@
   }
   
   &.edit:hover {
-    background-color: rgba($status-pending, 0.15);
+    background-color: rgba(var(--status-pending-rgb), 0.15);
     color: $status-pending;
   }
   
   &.delete:hover {
-    background-color: rgba($status-rejected, 0.15);
+    background-color: rgba(var(--status-rejected-rgb), 0.15);
     color: $status-rejected;
   }
   
   &.status:hover {
-    background-color: rgba($color-dark-blue, 0.15);
+    background-color: rgba(var(--color-dark-blue-rgb), 0.15);
     color: $color-dark-blue;
   }
 }
@@ -521,7 +521,7 @@
   font-weight: 500;
   
   &:hover:not(:disabled) {
-    background-color: darken($color-dark-blue, 10%);
+    background-color: color-mix(in srgb, var(--color-dark-blue), black 10%);
   }
   
   &:disabled {
@@ -547,7 +547,7 @@
   font-weight: 500;
   
   &:hover {
-    background-color: darken($color-cancel, 10%);
+    background-color: color-mix(in srgb, var(--color-cancel), black 10%);
   }
   
   @include mobile {
@@ -568,7 +568,7 @@
   font-weight: 500;
   
   &:hover {
-    background-color: darken($status-rejected, 10%);
+    background-color: color-mix(in srgb, var(--status-rejected), black 10%);
   }
   
   @include mobile {
@@ -583,7 +583,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba($color-black, 0.5);
+  background-color: rgba(var(--color-black-rgb), 0.5);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -58,7 +58,7 @@
             display: flex;
             align-items: center;
             gap: $sp;
-            background: linear-gradient(135deg, $color-light-gray 0%, rgba($color-sky, 0.3) 100%);
+            background: linear-gradient(135deg, $color-light-gray 0%, rgba(var(--color-sky-rgb), 0.3) 100%);
 
             .user-avatar {
                 width: 48px;
@@ -71,7 +71,13 @@
                 border: 2px solid $color-dark-blue;
 
                 app-icon {
-                    color: $color-dark-blue;
+                    ::ng-deep .app-icon {
+                        color: $color-dark-blue;
+                        svg {
+                            fill: currentColor;
+                            stroke: currentColor;
+                        }
+                    }
                 }
             }
 
@@ -103,6 +109,30 @@
 
                     @include mobile {
                         font-size: $font-size-xs;
+                    }
+                }
+            }
+
+            .edit-profile {
+                app-icon {
+                    cursor: pointer;
+                    display: inline-block;
+                    
+                    ::ng-deep .app-icon {
+                        color: $color-dark-blue;
+                        transition: transform 0.2s ease, color 0.2s ease;
+                        
+                        svg {
+                            fill: currentColor;
+                            stroke: currentColor;
+                        }
+                    }
+                    
+                    &:hover {
+                        ::ng-deep .app-icon {
+                            transform: scale(1.1);
+                            color: $color-light-blue;
+                        }
                     }
                 }
             }
@@ -171,7 +201,7 @@
                 background: $color-light-gray;
                 border: 1px solid $color-border;
                 border-top: 0;
-                box-shadow: 0 17px 10px rgba($color-black, 0.1);
+                box-shadow: 0 17px 10px rgba(var(--color-black-rgb), 0.1);
                 z-index: 1;
                 max-height: 200px;
                 overflow-y: auto;
@@ -271,6 +301,51 @@
 
                         .menu-icon {
                             color: $status-rejected;
+                        }
+                    }
+                }
+
+                &.theme-switcher-item {
+                    padding: $sp-sm $sp-md;
+
+                    .theme-switcher-header {
+                        font-size: $font-size-sm;
+                        color: $color-help-text;
+                        margin-bottom: $sp-xs;
+                    }
+
+                    .theme-circles-container {
+                        display: flex;
+                        gap: $sp;
+                        overflow-x: auto;
+                        padding-bottom: $sp-xs;
+                        
+                        /* Hide scrollbar for a cleaner look */
+                        &::-webkit-scrollbar {
+                            height: 4px;
+                        }
+                        &::-webkit-scrollbar-thumb {
+                            background: $color-border;
+                            border-radius: 4px;
+                        }
+
+                        .theme-circle {
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            border: 2px solid transparent;
+                            cursor: pointer;
+                            flex-shrink: 0;
+                            transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+                            &:hover {
+                                transform: scale(1.1);
+                            }
+
+                            &.active {
+                                box-shadow: 0 0 0 2px $color-white, 0 0 0 4px $color-border-highlight;
+                                transform: scale(1.1);
+                            }
                         }
                     }
                 }

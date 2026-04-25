@@ -141,7 +141,7 @@ export class SocietyCardComponent {
    * For others, use white text on dark background
    */
   getPlanTextColor(): string {
-    if (!this.plan) return '#ffffff';
+    if (!this.plan) return 'var(--color-white)';
 
     const planName = this.plan.planDetails.name?.toLowerCase() || '';
     // For starter trial with light background, use primary color for dark text

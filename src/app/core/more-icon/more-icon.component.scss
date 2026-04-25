@@ -22,7 +22,7 @@
     border: 1px solid $color-border;
     padding: $sp-sm;
     border-radius: 6px;
-    box-shadow: 0 6px 18px rgba($color-black, 0.08);
+    box-shadow: 0 6px 18px rgba(var(--color-black-rgb), 0.08);
     z-index: $z-user-dropdown;
 
     ul {

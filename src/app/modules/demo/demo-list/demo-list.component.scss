@@ -72,7 +72,7 @@
 
     &:hover {
         border-color: $color-help-text;
-        box-shadow: 0 2px 4px rgba($color-black, 0.05);
+        box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.05);
     }
 
     .stat-indicator {
@@ -173,7 +173,7 @@
         &:focus {
             outline: none;
             border-color: $btn-bg-primary;
-            box-shadow: 0 0 0 3px rgba($btn-bg-primary, 0.1);
+            box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.1);
         }
 
         &::placeholder {
@@ -203,7 +203,7 @@
         &:focus {
             outline: none;
             border-color: $btn-bg-primary;
-            box-shadow: 0 0 0 3px rgba($btn-bg-primary, 0.1);
+            box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.1);
         }
     }
 
@@ -315,7 +315,7 @@
     &:hover {
         opacity: 0.9;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba($btn-bg-primary, 0.3);
+        box-shadow: 0 4px 8px rgba(var(--color-dark-blue-rgb), 0.3);
     }
 }
 
@@ -366,7 +366,7 @@
             user-select: none;
 
             &:hover {
-                background-color: darken($color-light-gray, 5%);
+                background-color: color-mix(in srgb, var(--color-light-gray), black 5%);
             }
         }
 
@@ -398,11 +398,11 @@
         transition: background-color 0.2s ease;
 
         &:hover {
-            background-color: rgba($color-light-gray, 0.5);
+            background-color: rgba(var(--color-light-gray-rgb), 0.5);
         }
 
         &.selected {
-            background-color: rgba($btn-bg-primary, 0.05);
+            background-color: rgba(var(--color-dark-blue-rgb), 0.05);
         }
     }
 }
@@ -417,7 +417,7 @@
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background-color: rgba($btn-bg-primary, 0.1);
+        background-color: rgba(var(--color-dark-blue-rgb), 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -507,9 +507,9 @@
     }
 
     &.status-pending {
-        background-color: rgba($status-pending, 0.1);
+        background-color: rgba(var(--status-pending-rgb), 0.1);
         color: $status-pending;
-        border: 1px solid rgba($status-pending, 0.2);
+        border: 1px solid rgba(var(--status-pending-rgb), 0.2);
 
         .status-dot {
             background-color: $status-pending;
@@ -517,9 +517,9 @@
     }
 
     &.status-confirmed {
-        background-color: rgba($btn-bg-primary, 0.1);
+        background-color: rgba(var(--color-dark-blue-rgb), 0.1);
         color: $btn-bg-primary;
-        border: 1px solid rgba($btn-bg-primary, 0.2);
+        border: 1px solid rgba(var(--color-dark-blue-rgb), 0.2);
 
         .status-dot {
             background-color: $btn-bg-primary;
@@ -527,9 +527,9 @@
     }
 
     &.status-rescheduled {
-        background-color: rgba($status-yet, 0.1);
+        background-color: rgba(var(--status-yet-rgb), 0.1);
         color: $status-yet;
-        border: 1px solid rgba($status-yet, 0.2);
+        border: 1px solid rgba(var(--status-yet-rgb), 0.2);
 
         .status-dot {
             background-color: $status-yet;
@@ -537,9 +537,9 @@
     }
 
     &.status-completed {
-        background-color: rgba($status-approved, 0.1);
+        background-color: rgba(var(--status-approved-rgb), 0.1);
         color: $status-approved;
-        border: 1px solid rgba($status-approved, 0.2);
+        border: 1px solid rgba(var(--status-approved-rgb), 0.2);
 
         .status-dot {
             background-color: $status-approved;
@@ -547,9 +547,9 @@
     }
 
     &.status-cancelled {
-        background-color: rgba($status-rejected, 0.1);
+        background-color: rgba(var(--status-rejected-rgb), 0.1);
         color: $status-rejected;
-        border: 1px solid rgba($status-rejected, 0.2);
+        border: 1px solid rgba(var(--status-rejected-rgb), 0.2);
 
         .status-dot {
             background-color: $status-rejected;
@@ -557,9 +557,9 @@
     }
 
     &.status-no_show {
-        background-color: rgba($status-rejected, 0.1);
+        background-color: rgba(var(--status-rejected-rgb), 0.1);
         color: $status-rejected;
-        border: 1px solid rgba($status-rejected, 0.2);
+        border: 1px solid rgba(var(--status-rejected-rgb), 0.2);
 
         .status-dot {
             background-color: $status-rejected;
@@ -567,9 +567,9 @@
     }
 
     &.status-follow_up {
-        background-color: rgba($status-pending, 0.1);
-        color: darken($status-pending, 20%);
-        border: 1px solid rgba($status-pending, 0.2);
+        background-color: rgba(var(--status-pending-rgb), 0.1);
+        color: color-mix(in srgb, var(--status-pending), black 20%);
+        border: 1px solid rgba(var(--status-pending-rgb), 0.2);
 
         .status-dot {
             background-color: $status-pending;
@@ -581,7 +581,7 @@
     display: inline-block;
     margin-left: $sp-xs;
     padding: 2px $sp-xs;
-    background-color: rgba($status-approved, 0.1);
+    background-color: rgba(var(--status-approved-rgb), 0.1);
     color: $status-approved;
     border-radius: 4px;
     font-size: 10px;
@@ -635,7 +635,7 @@
 
     &:hover {
         transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba($color-black, 0.1);
+        box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
 
         svg {
             color: $color-white;
@@ -680,7 +680,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
     padding: $sp-xs;
-    box-shadow: 0 4px 12px rgba($color-black, 0.15);
+    box-shadow: 0 4px 12px rgba(var(--color-black-rgb), 0.15);
     min-width: 140px;
     margin-top: 2px;
 
@@ -753,7 +753,7 @@
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
-                background-color: rgba($btn-bg-primary, 0.1);
+                background-color: rgba(var(--color-dark-blue-rgb), 0.1);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -1041,7 +1041,7 @@
     justify-content: space-between;
     align-items: center;
     padding: $sp-md;
-    background-color: rgba($btn-bg-primary, 0.05);
+    background-color: rgba(var(--color-dark-blue-rgb), 0.05);
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
     margin-top: $sp-md;
@@ -1119,7 +1119,7 @@
         color: $color-black;
 
         &:hover {
-            background-color: darken($color-light-gray, 5%);
+            background-color: color-mix(in srgb, var(--color-light-gray), black 5%);
         }
     }
 }
@@ -1151,7 +1151,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba($color-black, 0.5);
+        background-color: rgba(var(--color-black-rgb), 0.5);
     }
 
     .modal-content {
@@ -1163,7 +1163,7 @@
         max-height: 90vh;
         overflow-y: auto;
         z-index: 1;
-        box-shadow: 0 20px 25px -5px rgba($color-black, 0.1), 0 10px 10px -5px rgba($color-black, 0.04);
+        box-shadow: 0 20px 25px -5px rgba(var(--color-black-rgb), 0.1), 0 10px 10px -5px rgba(var(--color-black-rgb), 0.04);
 
         @include mobile {
             width: 95%;
@@ -1249,7 +1249,7 @@
         &:focus {
             outline: none;
             border-color: $btn-bg-primary;
-            box-shadow: 0 0 0 3px rgba($btn-bg-primary, 0.1);
+            box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.1);
         }
 
         @include mobile {
@@ -1307,14 +1307,14 @@
         &:hover {
             opacity: 0.9;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba($btn-bg-primary, 0.3);
+            box-shadow: 0 4px 8px rgba(var(--color-dark-blue-rgb), 0.3);
         }
 
         &.cancel {
             background-color: $status-rejected;
 
             &:hover {
-                box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+                box-shadow: 0 4px 8px rgba(var(--status-rejected-rgb), 0.3);
             }
         }
 
@@ -1322,7 +1322,7 @@
             background-color: $status-rejected;
 
             &:hover {
-                box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+                box-shadow: 0 4px 8px rgba(var(--status-rejected-rgb), 0.3);
             }
         }
     }
@@ -1341,7 +1341,7 @@
         &:hover {
             opacity: 0.9;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+            box-shadow: 0 4px 8px rgba(var(--status-rejected-rgb), 0.3);
         }
 
         @include mobile {
@@ -1364,7 +1364,7 @@
         &:hover {
             opacity: 0.9;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba($status-yet, 0.3);
+            box-shadow: 0 4px 8px rgba(var(--status-yet-rgb), 0.3);
         }
 
         @include mobile {

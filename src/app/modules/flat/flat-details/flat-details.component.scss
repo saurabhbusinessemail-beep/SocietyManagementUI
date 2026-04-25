@@ -48,7 +48,7 @@
     .plan-duration,
     .plan-usage {
         font-size: $font-size-xs;
-        background-color: rgba($color-white, 0.2);
+        background-color: rgba(var(--color-white-rgb), 0.2);
         padding: $sp-xs $sp-sm;
         border-radius: $btn-border-radius-sm;
     }
@@ -96,7 +96,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba($color-black, 0.05);
+    box-shadow: 0 1px 2px rgba(var(--color-black-rgb), 0.05);
 
     .card-header {
         display: flex;
@@ -291,7 +291,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
-    box-shadow: 0 1px 2px rgba($color-black, 0.05);
+    box-shadow: 0 1px 2px rgba(var(--color-black-rgb), 0.05);
 
     .profile-header {
         display: flex;
@@ -478,7 +478,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba($color-black, 0.05);
+    box-shadow: 0 1px 2px rgba(var(--color-black-rgb), 0.05);
 
     .section-header {
         display: flex;

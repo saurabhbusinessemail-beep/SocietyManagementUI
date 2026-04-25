@@ -4,7 +4,7 @@
 .popup-container {
     background: $color-white;
     border-radius: $btn-border-radius-md;
-    box-shadow: 0 12px 30px rgba($color-black, 0.12);
+    box-shadow: 0 12px 30px rgba(var(--color-black-rgb), 0.12);
     overflow: hidden;
     width: 100%;
 
@@ -169,13 +169,13 @@
     }
 
     &:hover:not(.disabled) {
-        background: rgba($color-dark-blue, 0.08);
+        background: rgba(var(--color-dark-blue-rgb), 0.08);
         border-color: $color-dark-blue;
         color: $color-dark-blue;
     }
 
     &:active:not(.disabled) {
-        background: rgba($color-dark-blue, 0.15);
+        background: rgba(var(--color-dark-blue-rgb), 0.15);
         transform: scale(0.97);
     }
 

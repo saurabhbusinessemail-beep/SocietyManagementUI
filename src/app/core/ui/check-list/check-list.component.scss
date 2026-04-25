@@ -75,8 +75,14 @@
     }
 
 
-    input:checked + .custom-box::after {
-        opacity: 1;
+    input:checked + .custom-box {
+        background-color: var(--primary-color, $btn-bg-primary);
+        border-color: var(--primary-color, $btn-bg-primary);
+
+        &::after {
+            opacity: 1;
+            border-color: $color-header-text;
+        }
     }
 
 

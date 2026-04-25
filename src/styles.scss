@@ -1,3 +1,4 @@
+@import 'styles/themes';
 @import './styles/variables';
 @import './styles/mixins';
 @import './styles/grid';
@@ -233,15 +234,15 @@ body {
     &.primary {
         background: linear-gradient(135deg, $btn-bg-primary 0%, $btn-bg-primary-light 100%);
         color: $btn-text-primary;
-        box-shadow: 0 4px 14px rgba($btn-bg-primary, 0.25);
+        box-shadow: 0 4px 14px rgba(var(--btn-bg-primary-rgb), 0.25);
         
         &:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba($btn-bg-primary, 0.35);
+            box-shadow: 0 6px 20px rgba(var(--btn-bg-primary-rgb), 0.35);
         }
         &:active:not(:disabled) {
             transform: translateY(1px);
-            box-shadow: 0 2px 8px rgba($btn-bg-primary, 0.3);
+            box-shadow: 0 2px 8px rgba(var(--btn-bg-primary-rgb), 0.3);
         }
     }
 
@@ -258,10 +259,10 @@ body {
     &.error {
         background: $btn-error;
         color: $color-white;
-        box-shadow: 0 4px 14px rgba($btn-error, 0.25);
+        box-shadow: 0 4px 14px rgba(var(--btn-error-rgb), 0.25);
         &:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba($btn-error, 0.35);
+            box-shadow: 0 6px 20px rgba(var(--btn-error-rgb), 0.35);
         }
     }
 
@@ -271,7 +272,7 @@ body {
         padding: $sp-sm $sp;
         &:hover:not(:disabled) {
             color: $color-light-blue;
-            background: rgba($color-dark-blue, 0.05);
+            background: rgba(var(--color-dark-blue-rgb), 0.05);
             border-radius: $btn-border-radius-sm;
         }
     }
@@ -298,7 +299,7 @@ textarea {
     &:focus {
         outline: none;
         border-color: $color-dark-blue;
-        box-shadow: 0 0 0 3px rgba($color-dark-blue, 0.15);
+        box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.15);
     }
 
     &:disabled {
@@ -327,7 +328,7 @@ textarea {
 
     &.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
         border-color: $color-dark-blue !important;
-        box-shadow: 0 0 0 3px rgba($color-dark-blue, 0.15) !important;
+        box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.15) !important;
     }
 
     .ng-select-container,
@@ -362,7 +363,7 @@ textarea {
             }
 
             &.ng-option-selected {
-                background-color: rgba($color-dark-blue, 0.1) !important;
+                background-color: rgba(var(--color-dark-blue-rgb), 0.1) !important;
                 color: $color-dark-blue !important;
             }
         }
@@ -463,7 +464,7 @@ body {
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.2s ease;
-        background: linear-gradient(transparent, rgba($color-header-text, 0.9));
+        background: linear-gradient(transparent, rgba(var(--color-header-text-rgb), 0.9));
     }
 
     // Show fade effect only when collapsed and content exceeds height
@@ -555,7 +556,7 @@ body {
 // Dark mode support (if needed)
 @media (prefers-color-scheme: dark) {
     .height-restriction-wrapper::after {
-        background: linear-gradient(transparent, rgba($color-black, 0.9));
+        background: linear-gradient(transparent, rgba(var(--color-black-rgb), 0.9));
     }
 }
 

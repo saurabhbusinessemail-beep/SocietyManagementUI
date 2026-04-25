@@ -63,6 +63,21 @@
 
             <div class="dropdown-divider"></div>
 
+            <li class="menu-item theme-switcher-item" (click)="$event.stopPropagation()">
+                <div class="theme-switcher-header">Theme</div>
+                <div class="theme-circles-container">
+                    <div class="theme-circle" *ngFor="let theme of themeService.availableThemes"
+                         [class.active]="(themeService.currentTheme | async) === theme.id"
+                         (click)="themeService.setTheme(theme.id)"
+                         [style.background]="theme.colorPrimary"
+                         [style.border-color]="theme.colorSecondary"
+                         [title]="theme.name">
+                    </div>
+                </div>
+            </li>
+
+            <div class="dropdown-divider"></div>
+
             <li class="menu-item logout-item" (click)="logout()">
                 <button class="menu-btn logout-btn">
                     <app-icon name="logout-icon" class="menu-icon" size="xl"></app-icon>

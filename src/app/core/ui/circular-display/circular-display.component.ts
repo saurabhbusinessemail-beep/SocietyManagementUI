@@ -8,9 +8,9 @@ import { Component, Input, OnInit, AfterContentInit, Output, EventEmitter } from
 export class CircularDisplayComponent implements OnInit, AfterContentInit {
   @Input() label?: string;
   @Input() showLabel: boolean = true;
-  @Input() iconColor: string = '#4f46e5';
-  @Input() backgroundColor: string = 'rgba(79, 70, 229, 0.1)';
-  @Input() containerBackground: string = 'rgba(255, 255, 255, 0.6)';
+  @Input() iconColor: string = 'var(--color-dark-blue)';
+  @Input() backgroundColor: string = 'rgba(var(--color-dark-blue-rgb), 0.1)';
+  @Input() containerBackground: string = 'rgba(var(--color-white-rgb), 0.6)';
   @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md';
   @Input() variant: 'default' | 'bordered' | 'shadow' = 'default';
 

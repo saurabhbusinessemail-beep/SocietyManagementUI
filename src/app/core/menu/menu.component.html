@@ -10,11 +10,11 @@
                 <span class="logo-mobile">
                     <img class="icon menu-icon" src="assets/logo.png">
                 </span>
-                <app-icon name="double-arrow-right" color="white" *ngIf="!this.open"></app-icon>
+                <app-icon name="double-arrow-right" color="var(--color-header-text)" *ngIf="!this.open"></app-icon>
             </div>
             <div class="menu-close" *ngIf="open">
                 <button class="btn only-content" *ngIf="open">
-                    <app-icon name="clear" color="white"></app-icon>
+                    <app-icon name="clear" color="var(--color-header-text)"></app-icon>
                 </button>
             </div>
         </div>
@@ -24,7 +24,7 @@
                 <div (click)="closeOverlay(m)"
                     [ngClass]="{ 'active': menuService.selectedMenu.value?.menuId === m.menuId}">
                     <app-icon [name]="m.icon ?? ''"
-                        [color]="menuService.selectedMenu.value?.menuId === m.menuId ? '#05ff01' : 'white'" size="xl"></app-icon>
+                        [color]="menuService.selectedMenu.value?.menuId === m.menuId ? 'var(--color-border-highlight)' : 'var(--color-header-text)'" size="xl"></app-icon>
                     <span class="label" *ngIf="open">{{ m.menuName }}</span>
                 </div>
             </li>

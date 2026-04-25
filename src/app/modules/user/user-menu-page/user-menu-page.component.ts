@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { MenuService } from '../../../services/menu.service';
 import { IconsService } from '../../../core/icons/icons.service';
 import { SocietyService } from '../../../services/society.service';
+import { ThemeService } from '../../../services/theme.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -41,7 +42,8 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
     private location: Location,
     private menuService: MenuService,
     public iconService: IconsService,
-    private societyService: SocietyService
+    private societyService: SocietyService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {

@@ -58,7 +58,7 @@
         justify-content: center;
         width: 64px;
         height: 64px;
-        background-color: rgba($status-rejected, 0.1);
+        background-color: rgba(var(--status-rejected-rgb), 0.1);
         color: $status-rejected;
         border-radius: 50%;
         font-size: 32px;
@@ -83,7 +83,7 @@
         transition: background-color 0.2s ease;
 
         &:hover {
-            background-color: darken($color-dark-blue, 10%);
+            background-color: color-mix(in srgb, var(--color-dark-blue), black 10%);
         }
     }
 }
@@ -103,7 +103,7 @@
     border-radius: $btn-border-radius-lg;
     padding: $sp-xl;
     margin-bottom: $sp-xl;
-    box-shadow: 0 2px 8px rgba($color-black, 0.04);
+    box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.04);
 
     @include mobile {
         flex-direction: column;
@@ -171,7 +171,7 @@
             padding: 0;
 
             &:hover {
-                background: darken($color-dark-blue, 10%);
+                background: color-mix(in srgb, var(--color-dark-blue), black 10%);
                 transform: scale(1.1);
 
                 .edit-text {
@@ -267,19 +267,19 @@
 
         .status-badge {
             &.status-active {
-                background: rgba($status-active, 0.1);
+                background: rgba(var(--status-active-rgb), 0.1);
                 color: $status-active;
             }
             &.status-inactive {
-                background: rgba($status-inactive, 0.1);
+                background: rgba(var(--status-inactive-rgb), 0.1);
                 color: $status-inactive;
             }
             &.status-pending {
-                background: rgba($status-pending, 0.1);
+                background: rgba(var(--status-pending-rgb), 0.1);
                 color: $status-pending;
             }
             &.status-blocked {
-                background: rgba($status-rejected, 0.1);
+                background: rgba(var(--status-rejected-rgb), 0.1);
                 color: $status-rejected;
             }
         }
@@ -301,7 +301,7 @@
     border-radius: $btn-border-radius-lg;
     padding: $sp-xl;
     margin-bottom: $sp-xl;
-    box-shadow: 0 2px 8px rgba($color-black, 0.04);
+    box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.04);
 
     @include mobile {
         flex-direction: column;
@@ -385,19 +385,19 @@
 
         .status-badge {
             &.status-active {
-                background: rgba($status-active, 0.1);
+                background: rgba(var(--status-active-rgb), 0.1);
                 color: $status-active;
             }
             &.status-inactive {
-                background: rgba($status-inactive, 0.1);
+                background: rgba(var(--status-inactive-rgb), 0.1);
                 color: $status-inactive;
             }
             &.status-pending {
-                background: rgba($status-pending, 0.1);
+                background: rgba(var(--status-pending-rgb), 0.1);
                 color: $status-pending;
             }
             &.status-blocked {
-                background: rgba($status-rejected, 0.1);
+                background: rgba(var(--status-rejected-rgb), 0.1);
                 color: $status-rejected;
             }
         }
@@ -410,7 +410,7 @@
     border-radius: $btn-border-radius-lg;
     padding: $sp-xl;
     margin-bottom: $sp-xl;
-    box-shadow: 0 2px 8px rgba($color-black, 0.04);
+    box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.04);
 
     @include mobile {
         padding: $sp-lg;
@@ -577,7 +577,7 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: rgba($color-black, 0.5);
+    background: rgba(var(--color-black-rgb), 0.5);
     display: flex;
     align-items: center;
     justify-content: center;

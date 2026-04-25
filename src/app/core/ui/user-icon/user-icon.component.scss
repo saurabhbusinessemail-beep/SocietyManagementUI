@@ -16,7 +16,7 @@
         justify-content: center;
 
         &:hover, &.userMenuRouteLoaded {
-            background: rgba($color-header-text, 0.1);
+            background: rgba(var(--color-header-text-rgb), 0.1);
 
             app-icon {
                 color: $color-header-text;
@@ -45,7 +45,7 @@
     background: $color-white;
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
-    box-shadow: 0 10px 25px rgba($color-black, 0.1);
+    box-shadow: 0 10px 25px rgba(var(--color-black-rgb), 0.1);
     z-index: $z-user-dropdown;
     width: 320px;
     max-width: 90vw;
@@ -62,7 +62,7 @@
         display: flex;
         align-items: center;
         gap: $sp;
-        background: linear-gradient(135deg, $color-light-gray 0%, rgba($color-sky, 0.3) 100%);
+        background: linear-gradient(135deg, $color-light-gray 0%, rgba(var(--color-sky-rgb), 0.3) 100%);
 
         .user-avatar {
             width: 48px;
@@ -187,6 +187,51 @@
                     }
                 }
             }
+
+            &.theme-switcher-item {
+                padding: $sp-sm $sp-md;
+
+                .theme-switcher-header {
+                    font-size: $font-size-sm;
+                    color: $color-help-text;
+                    margin-bottom: $sp-xs;
+                }
+
+                .theme-circles-container {
+                    display: flex;
+                    gap: $sp;
+                    overflow-x: auto;
+                    padding-bottom: $sp-xs;
+                    
+                    /* Hide scrollbar for a cleaner look */
+                    &::-webkit-scrollbar {
+                        height: 4px;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        background: $color-border;
+                        border-radius: 4px;
+                    }
+
+                    .theme-circle {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        border: 2px solid transparent;
+                        cursor: pointer;
+                        flex-shrink: 0;
+                        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+                        &:hover {
+                            transform: scale(1.1);
+                        }
+
+                        &.active {
+                            box-shadow: 0 0 0 2px $color-white, 0 0 0 4px $color-border-highlight;
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -208,7 +253,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba($color-black, 0.3);
+    background: rgba(var(--color-black-rgb), 0.3);
     z-index: calc($z-user-dropdown - 1);
     display: none;
 

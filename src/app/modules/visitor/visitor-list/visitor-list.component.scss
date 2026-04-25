@@ -13,7 +13,7 @@
   background: $color-white;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba($color-black, 0.1);
+  box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
   
   label {
     display: block;
@@ -34,7 +34,7 @@
     &:focus {
       outline: none;
       border-color: $color-light-blue;
-      box-shadow: 0 0 0 3px rgba($color-light-blue, 0.2);
+      box-shadow: 0 0 0 3px rgba(var(--color-light-blue-rgb), 0.2);
     }
   }
 }
@@ -44,7 +44,7 @@
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 4px rgba($color-black, 0.1);
+  box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
   
   h2 {
     margin: 0;
@@ -77,7 +77,7 @@
     background: $color-white;
     border-radius: 12px;
     margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba($color-black, 0.1);
+    box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.1);
     overflow: hidden;
     border-left: 4px solid $color-light-blue;
     
@@ -210,13 +210,13 @@
   .desktop-card {
     background: $color-white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba($color-black, 0.1);
+    box-shadow: 0 4px 12px rgba(var(--color-black-rgb), 0.1);
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
     
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba($color-black, 0.15);
+      box-shadow: 0 6px 16px rgba(var(--color-black-rgb), 0.15);
     }
     
     .card-header {
@@ -323,7 +323,7 @@
     
     &:hover {
       background: $status-active;
-      box-shadow: 0 4px 12px rgba($status-active, 0.3);
+      box-shadow: 0 4px 12px rgba(var(--status-active-rgb), 0.3);
     }
   }
   
@@ -333,7 +333,7 @@
     
     &:hover {
       background: $status-rejected;
-      box-shadow: 0 4px 12px rgba($status-rejected, 0.3);
+      box-shadow: 0 4px 12px rgba(var(--status-rejected-rgb), 0.3);
     }
   }
 }

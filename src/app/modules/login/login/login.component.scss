@@ -2,7 +2,7 @@
 @import '../../../../styles/mixins';
 
 .first-div {
-    background: linear-gradient(to bottom, rgba($color-white, 0) 90%, $color-white 100%), url(../../../../assets/header-background.png);
+    background: linear-gradient(to bottom, rgba(var(--color-white-rgb), 0) 90%, $color-white 100%), url(../../../../assets/header-background.png);
     padding-bottom: 10%;
 
     .first-div-title {
@@ -61,12 +61,12 @@
             font-weight: 600;
 
             border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba($color-black, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(var(--color-black-rgb), 0.3);
 
             flex-shrink: 0;
 
             &:hover {
-                background-color: rgba($color-white, 0.9);
+                background-color: rgba(var(--color-white-rgb), 0.9);
             }
 
             &:disabled {
@@ -76,15 +76,15 @@
 
             &:focus-visible {
                 border-color: var(--ring);
-                box-shadow: 0 0 0 3px rgba($color-black, 0.5);
+                box-shadow: 0 0 0 3px rgba(var(--color-black-rgb), 0.5);
             }
 
             &[aria-invalid="true"] {
                 border-color: var(--destructive);
-                box-shadow: 0 0 0 3px rgba($status-rejected, 0.2);
+                box-shadow: 0 0 0 3px rgba(var(--status-rejected-rgb), 0.2);
 
                 .dark & {
-                    box-shadow: 0 0 0 3px rgba($status-rejected, 0.4);
+                    box-shadow: 0 0 0 3px rgba(var(--status-rejected-rgb), 0.4);
                 }
             }
 
@@ -114,10 +114,10 @@
             transition: all 0.2s ease;
             outline: none;
             cursor: pointer;
-            background: rgba($color-white, 0.1);
+            background: rgba(var(--color-white-rgb), 0.1);
 
             color: $color-white;
-            border: 1px solid rgba($color-white, 0.3);
+            border: 1px solid rgba(var(--color-white-rgb), 0.3);
 
             gap: 0.5rem;
             padding: 0.625rem 1.5rem;
@@ -128,7 +128,7 @@
             flex-shrink: 0;
 
             &:hover {
-                background: rgba($color-white, 0.1);
+                background: rgba(var(--color-white-rgb), 0.1);
                 color: $color-white;
             }
 
@@ -139,20 +139,20 @@
 
             &:focus-visible {
                 border-color: var(--ring);
-                box-shadow: 0 0 0 3px rgba($color-black, 0.5);
+                box-shadow: 0 0 0 3px rgba(var(--color-black-rgb), 0.5);
             }
 
             &[aria-invalid="true"] {
                 border-color: var(--destructive);
-                box-shadow: 0 0 0 3px rgba($status-rejected, 0.2);
+                box-shadow: 0 0 0 3px rgba(var(--status-rejected-rgb), 0.2);
 
                 .dark & {
-                    box-shadow: 0 0 0 3px rgba($status-rejected, 0.4);
+                    box-shadow: 0 0 0 3px rgba(var(--status-rejected-rgb), 0.4);
                 }
             }
 
             .dark &:hover {
-                background: rgba($color-white, 0.1);
+                background: rgba(var(--color-white-rgb), 0.1);
             }
 
             &:has(> svg) {
@@ -246,7 +246,7 @@
 .features-container {
     padding-top: 2rem;
     padding-bottom: 6rem;
-    background: linear-gradient(to top, rgba($color-white, 0) 90%, $color-white 100%), rgba($color-light-gray, 0.5);
+    background: linear-gradient(to top, rgba(var(--color-white-rgb), 0) 90%, $color-white 100%), rgba(var(--color-light-gray-rgb), 0.5);
     border-bottom: 1px solid $color-border;
 
     .feature-title-container {
@@ -300,12 +300,12 @@
     background-color: $color-white;
     border-radius: 1rem;
     padding: $sp-lg;
-    box-shadow: 0 1px 3px rgba($color-black, 0.1);
-    border: 1px solid rgba($color-border, 0.6);
+    box-shadow: 0 1px 3px rgba(var(--color-black-rgb), 0.1);
+    border: 1px solid rgba(var(--color-border-rgb), 0.6);
     transition: all 300ms ease;
 
     &:hover {
-        box-shadow: 0 4px 6px -1px rgba($color-black, 0.1), 0 2px 4px -1px rgba($color-black, 0.06);
+        box-shadow: 0 4px 6px -1px rgba(var(--color-black-rgb), 0.1), 0 2px 4px -1px rgba(var(--color-black-rgb), 0.06);
         border-color: $color-border;
 
         .icon-wrapper {
@@ -373,7 +373,7 @@
     background-color: $color-dark-blue;
     border-radius: 1rem;
     padding: $sp-lg;
-    box-shadow: 0 10px 15px -3px rgba($color-dark-blue, 0.2);
+    box-shadow: 0 10px 15px -3px rgba(var(--color-dark-blue-rgb), 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -407,7 +407,7 @@
 }
 
 .special-description {
-    color: rgba($color-white, 0.8);
+    color: rgba(var(--color-white-rgb), 0.8);
     font-size: $font-size-sm;
     margin-bottom: $sp-md;
 
@@ -421,7 +421,7 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 9999px;
-    background-color: rgba($color-white, 0.2);
+    background-color: rgba(var(--color-white-rgb), 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -445,47 +445,47 @@
 }
 
 .bg-blue-100 {
-    background-color: lighten($color-dark-blue, 60%);
+    background-color: color-mix(in srgb, var(--color-dark-blue), white 60%);
 }
 
 .bg-indigo-100 {
-    background-color: lighten($color-dark-blue, 40%);
+    background-color: color-mix(in srgb, var(--color-dark-blue), white 40%);
 }
 
 .bg-purple-100 {
-    background-color: lighten($status-yet, 40%);
+    background-color: color-mix(in srgb, var(--status-yet), white 40%);
 }
 
 .bg-rose-100 {
-    background-color: lighten($status-rejected, 35%);
+    background-color: color-mix(in srgb, var(--status-rejected), white 35%);
 }
 
 .bg-orange-100 {
-    background-color: lighten($status-pending, 35%);
+    background-color: color-mix(in srgb, var(--status-pending), white 35%);
 }
 
 .bg-amber-100 {
-    background-color: lighten($color-amber, 15%);
+    background-color: color-mix(in srgb, var(--color-amber), white 15%);
 }
 
 .bg-emerald-100 {
-    background-color: lighten($status-active, 45%);
+    background-color: color-mix(in srgb, var(--status-active), white 45%);
 }
 
 .bg-teal-100 {
-    background-color: lighten($status-approved, 55%);
+    background-color: color-mix(in srgb, var(--status-approved), white 55%);
 }
 
 .bg-cyan-100 {
-    background-color: lighten($color-sky, 25%);
+    background-color: color-mix(in srgb, var(--color-sky), white 25%);
 }
 
 .bg-sky-100 {
-    background-color: lighten($color-sky, 15%);
+    background-color: color-mix(in srgb, var(--color-sky), white 15%);
 }
 
 .bg-slate-100 {
-    background-color: lighten($color-note-gray, 55%);
+    background-color: color-mix(in srgb, var(--color-note-gray), white 55%);
 }
 
 .text-blue-600 {
@@ -493,11 +493,11 @@
 }
 
 .text-indigo-600 {
-    color: darken($color-dark-blue, 5%);
+    color: color-mix(in srgb, var(--color-dark-blue), black 5%);
 }
 
 .text-purple-600 {
-    color: darken($status-yet, 5%);
+    color: color-mix(in srgb, var(--status-yet), black 5%);
 }
 
 .text-rose-600 {
@@ -505,27 +505,27 @@
 }
 
 .text-orange-600 {
-    color: darken($status-pending, 15%);
+    color: color-mix(in srgb, var(--status-pending), black 15%);
 }
 
 .text-amber-600 {
-    color: darken($color-amber, 20%);
+    color: color-mix(in srgb, var(--color-amber), black 20%);
 }
 
 .text-emerald-600 {
-    color: darken($status-active, 10%);
+    color: color-mix(in srgb, var(--status-active), black 10%);
 }
 
 .text-teal-600 {
-    color: darken($status-approved, 5%);
+    color: color-mix(in srgb, var(--status-approved), black 5%);
 }
 
 .text-cyan-600 {
-    color: darken($color-sky, 40%);
+    color: color-mix(in srgb, var(--color-sky), black 40%);
 }
 
 .text-sky-600 {
-    color: darken($color-sky, 30%);
+    color: color-mix(in srgb, var(--color-sky), black 30%);
 }
 
 .text-slate-600 {
@@ -549,8 +549,8 @@
     inset: 0;
     opacity: 0.1;
     background-image:
-        linear-gradient(to right, rgba($color-white, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba($color-white, 0.1) 1px, transparent 1px);
+        linear-gradient(to right, rgba(var(--color-white-rgb), 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(var(--color-white-rgb), 0.1) 1px, transparent 1px);
     background-size: 24px 24px;
 
     @include mobile {
@@ -590,11 +590,11 @@
     }
 
     >* {
-        border-bottom: 1px solid rgba($color-border, 0.2);
+        border-bottom: 1px solid rgba(var(--color-border-rgb), 0.2);
 
         @include tablet {
             border-bottom: none;
-            border-right: 1px solid rgba($color-border, 0.2);
+            border-right: 1px solid rgba(var(--color-border-rgb), 0.2);
 
             &:last-child {
                 border-right: none;
@@ -768,12 +768,12 @@
     border-radius: 1rem;
     padding: 2rem;
     border: 1px solid $color-border;
-    box-shadow: 0 1px 3px rgba($color-black, 0.1);
+    box-shadow: 0 1px 3px rgba(var(--color-black-rgb), 0.1);
     position: relative;
     transition: border-color 0.3s ease;
 
     &:hover {
-        border-color: rgba($color-dark-blue, 0.5);
+        border-color: rgba(var(--color-dark-blue-rgb), 0.5);
 
         .step-badge {
             background-color: $color-dark-blue;
@@ -803,7 +803,7 @@
     top: -1.75rem;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1), 0 2px 4px -1px rgba($color-black, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(var(--color-black-rgb), 0.1), 0 2px 4px -1px rgba(var(--color-black-rgb), 0.06);
     transition: all 0.3s ease;
 
     @include mobile {
@@ -880,7 +880,7 @@
     z-index: -1;
 
     @media not all and (min-resolution: 0.001dpcm) {
-        background-color: rgba($color-dark-blue, 0.3);
+        background-color: rgba(var(--color-dark-blue-rgb), 0.3);
     }
 }
 
@@ -921,7 +921,7 @@
 
 .cta-description {
     font-size: 1.125rem;
-    color: rgba($color-white, 0.8);
+    color: rgba(var(--color-white-rgb), 0.8);
     margin-bottom: 2.5rem;
     max-width: 42rem;
     margin-left: auto;
@@ -966,7 +966,7 @@
     }
 
     &:focus {
-        outline: 2px solid rgba($color-white, 0.5);
+        outline: 2px solid rgba(var(--color-white-rgb), 0.5);
         outline-offset: 2px;
     }
 
@@ -978,28 +978,28 @@
 .btn-primary {
     background-color: $color-white;
     color: $color-dark-blue;
-    box-shadow: 0 10px 15px -3px rgba($color-black, 0.1), 0 4px 6px -2px rgba($color-black, 0.05);
+    box-shadow: 0 10px 15px -3px rgba(var(--color-black-rgb), 0.1), 0 4px 6px -2px rgba(var(--color-black-rgb), 0.05);
 
     &:hover {
-        background-color: darken($color-white, 3%);
+        background-color: color-mix(in srgb, var(--color-white), black 3%);
     }
 
     &:active {
-        background-color: darken($color-white, 6%);
+        background-color: color-mix(in srgb, var(--color-white), black 6%);
     }
 }
 
 .btn-secondary {
     background-color: transparent;
     color: $color-white;
-    border: 2px solid rgba($color-white, 0.3);
+    border: 2px solid rgba(var(--color-white-rgb), 0.3);
 
     &:hover {
-        background-color: rgba($color-white, 0.1);
+        background-color: rgba(var(--color-white-rgb), 0.1);
     }
 
     &:active {
-        background-color: rgba($color-white, 0.15);
+        background-color: rgba(var(--color-white-rgb), 0.15);
     }
 }
 
@@ -1086,9 +1086,9 @@
     border-radius: 9999px;
     font-size: $font-size-sm;
     font-weight: 500;
-    background-color: rgba($color-dark-blue, 0.1);
+    background-color: rgba(var(--color-dark-blue-rgb), 0.1);
     color: $color-dark-blue;
-    border: 1px solid rgba($color-dark-blue, 0.2);
+    border: 1px solid rgba(var(--color-dark-blue-rgb), 0.2);
     margin-bottom: $sp-md;
 
     @include mobile {
@@ -1152,12 +1152,12 @@
     border-width: 1px;
     background-color: $color-white;
     padding: $sp-xl;
-    box-shadow: 0 1px 3px rgba($color-black, 0.1);
+    box-shadow: 0 1px 3px rgba(var(--color-black-rgb), 0.1);
     transition: all 300ms ease;
     overflow: hidden;
 
     &:hover {
-        box-shadow: 0 20px 25px -5px rgba($color-black, 0.1), 0 10px 10px -5px rgba($color-black, 0.04);
+        box-shadow: 0 20px 25px -5px rgba(var(--color-black-rgb), 0.1), 0 10px 10px -5px rgba(var(--color-black-rgb), 0.04);
         transform: translateY(-0.25rem);
     }
 
@@ -1167,15 +1167,15 @@
 }
 
 .owner-card {
-    border-color: lighten($color-sky, 15%);
+    border-color: color-mix(in srgb, var(--color-sky), white 15%);
 }
 
 .tenant-card {
-    border-color: lighten($color-dark-blue, 45%);
+    border-color: color-mix(in srgb, var(--color-dark-blue), white 45%);
 }
 
 .security-card {
-    border-color: lighten($status-active, 45%);
+    border-color: color-mix(in srgb, var(--status-active), white 45%);
 }
 
 .card-top-bar {
@@ -1189,15 +1189,15 @@
 }
 
 .gradient-bar-blue {
-    background: linear-gradient(to right, $color-sky, darken($color-sky, 15%));
+    background: linear-gradient(to right, $color-sky, color-mix(in srgb, var(--color-sky), black 15%));
 }
 
 .gradient-bar-violet {
-    background: linear-gradient(to right, lighten($color-dark-blue, 30%), $color-dark-blue);
+    background: linear-gradient(to right, color-mix(in srgb, var(--color-dark-blue), white 30%), $color-dark-blue);
 }
 
 .gradient-bar-emerald {
-    background: linear-gradient(to right, lighten($status-active, 20%), $status-active);
+    background: linear-gradient(to right, color-mix(in srgb, var(--status-active), white 20%), $status-active);
 }
 
 .card-badge {
@@ -1210,18 +1210,18 @@
 }
 
 .badge-blue {
-    background-color: rgba($color-sky, 0.15);
-    color: darken($color-sky, 30%);
+    background-color: rgba(var(--color-sky-rgb), 0.15);
+    color: color-mix(in srgb, var(--color-sky), black 30%);
 }
 
 .badge-violet {
-    background-color: rgba($color-dark-blue, 0.1);
+    background-color: rgba(var(--color-dark-blue-rgb), 0.1);
     color: $color-dark-blue;
 }
 
 .badge-emerald {
-    background-color: rgba($status-active, 0.1);
-    color: darken($status-active, 15%);
+    background-color: rgba(var(--status-active-rgb), 0.1);
+    color: color-mix(in srgb, var(--status-active), black 15%);
 }
 
 .card-icon {
@@ -1251,19 +1251,19 @@
 }
 
 .icon-wrapper-blue {
-    background-color: rgba($color-sky, 0.1);
+    background-color: rgba(var(--color-sky-rgb), 0.1);
 }
 
 .icon-wrapper-violet {
-    background-color: rgba($color-dark-blue, 0.05);
+    background-color: rgba(var(--color-dark-blue-rgb), 0.05);
 }
 
 .icon-wrapper-emerald {
-    background-color: rgba($status-active, 0.05);
+    background-color: rgba(var(--status-active-rgb), 0.05);
 }
 
 .icon-blue {
-    color: darken($color-sky, 20%);
+    color: color-mix(in srgb, var(--color-sky), black 20%);
 }
 
 .icon-violet {
@@ -1271,7 +1271,7 @@
 }
 
 .icon-emerald {
-    color: darken($status-active, 10%);
+    color: color-mix(in srgb, var(--status-active), black 10%);
 }
 
 .card-title {
@@ -1333,15 +1333,15 @@
 }
 
 .dot-gradient-blue {
-    background: linear-gradient(to bottom right, $color-sky, darken($color-sky, 15%));
+    background: linear-gradient(to bottom right, $color-sky, color-mix(in srgb, var(--color-sky), black 15%));
 }
 
 .dot-gradient-violet {
-    background: linear-gradient(to bottom right, lighten($color-dark-blue, 30%), $color-dark-blue);
+    background: linear-gradient(to bottom right, color-mix(in srgb, var(--color-dark-blue), white 30%), $color-dark-blue);
 }
 
 .dot-gradient-emerald {
-    background: linear-gradient(to bottom right, lighten($status-active, 20%), $status-active);
+    background: linear-gradient(to bottom right, color-mix(in srgb, var(--status-active), white 20%), $status-active);
 }
 
 .card-button {
@@ -1357,11 +1357,11 @@
     color: $color-white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(var(--color-black-rgb), 0.1);
     transition: all 200ms ease;
 
     &:hover {
-        box-shadow: 0 10px 15px -3px rgba($color-black, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(var(--color-black-rgb), 0.1);
         opacity: 0.9;
 
         .button-arrow {
@@ -1375,15 +1375,15 @@
 }
 
 .button-gradient-blue {
-    background: linear-gradient(to right, $color-sky, darken($color-sky, 15%));
+    background: linear-gradient(to right, $color-sky, color-mix(in srgb, var(--color-sky), black 15%));
 }
 
 .button-gradient-violet {
-    background: linear-gradient(to right, lighten($color-dark-blue, 30%), $color-dark-blue);
+    background: linear-gradient(to right, color-mix(in srgb, var(--color-dark-blue), white 30%), $color-dark-blue);
 }
 
 .button-gradient-emerald {
-    background: linear-gradient(to right, lighten($status-active, 20%), $status-active);
+    background: linear-gradient(to right, color-mix(in srgb, var(--status-active), white 20%), $status-active);
 }
 
 .button-arrow {
@@ -1438,20 +1438,20 @@
         &.demo-link {
             background-color: $color-sky;
             color: $color-dark-blue;
-            border-color: lighten($color-dark-blue, 50%);
+            border-color: color-mix(in srgb, var(--color-dark-blue), white 50%);
 
             &:hover {
-                background-color: darken($color-sky, 5%);
+                background-color: color-mix(in srgb, var(--color-sky), black 5%);
             }
         }
 
         &.register-link {
-            background-color: rgba($btn-bg-primary, 0.1);
+            background-color: rgba(var(--color-dark-blue-rgb), 0.1);
             color: $btn-bg-primary;
-            border-color: rgba($btn-bg-primary, 0.3);
+            border-color: rgba(var(--color-dark-blue-rgb), 0.3);
 
             &:hover {
-                background-color: rgba($btn-bg-primary, 0.15);
+                background-color: rgba(var(--color-dark-blue-rgb), 0.15);
             }
         }
 
@@ -1487,10 +1487,10 @@
         //     font-weight: 600;
         //     background-color: $btn-bg-primary;
         //     color: $btn-text-primary;
-        //     box-shadow: 0 2px 4px rgba($color-black, 0.1);
+        //     box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
 
         //     &:hover {
-        //         background-color: darken($btn-bg-primary, 5%);
+        //         background-color: color-mix(in srgb, var(--color-dark-blue), black 5%);
         //     }
         // }
     }

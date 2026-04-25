@@ -4,12 +4,12 @@
 .complaint-card {
     background-color: $color-white;
     border-radius: $btn-border-radius-lg;
-    box-shadow: 0 4px 6px -1px rgba($color-black, 0.1), 0 2px 4px -1px rgba($color-black, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(var(--color-black-rgb), 0.1), 0 2px 4px -1px rgba(var(--color-black-rgb), 0.06);
     transition: all 0.3s ease;
     overflow: hidden;
 
     &:hover {
-        box-shadow: 0 20px 25px -5px rgba($color-black, 0.1), 0 10px 10px -5px rgba($color-black, 0.04);
+        box-shadow: 0 20px 25px -5px rgba(var(--color-black-rgb), 0.1), 0 10px 10px -5px rgba(var(--color-black-rgb), 0.04);
         transform: translateY(-2px);
     }
 
@@ -87,36 +87,36 @@
 
                 // Status badges with icon + semi-transparent background
                 .status-badge {
-                    background-color: rgba($color-dark-blue, 0.125);
+                    background-color: rgba(var(--color-dark-blue-rgb), 0.125);
                     color: $color-dark-blue;
 
                     &.submitted {
-                        background-color: rgba($color-dark-blue, 0.125);
+                        background-color: rgba(var(--color-dark-blue-rgb), 0.125);
                         color: $color-dark-blue;
                     }
 
                     &.approved {
-                        background-color: rgba($status-active, 0.125);
+                        background-color: rgba(var(--status-active-rgb), 0.125);
                         color: $status-active;
                     }
 
                     &.in-progress {
-                        background-color: rgba($color-amber, 0.125);
+                        background-color: rgba(var(--color-amber-rgb), 0.125);
                         color: $color-amber;
                     }
 
                     &.resolved {
-                        background-color: rgba($status-yet, 0.125);
+                        background-color: rgba(var(--status-yet-rgb), 0.125);
                         color: $status-yet;
                     }
 
                     &.closed {
-                        background-color: rgba($color-note-gray, 0.125);
+                        background-color: rgba(var(--color-note-gray-rgb), 0.125);
                         color: $color-help-text;
                     }
 
                     &.rejected {
-                        background-color: rgba($status-rejected, 0.125);
+                        background-color: rgba(var(--status-rejected-rgb), 0.125);
                         color: $status-rejected;
                     }
                 }
@@ -142,7 +142,7 @@
                 transition: background-color 0.2s;
 
                 &:hover {
-                    background-color: rgba($color-dark-blue, 0.1);
+                    background-color: rgba(var(--color-dark-blue-rgb), 0.1);
                 }
             }
         }
@@ -248,7 +248,7 @@
 
             &:hover {
                 transform: scale(1.05);
-                box-shadow: 0 10px 15px -3px rgba($color-black, 0.1);
+                box-shadow: 0 10px 15px -3px rgba(var(--color-black-rgb), 0.1);
             }
 
             @include tablet {
@@ -294,7 +294,7 @@
 
             &:hover {
                 background-color: $color-border; // red-100
-                box-shadow: 0 10px 15px -3px rgba($color-black, 0.1);
+                box-shadow: 0 10px 15px -3px rgba(var(--color-black-rgb), 0.1);
             }
 
             @include tablet {

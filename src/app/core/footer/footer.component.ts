@@ -18,7 +18,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   topTwoMenus: IMenu[] = [];
 
-  constructor(private menuService: MenuService, private router: Router) { }
+  constructor(public menuService: MenuService, private router: Router) { }
 
   ngOnInit(): void {
     this.menuService.filteredMenus

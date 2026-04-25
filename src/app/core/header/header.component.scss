@@ -55,7 +55,7 @@
         align-items: center;
         font-weight: 500;
         letter-spacing: 0.5px;
-        color: rgba($color-header-text, 0.8);
+        color: rgba(var(--color-header-text-rgb), 0.8);
 
         .n-bold {
             font-weight: 900;
@@ -100,7 +100,7 @@
         }
 
         &:hover {
-            background-color: rgba($color-header-text, 0.1);
+            background-color: rgba(var(--color-header-text-rgb), 0.1);
 
             svg {
                 color: $color-header-text;
@@ -109,7 +109,7 @@
 
         &:focus {
             outline: none;
-            box-shadow: 0 0 0 2px rgba($color-header-text, 0.5);
+            box-shadow: 0 0 0 2px rgba(var(--color-header-text-rgb), 0.5);
         }
     }
 
@@ -191,38 +191,38 @@
         background:
             /* 🔷 BLUE OUTER GLOW */
             conic-gradient(from 20deg at 25% 30%,
-                rgba($color-light-blue, 0.18),
+                rgba(var(--color-light-blue-rgb), 0.18),
                 transparent 60%),
 
             conic-gradient(from -40deg at 75% 25%,
-                rgba($color-light-blue, 0.15),
+                rgba(var(--color-light-blue-rgb), 0.15),
                 transparent 70%),
 
             /* ⚪ WHITE CORE (sharp highlight) */
             conic-gradient(from 20deg at 25% 30%,
-                rgba($color-light-blue, 0.35),
+                rgba(var(--color-light-blue-rgb), 0.35),
                 transparent 35%),
 
             conic-gradient(from -40deg at 75% 25%,
-                rgba($color-light-blue, 0.30),
+                rgba(var(--color-light-blue-rgb), 0.30),
                 transparent 40%),
 
             conic-gradient(from 60deg at 60% 65%,
-                rgba($color-light-blue, 0.25),
+                rgba(var(--color-light-blue-rgb), 0.25),
                 transparent 40%);
 
         /* blur only softens edges, core still visible */
         filter: blur(5px);
 
         mask-image: linear-gradient(to bottom,
-                rgba($color-black, 0.95) 0%,
-                rgba($color-black, 0.75) 65%,
-                rgba($color-black, 0.35) 90%,
+                rgba(var(--color-black-rgb), 0.95) 0%,
+                rgba(var(--color-black-rgb), 0.75) 65%,
+                rgba(var(--color-black-rgb), 0.35) 90%,
                 transparent 100%);
         -webkit-mask-image: linear-gradient(to bottom,
-                rgba($color-black, 0.95) 0%,
-                rgba($color-black, 0.75) 65%,
-                rgba($color-black, 0.35) 90%,
+                rgba(var(--color-black-rgb), 0.95) 0%,
+                rgba(var(--color-black-rgb), 0.75) 65%,
+                rgba(var(--color-black-rgb), 0.35) 90%,
                 transparent 100%);
 
         animation: moveFlares 30s ease-in-out infinite alternate;
@@ -247,26 +247,26 @@
         background:
             linear-gradient(120deg,
                 transparent 42%,
-                rgba($color-light-blue, 0.28) 50%,
+                rgba(var(--color-light-blue-rgb), 0.28) 50%,
                 transparent 58%),
 
             linear-gradient(-120deg,
                 transparent 35%,
-                rgba($color-sky, 0.18) 50%,
+                rgba(var(--color-sky-rgb), 0.18) 50%,
                 transparent 65%);
 
         /* slight blur so it blends but keeps core */
         filter: blur(3px);
 
         mask-image: linear-gradient(to bottom,
-                rgba($color-black, 0.95) 0%,
-                rgba($color-black, 0.7) 70%,
-                rgba($color-black, 0.3) 90%,
+                rgba(var(--color-black-rgb), 0.95) 0%,
+                rgba(var(--color-black-rgb), 0.7) 70%,
+                rgba(var(--color-black-rgb), 0.3) 90%,
                 transparent 100%);
         -webkit-mask-image: linear-gradient(to bottom,
-                rgba($color-black, 0.95) 0%,
-                rgba($color-black, 0.7) 70%,
-                rgba($color-black, 0.3) 90%,
+                rgba(var(--color-black-rgb), 0.95) 0%,
+                rgba(var(--color-black-rgb), 0.7) 70%,
+                rgba(var(--color-black-rgb), 0.3) 90%,
                 transparent 100%);
 
         animation: moveFlaresAlt 36s ease-in-out infinite alternate;

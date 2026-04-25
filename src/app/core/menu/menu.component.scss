@@ -13,8 +13,8 @@
             width: $menu-width-expanded;
             max-width: 100vw;
 
-            background: url("../../../assets/header-background.png");
-            color: $color-white;
+            background: $color-header-footer;
+            color: $color-header-text;
             // height: 100vh;
             padding: $sp-lg;
             position: relative;
@@ -26,13 +26,13 @@
         }
 
         .brand-text {
-            color: $color-white;
+            color: $color-header-text;
             font-weight: 700;
             margin-left: $sp-sm;
         }
 
         .menu-item div {
-            color: $color-white;
+            color: $color-header-text;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -41,7 +41,7 @@
         }
 
         .menu-item a:hover {
-            background: rgba($color-white, 0.04);
+            background: rgba(var(--color-white-rgb), 0.04);
         }
 
         .icon-box {
@@ -58,7 +58,7 @@
         width: calc($menu-width-icons + env(scrollbar-width));
 
         .menu-inner {
-            background: url("../../../assets/header-background.png");
+            background: $color-header-footer;
             padding: $sp-sm;
             position: relative;
             left: 0;
@@ -77,8 +77,8 @@
             // when open, show overlay panel
             .menu-inner {
                 width: $menu-width-expanded;
-                background: $color-dark-blue;
-                color: $color-white;
+                background: $color-header-footer;
+                color: $color-header-text;
                 display: flex;
                 flex-direction: column;
                 max-height: 100vh;
@@ -106,7 +106,7 @@
     .backdrop {
         position: fixed;
         inset: 0;
-        background: rgba($color-black, 0.4);
+        background: rgba(var(--color-black-rgb), 0.4);
         display: none;
     }
 

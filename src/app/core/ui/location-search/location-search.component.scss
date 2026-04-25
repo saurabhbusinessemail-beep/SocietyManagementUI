@@ -74,7 +74,7 @@
 
     &:focus-within {
         border-color: $color-dark-blue;
-        box-shadow: 0 0 0 2px rgba($color-dark-blue, 0.15);
+        box-shadow: 0 0 0 2px rgba(var(--color-dark-blue-rgb), 0.15);
     }
 
     &[aria-disabled='true'] {

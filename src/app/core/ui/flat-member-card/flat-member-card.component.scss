@@ -7,7 +7,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
     padding: $sp-md;
-    box-shadow: 0 2px 6px rgba($color-black, 0.05);
+    box-shadow: 0 2px 6px rgba(var(--color-black-rgb), 0.05);
 
     @include mobile {
         padding: $sp;

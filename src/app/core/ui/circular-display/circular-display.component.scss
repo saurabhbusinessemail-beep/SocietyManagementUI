@@ -14,32 +14,32 @@
     box-shadow: 4px 4px 23px 2px $color-sky;
 
     // Default container styles
-    background-color: rgba($color-white, 0.6);
+    background-color: rgba(var(--color-white-rgb), 0.6);
     backdrop-filter: blur(4px);
 
     &:hover {
         transform: translateY(-2px);
-        background-color: rgba($color-white, 0.9);
-        box-shadow: 0 4px 12px rgba($color-black, 0.1);
+        background-color: rgba(var(--color-white-rgb), 0.9);
+        box-shadow: 0 4px 12px rgba(var(--color-black-rgb), 0.1);
         -webkit-box-shadow: 4px 4px 23px 2px $color-sky;
         box-shadow: 4px 4px 23px 2px $color-sky;
     }
 
     // Bordered variant
     &.container-bordered {
-        border: 1px solid rgba($color-dark-blue, 0.2);
+        border: 1px solid rgba(var(--color-dark-blue-rgb), 0.2);
 
         &:hover {
-            border-color: rgba($color-dark-blue, 0.5);
+            border-color: rgba(var(--color-dark-blue-rgb), 0.5);
         }
     }
 
     // Shadow variant
     &.container-shadow {
-        box-shadow: 0 2px 8px rgba($color-black, 0.05);
+        box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.05);
 
         &:hover {
-            box-shadow: 0 8px 24px rgba($color-black, 0.12);
+            box-shadow: 0 8px 24px rgba(var(--color-black-rgb), 0.12);
         }
     }
 
@@ -62,7 +62,7 @@
     flex-shrink: 0;
 
     // Background gradient fallback (will be overridden by inline style if provided)
-    background: linear-gradient(135deg, rgba($color-dark-blue, 0.15) 0%, rgba($color-dark-blue, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(var(--color-dark-blue-rgb), 0.15) 0%, rgba(var(--color-dark-blue-rgb), 0.05) 100%);
 
     // Ensure content is centered
     >* {
@@ -77,7 +77,7 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         line-height: 1;
-        text-shadow: 0 1px 1px rgba($color-black, 0.1);
+        text-shadow: 0 1px 1px rgba(var(--color-black-rgb), 0.1);
     }
 
     // SVG styling for projected content
@@ -170,7 +170,7 @@
 
 // Dark theme colors for the background gradient
 .circular-display.dark-bg {
-    background: linear-gradient(135deg, rgba($color-black, 0.6) 0%, rgba($color-black, 0.3) 100%);
+    background: linear-gradient(135deg, rgba(var(--color-black-rgb), 0.6) 0%, rgba(var(--color-black-rgb), 0.3) 100%);
 }
 
 .circular-display.primary-bg {

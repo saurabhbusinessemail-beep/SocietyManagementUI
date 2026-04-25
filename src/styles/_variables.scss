@@ -8,39 +8,39 @@ $break-mobile: 480px;
 
 // ----- Colors -----
 // Primary Theme (Sleek Indigo)
-$color-sky: #e0e7ff; // light accent
-$color-dark-blue: #4f46e5; // primary interactive color
-$color-light-blue: #818cf8; // primary hover/light
-$color-header-footer: #312e81; // dark indigo for light logo
-$color-header-text: #ffffff; // text color for header
-$color-white: #ffffff;
-$color-black: #0f172a; // slate-900 (softer text)
-$color-light-gray: #f8fafc; // slate-50 (app background)
-$color-note-gray: #64748b; // slate-500
-$color-border: #e2e8f0; // slate-200
-$color-border-highlight: #4f46e5;
-$color-cancel: #f1f5f9; // slate-100
-$color-help-text: #94a3b8; // slate-400
-$color-disable-background: #f1f5f9;
-$color-amber: #f59e0b;
+$color-sky: var(--color-sky); // light accent
+$color-dark-blue: var(--color-dark-blue); // primary interactive color
+$color-light-blue: var(--color-light-blue); // primary hover/light
+$color-header-footer: var(--color-header-footer); // dark indigo for light logo
+$color-header-text: var(--color-header-text); // text color for header
+$color-white: var(--color-white);
+$color-black: var(--color-black); // slate-900 (softer text)
+$color-light-gray: var(--color-light-gray); // slate-50 (app background)
+$color-note-gray: var(--color-note-gray); // slate-500
+$color-border: var(--color-border); // slate-200
+$color-border-highlight: var(--color-border-highlight);
+$color-cancel: var(--color-cancel); // slate-100
+$color-help-text: var(--color-help-text); // slate-400
+$color-disable-background: var(--color-disable-background);
+$color-amber: var(--color-amber);
 
 // Errors
-$color-error-dark: #a60000;
-$color-error-light: #ffd6d6;
-$color-error-header: #ff4d4d;
+$color-error-dark: var(--color-error-dark);
+$color-error-light: var(--color-error-light);
+$color-error-header: var(--color-error-header);
 
 // Status colors
-$status-active: #10b981; // emerald-500
-$status-inactive: #94a3b8; // slate-400
-$status-approved: #059669; // emerald-600
-$status-rejected: #ef4444; // red-500
-$status-pending: #f59e0b; // amber-500
-$status-expired: #cbd5e1; // slate-300
-$status-purchased: #4f46e5; // indigo-600
-$status-yet: #8b5cf6; // violet-500
+$status-active: var(--status-active); // emerald-500
+$status-inactive: var(--status-inactive); // slate-400
+$status-approved: var(--status-approved); // emerald-600
+$status-rejected: var(--status-rejected); // red-500
+$status-pending: var(--status-pending); // amber-500
+$status-expired: var(--status-expired); // slate-300
+$status-purchased: var(--status-purchased); // indigo-600
+$status-yet: var(--status-yet); // violet-500
 
 // Mandatory star
-$color-mandatory: #d12b2b;
+$color-mandatory: var(--color-mandatory);
 
 // Icon color for dark or light backgrounds
 $icon-on-dark: $color-white;

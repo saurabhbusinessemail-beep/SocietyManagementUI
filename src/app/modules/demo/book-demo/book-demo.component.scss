@@ -4,7 +4,7 @@
 .demo-container {
     background-color: $color-white;
     border-radius: $btn-border-radius-lg;
-    box-shadow: 0 10px 25px -5px rgba($color-black, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(var(--color-black-rgb), 0.1);
     border: 1px solid $color-border;
     overflow: hidden;
 }
@@ -182,7 +182,7 @@
     &:focus {
         outline: none;
         border-color: $btn-bg-primary;
-        box-shadow: 0 0 0 3px rgba($btn-bg-primary, 0.1);
+        box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.1);
     }
 
     &.field-error {
@@ -190,7 +190,7 @@
 
         &:focus {
             border-color: $status-rejected;
-            box-shadow: 0 0 0 3px rgba($status-rejected, 0.1);
+            box-shadow: 0 0 0 3px rgba(var(--status-rejected-rgb), 0.1);
         }
     }
 }
@@ -218,7 +218,7 @@
     &:focus {
         outline: none;
         border-color: $btn-bg-primary;
-        box-shadow: 0 0 0 3px rgba($btn-bg-primary, 0.1);
+        box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.1);
     }
 }
 
@@ -258,7 +258,7 @@
 
     &:hover {
         border-color: $btn-bg-primary;
-        background-color: rgba($btn-bg-primary, 0.05);
+        background-color: rgba(var(--color-dark-blue-rgb), 0.05);
     }
 
     &.time-slot-selected {
@@ -286,7 +286,7 @@
 
     &:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba($btn-bg-primary, 0.3);
+        box-shadow: 0 4px 12px rgba(var(--color-dark-blue-rgb), 0.3);
     }
 
     &:disabled {
@@ -390,8 +390,8 @@
     align-items: center;
     gap: $sp-xs;
     padding: $sp-sm;
-    background-color: rgba($status-rejected, 0.1);
-    border: 1px solid rgba($status-rejected, 0.2);
+    background-color: rgba(var(--status-rejected-rgb), 0.1);
+    border: 1px solid rgba(var(--status-rejected-rgb), 0.2);
     border-radius: $input-border-radius;
     color: $status-rejected;
     font-size: $font-size-xs;

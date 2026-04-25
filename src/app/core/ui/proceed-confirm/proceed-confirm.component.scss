@@ -86,7 +86,7 @@
             color: $color-black;
 
             &:hover {
-                background-color: darken($color-light-gray, 10%);
+                background-color: color-mix(in srgb, var(--color-light-gray), black 10%);
             }
         }
 
@@ -95,7 +95,7 @@
             color: $btn-text-primary;
 
             &:hover {
-                background-color: darken($btn-bg-primary, 10%);
+                background-color: color-mix(in srgb, var(--color-dark-blue), black 10%);
             }
         }
     }

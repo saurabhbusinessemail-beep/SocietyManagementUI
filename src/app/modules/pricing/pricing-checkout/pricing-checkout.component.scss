@@ -17,7 +17,7 @@
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
     margin-bottom: $sp-lg;
-    box-shadow: 0 2px 4px rgba($color-black, 0.1);
+    box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
 
     @include mobile {
         padding: $sp;
@@ -93,7 +93,7 @@
     padding: $sp-xs;
 
     &:hover {
-        color: darken($color-dark-blue, 10%);
+        color: color-mix(in srgb, var(--color-dark-blue), black 10%);
     }
 }
 
@@ -164,7 +164,7 @@
     flex-shrink: 0;
 
     &.included {
-        background-color: rgba($status-active, 0.1);
+        background-color: rgba(var(--status-active-rgb), 0.1);
     }
 }
 
@@ -282,7 +282,7 @@
         color: $color-white;
 
         &:hover:not(:disabled) {
-            background-color: darken($color-dark-blue, 10%);
+            background-color: color-mix(in srgb, var(--color-dark-blue), black 10%);
         }
     }
 
@@ -291,7 +291,7 @@
         color: $color-black;
 
         &:hover:not(:disabled) {
-            background-color: darken($color-light-gray, 10%);
+            background-color: color-mix(in srgb, var(--color-light-gray), black 10%);
         }
     }
 }
@@ -345,7 +345,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba($color-black, 0.5);
+        background-color: rgba(var(--color-black-rgb), 0.5);
     }
 
     .modal-content {
@@ -357,7 +357,7 @@
         max-height: 90vh;
         overflow-y: auto;
         z-index: 1;
-        box-shadow: 0 20px 25px -5px rgba($color-black, 0.1), 0 10px 10px -5px rgba($color-black, 0.04);
+        box-shadow: 0 20px 25px -5px rgba(var(--color-black-rgb), 0.1), 0 10px 10px -5px rgba(var(--color-black-rgb), 0.04);
 
         @include mobile {
             width: 95%;
@@ -445,14 +445,14 @@
         &:hover {
             opacity: 0.9;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba($btn-bg-primary, 0.3);
+            box-shadow: 0 4px 8px rgba(var(--color-dark-blue-rgb), 0.3);
         }
 
         &.cancel {
             background-color: $status-rejected;
 
             &:hover {
-                box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+                box-shadow: 0 4px 8px rgba(var(--status-rejected-rgb), 0.3);
             }
         }
 
@@ -460,7 +460,7 @@
             background-color: $status-rejected;
 
             &:hover {
-                box-shadow: 0 4px 8px rgba($status-rejected, 0.3);
+                box-shadow: 0 4px 8px rgba(var(--status-rejected-rgb), 0.3);
             }
         }
     }
@@ -504,7 +504,7 @@
     }
 
     &.no-society {
-        background-color: rgba($status-rejected, 0.1);
+        background-color: rgba(var(--status-rejected-rgb), 0.1);
         border: 1px solid $status-rejected;
 
         p {
@@ -514,7 +514,7 @@
     }
 
     &.login-required {
-        background-color: rgba($color-amber, 0.1);
+        background-color: rgba(var(--color-amber-rgb), 0.1);
         border: 1px solid $color-amber;
         display: flex;
         align-items: center;
@@ -551,7 +551,7 @@
 }
 
 .change-plan-summary {
-    background-color: rgba($color-amber, 0.05);
+    background-color: rgba(var(--color-amber-rgb), 0.05);
     border: 1px solid $color-amber;
     border-radius: $btn-border-radius-md;
     padding: $sp;
@@ -700,7 +700,7 @@
     color: $color-white;
 
     &:hover:not(:disabled) {
-        background-color: darken($status-rejected, 10%);
+        background-color: color-mix(in srgb, var(--status-rejected), black 10%);
     }
 
     @include mobile {
@@ -742,12 +742,12 @@
     &:hover {
         border-color: $color-dark-blue;
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(var(--color-black-rgb), 0.1);
     }
 
     &.selected {
         border-color: $color-dark-blue;
-        background-color: rgba($color-dark-blue, 0.05);
+        background-color: rgba(var(--color-dark-blue-rgb), 0.05);
     }
 
     .duration-value {

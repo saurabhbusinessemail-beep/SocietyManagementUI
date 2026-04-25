@@ -127,7 +127,7 @@
 
     // Gradient 11: Button Primary Gradient
     &.gradient-button-primary {
-        background: linear-gradient(to right, $color-dark-blue, lighten($color-dark-blue, 15%), $color-dark-blue);
+        background: linear-gradient(to right, $color-dark-blue, color-mix(in srgb, var(--color-dark-blue), white 15%), $color-dark-blue);
 
         .form-title {
             color: $color-white; // Dark blue background needs white text
@@ -151,7 +151,7 @@
 
     // Gradient 13: Metallic Blue
     &.gradient-metallic-blue {
-        background: linear-gradient(145deg, $color-dark-blue, lighten($color-dark-blue, 20%), $color-dark-blue);
+        background: linear-gradient(145deg, $color-dark-blue, color-mix(in srgb, var(--color-dark-blue), white 20%), $color-dark-blue);
 
         .form-title {
             color: $color-white; // Dark blue variations need white
@@ -182,9 +182,9 @@
     // Gradient 16: Pastel Dreams
     &.gradient-pastel-dreams {
         background: linear-gradient(90deg,
-                lighten($color-sky, 10%) 0%,
+                color-mix(in srgb, var(--color-sky), white 10%) 0%,
                 $color-light-gray 50%,
-                lighten($status-yet, 20%) 100%);
+                color-mix(in srgb, var(--status-yet), white 20%) 100%);
 
         .form-title {
             color: $color-dark-blue; // Pastel colors need dark text
@@ -193,7 +193,7 @@
 
     // Gradient 17: Corporate Professional
     &.gradient-corporate {
-        background: linear-gradient(135deg, $color-dark-blue, darken($color-dark-blue, 10%), $color-dark-blue);
+        background: linear-gradient(135deg, $color-dark-blue, color-mix(in srgb, var(--color-dark-blue), black 10%), $color-dark-blue);
 
         .form-title {
             color: $color-white; // Dark blue variations need white
@@ -263,7 +263,7 @@
 
     // Gradient 24: Deep Space
     &.gradient-deep-space {
-        background: radial-gradient(circle at 30% 50%, $color-dark-blue, darken($color-dark-blue, 15%), $color-black);
+        background: radial-gradient(circle at 30% 50%, $color-dark-blue, color-mix(in srgb, var(--color-dark-blue), black 15%), $color-black);
 
         .form-title {
             color: $color-white; // Very dark background needs white
@@ -290,11 +290,11 @@
             pointer-events: none;
 
             background:
-                radial-gradient(circle at 12% 22%, rgba($color-white, 0.45) 0px, rgba($color-white, 0.35) 60px, transparent 12px),
-                radial-gradient(circle at 82% 18%, rgba($color-white, 0.30) 0px, rgba($color-white, 0.25) 90px, transparent 16px),
-                radial-gradient(circle at 70% 75%, rgba($color-sky, 0.45) 0px, rgba($color-sky, 0.35) 110px, transparent 20px),
-                radial-gradient(circle at 25% 80%, rgba($color-light-gray, 0.50) 0px, rgba($color-light-gray, 0.40) 13px, transparent 220px),
-                radial-gradient(circle at 55% 40%, rgba($color-white, 0.25) 0px, rgba($color-white, 0.18) 70px, transparent 15px);
+                radial-gradient(circle at 12% 22%, rgba(var(--color-white-rgb), 0.45) 0px, rgba(var(--color-white-rgb), 0.35) 60px, transparent 12px),
+                radial-gradient(circle at 82% 18%, rgba(var(--color-white-rgb), 0.30) 0px, rgba(var(--color-white-rgb), 0.25) 90px, transparent 16px),
+                radial-gradient(circle at 70% 75%, rgba(var(--color-sky-rgb), 0.45) 0px, rgba(var(--color-sky-rgb), 0.35) 110px, transparent 20px),
+                radial-gradient(circle at 25% 80%, rgba(var(--color-light-gray-rgb), 0.50) 0px, rgba(var(--color-light-gray-rgb), 0.40) 13px, transparent 220px),
+                radial-gradient(circle at 55% 40%, rgba(var(--color-white-rgb), 0.25) 0px, rgba(var(--color-white-rgb), 0.18) 70px, transparent 15px);
         }
 
         .form-title {

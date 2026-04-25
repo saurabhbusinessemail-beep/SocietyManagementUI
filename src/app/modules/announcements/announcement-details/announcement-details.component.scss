@@ -76,7 +76,7 @@
     margin: 0 auto;
     background: $color-white;
     border-radius: $btn-border-radius-lg;
-    box-shadow: 0 2px 12px rgba($color-black, 0.04);
+    box-shadow: 0 2px 12px rgba(var(--color-black-rgb), 0.04);
     padding: $sp-xl;
     position: relative;
 
@@ -114,7 +114,7 @@
     }
 
     &.pinned {
-        background: rgba($color-dark-blue, 0.02);
+        background: rgba(var(--color-dark-blue-rgb), 0.02);
         // margin: -$sp-sm -$sp-sm $sp-lg;
         // padding: $sp-sm $sp-lg;
         border-radius: $btn-border-radius-lg $btn-border-radius-lg 0 0;
@@ -246,7 +246,7 @@
 }
 
 .pin-badge {
-    background: rgba($color-dark-blue, 0.08);
+    background: rgba(var(--color-dark-blue-rgb), 0.08);
     color: $color-dark-blue;
 }
 
@@ -506,7 +506,7 @@
         &:hover {
             background: $color-white;
             border-color: $color-dark-blue;
-            box-shadow: 0 2px 8px rgba($color-dark-blue, 0.08);
+            box-shadow: 0 2px 8px rgba(var(--color-dark-blue-rgb), 0.08);
 
             .external-link {
                 opacity: 1;

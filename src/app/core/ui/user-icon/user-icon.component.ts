@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IMyProfile } from '../../../interfaces';
 import { Location } from '@angular/common';
 import { WindowService } from '../../../services/window.service';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'ui-user-icon',
@@ -26,6 +27,7 @@ export class UserIconComponent implements OnInit {
     private router: Router,
     private windowService: WindowService,
     private location: Location,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {

@@ -6,7 +6,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
     padding: $sp-lg;
-    box-shadow: 0 2px 8px rgba($color-black, 0.04);
+    box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.04);
     position: relative;
 
     @include mobile {
@@ -14,13 +14,13 @@
     }
 
     &:hover {
-        box-shadow: 0 4px 12px rgba($color-black, 0.08);
+        box-shadow: 0 4px 12px rgba(var(--color-black-rgb), 0.08);
     }
 
     &.pinned {
         background: $color-white;
         border: 1px solid $color-dark-blue;
-        box-shadow: 0 2px 12px rgba($color-dark-blue, 0.08);
+        box-shadow: 0 2px 12px rgba(var(--color-dark-blue-rgb), 0.08);
     }
 
     &.draft {
@@ -240,7 +240,7 @@
         transition: background 0.2s ease;
 
         &:hover {
-            background: darken($color-light-gray, 5%);
+            background: color-mix(in srgb, var(--color-light-gray), black 5%);
         }
 
         &.more {
@@ -421,7 +421,7 @@
     align-items: center;
     gap: 4px;
     padding: 4px 12px;
-    background: rgba($color-dark-blue, 0.08);
+    background: rgba(var(--color-dark-blue-rgb), 0.08);
     color: $color-dark-blue;
     border-radius: 16px;
     font-size: $font-size-xs;

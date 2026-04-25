@@ -66,7 +66,7 @@
     background-color: $color-white;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba($color-black, 0.1);
+    box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
 
     .card-header {
         padding: $sp;
@@ -109,12 +109,12 @@
                 border-radius: $btn-border-radius-sm;
 
                 &.active {
-                    background-color: rgba($status-active, 0.1);
+                    background-color: rgba(var(--status-active-rgb), 0.1);
                     color: $status-active;
                 }
 
                 &:not(.active) {
-                    background-color: rgba($status-inactive, 0.1);
+                    background-color: rgba(var(--status-inactive-rgb), 0.1);
                     color: $status-inactive;
                 }
             }
@@ -158,17 +158,17 @@
             font-weight: 600;
 
             &.status-paid {
-                background-color: rgba($status-active, 0.1);
+                background-color: rgba(var(--status-active-rgb), 0.1);
                 color: $status-active;
             }
 
             &.status-pending {
-                background-color: rgba($status-pending, 0.1);
+                background-color: rgba(var(--status-pending-rgb), 0.1);
                 color: $status-pending;
             }
 
             &.status-failed {
-                background-color: rgba($status-rejected, 0.1);
+                background-color: rgba(var(--status-rejected-rgb), 0.1);
                 color: $status-rejected;
             }
         }

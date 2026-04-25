@@ -7,7 +7,7 @@
     border-radius: 16px;
     overflow: hidden;
     font-family: $font-family-base;
-    box-shadow: 0 2px 8px rgba($color-black, 0.05);
+    box-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.05);
 }
 
 /* SEARCH CONTAINER */
@@ -60,13 +60,13 @@
         }
 
         &:hover {
-            border-color: darken($color-border, 10%);
+            border-color: color-mix(in srgb, var(--color-border), black 10%);
         }
 
         &:focus {
             outline: none;
             border-color: $color-dark-blue;
-            box-shadow: 0 0 0 3px rgba($color-dark-blue, 0.1);
+            box-shadow: 0 0 0 3px rgba(var(--color-dark-blue-rgb), 0.1);
         }
 
         @include mobile {
@@ -103,7 +103,7 @@
 
         &:focus {
             outline: none;
-            box-shadow: 0 0 0 2px rgba($color-dark-blue, 0.3);
+            box-shadow: 0 0 0 2px rgba(var(--color-dark-blue-rgb), 0.3);
         }
     }
 }
@@ -192,7 +192,7 @@
 
     thead {
         tr {
-            background: rgba($color-light-gray, 0.4);
+            background: rgba(var(--color-light-gray-rgb), 0.4);
             border-bottom: 1px solid $color-border;
         }
 
@@ -214,7 +214,7 @@
             transition: background 0.2s ease;
 
             &:hover {
-                background: rgba($color-light-gray, 0.3);
+                background: rgba(var(--color-light-gray-rgb), 0.3);
             }
         }
 
@@ -237,7 +237,7 @@
         width: 36px;
         height: 36px;
         border-radius: 10px;
-        background: rgba($color-dark-blue, 0.1);
+        background: rgba(var(--color-dark-blue-rgb), 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -332,9 +332,9 @@
         border: 1px solid;
 
         &.pending {
-            background: rgba($status-rejected, 0.1);
-            color: darken($status-rejected, 20%);
-            border-color: rgba($status-rejected, 0.3);
+            background: rgba(var(--status-rejected-rgb), 0.1);
+            color: color-mix(in srgb, var(--status-rejected), black 20%);
+            border-color: rgba(var(--status-rejected-rgb), 0.3);
         }
 
         .status-icon {
@@ -376,7 +376,7 @@
 
     &:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba($color-black, 0.1);
+        box-shadow: 0 4px 8px rgba(var(--color-black-rgb), 0.1);
     }
 
     &.mobile {
@@ -391,7 +391,7 @@
     color: $color-white;
 
     &:hover {
-        background: darken($status-active, 10%);
+        background: color-mix(in srgb, var(--status-active), black 10%);
     }
 
     &:disabled {
@@ -403,12 +403,12 @@
 }
 
 .btn-reject {
-    background: rgba($status-rejected, 0.1);
+    background: rgba(var(--status-rejected-rgb), 0.1);
     color: $status-rejected;
-    border: 1px solid rgba($status-rejected, 0.3);
+    border: 1px solid rgba(var(--status-rejected-rgb), 0.3);
 
     &:hover {
-        background: rgba($status-rejected, 0.2);
+        background: rgba(var(--status-rejected-rgb), 0.2);
     }
 
     &:disabled {
@@ -452,7 +452,7 @@
         transition: background 0.2s ease;
 
         &:hover {
-            background: rgba($color-light-gray, 0.3);
+            background: rgba(var(--color-light-gray-rgb), 0.3);
         }
 
         &-left {
@@ -511,7 +511,7 @@
     .mobile-body {
         padding: 16px;
         border-top: 1px solid $color-border;
-        background: rgba($color-light-gray, 0.3);
+        background: rgba(var(--color-light-gray-rgb), 0.3);
     }
 }
 
@@ -540,7 +540,7 @@
 
 /* ADMIN DETAILS */
 .admin-details {
-    background: rgba($color-light-gray, 0.5);
+    background: rgba(var(--color-light-gray-rgb), 0.5);
     border-radius: 10px;
     padding: 12px;
     margin-bottom: 16px;
@@ -617,7 +617,7 @@
 
         &:hover:not(:disabled) {
             background: $color-light-gray;
-            border-color: darken($color-border, 10%);
+            border-color: color-mix(in srgb, var(--color-border), black 10%);
         }
 
         &:disabled {
@@ -646,21 +646,21 @@
     transition: all 0.2s ease;
 
     &.approved {
-        background: rgba($status-active, 0.1);
+        background: rgba(var(--status-active-rgb), 0.1);
         color: $status-active;
-        border-color: rgba($status-active, 0.3);
+        border-color: rgba(var(--status-active-rgb), 0.3);
     }
 
     &.rejected {
-        background: rgba($status-rejected, 0.1);
+        background: rgba(var(--status-rejected-rgb), 0.1);
         color: $status-rejected;
-        border-color: rgba($status-rejected, 0.3);
+        border-color: rgba(var(--status-rejected-rgb), 0.3);
     }
 
     &.pending {
-        background: rgba($status-rejected, 0.1);
-        color: darken($status-rejected, 20%);
-        border-color: rgba($status-rejected, 0.3);
+        background: rgba(var(--status-rejected-rgb), 0.1);
+        color: color-mix(in srgb, var(--status-rejected), black 20%);
+        border-color: rgba(var(--status-rejected-rgb), 0.3);
     }
 
     &.small {
@@ -767,11 +767,11 @@
     }
 
     tr.my {
-        background: rgba($color-dark-blue, 0.05);
+        background: rgba(var(--color-dark-blue-rgb), 0.05);
     }
 
     tr.approval {
-        background: rgba($status-approved, 0.05);
+        background: rgba(var(--status-approved-rgb), 0.05);
     }
 }
 

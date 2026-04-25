@@ -21,7 +21,7 @@
     border-radius: 12px;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 4px 14px rgba($color-black, 0.1);
+    box-shadow: 0 4px 14px rgba(var(--color-black-rgb), 0.1);
 
     .section-header {
         color: $color-dark-blue;
@@ -79,6 +79,6 @@
     padding: $sp-xs;
 
     &:hover {
-        color: darken($color-dark-blue, 10%);
+        color: color-mix(in srgb, var(--color-dark-blue), black 10%);
     }
 }

@@ -14,6 +14,7 @@ import { PricingPlanService } from './services/pricing-plan.service';
 import { SocietyService } from './services/society.service';
 import { ICurrentPlanResponse } from './interfaces';
 import { CurrencyService } from './services/currency.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private pushNotificationService: PushNotificationService,
     private pricingPlanService: PricingPlanService,
     private societService: SocietyService,
-    private zone: NgZone
+    private zone: NgZone,
+    private themeService: ThemeService
   ) { }
 
   async ngOnInit() {

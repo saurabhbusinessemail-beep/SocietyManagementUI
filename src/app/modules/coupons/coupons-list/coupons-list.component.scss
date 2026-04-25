@@ -123,7 +123,7 @@
             border: 1px solid $color-border;
             border-radius: $btn-border-radius-md;
             padding: $sp-md;
-            box-shadow: 0 2px 4px rgba($color-black, 0.05);
+            box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.05);
 
             .card-header {
                 display: flex;
@@ -237,7 +237,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba($color-black, 0.5);
+        background-color: rgba(var(--color-black-rgb), 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -254,7 +254,7 @@
             max-height: 90vh;
             overflow-y: auto;
             // Optional: add a slight shadow for depth
-            box-shadow: 0 10px 25px rgba($color-black, 0.2);
+            box-shadow: 0 10px 25px rgba(var(--color-black-rgb), 0.2);
             // Ensure relative positioning for internal absolute elements if needed
             position: relative;
         }
