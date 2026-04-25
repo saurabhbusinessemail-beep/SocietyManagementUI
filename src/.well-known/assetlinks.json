@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.saurabhkumarbusiness.societymanagement",
+            "sha256_cert_fingerprints": [
+                "13:1B:53:A3:CD:45:E6:0B:44:C9:51:D8:B1:78:16:C7:7D:ED:2E:87:6F:B2:BF:A5:45:A8:B3:6A:1B:82:56:11"
+            ]
+        }
+    }
+]

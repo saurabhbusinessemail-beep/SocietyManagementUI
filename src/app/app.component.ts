@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './services/menu.service';
 import { combineLatest, filter, finalize, map, mergeMap, of, startWith, take } from 'rxjs';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { UserNameInputPopupComponent } from './core/user-name-popup/user-name-in
 import { FcmTokenService } from './services/fcm-token.service';
 import { ConsoleCaptureService } from './services/console-capture.service';
 import { PushNotificationService } from './services/push-notification.service';
-import { App } from '@capacitor/app';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { UserService } from './services/user.service';
 import { PricingPlanService } from './services/pricing-plan.service';
 import { SocietyService } from './services/society.service';
@@ -42,6 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private pushNotificationService: PushNotificationService,
     private pricingPlanService: PricingPlanService,
     private societService: SocietyService,
+    private zone: NgZone
   ) { }
 
   async ngOnInit() {
@@ -52,7 +53,10 @@ export class AppComponent implements OnInit, OnDestroy {
     await this.pushNotificationService.initialize();
 
     this.loginService.loggedInUser.pipe(filter(val => !!val))
-      .subscribe(() => this.checkAndAskForUserName());
+      .subscribe(() => {
+        this.checkAndAskForUserName();
+        this.societService.getAllSocieties().pipe(take(1)).subscribe();
+      });
 
     this.menuService.userMenus.subscribe(() => this.filterMenus());
 
@@ -74,8 +78,6 @@ export class AppComponent implements OnInit, OnDestroy {
           this.societService.societyPlanLoading = false;
         }
       });
-
-    this.societService.getAllSocieties().pipe(take(1)).subscribe();
 
 
     setTimeout(() => {
@@ -112,6 +114,11 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }, 100);
 
+    this.initializeApp();
+  }
+
+  initializeApp() {
+
     // Listen for app resume events
     App.addListener('appStateChange', ({ isActive }) => {
       console.log('App state changed. Active:', isActive);
@@ -119,6 +126,18 @@ export class AppComponent implements OnInit, OnDestroy {
         // App came to foreground, check for pending notifications
         this.checkPendingNotifications();
       }
+    });
+
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      this.zone.run(() => {
+        console.log('appUrlOpen')
+        // Extract the path from the full URL
+        const path = event.url.split('.com')[1];
+        // Navigate to the path
+        if (path) {
+          this.router.navigateByUrl(path);
+        }
+      });
     });
   }
 

@@ -34,6 +34,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/firebase-messaging-sw.js",
+              "src/.well-known",
               {
                 "glob": "manifest.webmanifest",
                 "input": "src/manifest",
