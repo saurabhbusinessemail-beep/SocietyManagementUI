@@ -16,10 +16,10 @@
         justify-content: center;
 
         &:hover, &.userMenuRouteLoaded {
-            background: $color-light-gray;
+            background: rgba($color-header-text, 0.1);
 
             app-icon {
-                color: inherit;
+                color: $color-header-text;
             }
         }
 
@@ -33,7 +33,7 @@
         }
 
         app-icon {
-            color: $color-white;
+            color: $color-header-text;
         }
     }
 }
@@ -45,7 +45,7 @@
     background: $color-white;
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
-    box-shadow: 0 10px 25px $color-rgba-14;
+    box-shadow: 0 10px 25px rgba($color-black, 0.1);
     z-index: $z-user-dropdown;
     width: 320px;
     max-width: 90vw;
@@ -62,7 +62,7 @@
         display: flex;
         align-items: center;
         gap: $sp;
-        background: linear-gradient(135deg, $color-header-footer 0%, rgba($color-sky, 0.3) 100%);
+        background: linear-gradient(135deg, $color-light-gray 0%, rgba($color-sky, 0.3) 100%);
 
         .user-avatar {
             width: 48px;
@@ -162,7 +162,7 @@
 
                 .menu-icon,
                 svg {
-                    color: $icon-on-light-highlight;
+                    color: inherit;
                     width: 20px;
                     height: 20px;
                     flex-shrink: 0;
@@ -175,15 +175,15 @@
 
             &.logout-item {
                 .menu-btn {
-                    color: $color-error-dark;
+                    color: $status-rejected;
 
                     &:hover {
-                        color: $color-error-header;
-                        background: $color-error-light;
+                        color: $status-rejected;
+                        background: $color-border;
                     }
 
                     .menu-icon {
-                        color: $color-error-dark;
+                        color: $status-rejected;
                     }
                 }
             }
@@ -208,7 +208,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: $color-rgba-13;
+    background: rgba($color-black, 0.3);
     z-index: calc($z-user-dropdown - 1);
     display: none;
 

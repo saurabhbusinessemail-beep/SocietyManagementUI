@@ -4,7 +4,7 @@
 .popup-container {
     background: $color-white;
     border-radius: $btn-border-radius-md;
-    box-shadow: 0 12px 30px $color-rgba-20;
+    box-shadow: 0 12px 30px rgba($color-black, 0.12);
     overflow: hidden;
     width: 100%;
 
@@ -32,7 +32,7 @@
     justify-content: space-between;
 
     border-bottom: 1px solid $color-border;
-    background: $color-header-footer;
+    background: $color-light-gray;
 
     /* Desktop */
     @include desktop {

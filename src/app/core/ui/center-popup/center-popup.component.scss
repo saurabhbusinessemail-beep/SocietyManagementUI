@@ -1,7 +1,9 @@
+@import '../../../../styles/variables';
+
 .overlay {
     position: absolute;
     inset: 0;
-    background: $color-rgba-16;
+    background: rgba($color-black, 0.4);
 
     display: flex;
     align-items: center;

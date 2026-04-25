@@ -6,7 +6,7 @@
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
     padding: $sp-lg;
-    box-shadow: 0 2px 8px $color-rgba-21;
+    box-shadow: 0 2px 8px rgba($color-black, 0.04);
     position: relative;
 
     @include mobile {
@@ -14,7 +14,7 @@
     }
 
     &:hover {
-        box-shadow: 0 4px 12px $color-rgba-17;
+        box-shadow: 0 4px 12px rgba($color-black, 0.08);
     }
 
     &.pinned {
@@ -96,23 +96,23 @@
     color: $color-note-gray;
 
     &.priority-low {
-        background: $color-e8f5e9;
-        color: $color-2e7d32;
+        background: $color-border;
+        color: $status-approved;
     }
 
     &.priority-medium {
-        background: $color-fff3e0;
-        color: $color-ef6c00;
+        background: $color-cancel;
+        color: $color-amber;
     }
 
     &.priority-high {
-        background: $color-ffebee;
-        color: $color-c62828;
+        background: $color-cancel;
+        color: $status-rejected;
     }
 
     &.priority-urgent {
-        background: $color-fce4ec;
-        color: $color-c2185b;
+        background: $color-cancel;
+        color: $status-rejected;
     }
 }
 
@@ -124,33 +124,33 @@
     font-weight: 500;
 
     &.category-general {
-        background: $color-eef2f6;
-        color: $color-334e68;
+        background: $color-cancel;
+        color: $color-light-gray;
     }
 
     &.category-maintenance {
-        background: $color-e1f5fe;
-        color: $color-0277bd;
+        background: $color-sky;
+        color: $status-approved;
     }
 
     &.category-event {
-        background: $color-f3e8ff;
-        color: $color-6b21a8;
+        background: $color-cancel;
+        color: $color-light-gray;
     }
 
     &.category-security {
-        background: $color-fee2e2;
-        color: $color-991b1b;
+        background: $color-border;
+        color: $status-rejected;
     }
 
     &.category-billing {
-        background: $color-dcfce7;
-        color: $color-166534;
+        background: $color-border;
+        color: $status-approved;
     }
 
     &.category-other {
         background: $color-cancel;
-        color: $color-4b5563;
+        color: $color-light-gray;
     }
 }
 
@@ -164,18 +164,18 @@
     color: $color-note-gray;
 
     &.status-draft {
-        background: $color-fff8e1;
-        color: $color-b76e00;
+        background: $color-cancel;
+        color: $color-amber;
     }
 
     &.status-published {
-        background: $color-e3f2fd;
-        color: $color-0a558c;
+        background: $color-sky;
+        color: $color-light-gray;
     }
 
     &.status-archived {
-        background: $color-eeeeee;
-        color: $color-616161;
+        background: $color-cancel;
+        color: $color-note-gray;
     }
 }
 
@@ -366,7 +366,7 @@
     }
 
     .delete-icon {
-        color: $color-d32f2f;
+        color: $status-rejected;
         cursor: pointer;
         font-size: $font-size-lg;
         padding: 4px;
@@ -374,7 +374,7 @@
         transition: all 0.2s ease;
 
         &:hover {
-            background: $color-ffebee;
+            background: $color-cancel;
         }
     }
 
@@ -403,13 +403,13 @@
 }
 
 .expiry-badge {
-    background: $color-ffebee;
-    color: $color-c62828;
+    background: $color-cancel;
+    color: $status-rejected;
 }
 
 .draft-badge {
-    background: $color-fff8e1;
-    color: $color-b76e00;
+    background: $color-cancel;
+    color: $color-amber;
 }
 
 /* Pinned badge */

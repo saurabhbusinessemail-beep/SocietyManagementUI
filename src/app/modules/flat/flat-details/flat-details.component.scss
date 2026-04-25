@@ -17,8 +17,8 @@
 
 // Plan Banner
 .plan-banner {
-    background-color: $color-4f46e5;
-    color: white;
+    background-color: $color-dark-blue;
+    color: $color-white;
     padding: $sp-sm $sp-md;
     border-radius: $btn-border-radius-md;
     display: flex;
@@ -41,14 +41,14 @@
         font-size: $font-size-sm;
 
         svg {
-            stroke: white;
+            stroke: $color-white;
         }
     }
 
     .plan-duration,
     .plan-usage {
         font-size: $font-size-xs;
-        background-color: $color-rgba-55;
+        background-color: rgba($color-white, 0.2);
         padding: $sp-xs $sp-sm;
         border-radius: $btn-border-radius-sm;
     }
@@ -71,15 +71,15 @@
     .spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid $color-e5e7eb;
-        border-top-color: $color-4f46e5;
+        border: 3px solid $color-border;
+        border-top-color: $color-dark-blue;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: $sp-md;
     }
 
     p {
-        color: $color-9ca3af;
+        color: $color-help-text;
         font-size: $font-size-base;
     }
 }
@@ -92,11 +92,11 @@
 
 // Info Card (Flat Information)
 .info-card {
-    background-color: white;
-    border: 1px solid $color-e5e7eb;
+    background-color: $color-white;
+    border: 1px solid $color-border;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 1px 2px $color-rgba-1;
+    box-shadow: 0 1px 2px rgba($color-black, 0.05);
 
     .card-header {
         display: flex;
@@ -111,13 +111,13 @@
             gap: $sp-sm;
 
             svg {
-                stroke: $color-6366f1;
+                stroke: $color-dark-blue;
             }
 
             .card-title {
                 font-size: $font-size-sm;
                 font-weight: 700;
-                color: $color-1f2937;
+                color: $color-black;
                 margin: 0;
             }
         }
@@ -145,32 +145,32 @@
                     font-weight: 600;
 
                     &.self {
-                        background-color: $color-eef2ff;
-                        border: 1px solid $color-c7d2fe;
-                        color: $color-4f46e5;
+                        background-color: $color-cancel;
+                        border: 1px solid $status-expired;
+                        color: $color-dark-blue;
 
                         svg {
-                            stroke: $color-4f46e5;
+                            stroke: $color-dark-blue;
                         }
                     }
 
                     &.vacant {
-                        background-color: $color-f8fafc;
-                        border: 1px solid $color-e2e8f0;
-                        color: $color-94a3b8;
+                        background-color: $color-light-gray;
+                        border: 1px solid $color-border;
+                        color: $color-help-text;
 
                         svg {
-                            stroke: $color-94a3b8;
+                            stroke: $color-help-text;
                         }
                     }
 
                     &.tenant {
-                        background-color: $color-fffbeb;
-                        border: 1px solid $color-fde68a;
-                        color: $color-f59e0b;
+                        background-color: $color-light-gray;
+                        border: 1px solid $status-expired;
+                        color: $color-amber;
 
                         svg {
-                            stroke: $color-f59e0b;
+                            stroke: $color-amber;
                         }
                     }
                 }
@@ -190,12 +190,12 @@
                 }
 
                 &.self {
-                    background-color: $color-eef2ff;
-                    border: 1px solid $color-c7d2fe;
-                    color: $color-4f46e5;
+                    background-color: $color-cancel;
+                    border: 1px solid $status-expired;
+                    color: $color-dark-blue;
 
                     svg {
-                        stroke: $color-4f46e5;
+                        stroke: $color-dark-blue;
                     }
                 }
             }
@@ -204,8 +204,8 @@
                 width: 28px;
                 height: 28px;
                 border-radius: 9999px;
-                border: 1px solid $color-e5e7eb;
-                background-color: $color-f9fafb;
+                border: 1px solid $color-border;
+                background-color: $color-light-gray;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -213,7 +213,7 @@
                 transition: all 0.2s;
 
                 &:hover {
-                    background-color: $color-eef2ff;
+                    background-color: $color-cancel;
                 }
 
                 svg {
@@ -259,14 +259,14 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: $color-9ca3af;
+                color: $color-help-text;
                 margin-bottom: $sp-xs;
 
                 svg {
-                    stroke: $color-9ca3af;
+                    stroke: $color-help-text;
 
                     &[stroke="currentColor"] {
-                        stroke: $color-9ca3af;
+                        stroke: $color-help-text;
                     }
                 }
             }
@@ -274,7 +274,7 @@
             .detail-value {
                 font-size: $font-size-base;
                 font-weight: 800;
-                color: $color-111827;
+                color: $color-black;
                 margin: 0;
 
                 @include tablet {
@@ -287,11 +287,11 @@
 
 // Profile Card
 .profile-card {
-    background-color: white;
-    border: 1px solid $color-e5e7eb;
+    background-color: $color-white;
+    border: 1px solid $color-border;
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
-    box-shadow: 0 1px 2px $color-rgba-1;
+    box-shadow: 0 1px 2px rgba($color-black, 0.05);
 
     .profile-header {
         display: flex;
@@ -308,17 +308,17 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background-color: $color-eef2ff;
+            background-color: $color-cancel;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid $color-4f46e5;
+            border: 3px solid $color-dark-blue;
             flex-shrink: 0;
 
             .avatar-initials {
                 font-size: $font-size-xl;
                 font-weight: 600;
-                color: $color-4f46e5;
+                color: $color-dark-blue;
                 text-transform: uppercase;
             }
         }
@@ -329,7 +329,7 @@
             .profile-name {
                 font-size: $font-size-lg;
                 font-weight: 700;
-                color: $color-111827;
+                color: $color-black;
                 margin: 0 0 $sp-xs 0;
             }
 
@@ -346,18 +346,18 @@
                     text-transform: uppercase;
 
                     &.self {
-                        background-color: $color-22c55e;
-                        color: white;
+                        background-color: $status-active;
+                        color: $color-white;
                     }
 
                     &.tenant {
-                        background-color: $color-f59e0b;
-                        color: white;
+                        background-color: $color-amber;
+                        color: $color-white;
                     }
 
                     &.vacant {
                         background-color: $color-help-text;
-                        color: white;
+                        color: $color-white;
                     }
                 }
 
@@ -366,10 +366,10 @@
                     font-weight: 600;
                     padding: $sp-xs $sp-sm;
                     border-radius: 9999px;
-                    color: white;
+                    color: $color-white;
 
                     &.active {
-                        background-color: $color-22c55e;
+                        background-color: $status-active;
                     }
 
                     &.expired {
@@ -377,7 +377,7 @@
                     }
 
                     &.terminated {
-                        background-color: $color-ef4444;
+                        background-color: $status-rejected;
                     }
                 }
             }
@@ -391,7 +391,7 @@
             padding: $sp-sm $sp-md;
             border-radius: $btn-border-radius-sm;
             font-size: $font-size-sm;
-            color: $color-374151;
+            color: $color-light-gray;
 
             svg {
                 stroke: $color-help-text;
@@ -421,13 +421,13 @@
             font-weight: 500;
 
             &.owner {
-                background-color: $color-eef2ff;
-                color: $color-4f46e5;
+                background-color: $color-cancel;
+                color: $color-dark-blue;
             }
 
             &.tenant {
-                background-color: $color-fffbeb;
-                color: $color-f59e0b;
+                background-color: $color-light-gray;
+                color: $color-amber;
             }
 
             &.member {
@@ -436,8 +436,8 @@
             }
 
             &.tenant-member {
-                background-color: $color-fef3c7;
-                color: $color-d97706;
+                background-color: $color-border;
+                color: $color-amber;
             }
         }
     }
@@ -447,12 +447,12 @@
         flex-wrap: wrap;
         gap: $sp-lg;
         padding-top: $sp-md;
-        border-top: 1px solid $color-e5e7eb;
+        border-top: 1px solid $color-border;
 
         .lease-item {
             .lease-label {
                 font-size: $font-size-xs;
-                color: $color-9ca3af;
+                color: $color-help-text;
                 text-transform: uppercase;
                 display: block;
                 margin-bottom: $sp-xs;
@@ -464,7 +464,7 @@
 
                 &.rent {
                     font-size: $font-size-base;
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                     font-weight: 700;
                 }
             }
@@ -474,11 +474,11 @@
 
 // Section Card
 .section-card {
-    background-color: white;
-    border: 1px solid $color-e5e7eb;
+    background-color: $color-white;
+    border: 1px solid $color-border;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
-    box-shadow: 0 1px 2px $color-rgba-1;
+    box-shadow: 0 1px 2px rgba($color-black, 0.05);
 
     .section-header {
         display: flex;
@@ -493,13 +493,13 @@
             gap: $sp-sm;
 
             svg {
-                stroke: $color-4f46e5;
+                stroke: $color-dark-blue;
             }
 
             .section-title {
                 font-size: $font-size-sm;
                 font-weight: 700;
-                color: $color-1f2937;
+                color: $color-black;
                 margin: 0;
             }
         }
@@ -510,9 +510,9 @@
             gap: $sp-xs;
             font-size: $font-size-xs;
             font-weight: 600;
-            color: $color-4f46e5;
-            background-color: $color-eef2ff;
-            border: 1px solid $color-c7d2fe;
+            color: $color-dark-blue;
+            background-color: $color-cancel;
+            border: 1px solid $status-expired;
             padding: $sp-xs $sp;
             border-radius: 9999px;
             cursor: pointer;
@@ -524,7 +524,7 @@
             }
 
             &:hover {
-                background-color: $color-e0e7ff;
+                background-color: $color-sky;
             }
         }
     }
@@ -556,7 +556,7 @@
                 width: 36px;
                 height: 36px;
                 border-radius: 50%;
-                background-color: $color-eef2ff;
+                background-color: $color-cancel;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -565,7 +565,7 @@
                 .avatar-letter {
                     font-size: $font-size-sm;
                     font-weight: 700;
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                 }
             }
 
@@ -573,16 +573,16 @@
                 .resident-name {
                     font-size: $font-size-sm;
                     font-weight: 600;
-                    color: $color-111827;
+                    color: $color-black;
                     margin: 0 0 2px 0;
                 }
 
                 .resident-role {
                     font-size: 11px;
                     padding: 2px $sp-sm;
-                    background-color: $color-eef2ff;
+                    background-color: $color-cancel;
                     border-radius: 9999px;
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                     font-weight: 500;
                 }
             }
@@ -597,7 +597,7 @@
             font-family: monospace;
 
             svg {
-                stroke: $color-9ca3af;
+                stroke: $color-help-text;
             }
         }
     }
@@ -617,7 +617,7 @@
         .parking-number {
             font-size: $font-size-sm;
             font-weight: 500;
-            color: $color-111827;
+            color: $color-black;
         }
 
         .vehicle-type,
@@ -647,14 +647,14 @@
                 width: 36px;
                 height: 36px;
                 border-radius: $btn-border-radius-md;
-                background-color: $color-f0fdf4;
-                border: 1px solid $color-bbf7d0;
+                background-color: $color-cancel;
+                border: 1px solid $status-expired;
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
                 svg {
-                    stroke: $color-14b8a6;
+                    stroke: $status-active;
                 }
             }
 
@@ -664,14 +664,14 @@
                     font-weight: 600;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
-                    color: $color-9ca3af;
+                    color: $color-help-text;
                     margin: 0 0 2px 0;
                 }
 
                 .gatepass-otp {
                     font-size: $font-size-base;
                     font-weight: 800;
-                    color: $color-111827;
+                    color: $color-black;
                     font-family: monospace;
                     margin: 0;
                 }
@@ -680,7 +680,7 @@
 
         .gatepass-date {
             font-size: $font-size-xs;
-            color: $color-9ca3af;
+            color: $color-help-text;
         }
     }
 
@@ -704,7 +704,7 @@
                 .complaint-title {
                     font-size: $font-size-sm;
                     font-weight: 500;
-                    color: $color-111827;
+                    color: $color-black;
                 }
 
                 .priority-badge {
@@ -714,23 +714,23 @@
                     font-weight: 600;
 
                     &.low {
-                        background-color: $color-22c55e;
-                        color: white;
+                        background-color: $status-active;
+                        color: $color-white;
                     }
 
                     &.medium {
-                        background-color: $color-f59e0b;
-                        color: white;
+                        background-color: $color-amber;
+                        color: $color-white;
                     }
 
                     &.high {
-                        background-color: $color-ef4444;
-                        color: white;
+                        background-color: $status-rejected;
+                        color: $color-white;
                     }
 
                     &.urgent {
-                        background-color: $color-dc2626;
-                        color: white;
+                        background-color: $status-rejected;
+                        color: $color-white;
                     }
                 }
             }
@@ -746,38 +746,38 @@
                     font-weight: 500;
 
                     &.submitted {
-                        background-color: $color-f59e0b;
-                        color: white;
+                        background-color: $color-amber;
+                        color: $color-white;
                     }
 
                     &.approved {
-                        background-color: $color-22c55e;
-                        color: white;
+                        background-color: $status-active;
+                        color: $color-white;
                     }
 
                     &.in_progress {
-                        background-color: $color-4f46e5;
-                        color: white;
+                        background-color: $color-dark-blue;
+                        color: $color-white;
                     }
 
                     &.resolved {
-                        background-color: $color-10b981;
-                        color: white;
+                        background-color: $status-active;
+                        color: $color-white;
                     }
 
                     &.closed {
                         background-color: $color-help-text;
-                        color: white;
+                        color: $color-white;
                     }
 
                     &.rejected {
-                        background-color: $color-ef4444;
-                        color: white;
+                        background-color: $status-rejected;
+                        color: $color-white;
                     }
                 }
 
                 .complaint-date {
-                    color: $color-9ca3af;
+                    color: $color-help-text;
                 }
             }
         }
@@ -803,7 +803,7 @@
                 .visitor-name {
                     font-size: $font-size-sm;
                     font-weight: 500;
-                    color: $color-111827;
+                    color: $color-black;
                 }
 
                 .gate-status {
@@ -813,33 +813,33 @@
                     font-weight: 600;
 
                     &.requested {
-                        background-color: $color-f59e0b;
-                        color: white;
+                        background-color: $color-amber;
+                        color: $color-white;
                     }
 
                     &.approved {
-                        background-color: $color-22c55e;
-                        color: white;
+                        background-color: $status-active;
+                        color: $color-white;
                     }
 
                     &.rejected {
-                        background-color: $color-ef4444;
-                        color: white;
+                        background-color: $status-rejected;
+                        color: $color-white;
                     }
 
                     &.cancelled {
                         background-color: $color-help-text;
-                        color: white;
+                        color: $color-white;
                     }
 
                     &.expired {
-                        background-color: $color-9ca3af;
-                        color: white;
+                        background-color: $color-help-text;
+                        color: $color-white;
                     }
 
                     &.completed {
-                        background-color: $color-10b981;
-                        color: white;
+                        background-color: $status-active;
+                        color: $color-white;
                     }
                 }
             }
@@ -861,9 +861,9 @@
     .empty-state {
         padding: $sp-md;
         text-align: center;
-        color: $color-9ca3af;
+        color: $color-help-text;
         font-style: italic;
-        background-color: $color-f9fafb;
+        background-color: $color-light-gray;
         border-radius: $btn-border-radius-md;
         margin: $sp-md;
     }
@@ -889,7 +889,7 @@
             justify-content: center;
 
             svg {
-                stroke: $color-9ca3af;
+                stroke: $color-help-text;
             }
         }
 
@@ -904,8 +904,8 @@
             display: inline-flex;
             align-items: center;
             gap: $sp-xs;
-            background-color: $color-4f46e5;
-            color: white;
+            background-color: $color-dark-blue;
+            color: $color-white;
             font-size: $font-size-xs;
             font-weight: 700;
             text-transform: uppercase;
@@ -922,7 +922,7 @@
             }
 
             &:hover {
-                background-color: $color-4338ca;
+                background-color: $color-dark-blue;
             }
 
             &:disabled {
@@ -956,18 +956,18 @@
     text-align: center;
     padding-top: $sp-md;
     margin-top: $sp-md;
-    border-top: 1px solid $color-e5e7eb;
+    border-top: 1px solid $color-border;
 
     p {
         font-size: 11px;
-        color: $color-9ca3af;
+        color: $color-help-text;
         margin: 0;
     }
 }
 
 // Confirmation Dialog
 .confirm-dialog {
-    background-color: white;
+    background-color: $color-white;
     border-radius: $btn-border-radius-lg;
     overflow: hidden;
     min-width: 320px;
@@ -978,12 +978,12 @@
         justify-content: space-between;
         align-items: center;
         padding: $sp-md $sp-lg;
-        border-bottom: 1px solid $color-e5e7eb;
+        border-bottom: 1px solid $color-border;
 
         h2 {
             font-size: $font-size-lg;
             font-weight: 600;
-            color: $color-111827;
+            color: $color-black;
             margin: 0;
         }
 
@@ -992,7 +992,7 @@
             border: none;
             font-size: $font-size-xl;
             cursor: pointer;
-            color: $color-9ca3af;
+            color: $color-help-text;
             padding: 0;
             width: 32px;
             height: 32px;
@@ -1011,7 +1011,7 @@
         p {
             margin: 0;
             line-height: 1.5;
-            color: $color-374151;
+            color: $color-light-gray;
         }
 
         &.note {
@@ -1027,7 +1027,7 @@
         justify-content: flex-end;
         gap: $sp-sm;
         padding: $sp-md $sp-lg;
-        border-top: 1px solid $color-e5e7eb;
+        border-top: 1px solid $color-border;
 
         button {
             padding: $sp-sm $sp-lg;
@@ -1040,37 +1040,37 @@
 
             &.btn-cancel {
                 background-color: $color-cancel;
-                color: $color-374151;
+                color: $color-light-gray;
 
                 &:hover {
-                    background-color: $color-e5e7eb;
+                    background-color: $color-border;
                 }
             }
 
             &.btn-self {
-                background-color: $color-4f46e5;
-                color: white;
+                background-color: $color-dark-blue;
+                color: $color-white;
 
                 &:hover {
-                    background-color: $color-4338ca;
+                    background-color: $color-dark-blue;
                 }
             }
 
             &.btn-tenant {
-                background-color: $color-f59e0b;
-                color: white;
+                background-color: $color-amber;
+                color: $color-white;
 
                 &:hover {
-                    background-color: $color-d97706;
+                    background-color: $color-amber;
                 }
             }
 
             &.btn-vacant {
                 background-color: $color-help-text;
-                color: white;
+                color: $color-white;
 
                 &:hover {
-                    background-color: $color-4b5563;
+                    background-color: $color-light-gray;
                 }
             }
         }

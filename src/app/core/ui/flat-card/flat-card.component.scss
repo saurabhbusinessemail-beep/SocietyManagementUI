@@ -126,11 +126,11 @@
                 }
 
                 &.delete-btn {
-                    background-color: $color-error-light;
-                    color: $color-error-dark;
+                    background-color: $color-border;
+                    color: $status-rejected;
 
                     &:hover {
-                        background-color: $color-error-header;
+                        background-color: $status-rejected;
                         color: $color-white;
                     }
                 }

@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 .not-found-container {
     height: 80vh;
     display: flex;
@@ -11,26 +13,26 @@
         font-size: 8rem;
         font-weight: 700;
         margin: 0;
-        color: $color-ff5252;
+        color: $status-rejected;
     }
 
     h2 {
         font-size: 2rem;
         margin: 10px 0;
-        color: $color-333333;
+        color: $color-black;
     }
 
     p {
         font-size: 1.1rem;
-        color: $color-666666;
+        color: $color-note-gray;
         max-width: 400px;
         margin-bottom: 30px;
     }
 
     .home-btn {
-        background: $color-007bff;
+        background: $color-dark-blue;
         border: none;
-        color: white;
+        color: $color-white;
         padding: 12px 24px;
         border-radius: 6px;
         font-size: 1rem;
@@ -38,7 +40,7 @@
         transition: background 0.2s ease;
 
         &:hover {
-            background: $color-0056b3;
+            background: $color-light-gray;
         }
     }
 }

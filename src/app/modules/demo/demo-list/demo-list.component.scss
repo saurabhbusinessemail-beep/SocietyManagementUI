@@ -104,7 +104,7 @@
         }
 
         &.no-show {
-            background-color: $color-error-header;
+            background-color: $status-rejected;
         }
 
         &.follow-up {
@@ -247,10 +247,10 @@
 .error-state {
     text-align: center;
     padding: $sp-xl;
-    background-color: $color-error-light;
-    border: 1px solid $color-error-header;
+    background-color: $color-border;
+    border: 1px solid $status-rejected;
     border-radius: $btn-border-radius-lg;
-    color: $color-error-dark;
+    color: $status-rejected;
 
     .error-icon {
         font-size: 32px;
@@ -557,12 +557,12 @@
     }
 
     &.status-no_show {
-        background-color: rgba($color-error-header, 0.1);
-        color: $color-error-header;
-        border: 1px solid rgba($color-error-header, 0.2);
+        background-color: rgba($status-rejected, 0.1);
+        color: $status-rejected;
+        border: 1px solid rgba($status-rejected, 0.2);
 
         .status-dot {
-            background-color: $color-error-header;
+            background-color: $status-rejected;
         }
     }
 
@@ -658,8 +658,8 @@
     }
 
     &.noshow:hover {
-        background-color: $color-error-header;
-        border-color: $color-error-header;
+        background-color: $status-rejected;
+        border-color: $status-rejected;
     }
 
     &.more:hover {
@@ -710,10 +710,10 @@
         }
 
         &.delete:hover {
-            color: $color-error-header;
+            color: $status-rejected;
 
             svg {
-                color: $color-error-header;
+                color: $status-rejected;
             }
         }
     }
@@ -910,9 +910,9 @@
         }
 
         &.noshow {
-            background-color: $color-error-header;
+            background-color: $status-rejected;
             color: $color-white;
-            border-color: $color-error-header;
+            border-color: $status-rejected;
         }
 
         &.edit {
@@ -952,9 +952,9 @@
         }
 
         &.delete {
-            background-color: $color-error-header;
+            background-color: $status-rejected;
             color: $color-white;
-            border-color: $color-error-header;
+            border-color: $status-rejected;
         }
 
         &:hover {
@@ -1105,7 +1105,7 @@
     }
 
     &.delete {
-        background-color: $color-error-header;
+        background-color: $status-rejected;
         color: $color-white;
 
         &:hover {
@@ -1434,7 +1434,7 @@
 
 // Mandatory star indicator
 .mandatory-star {
-    color: $color-mandatory;
+    color: $status-rejected;
     margin-left: 2px;
     font-weight: 600;
 }

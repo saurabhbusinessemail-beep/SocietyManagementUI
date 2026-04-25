@@ -111,7 +111,7 @@
   font-family: $font-family-base;
   
   th {
-    background-color: $color-header-footer;
+    background-color: $color-light-gray;
     color: $color-dark-blue;
     font-weight: 600;
     font-size: $font-size-sm;
@@ -232,7 +232,7 @@
     }
     
     &.view:hover {
-      background-color: $color-header-footer;
+      background-color: $color-light-gray;
       border-color: $color-dark-blue;
       
       .btn-label {
@@ -446,7 +446,7 @@
   }
   
   &.view:hover {
-    background-color: $color-header-footer;
+    background-color: $color-light-gray;
     color: $color-dark-blue;
   }
   
@@ -568,7 +568,7 @@
   font-weight: 500;
   
   &:hover {
-    background-color: darken($color-error-header, 10%);
+    background-color: darken($status-rejected, 10%);
   }
   
   @include mobile {
@@ -717,7 +717,7 @@
     color: $color-note-gray;
     
     .mandatory {
-      color: $color-mandatory;
+      color: $status-rejected;
     }
   }
   

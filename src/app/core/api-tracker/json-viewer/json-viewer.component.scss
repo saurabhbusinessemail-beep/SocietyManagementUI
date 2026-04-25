@@ -1,3 +1,5 @@
+@import '../../../../styles/variables';
+
 .json-node {
     font-family: monospace;
     font-size: 13px;
@@ -12,12 +14,12 @@
 
 .toggle {
     margin-right: 4px;
-    color: $color-1976d2;
+    color: $color-dark-blue;
 }
 
 .json-children {
     padding-left: 16px;
-    border-left: 1px dotted $color-cccccc;
+    border-left: 1px dotted $status-expired;
 }
 
 .json-row {
@@ -25,13 +27,13 @@
 }
 
 .json-key {
-    color: $color-c62828;
+    color: $status-rejected;
 }
 
 .json-index {
-    color: $color-6a1b9a;
+    color: $color-light-gray;
 }
 
 .json-value {
-    color: $color-2e7d32;
+    color: $status-approved;
 }

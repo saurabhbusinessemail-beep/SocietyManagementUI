@@ -21,8 +21,8 @@
     width: 32px;
     height: 32px;
     border-radius: 9999px;
-    border: 1px solid $color-e5e7eb; // gray-200
-    background-color: white;
+    border: 1px solid $color-border; // gray-200
+    background-color: $color-white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,7 +30,7 @@
     cursor: pointer;
 
     &:hover {
-        background-color: $color-eef2ff; // indigo-50
+        background-color: $color-cancel; // indigo-50
     }
 
     app-icon {
@@ -73,7 +73,7 @@
 
         .society-subtitle {
             font-size: $font-size-xs;
-            color: $color-9ca3af; // gray-400
+            color: $color-help-text; // gray-400
             margin: 0;
         }
     }
@@ -95,8 +95,8 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                background-color: $color-4f46e5; // indigo-600
-                color: white;
+                background-color: $color-dark-blue; // indigo-600
+                color: $color-white;
                 font-size: $font-size-xs;
                 font-weight: 700;
                 padding: $sp-xs $sp;
@@ -105,7 +105,7 @@
                 .plan-dot {
                     width: 6px;
                     height: 6px;
-                    background-color: $color-818cf8; // indigo-300
+                    background-color: $color-light-blue; // indigo-300
                     border-radius: 50%;
                 }
             }
@@ -115,7 +115,7 @@
                 align-items: center;
                 gap: 4px;
                 background-color: $color-cancel; // gray-100
-                color: $color-4b5563; // gray-600
+                color: $color-light-gray; // gray-600
                 font-size: $font-size-xs;
                 font-weight: 500;
                 padding: $sp-xs $sp;
@@ -143,15 +143,15 @@
     .spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid $color-e5e7eb;
-        border-top-color: $color-4f46e5;
+        border: 3px solid $color-border;
+        border-top-color: $color-dark-blue;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: $sp-md;
     }
 
     p {
-        color: $color-9ca3af;
+        color: $color-help-text;
         font-size: $font-size-base;
     }
 }
@@ -175,18 +175,18 @@
     }
 
     .stat-card {
-        background-color: white;
-        border: 1px solid $color-e5e7eb;
+        background-color: $color-white;
+        border: 1px solid $color-border;
         border-radius: 20px;
         padding: $sp-md;
         display: flex;
         align-items: center;
         gap: $sp-md;
-        box-shadow: 0 1px 2px $color-rgba-1;
+        box-shadow: 0 1px 2px rgba($color-black, 0.05);
         transition: box-shadow 0.2s;
 
         &:hover {
-            box-shadow: 0 4px 6px -1px $color-rgba-14;
+            box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
         }
 
         .stat-icon-wrapper {
@@ -210,7 +210,7 @@
                 font-weight: 500;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: $color-9ca3af;
+                color: $color-help-text;
                 margin: 0 0 2px 0;
             }
 
@@ -246,57 +246,57 @@
 
         &--indigo {
             .stat-icon-wrapper {
-                background-color: $color-eef2ff;
+                background-color: $color-cancel;
 
                 app-icon {
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                 }
             }
 
             .stat-value {
-                color: $color-4f46e5;
+                color: $color-dark-blue;
             }
         }
 
         &--blue {
             .stat-icon-wrapper {
-                background-color: $color-eff6ff;
+                background-color: $color-cancel;
 
                 app-icon {
-                    color: $color-3b82f6;
+                    color: $color-dark-blue;
                 }
             }
 
             .stat-value {
-                color: $color-2563eb;
+                color: $color-dark-blue;
             }
         }
 
         &--amber {
             .stat-icon-wrapper {
-                background-color: $color-fffbeb;
+                background-color: $color-light-gray;
 
                 app-icon {
-                    color: $color-f59e0b;
+                    color: $color-amber;
                 }
             }
 
             .stat-value {
-                color: $color-d97706;
+                color: $color-amber;
             }
         }
 
         &--green {
             .stat-icon-wrapper {
-                background-color: $color-f0fdf4;
+                background-color: $color-cancel;
 
                 app-icon {
-                    color: $color-22c55e;
+                    color: $status-active;
                 }
             }
 
             .stat-value {
-                color: $color-16a34a;
+                color: $status-approved;
             }
         }
     }
@@ -316,10 +316,10 @@
 
 // Info Cards (Admins & Secretaries)
 .info-card {
-    background-color: white;
-    border: 1px solid $color-e5e7eb;
+    background-color: $color-white;
+    border: 1px solid $color-border;
     border-radius: 20px;
-    box-shadow: 0 1px 2px $color-rgba-1;
+    box-shadow: 0 1px 2px rgba($color-black, 0.05);
     overflow: hidden;
 
     .card-header {
@@ -339,26 +339,26 @@
                 height: 15px;
 
                 &--indigo {
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                 }
 
                 &--blue {
-                    color: $color-2563eb;
+                    color: $color-dark-blue;
                 }
 
                 &--amber {
-                    color: $color-f59e0b;
+                    color: $color-amber;
                 }
 
                 &--green {
-                    color: $color-22c55e;
+                    color: $status-active;
                 }
             }
 
             .card-title {
                 font-size: $font-size-sm;
                 font-weight: 700;
-                color: $color-1f2937;
+                color: $color-black;
                 margin: 0;
             }
         }
@@ -369,9 +369,9 @@
             gap: $sp-xs;
             font-size: $font-size-xs;
             font-weight: 600;
-            color: $color-4f46e5;
-            background-color: $color-eef2ff;
-            border: 1px solid $color-c7d2fe;
+            color: $color-dark-blue;
+            background-color: $color-cancel;
+            border: 1px solid $status-expired;
             padding: $sp-xs $sp;
             border-radius: 9999px;
             transition: all 0.2s;
@@ -391,7 +391,7 @@
             // }
 
             &:hover {
-                background-color: $color-e0e7ff;
+                background-color: $color-sky;
             }
         }
     }
@@ -410,9 +410,9 @@
             display: inline-flex;
             align-items: center;
             gap: $sp-sm;
-            background-color: $color-eef2ff;
-            border: 1px solid $color-c7d2fe;
-            color: $color-4f46e5;
+            background-color: $color-cancel;
+            border: 1px solid $status-expired;
+            color: $color-dark-blue;
             font-size: $font-size-xs;
             font-weight: 500;
             padding: $sp-xs $sp;
@@ -430,11 +430,11 @@
                 app-icon {
                     width: 12px;
                     height: 12px;
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                 }
 
                 &:hover app-icon {
-                    color: $color-ef4444;
+                    color: $status-rejected;
                 }
             }
         }
@@ -443,7 +443,7 @@
             display: flex;
             align-items: center;
             gap: $sp-sm;
-            color: $color-9ca3af;
+            color: $color-help-text;
             font-size: $font-size-sm;
             padding: $sp-sm 0;
 
@@ -459,7 +459,7 @@
                 app-icon {
                     width: 14px;
                     height: 14px;
-                    color: $color-9ca3af;
+                    color: $color-help-text;
                 }
             }
         }
@@ -468,18 +468,18 @@
 
 // Action Cards (Buildings & Flats)
 .action-card {
-    background-color: white;
-    border: 1px solid $color-e5e7eb;
+    background-color: $color-white;
+    border: 1px solid $color-border;
     border-radius: 20px;
     padding: $sp-lg;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 1px 2px $color-rgba-1;
+    box-shadow: 0 1px 2px rgba($color-black, 0.05);
     transition: box-shadow 0.2s;
 
     &:hover {
-        box-shadow: 0 4px 6px -1px $color-rgba-14;
+        box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
     }
 
     .action-content {
@@ -501,18 +501,18 @@
             }
 
             &--indigo {
-                background-color: $color-eef2ff;
+                background-color: $color-cancel;
 
                 app-icon {
-                    color: $color-4f46e5;
+                    color: $color-dark-blue;
                 }
             }
 
             &--blue {
-                background-color: $color-eff6ff;
+                background-color: $color-cancel;
 
                 app-icon {
-                    color: $color-3b82f6;
+                    color: $color-dark-blue;
                 }
             }
         }
@@ -523,7 +523,7 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: $color-9ca3af;
+                color: $color-help-text;
                 margin: 0 0 2px 0;
             }
 
@@ -547,8 +547,8 @@
         font-size: $font-size-xs;
         font-weight: 600;
         color: $color-help-text;
-        background-color: $color-f9fafb;
-        border: 1px solid $color-e5e7eb;
+        background-color: $color-light-gray;
+        border: 1px solid $color-border;
         padding: $sp-xs $sp;
         border-radius: 9999px;
         transition: all 0.2s;
@@ -583,15 +583,15 @@
 }
 
 .feature-card {
-    background-color: white;
-    border: 1px solid $color-e5e7eb;
+    background-color: $color-white;
+    border: 1px solid $color-border;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 1px 2px $color-rgba-1;
+    box-shadow: 0 1px 2px rgba($color-black, 0.05);
     transition: box-shadow 0.2s;
 
     &:hover {
-        box-shadow: 0 4px 6px -1px $color-rgba-14;
+        box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
     }
 
     .feature-header {
@@ -606,22 +606,22 @@
             height: 15px;
 
             &--purple {
-                color: $color-8b5cf6;
+                color: $status-yet;
             }
 
             &--red {
-                color: $color-f87171;
+                color: $status-rejected;
             }
 
             &--orange {
-                color: $color-fb923c;
+                color: $color-amber;
             }
         }
 
         .feature-title {
             font-size: $font-size-sm;
             font-weight: 700;
-            color: $color-1f2937;
+            color: $color-black;
             margin: 0;
         }
     }
@@ -639,13 +639,13 @@
             font-size: $font-size-sm;
 
             &--success {
-                background-color: $color-22c55e;
-                color: white;
+                background-color: $status-active;
+                color: $color-white;
             }
 
             &--warning {
-                background-color: $color-f59e0b;
-                color: white;
+                background-color: $color-amber;
+                color: $color-white;
             }
 
             &--neutral {
@@ -664,12 +664,12 @@
         border-radius: 9999px;
         font-size: $font-size-xs;
         font-weight: 600;
-        color: $color-4b5563;
+        color: $color-light-gray;
         cursor: pointer;
         transition: background-color 0.2s;
 
         &:hover {
-            background-color: $color-e5e7eb;
+            background-color: $color-border;
         }
     }
 
@@ -695,7 +695,7 @@
                 .locked-icon {
                     width: 32px;
                     height: 32px;
-                    color: $color-9ca3af;
+                    color: $color-help-text;
                 }
             }
 
@@ -710,8 +710,8 @@
                 display: inline-flex;
                 align-items: center;
                 gap: $sp-xs;
-                background-color: $color-4f46e5;
-                color: white;
+                background-color: $color-dark-blue;
+                color: $color-white;
                 font-size: $font-size-xs;
                 font-weight: 700;
                 text-transform: uppercase;
@@ -728,7 +728,7 @@
                 }
 
                 &:hover {
-                    background-color: $color-4338ca;
+                    background-color: $color-dark-blue;
                 }
             }
         }

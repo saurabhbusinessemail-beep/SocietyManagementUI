@@ -1,4 +1,5 @@
-// empty-societies.component.scss
+@import '../../../../styles/variables';
+
 .empty-societies {
     display: flex;
     flex-direction: column;
@@ -11,7 +12,7 @@
         width: 4rem; // w-16
         height: 4rem; // h-16
         border-radius: 1rem; // rounded-2xl (1rem)
-        background-color: $color-f0f4ff; // bg-primary-50 (light blue)
+        background-color: $btn-bg-primary; // bg-primary-50 (light blue)
         display: flex;
         align-items: center;
         justify-content: center;
@@ -21,28 +22,28 @@
         ::ng-deep svg {
             width: 2rem; // 32px
             height: 2rem; // 32px
-            color: $color-1e3a8a; // text-primary-700 (dark blue)
+            color: $color-light-gray; // text-primary-700 (dark blue)
         }
     }
 
     &__title {
         font-size: 1.125rem; // text-lg
         font-weight: 600; // font-semibold
-        color: $color-11181c; // text-foreground (adjust as needed)
+        color: $color-black; // text-foreground (adjust as needed)
         margin-bottom: 0.5rem; // mb-2
     }
 
     &__message {
         font-size: 0.875rem; // text-sm
-        color: $color-687076; // text-muted-foreground (gray)
+        color: $color-note-gray; // text-muted-foreground (gray)
         max-width: 24rem; // max-w-sm (24rem)
         margin-bottom: 1.5rem; // mb-6
     }
 
     &__button {
         padding: 0.625rem 1.5rem; // px-6 py-2.5
-        background-color: $color-1e3a8a; // bg-primary-700
-        color: white;
+        background-color: $color-light-gray; // bg-primary-700
+        color: $color-white;
         font-size: 0.875rem; // text-sm
         font-weight: 600; // font-semibold
         border-radius: 0.5rem; // rounded-lg
@@ -51,7 +52,7 @@
         transition: all 0.15s ease-in-out; // transition-all duration-150
 
         &:hover {
-            background-color: $color-2563eb; // hover:bg-primary-600 (lighter)
+            background-color: $color-dark-blue; // hover:bg-primary-600 (lighter)
         }
 
         &:active {

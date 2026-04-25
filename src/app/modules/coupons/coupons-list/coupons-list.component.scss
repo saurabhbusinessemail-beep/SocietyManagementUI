@@ -26,7 +26,7 @@
                 padding: $input-padding-mobile $sp;
                 border: 1px solid $color-border;
                 border-radius: $input-border-radius;
-                background: white;
+                background: $color-white;
             }
         }
     }
@@ -38,8 +38,8 @@
     }
 
     .error-message {
-        color: $color-error-dark;
-        background: $color-error-light;
+        color: $status-rejected;
+        background: $color-border;
         border-radius: $btn-border-radius-sm;
     }
 
@@ -77,12 +77,12 @@
 
                 &.active {
                     background: $status-active;
-                    color: white;
+                    color: $color-white;
                 }
 
                 &.inactive {
                     background: $status-inactive;
-                    color: white;
+                    color: $color-white;
                 }
             }
 
@@ -119,11 +119,11 @@
         }
 
         .coupon-card {
-            background: white;
+            background: $color-white;
             border: 1px solid $color-border;
             border-radius: $btn-border-radius-md;
             padding: $sp-md;
-            box-shadow: 0 2px 4px $color-rgba-1;
+            box-shadow: 0 2px 4px rgba($color-black, 0.05);
 
             .card-header {
                 display: flex;
@@ -140,12 +140,12 @@
 
                     &.active {
                         background: $status-active;
-                        color: white;
+                        color: $color-white;
                     }
 
                     &.inactive {
                         background: $status-inactive;
-                        color: white;
+                        color: $color-white;
                     }
                 }
             }
@@ -171,13 +171,13 @@
                     flex: 1;
                     padding: $sp-xs $sp-sm;
                     background: $color-dark-blue;
-                    color: white;
+                    color: $color-white;
                     border: none;
                     border-radius: $btn-border-radius-sm;
                     cursor: pointer;
 
                     &.danger {
-                        background: $color-error-header;
+                        background: $status-rejected;
                     }
 
                     &:hover {
@@ -221,7 +221,7 @@
         .test-result {
             margin-top: $sp;
             padding: $sp;
-            background: white;
+            background: $color-white;
             border-radius: $btn-border-radius-sm;
 
             p {
@@ -237,7 +237,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: $color-rgba-52;
+        background-color: rgba($color-black, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -246,7 +246,7 @@
         overflow: visible;
 
         .modal-content {
-            background: white;
+            background: $color-white;
             border-radius: $btn-border-radius-lg;
             padding: $sp-lg;
             width: 90%;
@@ -254,7 +254,7 @@
             max-height: 90vh;
             overflow-y: auto;
             // Optional: add a slight shadow for depth
-            box-shadow: 0 10px 25px $color-rgba-53;
+            box-shadow: 0 10px 25px rgba($color-black, 0.2);
             // Ensure relative positioning for internal absolute elements if needed
             position: relative;
         }
@@ -282,7 +282,7 @@
             }
 
             small {
-                color: $color-error-dark;
+                color: $status-rejected;
                 font-size: $font-size-xs;
             }
 

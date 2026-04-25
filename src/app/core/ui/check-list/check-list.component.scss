@@ -18,7 +18,7 @@
     font-size: small;
 
     .required {
-        color: $color-error-header;
+        color: $status-rejected;
         margin-left: 2px;
     }
 }
@@ -99,5 +99,5 @@
 
 .ui-error {
     font-size: x-small;
-    color: $color-error-dark;
+    color: $status-rejected;
 }

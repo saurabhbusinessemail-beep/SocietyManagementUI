@@ -1,6 +1,9 @@
+@import '../../../styles/variables';
+
 .layout-body {
     flex: 1;
-    overflow-y: auto; /* only this scrolls */
-    background: $color-f4f4f4;
+    overflow-y: auto;
+    /* only this scrolls */
+    background: $color-cancel;
     padding: 16px;
 }

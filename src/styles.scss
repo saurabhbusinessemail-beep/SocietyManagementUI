@@ -31,9 +31,10 @@ body {
     font-family: $font-family-base;
     font-size: $font-size-base;
     color: $color-black;
-    background: $color-white;
+    background: $color-light-gray;
     margin: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @include tablet {
@@ -102,12 +103,15 @@ body {
 .app-header,
 .app-footer {
     background: $color-header-footer;
-    color: $color-black;
+    color: $color-header-text;
     padding: $sp-sm $sp-lg;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: url(./assets/header-background.png);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid $color-border;
+    backdrop-filter: blur(8px);
+    z-index: $z-header;
 }
 
 // Divider
@@ -191,7 +195,7 @@ body {
     width: 0.625rem;
     height: 0.625rem;
     display: inline-block;
-    background-color: $color-94a3b8;
+    background-color: $color-help-text;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'%3E%3C/path%3E%3Cpath d='m6 6 12 12'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'%3E%3C/path%3E%3Cpath d='m6 6 12 12'%3E%3C/path%3E%3C/svg%3E") center/contain no-repeat;
 }
@@ -203,9 +207,10 @@ body {
     justify-content: center;
     padding: $input-padding-mobile $sp-xl;
     border: 0px;
-
     cursor: pointer;
-    border: 0px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
     .label {
         flex: 1 auto;
@@ -214,47 +219,60 @@ body {
 
     &:disabled {
         background: $color-disable-background !important;
-        border-color: $color-disable-background;
-        color: $status-inactive !important;
+        color: $color-help-text !important;
         cursor: not-allowed !important;
+        box-shadow: none !important;
+        transform: none !important;
+        border-color: $color-border !important;
     }
 
-    @include mobile {
-        border-radius: $btn-border-radius-sm;
-    }
-
-    @include tablet {
-        border-radius: $btn-border-radius-md;
-    }
-
-    @include desktop {
-        border-radius: $btn-border-radius-lg;
-    }
-
+    @include mobile { border-radius: $btn-border-radius-sm; }
+    @include tablet { border-radius: $btn-border-radius-md; }
+    @include desktop { border-radius: $btn-border-radius-lg; }
 
     &.primary {
         background: linear-gradient(135deg, $btn-bg-primary 0%, $btn-bg-primary-light 100%);
         color: $btn-text-primary;
+        box-shadow: 0 4px 14px rgba($btn-bg-primary, 0.25);
+        
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba($btn-bg-primary, 0.35);
+        }
+        &:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba($btn-bg-primary, 0.3);
+        }
     }
 
     &.cancel {
-        background: $btn-bg-cancel;
+        background: $color-white;
         color: $btn-text-cancel;
+        border: 1px solid $color-border;
+        &:hover:not(:disabled) {
+            background: $color-cancel;
+            transform: translateY(-1px);
+        }
     }
 
     &.error {
         background: $btn-error;
         color: $color-white;
+        box-shadow: 0 4px 14px rgba($btn-error, 0.25);
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba($btn-error, 0.35);
+        }
     }
 
     &.only-content {
         background: transparent;
         color: $color-dark-blue;
-
-        &:disabled {
-            background: transparent !important;
-            color: $status-inactive !important;
-            cursor: not-allowed !important;
+        padding: $sp-sm $sp;
+        &:hover:not(:disabled) {
+            color: $color-light-blue;
+            background: rgba($color-dark-blue, 0.05);
+            border-radius: $btn-border-radius-sm;
         }
     }
 }
@@ -268,26 +286,87 @@ textarea {
     border: 1px solid $color-border;
     border-radius: $input-border-radius;
     background: $color-white;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    font-family: $font-family-base;
+    color: $color-black;
+
+    &::placeholder {
+        color: $color-help-text;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $color-dark-blue;
+        box-shadow: 0 0 0 3px rgba($color-dark-blue, 0.15);
+    }
 
     &:disabled {
         background: $color-disable-background;
-        color: $status-inactive;
+        color: $color-help-text;
         cursor: not-allowed;
+        box-shadow: none;
     }
 }
 
 .ng-select {
+    font-family: $font-family-base;
+
+    .ng-select-container {
+        background-color: $color-white !important;
+        border: 1px solid $color-border !important;
+        border-radius: $input-border-radius !important;
+        color: $color-black !important;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+        &:hover {
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+    }
+
+    &.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+        border-color: $color-dark-blue !important;
+        box-shadow: 0 0 0 3px rgba($color-dark-blue, 0.15) !important;
+    }
 
     .ng-select-container,
     .ng-input>input {
         padding: $input-padding-mobile $input-padding-desktop !important;
         height: inherit !important;
+        color: $color-black !important;
+    }
+
+    .ng-value-container .ng-input > input {
+        color: $color-black !important;
     }
 
     .ng-value.ng-star-inserted {
         margin-top: 5px;
+        color: $color-black;
     }
 
+    .ng-dropdown-panel {
+        background-color: $color-white !important;
+        border: 1px solid $color-border !important;
+        border-radius: $btn-border-radius-sm !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+
+        .ng-dropdown-panel-items .ng-option {
+            background-color: $color-white !important;
+            color: $color-black !important;
+
+            &.ng-option-marked {
+                background-color: $color-light-gray !important;
+                color: $color-dark-blue !important;
+            }
+
+            &.ng-option-selected {
+                background-color: rgba($color-dark-blue, 0.1) !important;
+                color: $color-dark-blue !important;
+            }
+        }
+    }
 }
 
 // Page header
@@ -333,22 +412,24 @@ textarea {
 // Tabs (div-based)
 .tabs {
     display: flex;
-    gap: $sp-sm;
+    gap: $sp;
+    border-bottom: 1px solid $color-border;
+    margin-bottom: $sp-md;
 
     .tab {
         padding: $sp-sm $sp-md;
-        border-radius: 6px 6px 0 0;
         cursor: pointer;
-        border: 1px solid $color-border;
-        border-bottom: none;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        color: $color-note-gray;
 
         &.active {
-            background: $color-dark-blue;
-            color: $color-white;
+            color: $color-dark-blue;
+            border-bottom-color: $color-dark-blue;
         }
 
-        &.inactive {
-            background: $color-sky;
+        &.inactive:hover {
             color: $color-black;
         }
     }
@@ -382,7 +463,7 @@ body {
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.2s ease;
-        background: linear-gradient(transparent, $color-rgba-24);
+        background: linear-gradient(transparent, rgba($color-header-text, 0.9));
     }
 
     // Show fade effect only when collapsed and content exceeds height
@@ -474,7 +555,7 @@ body {
 // Dark mode support (if needed)
 @media (prefers-color-scheme: dark) {
     .height-restriction-wrapper::after {
-        background: linear-gradient(transparent, $color-rgba-68);
+        background: linear-gradient(transparent, rgba($color-black, 0.9));
     }
 }
 

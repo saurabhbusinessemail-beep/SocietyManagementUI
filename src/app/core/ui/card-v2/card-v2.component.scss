@@ -4,7 +4,7 @@
 .card-container {
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 12px $color-rgba-14;
+    box-shadow: 0 4px 12px rgba($color-black, 0.1);
 
     .card-header {
         display: flex;
@@ -12,7 +12,7 @@
         background: linear-gradient(135deg, $color-dark-blue 0%, $color-sky 60%);
 
         .title {
-            color: $color-header-footer;
+            color: $color-light-gray;
         }
 
         &.active {

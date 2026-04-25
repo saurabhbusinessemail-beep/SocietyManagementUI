@@ -7,7 +7,7 @@
     border-radius: 16px;
     overflow: hidden;
     font-family: $font-family-base;
-    box-shadow: 0 2px 8px $color-rgba-1;
+    box-shadow: 0 2px 8px rgba($color-black, 0.05);
 }
 
 /* SEARCH CONTAINER */
@@ -376,7 +376,7 @@
 
     &:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px $color-rgba-14;
+        box-shadow: 0 4px 8px rgba($color-black, 0.1);
     }
 
     &.mobile {
@@ -403,12 +403,12 @@
 }
 
 .btn-reject {
-    background: rgba($color-error-dark, 0.1);
-    color: $color-error-dark;
-    border: 1px solid rgba($color-error-dark, 0.3);
+    background: rgba($status-rejected, 0.1);
+    color: $status-rejected;
+    border: 1px solid rgba($status-rejected, 0.3);
 
     &:hover {
-        background: rgba($color-error-dark, 0.2);
+        background: rgba($status-rejected, 0.2);
     }
 
     &:disabled {
@@ -652,9 +652,9 @@
     }
 
     &.rejected {
-        background: rgba($color-error-dark, 0.1);
-        color: $color-error-dark;
-        border-color: rgba($color-error-dark, 0.3);
+        background: rgba($status-rejected, 0.1);
+        color: $status-rejected;
+        border-color: rgba($status-rejected, 0.3);
     }
 
     &.pending {

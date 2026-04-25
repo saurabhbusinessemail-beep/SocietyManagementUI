@@ -1,9 +1,9 @@
-@import './src/styles/variables';
+@import '../../../styles/variables';
 
 .tracker-wrapper {
     padding: 16px;
     font-family: monospace;
-    background: $color-f5f7fa;
+    background: $color-cancel;
 }
 
 .tracker-header {
@@ -18,20 +18,20 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background: $color-ff5252;
-    color: white;
+    background: $status-rejected;
+    color: $color-white;
 }
 
 .api-card {
-    background: white;
+    background: $color-white;
     border-radius: 8px;
     margin-bottom: 12px;
-    box-shadow: 0 2px 6px $color-rgba-1;
+    box-shadow: 0 2px 6px rgba($color-black, 0.05);
     overflow: hidden;
     border: solid 1px;
 
     &.opened {
-        background-color: $color-d1ffff;
+        background-color: $color-sky;
     }
 }
 
@@ -45,7 +45,7 @@
     gap: 12px;
     padding: 12px;
     cursor: pointer;
-    border-bottom: 1px solid $color-eeeeee;
+    border-bottom: 1px solid $color-cancel;
 }
 
 .method {
@@ -53,29 +53,29 @@
     border-radius: 4px;
     font-weight: bold;
     font-size: 12px;
-    color: white;
+    color: $color-white;
     min-width: 60px;
     text-align: center;
 }
 
 .method.GET {
-    background: $color-2196f3;
+    background: $color-dark-blue;
 }
 
 .method.POST {
-    background: $color-4caf50;
+    background: $status-active;
 }
 
 .method.PUT {
-    background: $color-ff9800;
+    background: $color-amber;
 }
 
 .method.DELETE {
-    background: $color-f44336;
+    background: $status-rejected;
 }
 
 .method.PATCH {
-    background: $color-9c27b0;
+    background: $status-yet;
 }
 
 .url {
@@ -91,12 +91,12 @@
 }
 
 .status.error {
-    color: $color-f44336;
+    color: $status-rejected;
 }
 
 .duration {
     font-size: 12px;
-    color: $color-666666;
+    color: $color-note-gray;
     min-width: 70px;
     text-align: right;
 }
@@ -112,7 +112,7 @@
 
 .api-details {
     padding: 12px;
-    background: $color-fafafa;
+    background: $color-light-gray;
 }
 
 .tabs {
@@ -125,20 +125,20 @@
 .tabs button {
     padding: 6px 10px;
     border: none;
-    background: $color-e0e0e0;
+    background: $color-border;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
 }
 
 .tabs button.active {
-    background: $color-1976d2;
-    color: white;
+    background: $color-dark-blue;
+    color: $color-white;
 }
 
 .tab-content pre {
-    background: $color-1e1e1e;
-    color: $color-00ff90;
+    background: $color-black;
+    color: $status-active;
     padding: 12px;
     border-radius: 6px;
     overflow: auto;

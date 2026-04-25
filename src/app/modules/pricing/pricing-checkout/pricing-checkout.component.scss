@@ -17,7 +17,7 @@
     border-radius: $btn-border-radius-lg;
     padding: $sp-lg;
     margin-bottom: $sp-lg;
-    box-shadow: 0 2px 4px $color-rgba-14;
+    box-shadow: 0 2px 4px rgba($color-black, 0.1);
 
     @include mobile {
         padding: $sp;
@@ -215,7 +215,7 @@
     }
 
     &.error {
-        color: $color-error-header;
+        color: $status-rejected;
     }
 }
 
@@ -504,11 +504,11 @@
     }
 
     &.no-society {
-        background-color: rgba($color-error-header, 0.1);
-        border: 1px solid $color-error-header;
+        background-color: rgba($status-rejected, 0.1);
+        border: 1px solid $status-rejected;
 
         p {
-            color: $color-error-header;
+            color: $status-rejected;
             margin: 0;
         }
     }
@@ -696,11 +696,11 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    background-color: $color-error-header;
+    background-color: $status-rejected;
     color: $color-white;
 
     &:hover:not(:disabled) {
-        background-color: darken($color-error-header, 10%);
+        background-color: darken($status-rejected, 10%);
     }
 
     @include mobile {
@@ -742,7 +742,7 @@
     &:hover {
         border-color: $color-dark-blue;
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px -1px $color-rgba-14;
+        box-shadow: 0 4px 6px -1px rgba($color-black, 0.1);
     }
 
     &.selected {

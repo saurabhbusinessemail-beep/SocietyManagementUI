@@ -41,7 +41,7 @@
         }
 
         .menu-item a:hover {
-            background: $color-rgba-15;
+            background: rgba($color-white, 0.04);
         }
 
         .icon-box {
@@ -106,7 +106,7 @@
     .backdrop {
         position: fixed;
         inset: 0;
-        background: $color-rgba-16;
+        background: rgba($color-black, 0.4);
         display: none;
     }
 

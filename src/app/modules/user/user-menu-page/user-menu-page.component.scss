@@ -58,7 +58,7 @@
             display: flex;
             align-items: center;
             gap: $sp;
-            background: linear-gradient(135deg, $color-header-footer 0%, rgba($color-sky, 0.3) 100%);
+            background: linear-gradient(135deg, $color-light-gray 0%, rgba($color-sky, 0.3) 100%);
 
             .user-avatar {
                 width: 48px;
@@ -171,7 +171,7 @@
                 background: $color-light-gray;
                 border: 1px solid $color-border;
                 border-top: 0;
-                box-shadow: 0 17px 10px $color-rgba-14;
+                box-shadow: 0 17px 10px rgba($color-black, 0.1);
                 z-index: 1;
                 max-height: 200px;
                 overflow-y: auto;
@@ -190,10 +190,10 @@
 
                     &.clear-option {
                         border-bottom: 1px solid $color-border;
-                        color: $color-error-dark;
+                        color: $status-rejected;
 
                         &:hover {
-                            background: $color-error-light;
+                            background: $color-border;
                         }
                     }
                 }
@@ -249,7 +249,7 @@
                     .menu-icon,
                     svg,
                     app-icon {
-                        color: $icon-on-light-highlight;
+                        color: inherit;
                         width: 20px;
                         height: 20px;
                         flex-shrink: 0;
@@ -262,15 +262,15 @@
 
                 &.logout-item {
                     .menu-btn {
-                        color: $color-error-dark;
+                        color: $status-rejected;
 
                         &:hover {
-                            color: $color-error-header;
-                            background: $color-error-light;
+                            color: $status-rejected;
+                            background: $color-border;
                         }
 
                         .menu-icon {
-                            color: $color-error-dark;
+                            color: $status-rejected;
                         }
                     }
                 }

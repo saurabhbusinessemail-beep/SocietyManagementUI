@@ -2,59 +2,59 @@
 
 .timeline-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: $color-333333;
+  color: $color-black;
   padding: 16px;
-  background: $color-f5f7fa;
+  background: $color-cancel;
   min-height: 100vh;
 }
 
 .date-selector {
   margin-bottom: 24px;
-  background: white;
+  background: $color-white;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px $color-rgba-14;
+  box-shadow: 0 2px 4px rgba($color-black, 0.1);
   
   label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: $color-2c3e50;
+    color: $color-light-gray;
   }
   
   .date-input {
     width: 100%;
     max-width: 300px;
     padding: 10px 16px;
-    border: 2px solid $color-e0e6ed;
+    border: 2px solid $color-border;
     border-radius: 6px;
     font-size: 16px;
     transition: border-color 0.3s;
     
     &:focus {
       outline: none;
-      border-color: $color-3498db;
-      box-shadow: 0 0 0 3px $color-rgba-64;
+      border-color: $color-light-blue;
+      box-shadow: 0 0 0 3px rgba($color-light-blue, 0.2);
     }
   }
 }
 
 .timeline-header {
-  background: white;
+  background: $color-white;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 4px $color-rgba-14;
+  box-shadow: 0 2px 4px rgba($color-black, 0.1);
   
   h2 {
     margin: 0;
-    color: $color-2c3e50;
+    color: $color-light-gray;
     font-size: 1.5rem;
   }
   
   .entry-count {
     margin: 8px 0 0;
-    color: $color-7f8c8d;
+    color: $color-note-gray;
     font-size: 0.9rem;
   }
 }
@@ -74,24 +74,24 @@
   }
   
   .mobile-card {
-    background: white;
+    background: $color-white;
     border-radius: 12px;
     margin-bottom: 16px;
-    box-shadow: 0 2px 8px $color-rgba-14;
+    box-shadow: 0 2px 8px rgba($color-black, 0.1);
     overflow: hidden;
-    border-left: 4px solid $color-3498db;
+    border-left: 4px solid $color-light-blue;
     
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 16px;
-      background: $color-f8f9fa;
-      border-bottom: 1px solid $color-e0e6ed;
+      background: $color-light-gray;
+      border-bottom: 1px solid $color-border;
       
       .time-badge {
-        background: $color-3498db;
-        color: white;
+        background: $color-light-blue;
+        color: $color-white;
         padding: 6px 12px;
         border-radius: 20px;
         font-weight: 600;
@@ -105,7 +105,7 @@
       .entry-info {
         .entry-name {
           margin: 0 0 12px;
-          color: $color-2c3e50;
+          color: $color-light-gray;
           font-size: 1.1rem;
         }
         
@@ -113,7 +113,7 @@
         .entry-purpose,
         .entry-time {
           margin: 8px 0;
-          color: $color-5a6c7d;
+          color: $color-note-gray;
           display: flex;
           align-items: center;
           
@@ -152,7 +152,7 @@
       top: 0;
       bottom: 0;
       width: 2px;
-      background: linear-gradient(to bottom, $color-3498db, $color-2ecc71);
+      background: linear-gradient(to bottom, $color-light-blue, $status-active);
       transform: translateX(-50%);
     }
   }
@@ -167,31 +167,31 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: $color-3498db;
+    background: $color-light-blue;
     border: 3px solid white;
-    box-shadow: 0 0 0 3px $color-3498db;
+    box-shadow: 0 0 0 3px $color-light-blue;
     z-index: 1;
     flex-shrink: 0;
     margin-right: 30px;
     
     &.status-approved {
-      background: $color-2ecc71;
-      box-shadow: 0 0 0 3px $color-2ecc71;
+      background: $status-active;
+      box-shadow: 0 0 0 3px $status-active;
     }
     
     &.status-rejected {
-      background: $color-e74c3c;
-      box-shadow: 0 0 0 3px $color-e74c3c;
+      background: $status-rejected;
+      box-shadow: 0 0 0 3px $status-rejected;
     }
     
     &.status-requested {
-      background: $color-f39c12;
-      box-shadow: 0 0 0 3px $color-f39c12;
+      background: $color-amber;
+      box-shadow: 0 0 0 3px $color-amber;
     }
     
     &.status-completed {
-      background: $color-9b59b6;
-      box-shadow: 0 0 0 3px $color-9b59b6;
+      background: $status-yet;
+      box-shadow: 0 0 0 3px $status-yet;
     }
   }
   
@@ -202,21 +202,21 @@
   
   .timeline-time {
     font-size: 0.9rem;
-    color: $color-7f8c8d;
+    color: $color-note-gray;
     margin-bottom: 8px;
     font-weight: 500;
   }
   
   .desktop-card {
-    background: white;
+    background: $color-white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px $color-rgba-14;
+    box-shadow: 0 4px 12px rgba($color-black, 0.1);
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
     
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px $color-rgba-65;
+      box-shadow: 0 6px 16px rgba($color-black, 0.15);
     }
     
     .card-header {
@@ -224,8 +224,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 20px 24px;
-      background: linear-gradient(135deg, $color-667eea 0%, $color-764ba2 100%);
-      color: white;
+      background: linear-gradient(135deg, $color-light-blue 0%, $color-note-gray 100%);
+      color: $color-white;
       
       .entry-name {
         margin: 0;
@@ -249,14 +249,14 @@
           
           .info-label {
             font-size: 0.85rem;
-            color: $color-7f8c8d;
+            color: $color-note-gray;
             margin-bottom: 4px;
             font-weight: 500;
           }
           
           .info-value {
             font-size: 1rem;
-            color: $color-2c3e50;
+            color: $color-light-gray;
           }
         }
       }
@@ -274,23 +274,23 @@
   letter-spacing: 0.5px;
   
   &.status-approved {
-    background: $color-d5f4e6;
-    color: $color-27ae60;
+    background: $color-border;
+    color: $status-active;
   }
   
   &.status-rejected {
-    background: $color-fde8e8;
-    color: $color-e74c3c;
+    background: $color-cancel;
+    color: $status-rejected;
   }
   
   &.status-requested {
-    background: $color-fef9e7;
-    color: $color-f39c12;
+    background: $color-light-gray;
+    color: $color-amber;
   }
   
   &.status-completed {
-    background: $color-f4ecf7;
-    color: $color-8e44ad;
+    background: $color-cancel;
+    color: $color-note-gray;
   }
 }
 
@@ -318,22 +318,22 @@
   }
   
   .btn-approve {
-    background: $color-2ecc71;
-    color: white;
+    background: $status-active;
+    color: $color-white;
     
     &:hover {
-      background: $color-27ae60;
-      box-shadow: 0 4px 12px $color-rgba-66;
+      background: $status-active;
+      box-shadow: 0 4px 12px rgba($status-active, 0.3);
     }
   }
   
   .btn-reject {
-    background: $color-e74c3c;
-    color: white;
+    background: $status-rejected;
+    color: $color-white;
     
     &:hover {
-      background: $color-c0392b;
-      box-shadow: 0 4px 12px $color-rgba-67;
+      background: $status-rejected;
+      box-shadow: 0 4px 12px rgba($status-rejected, 0.3);
     }
   }
 }
@@ -341,7 +341,7 @@
 .no-entries, .no-entries-desktop {
   text-align: center;
   padding: 40px 20px;
-  color: $color-7f8c8d;
+  color: $color-note-gray;
   
   p {
     font-size: 1.1rem;
@@ -358,12 +358,12 @@
   }
   
   h3 {
-    color: $color-2c3e50;
+    color: $color-light-gray;
     margin: 16px 0;
   }
   
   p {
-    color: $color-7f8c8d;
+    color: $color-note-gray;
     margin: 0;
   }
 }

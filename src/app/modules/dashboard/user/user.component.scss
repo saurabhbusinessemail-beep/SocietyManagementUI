@@ -4,7 +4,7 @@
 ::ng-deep {
     .layout-body-container {
         padding: 0px !important;
-        background-color: $color-header-footer !important;
+        background-color: $color-light-gray !important;
     }
 }
 
@@ -56,14 +56,14 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, $color-rgba-54 0%, $color-rgba-28 100%);
+            background: linear-gradient(135deg, rgba($color-dark-blue, 0.1) 0%, rgba($color-dark-blue, 0.05) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: $sp-sm;
 
             app-icon {
-                color: $color-4f46e5;
+                color: $color-dark-blue;
             }
         }
 

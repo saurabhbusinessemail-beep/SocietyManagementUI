@@ -40,7 +40,7 @@
 
     // Gradient 2: Header-Inspired Gradient
     &.gradient-header-breeze {
-        background: linear-gradient(120deg, $color-header-footer 0%, $color-sky 50%, $color-dark-blue 100%);
+        background: linear-gradient(120deg, $color-light-gray 0%, $color-sky 50%, $color-dark-blue 100%);
 
         .form-title {
             color: $color-black; // Light colors at top, black for contrast
@@ -109,7 +109,7 @@
 
     // Gradient 9: Error Alert Gradient
     &.gradient-error-alert {
-        background: linear-gradient(90deg, $color-error-light 0%, $color-error-header 50%, $color-error-dark 100%);
+        background: linear-gradient(90deg, $color-border 0%, $status-rejected 50%, $status-rejected 100%);
 
         .form-title {
             color: $color-white; // Error header and dark are bright/dark respectively
@@ -118,7 +118,7 @@
 
     // Gradient 10: Light & Airy
     &.gradient-light-airy {
-        background: linear-gradient(135deg, $color-header-footer 0%, $color-white 70%, $color-sky 100%);
+        background: linear-gradient(135deg, $color-light-gray 0%, $color-white 70%, $color-sky 100%);
 
         .form-title {
             color: $color-dark-blue; // Dark blue stands out on light background
@@ -139,7 +139,7 @@
         background: linear-gradient(120deg,
                 $color-dark-blue 0%,
                 $color-sky 20%,
-                $color-header-footer 40%,
+                $color-light-gray 40%,
                 $status-approved 60%,
                 $status-pending 80%,
                 $status-rejected 100%);
@@ -172,7 +172,7 @@
         background:
             radial-gradient(circle at 0% 30%, $color-sky, transparent 50%),
             radial-gradient(circle at 100% 70%, $color-dark-blue, transparent 50%),
-            linear-gradient(135deg, $color-header-footer 0%, $status-purchased 100%);
+            linear-gradient(135deg, $color-light-gray 0%, $status-purchased 100%);
 
         .form-title {
             color: $color-black; // Complex but overall light-medium tone
@@ -183,7 +183,7 @@
     &.gradient-pastel-dreams {
         background: linear-gradient(90deg,
                 lighten($color-sky, 10%) 0%,
-                $color-header-footer 50%,
+                $color-light-gray 50%,
                 lighten($status-yet, 20%) 100%);
 
         .form-title {
@@ -214,7 +214,7 @@
 
     // Gradient 19: Header to Footer
     &.gradient-header-footer {
-        background: linear-gradient(180deg, $color-header-footer 0%, $color-sky 50%, $color-dark-blue 100%);
+        background: linear-gradient(180deg, $color-light-gray 0%, $color-sky 50%, $color-dark-blue 100%);
 
         .form-title {
             color: $color-black; // Top part is light, black works well
@@ -225,7 +225,7 @@
     &.gradient-sunset-ocean {
         background: linear-gradient(135deg,
                 $status-pending 0%,
-                $color-error-header 30%,
+                $status-rejected 30%,
                 $color-dark-blue 70%,
                 $color-sky 100%);
 
@@ -245,7 +245,7 @@
 
     // Gradient 22: Subtle Background Gradient
     &.gradient-subtle-bg {
-        background: linear-gradient(135deg, $color-light-gray 0%, $color-header-footer 100%);
+        background: linear-gradient(135deg, $color-light-gray 0%, $color-light-gray 100%);
 
         .form-title {
             color: $color-dark-blue; // Light background needs dark text
@@ -272,7 +272,7 @@
 
     // Gradient 25: Fresh & Clean
     &.gradient-fresh-clean {
-        background: linear-gradient(120deg, $color-white 0%, $color-sky 50%, $color-header-footer 100%);
+        background: linear-gradient(120deg, $color-white 0%, $color-sky 50%, $color-light-gray 100%);
 
         .form-title {
             color: $color-dark-blue; // Light background needs dark text
@@ -293,7 +293,7 @@
                 radial-gradient(circle at 12% 22%, rgba($color-white, 0.45) 0px, rgba($color-white, 0.35) 60px, transparent 12px),
                 radial-gradient(circle at 82% 18%, rgba($color-white, 0.30) 0px, rgba($color-white, 0.25) 90px, transparent 16px),
                 radial-gradient(circle at 70% 75%, rgba($color-sky, 0.45) 0px, rgba($color-sky, 0.35) 110px, transparent 20px),
-                radial-gradient(circle at 25% 80%, rgba($color-header-footer, 0.50) 0px, rgba($color-header-footer, 0.40) 13px, transparent 220px),
+                radial-gradient(circle at 25% 80%, rgba($color-light-gray, 0.50) 0px, rgba($color-light-gray, 0.40) 13px, transparent 220px),
                 radial-gradient(circle at 55% 40%, rgba($color-white, 0.25) 0px, rgba($color-white, 0.18) 70px, transparent 15px);
         }
 

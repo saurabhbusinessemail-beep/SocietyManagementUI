@@ -9,7 +9,7 @@
         width: auto;
 
         app-icon {
-            color: $color-white;
+            color: inherit;
         }
     }
 }
@@ -22,7 +22,7 @@
     border: 1px solid $color-border;
     padding: $sp-sm;
     border-radius: 6px;
-    box-shadow: 0 6px 18px $color-rgba-17;
+    box-shadow: 0 6px 18px rgba($color-black, 0.08);
     z-index: $z-user-dropdown;
 
     ul {

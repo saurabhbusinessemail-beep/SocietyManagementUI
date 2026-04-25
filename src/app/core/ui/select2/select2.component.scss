@@ -18,7 +18,7 @@
 
 
         .required {
-            color: $color-error-header;
+            color: $status-rejected;
             margin-left: 2px;
         }
     }
@@ -40,7 +40,7 @@
 
 
     &.invalid .ui-input {
-        border-color: $color-error-dark;
+        border-color: $status-rejected;
     }
 
 
@@ -52,6 +52,6 @@
 
     .ui-error {
         font-size: x-small;
-        color: $color-error-dark;
+        color: $status-rejected;
     }
 }
