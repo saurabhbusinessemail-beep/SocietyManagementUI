@@ -1,4 +1,5 @@
-<app-layout [hideMoreActions]="true" [pageTitle]="pageTitle" [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
+<app-layout [hideMoreActions]="true" [pageTitle]="pageTitle"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
     <div class="flat-details-container">
 
         <!-- Flat Information Card -->
@@ -376,7 +377,8 @@
 
                 <!-- Tenant Section -->
                 <ng-container *ngIf="isTenantResiding">
-                    <div class="section-card" [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingTenants">
+                    <div class="section-card"
+                        [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingTenants">
                         <div class="section-header">
                             <div class="section-title-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
@@ -536,7 +538,8 @@
                                 <div class="gate-item" *ngFor="let entry of gateEntries">
                                     <div class="gate-header">
                                         <span class="visitor-name">{{ entry.visitorName || 'Visitor' }}</span>
-                                        <span class="gate-status" [ngClass]="entry.status">{{ entry.status | gateEntryStatus }}</span>
+                                        <span class="gate-status" [ngClass]="entry.status">{{ entry.status |
+                                            gateEntryStatus }}</span>
                                     </div>
                                     <div class="gate-details" *ngIf="entry.entryTime">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"

@@ -270,14 +270,17 @@
                 background: rgba(var(--status-active-rgb), 0.1);
                 color: $status-active;
             }
+
             &.status-inactive {
                 background: rgba(var(--status-inactive-rgb), 0.1);
                 color: $status-inactive;
             }
+
             &.status-pending {
                 background: rgba(var(--status-pending-rgb), 0.1);
                 color: $status-pending;
             }
+
             &.status-blocked {
                 background: rgba(var(--status-rejected-rgb), 0.1);
                 color: $status-rejected;
@@ -388,14 +391,17 @@
                 background: rgba(var(--status-active-rgb), 0.1);
                 color: $status-active;
             }
+
             &.status-inactive {
                 background: rgba(var(--status-inactive-rgb), 0.1);
                 color: $status-inactive;
             }
+
             &.status-pending {
                 background: rgba(var(--status-pending-rgb), 0.1);
                 color: $status-pending;
             }
+
             &.status-blocked {
                 background: rgba(var(--status-rejected-rgb), 0.1);
                 color: $status-rejected;
