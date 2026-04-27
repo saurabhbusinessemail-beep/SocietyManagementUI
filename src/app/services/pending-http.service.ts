@@ -26,12 +26,13 @@ export class PendingHttpService {
         this.pendingCount.next(this.pendingRequests.size);
     }
 
-    removeRequest(url: string, showUserMessage: boolean = true): void {
+    removeRequest(url: string, showUserMessage: boolean = true, overrideMessage?: string): void {
         const userMessage = this.pendingRequests.get(url);
         this.pendingRequests.delete(url);
         this.pendingCount.next(this.pendingRequests.size);
         if (showUserMessage && userMessage) {
-            this._snackBar.open(userMessage.message, userMessage.action, { duration: this.durationInSeconds * 1000, panelClass: 'snackbar-success' });
+            const messageToShow = overrideMessage || userMessage.message;
+            this._snackBar.open(messageToShow, userMessage.action, { duration: this.durationInSeconds * 1000, panelClass: 'snackbar-success' });
         }
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IMyProfile, IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
@@ -7,6 +7,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
+import { PendingHttpService } from '../../../services/pending-http.service';
 
 @Component({
   selector: 'app-add-society',
@@ -14,6 +15,8 @@ import { LoginService } from '../../../services/login.service';
   styleUrl: './add-society.component.scss'
 })
 export class AddSocietyComponent implements OnInit, OnDestroy {
+
+  private pendingHttpService = inject(PendingHttpService);
 
   fb = new FormGroup({
     societyId: new FormControl<string>(''),
@@ -169,7 +172,7 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
 
       if (this.myProfile && this.myProfile.user.role === 'user')
         this.createSocietyForApproval(payload);
-      else if (!this.myProfile ||  this.myProfile.user.role === 'user')
+      else if (!this.myProfile || this.myProfile.user.role === 'user')
         this.loginAndSendForApproval(payload);
       else
         this.add(payload);
@@ -186,11 +189,16 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
   }
 
   createSocietyForApproval(payload: any) {
+    this.pendingHttpService.addRequest('request-society', { message: 'Request sent to society admin for approval.' });
     this.societyService.createSocietyForApproval(payload)
       .pipe(take(1))
       .subscribe({
-        next: response => this.location.back(),
+        next: response => {
+          this.pendingHttpService.removeRequest('request-society');
+          this.router.navigateByUrl('/society/pendingApproval/societies');
+        },
         error: err => {
+          this.pendingHttpService.removeRequest('request-society');
           this.errorMessage = 'Error while sending society for approval.';
           console.log('error while adding society');
         }

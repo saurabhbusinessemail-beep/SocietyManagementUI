@@ -360,18 +360,18 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       this.saveTenant();
     }
 
-    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Owner' });
+    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Owner...' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.pendingHttpService.removeRequest('join-as');
+          this.pendingHttpService.removeRequest('join-as', true, response.message);
           if (response.success && response.token) this.updateUserToken(response.token);
           this.isSaving = false;
         },
         error: () => {
           this.isSaving = false;
-          this.pendingHttpService.removeRequest('join-as');
+          this.pendingHttpService.removeRequest('join-as', false);
         }
       });
   }
@@ -382,18 +382,18 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     if (!payload) return;
 
     this.isSaving = true;
-    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Tenant' });
+    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Tenant...' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.pendingHttpService.removeRequest('join-as');
+          this.pendingHttpService.removeRequest('join-as', true, response.message);
           if (response.success && response.token) this.updateUserToken(response.token);
           this.isSaving = false;
         },
         error: () => {
           this.isSaving = false;
-          this.pendingHttpService.removeRequest('join-as');
+          this.pendingHttpService.removeRequest('join-as', false);
         }
       });
   }
@@ -403,18 +403,18 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     if (!payload) return;
 
     this.isSaving = true;
-    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Security' });
+    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Security...' });
     this.newUserService.newSecurity(payload)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.pendingHttpService.removeRequest('join-as');
+          this.pendingHttpService.removeRequest('join-as', true, response.message);
           if (response.success && response.token) this.updateUserToken(response.token);
           this.isSaving = false;
         },
         error: () => {
           this.isSaving = false;
-          this.pendingHttpService.removeRequest('join-as');
+          this.pendingHttpService.removeRequest('join-as', false);
         }
       });
   }
