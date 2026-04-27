@@ -70,7 +70,8 @@
                         *ngIf="!floorControl.value || floorControl.value === flat.floor.toString()"
                         [selectMode]="selectMode" [selected]="selectedIds.has(flat._id)"
                         (selectedChange)="onSelectionChange(flat._id, $event)"
-                        [showDelete]="canDeleteFlat && !selectMode" (delete)="deleteFlat(flat)">
+                        [showDelete]="canDeleteFlat && !selectMode" (delete)="deleteFlat(flat)"
+                        (flatClick)="onFlatClick(flat)">
                     </ui-flat-card>
                 </ng-container>
 

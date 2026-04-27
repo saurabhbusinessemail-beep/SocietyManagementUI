@@ -1,6 +1,25 @@
 <app-layout [hideMoreActions]="true" [pageTitle]="pageTitle"
     [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
     <div class="flat-details-container">
+        
+        <!-- Owner Details Section -->
+        <div class="owner-section" *ngIf="showOwnerSection">
+            <div class="owner-card">
+                <div class="owner-info">
+                    <ui-user-avatar [user]="owner?.userId" [name]="owner?.name" size="lg"></ui-user-avatar>
+                    <div class="owner-text">
+                        <span class="owner-label">FLAT OWNER</span>
+                        <h3 class="owner-name">{{ owner?.name }}</h3>
+                    </div>
+                </div>
+                <div class="owner-contact" *ngIf="owner?.contact">
+                    <a [href]="'tel:' + owner?.contact" class="contact-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.18-2.18a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        {{ owner?.contact }}
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <!-- Flat Information Card -->
         <div class="info-card">
@@ -60,7 +79,7 @@
                         </svg>
                         Self
                     </span>
-                    <button class="edit-button" (click)="handleChangeResidingTypeClick()">
+                    <button class="edit-button" (click)="handleChangeResidingTypeClick()" *ngIf="canManageFlat">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -197,7 +216,7 @@
                     </svg>
                     <h3 class="section-title">Residents</h3>
                 </div>
-                <button class="manage-btn" (click)="manageResidents()" [disabled]="loadingOtherFlatMembers">
+                <button class="manage-btn" (click)="manageResidents()" [disabled]="loadingOtherFlatMembers" *ngIf="canManageFlat">
                     Manage
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
@@ -244,7 +263,7 @@
                             </svg>
                         </div>
                         <p>Your current plan does not support Resident management.</p>
-                        <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
+                        <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety" *ngIf="canManageFlat">
                             Upgrade Plan
                             <app-icon name="upgrade" size="sm"></app-icon>
                         </button>
@@ -276,7 +295,7 @@
                             </svg>
                             <h3 class="section-title">Vehicles</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageVehicles()" [disabled]="loadingVehicles">
+                        <button class="manage-btn" (click)="manageVehicles()" [disabled]="loadingVehicles" *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -385,7 +404,7 @@
                                 </svg>
                                 <h3 class="section-title">Tenant</h3>
                             </div>
-                            <button class="manage-btn" (click)="manageTenants()" [disabled]="!loadingTenants">
+                            <button class="manage-btn" (click)="manageTenants()" [disabled]="!loadingTenants" *ngIf="canManageFlat">
                                 Manage
                                 <app-icon name="goto" size="md"></app-icon>
                             </button>
@@ -417,7 +436,7 @@
                                     </div>
                                     <p>Your current plan does not support Tenant management.</p>
                                     <button class="upgrade-btn" (click)="gotoPlanUpgrade()"
-                                        [disabled]="!canUpdateSociety">
+                                        [disabled]="!canUpdateSociety" *ngIf="canManageFlat">
                                         Upgrade Plan
                                         <app-icon name="upgrade" size="sm"></app-icon>
                                     </button>
@@ -449,7 +468,7 @@
                             </svg>
                             <h3 class="section-title">Complaints</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageComplaints()" [disabled]="loadingComplaints">
+                        <button class="manage-btn" (click)="manageComplaints()" [disabled]="loadingComplaints" *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -522,7 +541,7 @@
                             </svg>
                             <h3 class="section-title">Gate Entries</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageGateEntries()" [disabled]="laodingGateEntries">
+                        <button class="manage-btn" (click)="manageGateEntries()" [disabled]="laodingGateEntries" *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -603,7 +622,7 @@
                             </svg>
                             <h3 class="section-title">Gate Passes</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageGatePasses()" [disabled]="loadingGatePasses">
+                        <button class="manage-btn" (click)="manageGatePasses()" [disabled]="loadingGatePasses" *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>

@@ -110,6 +110,30 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     return this.windowService.mode.value === 'mobile' ? residingType : 'Residing: ' + residingType
   }
 
+  get owner(): IFlatMember | undefined {
+    return this.flatMember?.owner;
+  }
+
+  get showOwnerSection(): boolean {
+    if (!this.owner || !this.myProfile) return false;
+    const ownerUserId = typeof this.owner.userId === 'string' ? this.owner.userId : this.owner.userId?._id;
+    return ownerUserId !== this.myProfile.user._id;
+  }
+
+  get canManageFlat(): boolean {
+    if (!this.flatMember || !this.myProfile) return false;
+
+    // Check if viewed member is the user
+    const viewedUserId = typeof this.flatMember.userId === 'string' ? this.flatMember.userId : this.flatMember.userId?._id;
+    if (viewedUserId === this.myProfile.user._id) return true;
+
+    // Check if user is in members list
+    return this.members.some(m => {
+      const mUserId = typeof m.userId === 'string' ? m.userId : m.userId?._id;
+      return mUserId === this.myProfile?.user._id;
+    });
+  }
+
   get currentSocietyId(): string | undefined {
     if (!this.flatMember) return undefined;
 
@@ -118,6 +142,18 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       return societyId;
     } else if (societyId && typeof societyId === 'object' && '_id' in societyId) {
       return societyId._id;
+    }
+    return undefined;
+  }
+
+  get currentFlatId(): string | undefined {
+    if (!this.flatMember) return undefined;
+
+    const flatId = this.flatMember.flatId;
+    if (typeof flatId === 'string') {
+      return flatId;
+    } else if (flatId && typeof flatId === 'object' && '_id' in flatId) {
+      return flatId._id;
     }
     return undefined;
   }
@@ -189,6 +225,14 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
           const societyId = typeof this.flatMember.societyId === 'string'
             ? this.flatMember.societyId
             : this.flatMember.societyId._id;
+
+          // Auto select society if not already selected
+          const society = this.flatMember.societyId;
+          if (typeof society !== 'string') {
+            if (this.societyService.selectedSocietyFilterValue?.value !== society._id) {
+              this.societyService.selectSocietyFilter({ label: society.societyName, value: society._id });
+            }
+          }
           this.loadingFlatMember = false;
 
           // Load current plan to check feature availability
@@ -508,6 +552,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleChangeResidingTypeClick() {
+    if (!this.canManageFlat) return;
     this.resetDialogData();
     this.currentDialogRef = this.dialog.open(this.confirmationTemplate);
   }
@@ -573,38 +618,61 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   manageResidents() {
-    if (!this.membersFeatureAvailable || !this.flatId) return;
-    this.router.navigate(['members', this.flatId, 'list']);
+    if (!this.canManageFlat) return;
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId && flatId) {
+      this.router.navigate(['/myflats', societyId, flatId, 'members']);
+    }
   }
 
   manageVehicles() {
-    if (!this.vehiclesFeatureAvailable || !this.flatMember || !this.flatId) return;
-
-    this.router.navigate(['vehicles', this.flatId, 'list']);
+    if (!this.canManageFlat) return;
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId && flatId) {
+      this.router.navigate(['/myflats', societyId, flatId, 'vehicles']);
+    }
   }
 
   manageComplaints() {
-    if (!this.complaintsFeatureAvailable || !this.flatId) return;
-    this.router.navigate(['complaints', this.flatId, 'list']);
+    if (!this.canManageFlat) return;
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId && flatId) {
+      this.router.navigate(['/myflats', societyId, flatId, 'complaints']);
+    }
   }
 
   manageGateEntries() {
-    if (!this.gateEntriesFeatureAvailable || !this.flatId) return;
-    this.router.navigate(['visitors', this.flatId, 'list']);
+    if (!this.canManageFlat) return;
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId && flatId) {
+      this.router.navigate(['/myflats', societyId, flatId, 'gateEntries']);
+    }
   }
 
   manageGatePasses() {
-    if (!this.gatePassesFeatureAvailable || !this.flatId) return;
-    this.router.navigate(['gatepass', this.flatId, 'list']);
+    if (!this.canManageFlat) return;
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId && flatId) {
+      this.router.navigate(['/myflats', societyId, flatId, 'gatePasses']);
+    }
   }
 
   manageTenants() {
-    if (!this.gatePassesFeatureAvailable || !this.flatId) return;
-    this.router.navigate(['tenants', this.flatId, 'list']);
+    if (!this.canManageFlat) return;
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId && flatId) {
+      this.router.navigate(['/myflats', societyId, flatId, 'tenants']);
+    }
   }
 
   gotoPlanUpgrade() {
-    if (!this.flatMember) return;
+    if (!this.canManageFlat || !this.flatMember) return;
 
     const societyId = typeof this.flatMember.societyId === 'string'
       ? this.flatMember.societyId

@@ -15,6 +15,85 @@
     }
 }
 
+// Owner Section
+.owner-section {
+    margin-bottom: $sp-md;
+
+    .owner-card {
+        background: linear-gradient(135deg, $color-white 0%, $color-cancel 100%);
+        border: 1px solid $color-border;
+        border-radius: $btn-border-radius-lg;
+        padding: $sp-md $sp-lg;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $sp-md;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        transition: transform 0.2s;
+
+        @include mobile {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: $sp-sm;
+        }
+
+        .owner-info {
+            display: flex;
+            align-items: center;
+            gap: $sp-md;
+
+            .owner-text {
+                display: flex;
+                flex-direction: column;
+
+                .owner-label {
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: 0.1em;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                }
+
+                .owner-name {
+                    font-size: $font-size-base;
+                    font-weight: 700;
+                    color: $color-black;
+                    margin: 0;
+                }
+            }
+        }
+
+        .owner-contact {
+            .contact-link {
+                display: flex;
+                align-items: center;
+                gap: $sp-xs;
+                background-color: $color-white;
+                padding: $sp-sm $sp-md;
+                border-radius: $btn-border-radius-md;
+                color: $color-dark-blue;
+                font-weight: 600;
+                font-size: $font-size-sm;
+                text-decoration: none;
+                border: 1px solid $color-border;
+                transition: all 0.2s;
+
+                &:hover {
+                    background-color: $color-dark-blue;
+                    color: $color-white;
+                    border-color: $color-dark-blue;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                svg {
+                    stroke: currentColor;
+                }
+            }
+        }
+    }
+}
+
 // Plan Banner
 .plan-banner {
     background-color: $color-dark-blue;

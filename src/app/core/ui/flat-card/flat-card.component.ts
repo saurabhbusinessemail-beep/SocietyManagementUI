@@ -17,6 +17,7 @@ export class FlatCardComponent {
 
   @Output() edit = new EventEmitter<IFlat>();
   @Output() delete = new EventEmitter<IFlat>();
+  @Output() flatClick = new EventEmitter<IFlat>();
 
   /**
    * Returns a display string for the building.
@@ -73,9 +74,14 @@ export class FlatCardComponent {
     this.edit.emit(this.flat);
   }
 
-  onDelete(event: MouseEvent): void {
+  onDelete(event: Event) {
     event.stopPropagation();
     this.delete.emit(this.flat);
+  }
+
+  onFlatClick(event: Event) {
+    event.stopPropagation();
+    this.flatClick.emit(this.flat);
   }
 
   toggleSelection(event: Event): void {

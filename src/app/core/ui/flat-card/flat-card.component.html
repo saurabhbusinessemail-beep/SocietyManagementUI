@@ -4,7 +4,7 @@
             <input type="checkbox" [checked]="selected">
         </div>
         <div class="flat-info">
-            <h3 class="flat-number">Flat {{ flat.flatNumber }}</h3>
+            <h3 class="flat-number clickable" (click)="onFlatClick($event)">Flat {{ flat.flatNumber }}</h3>
             <span class="flat-type-badge" [ngClass]="'type-' + (flat.flatType | lowercase)">
                 {{ flat.flatType }}
             </span>

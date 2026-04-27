@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { IBuilding, IFlat, ISociety, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
@@ -265,7 +265,8 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
     private loginService: LoginService,
     private dialog: MatDialog,
     dialogService: DialogService,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private router: Router
   ) { super(dialogService) }
 
   ngOnInit(): void {
@@ -536,6 +537,11 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
           this.loadFlats(this.societyId ?? '', buildingId ?? undefined);
         },
       })
+  }
+
+  onFlatClick(flat: IFlat) {
+    const idToPass = flat.flatOwnerMemberId || flat._id;
+    this.router.navigate(['myflats/details', idToPass]);
   }
 
   deleteOneRecord(id: string) {

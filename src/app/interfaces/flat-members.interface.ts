@@ -22,6 +22,8 @@ export interface IFlatMember extends IDefaultFields {
     rentAmount?: number;
     documents: any;
     status: 'active' | 'expired' | 'terminated';
+    owner?: IFlatMember;
+    tenant?: IFlatMember;
 }
 
 export interface IMyFlatResponse extends IFlatMember {
