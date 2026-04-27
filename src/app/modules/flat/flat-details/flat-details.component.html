@@ -137,9 +137,7 @@
         <div class="profile-card" *ngIf="flatMember && showFlatMemberProfile">
 
             <div class="profile-header">
-                <div class="profile-avatar">
-                    <span class="avatar-initials">{{ getInitials(flatMember.name) }}</span>
-                </div>
+                <ui-user-avatar [user]="flatMember.userId" [name]="flatMember.name" size="xl"></ui-user-avatar>
                 <div class="profile-info">
                     <h3 class="profile-name">{{ flatMember.name }}</h3>
                     <div class="profile-meta">
@@ -210,9 +208,7 @@
                     <div class="resident-list" *ngIf="members.length; else noResidents">
                         <div class="resident-item" *ngFor="let member of members">
                             <div class="resident-info">
-                                <div class="resident-avatar">
-                                    <span class="avatar-letter">{{ getInitials(member.name) }}</span>
-                                </div>
+                                <ui-user-avatar [user]="member.userId" [name]="member.name" size="md"></ui-user-avatar>
                                 <div class="resident-details">
                                     <p class="resident-name">{{ member.name }}</p>
                                     <span class="resident-role" *ngIf="member.isOwner">Owner</span>

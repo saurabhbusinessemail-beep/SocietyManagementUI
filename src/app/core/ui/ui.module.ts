@@ -44,6 +44,7 @@ import { CircularDisplayComponent } from './circular-display/circular-display.co
 import { EmptyRecordsComponent } from './empty-records/empty-records.component';
 import { PipeModule } from "../../pipes/pipes.module";
 import { LoadingDataComponent } from './loading-data/loading-data.component';
+import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { LoadingDataComponent } from './loading-data/loading-data.component';
     VehicleCardComponent,
     CircularDisplayComponent,
     EmptyRecordsComponent,
-    LoadingDataComponent
+    LoadingDataComponent,
+    UserAvatarComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -126,7 +128,8 @@ import { LoadingDataComponent } from './loading-data/loading-data.component';
     VehicleCardComponent,
     CircularDisplayComponent,
     EmptyRecordsComponent,
-    LoadingDataComponent
+    LoadingDataComponent,
+    UserAvatarComponent
   ],
   providers: [MatDatepickerModule]
 })

@@ -96,10 +96,7 @@
                 <h4>Owner Information</h4>
             </div>
             <div class="user-details">
-                <div class="avatar" [style.background-color]="getAvatarBgColor(ownerUser)"
-                    [style.color]="getAvatarColor(ownerUser)">
-                    {{ getUserInitials(ownerUser) }}
-                </div>
+                <ui-user-avatar [user]="ownerUser" size="md"></ui-user-avatar>
                 <div class="info">
                     <p class="name">{{ getUserName(ownerUser) }}</p>
                     <div class="contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -121,10 +118,7 @@
                 <h4>Tenant Information</h4>
             </div>
             <div class="user-details">
-                <div class="avatar" [style.background-color]="getAvatarBgColor(tenantUser)"
-                    [style.color]="getAvatarColor(tenantUser)">
-                    {{ getUserInitials(tenantUser) }}
-                </div>
+                <ui-user-avatar [user]="tenantUser" size="md"></ui-user-avatar>
                 <div class="info">
                     <p class="name">{{ getUserName(tenantUser) }}</p>
                     <div class="contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"

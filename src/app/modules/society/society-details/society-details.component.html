@@ -93,7 +93,8 @@
                         <ng-container *ngIf="!loadingSociety">
                             <div class="list-items" *ngIf="adminIds.length > 0; else noAdmins">
                                 <div class="user-chip" *ngFor="let a of adminIds">
-                                    <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span>
+                                    <ui-user-avatar [user]="a" size="sm"></ui-user-avatar>
+                                    <!-- <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span> -->
                                 </div>
                             </div>
                             <ng-template #noAdmins>
@@ -127,7 +128,8 @@
                         <ng-container *ngIf="!loadingSociety">
                             <div class="list-items" *ngIf="managerIds.length > 0; else noSecretaries">
                                 <div class="user-chip" *ngFor="let s of managerIds">
-                                    <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
+                                    <ui-user-avatar [user]="s" size="sm"></ui-user-avatar>
+                                    <!-- <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span> -->
                                     <!-- <button class="remove-chip" *ngIf="canDeleteManager" (click)="removeSecretary(s)">
                                     <app-icon name="delete"></app-icon>
                                 </button> -->
@@ -163,7 +165,8 @@
                         <ng-container *ngIf="!loadingSecurities">
                             <div class="list-items" *ngIf="securities.length > 0; else noSecurities">
                                 <div class="user-chip" *ngFor="let s of securities">
-                                    <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
+                                    <ui-user-avatar [user]="s" size="sm"></ui-user-avatar>
+                                    <!-- <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span> -->
                                 </div>
                             </div>
                             <ng-template #noSecurities>

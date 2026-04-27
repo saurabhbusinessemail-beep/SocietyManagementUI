@@ -1,0 +1,9 @@
+<div class="user-avatar-container" [ngClass]="['size-' + size]">
+    <div class="avatar-circle">
+        <img *ngIf="displayPicture" [src]="displayPicture" class="avatar-img" [alt]="displayName" />
+        <span *ngIf="!displayPicture" class="avatar-initials">{{ initials }}</span>
+    </div>
+    <div class="avatar-label" *ngIf="showLabel">
+        <span class="user-name">{{ displayName }}</span>
+    </div>
+</div>

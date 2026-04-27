@@ -83,9 +83,7 @@
 
             <!-- Author Information -->
             <div class="author-section">
-                <div class="author-avatar">
-                    {{ createdByUser?.name?.charAt(0) || 'A' }}
-                </div>
+                <ui-user-avatar [user]="createdByUser" size="lg"></ui-user-avatar>
                 <div class="author-details">
                     <span class="author-name">{{ createdByUser?.name || 'Unknown' }}</span>
                     <span class="author-role" *ngIf="createdByUser?.role">{{ createdByUser?.role | titlecase }}</span>

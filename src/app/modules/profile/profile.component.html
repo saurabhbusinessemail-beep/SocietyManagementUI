@@ -13,15 +13,7 @@
             <!-- Profile Header with Avatar -->
             <div class="profile-header">
                 <div class="avatar-container">
-                    <!-- Image Avatar (if exists) -->
-                    <div class="avatar-image" *ngIf="profilePictureUrl">
-                        <img [src]="profilePictureUrl" alt="Profile Picture">
-                    </div>
-
-                    <!-- Initial Avatar (if no image) -->
-                    <div class="avatar-initial" *ngIf="!profilePictureUrl">
-                        {{ getInitial() }}
-                    </div>
+                    <ui-user-avatar [profilePicture]="profilePictureUrl" [name]="user.name || user.email || 'U'" size="full"></ui-user-avatar>
 
                     <!-- Edit Button Overlay -->
                     <button class="avatar-edit-btn" (click)="triggerFileInput()">

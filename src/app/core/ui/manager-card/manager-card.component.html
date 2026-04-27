@@ -4,12 +4,7 @@
             <input type="checkbox" [checked]="selected">
         </div>
         <div class="user-info">
-            <div class="avatar">
-                <img *ngIf="user.profilePicture" [src]="user.profilePicture" alt="{{ getUserDisplayName() }}">
-                <span *ngIf="!user.profilePicture" class="avatar-placeholder">
-                    {{ getUserInitials() }}
-                </span>
-            </div>
+            <ui-user-avatar [user]="user" size="md"></ui-user-avatar>
             <div class="name-role">
                 <h3 class="user-name">{{ getUserDisplayName() }}</h3>
                 <span class="role-badge" [ngClass]="user.role">{{ user.role }}</span>
