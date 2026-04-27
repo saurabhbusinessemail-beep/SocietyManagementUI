@@ -101,38 +101,25 @@
                 justify-content: flex-end;
             }
 
-            button {
-                border: none;
-                background: none;
-                padding: $sp-xs $sp-sm;
-                border-radius: $btn-border-radius-sm;
-                font-size: $font-size-sm;
-                font-weight: 500;
+            app-icon {
                 cursor: pointer;
-                transition: background-color 0.2s ease, color 0.2s ease;
+                transition: transform 0.2s ease, color 0.2s ease;
+                margin-left: $sp-xs;
 
-                @include mobile {
-                    flex: 1;
-                    max-width: 120px;
+                &:hover {
+                    transform: scale(1.1);
                 }
 
                 &.edit-btn {
-                    background-color: $btn-bg-primary;
-                    color: $btn-text-primary;
+                    color: $color-dark-blue;
 
                     &:hover {
-                        background-color: color-mix(in srgb, var(--color-dark-blue), black 10%);
+                        color: $color-light-blue;
                     }
                 }
 
                 &.delete-btn {
-                    background-color: $color-border;
                     color: $status-rejected;
-
-                    &:hover {
-                        background-color: $status-rejected;
-                        color: $color-white;
-                    }
                 }
             }
         }
