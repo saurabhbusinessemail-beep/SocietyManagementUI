@@ -27,7 +27,7 @@
             *ngIf="societies.length > 0">
             <ng-container *ngFor="let s of societies">
                 <ui-circular-display [label]="s.societyName" [smColumns]="6" [mdColumns]="3" [lgColumns]="2"
-                    (onClicked)="handleSocietyClick(s)">
+                    (onClicked)="handleSocietyClick(s)" class="link-blue">
                 </ui-circular-display>
             </ng-container>
         </ui-form-layout>

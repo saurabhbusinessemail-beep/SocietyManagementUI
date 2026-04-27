@@ -100,6 +100,17 @@ body {
     color: $btn-error;
 }
 
+.link-blue {
+    color: $color-link !important;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+}
+
 // header/footer shared background
 .app-header,
 .app-footer {
@@ -594,5 +605,26 @@ body {
 .snackbar-success {
     .mdc-snackbar__surface {
         background-color: $status-approved !important;
+    }
+}
+
+// Mat Menu Theme
+.mat-mdc-menu-panel.mobile-action-panel {
+    background-color: $color-white !important;
+    
+    .mobile-actions {
+        background-color: $color-white;
+        color: $color-black;
+
+        // Ensure icons inside use theme color
+        app-icon, svg {
+            color: $color-link;
+            stroke: $color-link;
+        }
+
+        // Ensure buttons inside use theme color
+        .btn.only-content {
+            color: $color-link;
+        }
     }
 }

@@ -104,7 +104,7 @@
                         </svg>
                         SOCIETY
                     </div>
-                    <p class="detail-value" *ngIf="!loadingFlatMember">{{ getSociety()?.societyName || '—' }}</p>
+                    <p class="detail-value link-blue" *ngIf="!loadingFlatMember" (click)="handleSocietyClick()">{{ getSociety()?.societyName || '—' }}</p>
                     <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
 
                 </div>

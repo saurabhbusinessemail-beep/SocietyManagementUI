@@ -681,6 +681,13 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     this.router.navigate(['society/current-plan', societyId]);
   }
 
+  handleSocietyClick() {
+    const societyId = this.currentSocietyId;
+    if (societyId) {
+      this.router.navigate(['society/details', societyId]);
+    }
+  }
+
   ngOnDestroy(): void {
     this.currentDialogRef?.close();
   }

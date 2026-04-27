@@ -111,11 +111,11 @@
             }
 
             &.self {
-                color: $color-light-gray;
+                color: $color-black;
             }
 
             &.tenant {
-                color: $color-light-gray;
+                color: $color-black;
             }
         }
 
@@ -127,8 +127,8 @@
 
         &:has(.self),
         &:has(.tenant) {
-            background-color: rgba(var(--color-light-gray-rgb), 0.05);
-            border: 1px solid rgba(var(--color-light-gray-rgb), 0.1);
+            background-color: rgba(var(--color-sky-rgb), 0.3);
+            border: 1px solid rgba(var(--color-sky-rgb), 0.5);
         }
     }
 
@@ -188,7 +188,7 @@
                 border: 1px solid rgba(var(--color-help-text-rgb), 0.2);
 
                 .icon svg {
-                    stroke: $color-light-gray;
+                    stroke: $color-black;
                 }
             }
 
@@ -311,7 +311,7 @@
 
         .lease-dates {
             font-size: $font-size-xs;
-            color: $color-light-gray;
+            color: $color-black;
             margin: 0;
         }
     }

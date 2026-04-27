@@ -10,6 +10,16 @@
     border-top: solid 1px $color-sky;
     margin-bottom: $sp-md;
 
+    @include desktop {
+        padding-left: $sp;
+        padding-right: $sp;
+    }
+
+    @include tablet {
+        padding-left: $sp;
+        padding-right: $sp;
+    }
+
     .selected-filter-info {
         display: grid;
         grid-template-columns: repeat(2, 1fr) !important;

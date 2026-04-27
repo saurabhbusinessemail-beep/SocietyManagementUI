@@ -103,6 +103,16 @@ app-footer {
 
 ::ng-deep {
     .mat-mdc-menu-panel {
+        background-color: rgba(var(--color-white-rgb), 0.85) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid $color-border !important;
         border-radius: 17px !important;
+        box-shadow: 0 10px 30px rgba(var(--color-black-rgb), 0.15) !important;
+
+        .mobile-actions {
+            background-color: transparent !important;
+            color: $color-black;
+        }
     }
 }

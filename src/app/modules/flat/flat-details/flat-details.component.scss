@@ -1090,13 +1090,13 @@
         p {
             margin: 0;
             line-height: 1.5;
-            color: $color-light-gray;
+            color: $color-black;
         }
 
         &.note {
             padding-top: 0;
             font-style: italic;
-            color: $color-help-text;
+            color: $color-note-gray;
             font-size: $font-size-sm;
         }
     }
@@ -1119,7 +1119,7 @@
 
             &.btn-cancel {
                 background-color: $color-cancel;
-                color: $color-light-gray;
+                color: $color-black;
 
                 &:hover {
                     background-color: $color-border;

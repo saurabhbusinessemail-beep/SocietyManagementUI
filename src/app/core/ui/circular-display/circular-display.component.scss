@@ -27,10 +27,10 @@
 
     // Bordered variant
     &.container-bordered {
-        border: 1px solid rgba(var(--color-dark-blue-rgb), 0.2);
+        border: 1px solid color-mix(in srgb, var(--color-link), transparent 80%);
 
         &:hover {
-            border-color: rgba(var(--color-dark-blue-rgb), 0.5);
+            border-color: color-mix(in srgb, var(--color-link), transparent 50%);
         }
     }
 
@@ -51,6 +51,16 @@
         max-width: 100%;
         word-break: break-word;
     }
+
+    &.link-blue {
+        .label-text {
+            color: $color-link !important;
+            &:hover {
+                text-decoration: underline;
+                opacity: 0.8;
+            }
+        }
+    }
 }
 
 .circular-display {
@@ -62,7 +72,8 @@
     flex-shrink: 0;
 
     // Background gradient fallback (will be overridden by inline style if provided)
-    background: linear-gradient(135deg, rgba(var(--color-dark-blue-rgb), 0.15) 0%, rgba(var(--color-dark-blue-rgb), 0.05) 100%);
+    // Background gradient fallback (will be overridden by inline style if provided)
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-link), transparent 85%) 0%, color-mix(in srgb, var(--color-link), transparent 95%) 100%);
 
     // Ensure content is centered
     >* {

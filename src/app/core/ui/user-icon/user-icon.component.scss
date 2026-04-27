@@ -50,10 +50,12 @@
     position: absolute;
     right: 0;
     top: calc(100% + $sp-sm);
-    background: $color-white;
+    background: rgba(var(--color-white-rgb), 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid $color-border;
     border-radius: $btn-border-radius-md;
-    box-shadow: 0 10px 25px rgba(var(--color-black-rgb), 0.1);
+    box-shadow: 0 10px 30px rgba(var(--color-black-rgb), 0.15);
     z-index: $z-user-dropdown;
     width: 320px;
     max-width: 90vw;
@@ -70,7 +72,8 @@
         display: flex;
         align-items: center;
         gap: $sp;
-        background: linear-gradient(135deg, $color-light-gray 0%, rgba(var(--color-sky-rgb), 0.3) 100%);
+        background: linear-gradient(135deg, rgba(var(--color-sky-rgb), 0.2) 0%, rgba(var(--color-sky-rgb), 0.05) 100%);
+        border-bottom: 1px solid $color-border;
 
         .user-avatar {
             width: 48px;
@@ -144,7 +147,7 @@
             margin: 0;
 
             &:hover {
-                background: $color-light-gray;
+                background: rgba(var(--color-dark-blue-rgb), 0.05);
             }
 
             .menu-btn {
@@ -167,7 +170,7 @@
 
                 &:focus {
                     outline: none;
-                    background: $color-light-gray;
+                    background: rgba(var(--color-dark-blue-rgb), 0.05);
                 }
 
                 @include mobile {
@@ -252,7 +255,7 @@
 
     .dropdown-footer {
         padding: $sp-sm $sp-md;
-        background: $color-light-gray;
+        background: rgba(var(--color-sky-rgb), 0.1);
         text-align: center;
 
         .version-text {
@@ -299,7 +302,9 @@
         right: 20px;
         width: 16px;
         height: 16px;
-        background: $color-white;
+        background: rgba(var(--color-white-rgb), 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border-left: 1px solid $color-border;
         border-top: 1px solid $color-border;
         transform: rotate(45deg);

@@ -8,8 +8,8 @@ import { Component, Input, OnInit, AfterContentInit, Output, EventEmitter } from
 export class CircularDisplayComponent implements OnInit, AfterContentInit {
   @Input() label?: string;
   @Input() showLabel: boolean = true;
-  @Input() iconColor: string = 'var(--color-dark-blue)';
-  @Input() backgroundColor: string = 'rgba(var(--color-dark-blue-rgb), 0.1)';
+  @Input() iconColor: string = 'var(--color-link)';
+  @Input() backgroundColor: string = 'color-mix(in srgb, var(--color-link), transparent 90%)';
   @Input() containerBackground: string = 'rgba(var(--color-white-rgb), 0.6)';
   @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md';
   @Input() variant: 'default' | 'bordered' | 'shadow' = 'default';

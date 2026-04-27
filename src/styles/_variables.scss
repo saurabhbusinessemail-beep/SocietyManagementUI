@@ -23,6 +23,7 @@ $color-cancel: var(--color-cancel); // slate-100
 $color-help-text: var(--color-help-text); // slate-400
 $color-disable-background: var(--color-disable-background);
 $color-amber: var(--color-amber);
+$color-link: var(--color-link);
 
 // Errors
 $color-error-dark: var(--color-error-dark);
@@ -88,7 +89,7 @@ $input-padding-mobile: 8px;
 $input-border-radius: 8px;
 
 // Menu widths
-$menu-width-expanded: 220px; // decreased from 260px
+$menu-width-expanded: 300px; // decreased from 260px
 $menu-width-icons: 40px; // decreased from 45px
 
 // z-index
