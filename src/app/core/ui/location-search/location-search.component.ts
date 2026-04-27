@@ -3,6 +3,7 @@ import { LocationSearchService } from './location-search.service';
 import { UILocationResult } from '../../../interfaces';
 import { UIBaseFormControl } from '../../../directives';
 import { NgControl } from '@angular/forms';
+import { Geolocation } from '@capacitor/geolocation';
 
 declare const google: any;
 
@@ -61,8 +62,9 @@ export class LocationSearchComponent extends UIBaseFormControl<UILocationResult 
     this.locationInput.nativeElement.value = '';
   }
 
-  useCurrentLocation(): void {
-    navigator.geolocation.getCurrentPosition(pos => {
+  async useCurrentLocation(): Promise<void> {
+    try {
+      const pos = await Geolocation.getCurrentPosition();
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
@@ -83,6 +85,9 @@ export class LocationSearchComponent extends UIBaseFormControl<UILocationResult 
         this.locationSelect.emit(location);
         this.updateValue(location);
       });
-    });
+    } catch (error) {
+      console.error('Error getting location', error);
+      // Optional: Add some user-facing error message here
+    }
   }
 }
