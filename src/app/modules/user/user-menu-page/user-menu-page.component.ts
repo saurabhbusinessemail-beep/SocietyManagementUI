@@ -7,8 +7,10 @@ import { MenuService } from '../../../services/menu.service';
 import { IconsService } from '../../../core/icons/icons.service';
 import { SocietyService } from '../../../services/society.service';
 import { ThemeService } from '../../../services/theme.service';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Subscription, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { UserService } from '../../../services/user.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-menu-page',
@@ -34,6 +36,8 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
     return this.societyService.societyPlanLoading;
   }
 
+  profilePictureUrl: SafeUrl | string | null = null;
+  private destroy$ = new Subject<void>();
   private subscription = new Subscription();
 
   constructor(
@@ -43,7 +47,9 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
     private menuService: MenuService,
     public iconService: IconsService,
     private societyService: SocietyService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private userService: UserService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -53,10 +59,35 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
         this.selectedSociety = selected || null;
       })
     );
+    this.loadProfilePicture();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadProfilePicture(): void {
+    const savedPicture = this.userService.getProfilePictureToStorage();
+    if (savedPicture) {
+      this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(savedPicture);
+    } else {
+      this.userService.getMyProfilePicture()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response: any) => {
+            if (response?.success && response.data) {
+              this.profilePictureUrl = response.data;
+              if (typeof this.profilePictureUrl === 'string')
+                this.userService.saveProfilePictureToStorage(this.profilePictureUrl);
+            }
+          },
+          error: (error) => {
+            console.error('Error loading profile picture:', error);
+          }
+        });
+    }
   }
 
   loadSocieties(): void {

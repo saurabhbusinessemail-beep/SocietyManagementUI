@@ -366,7 +366,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.pendingHttpService.removeRequest('join-as', true, response.message);
-          if (response.success && response.token) this.updateUserToken(response.token);
+          if (response.success && response.token) this.updateUserToken(response.token, '/society/pendingApproval/flats');
           this.isSaving = false;
         },
         error: () => {
@@ -388,7 +388,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.pendingHttpService.removeRequest('join-as', true, response.message);
-          if (response.success && response.token) this.updateUserToken(response.token);
+          if (response.success && response.token) this.updateUserToken(response.token, '/society/pendingApproval/flats');
           this.isSaving = false;
         },
         error: () => {
@@ -409,7 +409,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           this.pendingHttpService.removeRequest('join-as', true, response.message);
-          if (response.success && response.token) this.updateUserToken(response.token);
+          if (response.success && response.token) this.updateUserToken(response.token, '/society/pendingApproval/security');
           this.isSaving = false;
         },
         error: () => {
@@ -419,17 +419,18 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private updateUserToken(token: string): void {
+  private updateUserToken(token: string, url?: string): void {
     this.loginService.saveTokenToStorage(token);
     this.loginService.loadProfile()
       .pipe(take(1))
       .subscribe((response: any) => {
         if (response?.success) {
-          if (this.menuService.userMenusValue.length > 1) {
-            this.menuService.selectAndLoadMenu(this.menuService.userMenusValue[1]);
-          } else {
-            this.menuService.syncSelectedMenuWithCurrentUrl(true);
-          }
+          if (url) this.router.navigateByUrl(url);
+          // if (this.menuService.userMenusValue.length > 1) {
+          //   this.menuService.selectAndLoadMenu(this.menuService.userMenusValue[1]);
+          // } else {
+          //   this.menuService.syncSelectedMenuWithCurrentUrl(true);
+          // }
         }
       });
   }

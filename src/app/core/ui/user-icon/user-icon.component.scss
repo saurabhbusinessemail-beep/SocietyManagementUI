@@ -35,6 +35,13 @@
         app-icon {
             color: $color-header-text;
         }
+
+        .avatar-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     }
 }
 
@@ -76,6 +83,13 @@
 
             app-icon {
                 color: $color-dark-blue;
+            }
+
+            .avatar-dropdown {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
             }
         }
 
