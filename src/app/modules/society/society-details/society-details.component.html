@@ -233,7 +233,7 @@
                         </div>
                     </div>
                     <button class="action-button" (click)="gotoFlatManager()"
-                        [disabled]="!loadingFlats || !canViewFlats">
+                        [disabled]="loadingFlats || !canViewFlats">
                         Manage <app-icon name="goto" size="md"></app-icon>
                     </button>
                 </div>
@@ -280,7 +280,8 @@
                 </div>
 
                 <!-- Complaints Card -->
-                <div class="feature-card" [class.feature-card--locked]="!complaintsFeatureAvailable && !loadingComplaints">
+                <div class="feature-card"
+                    [class.feature-card--locked]="!complaintsFeatureAvailable && !loadingComplaints">
                     <div class="feature-header">
                         <app-icon name="complaint" class="feature-icon feature-icon--red"></app-icon>
                         <h2 class="feature-title">Complaints</h2>

@@ -6,6 +6,7 @@ import { Platform } from '@angular/cdk/platform';
 import { App } from '@capacitor/app';
 import { GateEntryService } from './gate-entry.service';
 import { LoginService } from './login.service';
+import { take } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -118,6 +119,10 @@ export class PushNotificationService {
                 allData: data
             });
 
+            if (['APPROVAL_REQUEST', 'APPROVAL_RESPONSE', 'SOCIETY_APPROVED'].includes(type)) {
+                this.loginService.loadProfile().pipe(take(1)).subscribe();
+            }
+
             // Navigate based on notification type
             if (type === 'GATE_PASS' && gateEntryId) {
                 setTimeout(() => {
@@ -130,6 +135,12 @@ export class PushNotificationService {
             } else if (type === 'APPROVAL_REQUEST' || type === 'APPROVAL_RESPONSE') {
                 const tabId = data.requestType === 'Security' ? 'security' : 'flats';
                 this.router.navigate(['/society/pendingApproval'], { queryParams: { tabId } });
+            } else if (type === 'SOCIETY_APPROVED') {
+                if (notificationId) {
+                    this.router.navigate(['/notifications', notificationId]);
+                } else {
+                    this.router.navigate(['/home']);
+                }
             } else if (type === 'OTP') {
                 this.loginService.otpReceived.next(data.otp);
 
