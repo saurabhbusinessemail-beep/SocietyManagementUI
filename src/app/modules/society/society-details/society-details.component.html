@@ -51,7 +51,7 @@
                                 {{ addedBuildings }}
                                 <span class="out-of"> / {{ society?.numberOfBuildings || 0 }}</span>
                             </ng-container>
-                            <ui-loading *ngIf="loadingBuildings" message="Loading">
+                            <ui-loading *ngIf="loadingBuildings" message="">
                             </ui-loading>
                         </p>
                     </div>
@@ -68,7 +68,7 @@
                                 {{ addedFlats }}
                                 <span class="out-of"> / {{ society?.numberOfFlats || 0 }}</span>
                             </ng-container>
-                            <ui-loading *ngIf="loadingFlats" message="Loading">
+                            <ui-loading *ngIf="loadingFlats" message="">
                             </ui-loading>
                         </p>
                     </div>

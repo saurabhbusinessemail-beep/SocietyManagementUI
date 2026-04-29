@@ -19,7 +19,7 @@ export class SocietySearchComponent extends UIBaseFormControl<ISociety | undefin
   societiesSearchConfig: IUIControlConfig = {
     id: 'society',
     label: 'Society',
-    placeholder: 'Search Society',
+    placeholder: 'Type your society name to search',
   };
   societiesSearchControl = new FormControl<IUIDropdownOption | undefined>(undefined);
   societies: ISociety[] = [];
@@ -33,7 +33,7 @@ export class SocietySearchComponent extends UIBaseFormControl<ISociety | undefin
     let userSearchConfig: IUIControlConfig = {
       id: 'society',
       label: 'Society',
-      placeholder: 'Search Society',
+      placeholder: 'Type your society name to search',
     };
 
     if (this.required) {
@@ -59,7 +59,7 @@ export class SocietySearchComponent extends UIBaseFormControl<ISociety | undefin
 
   subscribeToSearchChange() {
     this.search$.pipe(
-      debounceTime(100),
+      debounceTime(500),
       distinctUntilChanged(),
       takeUntil(this.isComponentActive),
       filter(txt => !!txt),

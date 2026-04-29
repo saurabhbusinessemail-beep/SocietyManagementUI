@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DemoService } from '../../../services/demo.service';
 import { LoginService } from '../../../services/login.service';
+import { Subject, takeUntil } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ITimeSlotAvailability, IDemoBooking, IBEResponseFormat } from '../../../interfaces';
 import { BookingSource } from '../../../constants';
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './book-demo.component.html',
   styleUrls: ['./book-demo.component.scss']
 })
-export class BookDemoComponent implements OnInit {
+export class BookDemoComponent implements OnInit, OnDestroy {
   private _snackBar = inject(MatSnackBar);
   private router = inject(Router);
 
@@ -24,6 +25,7 @@ export class BookDemoComponent implements OnInit {
   submitSuccess = false;
   submitError: string | null = null;
   bookingReference: string | null = null;
+  private isComponentActive = new Subject<void>();
 
   // Slot availability
   slotAvailability: ITimeSlotAvailability | null = null;
@@ -50,14 +52,21 @@ export class BookDemoComponent implements OnInit {
     this.initializeForm();
 
     // Watch for date changes to check availability
-    this.demoForm.get('preferredDate')?.valueChanges.subscribe(date => {
-      if (date) {
-        this.loadSlotAvailability(date);
-      } else {
-        this.slotAvailability = null;
-        this.unavailableSlots.clear();
-      }
-    });
+    this.demoForm.get('preferredDate')?.valueChanges
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(date => {
+        if (date) {
+          this.loadSlotAvailability(date);
+        } else {
+          this.slotAvailability = null;
+          this.unavailableSlots.clear();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.isComponentActive.next();
+    this.isComponentActive.complete();
   }
 
   private initializeForm(): void {
@@ -89,31 +98,33 @@ export class BookDemoComponent implements OnInit {
     this.isLoadingSlots = true;
     this.unavailableSlots.clear();
 
-    this.demoService.checkSlotAvailability(date).subscribe({
-      next: (response) => {
-        this.isLoadingSlots = false;
-        if (response.success && response.data) {
-          this.slotAvailability = response.data;
+    this.demoService.checkSlotAvailability(date)
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe({
+        next: (response) => {
+          this.isLoadingSlots = false;
+          if (response.success && response.data) {
+            this.slotAvailability = response.data;
 
-          // Track unavailable slots
-          response.data.slots.forEach(slot => {
-            if (!slot.available) {
-              this.unavailableSlots.add(slot.time);
+            // Track unavailable slots
+            response.data.slots.forEach(slot => {
+              if (!slot.available) {
+                this.unavailableSlots.add(slot.time);
+              }
+            });
+
+            // Clear selected time if it's now unavailable
+            if (this.selectedTime && this.unavailableSlots.has(this.selectedTime)) {
+              this.selectedTime = null;
             }
-          });
-
-          // Clear selected time if it's now unavailable
-          if (this.selectedTime && this.unavailableSlots.has(this.selectedTime)) {
-            this.selectedTime = null;
           }
+        },
+        error: (error) => {
+          this.isLoadingSlots = false;
+          console.error('Failed to load slot availability:', error);
+          // Don't block booking if availability check fails
         }
-      },
-      error: (error) => {
-        this.isLoadingSlots = false;
-        console.error('Failed to load slot availability:', error);
-        // Don't block booking if availability check fails
-      }
-    });
+      });
   }
 
   // Check if field is invalid and touched
@@ -241,9 +252,12 @@ export class BookDemoComponent implements OnInit {
     const bookingData = this.prepareBookingData();
 
     this.demoService.bookDemo(bookingData)
-      .pipe(finalize(() => {
-        // Any cleanup if needed
-      }))
+      .pipe(
+        takeUntil(this.isComponentActive),
+        finalize(() => {
+          // Any cleanup if needed
+        })
+      )
       .subscribe({
         next: (response) => this.handleSuccess(response),
         error: (error) => this.handleError(error)

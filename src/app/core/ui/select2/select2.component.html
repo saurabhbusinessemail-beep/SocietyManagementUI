@@ -9,8 +9,9 @@
 
 
     <!-- Input -->
-    <ng-select [items]="options" bindLabel="label" [ngModel]="value"
-        (change)="onInput($event)" (search)="onSearch($event)">
+    <ng-select #select [items]="options" bindLabel="label" [ngModel]="value"
+        [placeholder]="placeholder || config?.placeholder || ''" (change)="onInput($event)" (search)="onSearch($event)"
+        (open)="onOpen(select)">
     </ng-select>
 
 

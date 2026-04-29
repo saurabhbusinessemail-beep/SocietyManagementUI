@@ -12,6 +12,8 @@ export class Select2Component
   implements OnInit, OnDestroy {
 
   @Input() options: IUIDropdownOption[] = [];
+  @Input() placeholder?: string;
+  @Input() openOnlyWithItems = false;
   @Output() searchChange = new EventEmitter<string>();
 
   ngOnInit(): void {
@@ -27,6 +29,12 @@ export class Select2Component
 
   onInput(event: any): void {
     this.updateValue(event);
+  }
+
+  onOpen(select: any) {
+    if (this.openOnlyWithItems && (!this.options || this.options.length === 0)) {
+      select.close();
+    }
   }
 
   ngOnDestroy(): void {
