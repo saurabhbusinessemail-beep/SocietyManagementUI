@@ -94,7 +94,7 @@
                             <div class="list-items" *ngIf="adminIds.length > 0; else noAdmins">
                                 <div class="user-chip" *ngFor="let a of adminIds">
                                     <ui-user-avatar [user]="a" size="sm"></ui-user-avatar>
-                                    <!-- <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span> -->
+                                    <span>{{ a.name ?? '' }} {{ a.phoneNumber }}</span>
                                 </div>
                             </div>
                             <ng-template #noAdmins>
@@ -129,7 +129,7 @@
                             <div class="list-items" *ngIf="managerIds.length > 0; else noSecretaries">
                                 <div class="user-chip" *ngFor="let s of managerIds">
                                     <ui-user-avatar [user]="s" size="sm"></ui-user-avatar>
-                                    <!-- <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span> -->
+                                    <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
                                     <!-- <button class="remove-chip" *ngIf="canDeleteManager" (click)="removeSecretary(s)">
                                     <app-icon name="delete"></app-icon>
                                 </button> -->
@@ -166,7 +166,7 @@
                             <div class="list-items" *ngIf="securities.length > 0; else noSecurities">
                                 <div class="user-chip" *ngFor="let s of securities">
                                     <ui-user-avatar [user]="s" size="sm"></ui-user-avatar>
-                                    <!-- <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span> -->
+                                    <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
                                 </div>
                             </div>
                             <ng-template #noSecurities>
@@ -322,6 +322,51 @@
                     </ui-loading>
                     <button class="feature-manage-btn" (click)="gotoComplaints()" [disabled]="loadingComplaints"
                         *ngIf="canUpdateSociety">
+                        Manage
+                    </button>
+                </div>
+
+                <!-- Maintenance Card -->
+                <div class="feature-card"
+                    [class.feature-card--locked]="!maintenanceFeatureAvailable && !loadingMaintenance">
+                    <div class="feature-header">
+                        <app-icon name="home" class="feature-icon feature-icon--indigo"></app-icon>
+                        <h2 class="feature-title">Maintenance</h2>
+                    </div>
+                    <ng-container *ngIf="!loadingMaintenance">
+
+                        <div class="feature-stats" *ngIf="maintenanceFeatureAvailable; else maintenanceLocked">
+                            <ng-container *ngIf="maintenanceSummary; else noMaintenance">
+                                <div class="stat-badge stat-badge--success">
+                                    Paid: {{ maintenanceSummary.paidCount }}
+                                </div>
+                                <div class="stat-badge stat-badge--warning">
+                                    Pending: {{ maintenanceSummary.pendingCount }}
+                                </div>
+                            </ng-container>
+                            <ng-template #noMaintenance>
+                                <div class="stat-badge stat-badge--neutral">No maintenance data</div>
+                            </ng-template>
+                        </div>
+
+                        <ng-template #maintenanceLocked>
+                            <div class="locked-content">
+                                <div class="locked-icon-wrapper">
+                                    <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
+                                </div>
+                                <p class="locked-message">Your current plan does not support the Maintenance feature.
+                                </p>
+                                <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
+                                    Upgrade Plan <app-icon name="upgrade"></app-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+
+                    </ng-container>
+                    <ui-loading *ngIf="loadingMaintenance" message="Loading">
+                    </ui-loading>
+                    <button class="feature-manage-btn" (click)="gotoMaintenance()" [disabled]="loadingMaintenance"
+                        *ngIf="canUpdateSociety && maintenanceFeatureAvailable">
                         Manage
                     </button>
                 </div>

@@ -18,7 +18,7 @@ export class IconsService {
       'abacus', 'account', 'account-circle', 'admin', 'announcement', 'approve', 'approve-reject', 'arrow-down', 'arrow-left', 'back', 'block-icon', 'building',
       'calendar', 'call', 'clear', 'close', 'comment', 'complaint', 'coupon', 'dashboard', 'delete', 'demo', 'double-arrow-right', 'down-arrow',
       'download', 'edit', 'exit', 'expire', 'filter', 'gateentry', 'gatepass', 'goto', 'help', 'home', 'in-progress', 'invalid',
-      'location-color', 'lock', 'logout-icon', 'member', 'menu-icon', 'menu', 'more-vert', 'multi-select-on', 'multi-select', 'pin', 'publish', 'qr-code', 'reject',
+      'location-color', 'lock', 'logout-icon', 'member', 'menu-icon', 'menu', 'more-vert', 'multi-select-on', 'multi-select', 'notifications', 'pin', 'publish', 'qr-code', 'reject',
       'resolved', 'search', 'secretary', 'security', 'setting', 'society-icon', 'tenant', 'upgrade', 'user-icon', 'valid', 'vehicle', 'visitor'
     ];
 

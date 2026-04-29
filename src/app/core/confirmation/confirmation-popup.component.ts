@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IConfirmationPopupDataConfig } from '../../interfaces';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-confirmation-popup',
@@ -8,6 +9,8 @@ import { IConfirmationPopupDataConfig } from '../../interfaces';
   styleUrl: './confirmation-popup.component.scss'
 })
 export class ConfirmationPopupComponent {
+
+  inputControl = new FormControl('');
 
   constructor(
     private dialogRef: MatDialogRef<ConfirmationPopupComponent>,
@@ -17,5 +20,13 @@ export class ConfirmationPopupComponent {
 
   close() {
     this.dialogRef.close();
+  }
+
+  onAction(result: any) {
+    if (this.data.showInput) {
+      this.dialogRef.close({ result, inputValue: this.inputControl.value });
+    } else {
+      this.dialogRef.close(result);
+    }
   }
 }

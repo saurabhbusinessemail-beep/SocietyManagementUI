@@ -14,6 +14,7 @@ import { CurrentPlanComponent } from './current-plan/current-plan.component';
 import { PlanHistoryComponent } from './plan-history/plan-history.component';
 import { PendingApprovalComponent } from './pending-approval/pending-approval.component';
 import { SocietySecuritiesComponent } from './society-securities/society-securities.component';
+import { MaintenanceListComponent } from './maintenance-list/maintenance-list.component';
 
 const routes: Routes = [
   // Socities
@@ -139,6 +140,13 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     component: ParkingsListComponent,
     data: { permission: PERMISSIONS.flat_view, checkSocietyId: true }
+  },
+
+  // Maintenance
+  {
+    path: ':societyId/maintenance',
+    component: MaintenanceListComponent,
+    data: { checkSocietyId: true }
   }
 ];
 

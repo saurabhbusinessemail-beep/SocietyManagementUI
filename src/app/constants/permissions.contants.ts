@@ -51,5 +51,8 @@ export const PERMISSIONS = {
     role_view: "role.view",
     feature_view: "feature.view",
     feature_add: "feature.add",
-    gateentry_manage: "gateentry.manage"
+    gateentry_manage: "gateentry.manage",
+    maintenance_view: "maintenance.view",
+    maintenance_add: "maintenance.add",
+    maintenance_manage: "maintenance.manage"
 }

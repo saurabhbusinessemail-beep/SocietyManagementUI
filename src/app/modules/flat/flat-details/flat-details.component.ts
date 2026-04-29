@@ -13,7 +13,8 @@ import {
   IVehicle,
   IParking,
   IMyProfile,
-  ICurrentPlanResponse
+  ICurrentPlanResponse,
+  IMaintenancePayment
 } from '../../../interfaces';
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
@@ -25,6 +26,8 @@ import { FEATURES, PERMISSIONS, ResidingTypes } from '../../../constants';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VehicleService } from '../../../services/vehicle.service';
 import { DialogService } from '../../../services/dialog.service';
+import { MaintenanceService } from '../../../services/maintenance.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-flat-details',
@@ -56,6 +59,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   gateEntriesFeatureAvailable: boolean = false;
   gatePassesFeatureAvailable: boolean = false;
   tenantManagementFeatureAvailable: boolean = false;
+  maintenanceFeatureAvailable: boolean = false;
 
   // Related data arrays (populated via API calls)
   members: IFlatMember[] = [];           // other residents of the same flat
@@ -65,6 +69,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   vehicles: IVehicle[] = [];
   parkings: IParking[] = [];
   tenants: IFlatMember[] = [];
+  maintenancePayments: IMaintenancePayment[] = [];
 
   loadingFlatMember = true;
   loadingPlan = true;
@@ -76,6 +81,37 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   loadingVehicles = true; //
   loadingParkings = true;
   loadingTenants = true;
+  loadingMaintenance = true;
+  recordingMaintenance = false;
+
+  // Maintenance payment form controls
+  @ViewChild('maintenancePayTemplate') maintenancePayTemplate!: TemplateRef<any>;
+  maintenanceDialogRef: MatDialogRef<any> | null = null;
+  maintenanceAmount = new FormControl<number>(0);
+  maintenanceDate = new FormControl<Date>(new Date());
+  maintenancePaymentMethod = new FormControl<string>('');
+  maintenancePaymentDetails = new FormControl<string>('');
+  maintenanceMonth = new FormControl<number>(new Date().getMonth() + 1);
+  maintenanceYear = new FormControl<number>(new Date().getFullYear());
+  maintenanceNote = new FormControl<string>('');
+
+  monthConfig = { id: 'month', label: 'Month' };
+  yearConfig = { id: 'year', label: 'Year' };
+
+  get monthOptions() {
+    return Array.from({ length: 12 }, (_, i) => ({
+      value: i + 1,
+      label: this.maintenanceService.getMonthFullName(i + 1)
+    }));
+  }
+
+  get yearOptions() {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 5 }, (_, i) => ({
+      value: currentYear - i,
+      label: (currentYear - i).toString()
+    }));
+  }
 
 
   get pageTitle(): string {
@@ -118,6 +154,15 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     if (!this.owner || !this.myProfile) return false;
     const ownerUserId = typeof this.owner.userId === 'string' ? this.owner.userId : this.owner.userId?._id;
     return ownerUserId !== this.myProfile.user._id;
+  }
+
+  get ownerName(): string {
+    if (this.owner?.name) return this.owner.name;
+    const ownerUserId = this.owner?.userId;
+    if (ownerUserId && typeof ownerUserId === 'object' && (ownerUserId as any).name) {
+      return (ownerUserId as any).name;
+    }
+    return 'N/A';
   }
 
   get canManageFlat(): boolean {
@@ -184,7 +229,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     private planService: PricingPlanService,
     private dialog: MatDialog,
     private vehicleService: VehicleService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    public maintenanceService: MaintenanceService
   ) { }
 
   ngOnInit(): void {
@@ -196,6 +242,15 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.loadFlatMember(this.flatMemberId);
+  }
+
+  viewHistory(): void {
+    if (this.flatMember?.flatId) {
+      const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id;
+      this.router.navigate(['/myflats/logs', flatId], { 
+        queryParams: { societyId: this.flatMember.societyId } 
+      });
+    }
   }
 
   getPlanDurationDisplay(): string {
@@ -314,6 +369,11 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     );
     if (!this.tenantManagementFeatureAvailable) this.loadingTenants = false;
 
+    this.maintenanceFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
+      f.key === FEATURES.MAINTENANCE && f.included === true
+    );
+    if (!this.maintenanceFeatureAvailable) this.loadingMaintenance = false;
+
     // console.log('Feature availability:', {
     //   members: this.membersFeatureAvailable,
     //   vehicles: this.vehiclesFeatureAvailable,
@@ -367,6 +427,10 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
     if (this.tenantManagementFeatureAvailable) {
       this.getTenants(societyId, flatId);
+    }
+
+    if (this.maintenanceFeatureAvailable) {
+      this.getMaintenancePayments(societyId, flatId);
     }
   }
 
@@ -688,7 +752,117 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ---- Maintenance ----
+
+  getMaintenancePayments(societyId: string, flatId: string) {
+    this.loadingMaintenance = true;
+    const now = new Date();
+    this.maintenanceService.getPaymentsByFlat(flatId, societyId, now.getMonth() + 1, now.getFullYear())
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.maintenancePayments = response.data || [];
+          this.loadingMaintenance = false;
+        },
+        error: () => {
+          this.loadingMaintenance = false;
+        }
+      });
+  }
+
+  get currentMonthPayment(): IMaintenancePayment | undefined {
+    const now = new Date();
+    const monthPayments = this.maintenancePayments.filter(p =>
+      p.month === (now.getMonth() + 1) &&
+      p.year === now.getFullYear()
+    );
+
+    if (monthPayments.length === 0) return undefined;
+
+    return monthPayments.find(p => p.status === 'approved') ||
+      monthPayments.find(p => p.status === 'pending_approval') ||
+      monthPayments.find(p => p.status === 'rejected');
+  }
+
+  get currentMonthLabel(): string {
+    const now = new Date();
+    return this.maintenanceService.getMonthFullName(now.getMonth() + 1) + ' ' + now.getFullYear();
+  }
+
+  openPayMaintenanceDialog() {
+    this.maintenanceAmount.setValue(0);
+    this.maintenanceMonth.setValue(new Date().getMonth() + 1);
+    this.maintenanceYear.setValue(new Date().getFullYear());
+    this.maintenanceDate.setValue(new Date());
+    this.maintenancePaymentMethod.setValue('');
+    this.maintenancePaymentDetails.setValue('');
+    this.maintenanceNote.setValue('');
+
+    const width = this.windowService.mode.value === 'mobile' ? '90%' :
+                  this.windowService.mode.value === 'tablet' ? '70%' : '50%';
+
+    this.maintenanceDialogRef = this.dialog.open(this.maintenancePayTemplate, {
+      width,
+      panelClass: 'maintenance-dialog'
+    });
+  }
+
+  closeMaintenanceDialog() {
+    this.maintenanceDialogRef?.close();
+    this.maintenanceDialogRef = null;
+  }
+
+  submitMaintenancePayment() {
+    if (!this.flatMember || !this.maintenanceAmount.value) return;
+
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (!societyId || !flatId) return;
+
+    this.recordingMaintenance = true;
+    const now = new Date();
+
+    const payload = {
+      societyId,
+      flatId,
+      flatMemberId: this.flatMember._id,
+      amount: this.maintenanceAmount.value,
+      month: this.maintenanceMonth.value,
+      year: this.maintenanceYear.value,
+      paymentMethod: this.maintenancePaymentMethod.value || undefined,
+      paymentDetails: this.maintenancePaymentDetails.value
+        ? { details: this.maintenancePaymentDetails.value }
+        : undefined,
+      paidOn: this.maintenanceDate.value || now,
+      note: this.maintenanceNote.value || undefined
+    };
+
+    this.maintenanceService.recordPayment(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.recordingMaintenance = false;
+          if (response.success) {
+            this.closeMaintenanceDialog();
+            this.getMaintenancePayments(societyId, flatId);
+          }
+        },
+        error: () => {
+          this.recordingMaintenance = false;
+        }
+      });
+  }
+
+  getPaymentStatusText(status: string): string {
+    return this.maintenanceService.getStatusDisplayText(status);
+  }
+
+  getPaymentStatusClass(status: string): string {
+    return this.maintenanceService.getStatusColorName(status);
+  }
+
   ngOnDestroy(): void {
     this.currentDialogRef?.close();
+    this.maintenanceDialogRef?.close();
   }
 }

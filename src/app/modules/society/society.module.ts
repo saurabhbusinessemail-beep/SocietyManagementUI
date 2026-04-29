@@ -24,6 +24,8 @@ import { PendingApprovalComponent } from './pending-approval/pending-approval.co
 import { MatTabsModule } from '@angular/material/tabs';
 import { PendingFlatApprovalsComponent } from './pending-flat-approvals/pending-flat-approvals.component';
 import { SocietySecuritiesComponent } from './society-securities/society-securities.component';
+import { MaintenanceListComponent } from './maintenance-list/maintenance-list.component';
+import { FilterModule } from '../../core/filter/filter.module';
 
 
 
@@ -42,7 +44,8 @@ import { SocietySecuritiesComponent } from './society-securities/society-securit
     PlanHistoryComponent,
     PendingApprovalComponent,
     PendingFlatApprovalsComponent,
-    SocietySecuritiesComponent
+    SocietySecuritiesComponent,
+    MaintenanceListComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +58,8 @@ import { SocietySecuritiesComponent } from './society-securities/society-securit
     DirectiveModule,
     PipeModule,
     MatDialogContent,
-    MatTabsModule
+    MatTabsModule,
+    FilterModule
   ]
 })
 export class SocietyModule { }

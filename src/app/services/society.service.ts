@@ -39,6 +39,20 @@ export class SocietyService {
         this._societyPlanLoading = val;
     }
 
+    get isManagerOrAdmin(): boolean {
+        const profile = this.loginService.getProfileFromStorage();
+        if (!profile) return false;
+        if (profile.user.role === 'admin') return true;
+        
+        const selectedSocietyId = this.selectedSocietyFilterValue?.value;
+        if (!selectedSocietyId) return false;
+        
+        const societyRoles = profile.socities.find(s => s.societyId === selectedSocietyId)?.societyRoles;
+        if (!societyRoles) return false;
+        
+        return societyRoles.some(sr => sr.name === SocietyRoles.societyadmin || sr.name === SocietyRoles.manager);
+    }
+
     constructor(
         private http: HttpClient,
         private router: Router,

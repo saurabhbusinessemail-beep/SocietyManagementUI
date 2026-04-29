@@ -1,23 +1,30 @@
 <div class="flex-col confirmation-container">
-
-    <div class="flex flex-end">
+    <div class="flex flex-end header">
         <ui-button type="only-content" label="" (clicked)="close()">
             <app-icon name="clear"></app-icon>
         </ui-button>
     </div>
 
-    <div class="flex flex-center flex-auto" *ngIf="data.icon">
-        <app-icon size="xxxl" [name]="data.icon"></app-icon>
+    <div class="flex-col flex-center content-area">
+        <div class="icon-wrapper" *ngIf="data.icon">
+            <app-icon size="xxxl" [name]="data.icon"></app-icon>
+        </div>
+
+        <div class="message-wrapper">
+            <h3 class="message-text">{{ data.message }}</h3>
+        </div>
+
+        <div class="input-wrapper" *ngIf="data.showInput">
+            <ui-text-box [formControl]="inputControl"
+                [config]="{id: 'popupInput', label: '', placeholder: data.inputPlaceholder || 'Enter details...'}"></ui-text-box>
+        </div>
     </div>
 
-    <div class="flex flex-center flex-auto message">
-        <ui-label [valueText]="data.message">
-        </ui-label>
-    </div>
-
-    <div class="flex flex-space-between" *ngIf="data.actionButtons.length > 0">
+    <div class="flex flex-center footer-actions" *ngIf="data.actionButtons.length > 0">
         <ng-container *ngFor="let action of data.actionButtons">
-            <ui-button [label]="action.label" [type]="action.type" (clicked)="action.onClick()"></ui-button>
+            <ui-button [label]="action.label"
+                [type]="action.type || (action.class === 'primary' ? 'primary' : action.class === 'error' ? 'error' : 'cancel')"
+                (clicked)="onAction(action.result)"></ui-button>
         </ng-container>
     </div>
 </div>

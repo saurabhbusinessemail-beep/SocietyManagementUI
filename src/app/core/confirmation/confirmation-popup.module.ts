@@ -6,6 +6,8 @@ import { IconModule } from "../icons/icon.module";
 
 
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     ConfirmationPopupComponent
@@ -13,7 +15,8 @@ import { IconModule } from "../icons/icon.module";
   imports: [
     CommonModule,
     UiModule,
-    IconModule
+    IconModule,
+    ReactiveFormsModule
 ],
 exports: [ConfirmationPopupComponent]
 })

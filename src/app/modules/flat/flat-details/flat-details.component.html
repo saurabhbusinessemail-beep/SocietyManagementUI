@@ -1,7 +1,7 @@
 <app-layout [hideMoreActions]="true" [pageTitle]="pageTitle"
     [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
     <div class="flat-details-container">
-        
+
         <!-- Owner Details Section -->
         <div class="owner-section" *ngIf="showOwnerSection">
             <div class="owner-card">
@@ -9,12 +9,17 @@
                     <ui-user-avatar [user]="owner?.userId" [name]="owner?.name" size="lg"></ui-user-avatar>
                     <div class="owner-text">
                         <span class="owner-label">FLAT OWNER</span>
-                        <h3 class="owner-name">{{ owner?.name }}</h3>
+                        <h3 class="owner-name">{{ ownerName }}</h3>
                     </div>
                 </div>
                 <div class="owner-contact" *ngIf="owner?.contact">
                     <a [href]="'tel:' + owner?.contact" class="contact-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.18-2.18a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.18-2.18a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
                         {{ owner?.contact }}
                     </a>
                 </div>
@@ -104,7 +109,8 @@
                         </svg>
                         SOCIETY
                     </div>
-                    <p class="detail-value link-blue" *ngIf="!loadingFlatMember" (click)="handleSocietyClick()">{{ getSociety()?.societyName || '—' }}</p>
+                    <p class="detail-value link-blue" *ngIf="!loadingFlatMember" (click)="handleSocietyClick()">{{
+                        getSociety()?.societyName || '—' }}</p>
                     <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
 
                 </div>
@@ -216,7 +222,8 @@
                     </svg>
                     <h3 class="section-title">Residents</h3>
                 </div>
-                <button class="manage-btn" (click)="manageResidents()" [disabled]="loadingOtherFlatMembers" *ngIf="canManageFlat">
+                <button class="manage-btn" (click)="manageResidents()" [disabled]="loadingOtherFlatMembers"
+                    *ngIf="canManageFlat">
                     Manage
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
@@ -263,7 +270,8 @@
                             </svg>
                         </div>
                         <p>Your current plan does not support Resident management.</p>
-                        <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety" *ngIf="canManageFlat">
+                        <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
+                            *ngIf="canManageFlat">
                             Upgrade Plan
                             <app-icon name="upgrade" size="sm"></app-icon>
                         </button>
@@ -295,7 +303,8 @@
                             </svg>
                             <h3 class="section-title">Vehicles</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageVehicles()" [disabled]="loadingVehicles" *ngIf="canManageFlat">
+                        <button class="manage-btn" (click)="manageVehicles()" [disabled]="loadingVehicles"
+                            *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -404,7 +413,8 @@
                                 </svg>
                                 <h3 class="section-title">Tenant</h3>
                             </div>
-                            <button class="manage-btn" (click)="manageTenants()" [disabled]="!loadingTenants" *ngIf="canManageFlat">
+                            <button class="manage-btn" (click)="manageTenants()" [disabled]="!loadingTenants"
+                                *ngIf="canManageFlat">
                                 Manage
                                 <app-icon name="goto" size="md"></app-icon>
                             </button>
@@ -468,7 +478,8 @@
                             </svg>
                             <h3 class="section-title">Complaints</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageComplaints()" [disabled]="loadingComplaints" *ngIf="canManageFlat">
+                        <button class="manage-btn" (click)="manageComplaints()" [disabled]="loadingComplaints"
+                            *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -541,7 +552,8 @@
                             </svg>
                             <h3 class="section-title">Gate Entries</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageGateEntries()" [disabled]="laodingGateEntries" *ngIf="canManageFlat">
+                        <button class="manage-btn" (click)="manageGateEntries()" [disabled]="laodingGateEntries"
+                            *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -622,7 +634,8 @@
                             </svg>
                             <h3 class="section-title">Gate Passes</h3>
                         </div>
-                        <button class="manage-btn" (click)="manageGatePasses()" [disabled]="loadingGatePasses" *ngIf="canManageFlat">
+                        <button class="manage-btn" (click)="manageGatePasses()" [disabled]="loadingGatePasses"
+                            *ngIf="canManageFlat">
                             Manage
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
@@ -682,6 +695,121 @@
             </div>
         </div>
 
+        <!-- Maintenance Section -->
+        <div class="section-card" *ngIf="maintenanceFeatureAvailable || loadingMaintenance">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <app-icon name="home"></app-icon>
+                    <h2 class="section-title">Maintenance</h2>
+                </div>
+            </div>
+
+            <ng-container *ngIf="!loadingMaintenance">
+                <div class="maintenance-section">
+                    <!-- Current month status -->
+                    <div class="maintenance-status">
+                        <div class="maintenance-month">{{ currentMonthLabel }}</div>
+
+                        <!-- Case 1: Approved or Pending -->
+                        <ng-container *ngIf="currentMonthPayment && currentMonthPayment.status !== 'rejected'">
+                            <div class="maintenance-payment-info">
+                                <div class="status-badge-maintenance"
+                                    [class.approved]="currentMonthPayment.status === 'approved'"
+                                    [class.pending]="currentMonthPayment.status === 'pending_approval'">
+                                    {{ getPaymentStatusText(currentMonthPayment.status) }}
+                                </div>
+                                <span class="payment-amount">₹{{ currentMonthPayment.amount }}</span>
+                                <span class="payment-date" *ngIf="currentMonthPayment.paidOn">
+                                    {{ currentMonthPayment.paidOn | date:'mediumDate' }}
+                                </span>
+                            </div>
+                        </ng-container>
+
+                        <!-- Case 2: Rejected -->
+                        <ng-container *ngIf="currentMonthPayment && currentMonthPayment.status === 'rejected'">
+                            <div class="maintenance-rejected-info">
+                                <div class="rejection-card">
+                                    <div class="rejection-header">
+                                        <div class="status-badge-maintenance rejected">Rejected</div>
+                                        <span class="payment-amount">₹{{ currentMonthPayment.amount }}</span>
+                                    </div>
+                                    <div class="rejection-reason-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="M12 8v4" />
+                                            <path d="M12 16h.01" />
+                                        </svg>
+                                        <div class="reason-content">
+                                            <span class="reason-label">Reason:</span>
+                                            <span class="reason-text">{{ currentMonthPayment.rejectionReason }}</span>
+                                        </div>
+                                    </div>
+                                    <button class="pay-maintenance-btn retry" (click)="openPayMaintenanceDialog()"
+                                        *ngIf="canManageFlat">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                            <path d="M3 3v5h5" />
+                                            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                                            <path d="M16 16h5v5" />
+                                        </svg>
+                                        Pay Again
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Case 3: Not Paid -->
+                        <ng-container *ngIf="!currentMonthPayment">
+                            <div class="maintenance-not-paid">
+                                <span class="status-badge-maintenance not-paid">Not Paid</span>
+                                <button class="pay-maintenance-btn" (click)="openPayMaintenanceDialog()"
+                                    *ngIf="canManageFlat">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect width="20" height="14" x="2" y="5" rx="2" />
+                                        <line x1="2" x2="22" y1="10" y2="10" />
+                                    </svg>
+                                    Pay Maintenance
+                                </button>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <!-- History Action -->
+                    <div class="maintenance-history-action">
+                        <ui-button label="View Detailed Payment History & Logs" type="cancel" (clicked)="viewHistory()">
+                            <app-icon name="goto" size="sm"></app-icon>
+                        </ui-button>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ui-loading *ngIf="loadingMaintenance" message="Loading maintenance">
+            </ui-loading>
+        </div>
+
+        <!-- Locked Maintenance -->
+        <div class="section-card locked" *ngIf="!maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <app-icon name="home"></app-icon>
+                    <h2 class="section-title">Maintenance</h2>
+                </div>
+            </div>
+            <div class="locked-feature">
+                <app-icon name="lock" size="xl"></app-icon>
+                <p>Maintenance feature is not available in your plan</p>
+                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" *ngIf="canUpdateSociety">
+                    Upgrade Plan
+                </button>
+            </div>
+        </div>
+
         <!-- Footer Meta -->
         <div class="footer-meta" *ngIf="flatMember">
             <p>Created {{ flatMember.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
@@ -714,6 +842,60 @@
                 (click)="handleVaccantClick()">Vacant</button>
         </div>
     </div>
+</ng-template>
+
+<!-- Maintenance Pay Dialog -->
+<ng-template #maintenancePayTemplate>
+    <app-add-edit-popup title="Pay Maintenance" (onClose)="closeMaintenanceDialog()">
+        <ui-form-layout>
+            <ui-drop-down [formControl]="maintenanceMonth" [config]="monthConfig" [options]="monthOptions"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-drop-down [formControl]="maintenanceYear" [config]="yearConfig" [options]="yearOptions" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-text-box type="number" [formControl]="maintenanceAmount"
+                [config]="{id: 'maintenanceAmount', label: 'Amount (₹)', placeholder: 'Enter amount'}" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-text-box>
+
+            <ui-date [formControl]="maintenanceDate" [config]="{id: 'maintenanceDate', label: 'Payment Date'}"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-date>
+
+            <ui-drop-down [formControl]="maintenancePaymentMethod" [config]="{id: 'payMethod', label: 'Payment Method'}"
+                [options]="[
+                    {value: '', label: 'Select'},
+                    {value: 'upi', label: 'UPI'},
+                    {value: 'bank_transfer', label: 'Bank Transfer'},
+                    {value: 'cash', label: 'Cash'},
+                    {value: 'cheque', label: 'Cheque'},
+                    {value: 'other', label: 'Other'}
+                ]" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-text-box [formControl]="maintenancePaymentDetails"
+                [config]="{id: 'payDetails', label: 'Payment Details (Optional)', placeholder: 'UPI ID / Account No. etc.'}"
+                [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+                *ngIf="maintenancePaymentMethod.value && maintenancePaymentMethod.value !== 'cash'">
+            </ui-text-box>
+
+            <ui-text-box [formControl]="maintenanceNote"
+                [config]="{id: 'maintenanceNote', label: 'Note (Optional)', placeholder: 'Add a note'}" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-text-box>
+        </ui-form-layout>
+
+        <ng-container actions>
+            <ui-button label="Cancel" type="only-content" (clicked)="closeMaintenanceDialog()">
+            </ui-button>
+            <ui-button label="Submit Payment" [disable]="recordingMaintenance || !maintenanceAmount.value"
+                (clicked)="submitMaintenancePayment()">
+            </ui-button>
+        </ng-container>
+    </app-add-edit-popup>
 </ng-template>
 
 <ng-template #loadingFlatInfo>

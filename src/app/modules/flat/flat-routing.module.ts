@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MyFlatListComponent } from './my-flat-list/my-flat-list.component';
 import { FlatDetailsComponent } from './flat-details/flat-details.component';
+import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
 import { PERMISSIONS } from '../../constants';
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
     component: FlatDetailsComponent,
     // data: { permission: PERMISSIONS.flat_manage }
   },
+  {
+    path: 'logs/:id',
+    component: MaintenanceLogsComponent
+  }
 ];
 
 @NgModule({

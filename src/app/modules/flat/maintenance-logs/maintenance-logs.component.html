@@ -1,0 +1,126 @@
+<app-layout [hideMoreActions]="true">
+    <div class="logs-container">
+        <div class="logs-header">
+            <div class="header-main">
+                <ui-button type="only-content" (clicked)="goBack()" label="">
+                    <app-icon name="back"></app-icon>
+                </ui-button>
+                <h2 class="page-title">Maintenance History & Logs</h2>
+            </div>
+
+            <div class="filters-grid">
+                <div class="filter-item">
+                    <label>Month</label>
+                    <select [formControl]="monthControl" class="input">
+                        <option [ngValue]="null">All Months</option>
+                        <option *ngFor="let opt of monthOptions" [ngValue]="opt.value">{{ opt.label }}</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Year</label>
+                    <select [formControl]="yearControl" class="input">
+                        <option [ngValue]="null">All Years</option>
+                        <option *ngFor="let year of yearOptions" [ngValue]="year">{{ year }}</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Log Type</label>
+                    <select [formControl]="typeControl" class="input">
+                        <option value="all">All Logs</option>
+                        <option value="payment">Payments Only</option>
+                        <option value="reminder">Reminders Only</option>
+                    </select>
+                </div>
+                <div class="filter-item" *ngIf="typeControl.value !== 'reminder'">
+                    <label>Status</label>
+                    <select [formControl]="statusControl" class="input">
+                        <option value="all">All Status</option>
+                        <option value="approved">Paid</option>
+                        <option value="pending_approval">Pending</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="logs-content" *ngIf="!loading; else loadingState">
+            <div class="empty-state" *ngIf="filteredLogs.length === 0">
+                <app-icon name="help" size="xxxl"></app-icon>
+                <p>No records found for the selected filters.</p>
+            </div>
+
+            <div class="log-timeline">
+                <div class="log-entry" *ngFor="let log of filteredLogs" [ngClass]="log.logType">
+                    <div class="entry-date-marker">
+                        <span class="marker-date">{{ log.date | date:'dd MMM yyyy' }}</span>
+                        <span class="marker-time">{{ log.date | date:'hh:mm a' }}</span>
+                    </div>
+
+                    <div class="entry-card"
+                        [ngClass]="{'payment-card': log.logType === 'payment', 'reminder-card': log.logType === 'reminder'}">
+                        <div class="card-icon">
+                            <svg *ngIf="log.logType === 'payment'" xmlns="http://www.w3.org/2000/svg" width="20"
+                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                                <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                            </svg>
+                            <svg *ngIf="log.logType === 'reminder'" xmlns="http://www.w3.org/2000/svg" width="20"
+                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                            </svg>
+                        </div>
+
+                        <div class="card-main">
+                            <div class="card-header">
+                                <span class="log-month-year">{{ getMonthName(log.month) }} {{ log.year }}</span>
+                                <span *ngIf="log.logType === 'payment'" class="status-badge"
+                                    [ngClass]="getStatusColor(log.status!)">
+                                    {{ getStatusText(log.status!) }}
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+                                <!-- Payment Specific -->
+                                <ng-container *ngIf="log.logType === 'payment'">
+                                    <div class="amount-display">{{ currencySymbol }}{{ log.amount | number }}</div>
+                                    <div class="recorded-info" *ngIf="log.recordedBy">
+                                        Recorded by <strong>{{ log.recordedBy.name }}</strong>
+                                    </div>
+                                    <div class="rejection-message"
+                                        *ngIf="log.status === 'rejected' && log.rejectionReason">
+                                        <app-icon name="help" size="sm"></app-icon>
+                                        <span>{{ log.rejectionReason }}</span>
+                                    </div>
+                                </ng-container>
+
+                                <!-- Reminder Specific -->
+                                <ng-container *ngIf="log.logType === 'reminder'">
+                                    <div class="reminder-text">
+                                        Maintenance reminder sent to member via <strong>{{ log.type }}</strong>.
+                                    </div>
+                                    <div class="sent-info" *ngIf="log.sentBy">
+                                        Sent by <strong>{{ log.sentBy.name }}</strong>
+                                    </div>
+                                </ng-container>
+
+                                <div class="note-info" *ngIf="log.note">
+                                    <span class="note-label">Note:</span> {{ log.note }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #loadingState>
+            <div class="loading-state">
+                <ui-loading message="Fetching history logs..."></ui-loading>
+            </div>
+        </ng-template>
+    </div>
+</app-layout>

@@ -1156,6 +1156,131 @@
     }
 }
 
+// Maintenance Section
+.maintenance-section {
+    padding: $sp-md $sp-lg;
+
+    .maintenance-status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: $sp;
+
+        .maintenance-month {
+            font-size: $font-size-base;
+            font-weight: 700;
+            color: $color-black;
+        }
+
+        .maintenance-payment-info {
+            display: flex;
+            align-items: center;
+            gap: $sp;
+            flex-wrap: wrap;
+
+            .payment-amount {
+                font-size: $font-size-lg;
+                font-weight: 800;
+                color: $color-dark-blue;
+            }
+
+            .payment-date {
+                font-size: $font-size-xs;
+                color: $color-help-text;
+            }
+        }
+
+        .maintenance-not-paid {
+            display: flex;
+            align-items: center;
+            gap: $sp;
+            flex-wrap: wrap;
+        }
+    }
+}
+
+.status-badge-maintenance {
+    font-size: $font-size-xs;
+    font-weight: 700;
+    padding: $sp-xs $sp;
+    border-radius: 9999px;
+
+    &.approved {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: $status-approved;
+    }
+
+    &.pending {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: $status-pending;
+    }
+
+    &.not-paid {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: $status-rejected;
+    }
+}
+
+.pay-maintenance-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $sp-xs;
+    padding: $sp-sm $sp-md;
+    border: none;
+    border-radius: $btn-border-radius-md;
+    background-color: $color-dark-blue;
+    color: $color-white;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    svg {
+        stroke: currentColor;
+    }
+}
+
+.locked-feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $sp-lg;
+    gap: $sp;
+    text-align: center;
+
+    p {
+        font-size: $font-size-sm;
+        color: $color-help-text;
+    }
+
+    .upgrade-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: $sp-xs;
+        padding: $sp-sm $sp-md;
+        border: 1px solid $color-dark-blue;
+        border-radius: $btn-border-radius-md;
+        background-color: transparent;
+        color: $color-dark-blue;
+        font-size: $font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            background-color: $color-dark-blue;
+            color: $color-white;
+        }
+    }
+}
+
 ::ng-deep {
     .loading-overlay {
         align-items: inherit !important;
@@ -1164,5 +1289,100 @@
         margin-bottom: inherit !important;
         font-size: inherit !important;
         width: auto !important;
+    }
+}
+
+.maintenance-rejected-info {
+    width: 100%;
+    margin-top: $sp-sm;
+
+    .rejection-card {
+        background-color: rgba(239, 68, 68, 0.03);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        border-radius: $btn-border-radius-md;
+        padding: $sp-md;
+        display: flex;
+        flex-direction: column;
+        gap: $sp-sm;
+
+        .rejection-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .status-badge-maintenance.rejected {
+                background-color: rgba(239, 68, 68, 0.1);
+                color: #EF4444;
+            }
+
+            .payment-amount {
+                font-size: $font-size-base;
+                font-weight: 700;
+                color: $color-black;
+            }
+        }
+
+        .rejection-reason-block {
+            display: flex;
+            align-items: flex-start;
+            gap: $sp-xs;
+            background-color: $color-white;
+            padding: $sp-sm;
+            border-radius: $btn-border-radius-sm;
+            border: 1px dashed rgba(239, 68, 68, 0.2);
+
+            svg {
+                stroke: #EF4444;
+                margin-top: 2px;
+            }
+
+            .reason-content {
+                display: flex;
+                flex-direction: column;
+
+                .reason-label {
+                    font-size: 10px;
+                    font-weight: 700;
+                    color: #EF4444;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+
+                .reason-text {
+                    font-size: 13px;
+                    color: $color-black;
+                    font-weight: 500;
+                    line-height: 1.4;
+                }
+            }
+        }
+
+        .pay-maintenance-btn.retry {
+            width: 100%;
+            justify-content: center;
+            background-color: $color-dark-blue;
+            margin-top: $sp-xs;
+
+            &:hover {
+                filter: brightness(0.9);
+            }
+        }
+    }
+}
+
+.maintenance-history-action {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    justify-content: center;
+
+    ui-button {
+        width: 100%;
+
+        ::ng-deep button {
+            width: 100%;
+            justify-content: center;
+        }
     }
 }

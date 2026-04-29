@@ -9,12 +9,15 @@ import { DirectiveModule } from '../../directives/directive.module';
 import { FlatDetailsComponent } from './flat-details/flat-details.component';
 import { IconModule } from '../../core/icons/icon.module';
 import { PipeModule } from '../../pipes/pipes.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
 
 
 @NgModule({
   declarations: [
     MyFlatListComponent,
-    FlatDetailsComponent
+    FlatDetailsComponent,
+    MaintenanceLogsComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +26,8 @@ import { PipeModule } from '../../pipes/pipes.module';
     UiModule,
     IconModule,
     DirectiveModule,
-    PipeModule
+    PipeModule,
+    ReactiveFormsModule
   ]
 })
 export class FlatModule { }

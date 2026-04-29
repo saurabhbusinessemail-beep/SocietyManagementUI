@@ -8,6 +8,8 @@ import { LoginService } from '../../../services/login.service';
 import { ComplaintService } from '../../../services/complaint.service';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
 import { catchError } from 'rxjs/operators';
+import { MaintenanceService } from '../../../services/maintenance.service';
+import { IMaintenanceSummary } from '../../../interfaces';
 
 @Component({
   selector: 'app-society-details',
@@ -28,6 +30,7 @@ export class SocietyDetailsComponent implements OnInit {
   // Feature availability flags
   parkingFeatureAvailable: boolean = false;
   complaintsFeatureAvailable: boolean = false;
+  maintenanceFeatureAvailable: boolean = false;
 
 
   loadingSociety = true;
@@ -37,6 +40,8 @@ export class SocietyDetailsComponent implements OnInit {
   loadingFlats = true;
   loadingParkings = true;
   loadingSecurities = true;
+  loadingMaintenance = true;
+  maintenanceSummary?: IMaintenanceSummary;
 
   addedBuildings = 0;
   addedFlats = 0;
@@ -79,7 +84,8 @@ export class SocietyDetailsComponent implements OnInit {
     private societyService: SocietyService,
     private loginService: LoginService,
     private complaintService: ComplaintService,
-    private planService: PricingPlanService
+    private planService: PricingPlanService,
+    private maintenanceService: MaintenanceService
   ) { }
 
 
@@ -193,6 +199,10 @@ export class SocietyDetailsComponent implements OnInit {
       f.key === FEATURES.COMPLAINTS && f.included === true
     );
 
+    this.maintenanceFeatureAvailable = !isExpired && plan.features.some(f =>
+      f.key === FEATURES.MAINTENANCE && f.included === true
+    );
+
     // console.log('Feature availability:', {
     //   parking: this.parkingFeatureAvailable,
     //   complaints: this.complaintsFeatureAvailable
@@ -219,6 +229,13 @@ export class SocietyDetailsComponent implements OnInit {
       this.loadParkings(societyId);
     } else {
       this.loadingParkings = false;
+    }
+
+    // Load maintenance summary if feature is available
+    if (this.maintenanceFeatureAvailable) {
+      this.loadMaintenanceSummary(societyId);
+    } else {
+      this.loadingMaintenance = false;
     }
   }
 
@@ -350,6 +367,30 @@ export class SocietyDetailsComponent implements OnInit {
   gotoParkingManager() {
     if (this.parkingFeatureAvailable) {
       this.router.navigate(['/society', this.society?._id, 'parkings']);
+    }
+  }
+
+  loadMaintenanceSummary(societyId: string): void {
+    this.loadingMaintenance = true;
+    const now = new Date();
+    this.maintenanceService.getMaintenanceSummary(societyId, now.getMonth() + 1, now.getFullYear())
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.maintenanceSummary = response.data;
+          }
+          this.loadingMaintenance = false;
+        },
+        error: () => {
+          this.loadingMaintenance = false;
+        }
+      });
+  }
+
+  gotoMaintenance() {
+    if (this.maintenanceFeatureAvailable) {
+      this.router.navigate(['/society', this.society?._id, 'maintenance']);
     }
   }
 
