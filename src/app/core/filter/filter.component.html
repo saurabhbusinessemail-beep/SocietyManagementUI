@@ -12,7 +12,7 @@
             </div>
 
             <app-icon name="clear" size="md" *ngIf="isFilterOpen" (click)="isFilterOpen=false"></app-icon>
-            <app-icon name="filter" size="xl" *ngIf="!isFilterOpen"></app-icon>
+            <app-icon name="filter" size="xl" *ngIf="!isFilterOpen" (click)="isFilterOpen=true"></app-icon>
         </div>
 
         <ui-form-layout>

@@ -11,6 +11,7 @@ import { IconModule } from '../../core/icons/icon.module';
 import { PipeModule } from '../../pipes/pipes.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
+import { FilterModule } from '../../core/filter/filter.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.co
     IconModule,
     DirectiveModule,
     PipeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FilterModule
   ]
 })
 export class FlatModule { }

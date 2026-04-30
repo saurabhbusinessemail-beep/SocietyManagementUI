@@ -8,8 +8,10 @@ import {
   IMaintenanceMonthlyReport,
   IMaintenanceYearlyReport,
   IMaintenanceSummary,
-  IMaintenanceLog
+  IMaintenanceLog,
+  IMaintenanceLogsResponse
 } from '../interfaces';
+import { Cacheable, InvalidateCache } from '../decorators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,17 @@ export class MaintenanceService {
   /**
    * Record a new maintenance payment
    */
+  @InvalidateCache({
+    methods: [
+      'MaintenanceService.getPaymentsByFlat*',
+      'MaintenanceService.getMonthlyReport*',
+      'MaintenanceService.getYearlyReport*',
+      'MaintenanceService.getPendingApprovals*',
+      'MaintenanceService.getMaintenanceSummary*',
+      'MaintenanceService.getLogs*'
+    ],
+    groups: ['maintenance']
+  })
   recordPayment(payload: any): Observable<IBEResponseFormat<IMaintenancePayment>> {
     return this.http.post<IBEResponseFormat<IMaintenancePayment>>(this.baseUrl, payload);
   }
@@ -30,6 +43,10 @@ export class MaintenanceService {
   /**
    * Get payments for a flat
    */
+  @Cacheable({
+    paramIndices: [0, 1, 2, 3],
+    group: 'maintenance'
+  })
   getPaymentsByFlat(flatId: string, societyId?: string, month?: number, year?: number): Observable<IBEResponseFormat<IMaintenancePayment[]>> {
     let params: any = {};
     if (societyId) params.societyId = societyId;
@@ -45,6 +62,10 @@ export class MaintenanceService {
   /**
    * Get monthly report
    */
+  @Cacheable({
+    paramIndices: [0, 1, 2],
+    group: 'maintenance'
+  })
   getMonthlyReport(societyId: string, month: number, year: number): Observable<IBEResponseFormat<IMaintenanceMonthlyReport>> {
     return this.http.post<IBEResponseFormat<IMaintenanceMonthlyReport>>(
       `${this.baseUrl}/report/monthly`,
@@ -55,6 +76,10 @@ export class MaintenanceService {
   /**
    * Get yearly report
    */
+  @Cacheable({
+    paramIndices: [0, 1],
+    group: 'maintenance'
+  })
   getYearlyReport(societyId: string, year: number): Observable<IBEResponseFormat<IMaintenanceYearlyReport>> {
     return this.http.post<IBEResponseFormat<IMaintenanceYearlyReport>>(
       `${this.baseUrl}/report/yearly`,
@@ -65,6 +90,17 @@ export class MaintenanceService {
   /**
    * Approve a payment
    */
+  @InvalidateCache({
+    methods: [
+      'MaintenanceService.getPaymentsByFlat*',
+      'MaintenanceService.getMonthlyReport*',
+      'MaintenanceService.getYearlyReport*',
+      'MaintenanceService.getPendingApprovals*',
+      'MaintenanceService.getMaintenanceSummary*',
+      'MaintenanceService.getLogs*'
+    ],
+    groups: ['maintenance']
+  })
   approvePayment(paymentId: string): Observable<IBEResponseFormat<IMaintenancePayment>> {
     return this.http.post<IBEResponseFormat<IMaintenancePayment>>(
       `${this.baseUrl}/${paymentId}/approve`,
@@ -75,6 +111,17 @@ export class MaintenanceService {
   /**
    * Reject a payment
    */
+  @InvalidateCache({
+    methods: [
+      'MaintenanceService.getPaymentsByFlat*',
+      'MaintenanceService.getMonthlyReport*',
+      'MaintenanceService.getYearlyReport*',
+      'MaintenanceService.getPendingApprovals*',
+      'MaintenanceService.getMaintenanceSummary*',
+      'MaintenanceService.getLogs*'
+    ],
+    groups: ['maintenance']
+  })
   rejectPayment(paymentId: string, reason?: string): Observable<IBEResponseFormat<IMaintenancePayment>> {
     return this.http.post<IBEResponseFormat<IMaintenancePayment>>(
       `${this.baseUrl}/${paymentId}/reject`,
@@ -85,6 +132,17 @@ export class MaintenanceService {
   /**
    * Update a payment (admin edit amount)
    */
+  @InvalidateCache({
+    methods: [
+      'MaintenanceService.getPaymentsByFlat*',
+      'MaintenanceService.getMonthlyReport*',
+      'MaintenanceService.getYearlyReport*',
+      'MaintenanceService.getPendingApprovals*',
+      'MaintenanceService.getMaintenanceSummary*',
+      'MaintenanceService.getLogs*'
+    ],
+    groups: ['maintenance']
+  })
   updatePayment(paymentId: string, data: any): Observable<IBEResponseFormat<IMaintenancePayment>> {
     return this.http.put<IBEResponseFormat<IMaintenancePayment>>(
       `${this.baseUrl}/${paymentId}`,
@@ -95,6 +153,10 @@ export class MaintenanceService {
   /**
    * Get pending approvals
    */
+  @Cacheable({
+    paramIndices: [0],
+    group: 'maintenance'
+  })
   getPendingApprovals(societyId: string): Observable<IBEResponseFormat<IMaintenancePayment[]>> {
     return this.http.get<IBEResponseFormat<IMaintenancePayment[]>>(
       `${this.baseUrl}/pending`,
@@ -106,6 +168,13 @@ export class MaintenanceService {
   /**
    * Send reminder to a flat for pending maintenance
    */
+  @InvalidateCache({
+    methods: [
+      'MaintenanceService.getMonthlyReport*',
+      'MaintenanceService.getLogs*'
+    ],
+    groups: ['maintenance']
+  })
   sendReminder(societyId: string, flatId: string, month: number, year: number): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(
       `${this.baseUrl}/remind`,
@@ -116,6 +185,13 @@ export class MaintenanceService {
   /**
    * Send reminder to all flats with pending maintenance
    */
+  @InvalidateCache({
+    methods: [
+      'MaintenanceService.getMonthlyReport*',
+      'MaintenanceService.getLogs*'
+    ],
+    groups: ['maintenance']
+  })
   sendReminderAll(societyId: string, month: number, year: number): Observable<IBEResponseFormat<any>> {
     return this.http.post<IBEResponseFormat<any>>(
       `${this.baseUrl}/remind-all`,
@@ -126,6 +202,10 @@ export class MaintenanceService {
   /**
    * Get maintenance summary
    */
+  @Cacheable({
+    paramIndices: [0, 1, 2],
+    group: 'maintenance'
+  })
   getMaintenanceSummary(societyId: string, month?: number, year?: number): Observable<IBEResponseFormat<IMaintenanceSummary>> {
     let params: any = { societyId };
     if (month) params.month = month;
@@ -179,13 +259,17 @@ export class MaintenanceService {
   /**
    * Get merged logs (payments + reminders)
    */
-  getLogs(flatId: string, societyId?: string, month?: number, year?: number): Observable<IBEResponseFormat<IMaintenanceLog[]>> {
+  @Cacheable({
+    paramIndices: [0, 1, 2, 3],
+    group: 'maintenance'
+  })
+  getLogs(flatId: string, societyId?: string, month?: number, year?: number): Observable<IBEResponseFormat<IMaintenanceLogsResponse>> {
     let params: any = {};
     if (societyId) params.societyId = societyId;
     if (month) params.month = month;
     if (year) params.year = year;
 
-    return this.http.get<IBEResponseFormat<IMaintenanceLog[]>>(
+    return this.http.get<IBEResponseFormat<IMaintenanceLogsResponse>>(
       `${this.baseUrl}/logs/flat/${flatId}`,
       { params }
     );

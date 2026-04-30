@@ -4,8 +4,13 @@
     <div class="card-header" [ngClass]="status">
 
         <!-- Title -->
-        <div class="title">
-            {{ title }}
+        <div class="title-group">
+            <div class="title">
+                {{ title }}
+            </div>
+            <div class="sub-title" *ngIf="subTitle">
+                {{ subTitle }}
+            </div>
         </div>
 
         <div class="header-info" *ngIf="!hideHeaderInfo">

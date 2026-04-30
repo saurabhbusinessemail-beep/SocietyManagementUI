@@ -11,50 +11,68 @@
     }
 }
 
+.owner-header-card {
+    background: linear-gradient(135deg, $color-white 0%, #f9fafb 100%);
+    padding: $sp-md $sp-lg;
+    border-radius: 20px;
+    border: 1px solid $color-border;
+    margin-bottom: $sp-lg;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: $sp-sm;
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: $sp-xs;
+        color: $color-help-text;
+        font-size: $font-size-xs;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+
+        app-icon {
+            opacity: 0.6;
+        }
+    }
+
+    .owner-details {
+        display: flex;
+        align-items: center;
+        gap: $sp;
+
+        .owner-info {
+            .owner-name {
+                font-size: $font-size-lg;
+                font-weight: 800;
+                color: $color-black;
+                line-height: 1.2;
+            }
+
+            .owner-contact {
+                font-size: $font-size-sm;
+                color: $color-help-text;
+                font-weight: 500;
+            }
+        }
+    }
+}
+
 .logs-header {
-    margin-bottom: $sp-xl;
+    margin-bottom: $sp-lg;
 
     .header-main {
         display: flex;
         align-items: center;
         gap: $sp;
-        margin-bottom: $sp-lg;
+        margin-bottom: $sp-md;
 
         .page-title {
             margin: 0;
             font-size: $font-size-xxl;
             font-weight: 800;
             color: $color-black;
-        }
-    }
-
-    .filters-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: $sp;
-        background: $color-white;
-        padding: $sp-md;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        border: 1px solid $color-border;
-
-        .filter-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-
-            label {
-                font-size: $font-size-xs;
-                font-weight: 600;
-                color: $color-help-text;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            select {
-                width: 100%;
-                cursor: pointer;
-            }
         }
     }
 }

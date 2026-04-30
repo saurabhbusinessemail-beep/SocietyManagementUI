@@ -137,3 +137,31 @@
     font-size: 11px;
     font-weight: 500;
 }
+
+.owner-mini-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .mini-label {
+        font-size: $font-size-xs;
+        color: $color-help-text;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .mini-details {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .mini-info {
+            .mini-name {
+                font-size: $font-size-sm;
+                font-weight: 700;
+                color: $color-black;
+            }
+        }
+    }
+}

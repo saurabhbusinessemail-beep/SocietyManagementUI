@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, take, takeUntil } from 'rxjs';
+import { debounceTime, Subject, take, takeUntil } from 'rxjs';
 import { SocietyService } from '../../../services/society.service';
 import { MaintenanceService } from '../../../services/maintenance.service';
 import { LoginService } from '../../../services/login.service';
@@ -21,7 +21,9 @@ import { CountryService } from '../../../services/country.service';
 
 interface IMaintenanceFilter {
   societyId?: string;
-  flatId?: string;
+  month?: number;
+  year?: number;
+  statusFilter?: string;
 }
 
 @Component({
@@ -46,16 +48,45 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
 
   // Filters
   selectedFilter: IMaintenanceFilter = {};
+  // Selected tab
   selectedTab = 'monthly';
 
-  // Month/Year controls
-  monthControl = new FormControl<number>(new Date().getMonth() + 1);
-  yearControl = new FormControl<number>(new Date().getFullYear());
+  // Dropdown controls following announcement-list pattern
+  monthControl = new FormControl<IUIDropdownOption | undefined>(undefined);
+  monthConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
+    id: 'month',
+    label: 'Month',
+    formControl: this.monthControl,
+    dropDownOptions: Array.from({ length: 12 }, (_, i) => ({
+      value: i + 1,
+      label: this.maintenanceService.getMonthFullName(i + 1)
+    }))
+  };
 
-  // Status filter
-  statusFilterControl = new FormControl<string>('all');
-  searchControl = new FormControl<string>('');
-  mobileFilterControl = new FormControl<string>('');
+  yearControl = new FormControl<IUIDropdownOption | undefined>(undefined);
+  yearConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
+    id: 'year',
+    label: 'Year',
+    formControl: this.yearControl,
+    dropDownOptions: Array.from({ length: 5 }, (_, i) => {
+      const currentYear = new Date().getFullYear();
+      return { value: currentYear - i, label: (currentYear - i).toString() };
+    })
+  };
+
+  statusFilterControl = new FormControl<IUIDropdownOption | undefined>(undefined);
+  statusFilterConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
+    id: 'statusFilter',
+    label: 'Status',
+    formControl: this.statusFilterControl,
+    dropDownOptions: [
+      { value: 'all', label: 'All' },
+      { value: 'approved', label: 'Paid' },
+      { value: 'pending_approval', label: 'Pending' },
+      { value: 'not_paid', label: 'Not Paid' },
+      { value: 'rejected', label: 'Rejected' }
+    ]
+  };
 
   // Payment recording dialog
   @ViewChild('recordPaymentTemplate') recordPaymentTemplate!: TemplateRef<any>;
@@ -74,33 +105,10 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
     { value: 'yearly', label: 'Yearly' }
   ];
 
-  monthConfig: IUIControlConfig = { id: 'month', label: 'Month' };
-  yearConfig: IUIControlConfig = { id: 'year', label: 'Year' };
-  statusFilterConfig: IUIControlConfig = { id: 'statusFilter', label: 'Status' };
-  searchConfig: IUIControlConfig = { id: 'search', label: 'Search', placeholder: 'Flat # or Name' };
   dateConfig: IUIControlConfig = { id: 'paidOn', label: 'Payment Date' };
 
-  statusFilterOptions: IUIDropdownOption[] = [
-    { value: 'all', label: 'All' },
-    { value: 'approved', label: 'Paid' },
-    { value: 'pending_approval', label: 'Pending' },
-    { value: 'not_paid', label: 'Not Paid' },
-    { value: 'rejected', label: 'Rejected' }
-  ];
-
-  get monthOptions(): IUIDropdownOption[] {
-    return Array.from({ length: 12 }, (_, i) => ({
-      value: i + 1,
-      label: this.maintenanceService.getMonthFullName(i + 1)
-    }));
-  }
-
-  get yearOptions(): IUIDropdownOption[] {
-    const currentYear = new Date().getFullYear();
-    return Array.from({ length: 5 }, (_, i) => ({
-      value: currentYear - i,
-      label: (currentYear - i).toString()
-    }));
+  get currentMonthLabel(): string {
+    return this.monthControl.value?.label ?? this.maintenanceService.getMonthFullName(new Date().getMonth() + 1);
   }
 
   get paidCount(): number {
@@ -127,51 +135,45 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
     return this.monthlyReport?.summary.totalCollected ?? 0;
   }
 
+  get monthOptions(): IUIDropdownOption[] {
+    return this.monthConfig.dropDownOptions ?? [];
+  }
+
+  get yearOptions(): IUIDropdownOption[] {
+    return this.yearConfig.dropDownOptions ?? [];
+  }
+
+  get statusFilterOptions(): IUIDropdownOption[] {
+    return this.statusFilterConfig.dropDownOptions ?? [];
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public societyService: SocietyService,
     public maintenanceService: MaintenanceService,
     private loginService: LoginService,
-    private windowService: WindowService,
+    public windowService: WindowService,
     private dialog: MatDialog,
     private dialogService: DialogService,
     public countryService: CountryService
   ) { }
 
   ngOnInit(): void {
-    this.subscribeToChanges();
-
-    // Fix refresh issue: load if society already selected
-    const selectedSociety = this.societyService.selectedSocietyFilterValue;
-    if (selectedSociety) {
-      this.selectedFilter = { societyId: selectedSociety.value };
-      this.loadReport();
-    }
+    // Set defaults
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    const defaultMonth = this.monthOptions.find(o => o.value === currentMonth);
+    const defaultYear = this.yearOptions.find(o => o.value === currentYear);
+    if (defaultMonth) this.monthControl.setValue(defaultMonth);
+    if (defaultYear) this.yearControl.setValue(defaultYear);
   }
 
-  subscribeToChanges() {
-    this.monthControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(() => this.loadReport());
-
-    this.yearControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(() => this.loadReport());
-
-    this.statusFilterControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(() => this.applyFilters());
-
-    this.searchControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(() => this.applyFilters());
-
-    this.mobileFilterControl.valueChanges
-      .pipe(takeUntil(this.isComponentActive))
-      .subscribe(() => this.applyFilters());
-  }
-
+  /**
+   * Called by app-filter's (filterChanged) event.
+   * The filter object contains extracted values from ALL form controls:
+   * { societyId: '...', month: 3, year: 2026, statusFilter: 'approved' }
+   */
   onFilterChanged(filter: IMaintenanceFilter) {
     this.selectedFilter = filter;
     this.loadReport();
@@ -190,8 +192,9 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   loadMonthlyReport() {
     if (!this.selectedFilter.societyId) return;
 
-    const month = this.monthControl.value || (new Date().getMonth() + 1);
-    const year = this.yearControl.value || new Date().getFullYear();
+    // Values come from selectedFilter (extracted by app-filter) or fall back to defaults
+    const month = this.selectedFilter.month || this.monthControl.value?.value || (new Date().getMonth() + 1);
+    const year = this.selectedFilter.year || this.yearControl.value?.value || new Date().getFullYear();
 
     this.loadingReport = true;
     this.maintenanceService.getMonthlyReport(this.selectedFilter.societyId, month, year)
@@ -212,7 +215,7 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   loadYearlyReport() {
     if (!this.selectedFilter.societyId) return;
 
-    const year = this.yearControl.value || new Date().getFullYear();
+    const year = this.selectedFilter.year || this.yearControl.value?.value || new Date().getFullYear();
 
     this.loadingReport = true;
     this.maintenanceService.getYearlyReport(this.selectedFilter.societyId, year)
@@ -234,27 +237,10 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
 
     let entries = this.monthlyReport.entries;
 
-    // Apply Status Filter
-    const status = this.statusFilterControl.value;
+    // Apply Status Filter — value comes from selectedFilter (already extracted by app-filter)
+    const status = this.selectedFilter.statusFilter;
     if (status && status !== 'all') {
       entries = entries.filter(e => e.status === status);
-    }
-
-    // Apply Search Filter
-    const search = this.searchControl.value?.toLowerCase();
-    if (search) {
-      entries = entries.filter(e =>
-        (e.flatNumber && e.flatNumber.toLowerCase().includes(search)) ||
-        (e.memberName && e.memberName.toLowerCase().includes(search))
-      );
-    }
-
-    // Apply Mobile Filter
-    const mobileSearch = this.mobileFilterControl.value;
-    if (mobileSearch) {
-      entries = entries.filter(e =>
-        e.memberContact && e.memberContact.includes(mobileSearch)
-      );
     }
 
     this.filteredEntries = entries;
@@ -277,8 +263,8 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   openRecordPaymentDialog(entry: IMaintenanceReportEntry) {
     this.selectedEntry = entry;
     this.paymentAmount.setValue(entry.payment?.amount ?? 0);
-    this.paymentMonth.setValue(this.monthControl.value || (new Date().getMonth() + 1));
-    this.paymentYear.setValue(this.yearControl.value || new Date().getFullYear());
+    this.paymentMonth.setValue(this.selectedFilter.month || (new Date().getMonth() + 1));
+    this.paymentYear.setValue(this.selectedFilter.year || new Date().getFullYear());
     this.paymentDate.setValue(new Date());
     this.paymentNote.setValue('');
 
@@ -386,11 +372,14 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   onRemind(entry: IMaintenanceReportEntry) {
     if (!this.selectedFilter.societyId) return;
 
+    const month = this.selectedFilter.month || (new Date().getMonth() + 1);
+    const year = this.selectedFilter.year || new Date().getFullYear();
+
     this.maintenanceService.sendReminder(
       this.selectedFilter.societyId,
       entry.flatId,
-      this.monthControl.value!,
-      this.yearControl.value!
+      month,
+      year
     ).pipe(take(1)).subscribe({
       next: (res: any) => {
         if (res.success) {
@@ -407,8 +396,8 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   onRemindAll() {
     if (!this.selectedFilter.societyId) return;
 
-    const month = this.monthControl.value!;
-    const year = this.yearControl.value!;
+    const month = this.selectedFilter.month || (new Date().getMonth() + 1);
+    const year = this.selectedFilter.year || new Date().getFullYear();
 
     this.dialogService.showConfirmation({
       message: `Send maintenance reminders to all pending flats for ${this.maintenanceService.getMonthFullName(month)} ${year}?`,

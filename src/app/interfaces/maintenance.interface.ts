@@ -43,10 +43,17 @@ export interface IMaintenanceReportEntry {
   flatId: string;
   flatNumber: string;
   floor: number;
+  buildingNumber: string | null;
+  societyName: string;
   memberName: string;
   memberContact: string;
   memberType: string;
   flatMemberId?: string;
+  owner: {
+    name: string;
+    contact: string;
+    user: IUser | null;
+  } | null;
   payment: IMaintenancePayment | null;
   status: MaintenancePaymentStatus | 'not_paid';
   lastReminderSent?: Date;
@@ -86,4 +93,19 @@ export interface IMaintenanceLog {
   recordedBy?: any;
   approvedBy?: any;
   type?: string; // for reminder type (sms/notification)
+}
+
+export interface IMaintenanceLogsResponse {
+  logs: IMaintenanceLog[];
+  flat: {
+    flatNumber: string;
+    floor: number;
+    buildingNumber: string | null;
+    societyName: string;
+    owner: {
+      name: string;
+      contact: string;
+      user: IUser | null;
+    } | null;
+  };
 }

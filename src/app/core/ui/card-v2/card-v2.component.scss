@@ -11,8 +11,22 @@
         justify-content: space-between;
         background: linear-gradient(135deg, $color-dark-blue 0%, $color-sky 60%);
 
-        .title {
-            color: $color-light-gray;
+        .title-group {
+            display: flex;
+            flex-direction: column;
+            
+            .title {
+                color: $color-light-gray;
+                font-weight: 800;
+                font-size: $font-size-base;
+            }
+
+            .sub-title {
+                color: rgba($color-light-gray, 0.8);
+                font-size: $font-size-xs;
+                font-weight: 600;
+                margin-top: 2px;
+            }
         }
 
         &.active {

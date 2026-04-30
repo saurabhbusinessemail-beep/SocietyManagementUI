@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
 export class CardV2Component {
 
   @Input() title: string = '';
+  @Input() subTitle: string = '';
   @Input() status: string = '';
   @Input() hideHeaderInfo = false;
   @Input() hideAction = false;

@@ -157,12 +157,11 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   get ownerName(): string {
-    if (this.owner?.name) return this.owner.name;
     const ownerUserId = this.owner?.userId;
     if (ownerUserId && typeof ownerUserId === 'object' && (ownerUserId as any).name) {
       return (ownerUserId as any).name;
     }
-    return 'N/A';
+    return this.owner?.name || 'N/A';
   }
 
   get canManageFlat(): boolean {
@@ -213,6 +212,15 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       : this.flatMember?.flatId._id;
   }
 
+  getDisplayName(member?: IFlatMember): string {
+    if (!member) return '—';
+    const userId = member.userId;
+    if (userId && typeof userId === 'object' && (userId as any).name) {
+      return (userId as any).name;
+    }
+    return member.name || '—';
+  }
+
   get isTenantResiding() {
     return this.flatMember?.residingType === ResidingTypes.Tenant;
   }
@@ -245,10 +253,12 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   viewHistory(): void {
-    if (this.flatMember?.flatId) {
+    if (this.flatMember) {
       const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id;
+      const societyId = typeof this.flatMember.societyId === 'string' ? this.flatMember.societyId : this.flatMember.societyId._id;
+      
       this.router.navigate(['/myflats/logs', flatId], { 
-        queryParams: { societyId: this.flatMember.societyId } 
+        queryParams: { societyId } 
       });
     }
   }

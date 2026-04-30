@@ -3,7 +3,22 @@
 
     <div class="flex-col full-h">
         <app-filter [loadFirstSociety]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            [dropDownControlConfigs]="[monthConfig, yearConfig, statusFilterConfig]"
             (filterChanged)="onFilterChanged($any($event))">
+
+            <ui-select2 [formControl]="monthControl" [config]="monthConfig"
+                [options]="monthConfig.dropDownOptions ?? []" placeholder="Select Month" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="3" *ngIf="selectedTab === 'monthly'">
+            </ui-select2>
+
+            <ui-select2 [formControl]="yearControl" [config]="yearConfig" [options]="yearConfig.dropDownOptions ?? []"
+                placeholder="Select Year" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+            </ui-select2>
+
+            <ui-select2 [formControl]="statusFilterControl" [config]="statusFilterConfig"
+                [options]="statusFilterConfig.dropDownOptions ?? []" placeholder="Select Status" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="3" *ngIf="selectedTab === 'monthly'">
+            </ui-select2>
         </app-filter>
 
         <ui-form-layout class="flex-auto">
@@ -12,29 +27,6 @@
             <ui-tabs [config]="tabsConfig" [tabs]="tabsOptions" (tabChange)="handleTabChange($event)"
                 [(tab)]="selectedTab" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-tabs>
-
-            <!-- Month/Year Selectors -->
-            <ui-drop-down [formControl]="monthControl" [config]="monthConfig" [options]="monthOptions" [smColumns]="6"
-                [mdColumns]="3" [lgColumns]="2" *ngIf="selectedTab === 'monthly'">
-            </ui-drop-down>
-
-            <ui-drop-down [formControl]="yearControl" [config]="yearConfig" [options]="yearOptions" [smColumns]="6"
-                [mdColumns]="3" [lgColumns]="2">
-            </ui-drop-down>
-
-            <!-- Status filter (monthly only) -->
-            <ui-drop-down [formControl]="statusFilterControl" [config]="statusFilterConfig"
-                [options]="statusFilterOptions" [smColumns]="6" [mdColumns]="3" [lgColumns]="2"
-                *ngIf="selectedTab === 'monthly'">
-            </ui-drop-down>
-
-            <ui-text-box [formControl]="searchControl" [config]="searchConfig" [smColumns]="6" [mdColumns]="3"
-                [lgColumns]="2" *ngIf="selectedTab === 'monthly'">
-            </ui-text-box>
-
-            <ui-text-box [formControl]="mobileFilterControl" [config]="{id: 'mobileFilter', label: 'Mobile Filter', placeholder: 'Search by mobile'}" [smColumns]="6" [mdColumns]="3"
-                [lgColumns]="2" *ngIf="selectedTab === 'monthly'">
-            </ui-text-box>
 
             <!-- Loading -->
             <ui-loading *ngIf="loadingReport" message="Loading maintenance report" [smColumns]="12" [mdColumns]="12"
@@ -109,7 +101,8 @@
                             </div>
                         </div>
 
-                        <div class="summary-card summary-card--remind" *ngIf="societyService.isManagerOrAdmin" (click)="onRemindAll()">
+                        <div class="summary-card summary-card--remind" *ngIf="societyService.isManagerOrAdmin"
+                            (click)="onRemindAll()">
                             <div class="summary-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -128,30 +121,45 @@
 
                 <!-- Flat-wise List -->
                 <ng-container *ngFor="let entry of filteredEntries">
-                    <app-card-v2 [title]="entry.flatNumber" [status]="getStatusClass(entry.status)" [smColumns]="12"
-                        [mdColumns]="6" [lgColumns]="6">
+                    <app-card-v2 [title]="entry.flatNumber"
+                        [subTitle]="(entry.buildingNumber ? entry.buildingNumber + ', ' : '') + entry.societyName"
+                        [status]="getStatusClass(entry.status)" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
 
                         <ng-container card-info>
                             <ui-label [valueText]="getStatusText(entry.status)" direction="horizontal" [valueType]="getStatusClass(entry.status) === 'approved' ? 'active' :
                                              getStatusClass(entry.status) === 'pending' ? 'pending' :
                                              getStatusClass(entry.status) === 'rejected' ? 'rejected' : 'inactive'">
                             </ui-label>
-                            <div class="rejection-reason" *ngIf="entry.status === 'rejected' && entry.payment?.rejectionReason">
+                            <div class="rejection-reason"
+                                *ngIf="entry.status === 'rejected' && entry.payment?.rejectionReason">
                                 {{ entry.payment?.rejectionReason }}
                             </div>
                         </ng-container>
 
                         <ng-container card-body>
+                            <!-- Resident (Tenant or Owner who is primary) -->
                             <ui-label [config]="{id: '', label: 'Resident'}" [valueText]="entry.memberName"
                                 direction="vertical" valueType="info">
                             </ui-label>
+
+                            <!-- Owner Section (New) -->
+                            <div class="owner-mini-section" *ngIf="entry.owner && entry.memberType !== 'Owner'">
+                                <div class="mini-label">Owner</div>
+                                <div class="mini-details">
+                                    <ui-user-avatar [user]="entry.owner.user" size="sm"></ui-user-avatar>
+                                    <div class="mini-info">
+                                        <span class="mini-name">{{ entry.owner.name }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
                             <ui-label [config]="{id: '', label: 'Type'}" [valueText]="entry.memberType"
                                 direction="vertical" valueType="info">
                             </ui-label>
 
                             <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: 'Amount'}"
-                                [valueText]="currencySymbol + (entry.payment?.amount | number)" direction="vertical" valueType="info">
+                                [valueText]="currencySymbol + (entry.payment?.amount | number)" direction="vertical"
+                                valueType="info">
                             </ui-label>
 
                             <ui-label *ngIf="entry.payment?.paidOn" [config]="{id: '', label: 'Paid On'}"
@@ -230,7 +238,8 @@
                             </ui-label>
 
                             <ui-label [config]="{id: '', label: 'Collected'}"
-                                [valueText]="currencySymbol + (monthData.totalCollected | number)" direction="vertical" valueType="info">
+                                [valueText]="currencySymbol + (monthData.totalCollected | number)" direction="vertical"
+                                valueType="info">
                             </ui-label>
                         </ng-container>
                     </app-card-v2>
@@ -256,21 +265,20 @@
             </ui-label>
 
             <!-- Amount -->
-            <ui-drop-down [formControl]="paymentMonth" [config]="monthConfig" [options]="monthOptions" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
+            <ui-drop-down [formControl]="paymentMonth" [config]="{id: 'paymentMonth', label: 'Month'}"
+                [options]="monthConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-drop-down>
 
-            <ui-drop-down [formControl]="paymentYear" [config]="yearConfig" [options]="yearOptions" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
+            <ui-drop-down [formControl]="paymentYear" [config]="{id: 'paymentYear', label: 'Year'}"
+                [options]="yearConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="paymentAmount"
-                [config]="{id: 'amount', label: 'Amount (' + currencySymbol + ')', placeholder: 'Enter amount'}" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
+                [config]="{id: 'amount', label: 'Amount (' + currencySymbol + ')', placeholder: 'Enter amount'}"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
-            <ui-date [formControl]="paymentDate" [config]="dateConfig" [smColumns]="12" [mdColumns]="6"
-                [lgColumns]="6">
+            <ui-date [formControl]="paymentDate" [config]="dateConfig" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-date>
 
             <!-- Note -->

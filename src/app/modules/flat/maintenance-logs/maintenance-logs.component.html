@@ -1,44 +1,48 @@
-<app-layout [hideMoreActions]="true">
-    <div class="logs-container">
-        <div class="logs-header">
-            <div class="header-main">
-                <ui-button type="only-content" (clicked)="goBack()" label="">
-                    <app-icon name="back"></app-icon>
-                </ui-button>
-                <h2 class="page-title">Maintenance History & Logs</h2>
-            </div>
+<app-layout [hideMoreActions]="true" pageTitle="Maintenance History & Logs"
+    [subTitle]="flat ? flat.flatNumber + (flat.buildingNumber ? ' (' + flat.buildingNumber + ')' : '') + ' • ' + flat.societyName : ''"
+    [showBackButton]="true">
 
-            <div class="filters-grid">
-                <div class="filter-item">
-                    <label>Month</label>
-                    <select [formControl]="monthControl" class="input">
-                        <option [ngValue]="null">All Months</option>
-                        <option *ngFor="let opt of monthOptions" [ngValue]="opt.value">{{ opt.label }}</option>
-                    </select>
-                </div>
-                <div class="filter-item">
-                    <label>Year</label>
-                    <select [formControl]="yearControl" class="input">
-                        <option [ngValue]="null">All Years</option>
-                        <option *ngFor="let year of yearOptions" [ngValue]="year">{{ year }}</option>
-                    </select>
-                </div>
-                <div class="filter-item">
-                    <label>Log Type</label>
-                    <select [formControl]="typeControl" class="input">
-                        <option value="all">All Logs</option>
-                        <option value="payment">Payments Only</option>
-                        <option value="reminder">Reminders Only</option>
-                    </select>
-                </div>
-                <div class="filter-item" *ngIf="typeControl.value !== 'reminder'">
-                    <label>Status</label>
-                    <select [formControl]="statusControl" class="input">
-                        <option value="all">All Status</option>
-                        <option value="approved">Paid</option>
-                        <option value="pending_approval">Pending</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
+    <div class="logs-container">
+
+        <div class="logs-header">
+
+            <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true"
+                [dropDownControlConfigs]="[monthConfig, yearConfig, typeConfig, statusConfig]"
+                (filterChanged)="handleFilterChanged($event)">
+
+                <ui-select2 [formControl]="monthControl" [config]="monthConfig"
+                    [options]="monthConfig.dropDownOptions ?? []" placeholder="All Months" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-select2>
+
+                <ui-select2 [formControl]="yearControl" [config]="yearConfig"
+                    [options]="yearConfig.dropDownOptions ?? []" placeholder="All Years" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-select2>
+
+                <ui-select2 [formControl]="typeControl" [config]="typeConfig"
+                    [options]="typeConfig.dropDownOptions ?? []" placeholder="All Logs" [smColumns]="12" [mdColumns]="6"
+                    [lgColumns]="3">
+                </ui-select2>
+
+                <ui-select2 [formControl]="statusControl" [config]="statusConfig"
+                    [options]="statusConfig.dropDownOptions ?? []" placeholder="All Status" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-select2>
+            </app-filter>
+        </div>
+
+        <!-- Owner Section -->
+        <div class="owner-header-card" *ngIf="flat?.owner">
+            <div class="section-title">
+                <app-icon name="account" size="sm"></app-icon>
+                <span>Flat Owner</span>
+            </div>
+            <div class="owner-details">
+                <ui-user-avatar [user]="flat?.owner?.user" size="md"></ui-user-avatar>
+                <div class="owner-info">
+                    <div class="owner-name">{{ flat?.owner?.name }}</div>
+                    <div class="owner-contact">{{ flat?.owner?.contact }}</div>
                 </div>
             </div>
         </div>
