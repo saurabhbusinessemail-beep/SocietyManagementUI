@@ -11,8 +11,8 @@
             <div>
                 <h3 class="flat-title">{{ getFlatNumber() }}</h3>
                 <p class="scenario-label" *ngIf="isOwnerWithTenant">My flat is rented.</p>
-                <p class="scenario-label" *ngIf="member.isOwner && member.residingType === 'Self'">It's My Flat</p>
-                <p class="scenario-label" *ngIf="member.isOwner && member.residingType === 'Vacant'">Myflat is vaccant</p>
+                <p class="scenario-label" *ngIf="member.isOwner && residingType === 'Self'">It's My Flat</p>
+                <p class="scenario-label" *ngIf="member.isOwner && residingType === 'Vacant'">Myflat is vaccant</p>
                 <p class="scenario-label" *ngIf="member.isMember && member.status === 'active'">I am a Flat Member</p>
                 <p class="scenario-label" *ngIf="member.isMember && member.status !== 'active'">I was a Flat Member</p>
                 <p class="scenario-label" *ngIf="member.isTenant && !isTenantOrMember && showTenantMessage">Renting this flat</p>

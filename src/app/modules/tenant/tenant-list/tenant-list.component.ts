@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, take } from 'rxjs';
-import { IFlatMember } from '../../../interfaces';
+import { IFlatMemberWithResidency } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ interface ITenantsFilter {
 export class TenantListComponent implements OnInit {
 
   selectedFIlter: ITenantsFilter = {};
-  tenants: IFlatMember[] = [];
+  tenants: IFlatMemberWithResidency[] = [];
   routeFlatId?: string;
 
   loadingTenants = true;
@@ -51,10 +51,10 @@ export class TenantListComponent implements OnInit {
       });
   }
 
-  async deleteTenant(tenant: IFlatMember) {
+  async deleteTenant(tenant: IFlatMemberWithResidency) {
     const forUser = !tenant.userId || typeof tenant.userId === 'string' ? undefined : ` ${tenant.userId.name ?? tenant.userId.phoneNumber}`
     if (!await this.dialogService.confirmDelete('Delete Tenant', `Are you sure you want to delete tenant ${forUser}?`)) return;
-    
+
     this.loadingTenantAction[tenant._id] = true;
     this.societyService.deleteFlatMember(tenant._id)
       .pipe(take(1))
@@ -67,7 +67,7 @@ export class TenantListComponent implements OnInit {
       });
   }
 
-  moveOut(tenant: IFlatMember, dt: Date) {
+  moveOut(tenant: IFlatMemberWithResidency, dt: Date) {
     this.loadingTenantAction[tenant._id] = true;
     this.societyService.moveOutTenant(tenant._id, dt)
       .pipe(take(1))
@@ -85,7 +85,7 @@ export class TenantListComponent implements OnInit {
       })
   }
 
-  moveIn(tenant: IFlatMember) {
+  moveIn(tenant: IFlatMemberWithResidency) {
     this.loadingTenantAction[tenant._id] = true;
     this.societyService.moveInTenant(tenant._id)
       .pipe(take(1))

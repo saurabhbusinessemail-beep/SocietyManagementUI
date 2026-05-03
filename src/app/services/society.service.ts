@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse, ISecurity } from '../interfaces';
+import { IBEResponseFormat, IBuilding, IFlat, IPagedResponse, IParking, ISociety, IFlatMember, IUIDropdownOption, IPagination, IMyFlatResponse, ISecurity, IFlatMemberWithResidency } from '../interfaces';
 import { BehaviorSubject, Observable, share, take, tap } from 'rxjs';
 import { Cacheable, InvalidateCache } from '../decorators';
 import { PaginationService } from './pagination.service';
@@ -43,13 +43,13 @@ export class SocietyService {
         const profile = this.loginService.getProfileFromStorage();
         if (!profile) return false;
         if (profile.user.role === 'admin') return true;
-        
+
         const selectedSocietyId = this.selectedSocietyFilterValue?.value;
         if (!selectedSocietyId) return false;
-        
+
         const societyRoles = profile.socities.find(s => s.societyId === selectedSocietyId)?.societyRoles;
         if (!societyRoles) return false;
-        
+
         return societyRoles.some(sr => sr.name === SocietyRoles.societyadmin || sr.name === SocietyRoles.manager);
     }
 
@@ -636,7 +636,7 @@ export class SocietyService {
         group: 'flatMembers'
     })
     getFlatMemberDetails(flatMemberId: string) {
-        return this.http.get<IFlatMember>(`${this.flatsBaseUrl}/myFlats/${flatMemberId}`);
+        return this.http.get<IFlatMemberWithResidency>(`${this.flatsBaseUrl}/myFlats/${flatMemberId}`);
     }
 
     // Get flat tenants
@@ -656,9 +656,9 @@ export class SocietyService {
             return `${methodName}_${JSON.stringify(filters)}`;
         }
     })
-    myTenants(societyId?: string, flatId?: string): Observable<IPagedResponse<IFlatMember>> {
+    myTenants(societyId?: string, flatId?: string): Observable<IPagedResponse<IFlatMemberWithResidency>> {
         const payload = { societyId, flatId };
-        return this.http.post<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myTenants`, payload);
+        return this.http.post<IPagedResponse<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/myTenants`, payload);
     }
 
     // Get flat Members
@@ -678,9 +678,9 @@ export class SocietyService {
             return `${methodName}_${JSON.stringify(filters)}`;
         }
     })
-    myFlatMembers(societyId?: string, flatId?: string): Observable<IPagedResponse<IFlatMember>> {
+    myFlatMembers(societyId?: string, flatId?: string): Observable<IPagedResponse<IFlatMemberWithResidency>> {
         const payload = { societyId, flatId };
-        return this.http.post<IPagedResponse<IFlatMember>>(`${this.flatsBaseUrl}/myFlatMembers`, payload);
+        return this.http.post<IPagedResponse<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/myFlatMembers`, payload);
     }
 
     // Delete Flat Member
@@ -709,8 +709,8 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
-    moveOutTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMember>> {
-        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutTenant/${flatMemberId}`, { endDate });
+    moveOutTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveOutTenant/${flatMemberId}`, { endDate });
     }
 
     @InvalidateCache({
@@ -723,8 +723,8 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
-    moveInTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMember>> {
-        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveInTenant/${flatMemberId}`, { endDate });
+    moveInTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveInTenant/${flatMemberId}`, { endDate });
     }
 
     @InvalidateCache({
@@ -737,8 +737,8 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
-    moveOutOwner(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
-        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveOutOwner/${flatMemberId}`, {});
+    moveOutOwner(flatMemberId: string): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveOutOwner/${flatMemberId}`, {});
     }
 
     @InvalidateCache({
@@ -751,8 +751,8 @@ export class SocietyService {
         paramIndices: [0],
         groups: ['flatMembers']
     })
-    moveInSelf(flatMemberId: string): Observable<IBEResponseFormat<IFlatMember>> {
-        return this.http.patch<IBEResponseFormat<IFlatMember>>(`${this.flatsBaseUrl}/moveInSelf/${flatMemberId}`, {});
+    moveInSelf(flatMemberId: string): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveInSelf/${flatMemberId}`, {});
     }
 
 

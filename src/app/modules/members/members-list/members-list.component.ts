@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IFlatMember } from '../../../interfaces';
+import { IFlatMember, IFlatMemberWithResidency } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { Subject, take } from 'rxjs';
 import { SocietyRoles } from '../../../types';
@@ -18,7 +18,7 @@ interface IMemberFilter {
 export class MembersListComponent implements OnInit {
 
   selectedFIlter: IMemberFilter = {};
-  members: IFlatMember[] = [];
+  members: IFlatMemberWithResidency[] = [];
   routeFlatId?: string;
 
   loadingMember = true;
@@ -53,7 +53,7 @@ export class MembersListComponent implements OnInit {
       });
   }
 
-  async deleteMember(member: IFlatMember) {
+  async deleteMember(member: IFlatMemberWithResidency) {
     const forUser = !member.userId || typeof member.userId === 'string' ? undefined : ` ${member.userId.name ?? member.userId.phoneNumber}`
 
     if (!await this.dialogService.confirmDelete('Delete Flat Member', `Are you sure you want to delete flat member ${forUser}?`)) return;
@@ -85,7 +85,7 @@ export class MembersListComponent implements OnInit {
       this.router.navigate(['members', 'add']);
   }
 
-  allowDelete(flatMember: IFlatMember): boolean {
+  allowDelete(flatMember: IFlatMemberWithResidency): boolean {
 
     // If I am admin/society manager then I will see no delete button
     // If I am flat owner then I will see delete buttons for all records

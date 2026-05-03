@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IMyFlatResponse, IUser } from '../../../interfaces';
+import { IBuilding, IMyFlatResponse, IUser } from '../../../interfaces';
 
 @Component({
   selector: 'ui-my-flat-member-card',
@@ -26,6 +26,14 @@ export class MyFlatMemberCardComponent {
     return (this.member.userId && typeof this.member.userId === 'object') ? this.member.userId as IUser : null;
   }
 
+  get residingType(): string {
+    const flat = this.member.flatId;
+    if (flat && typeof flat === 'object' && 'residingType' in flat && flat.residingType) {
+      return flat.residingType;
+    }
+    return this.member.residingType || 'Vacant';
+  }
+
   get ownerUser(): IUser | null {
     if (this.member.owner?.userId && typeof this.member.owner.userId === 'object') {
       return this.member.owner.userId as IUser;
@@ -41,7 +49,7 @@ export class MyFlatMemberCardComponent {
   }
 
   get isOwnerWithTenant(): boolean {
-    return this.member.isOwner && this.member.residingType === 'Tenant';
+    return this.member.isOwner && this.residingType === 'Tenant';
   }
 
   get isTenantOrMember(): boolean {
@@ -63,28 +71,28 @@ export class MyFlatMemberCardComponent {
   // Context messages (vacant / self / tenant / previous tenant / other tenant)
   // --------------------------------------------------------------------------
   get showVacantMessage(): boolean {
-    return this.member.residingType === 'Vacant';
+    return this.residingType === 'Vacant';
   }
 
   get showSelfMessage(): boolean {
     // Owner living in own flat (Self) AND user is not a tenant
-    return this.member.isOwner && this.member.residingType === 'Self';
+    return this.member.isOwner && this.residingType === 'Self';
   }
 
   get showMemberMessage(): boolean {
     // Owner living in own flat (Self) AND user is not a tenant
-    return this.member.isMember && this.member.residingType === 'Self';
+    return this.member.isMember && this.residingType === 'Self';
   }
 
   get showTenantMessage(): boolean {
     // Current tenant: user is tenant and currently residing (residingType === 'Tenant')
     // And there is no other tenant record (or the tenant record matches the user)
-    return this.member.isTenant && this.member.residingType === 'Tenant' && !this.isPreviousTenantWithOtherTenant;
+    return this.member.isTenant && this.residingType === 'Tenant' && !this.isPreviousTenantWithOtherTenant;
   }
 
   get showTenantExpiredMessage(): boolean {
     // Previous tenant, owner has moved in (residingType === 'Self')
-    return this.member.isTenant && this.member.residingType === 'Self';
+    return this.member.isTenant && this.residingType === 'Self';
   }
 
   get showOtherTenantMessage(): boolean {
@@ -105,7 +113,7 @@ export class MyFlatMemberCardComponent {
   // Status badge class & disabled state
   // --------------------------------------------------------------------------
   get statusBadgeClass(): string {
-    switch (this.member.residingType) {
+    switch (this.residingType) {
       case 'Self': return 'status-self';
       case 'Tenant': return 'status-tenant';
       case 'Vacant': return 'status-vacant';
@@ -114,11 +122,11 @@ export class MyFlatMemberCardComponent {
   }
 
   get statusBadgeText(): string {
-    switch (this.member.residingType) {
+    switch (this.residingType) {
       case 'Self': return 'Self';
       case 'Tenant': return 'Tenant';
       case 'Vacant': return 'Vacant';
-      default: return this.member.residingType || '';
+      default: return this.residingType || '';
     }
   }
 
@@ -192,7 +200,7 @@ export class MyFlatMemberCardComponent {
     if (flat && typeof flat === 'object' && 'buildingId' in flat && flat.buildingId) {
       const building = flat.buildingId;
       if (building && typeof building === 'object' && 'buildingNumber' in building) {
-        return (building as any).buildingNumber;
+        return building.buildingNumber;
       }
     }
     return '';

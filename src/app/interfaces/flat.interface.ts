@@ -1,4 +1,4 @@
-import { FlatTypes } from "../constants";
+import { FlatTypes, ResidingTypes } from "../constants";
 import { IBuilding, IDefaultFields, ISociety } from "./";
 
 export interface IFlat extends IDefaultFields {
@@ -8,5 +8,6 @@ export interface IFlat extends IDefaultFields {
     societyId: string | ISociety;
     flatType: FlatTypes;
     floor: number;
+    residingType?: ResidingTypes;
     flatOwnerMemberId?: string;
 }

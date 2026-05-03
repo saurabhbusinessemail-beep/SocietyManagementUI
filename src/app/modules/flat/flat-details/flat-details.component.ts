@@ -5,6 +5,7 @@ import { take } from 'rxjs';
 import { SocietyService } from '../../../services/society.service';
 import {
   IFlatMember,
+  IFlatMemberWithResidency,
   IFlat,
   ISociety,
   IComplaint,
@@ -14,7 +15,8 @@ import {
   IParking,
   IMyProfile,
   ICurrentPlanResponse,
-  IMaintenancePayment
+  IMaintenancePayment,
+  IMyFlatResponse
 } from '../../../interfaces';
 import { ComplaintService } from '../../../services/complaint.service';
 import { GateEntryService } from '../../../services/gate-entry.service';
@@ -37,7 +39,7 @@ import { FormControl } from '@angular/forms';
 export class FlatDetailsComponent implements OnInit, OnDestroy {
 
   flatMemberId?: string;
-  flatMember?: IFlatMember;
+  flatMember?: IMyFlatResponse;
   myProfile?: IMyProfile;
   currentPlan?: ICurrentPlanResponse;
 
@@ -62,13 +64,13 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   maintenanceFeatureAvailable: boolean = false;
 
   // Related data arrays (populated via API calls)
-  members: IFlatMember[] = [];           // other residents of the same flat
+  members: IFlatMemberWithResidency[] = [];           // other residents of the same flat
   complaints: IComplaint[] = [];
   gateEntries: IGateEntry[] = [];
   gatePasses: IGatePass[] = [];
   vehicles: IVehicle[] = [];
   parkings: IParking[] = [];
-  tenants: IFlatMember[] = [];
+  tenants: IFlatMemberWithResidency[] = [];
   maintenancePayments: IMaintenancePayment[] = [];
 
   loadingFlatMember = true;
@@ -142,7 +144,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   get residingButtonText(): string {
-    const residingType = this.flatMember?.residingType ?? ''
+    const residingType = this.residingType ?? ''
     return this.windowService.mode.value === 'mobile' ? residingType : 'Residing: ' + residingType
   }
 
@@ -212,6 +214,12 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       : this.flatMember?.flatId._id;
   }
 
+  get residingType(): string {
+    const flat = this.getflat();
+    if (flat && flat.residingType) return flat.residingType;
+    return this.flatMember?.residingType || 'Vacant';
+  }
+
   getDisplayName(member?: IFlatMember): string {
     if (!member) return '—';
     const userId = member.userId;
@@ -222,7 +230,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   get isTenantResiding() {
-    return this.flatMember?.residingType === ResidingTypes.Tenant;
+    return this.residingType === ResidingTypes.Tenant;
   }
 
   constructor(
@@ -602,7 +610,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   resetDialogData(): void {
     if (!this.flatMember) return;
 
-    switch (this.flatMember.residingType) {
+    switch (this.residingType) {
       case ResidingTypes.Self:
         this.confirmationDialogData.message = 'You are currently residing in this flat. You can either set it as vaccant or add a tenant.';
         this.confirmationDialogData.note = 'All current flat members will be deactivated.';
@@ -649,7 +657,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   handleVaccantClick() {
     if (!this.flatMember) return;
 
-    if (this.flatMember.residingType === ResidingTypes.Self) {
+    if (this.residingType === ResidingTypes.Self) {
       this.societyService.moveOutOwner(this.flatMember._id)
         .pipe(take(1))
         .subscribe({
@@ -663,7 +671,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.flatMember.residingType === ResidingTypes.Tenant) {
+    if (this.residingType === ResidingTypes.Tenant) {
       this.societyService.moveOutTenant(this.flatMember._id)
         .pipe(take(1))
         .subscribe({

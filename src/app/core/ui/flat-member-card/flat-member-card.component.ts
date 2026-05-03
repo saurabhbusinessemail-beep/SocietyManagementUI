@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
-import { IFlat, IFlatMember, ISociety, IUIControlConfig, IUser } from '../../../interfaces';
+import { IFlat, IFlatMember, IFlatMemberWithResidency, ISociety, IUIControlConfig, IUser } from '../../../interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SocietyRoles } from '../../../types';
@@ -12,7 +12,7 @@ import { ResidingTypes } from '../../../constants';
 })
 export class FlatMemberCardComponent {
 
-  @Input() member!: IFlatMember;
+  @Input() member!: IFlatMemberWithResidency;
   @Input() viewerRole: 'admin' | SocietyRoles.manager | SocietyRoles.owner | SocietyRoles.tenant | SocietyRoles.member = SocietyRoles.owner;
   @Input() showDelete = false;
   @Input() actionInProgress = false;
@@ -23,6 +23,14 @@ export class FlatMemberCardComponent {
 
   get memberUser(): IUser | undefined {
     return typeof this.member.userId === 'string' ? undefined : this.member.userId;
+  }
+
+  get residingType(): string {
+    const flat = this.member.flatId;
+    if (flat && typeof flat === 'object' && 'residingType' in flat && flat.residingType) {
+      return flat.residingType;
+    }
+    return this.member.residingType || 'Vacant';
   }
 
   get society(): ISociety | undefined {
@@ -38,7 +46,7 @@ export class FlatMemberCardComponent {
   }
 
   get isTenant(): boolean {
-    return this.member.residingType as string === SocietyRoles.tenant;
+    return this.residingType === ResidingTypes.Tenant;
   }
 
   get statusClass(): string {
@@ -79,7 +87,7 @@ export class FlatMemberCardComponent {
 
   get showMoveIn(): boolean {
     if (!this.showMoveInOut) return false;
-    
+
     const today = new Date();
     const startDate = (this.member.leaseStart ? new Date(this.member.leaseStart) : new Date());
     const endDate = (this.member.leaseEnd ? new Date(this.member.leaseEnd) : new Date());

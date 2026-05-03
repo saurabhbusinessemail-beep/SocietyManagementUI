@@ -9,7 +9,6 @@ export interface IFlatMember extends IDefaultFields {
 
     name: string;
     contact: string;
-    residingType?: ResidingTypes;
 
     isOwner: boolean;
     isTenant: boolean;
@@ -26,7 +25,11 @@ export interface IFlatMember extends IDefaultFields {
     tenant?: IFlatMember;
 }
 
-export interface IMyFlatResponse extends IFlatMember {
-    tenant?: IFlatMember;
-    owner?: IFlatMember
+export interface IFlatMemberWithResidency extends IFlatMember {
+    residingType?: ResidingTypes;
+}
+
+export interface IMyFlatResponse extends IFlatMemberWithResidency {
+    tenant?: IFlatMemberWithResidency;
+    owner?: IFlatMemberWithResidency;
 }

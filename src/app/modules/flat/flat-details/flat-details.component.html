@@ -41,7 +41,7 @@
                 <div class="header-right" *ngIf="!loadingFlatMember">
                     <!-- Residing Type Badges - Desktop -->
                     <div class="residing-badges desktop-badges">
-                        <span class="residing-badge self" *ngIf="flatMember?.residingType === 'Self'">
+                        <span class="residing-badge self" *ngIf="residingType === 'Self'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -51,7 +51,7 @@
                             </svg>
                             Self
                         </span>
-                        <span class="residing-badge vacant" *ngIf="flatMember?.residingType === 'Vacant'">
+                        <span class="residing-badge vacant" *ngIf="residingType === 'Vacant'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -63,7 +63,7 @@
                             </svg>
                             Vacant
                         </span>
-                        <span class="residing-badge tenant" *ngIf="flatMember?.residingType === 'Tenant'">
+                        <span class="residing-badge tenant" *ngIf="residingType === 'Tenant'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -75,7 +75,7 @@
                         </span>
                     </div>
                     <!-- Mobile Badge -->
-                    <span class="residing-badge mobile-badge self" *ngIf="flatMember?.residingType === 'Self'">
+                    <span class="residing-badge mobile-badge self" *ngIf="residingType === 'Self'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -162,12 +162,13 @@
         <div class="profile-card" *ngIf="flatMember && showFlatMemberProfile">
 
             <div class="profile-header">
-                <ui-user-avatar [user]="flatMember.userId" [name]="getDisplayName(flatMember)" size="xl"></ui-user-avatar>
+                <ui-user-avatar [user]="flatMember.userId" [name]="getDisplayName(flatMember)"
+                    size="xl"></ui-user-avatar>
                 <div class="profile-info">
                     <h3 class="profile-name">{{ getDisplayName(flatMember) }}</h3>
                     <div class="profile-meta">
-                        <span class="role-badge" [ngClass]="flatMember.residingType?.toLowerCase()">
-                            {{ flatMember.residingType }}
+                        <span class="role-badge" [ngClass]="residingType.toLowerCase()">
+                            {{ residingType }}
                         </span>
                         <span class="status-badge" [ngClass]="flatMember.status">
                             {{ flatMember.status }}
@@ -234,7 +235,8 @@
                     <div class="resident-list" *ngIf="members.length; else noResidents">
                         <div class="resident-item" *ngFor="let member of members">
                             <div class="resident-info">
-                                <ui-user-avatar [user]="member.userId" [name]="getDisplayName(member)" size="md"></ui-user-avatar>
+                                <ui-user-avatar [user]="member.userId" [name]="getDisplayName(member)"
+                                    size="md"></ui-user-avatar>
                                 <div class="resident-details">
                                     <p class="resident-name">{{ getDisplayName(member) }}</p>
                                     <span class="resident-role" *ngIf="member.isOwner">Owner</span>
