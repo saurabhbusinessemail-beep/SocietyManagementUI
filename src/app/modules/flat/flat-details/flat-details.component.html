@@ -713,7 +713,7 @@
         </div>
 
         <!-- Maintenance Section -->
-        <div class="section-card" *ngIf="maintenanceFeatureAvailable || loadingMaintenance">
+        <div class="section-card" *ngIf="canManageFlat && (maintenanceFeatureAvailable || loadingMaintenance)">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="home"></app-icon>
@@ -811,7 +811,7 @@
         </div>
 
         <!-- Rent Section -->
-        <div class="section-card" *ngIf="tenantManagementFeatureAvailable && isTenantResiding">
+        <div class="section-card" *ngIf="canManageFlat && tenantManagementFeatureAvailable && isTenantResiding">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="account"></app-icon>
@@ -938,7 +938,7 @@
         </div>
 
         <!-- Locked Maintenance -->
-        <div class="section-card locked" *ngIf="!maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
+        <div class="section-card locked" *ngIf="canManageFlat && !maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="home"></app-icon>
