@@ -974,6 +974,40 @@
         }
     }
 
+    .rent-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $sp-md;
+        padding: $sp-md;
+        background: rgba($color-cancel, 0.5);
+        border-radius: $btn-border-radius-md;
+        margin-bottom: $sp-md;
+
+        .summary-stat {
+            flex: 1;
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .stat-label {
+                font-size: $font-size-xs;
+                color: $color-help-text;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+            .stat-value {
+                font-size: $font-size-lg;
+                font-weight: 800;
+                color: $color-black;
+
+                &.success { color: $status-approved; }
+                &.warning { color: $status-pending; }
+            }
+        }
+    }
+
     .empty-state {
         padding: $sp-md;
         text-align: center;

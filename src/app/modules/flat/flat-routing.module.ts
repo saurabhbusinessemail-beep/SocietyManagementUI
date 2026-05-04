@@ -4,6 +4,8 @@ import { MyFlatListComponent } from './my-flat-list/my-flat-list.component';
 import { FlatDetailsComponent } from './flat-details/flat-details.component';
 import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
 import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.component';
+import { RentListComponent } from './rent-list/rent-list.component';
+import { RentLogsComponent } from './rent-logs/rent-logs.component';
 import { PERMISSIONS } from '../../constants';
 
 const routes: Routes = [
@@ -37,6 +39,14 @@ const routes: Routes = [
   {
     path: 'logs/:id',
     component: MaintenanceLogsComponent
+  },
+  {
+    path: 'rent-list/:flatId',
+    component: RentListComponent
+  },
+  {
+    path: 'rent-logs/:id',
+    component: RentLogsComponent
   }
 ];
 

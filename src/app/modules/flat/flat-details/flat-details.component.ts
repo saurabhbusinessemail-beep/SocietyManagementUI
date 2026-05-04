@@ -29,7 +29,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VehicleService } from '../../../services/vehicle.service';
 import { DialogService } from '../../../services/dialog.service';
 import { MaintenanceService } from '../../../services/maintenance.service';
+import { RentService } from '../../../services/rent.service';
 import { FormControl } from '@angular/forms';
+import { IRentPayment, IRentMonthlyReport } from '../../../interfaces';
 
 @Component({
   selector: 'app-flat-details',
@@ -86,6 +88,12 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   loadingMaintenance = true;
   recordingMaintenance = false;
 
+  // Rent state
+  loadingRent = true;
+  recordingRent = false;
+  rentMonthlyReport?: IRentMonthlyReport;
+  rentPayments: IRentPayment[] = [];
+
   // Maintenance payment form controls
   @ViewChild('maintenancePayTemplate') maintenancePayTemplate!: TemplateRef<any>;
   maintenanceDialogRef: MatDialogRef<any> | null = null;
@@ -96,6 +104,15 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   maintenanceMonth = new FormControl<number>(new Date().getMonth() + 1);
   maintenanceYear = new FormControl<number>(new Date().getFullYear());
   maintenanceNote = new FormControl<string>('');
+
+  // Rent payment form controls
+  @ViewChild('rentPayTemplate') rentPayTemplate!: TemplateRef<any>;
+  rentDialogRef: MatDialogRef<any> | null = null;
+  rentAmount = new FormControl<number>(0);
+  rentDate = new FormControl<Date>(new Date());
+  rentMonth = new FormControl<number>(new Date().getMonth() + 1);
+  rentYear = new FormControl<number>(new Date().getFullYear());
+  rentNote = new FormControl<string>('');
 
   monthConfig = { id: 'month', label: 'Month' };
   yearConfig = { id: 'year', label: 'Year' };
@@ -246,7 +263,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private vehicleService: VehicleService,
     private dialogService: DialogService,
-    public maintenanceService: MaintenanceService
+    public maintenanceService: MaintenanceService,
+    public rentService: RentService
   ) { }
 
   ngOnInit(): void {
@@ -445,6 +463,19 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
     if (this.tenantManagementFeatureAvailable) {
       this.getTenants(societyId, flatId);
+      if (this.isTenantResiding) {
+         if (this.flatMember.isOwner) {
+            this.loadRentReport(flatId);
+         } else if (this.flatMember.isTenant) {
+            this.getRentPayments(societyId, flatId);
+         } else {
+             this.loadingRent = false;
+         }
+      } else {
+         this.loadingRent = false;
+      }
+    } else {
+        this.loadingRent = false;
     }
 
     if (this.maintenanceFeatureAvailable) {
@@ -805,6 +836,133 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     return monthPayments.find(p => p.status === 'approved') ||
       monthPayments.find(p => p.status === 'pending_approval') ||
       monthPayments.find(p => p.status === 'rejected');
+  }
+
+  // ---- Rent ----
+
+  loadRentReport(flatId: string) {
+    this.loadingRent = true;
+    const now = new Date();
+    this.rentService.getMonthlyReport(flatId, now.getMonth() + 1, now.getFullYear())
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.rentMonthlyReport = response.data;
+          this.loadingRent = false;
+        },
+        error: () => {
+          this.loadingRent = false;
+        }
+      });
+  }
+
+  getRentPayments(societyId: string, flatId: string) {
+    this.loadingRent = true;
+    const now = new Date();
+    this.rentService.getPaymentsByFlat(flatId, societyId, now.getMonth() + 1, now.getFullYear())
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.rentPayments = response.data || [];
+          this.loadingRent = false;
+        },
+        error: () => {
+          this.loadingRent = false;
+        }
+      });
+  }
+
+  get currentRentMonthPayment(): IRentPayment | undefined {
+    const now = new Date();
+    const monthPayments = this.rentPayments.filter(p => {
+      const memberId = typeof p.flatMemberId === 'string' ? p.flatMemberId : (p.flatMemberId as any)?._id;
+      return p.month === (now.getMonth() + 1) &&
+        p.year === now.getFullYear() &&
+        memberId === this.flatMember?._id;
+    });
+
+    if (monthPayments.length === 0) return undefined;
+
+    return monthPayments.find(p => p.status === 'approved') ||
+      monthPayments.find(p => p.status === 'pending_approval') ||
+      monthPayments.find(p => p.status === 'rejected');
+  }
+
+  manageRent() {
+    if (!this.canManageFlat) return;
+    const flatId = this.currentFlatId;
+    if (flatId) {
+      this.router.navigate(['/myflats/rent-list', flatId], { queryParams: { societyId: this.currentSocietyId } });
+    }
+  }
+
+  viewRentHistory() {
+    if (this.flatMember) {
+      const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id;
+      const societyId = typeof this.flatMember.societyId === 'string' ? this.flatMember.societyId : this.flatMember.societyId._id;
+      
+      this.router.navigate(['/myflats/rent-logs', flatId], { 
+        queryParams: { societyId } 
+      });
+    }
+  }
+
+  openPayRentDialog() {
+    this.rentAmount.setValue(this.flatMember?.rentAmount || 0);
+    this.rentMonth.setValue(new Date().getMonth() + 1);
+    this.rentYear.setValue(new Date().getFullYear());
+    this.rentDate.setValue(new Date());
+    this.rentNote.setValue('');
+
+    const width = this.windowService.mode.value === 'mobile' ? '90%' :
+                  this.windowService.mode.value === 'tablet' ? '70%' : '50%';
+
+    this.rentDialogRef = this.dialog.open(this.rentPayTemplate, {
+      width,
+      panelClass: 'maintenance-dialog'
+    });
+  }
+
+  closeRentDialog() {
+    this.rentDialogRef?.close();
+    this.rentDialogRef = null;
+  }
+
+  submitRentPayment() {
+    if (!this.flatMember || !this.rentAmount.value) return;
+
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (!societyId || !flatId) return;
+
+    this.recordingRent = true;
+    const now = new Date();
+
+    const payload = {
+      societyId,
+      flatId,
+      flatMemberId: this.flatMember._id,
+      amount: this.rentAmount.value,
+      month: this.rentMonth.value,
+      year: this.rentYear.value,
+      paidOn: this.rentDate.value || now,
+      note: this.rentNote.value || undefined
+    };
+
+    this.rentService.recordPayment(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.recordingRent = false;
+          if (response.success) {
+            this.closeRentDialog();
+            this.getRentPayments(societyId, flatId);
+          }
+        },
+        error: () => {
+          this.recordingRent = false;
+        }
+      });
   }
 
   get currentMonthLabel(): string {

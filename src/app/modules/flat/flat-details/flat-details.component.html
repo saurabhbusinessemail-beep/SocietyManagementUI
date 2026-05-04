@@ -93,8 +93,8 @@
                             <path d="m15 5 4 4" />
                         </svg>
                     </button>
-                    <button class="edit-button config" (click)="handleConfigureTenantClick()" *ngIf="flatMember?.isOwner"
-                        title="Configure Tenant Settings">
+                    <button class="edit-button config" (click)="handleConfigureTenantClick()"
+                        *ngIf="flatMember?.isOwner" title="Configure Tenant Settings">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -810,6 +810,133 @@
             </ui-loading>
         </div>
 
+        <!-- Rent Section -->
+        <div class="section-card" *ngIf="tenantManagementFeatureAvailable && isTenantResiding">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <app-icon name="account"></app-icon>
+                    <h2 class="section-title">Rent</h2>
+                </div>
+                <button class="manage-btn" (click)="manageRent()" [disabled]="loadingRent"
+                    *ngIf="canManageFlat && flatMember?.isOwner">
+                    Manage
+                    <app-icon name="goto" size="md"></app-icon>
+                </button>
+            </div>
+
+            <ng-container *ngIf="!loadingRent">
+                <div class="maintenance-section">
+                    <!-- For Owner View -->
+                    <ng-container *ngIf="flatMember?.isOwner && rentMonthlyReport">
+                        <div class="rent-summary">
+                            <div class="summary-stat">
+                                <span class="stat-label">Total Tenants</span>
+                                <span class="stat-value">{{ rentMonthlyReport.summary.totalTenants }}</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Collected</span>
+                                <span class="stat-value success">₹{{ rentMonthlyReport.summary.totalCollected }}</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Pending</span>
+                                <span class="stat-value warning">{{ rentMonthlyReport.summary.pendingCount }}</span>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!-- For Tenant View -->
+                    <ng-container *ngIf="flatMember?.isTenant">
+                        <div class="maintenance-status">
+                            <div class="maintenance-month">{{ currentMonthLabel }}</div>
+
+                            <!-- Case 1: Approved or Pending -->
+                            <ng-container
+                                *ngIf="currentRentMonthPayment && currentRentMonthPayment.status !== 'rejected'">
+                                <div class="maintenance-payment-info">
+                                    <div class="status-badge-maintenance"
+                                        [class.approved]="currentRentMonthPayment.status === 'approved'"
+                                        [class.pending]="currentRentMonthPayment.status === 'pending_approval'">
+                                        {{ rentService.getStatusDisplayText(currentRentMonthPayment.status) }}
+                                    </div>
+                                    <span class="payment-amount">₹{{ currentRentMonthPayment.amount }}</span>
+                                    <span class="payment-date" *ngIf="currentRentMonthPayment.paidOn">
+                                        {{ currentRentMonthPayment.paidOn | date:'mediumDate' }}
+                                    </span>
+                                </div>
+                            </ng-container>
+
+                            <!-- Case 2: Rejected -->
+                            <ng-container
+                                *ngIf="currentRentMonthPayment && currentRentMonthPayment.status === 'rejected'">
+                                <div class="maintenance-rejected-info">
+                                    <div class="rejection-card">
+                                        <div class="rejection-header">
+                                            <div class="status-badge-maintenance rejected">Rejected</div>
+                                            <span class="payment-amount">₹{{ currentRentMonthPayment.amount }}</span>
+                                        </div>
+                                        <div class="rejection-reason-block">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <path d="M12 8v4" />
+                                                <path d="M12 16h.01" />
+                                            </svg>
+                                            <div class="reason-content">
+                                                <span class="reason-label">Reason:</span>
+                                                <span class="reason-text">{{ currentRentMonthPayment.rejectionReason
+                                                    }}</span>
+                                            </div>
+                                        </div>
+                                        <button class="pay-maintenance-btn retry" (click)="openPayRentDialog()"
+                                            *ngIf="canManageFlat">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                                <path d="M3 3v5h5" />
+                                                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                                                <path d="M16 16h5v5" />
+                                            </svg>
+                                            Record Again
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <!-- Case 3: Not Paid -->
+                            <ng-container *ngIf="!currentRentMonthPayment">
+                                <div class="maintenance-not-paid">
+                                    <span class="status-badge-maintenance not-paid">Not Paid</span>
+                                    <button class="pay-maintenance-btn" (click)="openPayRentDialog()"
+                                        *ngIf="canManageFlat">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="20" height="14" x="2" y="5" rx="2" />
+                                            <line x1="2" x2="22" y1="10" y2="10" />
+                                        </svg>
+                                        Record Rent Payment
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+
+                    <!-- History Action -->
+                    <div class="maintenance-history-action">
+                        <ui-button label="View Detailed Payment History & Logs" type="cancel"
+                            (clicked)="viewRentHistory()">
+                            <app-icon name="goto" size="sm"></app-icon>
+                        </ui-button>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ui-loading *ngIf="loadingRent" message="Loading rent details">
+            </ui-loading>
+        </div>
+
         <!-- Locked Maintenance -->
         <div class="section-card locked" *ngIf="!maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
             <div class="section-header">
@@ -836,6 +963,43 @@
 
     </div>
 </app-layout>
+
+<!-- Rent Pay Dialog -->
+<ng-template #rentPayTemplate>
+    <app-add-edit-popup title="Record Rent Payment" (onClose)="closeRentDialog()">
+        <ui-form-layout>
+            <ui-drop-down [formControl]="rentMonth" [config]="monthConfig" [options]="monthOptions" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-drop-down [formControl]="rentYear" [config]="yearConfig" [options]="yearOptions" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-text-box type="number" [formControl]="rentAmount"
+                [config]="{id: 'rentAmount', label: 'Amount (₹)', placeholder: 'Enter amount'}" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-text-box>
+
+            <ui-date [formControl]="rentDate" [config]="{id: 'rentDate', label: 'Payment Date'}" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-date>
+
+            <ui-text-box [formControl]="rentNote"
+                [config]="{id: 'rentNote', label: 'Note (Optional)', placeholder: 'Add a note'}" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-text-box>
+        </ui-form-layout>
+
+        <ng-container actions>
+            <ui-button label="Cancel" type="only-content" (clicked)="closeRentDialog()">
+            </ui-button>
+            <ui-button label="Submit Payment" [disable]="recordingRent || !rentAmount.value"
+                (clicked)="submitRentPayment()">
+            </ui-button>
+        </ng-container>
+    </app-add-edit-popup>
+</ng-template>
 
 <!-- Confirmation Dialog Template -->
 <ng-template #confirmationTemplate>

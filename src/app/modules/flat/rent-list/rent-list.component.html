@@ -1,0 +1,244 @@
+<app-layout [hideMoreActions]="true" pageTitle="Rent Management"
+    [showBackButton]="true">
+
+    <div class="flex-col full-h">
+        <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
+            [dropDownControlConfigs]="[monthConfig, yearConfig, statusFilterConfig]"
+            (filterChanged)="onFilterChanged($any($event))">
+
+            <ui-select2 [formControl]="monthControl" [config]="monthConfig"
+                [options]="monthConfig.dropDownOptions ?? []" placeholder="Select Month" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="4">
+            </ui-select2>
+
+            <ui-select2 [formControl]="yearControl" [config]="yearConfig" [options]="yearConfig.dropDownOptions ?? []"
+                placeholder="Select Year" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+            </ui-select2>
+
+            <ui-select2 [formControl]="statusFilterControl" [config]="statusFilterConfig"
+                [options]="statusFilterConfig.dropDownOptions ?? []" placeholder="Select Status" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="4">
+            </ui-select2>
+        </app-filter>
+
+        <ui-form-layout class="flex-auto">
+
+            <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex-row items-center justify-end" style="padding-bottom: 8px;">
+                <ui-button label="View Logs" type="cancel" (clicked)="viewLogs()">
+                    <app-icon name="history" size="sm"></app-icon>
+                </ui-button>
+            </div>
+
+            <!-- Loading -->
+            <ui-loading *ngIf="loadingReport" message="Loading rent report" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="12">
+            </ui-loading>
+
+            <ng-container *ngIf="!loadingReport">
+                <!-- Summary Cards -->
+                <ng-container *ngIf="monthlyReport">
+                    <div class="summary-grid" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <div class="summary-card summary-card--paid">
+                            <div class="summary-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                    <path d="m9 12 2 2 4-4" />
+                                </svg>
+                            </div>
+                            <div class="summary-details">
+                                <p class="summary-label">Paid</p>
+                                <p class="summary-value">{{ paidCount }}</p>
+                            </div>
+                        </div>
+
+                        <div class="summary-card summary-card--pending">
+                            <div class="summary-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                            </div>
+                            <div class="summary-details">
+                                <p class="summary-label">Pending</p>
+                                <p class="summary-value">{{ pendingCount }}</p>
+                            </div>
+                        </div>
+
+                        <div class="summary-card summary-card--not-paid">
+                            <div class="summary-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                </svg>
+                            </div>
+                            <div class="summary-details">
+                                <p class="summary-label">Not Paid</p>
+                                <p class="summary-value">{{ notPaidCount }}</p>
+                            </div>
+                        </div>
+
+                        <div class="summary-card summary-card--total">
+                            <div class="summary-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                                    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                                </svg>
+                            </div>
+                            <div class="summary-details">
+                                <p class="summary-label">Collected</p>
+                                <p class="summary-value">{{ currencySymbol }}{{ totalCollected | number }}</p>
+                            </div>
+                        </div>
+
+                        <div class="summary-card summary-card--remind"
+                            (click)="onRemindAll()">
+                            <div class="summary-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                                </svg>
+                            </div>
+                            <div class="summary-details">
+                                <p class="summary-label">Reminders</p>
+                                <p class="summary-value">Remind All</p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Tenant-wise List -->
+                <ng-container *ngFor="let entry of filteredEntries">
+                    <app-card-v2 [title]="entry.memberName"
+                        [subTitle]="entry.memberContact"
+                        [status]="getStatusClass(entry.status)" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+
+                        <ng-container card-info>
+                            <ui-label [valueText]="getStatusText(entry.status)" direction="horizontal" [valueType]="getStatusClass(entry.status) === 'approved' ? 'active' :
+                                             getStatusClass(entry.status) === 'pending' ? 'pending' :
+                                             getStatusClass(entry.status) === 'rejected' ? 'rejected' : 'inactive'">
+                            </ui-label>
+                            <div class="rejection-reason"
+                                *ngIf="entry.status === 'rejected' && entry.payment?.rejectionReason">
+                                {{ entry.payment?.rejectionReason }}
+                            </div>
+                        </ng-container>
+
+                        <ng-container card-body>
+                            <ui-label [config]="{id: '', label: 'Rent Amount'}"
+                                [valueText]="currencySymbol + (entry.rentAmountExpected | number)" direction="vertical"
+                                valueType="info">
+                            </ui-label>
+
+                            <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: 'Paid Amount'}"
+                                [valueText]="currencySymbol + (entry.payment?.amount | number)" direction="vertical"
+                                valueType="info">
+                            </ui-label>
+
+                            <ui-label *ngIf="entry.payment?.paidOn" [config]="{id: '', label: 'Paid On'}"
+                                [valueText]="(entry.payment?.paidOn | date:'mediumDate') || ''" direction="vertical"
+                                valueType="info">
+                            </ui-label>
+
+                            <ui-label *ngIf="entry.lastReminderSent" [config]="{id: '', label: 'Last Reminder'}"
+                                [valueText]="(entry.lastReminderSent | date:'mediumDate') || ''" direction="vertical"
+                                valueType="info">
+                            </ui-label>
+                        </ng-container>
+
+                        <ng-container card-actions>
+                            <!-- Approve/Reject for pending payments -->
+                            <ng-container *ngIf="entry.status === 'pending_approval'">
+                                <ng-container *ngIf="!approving && !rejecting">
+                                    <ui-button label="Approve" (clicked)="onApprove(entry)">
+                                    </ui-button>
+                                    <ui-button label="Reject" type="error" (clicked)="onReject(entry)">
+                                    </ui-button>
+                                </ng-container>
+                                <ng-container *ngIf="approving || rejecting">
+                                    <ui-loading *ngIf="approving" message="Approving" [smColumns]="12" [mdColumns]="12"
+                                        [lgColumns]="12">
+                                    </ui-loading>
+                                    <ui-loading *ngIf="rejecting" message="Rejecting" [smColumns]="12" [mdColumns]="12"
+                                        [lgColumns]="12">
+                                    </ui-loading>
+                                </ng-container>
+                            </ng-container>
+
+                            <!-- Record Payment for unpaid flats -->
+                            <ng-container *ngIf="entry.status === 'not_paid' || entry.status === 'rejected'">
+                                <ui-button label="Record Payment" (clicked)="openRecordPaymentDialog(entry)">
+                                </ui-button>
+                                <ui-button label="Remind" type="only-content" (clicked)="onRemind(entry)">
+                                </ui-button>
+                            </ng-container>
+                        </ng-container>
+                    </app-card-v2>
+                </ng-container>
+
+                <!-- Empty -->
+                <ng-container *ngIf="filteredEntries.length === 0 && monthlyReport">
+                    <app-empty-records singular="tenant" plural="tenants" overrideTitle="No rent records found"
+                        [hideAddButton]="true" [hideMessage]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                        <app-icon icon name="account" size="xxl"></app-icon>
+                    </app-empty-records>
+                </ng-container>
+            </ng-container>
+
+        </ui-form-layout>
+    </div>
+
+</app-layout>
+
+<!-- Record Payment Dialog -->
+<ng-template #recordPaymentTemplate>
+    <app-add-edit-popup title="Record Rent Payment" (onClose)="closeDialog()">
+        <ui-form-layout>
+            <ui-label [valueText]="selectedEntry?.memberName ?? ''" [config]="{id: '', label: 'Tenant'}"
+                direction="horizontal" valueType="info" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            </ui-label>
+
+            <!-- Amount -->
+            <ui-drop-down [formControl]="paymentMonth" [config]="{id: 'paymentMonth', label: 'Month'}"
+                [options]="monthConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-drop-down [formControl]="paymentYear" [config]="{id: 'paymentYear', label: 'Year'}"
+                [options]="yearConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-drop-down>
+
+            <ui-text-box type="number" [formControl]="paymentAmount"
+                [config]="{id: 'amount', label: 'Amount (' + currencySymbol + ')', placeholder: 'Enter amount'}"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-text-box>
+
+            <ui-date [formControl]="paymentDate" [config]="dateConfig" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+            </ui-date>
+
+            <!-- Note -->
+            <ui-text-box [formControl]="paymentNote"
+                [config]="{id: 'note', label: 'Note (Optional)', placeholder: 'Add a note'}" [smColumns]="12"
+                [mdColumns]="6" [lgColumns]="6">
+            </ui-text-box>
+        </ui-form-layout>
+
+        <ng-container actions>
+            <ui-button label="Cancel" type="only-content" (clicked)="closeDialog()">
+            </ui-button>
+            <ui-button label="Record Payment" [disable]="recordingPayment || !paymentAmount.value"
+                (clicked)="recordPayment()">
+            </ui-button>
+        </ng-container>
+    </app-add-edit-popup>
+</ng-template>

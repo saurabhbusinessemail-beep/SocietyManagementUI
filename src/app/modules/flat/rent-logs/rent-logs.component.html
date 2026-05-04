@@ -1,0 +1,115 @@
+<app-layout [hideMoreActions]="true" pageTitle="Rent History & Logs"
+    [subTitle]="flat ? flat.flatNumber + (flat.buildingNumber ? ' (' + flat.buildingNumber + ')' : '') + ' • ' + flat.societyName : ''"
+    [showBackButton]="true">
+
+    <div class="logs-container">
+
+        <div class="logs-header">
+
+            <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true"
+                [dropDownControlConfigs]="[monthConfig, yearConfig, typeConfig, statusConfig]"
+                (filterChanged)="handleFilterChanged($event)">
+
+                <ui-select2 [formControl]="monthControl" [config]="monthConfig"
+                    [options]="monthConfig.dropDownOptions ?? []" placeholder="All Months" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-select2>
+
+                <ui-select2 [formControl]="yearControl" [config]="yearConfig"
+                    [options]="yearConfig.dropDownOptions ?? []" placeholder="All Years" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-select2>
+
+                <ui-select2 [formControl]="typeControl" [config]="typeConfig"
+                    [options]="typeConfig.dropDownOptions ?? []" placeholder="All Logs" [smColumns]="12" [mdColumns]="6"
+                    [lgColumns]="3">
+                </ui-select2>
+
+                <ui-select2 [formControl]="statusControl" [config]="statusConfig"
+                    [options]="statusConfig.dropDownOptions ?? []" placeholder="All Status" [smColumns]="12"
+                    [mdColumns]="6" [lgColumns]="3">
+                </ui-select2>
+            </app-filter>
+        </div>
+
+        <div class="logs-content" *ngIf="!loading; else loadingState">
+            <div class="empty-state" *ngIf="filteredLogs.length === 0">
+                <app-icon name="help" size="xxxl"></app-icon>
+                <p>No records found for the selected filters.</p>
+            </div>
+
+            <div class="log-timeline">
+                <div class="log-entry" *ngFor="let log of filteredLogs" [ngClass]="log.logType">
+                    <div class="entry-date-marker">
+                        <span class="marker-date">{{ log.date | date:'dd MMM yyyy' }}</span>
+                        <span class="marker-time">{{ log.date | date:'hh:mm a' }}</span>
+                    </div>
+
+                    <div class="entry-card"
+                        [ngClass]="{'payment-card': log.logType === 'payment', 'reminder-card': log.logType === 'reminder'}">
+                        <div class="card-icon">
+                            <svg *ngIf="log.logType === 'payment'" xmlns="http://www.w3.org/2000/svg" width="20"
+                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                                <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                            </svg>
+                            <svg *ngIf="log.logType === 'reminder'" xmlns="http://www.w3.org/2000/svg" width="20"
+                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                            </svg>
+                        </div>
+
+                        <div class="card-main">
+                            <div class="card-header">
+                                <span class="log-month-year">{{ getMonthName(log.month) }} {{ log.year }}</span>
+                                <span *ngIf="log.logType === 'payment'" class="status-badge"
+                                    [ngClass]="getStatusColor(log.status!)">
+                                    {{ getStatusText(log.status!) }}
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+                                <!-- Payment Specific -->
+                                <ng-container *ngIf="log.logType === 'payment'">
+                                    <div class="amount-display">{{ currencySymbol }}{{ log.amount | number }}</div>
+                                    <div class="recorded-info" *ngIf="log.recordedBy">
+                                        Recorded by <strong>{{ log.recordedBy.name }}</strong>
+                                    </div>
+                                    <div class="rejection-message"
+                                        *ngIf="log.status === 'rejected' && log.rejectionReason">
+                                        <app-icon name="help" size="sm"></app-icon>
+                                        <span>{{ log.rejectionReason }}</span>
+                                    </div>
+                                </ng-container>
+
+                                <!-- Reminder Specific -->
+                                <ng-container *ngIf="log.logType === 'reminder'">
+                                    <div class="reminder-text">
+                                        Rent reminder sent to member via <strong>{{ log.type }}</strong>.
+                                    </div>
+                                    <div class="sent-info" *ngIf="log.sentBy">
+                                        Sent by <strong>{{ log.sentBy.name }}</strong>
+                                    </div>
+                                </ng-container>
+
+                                <div class="note-info" *ngIf="log.note">
+                                    <span class="note-label">Note:</span> {{ log.note }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #loadingState>
+            <div class="loading-state">
+                <ui-loading message="Fetching rent history logs..."></ui-loading>
+            </div>
+        </ng-template>
+    </div>
+</app-layout>

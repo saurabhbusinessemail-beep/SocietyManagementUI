@@ -13,6 +13,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
 import { FilterModule } from '../../core/filter/filter.module';
 import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.component';
+import { RentListComponent } from './rent-list/rent-list.component';
+import { RentLogsComponent } from './rent-logs/rent-logs.component';
+
 
 
 @NgModule({
@@ -20,7 +23,9 @@ import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.co
     MyFlatListComponent,
     FlatDetailsComponent,
     MaintenanceLogsComponent,
-    ConfigureTenantComponent
+    ConfigureTenantComponent,
+    RentListComponent,
+    RentLogsComponent
   ],
   imports: [
     CommonModule,

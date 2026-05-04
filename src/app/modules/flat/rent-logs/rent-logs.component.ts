@@ -2,25 +2,25 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Location } from '@angular/common';
-import { MaintenanceService } from '../../../services/maintenance.service';
+import { RentService } from '../../../services/rent.service';
 import { CountryService } from '../../../services/country.service';
-import { IMaintenanceLog, IMaintenanceLogsResponse, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
+import { IRentLog, IRentLogsResponse, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { FormControl } from '@angular/forms';
 import { WindowService } from '../../../services/window.service';
 
 @Component({
-  selector: 'app-maintenance-logs',
-  templateUrl: './maintenance-logs.component.html',
-  styleUrls: ['./maintenance-logs.component.scss']
+  selector: 'app-rent-logs',
+  templateUrl: './rent-logs.component.html',
+  styleUrls: ['./rent-logs.component.scss']
 })
-export class MaintenanceLogsComponent implements OnInit, OnDestroy {
+export class RentLogsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   flatId: string = '';
   societyId: string = '';
-  logs: IMaintenanceLog[] = [];
-  filteredLogs: IMaintenanceLog[] = [];
-  flat?: IMaintenanceLogsResponse['flat'];
+  logs: IRentLog[] = [];
+  filteredLogs: IRentLog[] = [];
+  flat?: IRentLogsResponse['flat'];
   loading = false;
 
   // Filters — following announcement-list pattern exactly
@@ -32,7 +32,7 @@ export class MaintenanceLogsComponent implements OnInit, OnDestroy {
     formControl: this.monthControl,
     dropDownOptions: Array.from({ length: 12 }, (_, i) => ({
       value: i + 1,
-      label: this.maintenanceService.getMonthFullName(i + 1)
+      label: this.rentService.getMonthFullName(i + 1)
     }))
   };
 
@@ -80,7 +80,7 @@ export class MaintenanceLogsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    public maintenanceService: MaintenanceService,
+    public rentService: RentService,
     private countryService: CountryService,
     private location: Location,
     public windowService: WindowService
@@ -105,7 +105,7 @@ export class MaintenanceLogsComponent implements OnInit, OnDestroy {
 
   loadLogs(): void {
     this.loading = true;
-    this.maintenanceService.getLogs(this.flatId, this.societyId)
+    this.rentService.getLogs(this.flatId, this.societyId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
@@ -151,14 +151,14 @@ export class MaintenanceLogsComponent implements OnInit, OnDestroy {
   }
 
   getMonthName(month: number): string {
-    return this.maintenanceService.getMonthName(month);
+    return this.rentService.getMonthName(month);
   }
 
   getStatusColor(status: string): string {
-    return this.maintenanceService.getStatusColorName(status);
+    return this.rentService.getStatusColorName(status);
   }
 
   getStatusText(status: string): string {
-    return this.maintenanceService.getStatusDisplayText(status);
+    return this.rentService.getStatusDisplayText(status);
   }
 }

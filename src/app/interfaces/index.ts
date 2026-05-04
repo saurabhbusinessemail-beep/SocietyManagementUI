@@ -23,6 +23,7 @@ export * from './flat.interface';
 export * from './gate-entry.interface';
 export * from './gate-pass.interface';
 export * from './maintenance.interface';
+export * from './rent.interface';
 export * from './exchange-rate.interface';
 export * from './manager.interface';
 export * from './menu.interface';
