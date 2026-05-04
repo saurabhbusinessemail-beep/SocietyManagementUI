@@ -811,7 +811,7 @@
         </div>
 
         <!-- Rent Section -->
-        <div class="section-card" *ngIf="canManageFlat && tenantManagementFeatureAvailable && isTenantResiding">
+        <div class="section-card" *ngIf="canManageFlat && rentFeatureAvailable && isTenantResiding">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="account"></app-icon>
@@ -956,6 +956,23 @@
             <div class="locked-feature">
                 <app-icon name="lock" size="xl"></app-icon>
                 <p>Maintenance feature is not available in your plan</p>
+                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" *ngIf="canUpdateSociety">
+                    Upgrade Plan
+                </button>
+            </div>
+        </div>
+
+        <!-- Locked Rent -->
+        <div class="section-card locked" *ngIf="canManageFlat && !rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <app-icon name="account"></app-icon>
+                    <h2 class="section-title">Rent</h2>
+                </div>
+            </div>
+            <div class="locked-feature">
+                <app-icon name="lock" size="xl"></app-icon>
+                <p>Rent Management feature is not available in your plan</p>
                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" *ngIf="canUpdateSociety">
                     Upgrade Plan
                 </button>

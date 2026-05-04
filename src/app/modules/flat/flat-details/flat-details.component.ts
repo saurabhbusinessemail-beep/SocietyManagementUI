@@ -64,6 +64,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   gatePassesFeatureAvailable: boolean = false;
   tenantManagementFeatureAvailable: boolean = false;
   maintenanceFeatureAvailable: boolean = false;
+  rentFeatureAvailable: boolean = false;
 
   // Related data arrays (populated via API calls)
   members: IFlatMemberWithResidency[] = [];           // other residents of the same flat
@@ -282,9 +283,9 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     if (this.flatMember) {
       const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id;
       const societyId = typeof this.flatMember.societyId === 'string' ? this.flatMember.societyId : this.flatMember.societyId._id;
-      
-      this.router.navigate(['/myflats/logs', flatId], { 
-        queryParams: { societyId } 
+
+      this.router.navigate(['/myflats/logs', flatId], {
+        queryParams: { societyId }
       });
     }
   }
@@ -405,6 +406,11 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     );
     if (!this.tenantManagementFeatureAvailable) this.loadingTenants = false;
 
+    this.rentFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
+      f.key === FEATURES.RENT && f.included === true
+    );
+    if (!this.rentFeatureAvailable) this.loadingRent = false;
+
     this.maintenanceFeatureAvailable = !isExpired && currentPlan.planDetails.features.some(f =>
       f.key === FEATURES.MAINTENANCE && f.included === true
     );
@@ -463,19 +469,22 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
     if (this.tenantManagementFeatureAvailable) {
       this.getTenants(societyId, flatId);
+    }
+
+    if (this.rentFeatureAvailable) {
       if (this.isTenantResiding) {
-         if (this.flatMember.isOwner) {
-            this.loadRentReport(flatId);
-         } else if (this.flatMember.isTenant) {
-            this.getRentPayments(societyId, flatId);
-         } else {
-             this.loadingRent = false;
-         }
+        if (this.flatMember.isOwner) {
+          this.loadRentReport(flatId);
+        } else if (this.flatMember.isTenant) {
+          this.getRentPayments(societyId, flatId);
+        } else {
+          this.loadingRent = false;
+        }
       } else {
-         this.loadingRent = false;
+        this.loadingRent = false;
       }
     } else {
-        this.loadingRent = false;
+      this.loadingRent = false;
     }
 
     if (this.maintenanceFeatureAvailable) {
@@ -900,9 +909,9 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     if (this.flatMember) {
       const flatId = typeof this.flatMember.flatId === 'string' ? this.flatMember.flatId : this.flatMember.flatId._id;
       const societyId = typeof this.flatMember.societyId === 'string' ? this.flatMember.societyId : this.flatMember.societyId._id;
-      
-      this.router.navigate(['/myflats/rent-logs', flatId], { 
-        queryParams: { societyId } 
+
+      this.router.navigate(['/myflats/rent-logs', flatId], {
+        queryParams: { societyId }
       });
     }
   }
@@ -915,7 +924,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     this.rentNote.setValue('');
 
     const width = this.windowService.mode.value === 'mobile' ? '90%' :
-                  this.windowService.mode.value === 'tablet' ? '70%' : '50%';
+      this.windowService.mode.value === 'tablet' ? '70%' : '50%';
 
     this.rentDialogRef = this.dialog.open(this.rentPayTemplate, {
       width,
@@ -980,7 +989,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     this.maintenanceNote.setValue('');
 
     const width = this.windowService.mode.value === 'mobile' ? '90%' :
-                  this.windowService.mode.value === 'tablet' ? '70%' : '50%';
+      this.windowService.mode.value === 'tablet' ? '70%' : '50%';
 
     this.maintenanceDialogRef = this.dialog.open(this.maintenancePayTemplate, {
       width,
