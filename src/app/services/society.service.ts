@@ -612,6 +612,25 @@ export class SocietyService {
         return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats/${flatId}`);
     }
 
+    // Update flat
+    @InvalidateCache({
+        methods: [
+            'SocietyService.getFlat',
+            'SocietyService.getFlats*',
+            'SocietyService.getFlatsCount*',
+            'SocietyService.myFlats*',
+            'SocietyService.myFlatMembers*',
+            'SocietyService.myTenants*',
+            'SocietyService.getFlatMemberDetails*'
+        ],
+        matchParams: true,
+        paramIndices: [0],
+        groups: ['flats', 'flatMembers']
+    })
+    updateFlat(flatId: string, payload: any): Observable<IBEResponseFormat<IFlat>> {
+        return this.http.patch<IBEResponseFormat<IFlat>>(`${this.flatsBaseUrl}/update/${flatId}`, payload);
+    }
+
     // Get my flats as a owner/tenant/member
     @Cacheable({
         // ttl: 300000, // 5 minutes

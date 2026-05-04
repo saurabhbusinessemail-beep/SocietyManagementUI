@@ -212,23 +212,46 @@
 
         .section-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: $sp-sm;
             margin-bottom: $sp-md;
 
-            .icon svg {
-                width: 18px;
-                height: 18px;
-                stroke: $color-note-gray;
+            .header-left {
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+
+                .icon svg {
+                    width: 18px;
+                    height: 18px;
+                    stroke: $color-note-gray;
+                }
+
+                h4 {
+                    font-size: $font-size-xs;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2em;
+                    font-weight: 600;
+                    color: $color-note-gray;
+                    margin: 0;
+                }
             }
 
-            h4 {
-                font-size: $font-size-xs;
-                text-transform: uppercase;
-                letter-spacing: 0.2em;
-                font-weight: 600;
+            .expand-icon {
+                transition: transform 0.3s;
                 color: $color-note-gray;
-                margin: 0;
+
+                &.expanded {
+                    transform: rotate(180deg);
+                }
+
+                @include tablet {
+                    display: none;
+                }
+
+                @include desktop {
+                    display: none;
+                }
             }
         }
 
@@ -276,6 +299,46 @@
                         stroke: $color-note-gray;
                     }
                 }
+            }
+        }
+    }
+
+    .tenant-section {
+        .section-header {
+            cursor: pointer;
+        }
+
+        .tenant-list {
+            display: grid;
+            gap: $sp-md;
+            transition: all 0.3s ease;
+            overflow: hidden;
+
+            @include mobile {
+                grid-template-columns: 1fr;
+
+                &.collapsed {
+                    max-height: 0;
+                    opacity: 0;
+                    margin-top: 0;
+                }
+
+                &:not(.collapsed) {
+                    max-height: 1000px;
+                    opacity: 1;
+                }
+            }
+
+            @include tablet {
+                grid-template-columns: 1fr 1fr;
+                max-height: none !important;
+                opacity: 1 !important;
+            }
+
+            @include desktop {
+                grid-template-columns: 1fr 1fr;
+                max-height: none !important;
+                opacity: 1 !important;
             }
         }
     }

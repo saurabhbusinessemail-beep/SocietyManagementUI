@@ -9,5 +9,6 @@ export interface IFlat extends IDefaultFields {
     flatType: FlatTypes;
     floor: number;
     residingType?: ResidingTypes;
+    isMultiTenantAllowed?: boolean;
     flatOwnerMemberId?: string;
 }

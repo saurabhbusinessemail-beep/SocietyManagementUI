@@ -643,6 +643,11 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     this.currentDialogRef?.close();
   }
 
+  handleConfigureTenantClick() {
+    if (!this.flatMemberId) return;
+    this.router.navigate(['/myflats/details', this.flatMemberId, 'configure-tenant']);
+  }
+
   handleTenantClick() {
     this.cancelResidingTypeChange();
 
@@ -677,11 +682,11 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
         .subscribe({
           next: response => {
             if (!response.success) return;
+
             if (this.flatMember) this.loadFlatMember(this.flatMember._id);
           },
           complete: () => this.cancelResidingTypeChange()
         });
-      return;
     }
   }
 

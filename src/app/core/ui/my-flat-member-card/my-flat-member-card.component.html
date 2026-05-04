@@ -89,11 +89,13 @@
         <!-- Owner Information -->
         <div class="owner-section" *ngIf="showOwnerInfo">
             <div class="section-header">
-                <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg></div>
-                <h4>Owner Information</h4>
+                <div class="header-left">
+                    <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg></div>
+                    <h4>Owner Information</h4>
+                </div>
             </div>
             <div class="user-details">
                 <ui-user-avatar [user]="ownerUser" size="md"></ui-user-avatar>
@@ -109,31 +111,45 @@
         </div>
 
         <!-- Tenant Information (hidden for previous tenants to protect privacy) -->
-        <div class="tenant-section" *ngIf="showTenantInfo">
-            <div class="section-header">
-                <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg></div>
-                <h4>Tenant Information</h4>
-            </div>
-            <div class="user-details">
-                <ui-user-avatar [user]="tenantUser" size="md"></ui-user-avatar>
-                <div class="info">
-                    <p class="name">{{ getUserName(tenantUser) }}</p>
-                    <div class="contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>{{ getContact(tenantUser) }}</div>
-                    <div class="lease" *ngIf="member.tenant?.leaseStart && member.tenant?.leaseEnd">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M8 2v4" />
-                            <path d="M16 2v4" />
-                            <rect x="3" y="4" width="18" height="18" rx="2" />
-                            <path d="M3 10h18" />
+        <div class="tenant-section" *ngIf="showTenantInfo && tenants.length > 0">
+            <div class="section-header" (click)="toggleExpand($event)">
+                <div class="header-left">
+                    <div class="icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
                         </svg>
-                        Lease: {{ leaseStartDate }} – {{ leaseEndDate }}
+                    </div>
+                    <h4>Tenant Information ({{ tenants.length }})</h4>
+                </div>
+                <div class="expand-icon mobile-only" [class.expanded]="isExpanded">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="m6 9 6 6 6-6" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tenant-list" [class.collapsed]="!isExpanded">
+                <div class="user-details" *ngFor="let tenant of tenants">
+                    <ui-user-avatar [user]="tenant.userId" size="md"></ui-user-avatar>
+                    <div class="info">
+                        <p class="name">{{ getUserName(tenant.userId) }}</p>
+                        <div class="contact">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                            {{ getContact(tenant.userId) }}
+                        </div>
+                        <div class="lease" *ngIf="tenant.leaseStart && tenant.leaseEnd">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M8 2v4" />
+                                <path d="M16 2v4" />
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <path d="M3 10h18" />
+                            </svg>
+                            Lease: {{ tenant.leaseStart | date:'MMM yyyy' }} – {{ tenant.leaseEnd | date:'MMM yyyy' }}
+                        </div>
                     </div>
                 </div>
             </div>

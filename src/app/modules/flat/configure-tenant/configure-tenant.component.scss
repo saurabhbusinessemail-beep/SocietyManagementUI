@@ -1,0 +1,233 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.configure-container {
+    max-width: 800px;
+    margin: $sp-xl auto;
+    padding: 0 $sp-md;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.config-card {
+    background: $color-white;
+    border-radius: $btn-border-radius-lg;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid $color-border;
+}
+
+.config-header {
+    padding: $sp-xl;
+    background: linear-gradient(135deg, $color-cancel, $color-white);
+    display: flex;
+    gap: $sp-lg;
+    align-items: center;
+    border-bottom: 1px solid $color-border;
+
+    .icon-wrapper {
+        width: 56px;
+        height: 56px;
+        background: $color-dark-blue;
+        color: $color-white;
+        border-radius: $btn-border-radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-text {
+        h2 {
+            margin: 0;
+            font-size: $font-size-xl;
+            font-weight: 700;
+            color: $color-black;
+        }
+
+        p {
+            margin: 0.25rem 0 0;
+            color: $color-help-text;
+            font-size: $font-size-sm;
+        }
+    }
+}
+
+.options-list {
+    padding: $sp-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $sp-md;
+}
+
+.option-item {
+    display: flex;
+    gap: $sp-lg;
+    padding: $sp-lg;
+    border-radius: $btn-border-radius-lg;
+    border: 2px solid $color-border;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background: $color-white;
+
+    &:hover {
+        border-color: $color-light-blue;
+        background: $color-cancel;
+        transform: translateY(-2px);
+    }
+
+    &.active {
+        border-color: $color-dark-blue;
+        background: rgba($color-dark-blue, 0.02);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+        .option-radio {
+            border-color: $color-dark-blue;
+        }
+    }
+
+    .option-radio {
+        width: 24px;
+        height: 24px;
+        border: 2px solid $color-help-text;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+        transition: all 0.2s;
+
+        .radio-inner {
+            width: 12px;
+            height: 12px;
+            background: $color-dark-blue;
+            border-radius: 50%;
+            animation: scaleIn 0.2s ease-out;
+        }
+    }
+
+    .option-content {
+        flex: 1;
+        padding-right: 80px; // Reserve space for absolute badges
+
+        h3 {
+            margin: 0;
+            font-size: $font-size-lg;
+            font-weight: 600;
+            color: $color-black;
+        }
+
+        p {
+            margin: 0.5rem 0 0;
+            font-size: $font-size-sm;
+            color: $color-note-gray;
+            line-height: 1.5;
+        }
+    }
+
+    .badge-group {
+        position: absolute;
+        top: $sp-lg;
+        right: $sp-lg;
+        display: flex;
+        flex-direction: column;
+        gap: $sp-xs;
+        align-items: flex-end;
+
+        .status-badge {
+            position: static;
+        }
+    }
+
+    .status-badge {
+        position: absolute;
+        top: $sp-lg;
+        right: $sp-lg;
+        font-size: 10px;
+        font-weight: 700;
+        padding: $sp-xs $sp-sm;
+        border-radius: 100px;
+        background: $color-cancel;
+        color: $color-help-text;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        &.active {
+            background: $color-dark-blue;
+            color: $color-white;
+        }
+    }
+}
+
+.config-footer {
+    padding: $sp-lg $sp-xl;
+    border-top: 1px solid $color-border;
+    display: flex;
+    justify-content: flex-end;
+    background: $color-cancel;
+}
+
+.info-note {
+    margin-top: $sp-lg;
+    display: flex;
+    gap: $sp-sm;
+    padding: $sp-md;
+    background: rgba($color-dark-blue, 0.05);
+    border-radius: $btn-border-radius-md;
+    color: $color-note-gray;
+    font-size: $font-size-sm;
+    align-items: flex-start;
+
+    svg {
+        flex-shrink: 0;
+        color: $color-dark-blue;
+        margin-top: 0.1rem;
+    }
+
+    p {
+        margin: 0;
+        line-height: 1.4;
+    }
+}
+
+.loading-container {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+    .config-header {
+        padding: $sp-lg;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .option-item {
+        padding: $sp-md;
+        flex-direction: column;
+
+        .option-content {
+            padding-right: 0;
+        }
+    }
+
+    .status-badge, .badge-group {
+        position: static;
+        display: inline-block;
+        margin-top: $sp-sm;
+    }
+}

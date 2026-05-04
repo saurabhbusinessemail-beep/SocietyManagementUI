@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MyFlatListComponent } from './my-flat-list/my-flat-list.component';
 import { FlatDetailsComponent } from './flat-details/flat-details.component';
 import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
+import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.component';
 import { PERMISSIONS } from '../../constants';
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
     // canActivate: [PermissionGuard],
     component: FlatDetailsComponent,
     // data: { permission: PERMISSIONS.flat_manage }
+  },
+  {
+    path: 'details/:flatMemberId/configure-tenant',
+    component: ConfigureTenantComponent
   },
   {
     path: 'logs/:id',

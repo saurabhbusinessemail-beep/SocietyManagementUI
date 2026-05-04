@@ -177,7 +177,10 @@ export class AddTenantComponent implements OnInit {
     });
     if (!selectedFlat) return;
 
-    if (this.checkIfResidingStatusNeedsToChange(formValue.leaseStart, formValue.leaseEnd)) {
+    const flat = typeof selectedFlat.flatId === 'string' ? null : selectedFlat.flatId;
+    const isMultiTenantAllowed = flat?.isMultiTenantAllowed || false;
+
+    if (!isMultiTenantAllowed && this.checkIfResidingStatusNeedsToChange(formValue.leaseStart, formValue.leaseEnd)) {
       if (!await this.dialogService.confirmToProceed('You are adding a tenant with a lease start date of today or earlier – if the flat is currently occupied (by an owner or another tenant), the existing occupant(s) will be automatically vacated to make room for the new tenant; do you want to proceed?')) {
         return;
       }

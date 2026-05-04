@@ -293,10 +293,26 @@
 
                 &:hover {
                     background-color: $color-cancel;
+                    border-color: $color-dark-blue;
+                    transform: scale(1.1);
+                    
+                    svg {
+                        stroke: $color-dark-blue;
+                    }
+                }
+
+                &.config:hover {
+                    background-color: $color-cancel;
+                    border-color: $color-amber;
+
+                    svg {
+                        stroke: $color-amber;
+                    }
                 }
 
                 svg {
                     stroke: $color-help-text;
+                    transition: stroke 0.2s;
                 }
             }
         }
@@ -580,6 +596,27 @@
                 font-weight: 700;
                 color: $color-black;
                 margin: 0;
+                display: flex;
+                align-items: center;
+                gap: $sp-sm;
+
+                .occupancy-tag {
+                    font-size: 9px;
+                    font-weight: 700;
+                    padding: 1px 6px;
+                    border-radius: 4px;
+                    background-color: $color-cancel;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    border: 1px solid $color-border;
+
+                    &.multi {
+                        background-color: rgba($color-amber, 0.1);
+                        color: $color-amber;
+                        border-color: rgba($color-amber, 0.2);
+                    }
+                }
             }
         }
 

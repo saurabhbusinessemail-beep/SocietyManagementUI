@@ -31,5 +31,6 @@ export interface IFlatMemberWithResidency extends IFlatMember {
 
 export interface IMyFlatResponse extends IFlatMemberWithResidency {
     tenant?: IFlatMemberWithResidency;
+    tenants?: IFlatMemberWithResidency[];
     owner?: IFlatMemberWithResidency;
 }

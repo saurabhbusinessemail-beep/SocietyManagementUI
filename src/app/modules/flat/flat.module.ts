@@ -12,13 +12,15 @@ import { PipeModule } from '../../pipes/pipes.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.component';
 import { FilterModule } from '../../core/filter/filter.module';
+import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.component';
 
 
 @NgModule({
   declarations: [
     MyFlatListComponent,
     FlatDetailsComponent,
-    MaintenanceLogsComponent
+    MaintenanceLogsComponent,
+    ConfigureTenantComponent
   ],
   imports: [
     CommonModule,

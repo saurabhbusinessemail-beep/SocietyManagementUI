@@ -18,6 +18,7 @@ export class MyFlatMemberCardComponent {
   @Output() delete = new EventEmitter<IMyFlatResponse>();
   @Output() selectedChange = new EventEmitter<boolean>();
   @Output() clicked = new EventEmitter<void>();
+  isExpanded = false;
 
   // --------------------------------------------------------------------------
   // Computed properties for user relationships
@@ -46,6 +47,10 @@ export class MyFlatMemberCardComponent {
       return this.member.tenant.userId as IUser;
     }
     return null;
+  }
+
+  get tenants(): any[] {
+    return this.member.tenants || (this.member.tenant ? [this.member.tenant] : []);
   }
 
   get isOwnerWithTenant(): boolean {
@@ -100,13 +105,26 @@ export class MyFlatMemberCardComponent {
     return this.isPreviousTenantWithOtherTenant;
   }
 
+  // Check if the current user is among the active tenants
+  get isCurrentActiveTenant(): boolean {
+    if (!this.member.isTenant) return false;
+    const currentUserId = this.currentUser?._id;
+    if (!currentUserId) return false;
+
+    return this.tenants.some(t => {
+      const uid = typeof t.userId === 'string' ? t.userId : t.userId?._id;
+      return uid === currentUserId && t.status === 'active';
+    });
+  }
+
   // Check if the user is a previous tenant and another tenant is currently living
   get isPreviousTenantWithOtherTenant(): boolean {
     if (!this.member.isTenant) return false;
-    if (!this.member.tenant) return false;
-    const currentUserId = this.currentUser?._id;
-    const tenantUserId = this.tenantUser?._id;
-    return !!currentUserId && !!tenantUserId && currentUserId !== tenantUserId;
+    // If I am a current active tenant, I am NOT a previous tenant
+    if (this.isCurrentActiveTenant) return false;
+
+    // If I am NOT an active tenant but the flat is currently in Tenant mode
+    return this.residingType === 'Tenant';
   }
 
   // --------------------------------------------------------------------------
@@ -294,5 +312,10 @@ export class MyFlatMemberCardComponent {
     if (!this.isDisabled) {
       this.delete.emit(this.member);
     }
+  }
+
+  toggleExpand(event: Event): void {
+    event.stopPropagation();
+    this.isExpanded = !this.isExpanded;
   }
 }
