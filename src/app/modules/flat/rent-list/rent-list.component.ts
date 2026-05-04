@@ -104,8 +104,12 @@ export class RentListComponent implements OnInit, OnDestroy {
     return this.monthlyReport?.summary.paidCount ?? 0;
   }
 
-  get pendingCount(): number {
-    return this.monthlyReport?.summary.pendingCount ?? 0;
+  get pendingApprovalCount(): number {
+    return this.monthlyReport?.summary.pendingApprovalCount ?? 0;
+  }
+
+  get pendingAmount(): number {
+    return this.monthlyReport?.summary.pendingAmount ?? 0;
   }
 
   get totalTenants(): number {
@@ -117,7 +121,7 @@ export class RentListComponent implements OnInit, OnDestroy {
   }
 
   get notPaidCount(): number {
-    return this.totalTenants - this.paidCount - this.pendingCount;
+    return this.monthlyReport?.summary.notPaidCount ?? 0;
   }
 
   get totalCollected(): number {

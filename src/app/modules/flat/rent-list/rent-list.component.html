@@ -1,9 +1,8 @@
-<app-layout [hideMoreActions]="true" pageTitle="Rent Management"
-    [showBackButton]="true">
+<app-layout [hideMoreActions]="true" pageTitle="Rent Management" [showBackButton]="true">
 
     <div class="flex-col full-h">
-        <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
-            [dropDownControlConfigs]="[monthConfig, yearConfig, statusFilterConfig]"
+        <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true" [smColumns]="12" [mdColumns]="12"
+            [lgColumns]="12" [dropDownControlConfigs]="[monthConfig, yearConfig, statusFilterConfig]"
             (filterChanged)="onFilterChanged($any($event))">
 
             <ui-select2 [formControl]="monthControl" [config]="monthConfig"
@@ -23,9 +22,9 @@
 
         <ui-form-layout class="flex-auto">
 
-            <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex-row items-center justify-end" style="padding-bottom: 8px;">
+            <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex-row items-center justify-end"
+                style="padding-bottom: 8px;">
                 <ui-button label="View Logs" type="cancel" (clicked)="viewLogs()">
-                    <app-icon name="history" size="sm"></app-icon>
                 </ui-button>
             </div>
 
@@ -38,19 +37,19 @@
                 <!-- Summary Cards -->
                 <ng-container *ngIf="monthlyReport">
                     <div class="summary-grid" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                        <div class="summary-card summary-card--paid">
+                        <div class="summary-card summary-card--total">
                             <div class="summary-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
                                     <path
-                                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                    <path d="m9 12 2 2 4-4" />
+                                        d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                                    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Paid</p>
-                                <p class="summary-value">{{ paidCount }}</p>
+                                <p class="summary-label">Collected</p>
+                                <p class="summary-value">{{ currencySymbol }}{{ totalCollected | number }}</p>
                             </div>
                         </div>
 
@@ -65,7 +64,23 @@
                             </div>
                             <div class="summary-details">
                                 <p class="summary-label">Pending</p>
-                                <p class="summary-value">{{ pendingCount }}</p>
+                                <p class="summary-value">{{ currencySymbol }}{{ pendingAmount | number }}</p>
+                            </div>
+                        </div>
+
+                        <div class="summary-card summary-card--paid">
+                            <div class="summary-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                    <path d="m9 12 2 2 4-4" />
+                                </svg>
+                            </div>
+                            <div class="summary-details">
+                                <p class="summary-label">Paid</p>
+                                <p class="summary-value">{{ paidCount }}</p>
                             </div>
                         </div>
 
@@ -84,24 +99,24 @@
                             </div>
                         </div>
 
-                        <div class="summary-card summary-card--total">
+                        <div class="summary-card summary-card--pending">
                             <div class="summary-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path
-                                        d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
-                                    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="12" y1="18" x2="12" y2="12" />
+                                    <line x1="9" y1="15" x2="15" y2="15" />
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Collected</p>
-                                <p class="summary-value">{{ currencySymbol }}{{ totalCollected | number }}</p>
+                                <p class="summary-label">Pending Approval</p>
+                                <p class="summary-value">{{ pendingApprovalCount }}</p>
                             </div>
                         </div>
 
-                        <div class="summary-card summary-card--remind"
-                            (click)="onRemindAll()">
+                        <div class="summary-card summary-card--remind" (click)="onRemindAll()">
                             <div class="summary-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -120,8 +135,7 @@
 
                 <!-- Tenant-wise List -->
                 <ng-container *ngFor="let entry of filteredEntries">
-                    <app-card-v2 [title]="entry.memberName"
-                        [subTitle]="entry.memberContact"
+                    <app-card-v2 [title]="entry.memberName" [subTitle]="entry.memberContact"
                         [status]="getStatusClass(entry.status)" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
 
                         <ng-container card-info>

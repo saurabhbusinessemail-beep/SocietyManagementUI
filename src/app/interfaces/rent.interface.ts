@@ -35,9 +35,11 @@ export interface IRentPayment extends IDefaultFields {
 export interface IRentSummary {
   totalTenants: number;
   paidCount: number;
-  pendingCount: number;
+  pendingApprovalCount: number;
+  notPaidCount: number;
   totalCollected: number;
   totalRentExpected?: number;
+  pendingAmount?: number;
 }
 
 export interface IRentReportEntry {
