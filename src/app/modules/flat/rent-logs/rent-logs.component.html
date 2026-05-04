@@ -75,7 +75,7 @@
                             <div class="card-body">
                                 <!-- Payment Specific -->
                                 <ng-container *ngIf="log.logType === 'payment'">
-                                    <div class="amount-display">{{ currencySymbol }}{{ log.amount | number }}</div>
+                                    <div class="amount-display">{{ log.amount | formattedPrice }}</div>
                                     <div class="recorded-info" *ngIf="log.recordedBy">
                                         Recorded by <strong>{{ log.recordedBy.name }}</strong>
                                     </div>

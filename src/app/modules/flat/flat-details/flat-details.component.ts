@@ -32,6 +32,8 @@ import { MaintenanceService } from '../../../services/maintenance.service';
 import { RentService } from '../../../services/rent.service';
 import { FormControl } from '@angular/forms';
 import { IRentPayment, IRentMonthlyReport } from '../../../interfaces';
+import { CountryService } from '../../../services/country.service';
+import { CurrencyService } from '../../../services/currency.service';
 
 @Component({
   selector: 'app-flat-details',
@@ -131,6 +133,10 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       value: currentYear - i,
       label: (currentYear - i).toString()
     }));
+  }
+
+  get userCurrencySymbol(): string {
+    return this.countryService.loggedInUserCountryCurrency?.currencySymbol ?? '₹';
   }
 
 
@@ -265,7 +271,9 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     private vehicleService: VehicleService,
     private dialogService: DialogService,
     public maintenanceService: MaintenanceService,
-    public rentService: RentService
+    public rentService: RentService,
+    public countryService: CountryService,
+    private currencyService: CurrencyService
   ) { }
 
   ngOnInit(): void {
@@ -917,7 +925,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   openPayRentDialog() {
-    this.rentAmount.setValue(this.flatMember?.rentAmount || 0);
+    const amountInINR = this.flatMember?.rentAmount || 0;
+    this.rentAmount.setValue(this.currencyService.convertFromINR(amountInINR));
     this.rentMonth.setValue(new Date().getMonth() + 1);
     this.rentYear.setValue(new Date().getFullYear());
     this.rentDate.setValue(new Date());
@@ -951,7 +960,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       societyId,
       flatId,
       flatMemberId: this.flatMember._id,
-      amount: this.rentAmount.value,
+      amount: this.currencyService.convertToINR(this.rentAmount.value),
       month: this.rentMonth.value,
       year: this.rentYear.value,
       paidOn: this.rentDate.value || now,
@@ -1016,7 +1025,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
       societyId,
       flatId,
       flatMemberId: this.flatMember._id,
-      amount: this.maintenanceAmount.value,
+      amount: this.currencyService.convertToINR(this.maintenanceAmount.value),
       month: this.maintenanceMonth.value,
       year: this.maintenanceYear.value,
       paymentMethod: this.maintenancePaymentMethod.value || undefined,

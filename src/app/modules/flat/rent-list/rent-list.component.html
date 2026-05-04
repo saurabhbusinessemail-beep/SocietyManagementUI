@@ -49,7 +49,7 @@
                             </div>
                             <div class="summary-details">
                                 <p class="summary-label">Collected</p>
-                                <p class="summary-value">{{ currencySymbol }}{{ totalCollected | number }}</p>
+                                <p class="summary-value">{{ totalCollected | formattedPrice }}</p>
                             </div>
                         </div>
 
@@ -64,7 +64,7 @@
                             </div>
                             <div class="summary-details">
                                 <p class="summary-label">Pending</p>
-                                <p class="summary-value">{{ currencySymbol }}{{ pendingAmount | number }}</p>
+                                <p class="summary-value">{{ pendingAmount | formattedPrice }}</p>
                             </div>
                         </div>
 
@@ -150,15 +150,15 @@
                         </ng-container>
 
                         <ng-container card-body>
-                            <ui-label [config]="{id: '', label: 'Rent Amount'}"
-                                [valueText]="currencySymbol + (entry.rentAmountExpected | number)" direction="vertical"
-                                valueType="info">
-                            </ui-label>
+                             <ui-label [config]="{id: '', label: 'Rent Amount'}"
+                                 [valueText]="entry.rentAmountExpected | formattedPrice" direction="vertical"
+                                 valueType="info">
+                             </ui-label>
 
-                            <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: 'Paid Amount'}"
-                                [valueText]="currencySymbol + (entry.payment?.amount | number)" direction="vertical"
-                                valueType="info">
-                            </ui-label>
+                             <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: 'Paid Amount'}"
+                                 [valueText]="entry.payment?.amount | formattedPrice" direction="vertical"
+                                 valueType="info">
+                             </ui-label>
 
                             <ui-label *ngIf="entry.payment?.paidOn" [config]="{id: '', label: 'Paid On'}"
                                 [valueText]="(entry.payment?.paidOn | date:'mediumDate') || ''" direction="vertical"

@@ -97,7 +97,7 @@
                             </div>
                             <div class="summary-details">
                                 <p class="summary-label">Collected</p>
-                                <p class="summary-value">{{ currencySymbol }}{{ totalCollected | number }}</p>
+                                <p class="summary-value">{{ totalCollected | formattedPrice }}</p>
                             </div>
                         </div>
 
@@ -158,7 +158,7 @@
                             </ui-label>
 
                             <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: 'Amount'}"
-                                [valueText]="currencySymbol + (entry.payment?.amount | number)" direction="vertical"
+                                [valueText]="entry.payment?.amount | formattedPrice" direction="vertical"
                                 valueType="info">
                             </ui-label>
 
@@ -238,7 +238,7 @@
                             </ui-label>
 
                             <ui-label [config]="{id: '', label: 'Collected'}"
-                                [valueText]="currencySymbol + (monthData.totalCollected | number)" direction="vertical"
+                                [valueText]="monthData.totalCollected | formattedPrice" direction="vertical"
                                 valueType="info">
                             </ui-label>
                         </ng-container>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { IExchangeRate, IExchangeRateResponse } from '../interfaces';
 import { PricingPlanService } from './pricing-plan.service';
+import { CountryService } from './country.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,11 @@ export class CurrencyService {
         return this.exchangeRates ? true : false;
     }
 
-    constructor(private http: HttpClient, private pricingPlanService: PricingPlanService) {
+    constructor(
+        private http: HttpClient,
+        private pricingPlanService: PricingPlanService,
+        private countryService: CountryService
+    ) {
     }
 
     async loadExchangeRate() {
@@ -31,6 +36,14 @@ export class CurrencyService {
         return this.exchangeRates?.[toCurrency];
     }
 
+    get currentCurrency(): string {
+        return this.countryService.loggedInUserCountryCurrency?.currency ?? 'INR';
+    }
+
+    get currentCurrencyRate(): number {
+        return this.getRate(this.currentCurrency) ?? 1;
+    }
+
     convertCurrency(
         amount: number,
         toCurrency: string
@@ -40,14 +53,25 @@ export class CurrencyService {
             const rate = this.exchangeRates?.[toCurrency];
 
             if (!rate) {
-                throw new Error('Invalid target currency');
+                // throw new Error('Invalid target currency');
+                return amount;
             }
 
             return amount * rate;
 
         } catch (error) {
             console.error('Currency conversion error:', error);
-            throw error;
+            return amount;
         }
+    }
+
+    convertToINR(amount: number): number {
+        const rate = this.currentCurrencyRate;
+        return amount / rate;
+    }
+
+    convertFromINR(amount: number): number {
+        const rate = this.currentCurrencyRate;
+        return amount * rate;
     }
 }

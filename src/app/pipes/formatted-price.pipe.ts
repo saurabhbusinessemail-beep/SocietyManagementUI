@@ -14,7 +14,8 @@ export class FormattedPricePipe implements PipeTransform {
 
     constructor(private countryService: CountryService, private currencyService: CurrencyService) { }
 
-    transform(amount: number): string {
+    transform(amount: number | undefined | null): string {
+        if (amount === undefined || amount === null) return '';
 
         let toCurrency: ICurrency | undefined = !this.countryService.loggedInUserCountry ? undefined : {
             currency: this.countryService.loggedInUserCountry.currency,

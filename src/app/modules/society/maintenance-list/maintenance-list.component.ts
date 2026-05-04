@@ -18,6 +18,7 @@ import {
 } from '../../../interfaces';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CountryService } from '../../../services/country.service';
+import { CurrencyService } from '../../../services/currency.service';
 
 interface IMaintenanceFilter {
   societyId?: string;
@@ -156,7 +157,8 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
     public windowService: WindowService,
     private dialog: MatDialog,
     private dialogService: DialogService,
-    public countryService: CountryService
+    public countryService: CountryService,
+    private currencyService: CurrencyService
   ) { }
 
   ngOnInit(): void {
@@ -262,7 +264,8 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   // Admin: Record payment for a flat
   openRecordPaymentDialog(entry: IMaintenanceReportEntry) {
     this.selectedEntry = entry;
-    this.paymentAmount.setValue(entry.payment?.amount ?? 0);
+    const amountInINR = entry.payment?.amount ?? 0;
+    this.paymentAmount.setValue(this.currencyService.convertFromINR(amountInINR));
     this.paymentMonth.setValue(this.selectedFilter.month || (new Date().getMonth() + 1));
     this.paymentYear.setValue(this.selectedFilter.year || new Date().getFullYear());
     this.paymentDate.setValue(new Date());
@@ -290,7 +293,7 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
       societyId: this.selectedFilter.societyId,
       flatId: this.selectedEntry.flatId,
       flatMemberId: this.selectedEntry.flatMemberId,
-      amount: this.paymentAmount.value,
+      amount: this.currencyService.convertToINR(this.paymentAmount.value ?? 0),
       month: this.paymentMonth.value,
       year: this.paymentYear.value,
       paidOn: this.paymentDate.value || new Date(),

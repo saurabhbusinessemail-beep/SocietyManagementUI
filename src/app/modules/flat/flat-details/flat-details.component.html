@@ -215,7 +215,7 @@
                 </div>
                 <div class="lease-item" *ngIf="flatMember.rentAmount">
                     <span class="lease-label">Rent</span>
-                    <span class="lease-value rent">{{ flatMember.rentAmount | currency:'INR' }}</span>
+                    <span class="lease-value rent">{{ flatMember.rentAmount | formattedPrice }}</span>
                 </div>
             </div>
         </div>
@@ -735,7 +735,7 @@
                                     [class.pending]="currentMonthPayment.status === 'pending_approval'">
                                     {{ getPaymentStatusText(currentMonthPayment.status) }}
                                 </div>
-                                <span class="payment-amount">₹{{ currentMonthPayment.amount }}</span>
+                                <span class="payment-amount">{{ currentMonthPayment.amount | formattedPrice }}</span>
                                 <span class="payment-date" *ngIf="currentMonthPayment.paidOn">
                                     {{ currentMonthPayment.paidOn | date:'mediumDate' }}
                                 </span>
@@ -748,7 +748,7 @@
                                 <div class="rejection-card">
                                     <div class="rejection-header">
                                         <div class="status-badge-maintenance rejected">Rejected</div>
-                                        <span class="payment-amount">₹{{ currentMonthPayment.amount }}</span>
+                                        <span class="payment-amount">{{ currentMonthPayment.amount | formattedPrice }}</span>
                                     </div>
                                     <div class="rejection-reason-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -831,11 +831,11 @@
                         <div class="rent-summary" style="display: flex; gap: 16px; flex-wrap: wrap;">
                             <div class="summary-stat">
                                 <span class="stat-label">Collected</span>
-                                <span class="stat-value success">₹{{ rentMonthlyReport.summary.totalCollected }}</span>
+                                <span class="stat-value success">{{ rentMonthlyReport.summary.totalCollected | formattedPrice }}</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Pending</span>
-                                <span class="stat-value warning">₹{{ rentMonthlyReport.summary.pendingAmount }}</span>
+                                <span class="stat-value warning">{{ rentMonthlyReport.summary.pendingAmount | formattedPrice }}</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Paid</span>
@@ -866,7 +866,7 @@
                                         [class.pending]="currentRentMonthPayment.status === 'pending_approval'">
                                         {{ rentService.getStatusDisplayText(currentRentMonthPayment.status) }}
                                     </div>
-                                    <span class="payment-amount">₹{{ currentRentMonthPayment.amount }}</span>
+                                    <span class="payment-amount">{{ currentRentMonthPayment.amount | formattedPrice }}</span>
                                     <span class="payment-date" *ngIf="currentRentMonthPayment.paidOn">
                                         {{ currentRentMonthPayment.paidOn | date:'mediumDate' }}
                                     </span>
@@ -880,7 +880,7 @@
                                     <div class="rejection-card">
                                         <div class="rejection-header">
                                             <div class="status-badge-maintenance rejected">Rejected</div>
-                                            <span class="payment-amount">₹{{ currentRentMonthPayment.amount }}</span>
+                                            <span class="payment-amount">{{ currentRentMonthPayment.amount | formattedPrice }}</span>
                                         </div>
                                         <div class="rejection-reason-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -1002,7 +1002,7 @@
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="rentAmount"
-                [config]="{id: 'rentAmount', label: 'Amount (₹)', placeholder: 'Enter amount'}" [smColumns]="12"
+                [config]="{id: 'rentAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
@@ -1063,7 +1063,7 @@
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="maintenanceAmount"
-                [config]="{id: 'maintenanceAmount', label: 'Amount (₹)', placeholder: 'Enter amount'}" [smColumns]="12"
+                [config]="{id: 'maintenanceAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
