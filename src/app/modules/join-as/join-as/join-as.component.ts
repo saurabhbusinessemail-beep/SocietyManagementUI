@@ -147,7 +147,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
   }
 
   get residingTypeOptions(): IUIDropdownOption[] {
-    return ResidingTypeList.map(rt => ({ label: rt, value: rt }));
+    return [{ label: ResidingTypes.Self, value: ResidingTypes.Self }, { label: ResidingTypes.Vacant, value: ResidingTypes.Vacant }];
   }
 
   get parkingFlatOptions(): IUIDropdownOption<string>[] {
