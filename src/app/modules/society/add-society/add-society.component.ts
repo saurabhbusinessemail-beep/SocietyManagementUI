@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IMyProfile, IUIControlConfig, IUIDropdownOption, UILocationResult } from '../../../interfaces';
 import { countries } from '../../../constants';
-import { Subject, take, takeUntil } from 'rxjs';
+import { forkJoin, Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
@@ -136,18 +136,28 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
   }
 
   loadSocietyDetails(id: string) {
-    this.societyService.getSociety(id)
-      .pipe(take(1))
-      .subscribe({
-        next: response => {
-          this.fb.patchValue(response);
-          this.fb.get('gpsLocation')?.setValue(response.gpsLocation)
-          if (response.numberOfBuildings > 1) {
-            this.isMultipleBuildings.setValue([true])
-          }
-        },
-        error: err => console.log('Loading society details failed')
-      })
+    forkJoin({
+      society: this.societyService.getSociety(id).pipe(take(1)),
+      buildingsCount: this.societyService.getBuildingsCount(id).pipe(take(1)),
+      flatsCount: this.societyService.getFlatsCount(id).pipe(take(1))
+    }).subscribe({
+      next: ({ society, buildingsCount, flatsCount }) => {
+        this.fb.patchValue(society);
+        this.fb.get('gpsLocation')?.setValue(society.gpsLocation)
+        if (society.numberOfBuildings > 1) {
+          this.isMultipleBuildings.setValue([true])
+        }
+
+        const bCount = buildingsCount.data ?? 0;
+        const fCount = flatsCount.data ?? 0;
+
+        if (bCount > 0 || fCount > 0) {
+          this.isMultipleBuildings.disable();
+          this.multiBuildingConfig.helpText = 'This option cannot be changed as buildings or flats have already been added for this society.';
+        }
+      },
+      error: err => console.log('Loading society details failed')
+    })
   }
 
   cancel() {
