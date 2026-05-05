@@ -5,7 +5,8 @@
 
     <!-- Expanded area (desktop) or popover/drawer (tablet/mobile) -->
     <div class="menu-inner">
-        <div class="brand" (click)="toggleMenu()" *ngIf="windowService.mode.value !== 'desktop' && windowService.mode.value !== 'tablet'">
+        <div class="brand" (click)="toggleMenu()"
+            *ngIf="windowService.mode.value !== 'desktop' && windowService.mode.value !== 'tablet'">
             <div class="brand-icon">
                 <span class="logo-mobile">
                     <img class="icon menu-icon" src="assets/logo.png">
@@ -24,7 +25,8 @@
                 <div (click)="closeOverlay(m)"
                     [ngClass]="{ 'active': menuService.selectedMenu.value?.menuId === m.menuId}">
                     <app-icon [name]="m.icon ?? ''"
-                        [color]="menuService.selectedMenu.value?.menuId === m.menuId ? 'var(--color-border-highlight)' : 'var(--color-header-text)'" size="xl"></app-icon>
+                        [color]="menuService.selectedMenu.value?.menuId === m.menuId ? 'var(--color-border-highlight)' : 'var(--color-header-text)'"
+                        size="xl"></app-icon>
                     <span class="label" *ngIf="open">{{ m.menuName }}</span>
                 </div>
             </li>

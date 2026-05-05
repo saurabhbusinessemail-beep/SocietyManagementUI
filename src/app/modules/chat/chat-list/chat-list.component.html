@@ -1,0 +1,135 @@
+<app-layout [hideMoreActions]="true" pageTitle="">
+  <div class="chat-list-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header__title">
+        <span class="material-icons chat-icon">chat</span>
+        <h1>Chats</h1>
+        <span *ngIf="getTotalUnread() > 0" class="unread-badge">{{ getTotalUnread() }}</span>
+      </div>
+      <button class="icon-btn" (click)="openSearch()" title="Search Chats">
+        <span class="material-icons">search</span>
+      </button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="chat-tabs" *ngIf="hasPersonalMessages || personalRooms.length > 0">
+      <button class="tab-btn" [class.active]="activeTab === 'society'" (click)="switchTab('society')">
+        <span class="material-icons">groups</span>
+        Groups
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'personal'" (click)="switchTab('personal')">
+        <span class="material-icons">person</span>
+        Personal
+        <span *ngIf="getPersonalUnreadCount() > 0" class="tab-unread">{{ getPersonalUnreadCount() }}</span>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="skeleton-list">
+        <div class="skeleton-item" *ngFor="let i of [1,2,3,4,5]">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line long"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="!isLoading && errorMessage">
+      <span class="material-icons">error_outline</span>
+      <p>{{ errorMessage }}</p>
+      <button class="retry-btn" (click)="loadChatRooms()">Retry</button>
+    </div>
+
+    <!-- Society / Group Chats Tab -->
+    <div class="chat-rooms-list" *ngIf="!isLoading && !errorMessage && activeTab === 'society'">
+
+      <!-- Empty State -->
+      <div class="empty-state"
+        *ngIf="groupedRooms.length === 0 || (groupedRooms.length === 1 && groupedRooms[0].rooms.length === 0)">
+        <div class="empty-illustration">
+          <span class="material-icons">chat_bubble_outline</span>
+        </div>
+        <h3>No chats yet</h3>
+        <p>Chat rooms are created automatically when you join a society or flat.</p>
+      </div>
+
+      <!-- Grouped Society Rooms -->
+      <div class="society-group" *ngFor="let group of groupedRooms" [hidden]="group.rooms.length === 0">
+        <!-- Society header (only show when multiple societies) -->
+        <div class="society-group__header" *ngIf="groupedRooms.length > 1">
+          <span class="material-icons">apartment</span>
+          <span>{{ group.societyName }}</span>
+        </div>
+
+        <!-- Room items -->
+        <div class="room-item" *ngFor="let room of group.rooms; trackBy: trackByRoom" (click)="openRoom(room)"
+          [class.has-unread]="(room.unreadCount || 0) > 0">
+
+          <!-- Avatar -->
+          <div class="room-avatar" [class]="'room-avatar--' + room.type">
+            <span class="material-icons">{{ getRoomIcon(room.type) }}</span>
+          </div>
+
+          <!-- Room Info -->
+          <div class="room-info">
+            <div class="room-info__top">
+              <span class="room-name">{{ room.name }}</span>
+              <span class="room-time">{{ formatTime(room.lastMessage?.sentAt) }}</span>
+            </div>
+            <div class="room-info__bottom">
+              <span class="room-type-badge">{{ getRoomTypeLabel(room.type) }}</span>
+              <span class="last-message">{{ getLastMessagePreview(room) }}</span>
+              <span class="unread-count" *ngIf="(room.unreadCount || 0) > 0">
+                {{ room.unreadCount }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Chats Tab -->
+    <div class="chat-rooms-list" *ngIf="!isLoading && !errorMessage && activeTab === 'personal'">
+
+      <div class="empty-state" *ngIf="personalRooms.length === 0">
+        <div class="empty-illustration">
+          <span class="material-icons">person_outline</span>
+        </div>
+        <h3>No personal chats</h3>
+        <p>Start a personal chat from a resident's profile.</p>
+      </div>
+
+      <div class="room-item" *ngFor="let room of personalRooms; trackBy: trackByRoom" (click)="openRoom(room)"
+        [class.has-unread]="(room.unreadCount || 0) > 0">
+
+        <div class="room-avatar room-avatar--personal">
+          <span class="material-icons">person</span>
+        </div>
+
+        <div class="room-info">
+          <div class="room-info__top">
+            <span class="room-name">{{ getPersonalRoomName(room) }}</span>
+            <span class="room-time">{{ formatTime(room.lastMessage?.sentAt) }}</span>
+          </div>
+          <div class="room-info__bottom">
+            <span class="last-message">{{ getLastMessagePreview(room) }}</span>
+            <span class="unread-count" *ngIf="(room.unreadCount || 0) > 0">
+              {{ room.unreadCount }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Blocked indicator -->
+        <div class="blocked-badge" *ngIf="room.isBlocked">
+          <span class="material-icons" title="Blocked">block</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</app-layout>

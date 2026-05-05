@@ -1,0 +1,251 @@
+<app-layout [hideMoreActions]="true" [pageTitle]="">
+  <div class="chat-window" (click)="closeMenus()">
+
+    <!-- Header -->
+    <div class="chat-window__header" (click)="$event.stopPropagation()">
+      <button class="back-btn icon-btn" (click)="goBack()">
+        <span class="material-icons">arrow_back</span>
+      </button>
+
+      <div class="header-info" (click)="showRoomInfo = !showRoomInfo">
+        <div class="header-avatar" [class]="'room-avatar--' + (room?.type || 'society')">
+          <span class="material-icons">{{ room ? 'chat' : 'chat_bubble' }}</span>
+        </div>
+        <div class="header-text">
+          <span class="header-name">{{ getRoomName() }}</span>
+          <span class="header-sub" *ngIf="room?.type">{{ room?.type | titlecase }}</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" (click)="$event.stopPropagation(); clearChatForMe()" title="Clear Chat">
+          <span class="material-icons">delete_sweep</span>
+        </button>
+        <button class="icon-btn" *ngIf="room?.type === 'personal'" (click)="$event.stopPropagation(); toggleBlockUser()"
+          [title]="isBlocked ? 'Unblock' : 'Block'">
+          <span class="material-icons" [class.blocked]="isBlocked">{{ isBlocked ? 'block' : 'person_off' }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Blocked Banner -->
+    <div class="blocked-banner" *ngIf="isBlocked">
+      <span class="material-icons">block</span>
+      <span>You have blocked this contact. <button (click)="toggleBlockUser()">Unblock</button></span>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="messages-area" #messagesContainer (scroll)="$event.stopPropagation()">
+
+      <!-- Load More -->
+      <div class="load-more-wrapper" *ngIf="hasMore">
+        <button class="load-more-btn" (click)="loadMore(); $event.stopPropagation()" [disabled]="isLoadingMore">
+          <span class="material-icons" *ngIf="isLoadingMore">hourglass_empty</span>
+          {{ isLoadingMore ? 'Loading...' : 'Load earlier messages' }}
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-messages" *ngIf="isLoading">
+        <div class="msg-skeleton" *ngFor="let i of [1,2,3,4,5]" [class.mine]="i % 2 === 0">
+          <div class="skel-bubble"></div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-chat" *ngIf="!isLoading && messages.length === 0">
+        <div class="empty-chat__icon">
+          <span class="material-icons">chat_bubble_outline</span>
+        </div>
+        <p>No messages yet. Start the conversation!</p>
+      </div>
+
+      <!-- Messages -->
+      <ng-container *ngFor="let msg of messages; let i = index; trackBy: trackByMessage">
+
+        <!-- Date separator -->
+        <div class="date-separator" *ngIf="shouldShowDate(messages, i)">
+          <span>{{ formatDate(msg.sentAt) }}</span>
+        </div>
+
+        <!-- Message Bubble -->
+        <div class="message-wrapper" [class.mine]="isMine(msg)" [class.theirs]="!isMine(msg)"
+          (click)="$event.stopPropagation()">
+
+          <!-- Sender name for group chats -->
+          <div class="sender-header" *ngIf="!isMine(msg) && room?.type !== 'personal'">
+            <span class="sender-name">{{ msg.senderName || 'Unknown' }}</span>
+            <span class="sender-subtitle" *ngIf="msg.senderSubtitle">({{ msg.senderSubtitle }})</span>
+          </div>
+
+          <!-- Message bubble -->
+          <div class="message-bubble" [class.deleted]="msg.isDeletedForEveryone" [matMenuTriggerFor]="msgMenu">
+
+            <!-- Reply preview -->
+            <div class="reply-preview" *ngIf="msg.replyTo?.messageId">
+              <div class="reply-bar"></div>
+              <div class="reply-content">
+                <span class="reply-sender">{{ msg.replyTo?.senderName }}</span>
+                <span class="reply-text">{{ msg.replyTo?.content }}</span>
+              </div>
+            </div>
+
+            <!-- Deleted message -->
+            <div class="msg-deleted" *ngIf="msg.isDeletedForEveryone">
+              <span class="material-icons">remove_circle_outline</span>
+              <em>This message was deleted</em>
+            </div>
+
+            <!-- Text message -->
+            <p class="msg-text" *ngIf="!msg.isDeletedForEveryone && msg.type === 'text'">{{ msg.content }}</p>
+
+            <!-- Image message -->
+            <div class="msg-image" *ngIf="!msg.isDeletedForEveryone && msg.type === 'image'">
+              <img [src]="msg.media?.url" [alt]="msg.media?.fileName || 'Image'" loading="lazy" />
+              <span class="media-caption" *ngIf="msg.content">{{ msg.content }}</span>
+            </div>
+
+            <!-- Video message -->
+            <div class="msg-video" *ngIf="!msg.isDeletedForEveryone && msg.type === 'video'">
+              <video controls [src]="msg.media?.url" preload="metadata"></video>
+              <span class="media-caption" *ngIf="msg.content">{{ msg.content }}</span>
+            </div>
+
+            <!-- Document message -->
+            <div class="msg-document" *ngIf="!msg.isDeletedForEveryone && msg.type === 'document'">
+              <span class="material-icons doc-icon">description</span>
+              <div class="doc-info">
+                <span class="doc-name">{{ msg.media?.fileName || msg.content }}</span>
+                <span class="doc-size">{{ getFileSize(msg.media?.fileSize) }}</span>
+              </div>
+              <a class="doc-download" [href]="msg.media?.url" download target="_blank">
+                <span class="material-icons">download</span>
+              </a>
+            </div>
+
+            <!-- Location message -->
+            <div class="msg-location" *ngIf="!msg.isDeletedForEveryone && msg.type === 'location'"
+              (click)="openLocation(msg); $event.stopPropagation()">
+              <div class="location-map-placeholder">
+                <span class="material-icons location-pin">location_on</span>
+              </div>
+              <div class="location-info">
+                <span class="location-label">📍 Location</span>
+                <span class="location-coords" *ngIf="msg.location">
+                  {{ msg.location.address || (msg.location.latitude + ', ' + msg.location.longitude) }}
+                </span>
+                <span class="location-action">Tap to open in Maps</span>
+              </div>
+            </div>
+
+            <!-- Message meta -->
+            <div class="msg-meta" *ngIf="!msg.isDeletedForEveryone">
+              <span class="msg-time">{{ formatTime(msg.sentAt) }}</span>
+              <span class="msg-edited" *ngIf="msg.isEdited">edited</span>
+              <!-- Read receipts (only for my messages) -->
+              <span class="msg-status" *ngIf="isMine(msg)">
+                <span class="material-icons status-icon" [class]="getReadStatus(msg)">
+                  {{ getReadStatus(msg) === 'read' ? 'done_all' : getReadStatus(msg) === 'delivered' ? 'done_all' :
+                  'done' }}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Message Context Menu (Mat-Menu) -->
+          <mat-menu #msgMenu="matMenu">
+            <button mat-menu-item (click)="replyToMessage(msg)" *ngIf="!msg.isDeletedForEveryone">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="margin-right: 8px;">
+                <path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z" />
+              </svg>
+              <span>Reply</span>
+            </button>
+            <button mat-menu-item (click)="copyMessage(msg)" *ngIf="msg.type === 'text' && !msg.isDeletedForEveryone">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="margin-right: 8px;">
+                <path
+                  d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+              </svg>
+              <span>Copy</span>
+            </button>
+            <button mat-menu-item class="danger-menu-item" (click)="deleteForMe(msg)" *ngIf="!msg.isDeletedForEveryone">
+              <svg class="danger-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"
+                style="margin-right: 8px;">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+              </svg>
+              <span>Delete for me</span>
+            </button>
+            <button mat-menu-item class="danger-menu-item"
+              *ngIf="canDeleteForEveryone(msg) && !msg.isDeletedForEveryone" (click)="deleteForEveryone(msg)">
+              <svg class="danger-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"
+                style="margin-right: 8px;">
+                <path
+                  d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z" />
+              </svg>
+              <span>Delete for everyone</span>
+            </button>
+          </mat-menu>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Reply Preview Bar -->
+    <div class="reply-bar-container" *ngIf="replyingTo" (click)="$event.stopPropagation()">
+      <div class="reply-bar-inner">
+        <div class="reply-vertical-bar"></div>
+        <div class="reply-info">
+          <span class="reply-to-name">{{ replyingTo.senderName }}</span>
+          <span class="reply-to-text">{{ replyingTo.content }}</span>
+        </div>
+      </div>
+      <button class="cancel-reply icon-btn" (click)="cancelReply()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <!-- Message Input Bar -->
+    <div class="input-bar" (click)="$event.stopPropagation()" *ngIf="!isBlocked">
+
+      <!-- Attach Menu -->
+      <div class="attach-menu" *ngIf="showAttachMenu">
+        <label class="attach-option" for="imgUpload">
+          <span class="material-icons">photo_camera</span>
+          <span>Photo</span>
+          <input id="imgUpload" type="file" accept="image/*" (change)="sendFile($event, 'image')" hidden #fileInput />
+        </label>
+        <label class="attach-option" for="vidUpload">
+          <span class="material-icons">videocam</span>
+          <span>Video</span>
+          <input id="vidUpload" type="file" accept="video/*" (change)="sendFile($event, 'video')" hidden />
+        </label>
+        <label class="attach-option" for="docUpload">
+          <span class="material-icons">description</span>
+          <span>Document</span>
+          <input id="docUpload" type="file" (change)="sendFile($event, 'document')" hidden />
+        </label>
+        <button class="attach-option" (click)="sendLocation()">
+          <span class="material-icons">location_on</span>
+          <span>Location</span>
+        </button>
+      </div>
+
+      <button class="icon-btn attach-btn" (click)="showAttachMenu = !showAttachMenu; $event.stopPropagation()">
+        <span class="material-icons">attach_file</span>
+      </button>
+
+      <textarea #messageInput class="message-textarea" [formControl]="messageControl" placeholder="Type a message..."
+        rows="1" (keydown)="onKeyDown($event)" (click)="$event.stopPropagation()">
+    </textarea>
+
+      <button class="send-btn" [disabled]="!messageControl.value?.trim() || isSending"
+        (click)="sendMessage(); $event.stopPropagation()">
+        <span class="material-icons">{{ isSending ? 'hourglass_empty' : 'send' }}</span>
+      </button>
+    </div>
+
+    <!-- Blocked Input Replacement -->
+    <div class="blocked-input" *ngIf="isBlocked">
+      <span class="material-icons">block</span>
+      <span>Can't send message. <button (click)="toggleBlockUser()">Unblock</button> to chat.</span>
+    </div>
+  </div>
+</app-layout>

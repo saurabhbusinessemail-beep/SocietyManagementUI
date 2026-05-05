@@ -94,4 +94,8 @@ export class MyFlatListComponent implements OnInit {
   gotoFlatDetails(flatMember: IFlatMember) {
     this.router.navigate(['/myflats', 'details', flatMember._id]);
   }
+
+  gotoChat() {
+    this.router.navigate(['/chat/list'], { queryParams: { societyId: this.societyId } });
+  }
 }

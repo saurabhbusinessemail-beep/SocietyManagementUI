@@ -1,5 +1,15 @@
-<app-layout [hideMoreActions]="true" [pageTitle]="pageTitle"
+<app-layout [hideMoreActions]="false" [pageTitle]="pageTitle"
     [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
+
+    <ng-container moreActions>
+        <ul class="page-menu-list">
+            <li class="page-menu" (click)="gotoChat()">
+                <span class="material-icons" style="font-size:1rem;vertical-align:middle;margin-right:4px">chat</span>
+                Flat Chat
+            </li>
+        </ul>
+    </ng-container>
+
     <div class="flat-details-container">
 
         <!-- Owner Details Section -->

@@ -311,6 +311,16 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  gotoChat(): void {
+    const societyId = this.currentSocietyId;
+    const flatId = this.currentFlatId;
+    if (societyId) {
+      this.router.navigate(['/chat/list'], {
+        queryParams: { societyId, flatId }
+      });
+    }
+  }
+
   getPlanDurationDisplay(): string {
     if (!this.currentPlan?.selectedDuration) return '';
 

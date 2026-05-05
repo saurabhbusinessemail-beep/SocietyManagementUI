@@ -15,6 +15,7 @@ import { SocietyService } from './services/society.service';
 import { ICurrentPlanResponse } from './interfaces';
 import { CurrencyService } from './services/currency.service';
 import { ThemeService } from './services/theme.service';
+import { ChatService } from './services/chat.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ import { ThemeService } from './services/theme.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private currencyService = inject(CurrencyService);
+  private chatService = inject(ChatService);
   private route = inject(ActivatedRoute);
 
   firstRouteLoad = true;
@@ -58,6 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.checkAndAskForUserName();
         this.societService.getAllSocieties().pipe(take(1)).subscribe();
+        
+        // @TODO: Delete this in future. Required only during development and starting phase.
+        this.chatService.ensureAllPendingChats().pipe(take(1)).subscribe({
+          error: (err) => console.log('Silently failed to auto-create chats', err)
+        });
       });
 
     this.menuService.userMenus.subscribe(() => this.filterMenus());

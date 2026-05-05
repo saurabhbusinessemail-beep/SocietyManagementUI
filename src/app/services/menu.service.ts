@@ -45,6 +45,7 @@ export class MenuService {
       this.dashboardMenu,
       ...menus,
     ];
+    console.log('allMenus = ', allMenus)
     this._userMenus.next(allMenus);
   }
 

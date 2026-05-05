@@ -1,0 +1,85 @@
+<app-layout [hideMoreActions]="true" pageTitle="">
+  <div class="search-page">
+
+    <!-- Header -->
+    <div class="search-header">
+      <button class="back-btn" (click)="goBack()">
+        <span class="material-icons">arrow_back</span>
+      </button>
+
+      <div class="search-input-wrapper">
+        <span class="material-icons search-icon-input">search</span>
+        <input type="text" class="search-input" placeholder="Search chats and messages..." [formControl]="searchControl"
+          autofocus />
+        <button class="clear-btn" *ngIf="searchControl.value" (click)="clearSearch()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="searching-indicator" *ngIf="isSearching">
+      <div class="spinner"></div>
+      <span>Searching...</span>
+    </div>
+
+    <!-- Results -->
+    <div class="search-results" *ngIf="!isSearching && hasSearched">
+
+      <!-- Summary -->
+      <div class="results-summary" *ngIf="totalResults > 0">
+        {{ totalResults }} result{{ totalResults === 1 ? '' : 's' }} for "{{ searchTerm }}"
+      </div>
+
+      <!-- No Results -->
+      <div class="no-results" *ngIf="totalResults === 0">
+        <span class="material-icons">search_off</span>
+        <h3>No results found</h3>
+        <p>Try a different search term</p>
+      </div>
+
+      <!-- Matching Rooms -->
+      <div class="result-section" *ngIf="matchingRooms.length > 0">
+        <h4 class="section-label">Chats</h4>
+        <div class="result-item" *ngFor="let room of matchingRooms" (click)="openRoom(room._id)">
+
+          <div class="result-avatar" [class]="'room-avatar--' + room.type">
+            <span class="material-icons">{{ getRoomIcon(room.type) }}</span>
+          </div>
+          <div class="result-info">
+            <span class="result-name" [innerHTML]="highlightText(room.name, searchTerm)"></span>
+            <span class="result-sub">{{ room.type }}</span>
+          </div>
+          <span class="material-icons result-arrow">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- Matching Messages -->
+      <div class="result-section" *ngIf="matchingMessages.length > 0">
+        <h4 class="section-label">Messages</h4>
+        <div class="result-item message-result" *ngFor="let msg of matchingMessages" (click)="openRoom(msg.roomId)">
+
+          <div class="result-avatar room-avatar--personal">
+            <span class="material-icons">chat_bubble</span>
+          </div>
+          <div class="result-info">
+            <div class="result-meta">
+              <span class="result-name">{{ msg.senderName }}</span>
+              <span class="result-time">{{ formatTime(msg.sentAt) }}</span>
+            </div>
+            <span class="result-text" [innerHTML]="highlightText(msg.content, searchTerm)"></span>
+            <span class="result-room" *ngIf="msg.roomId && msg.roomId['name']">
+              in {{ msg.roomId['name'] }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Initial prompt -->
+    <div class="search-prompt" *ngIf="!isSearching && !hasSearched">
+      <span class="material-icons">search</span>
+      <p>Search for messages, group names, or contacts</p>
+    </div>
+  </div>
+</app-layout>

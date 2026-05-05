@@ -400,6 +400,11 @@ export class SocietyDetailsComponent implements OnInit {
     }
   }
 
+  gotoChat() {
+    this.societyService.selectSocietyFilter({ label: this.society?.societyName || '', value: this.society?._id || '' } as any);
+    this.router.navigate(['/chat/list'], { queryParams: { societyId: this.society?._id } });
+  }
+
   async removeSecretary(user: IUser) {
     if (!this.society) return;
 

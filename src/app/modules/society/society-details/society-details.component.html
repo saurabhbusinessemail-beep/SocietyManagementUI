@@ -372,6 +372,15 @@
                 </div>
             </div>
 
+            <!-- Chat Quick Access -->
+            <div class="chat-quick-access" *ngIf="society">
+                <button class="chat-goto-btn" (click)="gotoChat()">
+                    <span class="material-icons">chat</span>
+                    <span>Open Society Chat</span>
+                    <span class="material-icons arrow">chevron_right</span>
+                </button>
+            </div>
+
         </div> <!-- end content-wrapper -->
     </div> <!-- end society-detail-page -->
 </app-layout>

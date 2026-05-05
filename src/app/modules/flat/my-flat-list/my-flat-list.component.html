@@ -1,4 +1,13 @@
-<app-layout [hideMoreActions]="true" pageTitle="Flats" [subTitle]="society?.societyName">
+<app-layout [hideMoreActions]="!societyId" pageTitle="Flats" [subTitle]="society?.societyName">
+
+    <ng-container moreActions>
+        <ul class="page-menu-list" *ngIf="societyId">
+            <li class="page-menu" (click)="gotoChat()">
+                <span class="material-icons" style="font-size:1rem;vertical-align:middle;margin-right:4px">chat</span>
+                Open Chat
+            </li>
+        </ul>
+    </ng-container>
 
     <ui-form-layout>
 
