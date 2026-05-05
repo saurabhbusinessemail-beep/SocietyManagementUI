@@ -139,7 +139,7 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
 
   onMenuClick(menu: IMenu) {
     if (menu.relativePath) {
-      this.router.navigateByUrl(menu.relativePath);
+      this.menuService.selectAndLoadMenu(menu);
     }
   }
 

@@ -53,6 +53,7 @@ export class MenuService {
   }
 
   selectAndLoadMenu(menu: IMenu) {
+    console.log('selectAndLoadMenu')
     this.selectedMenu.next(menu);
     this.router.navigateByUrl(menu.relativePath ?? '');
   }

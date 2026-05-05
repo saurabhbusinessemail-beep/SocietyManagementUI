@@ -63,7 +63,6 @@ export class UserComponent implements OnInit, OnDestroy {
           const data = response.data ?? {};
 
           // Filter out seen gate entries for security
-          console.log('data = ', data);
           if (data.gateEntries) {
             const seenIds = this.getSeenGateEntryIds();
             data.gateEntries = data.gateEntries.filter((ge: any) => !seenIds.includes(ge._id));
