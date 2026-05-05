@@ -1,0 +1,207 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.list-container {
+    padding: $sp-md;
+    max-width: 1000px;
+    margin: 0 auto;
+
+    @include tablet {
+        padding: $sp-lg;
+    }
+}
+
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $sp-lg;
+    flex-wrap: wrap;
+    gap: $sp-md;
+
+    .filters {
+        flex: 1;
+        min-width: 200px;
+    }
+}
+
+.tenant-list {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-lg;
+}
+
+.tenant-card {
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-lg;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+    .tenant-header {
+        padding: $sp-md $sp-lg;
+        background: $color-cancel;
+        border-bottom: 1px solid $color-border;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .tenant-info {
+            .tenant-name {
+                font-size: $font-size-base;
+                font-weight: 700;
+                margin: 0;
+                color: $color-black;
+            }
+            .doc-count {
+                font-size: 11px;
+                color: $color-help-text;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
+.document-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: $sp-md;
+    padding: $sp-lg;
+
+    @include mobile {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.document-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-md;
+    overflow: hidden;
+    background: $color-white;
+
+    .doc-preview {
+        height: 120px;
+        background: $color-cancel;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pdf-icon {
+            color: $status-rejected;
+        }
+
+        .status-overlay {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: $color-white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+            &.pending { background: $color-amber; }
+            &.approved { background: $status-active; }
+            &.rejected { background: $status-rejected; }
+        }
+    }
+
+    .doc-details {
+        padding: $sp-sm;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $sp-xs;
+
+        .doc-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: $color-black;
+            flex: 1;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 4px;
+
+            .action-btn {
+                width: 28px;
+                height: 28px;
+                border-radius: 4px;
+                border: 1px solid $color-border;
+                background: $color-white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &.approve {
+                    color: $status-active;
+                    &:hover {
+                        background: $status-active;
+                        color: $color-white;
+                        border-color: $status-active;
+                    }
+                }
+
+                &.reject {
+                    color: $status-rejected;
+                    &:hover {
+                        background: $status-rejected;
+                        color: $color-white;
+                        border-color: $status-rejected;
+                    }
+                }
+            }
+        }
+    }
+
+    .rejection-reason {
+        padding: $sp-xs $sp-sm;
+        font-size: 11px;
+        color: $status-rejected;
+        background: rgba($status-rejected, 0.05);
+        border-top: 1px dashed rgba($status-rejected, 0.2);
+    }
+}
+
+.empty-state {
+    padding: $sp-xl;
+    text-align: center;
+    color: $color-help-text;
+    background: $color-white;
+    border-radius: $btn-border-radius-lg;
+    border: 1px dashed $color-border;
+
+    p {
+        margin-top: $sp-md;
+        font-weight: 600;
+    }
+}
+
+.loading-container {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

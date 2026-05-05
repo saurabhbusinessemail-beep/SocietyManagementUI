@@ -38,6 +38,7 @@ export * from './society-role-menu.interface';
 export * from './society-role.interface';
 export * from './society.interface';
 export * from './state.interface';
+export * from './tenant-document.interface';
 export * from './usage-metric.interface';
 export * from './user.interface';
 export * from './vehicle.interface';

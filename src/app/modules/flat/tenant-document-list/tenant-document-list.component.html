@@ -1,0 +1,67 @@
+<app-layout [pageTitle]="'Tenant Documents'" [subTitle]="subtitle" [showBackButton]="true">
+    <div class="list-container">
+        <!-- Header Actions -->
+        <div class="header-actions">
+            <div class="filters">
+                <ui-drop-down [formControl]="statusControl" [config]="statusConfig" [options]="statusConfig.dropDownOptions || []"></ui-drop-down>
+            </div>
+            <ui-button label="Remind All Pending" type="primary" (clicked)="sendReminderToAll()" [disable]="processing">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </ui-button>
+        </div>
+
+        <!-- Tenant Groups -->
+        <div class="tenant-list" *ngIf="!loading; else loadingState">
+            <div class="tenant-card" *ngFor="let group of groupedDocuments">
+                <div class="tenant-header">
+                    <div class="tenant-info">
+                        <h3 class="tenant-name">{{ group.tenantName }}</h3>
+                        <span class="doc-count">{{ group.documents.length }} Documents</span>
+                    </div>
+                    <ui-button label="Send Reminder" type="cancel" (clicked)="sendReminder(group.tenantId)" [disable]="processing">
+                        <app-icon name="notifications" size="sm"></app-icon>
+                    </ui-button>
+                </div>
+
+                <div class="document-grid">
+                    <div class="document-item" *ngFor="let doc of group.documents">
+                        <div class="doc-preview" (click)="viewDocument(doc)">
+                            <img [src]="doc.documentUrl" *ngIf="doc.documentType && doc.documentType.startsWith('image')" />
+                            <div class="pdf-icon" *ngIf="doc.documentType === 'pdf' || (doc.documentType && !doc.documentType.startsWith('image'))">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M9 15h3a2 2 0 0 1 0 4h-3V15z"></path></svg>
+                            </div>
+                            <div class="status-overlay" [ngClass]="doc.status">
+                                {{ doc.status }}
+                            </div>
+                        </div>
+                        <div class="doc-details">
+                            <span class="doc-name text-ellipsis">{{ doc.documentName }}</span>
+                            <div class="doc-actions">
+                                <button class="action-btn approve" (click)="approveDocument(doc); $event.stopPropagation()" *ngIf="doc.status !== 'approved'" title="Approve">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </button>
+                                <button class="action-btn reject" (click)="rejectDocument(doc); $event.stopPropagation()" *ngIf="doc.status !== 'rejected'" title="Reject">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="rejection-reason" *ngIf="doc.status === 'rejected' && doc.rejectionReason">
+                            <strong>Reason:</strong> {{ doc.rejectionReason }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" *ngIf="documents.length === 0">
+                <app-icon name="info" size="xl"></app-icon>
+                <p>No documents found matching the filter.</p>
+            </div>
+        </div>
+
+        <ng-template #loadingState>
+            <div class="loading-container">
+                <ui-loading message="Loading documents..."></ui-loading>
+            </div>
+        </ng-template>
+    </div>
+</app-layout>

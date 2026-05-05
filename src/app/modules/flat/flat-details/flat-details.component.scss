@@ -1457,3 +1457,207 @@
         }
     }
 }
+
+// Tenant Documents
+.documents-stats {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .stat-item {
+        padding: 8px 0;
+        border-bottom: 1px solid #f1f5f9;
+        &:last-child { border-bottom: none; }
+
+        .stat-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .tenant-name {
+                font-weight: 600;
+                font-size: 14px;
+                color: #0f172a;
+            }
+
+            .stat-badges {
+                display: flex;
+                gap: 8px;
+
+                .badge {
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    text-transform: uppercase;
+
+                    &.submitted {
+                        background-color: rgba(30, 58, 138, 0.1);
+                        color: #1e3a8a;
+                    }
+
+                    &.pending {
+                        background-color: rgba(245, 158, 11, 0.1);
+                        color: #f59e0b;
+                    }
+
+                    &.empty {
+                        background-color: #f8fafc;
+                        color: #64748b;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.tenant-documents-list {
+    padding: 16px 24px;
+
+    .mobile-carousel {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 16px;
+        -webkit-overflow-scrolling: touch;
+
+        &::-webkit-scrollbar { display: none; }
+
+        .carousel-track {
+            display: flex;
+            gap: 16px;
+        }
+
+        .doc-card {
+            min-width: 160px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+            .doc-preview {
+                height: 120px;
+                background: #f1f5f9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .pdf-placeholder {
+                    color: #ef4444;
+                }
+            }
+
+            .doc-footer {
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .doc-name {
+                    font-size: 12px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .doc-status {
+                    font-size: 10px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    &.pending { color: #f59e0b; }
+                    &.approved { color: #10b981; }
+                    &.rejected { color: #ef4444; }
+                }
+            }
+        }
+    }
+
+    .desktop-doc-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .doc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 6px;
+
+            .doc-info {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                .doc-name {
+                    font-weight: 600;
+                    font-size: 14px;
+                }
+
+                .doc-status-badge {
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    text-transform: uppercase;
+                    &.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+                    &.approved { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+                    &.rejected { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+                }
+            }
+
+            .doc-actions {
+                display: flex;
+                gap: 8px;
+
+                .icon-btn {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    border: 1px solid #e2e8f0;
+                    background: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    color: #64748b;
+                    transition: all 0.2s;
+
+                    &:hover {
+                        background: #1e3a8a;
+                        color: #fff;
+                        border-color: #1e3a8a;
+                    }
+
+                    &.delete:hover {
+                        background: #ef4444;
+                        border-color: #ef4444;
+                    }
+                }
+            }
+        }
+    }
+
+    .upload-prompt-btn {
+        margin-top: 16px;
+        background: #1e3a8a;
+        color: #fff;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        &:hover { opacity: 0.9; }
+    }
+}

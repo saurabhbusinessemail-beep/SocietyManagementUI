@@ -1,0 +1,189 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.manager-container {
+    padding: $sp-md;
+    max-width: 800px;
+    margin: 0 auto;
+
+    @include tablet {
+        padding: $sp-lg;
+    }
+}
+
+.upload-section {
+    margin-bottom: $sp-xl;
+
+    .upload-card {
+        background: $color-white;
+        border: 2px dashed $color-border;
+        border-radius: $btn-border-radius-lg;
+        padding: $sp-xl;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            border-color: $color-dark-blue;
+            background: $color-cancel;
+        }
+
+        .upload-icon-wrapper {
+            margin-bottom: $sp-md;
+            color: $color-dark-blue;
+        }
+
+        h3 {
+            margin: 0 0 $sp-xs 0;
+            font-size: $font-size-lg;
+            color: $color-black;
+        }
+
+        p {
+            margin: 0;
+            color: $color-help-text;
+            font-size: $font-size-sm;
+        }
+    }
+
+    .upload-progress {
+        margin-top: $sp-md;
+    }
+}
+
+.section-title {
+    font-size: $font-size-base;
+    font-weight: 700;
+    margin-bottom: $sp-md;
+    color: $color-black;
+}
+
+.document-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $sp-lg;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.document-item {
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-lg;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    .doc-preview {
+        height: 150px;
+        background: $color-cancel;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pdf-icon {
+            color: $status-rejected;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: $color-white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+            &.pending { background: $color-amber; }
+            &.approved { background: $status-active; }
+            &.rejected { background: $status-rejected; }
+        }
+    }
+
+    .doc-info {
+        padding: $sp-md;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $sp-sm;
+
+        .doc-name {
+            font-size: $font-size-sm;
+            font-weight: 600;
+            color: $color-black;
+            flex: 1;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: $sp-xs;
+
+            .action-btn {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                border: 1px solid $color-border;
+                background: $color-white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                color: $color-help-text;
+                transition: all 0.2s;
+
+                &:hover {
+                    background: $color-dark-blue;
+                    color: $color-white;
+                    border-color: $color-dark-blue;
+                }
+
+                &.delete:hover {
+                    background: $status-rejected;
+                    border-color: $status-rejected;
+                }
+            }
+        }
+    }
+
+    .rejection-reason {
+        padding: $sp-sm $sp-md;
+        background: rgba($status-rejected, 0.05);
+        border-top: 1px dashed rgba($status-rejected, 0.2);
+        color: $status-rejected;
+        font-size: 12px;
+    }
+}
+
+.empty-docs {
+    padding: $sp-xl;
+    text-align: center;
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $btn-border-radius-lg;
+    color: $color-help-text;
+}
+
+.loading-container {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

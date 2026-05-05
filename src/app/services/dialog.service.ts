@@ -5,6 +5,7 @@ import { IConfirmationPopupDataConfig } from '../interfaces';
 import { Observable, take } from 'rxjs';
 import { ConfirmDeleteComponent } from '../core/delete-confirmation/confirm-delete.component';
 import { ProceedConfirmComponent } from '../core/ui/proceed-confirm/proceed-confirm.component';
+import { DocumentViewerComponent } from '../core/ui/document-viewer/document-viewer.component';
 
 
 @Injectable({
@@ -30,9 +31,13 @@ export class DialogService {
       data
     });
 
-    setTimeout(() => {
-      this.dialogRef?.close();
-    }, timeout);
+    const isInteractive = data.showInput || (data.actionButtons && data.actionButtons.length > 0);
+
+    if (timeout > 0 && !isInteractive) {
+      setTimeout(() => {
+        this.dialogRef?.close();
+      }, timeout);
+    }
 
     this.dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
       this.dialogRef = undefined;
@@ -64,6 +69,17 @@ export class DialogService {
       ref.afterClosed().pipe(take(1)).subscribe((response: boolean) => {
         resolve(response);
       })
+    });
+  }
+
+  viewDocument(url: string, name: string, type?: string): void {
+    this.dialog.open(DocumentViewerComponent, {
+      width: '95vw',
+      maxWidth: '1000px',
+      height: '95vh',
+      maxHeight: '850px',
+      panelClass: 'document-viewer-dialog',
+      data: { url, name, type }
     });
   }
 }

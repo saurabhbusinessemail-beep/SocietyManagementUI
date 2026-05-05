@@ -45,6 +45,7 @@ import { EmptyRecordsComponent } from './empty-records/empty-records.component';
 import { PipeModule } from "../../pipes/pipes.module";
 import { LoadingDataComponent } from './loading-data/loading-data.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
+import { DocumentViewerComponent } from './document-viewer/document-viewer.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     CircularDisplayComponent,
     EmptyRecordsComponent,
     LoadingDataComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    DocumentViewerComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
@@ -129,7 +131,8 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     CircularDisplayComponent,
     EmptyRecordsComponent,
     LoadingDataComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    DocumentViewerComponent
   ],
   providers: [MatDatepickerModule]
 })

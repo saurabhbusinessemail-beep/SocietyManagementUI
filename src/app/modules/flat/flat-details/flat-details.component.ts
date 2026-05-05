@@ -34,6 +34,9 @@ import { FormControl } from '@angular/forms';
 import { IRentPayment, IRentMonthlyReport } from '../../../interfaces';
 import { CountryService } from '../../../services/country.service';
 import { CurrencyService } from '../../../services/currency.service';
+import { TenantDocumentService } from '../../../services/tenant-document.service';
+import { ITenantDocument, ITenantDocumentStats } from '../../../interfaces';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-flat-details',
@@ -91,6 +94,10 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   loadingMaintenance = true;
   recordingMaintenance = false;
 
+  loadingDocuments = true;
+  tenantDocuments: ITenantDocument[] = [];
+  tenantDocumentStats: ITenantDocumentStats[] = [];
+
   // Rent state
   loadingRent = true;
   recordingRent = false;
@@ -137,6 +144,10 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
   get userCurrencySymbol(): string {
     return this.countryService.loggedInUserCountryCurrency?.currencySymbol ?? '₹';
+  }
+
+  get isMobile(): boolean {
+    return this.windowService.mode.value === 'mobile';
   }
 
 
@@ -273,7 +284,9 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     public maintenanceService: MaintenanceService,
     public rentService: RentService,
     public countryService: CountryService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private tenantDocumentService: TenantDocumentService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -477,6 +490,9 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
     if (this.tenantManagementFeatureAvailable) {
       this.getTenants(societyId, flatId);
+      this.loadTenantDocumentsData(flatId);
+    } else {
+      this.loadingDocuments = false;
     }
 
     if (this.rentFeatureAvailable) {
@@ -498,6 +514,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     if (this.maintenanceFeatureAvailable) {
       this.getMaintenancePayments(societyId, flatId);
     }
+
+    this.loadTenantDocumentsData(flatId);
   }
 
   getFlatMembers(societyId: string, flatId: string) {
@@ -1058,6 +1076,98 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
   getPaymentStatusClass(status: string): string {
     return this.maintenanceService.getStatusColorName(status);
+  }
+
+  // ---- Tenant Documents ----
+
+  loadTenantDocumentsData(flatId: string) {
+    if (!this.flatMember || !this.myProfile) return;
+
+    if (this.flatMember.isOwner) {
+      this.getTenantDocumentStats(flatId);
+      this.getTenantDocuments(flatId, true); // Fetch all documents for the flat
+    } else if (this.flatMember.isTenant) {
+      this.getTenantDocuments(flatId);
+    }
+  }
+
+  getTenantDocumentStats(flatId: string) {
+    this.loadingDocuments = true;
+    this.tenantDocumentService.getDocumentStats(flatId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.tenantDocumentStats = response.data || [];
+          this.loadingDocuments = false;
+        },
+        error: () => {
+          this.loadingDocuments = false;
+        }
+      });
+  }
+
+  getTenantDocuments(flatId: string, all = false) {
+    this.loadingDocuments = true;
+    const filter: any = { flatId };
+    if (!all) {
+      filter.tenantId = this.myProfile?.user._id;
+    }
+    this.tenantDocumentService.getDocuments(filter)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.tenantDocuments = response.data || [];
+          this.loadingDocuments = false;
+        },
+        error: () => {
+          this.loadingDocuments = false;
+        }
+      });
+  }
+
+  manageTenantDocuments() {
+    if (!this.flatMember) return;
+    const flatId = this.currentFlatId;
+    const societyId = this.currentSocietyId;
+    const flatMemberId = this.flatMemberId;
+    if (flatId && flatMemberId) {
+      if (this.flatMember.isOwner) {
+        this.router.navigate(['/myflats/tenant-documents', flatId], { queryParams: { societyId } });
+      } else {
+        this.router.navigate(['/myflats/tenant-document-manager', flatId], { queryParams: { societyId, flatMemberId } });
+      }
+    }
+  }
+
+  downloadDocument(doc: ITenantDocument) {
+    const link = document.createElement('a');
+    link.href = doc.documentUrl;
+    link.download = doc.documentName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  viewDocument(doc: ITenantDocument) {
+    this.dialogService.viewDocument(doc.documentUrl, doc.documentName, doc.documentType);
+  }
+
+  deleteDocument(doc: ITenantDocument) {
+    this.dialogService.confirmDelete('Delete Document', 'Are you sure you want to delete this document?').then(confirmed => {
+      if (confirmed) {
+        this.tenantDocumentService.deleteDocument(doc._id)
+          .pipe(take(1))
+          .subscribe({
+            next: response => {
+              if (response.success) {
+                this.snackBar.open('Document deleted successfully', 'Close', { duration: 3000 });
+                const flatId = typeof doc.flatId === 'string' ? doc.flatId : doc.flatId._id;
+                this.getTenantDocuments(flatId);
+              }
+            }
+          });
+      }
+    });
   }
 
   ngOnDestroy(): void {

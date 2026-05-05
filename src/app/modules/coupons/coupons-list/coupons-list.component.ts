@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { ICoupon, IDiscountResult } from '../../../interfaces';
 import { CouponService } from '../../../services/coupon.service';
 import { PricingPlanService } from '../../../services/pricing-plan.service';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-coupons-list',
@@ -30,7 +31,8 @@ export class CouponsListComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private couponService: CouponService,
-    private pricingPlanService: PricingPlanService
+    private pricingPlanService: PricingPlanService,
+    private dialogService: DialogService
   ) {
     this.couponForm = this.fb.group({
       code: ['', [Validators.required, Validators.pattern(/^[A-Z0-9_]+$/i)]],
@@ -155,20 +157,22 @@ export class CouponsListComponent implements OnInit, OnDestroy {
   }
 
   deleteCoupon(coupon: ICoupon): void {
-    if (confirm(`Delete coupon "${coupon.code}"?`)) {
-      this.isLoading = true;
-      this.subscriptions.add(
-        this.couponService.deleteCoupon(coupon.code).subscribe({
-          next: () => {
-            this.loadCoupons();
-          },
-          error: (err) => {
-            this.errorMessage = err.message || 'Delete failed';
-            this.isLoading = false;
-          }
-        })
-      );
-    }
+    this.dialogService.confirmDelete('Delete Coupon', `Are you sure you want to delete coupon "${coupon.code}"?`).then(confirmed => {
+      if (confirmed) {
+        this.isLoading = true;
+        this.subscriptions.add(
+          this.couponService.deleteCoupon(coupon.code).subscribe({
+            next: () => {
+              this.loadCoupons();
+            },
+            error: (err) => {
+              this.errorMessage = err.message || 'Delete failed';
+              this.isLoading = false;
+            }
+          })
+        );
+      }
+    });
   }
 
   toggleActive(coupon: ICoupon): void {

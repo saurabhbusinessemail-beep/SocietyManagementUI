@@ -6,6 +6,8 @@ import { MaintenanceLogsComponent } from './maintenance-logs/maintenance-logs.co
 import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.component';
 import { RentListComponent } from './rent-list/rent-list.component';
 import { RentLogsComponent } from './rent-logs/rent-logs.component';
+import { TenantDocumentListComponent } from './tenant-document-list/tenant-document-list.component';
+import { TenantDocumentManagerComponent } from './tenant-document-manager/tenant-document-manager.component';
 import { PERMISSIONS } from '../../constants';
 
 const routes: Routes = [
@@ -47,6 +49,14 @@ const routes: Routes = [
   {
     path: 'rent-logs/:id',
     component: RentLogsComponent
+  },
+  {
+    path: 'tenant-documents/:flatId',
+    component: TenantDocumentListComponent
+  },
+  {
+    path: 'tenant-document-manager/:flatId',
+    component: TenantDocumentManagerComponent
   }
 ];
 

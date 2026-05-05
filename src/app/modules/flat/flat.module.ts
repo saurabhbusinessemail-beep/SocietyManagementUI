@@ -15,6 +15,8 @@ import { FilterModule } from '../../core/filter/filter.module';
 import { ConfigureTenantComponent } from './configure-tenant/configure-tenant.component';
 import { RentListComponent } from './rent-list/rent-list.component';
 import { RentLogsComponent } from './rent-logs/rent-logs.component';
+import { TenantDocumentListComponent } from './tenant-document-list/tenant-document-list.component';
+import { TenantDocumentManagerComponent } from './tenant-document-manager/tenant-document-manager.component';
 
 
 
@@ -25,7 +27,9 @@ import { RentLogsComponent } from './rent-logs/rent-logs.component';
     MaintenanceLogsComponent,
     ConfigureTenantComponent,
     RentListComponent,
-    RentLogsComponent
+    RentLogsComponent,
+    TenantDocumentListComponent,
+    TenantDocumentManagerComponent
   ],
   imports: [
     CommonModule,
