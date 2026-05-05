@@ -5,6 +5,7 @@
     </div>
 
     <div class="user-container">
+
         <!-- JOIN AS SECTION -->
         <ui-form-layout title="JOIN AS" [showAsSection]="true" colorTheme="gradient-modern-ui">
             <div class="no-mobile no-tablet" [lgColumns]="3"></div>
@@ -24,7 +25,7 @@
 
         <!-- SOCIETIES SECTION -->
         <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
-            *ngIf="societies.length > 0">
+            *ngIf="societies.length > 0" class="societies-section">
             <ng-container *ngFor="let s of societies">
                 <ui-circular-display [label]="s.societyName" [smColumns]="6" [mdColumns]="3" [lgColumns]="2"
                     (onClicked)="handleSocietyClick(s)" class="link-blue">
@@ -33,7 +34,7 @@
         </ui-form-layout>
 
         <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
-            *ngIf="societies.length === 0">
+            *ngIf="societies.length ===  0" class="societies-section">
             <div class="empty-societies-placeholder" *ngIf="!isSocitiesLoading" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
                 <div class="placeholder-content">
@@ -51,5 +52,170 @@
                 [lgColumns]="12">
             </ui-loading>
         </ui-form-layout>
+
+        <!-- CREATIVE PENDING APPROVALS SECTION -->
+        <div class="approvals-section" *ngIf="hasAnyApprovals">
+            <div class="section-header">
+                <div class="header-content">
+                    <div class="icon-wrapper">
+                        <app-icon name="notifications" size="xxl"></app-icon>
+                    </div>
+                    <div class="text-group">
+                        <h2>Pending Actions</h2>
+                        <p>Items requiring your immediate attention</p>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    Action Required
+                </div>
+            </div>
+
+            <div class="approvals-grid">
+                <!-- Gate Entries -->
+                <ng-container *ngFor="let ge of approvals.gateEntries">
+                    <div class="approval-card-premium" [smColumns]="6" [mdColumns]="4" [lgColumns]="3"
+                        [ngClass]="'status-' + ge.status" (click)="handleApprovalClick('gateEntry', ge)">
+                        <div class="card-top">
+                            <div class="type-icon gate-entry">
+                                <app-icon [name]="getGateEntryIcon(ge)" size="xl"></app-icon>
+                            </div>
+                            <div class="action-arrow">
+                                <app-icon name="goto"></app-icon>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="title">{{ ge.visitorName }}</span>
+                            <span class="subtitle">
+                                <span *ngIf="getBuildingNumber(ge.flatId)">{{ getBuildingNumber(ge.flatId) }}: </span>
+                                {{ getFlatNumber(ge.flatId) || 'Visitor' }}
+                            </span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="category-tag">{{ ge.status === 'requested' ? 'Visitor' : 'Approved' }}</span>
+                            <span class="time">{{ ge.status === 'requested' ? 'Pending Approval' : (ge.modifiedOn |
+                                date:'shortTime') }}</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Society Approvals -->
+                <ng-container *ngFor="let s of approvals.societies">
+                    <div class="approval-card-premium" [smColumns]="6" [mdColumns]="4" [lgColumns]="3"
+                        (click)="handleApprovalClick('society', s)">
+                        <div class="card-top">
+                            <div class="type-icon society">
+                                <app-icon name="building" size="xl"></app-icon>
+                            </div>
+                            <div class="action-arrow">
+                                <app-icon name="goto"></app-icon>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="title">{{ s.societyName }}</span>
+                            <span class="subtitle">New Society Registration</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="category-tag">Registration</span>
+                            <span class="time">Verify Now</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Join Requests -->
+                <ng-container *ngFor="let jr of approvals.joinRequests">
+                    <div class="approval-card-premium" [smColumns]="6" [mdColumns]="4" [lgColumns]="3"
+                        (click)="handleApprovalClick('join', jr)">
+                        <div class="card-top">
+                            <div class="type-icon join">
+                                <app-icon name="member" size="xl"></app-icon>
+                            </div>
+                            <div class="action-arrow">
+                                <app-icon name="goto"></app-icon>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="title">{{ jr.requesterName }}</span>
+                            <span class="subtitle">Join: {{ jr.requestType }}</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="category-tag">Join Request</span>
+                            <span class="time">Review Profile</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Rent Payments -->
+                <ng-container *ngFor="let rp of approvals.rentPayments">
+                    <div class="approval-card-premium" [smColumns]="6" [mdColumns]="4" [lgColumns]="3"
+                        (click)="handleApprovalClick('rent', rp)">
+                        <div class="card-top">
+                            <div class="type-icon rent">
+                                <app-icon name="home" size="xl"></app-icon>
+                            </div>
+                            <div class="action-arrow">
+                                <app-icon name="goto"></app-icon>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="title">Rent: {{ rp.month }}/{{ rp.year }}</span>
+                            <span class="subtitle">{{ rp.amount | currency:'INR':'symbol':'1.0-0' }} - {{
+                                getFlatNumber(rp.flatId) }}</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="category-tag">Rent</span>
+                            <span class="time">Approve Payment</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Maintenance Payments -->
+                <ng-container *ngFor="let mp of approvals.maintenancePayments">
+                    <div class="approval-card-premium" [smColumns]="6" [mdColumns]="4" [lgColumns]="3"
+                        (click)="handleApprovalClick('maintenance', mp)">
+                        <div class="card-top">
+                            <div class="type-icon maintenance">
+                                <app-icon name="society-icon" size="xl"></app-icon>
+                            </div>
+                            <div class="action-arrow">
+                                <app-icon name="goto"></app-icon>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="title">Maint: {{ mp.month }}/{{ mp.year }}</span>
+                            <span class="subtitle">{{ mp.amount | currency:'INR':'symbol':'1.0-0' }} - {{
+                                getFlatNumber(mp.flatId) }}</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="category-tag">Maintenance</span>
+                            <span class="time">Check Receipt</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Tenant Documents -->
+                <ng-container *ngFor="let td of approvals.tenantDocuments">
+                    <div class="approval-card-premium" [smColumns]="6" [mdColumns]="4" [lgColumns]="3"
+                        (click)="handleApprovalClick('document', td)">
+                        <div class="card-top">
+                            <div class="type-icon document">
+                                <app-icon name="gatepass" size="xl"></app-icon>
+                            </div>
+                            <div class="action-arrow">
+                                <app-icon name="goto"></app-icon>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="title">{{ td.documentName }}</span>
+                            <span class="subtitle">{{ getUserName(td.tenantId) }} - {{ getFlatNumber(td.flatId)
+                                }}</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="category-tag">Document</span>
+                            <span class="time">Verify Tenant</span>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
     </div>
 </app-layout>

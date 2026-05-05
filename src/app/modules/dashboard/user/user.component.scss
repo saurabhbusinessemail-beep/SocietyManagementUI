@@ -4,105 +4,286 @@
 ::ng-deep {
     .layout-body-container {
         padding: 0px !important;
-        background-color: $color-light-gray !important;
     }
 }
 
 .banner-container {
     display: flex;
+    overflow: hidden;
 
     .banner-image {
-        width: -webkit-fill-available;
-        padding-bottom: $input-padding-desktop;
+        width: 100%;
+        object-fit: cover;
 
         @include desktop {
-            max-height: 500px;
-            width: auto;
-            margin-left: auto;
-            margin-right: auto;
+            max-height: 350px;
         }
     }
 }
 
 .user-container {
+
     @include mobile {
-        padding: $input-padding-mobile;
+        padding: $sp-md;
     }
 
     @include tablet {
-        padding: $input-padding-desktop;
+        padding: $sp-lg;
     }
 
     @include desktop {
-        padding: $input-padding-desktop;
+        padding: $sp-xl;
+        max-width: 1400px;
+        margin: 0 auto;
     }
 }
 
-.empty-societies-placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: $sp-xl $sp-lg;
+.societies-section {
+    ::ng-deep .section-view {
+        margin-top: $sp-lg !important;
+    }
+}
 
-    .placeholder-content {
+// CREATIVE APPROVALS SECTION
+.approvals-section {
+    position: relative;
+    margin-top: $sp-lg;
+    margin-bottom: $sp-xl;
+    background: rgba(var(--color-white-rgb), 0.6);
+    backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid var(--color-border);
+    padding: $sp;
+    box-shadow:
+        0 4px 24px -1px rgba(var(--color-black-rgb), 0.05),
+        0 20px 40px -10px rgba(var(--color-black-rgb), 0.03);
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(var(--color-sky-rgb), 0.15) 0%, transparent 70%);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .section-header {
+        position: relative;
+        z-index: 1;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        text-align: center;
-        gap: $sp-md;
-        max-width: 400px;
+        justify-content: space-between;
+        margin-bottom: $sp-xl;
+        padding: $sp;
 
-        .placeholder-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(var(--color-dark-blue-rgb), 0.1) 0%, rgba(var(--color-dark-blue-rgb), 0.05) 100%);
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: $sp-md;
+
+            .icon-wrapper {
+                width: 48px;
+                height: 48px;
+                background: var(--color-white);
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 8px 16px rgba(var(--color-black-rgb), 0.06);
+                color: var(--color-dark-blue);
+            }
+
+            .text-group {
+                h2 {
+                    margin: 0;
+                    font-size: 24px;
+                    font-weight: 800;
+                    color: var(--color-black);
+                    letter-spacing: -0.02em;
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 13px;
+                    color: var(--color-note-gray);
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .status-badge {
+            background: var(--color-sky);
+            color: var(--color-dark-blue);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid var(--color-border);
+        }
+    }
+
+    // Grid that supports the [smColumns] directives
+    .approvals-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: $sp-lg;
+
+        @include mobile {
+            gap: $sp-md;
+        }
+    }
+}
+
+// PREMIUM CARDS
+.approval-card-premium {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    padding: $sp-lg;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    box-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.02);
+
+    &:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 30px -10px rgba(var(--color-black-rgb), 0.08);
+        border-color: var(--color-dark-blue);
+
+        .action-arrow {
+            transform: translateX(4px);
+            background: var(--color-dark-blue);
+            color: var(--color-white);
+        }
+    }
+
+    &.status-approved {
+        border-left: 4px solid var(--status-approved);
+        .category-tag { color: var(--status-approved); }
+    }
+
+    &.status-rejected {
+        border-left: 4px solid var(--status-rejected);
+        .category-tag { color: var(--status-rejected); }
+    }
+
+    &.status-requested {
+        border-left: 4px solid var(--status-pending);
+        .category-tag { color: var(--status-pending); }
+    }
+
+    .card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: $sp-md;
+
+        .type-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: $sp-sm;
 
-            app-icon {
-                color: $color-dark-blue;
+            &.gate-entry {
+                background: #fee2e2;
+                color: #ef4444;
+            }
+
+            &.society {
+                background: #e0e7ff;
+                color: #6366f1;
+            }
+
+            &.join {
+                background: #fae8ff;
+                color: #d946ef;
+            }
+
+            &.rent {
+                background: #dcfce7;
+                color: #22c55e;
+            }
+
+            &.maintenance {
+                background: #fef3c7;
+                color: #f59e0b;
+            }
+
+            &.document {
+                background: #e0f2fe;
+                color: #0ea5e9;
             }
         }
 
-        .placeholder-title {
-            font-size: $font-size-lg;
+        .action-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-note-gray);
+            transition: all 0.3s ease;
+        }
+    }
+
+    .card-body {
+        .title {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-black);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .subtitle {
+            display: block;
+            font-size: 13px;
+            color: var(--color-note-gray);
+            font-weight: 500;
+        }
+    }
+
+    .card-footer {
+        margin-top: $sp-md;
+        padding-top: $sp-md;
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .time {
+            font-size: 11px;
+            color: var(--color-help-text);
             font-weight: 600;
-            color: $color-dark-blue;
-            margin: 0;
         }
 
-        .placeholder-description {
-            font-size: $font-size-sm;
-            color: $color-help-text;
-            margin: 0 0 $sp-sm 0;
-        }
-
-        ui-button {
-            margin-top: $sp-xs;
+        .category-tag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-help-text);
         }
     }
 }
 
-@include mobile {
-    .empty-societies-placeholder {
-        padding: $sp-lg;
-
-        .placeholder-content {
-            .placeholder-icon {
-                width: 60px;
-                height: 60px;
-            }
-
-            .placeholder-title {
-                font-size: $font-size-base;
-            }
-
-            .placeholder-description {
-                font-size: $font-size-xs;
-            }
-        }
-    }
+// EXISTING COMPONENTS STYLES
+.empty-societies-placeholder {
+    // ... (Keep existing or refine)
+    padding: $sp-xl;
+    text-align: center;
 }

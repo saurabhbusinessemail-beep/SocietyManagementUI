@@ -10,6 +10,7 @@ export * from './approval-request.interface';
 export * from './building.interface';
 export * from './cache.interface';
 export * from './complaint.interface';
+export * from './dashboard.interface';
 export * from './confirmation-popup-config.interface';
 export * from './country.intrerface';
 export * from './coupon.interface';

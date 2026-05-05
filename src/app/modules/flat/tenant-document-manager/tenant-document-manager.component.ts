@@ -62,7 +62,12 @@ export class TenantDocumentManagerComponent implements OnInit, OnDestroy {
     if (!this.flatId) return;
 
     this.loading = true;
-    this.tenantDocumentService.getDocuments({ flatId: this.flatId, flatMemberId: this.flatMemberId })
+    const filter: any = { flatId: this.flatId };
+    if (this.flatMemberId) {
+      filter.flatMemberId = this.flatMemberId;
+    }
+
+    this.tenantDocumentService.getDocuments(filter)
       .pipe(take(1))
       .subscribe({
         next: response => {
