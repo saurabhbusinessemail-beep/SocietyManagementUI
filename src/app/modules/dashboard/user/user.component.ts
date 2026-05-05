@@ -60,7 +60,16 @@ export class UserComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.approvals = response.data ?? {};
+          const data = response.data ?? {};
+
+          // Filter out seen gate entries for security
+          console.log('data = ', data);
+          if (data.gateEntries) {
+            const seenIds = this.getSeenGateEntryIds();
+            data.gateEntries = data.gateEntries.filter((ge: any) => !seenIds.includes(ge._id));
+          }
+
+          this.approvals = data;
           this.isApprovalsLoading = false;
         },
         error: () => {
@@ -115,6 +124,9 @@ export class UserComponent implements OnInit, OnDestroy {
     switch (type) {
       case 'gateEntry':
         if (roles.includes('security')) {
+          if (item.status === 'approved') {
+            this.markGateEntryAsSeen(item._id);
+          }
           this.router.navigate(['/gateentry/dashboard', societyId]);
         } else {
           // flat owner / tenant / member
@@ -179,6 +191,44 @@ export class UserComponent implements OnInit, OnDestroy {
     const roles = societyContext?.societyRoles.map(r => r.name) || [];
 
     return roles.includes('security') ? 'security' : 'visitor';
+  }
+
+  private getSeenGateEntryIds(): string[] {
+    try {
+      const today = new Date().toDateString();
+      const stored = localStorage.getItem('seen_gate_entries_data');
+      if (!stored) return [];
+
+      const data = JSON.parse(stored);
+      // If date is different (new day), clear IDs
+      if (data.date !== today) {
+        localStorage.removeItem('seen_gate_entries_data');
+        return [];
+      }
+
+      return data.ids || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  private markGateEntryAsSeen(id: string) {
+    const today = new Date().toDateString();
+    const seenIds = this.getSeenGateEntryIds();
+
+    if (!seenIds.includes(id)) {
+      seenIds.push(id);
+      const data = {
+        date: today,
+        ids: seenIds
+      };
+      localStorage.setItem('seen_gate_entries_data', JSON.stringify(data));
+
+      // Immediately filter it out from current view
+      if (this.approvals.gateEntries) {
+        this.approvals.gateEntries = this.approvals.gateEntries.filter(ge => ge._id !== id);
+      }
+    }
   }
 
   ngOnDestroy(): void {
