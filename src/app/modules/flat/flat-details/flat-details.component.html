@@ -1158,35 +1158,55 @@
         </div>
 
         <!-- Locked Maintenance -->
-        <div class="section-card locked" *ngIf="canManageFlat && !maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
+        <div class="section-card" [class.feature-unavailable]="!maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance" 
+            *ngIf="canManageFlat && !maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="home"></app-icon>
                     <h2 class="section-title">Maintenance</h2>
                 </div>
             </div>
-            <div class="locked-feature">
-                <app-icon name="lock" size="xl"></app-icon>
-                <p>Maintenance feature is not available in your plan</p>
-                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" *ngIf="canUpdateSociety">
+            <div class="unavailable-content">
+                <div class="locked-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </div>
+                <p>Your current plan does not support Maintenance management.</p>
+                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
+                    *ngIf="canManageFlat">
                     Upgrade Plan
+                    <app-icon name="upgrade" size="sm"></app-icon>
                 </button>
             </div>
         </div>
 
         <!-- Locked Rent -->
-        <div class="section-card locked" *ngIf="canManageFlat && !rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding">
+        <div class="section-card" [class.feature-unavailable]="!rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding"
+            *ngIf="canManageFlat && !rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="account"></app-icon>
                     <h2 class="section-title">Rent</h2>
                 </div>
             </div>
-            <div class="locked-feature">
-                <app-icon name="lock" size="xl"></app-icon>
-                <p>Rent Management feature is not available in your plan</p>
-                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" *ngIf="canUpdateSociety">
+            <div class="unavailable-content">
+                <div class="locked-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </div>
+                <p>Your current plan does not support Rent Management.</p>
+                <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
+                    *ngIf="canManageFlat">
                     Upgrade Plan
+                    <app-icon name="upgrade" size="sm"></app-icon>
                 </button>
             </div>
         </div>
