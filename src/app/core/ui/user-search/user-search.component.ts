@@ -64,12 +64,9 @@ export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> im
   subscribeToSearchChange() {
     this.search$.pipe(
       debounceTime(100),
-      distinctUntilChanged(),
       takeUntil(this.isComponentActive),
       filter(txt => !!txt),
       switchMap(searchString => {
-        this.filteredUsers = [];
-        this.users = [];
         return this.userService.searchUsers(searchString).pipe(takeUntil(this.isComponentActive))
       })
     )

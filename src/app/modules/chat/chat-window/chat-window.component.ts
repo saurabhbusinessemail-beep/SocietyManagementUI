@@ -81,16 +81,25 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
         if (Capacitor.getPlatform() === 'web') {
             interval(this.pollInterval).pipe(
                 takeUntil(this.destroy$),
-                switchMap(() => this.chatService.getRoomMessages(this.roomId, 1, 50))
+                switchMap(() => {
+                    const lastRefresh = this.chatService.getLastRefresh(this.roomId);
+                    return this.chatService.getRoomMessages(this.roomId, 1, 50, undefined, lastRefresh);
+                })
             ).subscribe({
                 next: (response: any) => {
                     if (response.success && response.data) {
-                        const newMessages = response.data as IChatMessage[];
-                        // Only update if message count changed to avoid flickering
-                        if (newMessages.length !== this.messages.length) {
-                            this.messages = newMessages;
-                            this.shouldScrollToBottom = true;
+                        const newMsgs = response.data as IChatMessage[];
+                        if (newMsgs.length > 0) {
+                            const existingIds = new Set(this.messages.map(m => m._id));
+                            const truly_new = newMsgs.filter(m => !existingIds.has(m._id));
+                            if (truly_new.length > 0) {
+                                this.messages = [...this.messages, ...truly_new];
+                                this.chatService.setCachedMessages(this.roomId, this.messages);
+                                this.shouldScrollToBottom = true;
+                                this.lastMessageCount = this.messages.length;
+                            }
                         }
+                        this.chatService.setLastRefresh(this.roomId);
                     }
                 },
                 error: () => { }
@@ -104,7 +113,8 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
 
     private refreshMessages(): void {
         // Fetch the latest 50 messages from the API to ensure complete data integrity
-        this.chatService.getRoomMessages(this.roomId, 1, 50).subscribe({
+        const lastRefresh = this.chatService.getLastRefresh(this.roomId);
+        this.chatService.getRoomMessages(this.roomId, 1, 50, undefined, lastRefresh).subscribe({
             next: (response: any) => {
                 if (response.success && response.data) {
                     const incoming = response.data as IChatMessage[];
@@ -113,9 +123,11 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
 
                     if (truly_new.length > 0) {
                         this.messages = [...this.messages, ...truly_new];
+                        this.chatService.setCachedMessages(this.roomId, this.messages);
                         this.shouldScrollToBottom = true;
                         this.lastMessageCount = this.messages.length;
                     }
+                    this.chatService.setLastRefresh(this.roomId);
                     this.chatService.markRoomAsRead(this.roomId).subscribe();
                 }
             }
@@ -159,14 +171,28 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
     loadMessages(reset = false): void {
         if (reset) {
             this.page = 1;
-            this.messages = [];
-            this.hasMore = true;
-            this.isLoading = true;
+            const cached = this.chatService.getCachedMessages(this.roomId);
+            if (cached.length > 0) {
+                this.messages = cached;
+                this.isLoading = false;
+                this.hasMore = true; // allow scrolling up to fetch more
+                this.shouldScrollToBottom = true;
+                
+                // Fetch new messages since last refresh
+                this.refreshMessages();
+                return;
+            } else {
+                this.messages = [];
+                this.hasMore = true;
+                this.isLoading = true;
+            }
         } else {
             this.isLoadingMore = true;
         }
 
-        this.chatService.getRoomMessages(this.roomId, this.page, 50).subscribe({
+        const before = reset ? undefined : (this.messages.length > 0 ? this.messages[0].sentAt as string : undefined);
+
+        this.chatService.getRoomMessages(this.roomId, this.page, 50, before).subscribe({
             next: (response: any) => {
                 this.isLoading = false;
                 this.isLoadingMore = false;
@@ -176,9 +202,12 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
                     if (reset) {
                         this.messages = newMsgs;
                         this.shouldScrollToBottom = true;
+                        this.chatService.setLastRefresh(this.roomId);
                     } else {
                         this.messages = [...newMsgs, ...this.messages];
                     }
+                    this.chatService.setCachedMessages(this.roomId, this.messages);
+                    
                     this.hasMore = newMsgs.length >= 50;
                     this.lastMessageCount = this.messages.length;
 
@@ -218,6 +247,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
                 this.isSending = false;
                 if (response.success && response.data) {
                     this.messages = [...this.messages, response.data as IChatMessage];
+                    this.chatService.setCachedMessages(this.roomId, this.messages);
                     this.shouldScrollToBottom = true;
                 }
             },
@@ -247,6 +277,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
                     next: (response: any) => {
                         if (response.success && response.data) {
                             this.messages = [...this.messages, response.data as IChatMessage];
+                            this.chatService.setCachedMessages(this.roomId, this.messages);
                             this.shouldScrollToBottom = true;
                         }
                     }
@@ -281,6 +312,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
                 next: (response: any) => {
                     if (response.success && response.data) {
                         this.messages = [...this.messages, response.data as IChatMessage];
+                        this.chatService.setCachedMessages(this.roomId, this.messages);
                         this.shouldScrollToBottom = true;
                     }
                 }
@@ -324,6 +356,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
         this.chatService.deleteMessageForMe(message._id).subscribe({
             next: () => {
                 this.messages = this.messages.filter(m => m._id !== message._id);
+                this.chatService.setCachedMessages(this.roomId, this.messages);
             }
         });
         this.activeMessageMenu = null;
@@ -339,6 +372,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
                 const idx = this.messages.findIndex(m => m._id === message._id);
                 if (idx >= 0) {
                     this.messages[idx] = { ...this.messages[idx], isDeletedForEveryone: true, content: 'This message was deleted' };
+                    this.chatService.setCachedMessages(this.roomId, this.messages);
                 }
             }
         });
@@ -365,6 +399,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
             this.chatService.clearChatForMe(this.roomId).subscribe({
                 next: () => {
                     this.messages = [];
+                    this.chatService.setCachedMessages(this.roomId, this.messages);
                 }
             });
         }

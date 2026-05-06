@@ -17,7 +17,27 @@ import {
 export class ChatService {
     private apiUrl = `${environment.apiBaseUrl}/chat`;
 
+    private chatRoomLastRefreshMap: { [chatRoomId: string]: { lastRefreshDateTime: Date } } = {};
+    private chatRoomMessagesMap: { [roomId: string]: IChatMessage[] } = {};
+
     constructor(private http: HttpClient) {}
+
+    setLastRefresh(roomId: string, date: Date = new Date()): void {
+        this.chatRoomLastRefreshMap[roomId] = { lastRefreshDateTime: date };
+    }
+
+    getLastRefresh(roomId: string): string | undefined {
+        const data = this.chatRoomLastRefreshMap[roomId];
+        return data ? data.lastRefreshDateTime.toISOString() : undefined;
+    }
+
+    getCachedMessages(roomId: string): IChatMessage[] {
+        return this.chatRoomMessagesMap[roomId] || [];
+    }
+
+    setCachedMessages(roomId: string, messages: IChatMessage[]): void {
+        this.chatRoomMessagesMap[roomId] = messages;
+    }
 
     // ─── Rooms ────────────────────────────────────────────────────────────────
 
@@ -50,12 +70,13 @@ export class ChatService {
      * @param limit Number of messages per page
      * @param before Optional cursor for infinite scroll (ISO date string)
      */
-    getRoomMessages(roomId: string, page = 1, limit = 50, before?: string): Observable<IPagedResponse<IChatMessage>> {
+    getRoomMessages(roomId: string, page = 1, limit = 50, before?: string, after?: string): Observable<IPagedResponse<IChatMessage>> {
         let params = new HttpParams()
             .set('page', page.toString())
             .set('limit', limit.toString());
 
         if (before) params = params.set('before', before);
+        if (after) params = params.set('after', after);
 
         return this.http.get<IPagedResponse<IChatMessage>>(
             `${this.apiUrl}/rooms/${roomId}/messages`,

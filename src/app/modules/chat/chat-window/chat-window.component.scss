@@ -41,12 +41,31 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: #fff;
+    background: var(--color-cancel);
+    color: var(--color-note-gray);
+    border: 1px solid var(--color-border);
 
+    svg,
     .material-icons {
-        font-size: 1.2rem;
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+        fill: currentColor;
     }
+
+    /* Type specific ICON colors instead of background colors */
+    &--society_all { color: var(--color-dark-blue); }
+    &--society_owners { color: var(--color-amber); }
+    &--society_owners_tenants { color: var(--color-dark-blue); }
+    &--society_owners_managers { color: var(--status-yet); }
+    &--society_managers_owners_tenants { color: var(--status-yet); }
+    &--society_security { color: var(--status-rejected); }
+    &--building_all,
+    &--building_owners_admins { color: var(--status-active); }
+    &--flat_owner_members,
+    &--flat_owner_tenants,
+    &--flat_tenants { color: var(--color-link); }
+    &--personal { color: var(--status-purchased); }
 }
 
 .header-text {

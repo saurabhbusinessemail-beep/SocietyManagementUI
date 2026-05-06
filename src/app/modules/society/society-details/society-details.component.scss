@@ -114,8 +114,8 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 4px;
-                background-color: $color-cancel; // gray-100
-                color: $color-light-gray; // gray-600
+                background: var(--color-sky);
+                color: var(--color-dark-blue);
                 font-size: $font-size-xs;
                 font-weight: 500;
                 padding: $sp-xs $sp;

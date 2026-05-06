@@ -60,12 +60,9 @@ export class SocietySearchComponent extends UIBaseFormControl<ISociety | undefin
   subscribeToSearchChange() {
     this.search$.pipe(
       debounceTime(500),
-      distinctUntilChanged(),
       takeUntil(this.isComponentActive),
       filter(txt => !!txt),
       switchMap(searchString => {
-        this.filteredSocieties = [];
-        this.societies = [];
         return this.societiesService.searchSocieties(searchString).pipe(takeUntil(this.isComponentActive))
       })
     )

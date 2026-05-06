@@ -146,9 +146,9 @@ export class ChatListComponent implements OnInit, OnDestroy {
                 sentByUserId: data.senderId
             };
 
-            // Increment unread count if we're not currently in that room
-            // Note: In a real app, you might check current route
-            if (!this.router.url.includes(`/chat/room/${roomId}`)) {
+            // Increment unread count if we're not currently in that room and message is not from me
+            const currentUserId = this.loginService.getProfileFromStorage()?.user?._id;
+            if (!this.router.url.includes(`/chat/room/${roomId}`) && data.senderId !== currentUserId) {
                 room.unreadCount = (room.unreadCount || 0) + 1;
             }
 

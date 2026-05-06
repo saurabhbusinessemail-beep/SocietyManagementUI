@@ -92,12 +92,9 @@ export class ContactSearchComponent extends UIBaseFormControl<IPhoneContactFlat 
   subscribeToSearchChange() {
     this.search$.pipe(
       debounceTime(100),
-      distinctUntilChanged(),
       takeUntil(this.isComponentActive),
       filter(txt => txt !== undefined && txt !== ''),
       switchMap(searchString => {
-        this.filteredContacts = [];
-        this.contacts = [];
         return this.contactService.searchContacts(searchString).pipe(takeUntil(this.isComponentActive))
       })
     )
