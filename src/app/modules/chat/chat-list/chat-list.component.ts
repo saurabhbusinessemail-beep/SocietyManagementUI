@@ -1,12 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject, interval } from 'rxjs';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subject, interval, take, combineLatest } from 'rxjs';
 import { takeUntil, switchMap, startWith } from 'rxjs/operators';
 
 import { ChatService } from '../../../services/chat.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
-import { IChatRoom, IChatMessage } from '../../../interfaces';
+import { IChatRoom, IChatMessage, ISociety, IMyFlatResponse } from '../../../interfaces';
+
+interface BuildingGroup {
+    buildingId: string;
+    buildingNumber: string;
+    flats: IMyFlatResponse[];
+}
+
+interface SocietyMenuData {
+    societyId: string;
+    societyName: string;
+}
 
 interface GroupedRooms {
     societyId: string;
@@ -31,7 +42,10 @@ export class ChatListComponent implements OnInit, OnDestroy {
     errorMessage = '';
 
     selectedSocietyId: string | null = null;
-    selectedFlatId: string | null = null;
+    selectedSociety: ISociety | null = null;
+    
+    menuData: SocietyMenuData[] = [];
+    isMenuOpen = false;
 
     private destroy$ = new Subject<void>();
     private pollIntervalMs = 60000; // Poll every 1 minute
@@ -40,17 +54,48 @@ export class ChatListComponent implements OnInit, OnDestroy {
         private chatService: ChatService,
         private societyService: SocietyService,
         private loginService: LoginService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute,
+        private el: ElementRef
     ) {}
 
     ngOnInit(): void {
-        // Get selected society from filter
-        this.societyService.selectedSocietyFilter
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(filter => {
-                this.selectedSocietyId = filter?.value || null;
-                this.loadChatRooms();
+        // Check for societyId in URL on refresh
+        const urlParams = this.route.snapshot.queryParams;
+        if (urlParams['societyId'] && !this.societyService.selectedSocietyFilterValue) {
+            this.societyService.socities.pipe(take(1)).subscribe(societies => {
+                const soc = societies.find(s => s._id === urlParams['societyId']);
+                if (soc) {
+                    this.societyService.selectSocietyFilter({
+                        label: soc.societyName,
+                        value: soc._id
+                    });
+                }
             });
+        }
+
+        combineLatest([
+            this.route.queryParams,
+            this.societyService.selectedSocietyFilter
+        ])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(([params, filter]) => {
+            const newSocId = params['societyId'] || filter?.value || null;
+
+            if (newSocId !== this.selectedSocietyId) {
+                this.selectedSocietyId = newSocId;
+                
+                // If societyId is in params but not in filter, sync it
+                if (params['societyId'] && filter?.value !== params['societyId']) {
+                    this.syncSocietyFromParam(params['societyId']);
+                }
+
+                this.loadChatRooms();
+                this.updateSelectedInfo();
+            }
+        });
+
+        this.loadMenuData();
 
         // Poll for new messages
         interval(this.pollIntervalMs)
@@ -98,6 +143,63 @@ export class ChatListComponent implements OnInit, OnDestroy {
         });
     }
 
+    loadMenuData(): void {
+        this.societyService.socities.pipe(takeUntil(this.destroy$)).subscribe(societies => {
+            this.menuData = societies.map(soc => ({
+                societyId: soc._id,
+                societyName: soc.societyName
+            }));
+            this.updateSelectedInfo();
+        });
+    }
+
+    updateSelectedInfo(): void {
+        if (this.selectedSocietyId) {
+            this.societyService.socities.pipe(take(1)).subscribe(societies => {
+                this.selectedSociety = societies.find(s => s._id === this.selectedSocietyId) || null;
+            });
+        } else {
+            this.selectedSociety = null;
+        }
+    }
+
+    toggleMenu(event: Event): void {
+        event.stopPropagation();
+        this.isMenuOpen = !this.isMenuOpen;
+    }
+
+    syncSocietyFromParam(socId: string): void {
+        this.societyService.socities.pipe(take(1)).subscribe(societies => {
+            const soc = societies.find(s => s._id === socId);
+            if (soc) {
+                this.societyService.selectSocietyFilter({
+                    label: soc.societyName,
+                    value: soc._id
+                });
+            }
+        });
+    }
+
+    selectSociety(soc: SocietyMenuData): void {
+        this.isMenuOpen = false;
+        this.societyService.selectSocietyFilter({
+            label: soc.societyName,
+            value: soc.societyId
+        });
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { 
+                societyId: soc.societyId,
+                flatId: null 
+            },
+            queryParamsHandling: 'merge'
+        });
+    }
+
+    getDisplayTitle(): string {
+        return this.selectedSociety?.societyName || 'Chats';
+    }
+
     processRooms(): void {
         // Separate personal from group rooms
         this.personalRooms = this.allRooms.filter(r => r.type === 'personal');
@@ -106,15 +208,16 @@ export class ChatListComponent implements OnInit, OnDestroy {
         // Sort group rooms by type priority
         const typePriority: Record<string, number> = {
             'society_all': 1,
-            'society_owners_tenants': 2,
-            'society_owners': 3,
-            'society_owners_managers': 4,
-            'building_all': 5,
-            'building_owners_admins': 6,
-            'flat_owner_members': 7,
-            'flat_owner_tenants': 8,
-            'flat_tenants': 9,
-            'society_security': 10
+            'society_managers_owners_tenants': 2,
+            'society_owners_tenants': 3,
+            'society_owners': 4,
+            'society_owners_managers': 5,
+            'building_all': 6,
+            'building_owners_admins': 7,
+            'flat_owner_members': 8,
+            'flat_owner_tenants': 9,
+            'flat_tenants': 10,
+            'society_security': 11
         };
 
         groupRooms.sort((a, b) => {

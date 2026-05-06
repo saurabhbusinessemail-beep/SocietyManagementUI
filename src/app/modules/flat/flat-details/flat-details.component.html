@@ -3,10 +3,6 @@
 
     <ng-container moreActions>
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="gotoChat()">
-                <span class="material-icons" style="font-size:1rem;vertical-align:middle;margin-right:4px">chat</span>
-                Flat Chat
-            </li>
         </ul>
     </ng-container>
 
@@ -176,6 +172,15 @@
                     <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
                 </div>
             </div>
+        </div>
+        
+        <!-- Chat Quick Access -->
+        <div class="chat-quick-access" *ngIf="getflat()">
+            <button class="chat-goto-btn" (click)="gotoChat()">
+                <app-icon name="chat"></app-icon>
+                <span>Open Flat Chat</span>
+                <app-icon name="goto" class="arrow"></app-icon>
+            </button>
         </div>
 
         <!-- Member Profile Card (if viewing other member) -->

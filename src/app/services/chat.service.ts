@@ -205,6 +205,7 @@ export class ChatService {
             society_owners_tenants: 'Owners & Tenants',
             society_owners: 'Owners Only',
             society_owners_managers: 'Owners and Managers',
+            society_managers_owners_tenants: 'Managers, Owners & Tenants',
             society_security: 'Security',
             society_all: 'Society All Members',
             building_all: 'Building All Members',

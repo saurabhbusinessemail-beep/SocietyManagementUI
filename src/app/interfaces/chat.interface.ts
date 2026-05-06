@@ -1,4 +1,20 @@
-export type ChatRoomType = 'society' | 'building' | 'flat_all' | 'flat_owner_tenant' | 'society_all' | 'personal';
+export type ChatRoomType = 
+    | 'society' 
+    | 'building' 
+    | 'flat_all' 
+    | 'flat_owner_tenant' 
+    | 'society_all' 
+    | 'society_owners'
+    | 'society_owners_tenants'
+    | 'society_owners_managers'
+    | 'society_managers_owners_tenants'
+    | 'society_security'
+    | 'building_all'
+    | 'building_owners_admins'
+    | 'flat_owner_members'
+    | 'flat_owner_tenants'
+    | 'flat_tenants'
+    | 'personal';
 export type ChatMessageType = 'text' | 'image' | 'video' | 'document' | 'location' | 'audio';
 
 export interface IChatParticipant {

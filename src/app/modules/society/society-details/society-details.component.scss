@@ -791,11 +791,45 @@
     .feature-card--locked .locked-content {
         padding: $sp-lg;
     }
+
 }
 
-// Chat Quick Access Button
 .chat-quick-access {
-    margin-top: $sp-lg;
+    .chat-goto-btn-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: 9999px;
+        color: #fff;
+        font-size: $font-size-xs;
+        font-weight: 700;
+        padding: $sp-xs $sp-md;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+
+        @include tablet {
+            padding: $sp-sm $sp-lg;
+            font-size: $font-size-sm;
+        }
+
+        app-icon {
+            width: 14px;
+            height: 14px;
+            color: #fff;
+        }
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
 
     .chat-goto-btn {
         display: flex;

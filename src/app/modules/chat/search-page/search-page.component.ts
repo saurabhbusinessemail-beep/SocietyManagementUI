@@ -107,6 +107,10 @@ export class SearchPageComponent implements OnInit, OnDestroy {
         return this.chatService.getRoomTypeIcon(type);
     }
 
+    getRoomTypeLabel(type: string): string {
+        return this.chatService.getRoomTypeLabel(type);
+    }
+
     highlightText(text: string | undefined, term: string): string {
         if (!text || !term) return text || '';
         const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

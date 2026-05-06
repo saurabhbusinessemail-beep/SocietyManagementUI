@@ -1660,4 +1660,46 @@
         transition: opacity 0.2s;
         &:hover { opacity: 0.9; }
     }
-}
+}
+
+// Chat Quick Access Button
+.chat-quick-access {
+    margin-bottom: $sp-md;
+
+    @include tablet {
+        margin-bottom: $sp-lg;
+    }
+
+    .chat-goto-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: 16px;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        font-family: inherit;
+
+        app-icon { 
+            width: 20px;
+            height: 20px;
+            color: #fff;
+        }
+        
+        .arrow { margin-left: auto; opacity: 0.8; width: 14px; height: 14px; }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        &:active { transform: translateY(0); }
+    }
+}
