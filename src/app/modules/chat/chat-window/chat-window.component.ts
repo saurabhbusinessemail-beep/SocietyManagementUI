@@ -7,7 +7,9 @@ import { takeUntil, switchMap, debounceTime, startWith } from 'rxjs/operators';
 import { ChatService } from '../../../services/chat.service';
 import { LoginService } from '../../../services/login.service';
 import { DialogService } from '../../../services/dialog.service';
+import { PushNotificationService } from '../../../services/push-notification.service';
 import { IChatRoom, IChatMessage, IChatSendMessagePayload, IChatReplyTo } from '../../../interfaces';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
     selector: 'app-chat-window',
@@ -50,7 +52,8 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
         private router: Router,
         private chatService: ChatService,
         private loginService: LoginService,
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        private pushNotificationService: PushNotificationService
     ) { }
 
     ngOnInit(): void {
@@ -63,23 +66,63 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
             this.loadMessages(true);
         });
 
-        // Poll for new messages
-        interval(this.pollInterval).pipe(
-            startWith(0),
-            takeUntil(this.destroy$),
-            switchMap(() => this.chatService.getRoomMessages(this.roomId, 1, 50))
-        ).subscribe({
-            next: (response: any) => {
-                if (response.success && response.data) {
-                    const newMessages = response.data as IChatMessage[];
-                    if (newMessages.length !== this.messages.length) {
-                        this.messages = newMessages;
-                        this.shouldScrollToBottom = true;
-                    }
-                }
-            },
-            error: () => { }
+        // Listen for real-time messages via FCM
+        this.pushNotificationService.chatMessage$.pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(data => {
+            console.log('Real-time chat message received in window:', data);
+            if (data.roomId === this.roomId) {
+                // If message is from current room, append it
+                this.handleRealTimeMessage(data);
+            }
         });
+
+        // Fallback polling for Web platform
+        if (Capacitor.getPlatform() === 'web') {
+            interval(this.pollInterval).pipe(
+                takeUntil(this.destroy$),
+                switchMap(() => this.chatService.getRoomMessages(this.roomId, 1, 50))
+            ).subscribe({
+                next: (response: any) => {
+                    if (response.success && response.data) {
+                        const newMessages = response.data as IChatMessage[];
+                        // Only update if message count changed to avoid flickering
+                        if (newMessages.length !== this.messages.length) {
+                            this.messages = newMessages;
+                            this.shouldScrollToBottom = true;
+                        }
+                    }
+                },
+                error: () => { }
+            });
+        }
+    }
+
+    private handleRealTimeMessage(data: any): void {
+        const newMessage: IChatMessage = {
+            _id: data.messageId,
+            roomId: data.roomId,
+            societyId: data.societyId,
+            senderId: data.senderId,
+            senderName: data.senderName,
+            content: data.content,
+            type: data.type || 'text',
+            sentAt: data.sentAt,
+            isDeleted: false,
+            deletedForUsers: [],
+            readBy: [],
+            deliveredTo: []
+        };
+
+        // Avoid duplicates (if we already loaded it via loadMessages)
+        if (!this.messages.some(m => m._id === newMessage._id)) {
+            this.messages = [...this.messages, newMessage];
+            this.shouldScrollToBottom = true;
+            this.lastMessageCount = this.messages.length;
+
+            // Mark as read immediately since user is in the window
+            this.chatService.markRoomAsRead(this.roomId).subscribe();
+        }
     }
 
     ngAfterViewChecked(): void {

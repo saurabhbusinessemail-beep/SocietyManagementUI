@@ -6,13 +6,14 @@ import { Platform } from '@angular/cdk/platform';
 import { App } from '@capacitor/app';
 import { GateEntryService } from './gate-entry.service';
 import { LoginService } from './login.service';
-import { take } from 'rxjs';
+import { take, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PushNotificationService {
     private isInitialized = false;
+    public chatMessage$ = new Subject<any>();
 
     constructor(
         private router: Router,
@@ -111,6 +112,14 @@ export class PushNotificationService {
             const notificationId = data.notificationId;
             const type = data.type;
             const gateEntryId = data.gateEntryId;
+
+            if (type === 'CHAT_MESSAGE') {
+                this.chatMessage$.next(data);
+                // If user is already in this chat room, don't show notification or navigate
+                if (this.router.url.includes(`/chat/room/${data.roomId}`)) {
+                    return;
+                }
+            }
 
             console.log('Notification data:', {
                 notificationId,

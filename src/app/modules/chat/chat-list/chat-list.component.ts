@@ -6,7 +6,9 @@ import { takeUntil, switchMap, startWith } from 'rxjs/operators';
 import { ChatService } from '../../../services/chat.service';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
+import { PushNotificationService } from '../../../services/push-notification.service';
 import { IChatRoom, IChatMessage, ISociety, IMyFlatResponse } from '../../../interfaces';
+import { Capacitor } from '@capacitor/core';
 
 interface BuildingGroup {
     buildingId: string;
@@ -43,7 +45,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
     selectedSocietyId: string | null = null;
     selectedSociety: ISociety | null = null;
-    
+
     menuData: SocietyMenuData[] = [];
     isMenuOpen = false;
 
@@ -56,8 +58,9 @@ export class ChatListComponent implements OnInit, OnDestroy {
         private loginService: LoginService,
         private router: Router,
         private route: ActivatedRoute,
-        private el: ElementRef
-    ) {}
+        private el: ElementRef,
+        private pushNotificationService: PushNotificationService
+    ) { }
 
     ngOnInit(): void {
         // Check for societyId in URL on refresh
@@ -78,43 +81,83 @@ export class ChatListComponent implements OnInit, OnDestroy {
             this.route.queryParams,
             this.societyService.selectedSocietyFilter
         ])
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(([params, filter]) => {
-            const newSocId = params['societyId'] || filter?.value || null;
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(([params, filter]) => {
+                const newSocId = params['societyId'] || filter?.value || null;
 
-            if (newSocId !== this.selectedSocietyId) {
-                this.selectedSocietyId = newSocId;
-                
-                // If societyId is in params but not in filter, sync it
-                if (params['societyId'] && filter?.value !== params['societyId']) {
-                    this.syncSocietyFromParam(params['societyId']);
+                if (newSocId !== this.selectedSocietyId) {
+                    this.selectedSocietyId = newSocId;
+
+                    // If societyId is in params but not in filter, sync it
+                    if (params['societyId'] && filter?.value !== params['societyId']) {
+                        this.syncSocietyFromParam(params['societyId']);
+                    }
+
+                    this.loadChatRooms();
+                    this.updateSelectedInfo();
                 }
-
-                this.loadChatRooms();
-                this.updateSelectedInfo();
-            }
-        });
+            });
 
         this.loadMenuData();
 
-        // Poll for new messages
-        interval(this.pollIntervalMs)
-            .pipe(
-                startWith(0),
-                takeUntil(this.destroy$),
-                switchMap(() => this.chatService.getChatRooms({
-                    societyId: this.selectedSocietyId || undefined
-                }))
-            )
-            .subscribe({
-                next: (response: any) => {
-                    if (response.success) {
-                        this.allRooms = response.data || [];
-                        this.processRooms();
-                    }
-                },
-                error: () => {}
-            });
+        // Listen for real-time messages via FCM
+        this.pushNotificationService.chatMessage$.pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(data => {
+            console.log('Real-time chat message received in list:', data);
+            this.handleRealTimeMessage(data);
+        });
+
+        // Fallback polling for Web platform
+        if (Capacitor.getPlatform() === 'web') {
+            interval(this.pollIntervalMs)
+                .pipe(
+                    takeUntil(this.destroy$),
+                    switchMap(() => this.chatService.getChatRooms({
+                        societyId: this.selectedSocietyId || undefined
+                    }))
+                )
+                .subscribe({
+                    next: (response: any) => {
+                        if (response.success) {
+                            this.allRooms = response.data || [];
+                            this.processRooms();
+                        }
+                    },
+                    error: () => { }
+                });
+        }
+    }
+
+    private handleRealTimeMessage(data: any): void {
+        const roomId = data.roomId;
+        const roomIndex = this.allRooms.findIndex(r => r._id === roomId);
+
+        if (roomIndex >= 0) {
+            const room = this.allRooms[roomIndex];
+
+            // Update last message
+            room.lastMessage = {
+                messageId: data.messageId,
+                content: data.content,
+                type: data.type || 'text',
+                sentAt: data.sentAt,
+                senderName: data.senderName,
+                sentByUserId: data.senderId
+            };
+
+            // Increment unread count if we're not currently in that room
+            // Note: In a real app, you might check current route
+            if (!this.router.url.includes(`/chat/room/${roomId}`)) {
+                room.unreadCount = (room.unreadCount || 0) + 1;
+            }
+
+            // Move room to top and re-process
+            this.processRooms();
+        } else {
+            // Room not in current list (maybe a new room?), reload
+            this.loadChatRooms();
+        }
     }
 
     ngOnDestroy(): void {
@@ -188,9 +231,9 @@ export class ChatListComponent implements OnInit, OnDestroy {
         });
         this.router.navigate([], {
             relativeTo: this.route,
-            queryParams: { 
+            queryParams: {
                 societyId: soc.societyId,
-                flatId: null 
+                flatId: null
             },
             queryParamsHandling: 'merge'
         });
@@ -224,7 +267,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
             const pA = typePriority[a.type] || 99;
             const pB = typePriority[b.type] || 99;
             if (pA !== pB) return pA - pB;
-            
+
             // Secondary sort by latest message time
             const timeA = a.lastMessage?.sentAt ? new Date(a.lastMessage.sentAt).getTime() : 0;
             const timeB = b.lastMessage?.sentAt ? new Date(b.lastMessage.sentAt).getTime() : 0;
@@ -291,7 +334,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
     getLastMessagePreview(room: IChatRoom): string {
         if (!room.lastMessage) return 'No messages yet';
-        
+
         const msg = room.lastMessage;
         if (!msg.content && !msg.type && !msg.messageId) return 'No messages yet';
 
