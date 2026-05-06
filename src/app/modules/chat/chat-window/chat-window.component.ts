@@ -99,30 +99,27 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
     }
 
     private handleRealTimeMessage(data: any): void {
-        const newMessage: IChatMessage = {
-            _id: data.messageId,
-            roomId: data.roomId,
-            societyId: data.societyId,
-            senderId: data.senderId,
-            senderName: data.senderName,
-            content: data.content,
-            type: data.type || 'text',
-            sentAt: data.sentAt,
-            isDeleted: false,
-            deletedForUsers: [],
-            readBy: [],
-            deliveredTo: []
-        };
+        this.refreshMessages();
+    }
 
-        // Avoid duplicates (if we already loaded it via loadMessages)
-        if (!this.messages.some(m => m._id === newMessage._id)) {
-            this.messages = [...this.messages, newMessage];
-            this.shouldScrollToBottom = true;
-            this.lastMessageCount = this.messages.length;
+    private refreshMessages(): void {
+        // Fetch the latest 50 messages from the API to ensure complete data integrity
+        this.chatService.getRoomMessages(this.roomId, 1, 50).subscribe({
+            next: (response: any) => {
+                if (response.success && response.data) {
+                    const incoming = response.data as IChatMessage[];
+                    const existingIds = new Set(this.messages.map(m => m._id));
+                    const truly_new = incoming.filter(m => !existingIds.has(m._id));
 
-            // Mark as read immediately since user is in the window
-            this.chatService.markRoomAsRead(this.roomId).subscribe();
-        }
+                    if (truly_new.length > 0) {
+                        this.messages = [...this.messages, ...truly_new];
+                        this.shouldScrollToBottom = true;
+                        this.lastMessageCount = this.messages.length;
+                    }
+                    this.chatService.markRoomAsRead(this.roomId).subscribe();
+                }
+            }
+        });
     }
 
     ngAfterViewChecked(): void {

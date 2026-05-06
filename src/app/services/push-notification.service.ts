@@ -77,7 +77,7 @@ export class PushNotificationService {
         PushNotifications.addListener('pushNotificationActionPerformed',
             (action: ActionPerformed) => {
                 console.log('Push action performed:', action);
-                this.handleNotification(action.notification);
+                this.handleNotification(action.notification, false);
             }
         );
     }
@@ -94,7 +94,7 @@ export class PushNotificationService {
                 try {
                     const notification = JSON.parse(pendingNotification);
                     setTimeout(() => {
-                        this.handleNotification(notification);
+                        this.handleNotification(notification, false);
                     }, 1000); // Small delay to ensure app is ready
                     localStorage.removeItem('pending_notification');
                 } catch (error) {
@@ -104,7 +104,7 @@ export class PushNotificationService {
         }
     }
 
-    private handleNotification(notification: PushNotificationSchema) {
+    private handleNotification(notification: PushNotificationSchema, isForeground: boolean = false) {
         this.ngZone.run(() => {
             console.log('Handling notification click:', notification);
 
@@ -115,8 +115,8 @@ export class PushNotificationService {
 
             if (type === 'CHAT_MESSAGE') {
                 this.chatMessage$.next(data);
-                // If user is already in this chat room, don't show notification or navigate
-                if (this.router.url.includes(`/chat/room/${data.roomId}`)) {
+                // In foreground, we only suppress navigation for CHAT_MESSAGE
+                if (isForeground) {
                     return;
                 }
             }
@@ -133,7 +133,9 @@ export class PushNotificationService {
             }
 
             // Navigate based on notification type
-            if (type === 'GATE_PASS' && gateEntryId) {
+            if (type === 'CHAT_MESSAGE' && data.roomId) {
+                this.router.navigate(['/chat/room', data.roomId]);
+            } else if (type === 'GATE_PASS' && gateEntryId) {
                 setTimeout(() => {
                     this.gateEntryService.handleApprovalNotificationRequest(gateEntryId)
                 }, 100);
@@ -151,8 +153,9 @@ export class PushNotificationService {
                     this.router.navigate(['/home']);
                 }
             } else if (type === 'OTP') {
-                this.loginService.otpReceived.next(data.otp);
-
+                if (data.otp) {
+                    this.loginService.otpReceived.next(data.otp);
+                }
             } else if (notificationId) {
                 this.router.navigate(['/notifications', notificationId]);
             } else {
@@ -166,14 +169,13 @@ export class PushNotificationService {
 
     private showInAppNotification(notification: PushNotificationSchema) {
         console.log('Show in-app notification:', notification);
-        this.handleNotification(notification);
+        this.handleNotification(notification, true);
         // Show a toast or banner in your app
     }
 
     private sendTokenToServer(token: string) {
         console.log('Sending FCM token to server:', token);
-        // Send to your backend
-        // Example: this.apiService.sendFcmToken(token).subscribe();
+        localStorage.setItem('fcmToken', token);
     }
 
     // Method to manually trigger notification handling (for testing)
@@ -184,7 +186,7 @@ export class PushNotificationService {
             data: data.data || {},
             id: Date.now().toString()
         };
-        this.handleNotification(notification);
+        this.handleNotification(notification, false);
     }
 
     async removeAllListeners() {
@@ -251,7 +253,7 @@ export class PushNotificationService {
     //             });
     //         });
     //     } catch (error) {
-    //         console.log('Firebase onMessage setup skipped:', error);
+    //         log('Firebase onMessage setup skipped:', error);
     //     }
     //     // }
     // }

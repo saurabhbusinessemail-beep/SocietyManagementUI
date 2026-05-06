@@ -128,6 +128,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   initializeApp() {
 
+    /*
     // Listen for app resume events
     App.addListener('appStateChange', ({ isActive }) => {
       console.log('App state changed. Active:', isActive);
@@ -136,6 +137,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.checkPendingNotifications();
       }
     });
+    */
 
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
       this.zone.run(() => {
@@ -150,6 +152,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  /*
   private checkPendingNotifications() {
     // Check if there's a pending notification in storage
     const pending = localStorage.getItem('pending_notification');
@@ -163,6 +166,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }
   }
+  */
 
   checkAndAskForUserName() {
     setTimeout(() => {
