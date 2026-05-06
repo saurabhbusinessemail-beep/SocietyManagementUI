@@ -145,7 +145,7 @@ export class PushNotificationService {
                 }, 100);
             } else if (type === 'APPROVAL_REQUEST' || type === 'APPROVAL_RESPONSE') {
                 const tabId = data.requestType === 'Security' ? 'security' : 'flats';
-                this.router.navigate(['/society/pendingApproval'], { queryParams: { tabId } });
+                this.router.navigate(['/society/pendingApproval', tabId]);
             } else if (type === 'SOCIETY_APPROVED') {
                 if (notificationId) {
                     this.router.navigate(['/notifications', notificationId]);
