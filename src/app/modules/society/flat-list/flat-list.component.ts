@@ -30,6 +30,8 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
   loadingSocietyBuildings = false;
   loadingBuilding = false;
   loadingFlats = false;
+  totalFlatsCount = 0;
+  loadingTotalFlatsCount = false;
 
   @ViewChild('flatTemplate') flatTemplate!: TemplateRef<any>;
   currentDialogRef: MatDialogRef<any> | null = null;
@@ -247,7 +249,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
   }
 
   get pendingFlatsToAdd(): number {
-    return (this.society?.numberOfFlats ?? 0) - this.flats.length;
+    return (this.society?.numberOfFlats ?? 0) - this.totalFlatsCount;
   }
 
   get pendingBuildingType(): UILabelValueType {
@@ -277,6 +279,8 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
 
     if (this.societyId) {
       this.loadSociety(this.societyId);
+
+      this.loadTotalFlatsCount(this.societyId);
 
       if (this.buildingId) {
         this.loadBuilding(this.societyId, this.buildingId);
@@ -351,6 +355,21 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
         },
         error: err => {
           this.loadingFlats = false;
+        }
+      })
+  }
+
+  loadTotalFlatsCount(societyId: string) {
+    this.loadingTotalFlatsCount = true;
+    this.societyService.getFlatsCount(societyId)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          this.totalFlatsCount = response.data ?? 0;
+          this.loadingTotalFlatsCount = false;
+        },
+        error: err => {
+          this.loadingTotalFlatsCount = false;
         }
       })
   }
@@ -509,6 +528,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
           const societyId = formValue.society?._id ?? '';
           const buildingId = formValue.building ?? undefined;
           this.loadFlats(societyId, buildingId);
+          this.loadTotalFlatsCount(societyId);
           this.fb.get('autogenerateForm')?.reset();
           this.fb.get('addFlats')?.reset();
           this.closeDialog();
@@ -535,6 +555,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
         next: (value) => {
           const buildingId = typeof flat.buildingId === 'string' ? flat.buildingId : flat.buildingId?._id;
           this.loadFlats(this.societyId ?? '', buildingId ?? undefined);
+          this.loadTotalFlatsCount(this.societyId ?? '');
         },
       })
   }

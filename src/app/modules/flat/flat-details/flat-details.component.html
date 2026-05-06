@@ -173,7 +173,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Chat Quick Access -->
         <div class="chat-quick-access" *ngIf="getflat()">
             <button class="chat-goto-btn" (click)="gotoChat()">
@@ -445,7 +445,7 @@
                                     </span>
                                 </h3>
                             </div>
-                            <button class="manage-btn" (click)="manageTenants()" [disabled]="!loadingTenants"
+                            <button class="manage-btn" (click)="manageTenants()" [disabled]="loadingTenants"
                                 *ngIf="canManageFlat">
                                 Manage
                                 <app-icon name="goto" size="md"></app-icon>
@@ -728,7 +728,8 @@
         </div>
 
         <!-- Tenant Documents Section (Owner View) -->
-        <div class="section-card" *ngIf="flatMember?.isOwner && isTenantResiding" [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingDocuments">
+        <div class="section-card" *ngIf="flatMember?.isOwner && isTenantResiding"
+            [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingDocuments">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -741,12 +742,13 @@
                     </svg>
                     <h3 class="section-title">Tenant Documents</h3>
                 </div>
-                <button class="manage-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat" [disabled]="!tenantManagementFeatureAvailable">
+                <button class="manage-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat"
+                    [disabled]="!tenantManagementFeatureAvailable">
                     Manage
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
             </div>
-            
+
             <ng-container *ngIf="!loadingDocuments; else loadingDocs">
                 <ng-container *ngIf="tenantManagementFeatureAvailable; else docsNotAvailable">
                     <div class="documents-stats">
@@ -754,7 +756,8 @@
                             <div class="stat-info">
                                 <span class="tenant-name">{{ stat.tenantName }}</span>
                                 <div class="stat-badges">
-                                    <span class="badge submitted" *ngIf="stat.submittedCount > 0">{{ stat.submittedCount }}
+                                    <span class="badge submitted" *ngIf="stat.submittedCount > 0">{{ stat.submittedCount
+                                        }}
                                         Submitted</span>
                                     <span class="badge pending" *ngIf="stat.pendingApprovalCount > 0">{{
                                         stat.pendingApprovalCount }} Pending</span>
@@ -768,8 +771,10 @@
                     </div>
 
                     <!-- Shared List View for Owner -->
-                    <div class="tenant-documents-list" *ngIf="tenantDocuments.length > 0" style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-                        <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-secondary);">Recent Uploads</h4>
+                    <div class="tenant-documents-list" *ngIf="tenantDocuments.length > 0"
+                        style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-secondary);">Recent Uploads
+                        </h4>
                         <!-- Mobile Carousel View -->
                         <div class="mobile-carousel" *ngIf="isMobile">
                             <div class="carousel-track">
@@ -777,7 +782,8 @@
                                     <div class="doc-preview" (click)="viewDocument(doc)">
                                         <img [src]="doc.documentUrl"
                                             *ngIf="doc.documentType && doc.documentType.startsWith('image')" />
-                                        <div class="pdf-placeholder" *ngIf="doc.documentType === 'pdf' || (doc.documentType && !doc.documentType.startsWith('image'))">
+                                        <div class="pdf-placeholder"
+                                            *ngIf="doc.documentType === 'pdf' || (doc.documentType && !doc.documentType.startsWith('image'))">
                                             <app-icon name="document" size="lg"></app-icon>
                                         </div>
                                     </div>
@@ -798,10 +804,21 @@
                                 </div>
                                 <div class="doc-actions">
                                     <button class="icon-btn" (click)="viewDocument(doc)" title="View">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
                                     </button>
                                     <button class="icon-btn" (click)="downloadDocument(doc)" title="Download">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -815,9 +832,8 @@
         <ng-template #docsNotAvailable>
             <div class="unavailable-content">
                 <div class="locked-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
                         <path d="m6 6 12 12" />
                     </svg>
@@ -838,7 +854,8 @@
         </ng-template>
 
         <!-- Tenant Documents Section (Tenant View) -->
-        <div class="section-card" *ngIf="flatMember?.isTenant" [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingDocuments">
+        <div class="section-card" *ngIf="flatMember?.isTenant"
+            [class.feature-unavailable]="!tenantManagementFeatureAvailable && !loadingDocuments">
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -851,12 +868,13 @@
                     </svg>
                     <h3 class="section-title">Your Documents</h3>
                 </div>
-                <button class="manage-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat" [disabled]="!tenantManagementFeatureAvailable">
+                <button class="manage-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat"
+                    [disabled]="!tenantManagementFeatureAvailable">
                     Manage
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
             </div>
-            
+
             <ng-container *ngIf="!loadingDocuments; else loadingDocs">
                 <ng-container *ngIf="tenantManagementFeatureAvailable; else docsNotAvailable">
                     <div class="tenant-documents-list">
@@ -867,11 +885,13 @@
                                     <div class="doc-preview" (click)="viewDocument(doc)">
                                         <img [src]="doc.documentUrl"
                                             *ngIf="doc.documentType && doc.documentType.startsWith('image')" />
-                                        <div class="pdf-placeholder" *ngIf="doc.documentType === 'pdf' || (doc.documentType && !doc.documentType.startsWith('image'))">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <div class="pdf-placeholder"
+                                            *ngIf="doc.documentType === 'pdf' || (doc.documentType && !doc.documentType.startsWith('image'))">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+                                                </path>
                                                 <polyline points="14 2 14 8 20 8"></polyline>
                                                 <path d="M9 15h3a2 2 0 0 1 0 4h-3V15z"></path>
                                             </svg>
@@ -896,17 +916,17 @@
                                     <button class="icon-btn" (click)="viewDocument(doc)"
                                         *ngIf="doc.documentType && (doc.documentType.startsWith('image') || doc.documentType === 'pdf')"
                                         title="View">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
                                     </button>
                                     <button class="icon-btn" (click)="downloadDocument(doc)" title="Download">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                             <polyline points="7 10 12 15 17 10"></polyline>
                                             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -914,9 +934,9 @@
                                     </button>
                                     <button class="icon-btn delete" (click)="deleteDocument(doc)" title="Delete"
                                         *ngIf="doc.status === 'pending' || doc.status === 'rejected'">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="3 6 5 6 21 6"></polyline>
                                             <path
                                                 d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
@@ -931,7 +951,8 @@
 
                         <div class="empty-state" *ngIf="tenantDocuments.length === 0">
                             <p>No documents uploaded yet.</p>
-                            <button class="upload-prompt-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat">Upload
+                            <button class="upload-prompt-btn" (click)="manageTenantDocuments()"
+                                *ngIf="canManageFlat">Upload
                                 Document</button>
                         </div>
                     </div>
@@ -975,7 +996,8 @@
                                 <div class="rejection-card">
                                     <div class="rejection-header">
                                         <div class="status-badge-maintenance rejected">Rejected</div>
-                                        <span class="payment-amount">{{ currentMonthPayment.amount | formattedPrice }}</span>
+                                        <span class="payment-amount">{{ currentMonthPayment.amount | formattedPrice
+                                            }}</span>
                                     </div>
                                     <div class="rejection-reason-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -1058,11 +1080,13 @@
                         <div class="rent-summary" style="display: flex; gap: 16px; flex-wrap: wrap;">
                             <div class="summary-stat">
                                 <span class="stat-label">Collected</span>
-                                <span class="stat-value success">{{ rentMonthlyReport.summary.totalCollected | formattedPrice }}</span>
+                                <span class="stat-value success">{{ rentMonthlyReport.summary.totalCollected |
+                                    formattedPrice }}</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Pending</span>
-                                <span class="stat-value warning">{{ rentMonthlyReport.summary.pendingAmount | formattedPrice }}</span>
+                                <span class="stat-value warning">{{ rentMonthlyReport.summary.pendingAmount |
+                                    formattedPrice }}</span>
                             </div>
                             <div class="summary-stat">
                                 <span class="stat-label">Paid</span>
@@ -1093,7 +1117,8 @@
                                         [class.pending]="currentRentMonthPayment.status === 'pending_approval'">
                                         {{ rentService.getStatusDisplayText(currentRentMonthPayment.status) }}
                                     </div>
-                                    <span class="payment-amount">{{ currentRentMonthPayment.amount | formattedPrice }}</span>
+                                    <span class="payment-amount">{{ currentRentMonthPayment.amount | formattedPrice
+                                        }}</span>
                                     <span class="payment-date" *ngIf="currentRentMonthPayment.paidOn">
                                         {{ currentRentMonthPayment.paidOn | date:'mediumDate' }}
                                     </span>
@@ -1107,7 +1132,8 @@
                                     <div class="rejection-card">
                                         <div class="rejection-header">
                                             <div class="status-badge-maintenance rejected">Rejected</div>
-                                            <span class="payment-amount">{{ currentRentMonthPayment.amount | formattedPrice }}</span>
+                                            <span class="payment-amount">{{ currentRentMonthPayment.amount |
+                                                formattedPrice }}</span>
                                         </div>
                                         <div class="rejection-reason-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -1173,7 +1199,8 @@
         </div>
 
         <!-- Locked Maintenance -->
-        <div class="section-card" [class.feature-unavailable]="!maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance" 
+        <div class="section-card"
+            [class.feature-unavailable]="!maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance"
             *ngIf="canManageFlat && !maintenanceFeatureAvailable && !loadingPlan && !loadingMaintenance">
             <div class="section-header">
                 <div class="section-title-wrapper">
@@ -1183,9 +1210,8 @@
             </div>
             <div class="unavailable-content">
                 <div class="locked-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
                         <path d="m6 6 12 12" />
                     </svg>
@@ -1200,7 +1226,8 @@
         </div>
 
         <!-- Locked Rent -->
-        <div class="section-card" [class.feature-unavailable]="!rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding"
+        <div class="section-card"
+            [class.feature-unavailable]="!rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding"
             *ngIf="canManageFlat && !rentFeatureAvailable && !loadingPlan && !loadingRent && isTenantResiding">
             <div class="section-header">
                 <div class="section-title-wrapper">
@@ -1210,9 +1237,8 @@
             </div>
             <div class="unavailable-content">
                 <div class="locked-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
                         <path d="m6 6 12 12" />
                     </svg>
@@ -1249,8 +1275,8 @@
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="rentAmount"
-                [config]="{id: 'rentAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
+                [config]="{id: 'rentAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
             <ui-date [formControl]="rentDate" [config]="{id: 'rentDate', label: 'Payment Date'}" [smColumns]="12"
@@ -1310,8 +1336,8 @@
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="maintenanceAmount"
-                [config]="{id: 'maintenanceAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}" [smColumns]="12"
-                [mdColumns]="6" [lgColumns]="6">
+                [config]="{id: 'maintenanceAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}"
+                [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
             <ui-date [formControl]="maintenanceDate" [config]="{id: 'maintenanceDate', label: 'Payment Date'}"

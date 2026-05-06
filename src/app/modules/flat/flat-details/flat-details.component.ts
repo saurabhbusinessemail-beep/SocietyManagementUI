@@ -781,57 +781,35 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   }
 
   manageResidents() {
-    if (!this.canManageFlat) return;
-    const societyId = this.currentSocietyId;
-    const flatId = this.currentFlatId;
-    if (societyId && flatId) {
-      this.router.navigate(['/myflats', societyId, flatId, 'members']);
-    }
+    if (!this.membersFeatureAvailable || !this.flatId) return;
+    this.router.navigate(['members', this.flatId, 'list']);
   }
 
   manageVehicles() {
-    if (!this.canManageFlat) return;
-    const societyId = this.currentSocietyId;
-    const flatId = this.currentFlatId;
-    if (societyId && flatId) {
-      this.router.navigate(['/myflats', societyId, flatId, 'vehicles']);
-    }
+    if (!this.vehiclesFeatureAvailable || !this.flatMember || !this.flatId) return;
+    this.router.navigate(['vehicles', this.flatId, 'list']);
   }
 
   manageComplaints() {
-    if (!this.canManageFlat) return;
-    const societyId = this.currentSocietyId;
-    const flatId = this.currentFlatId;
-    if (societyId && flatId) {
-      this.router.navigate(['/myflats', societyId, flatId, 'complaints']);
-    }
+    if (!this.complaintsFeatureAvailable || !this.flatId) return;
+    this.router.navigate(['complaints', this.flatId, 'list']);
   }
 
   manageGateEntries() {
-    if (!this.canManageFlat) return;
-    const societyId = this.currentSocietyId;
-    const flatId = this.currentFlatId;
-    if (societyId && flatId) {
-      this.router.navigate(['/myflats', societyId, flatId, 'gateEntries']);
-    }
+    if (!this.gateEntriesFeatureAvailable || !this.flatId) return;
+    this.router.navigate(['visitors', this.flatId, 'list']);
   }
 
   manageGatePasses() {
-    if (!this.canManageFlat) return;
-    const societyId = this.currentSocietyId;
-    const flatId = this.currentFlatId;
-    if (societyId && flatId) {
-      this.router.navigate(['/myflats', societyId, flatId, 'gatePasses']);
-    }
+    if (!this.gatePassesFeatureAvailable || !this.flatId) return;
+    this.router.navigate(['gatepass', this.flatId, 'list']);
   }
 
   manageTenants() {
-    if (!this.canManageFlat) return;
-    const societyId = this.currentSocietyId;
-    const flatId = this.currentFlatId;
-    if (societyId && flatId) {
-      this.router.navigate(['/myflats', societyId, flatId, 'tenants']);
-    }
+    console.log('tenantManagementFeatureAvailable ', this.tenantManagementFeatureAvailable);
+    console.log('flatId ', this.flatId);
+    if (!this.tenantManagementFeatureAvailable || !this.flatId) return;
+    this.router.navigate(['tenants', this.flatId, 'list']);
   }
 
   gotoPlanUpgrade() {
