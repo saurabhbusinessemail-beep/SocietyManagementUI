@@ -24,7 +24,7 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.menuService.filteredMenus
       .pipe(takeUntil(this.isComponentActive))
       .subscribe(filteredMenus => {
-        this.topTwoMenus = filteredMenus.slice(0, 3);
+        this.topTwoMenus = filteredMenus.slice(0, 4);
       })
   }
 
