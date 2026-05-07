@@ -195,8 +195,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
   get ownerName(): string {
     const ownerUserId = this.owner?.userId;
-    if (ownerUserId && typeof ownerUserId === 'object' && (ownerUserId as any).name) {
-      return (ownerUserId as any).name;
+    if (ownerUserId && typeof ownerUserId === 'object' && 'name' in ownerUserId && ownerUserId.name) {
+      return ownerUserId.name;
     }
     return this.owner?.name || 'N/A';
   }
@@ -258,8 +258,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   getDisplayName(member?: IFlatMember): string {
     if (!member) return '—';
     const userId = member.userId;
-    if (userId && typeof userId === 'object' && (userId as any).name) {
-      return (userId as any).name;
+    if (userId && typeof userId === 'object' && 'name' in userId && userId.name) {
+      return userId.name;
     }
     return member.name || '—';
   }
@@ -898,7 +898,7 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
   get currentRentMonthPayment(): IRentPayment | undefined {
     const now = new Date();
     const monthPayments = this.rentPayments.filter(p => {
-      const memberId = typeof p.flatMemberId === 'string' ? p.flatMemberId : (p.flatMemberId as any)?._id;
+      const memberId = typeof p.flatMemberId === 'string' ? p.flatMemberId : p.flatMemberId._id;
       return p.month === (now.getMonth() + 1) &&
         p.year === now.getFullYear() &&
         memberId === this.flatMember?._id;

@@ -48,12 +48,12 @@ export class SocietyCardComponent {
    * Supports common property names: name, fullName, firstName+lastName, email.
    */
   private getUserName(user: IUser): string {
-    if ('name' in user) return (user as any).name;
-    if ('fullName' in user) return (user as any).fullName;
+    if ('name' in user && user.name) return user.name;
+    if ('fullName' in user && (user as any).fullName) return (user as any).fullName;
     if ('firstName' in user && 'lastName' in user) {
       return `${(user as any).firstName} ${(user as any).lastName}`;
     }
-    if ('email' in user) return (user as any).email;
+    if ('email' in user && user.email) return user.email;
     return 'Unknown User';
   }
 
@@ -66,8 +66,8 @@ export class SocietyCardComponent {
     // Handle string directly
     if (typeof loc === 'string') return loc;
     // Common UILocationResult properties
-    if ('formattedAddress' in loc) return (loc as any).formattedAddress;
-    if ('address' in loc) return (loc as any).address;
+    if ('formattedAddress' in loc && (loc as any).formattedAddress) return (loc as any).formattedAddress;
+    if ('address' in loc && loc.address) return loc.address;
     // Fallback: JSON representation
     return JSON.stringify(loc);
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IComplaintStats, ICurrentPlanResponse, IFlat, IParking, IPricingFeature, ISociety, IUser } from '../../../interfaces';
+import { IComplaintStats, ICurrentPlanResponse, IFlat, IParking, IPricingFeature, ISociety, IUIDropdownOption, IUser } from '../../../interfaces';
 import { FEATURES, PERMISSIONS } from '../../../constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
@@ -401,7 +401,7 @@ export class SocietyDetailsComponent implements OnInit {
   }
 
   gotoChat() {
-    this.societyService.selectSocietyFilter({ label: this.society?.societyName || '', value: this.society?._id || '' } as any);
+    this.societyService.selectSocietyFilter({ label: this.society?.societyName || '', value: this.society?._id || '' } as IUIDropdownOption);
     this.router.navigate(['/chat/list'], { queryParams: { societyId: this.society?._id } });
   }
 

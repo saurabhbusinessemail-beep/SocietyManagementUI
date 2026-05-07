@@ -509,7 +509,7 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
           });
         })
         return arrFlats;
-      }, [] as any[]);
+      }, [] as Partial<IFlat>[]);
 
       const existingFlats = this.findExistingFlat(flats);
       if (existingFlats) {

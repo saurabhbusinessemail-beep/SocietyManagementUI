@@ -83,8 +83,8 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     const filter: any = { flatId: this.flatId };
-    const statusValue = this.statusControl.value as any;
-    const status = typeof statusValue === 'object' ? statusValue?.value : statusValue;
+    const statusValue = this.statusControl.value;
+    const status = (statusValue && typeof statusValue === 'object') ? statusValue.value : statusValue;
 
     if (status && status !== 'all') {
       filter.status = status;
@@ -107,7 +107,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
     const groups: { [key: string]: { tenantName: string, tenantId: string, documents: ITenantDocument[] } } = {};
     
     this.documents.forEach(doc => {
-      const tenant = doc.tenantId as any;
+      const tenant = doc.tenantId;
       const tenantId = typeof tenant === 'string' ? tenant : tenant._id;
       const tenantName = typeof tenant === 'string' ? 'Tenant' : (tenant.name || tenant.email || 'Tenant');
       
