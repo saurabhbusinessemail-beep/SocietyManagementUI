@@ -23,6 +23,8 @@ export class SecurityComponent implements OnInit, OnDestroy {
   isComponentActive = new Subject<void>();
   pendingApprovals: IGateEntry[] = [];
   pendingExits: IGateEntry[] = [];
+  loadingApprovals = false;
+  loadingExits = false;
   openedGateEntryId?: string;
 
   societyConfig: IUIControlConfig = {
@@ -234,10 +236,12 @@ export class SecurityComponent implements OnInit, OnDestroy {
 
   loadPendingApprovals(openGateEntryId?: string) {
     const societyId = this.entryForm.get('society')?.value?.value;
+    this.loadingApprovals = true;
     this.gateEntryService.getApprovalPendingGateEntries(societyId)
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.loadingApprovals = false;
           if (!response.success) return;
 
           this.pendingApprovals = response.data;
@@ -245,18 +249,26 @@ export class SecurityComponent implements OnInit, OnDestroy {
             const gateEntry = this.pendingApprovals.find(ge => ge._id === openGateEntryId);
             if (gateEntry) this.openGateEntryDetails(gateEntry)
           }
+        },
+        error: () => {
+          this.loadingApprovals = false;
         }
       });
   }
 
   loadPendingExists() {
+    this.loadingExits = true;
     this.gateEntryService.getExitPendingGateEntries(undefined, undefined, 'approved')
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.loadingExits = false;
           if (!response.success) return;
 
           this.pendingExits = response.data;
+        },
+        error: () => {
+          this.loadingExits = false;
         }
       });
   }

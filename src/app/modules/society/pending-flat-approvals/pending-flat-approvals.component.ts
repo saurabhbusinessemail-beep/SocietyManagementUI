@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { Subject, debounceTime, merge, of, switchMap, takeUntil, tap } from 'rxjs';
 import { IApprovalRequest, IApprovalQueryParams, IPagedResponse } from '../../../interfaces';
 import { ApprovalService } from '../../../services/approval.service';
 
@@ -27,29 +27,38 @@ export class PendingFlatApprovalsComponent implements OnInit, OnDestroy {
   statusControl = new FormControl<string>('pending');
   viewFilterControl = new FormControl<'all' | 'my' | 'approval'>('all');
 
-  private destroy$ = new Subject<void>();
+  isComponentActive = new Subject<void>();
+  private refreshSubject = new Subject<void>();
+  loading = false;
   expandedRow: number | null = null;
   Math = Math;
 
   constructor(private approvalService: ApprovalService) { }
 
   ngOnInit(): void {
-    this.searchControl.valueChanges
-      .pipe(debounceTime(500), takeUntil(this.destroy$))
-      .subscribe(() => this.loadRequests());
-
-    this.statusControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.loadRequests());
-
-    this.viewFilterControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.loadRequests());
-
-    this.loadRequests();
+    merge(
+      this.searchControl.valueChanges.pipe(debounceTime(500)),
+      this.statusControl.valueChanges,
+      this.viewFilterControl.valueChanges,
+      this.refreshSubject,
+      of(null)
+    ).pipe(
+      takeUntil(this.isComponentActive),
+      tap(() => this.loading = true),
+      switchMap(() => this.getRequestsApiCall())
+    ).subscribe({
+      next: (res) => {
+        this.handleRequestsResponse(res);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+      }
+    });
   }
 
-  loadRequests(): void {
+  private getRequestsApiCall() {
     const params: IApprovalQueryParams = {
       page: this.page,
       limit: this.limit,
@@ -58,36 +67,38 @@ export class PendingFlatApprovalsComponent implements OnInit, OnDestroy {
       search: this.searchControl.value || undefined,
       sortBy: 'createdAt:desc'
     };
+    return this.approvalService.getAllMyRequests(params, params);
+  }
 
-    this.approvalService.getAllMyRequests(params, params).subscribe({
-      next: (res) => {
-        let myRequests = (res.myRequests.data || []).map(r => ({
-          ...r,
-          viewType: 'my' as const
-        }));
+  private handleRequestsResponse(res: any) {
+    let myRequests = (res.myRequests.data || []).map((r: any) => ({
+      ...r,
+      viewType: 'my' as const
+    }));
 
-        let approvalRequests = (res.toApprove.data || []).map(r => ({
-          ...r,
-          viewType: 'approval' as const
-        }));
+    let approvalRequests = (res.toApprove.data || []).map((r: any) => ({
+      ...r,
+      viewType: 'approval' as const
+    }));
 
-        // ✅ Apply filter
-        const filter = this.viewFilterControl.value;
+    // ✅ Apply filter
+    const filter = this.viewFilterControl.value;
 
-        if (filter === 'my') {
-          this.requests = myRequests;
-        } else if (filter === 'approval') {
-          this.requests = approvalRequests;
-        } else {
-          // ✅ My first, then approvals
-          this.requests = [...myRequests, ...approvalRequests];
-        }
+    if (filter === 'my') {
+      this.requests = myRequests;
+    } else if (filter === 'approval') {
+      this.requests = approvalRequests;
+    } else {
+      // ✅ My first, then approvals
+      this.requests = [...myRequests, ...approvalRequests];
+    }
 
-        // Optional: total (approx)
-        this.total = res.myRequests.total + res.toApprove.total;
-      },
-      error: (err) => console.error(err)
-    });
+    // Optional: total (approx)
+    this.total = res.myRequests.total + res.toApprove.total;
+  }
+
+  loadRequests(): void {
+    this.refreshSubject.next();
   }
 
   nextPage(): void {
@@ -121,7 +132,7 @@ export class PendingFlatApprovalsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.isComponentActive.next();
+    this.isComponentActive.complete();
   }
 }

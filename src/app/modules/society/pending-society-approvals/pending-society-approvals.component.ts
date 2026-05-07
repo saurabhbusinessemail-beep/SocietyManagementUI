@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IMyProfile, IPagedResponse, ISociety } from '../../../interfaces';
 import { SocietyService } from '../../../services/society.service';
 import { FormControl } from '@angular/forms';
-import { debounceTime, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { debounceTime, merge, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 
@@ -23,6 +23,8 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
   searchControl = new FormControl<string>('');
   statusControl = new FormControl<string>('pending');
   isComponentActive = new Subject<void>();
+  private refreshSubject = new Subject<void>();
+  loading = false;
 
   expandedRow: number | null = null;
 
@@ -31,12 +33,11 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
   }
 
   get totalPages() {
-    return Math.ceil(this.societies.length / this.limit);
+    return Math.ceil(this.total / this.limit);
   }
 
   get paginatedSocieties() {
-    const start = (this.page - 1) * this.limit;
-    return this.societies.slice(start, start + this.limit);
+    return this.societies;
   }
 
   constructor(private societyService: SocietyService, private loginService: LoginService, private router: Router) { }
@@ -44,24 +45,25 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.myProfile = this.loginService.getProfileFromStorage();
 
-    this.searchControl.valueChanges
-      .pipe(
-        takeUntil(this.isComponentActive),
-        debounceTime(500),
-        switchMap(() => this.getUnApprovedSocietyApiCall())
-      )
-      .subscribe(res => this.handleUnApprovedSocietyResponse(res));
-
-    
-    this.statusControl.valueChanges
-      .pipe(
-        takeUntil(this.isComponentActive),
-        switchMap(() => this.getUnApprovedSocietyApiCall())
-      )
-      .subscribe(res => this.handleUnApprovedSocietyResponse(res));
-
-    
-    this.loadUnApprovedSocieties()
+    merge(
+      this.searchControl.valueChanges.pipe(debounceTime(500)),
+      this.statusControl.valueChanges,
+      this.refreshSubject,
+      of(null)
+    ).pipe(
+      takeUntil(this.isComponentActive),
+      tap(() => this.loading = true),
+      switchMap(() => this.getUnApprovedSocietyApiCall()),
+    ).subscribe({
+      next: res => {
+        this.handleUnApprovedSocietyResponse(res);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error loading societies:', err);
+        this.loading = false;
+      }
+    });
   }
 
   getUnApprovedSocietyApiCall() {
@@ -72,12 +74,7 @@ export class PendingSocietyApprovalsComponent implements OnInit, OnDestroy {
   }
 
   loadUnApprovedSocieties() {
-
-    this.getUnApprovedSocietyApiCall()
-      .subscribe({
-        next: res => this.handleUnApprovedSocietyResponse(res)
-      });
-
+    this.refreshSubject.next();
   }
 
   handleUnApprovedSocietyResponse(res: IPagedResponse<ISociety>) {

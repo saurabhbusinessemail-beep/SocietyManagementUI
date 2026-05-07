@@ -10,6 +10,7 @@ export class EmptyRecordsComponent {
   @Input() singular = 'society';
   @Input() plural = 'societies';
   @Input() overrideTitle?: string;
+  @Input() overrideMessage?: string;
   @Input() hideAddButton = false;
   @Input() hideMessage = false;
   @Input() addRouterLink?: string;
@@ -28,7 +29,7 @@ export class EmptyRecordsComponent {
   }
 
   get message() {
-    return `You haven't added any ${this.singular} yet. Get started by adding your first ${this.singular}.`
+    return this.overrideMessage ?? `You haven't added any ${this.singular} yet. Get started by adding your first ${this.singular}.`
   }
 
   get buttonText() {

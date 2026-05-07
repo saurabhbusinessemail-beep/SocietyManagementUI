@@ -23,6 +23,18 @@ export class PushNotificationService {
         private gateEntryService: GateEntryService,
         private loginService: LoginService
     ) {
+        // Register the action listener immediately (synchronously) so it is ready
+        // before any async calls run. This is critical for cold-start: Capacitor
+        // queues the tap event and replays it to the first listener that registers.
+        if (Capacitor.isNativePlatform()) {
+            PushNotifications.addListener('pushNotificationActionPerformed',
+                (action: ActionPerformed) => {
+                    console.log('Push action performed (cold-start safe):', action);
+                    this.handleNotification(action.notification, false);
+                }
+            );
+        }
+
         // Check for launch notification when app starts
         this.checkLaunchNotification();
     }
@@ -73,13 +85,8 @@ export class PushNotificationService {
             }
         );
 
-        // Handle notification clicks when app is BACKGROUND or CLOSED
-        PushNotifications.addListener('pushNotificationActionPerformed',
-            (action: ActionPerformed) => {
-                console.log('Push action performed:', action);
-                this.handleNotification(action.notification, false);
-            }
-        );
+        // Note: pushNotificationActionPerformed is registered in the constructor
+        // to ensure it catches cold-start events before any async calls delay it.
     }
 
     private async checkLaunchNotification() {
