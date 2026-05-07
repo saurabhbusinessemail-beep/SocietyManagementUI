@@ -31,9 +31,14 @@
                         </ui-select2>
 
                         <!-- Flat -->
-                        <ui-select2 formControlName="flat" [config]="flatConfig" [options]="flatOptions" placeholder=""
-                            [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-                        </ui-select2>
+                        <div class="control-container" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+                            <ui-select2 formControlName="flat" [config]="flatConfig" [options]="flatOptions"
+                                placeholder="">
+                            </ui-select2>
+                            <div class="loading-spinner-overlay" *ngIf="isLoadingFlats">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
                         <div class="no-mobile no-tablet" [lgColumns]="2"></div>
 
 

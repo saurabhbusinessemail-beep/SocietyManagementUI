@@ -25,6 +25,7 @@ export class SecurityComponent implements OnInit, OnDestroy {
   pendingExits: IGateEntry[] = [];
   loadingApprovals = false;
   loadingExits = false;
+  isLoadingFlats = false;
   openedGateEntryId?: string;
 
   societyConfig: IUIControlConfig = {
@@ -221,15 +222,21 @@ export class SecurityComponent implements OnInit, OnDestroy {
   }
 
   loadSocietyFlats(societyId: string, populate = true) {
-
+    this.isLoadingFlats = true;
     this.societyService.getFlats(societyId)
       .pipe(take(1))
-      .subscribe(response => {
-        if (!response.success) {
-          return;
-        }
+      .subscribe({
+        next: response => {
+          this.isLoadingFlats = false;
+          if (!response.success) {
+            return;
+          }
 
-        this.flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.entryForm.get('society')?.value?.value));
+          this.flatOptions = response.data.map(flat => this.societyService.convertFlatToDropdownOption(flat, this.entryForm.get('society')?.value?.value));
+        },
+        error: () => {
+          this.isLoadingFlats = false;
+        }
       });
 
   }

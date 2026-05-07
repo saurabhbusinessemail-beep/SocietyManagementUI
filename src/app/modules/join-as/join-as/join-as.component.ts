@@ -23,6 +23,8 @@ export class JoinAsComponent implements OnInit, OnDestroy {
 
   role: string = '';
   isSaving = false;
+  isLoadingBuildings = false;
+  isLoadingFlats = false;
 
   fb = new FormGroup({
     society: new FormControl<ISociety | null>(null, [Validators.required]),
@@ -267,15 +269,29 @@ export class JoinAsComponent implements OnInit, OnDestroy {
   }
 
   private loadSocietyBuildings(societyId: string): void {
+    this.isLoadingBuildings = true;
     this.societyService.getBuildings(societyId)
       .pipe(take(1))
-      .subscribe({ next: response => this.buildings = response.data });
+      .subscribe({
+        next: response => {
+          this.buildings = response.data;
+          this.isLoadingBuildings = false;
+        },
+        error: () => this.isLoadingBuildings = false
+      });
   }
 
   private loadFlats(societyId: string, buildingId?: string): void {
+    this.isLoadingFlats = true;
     this.societyService.getFlats(societyId, buildingId)
       .pipe(take(1))
-      .subscribe({ next: response => this.flats = response.data });
+      .subscribe({
+        next: response => {
+          this.flats = response.data;
+          this.isLoadingFlats = false;
+        },
+        error: () => this.isLoadingFlats = false
+      });
   }
 
   cancel(): void {

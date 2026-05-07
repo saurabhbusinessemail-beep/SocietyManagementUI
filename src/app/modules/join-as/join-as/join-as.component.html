@@ -17,14 +17,23 @@
                 <!-- Buildings & Flats -->
                 <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12" *ngIf="!isSecurity">
                     <div class="no-mobile no-tablet" [lgColumns]="3"></div>
-                    <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
-                        [options]="buildingOptions" placeholder="Select Building" [smColumns]="12" [mdColumns]="6"
-                        [lgColumns]="3">
-                    </ui-drop-down>
+                    <div class="control-container" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                        <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
+                            [options]="buildingOptions" placeholder="Select Building">
+                        </ui-drop-down>
+                        <div class="loading-spinner-overlay" *ngIf="isLoadingBuildings">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
 
-                    <ui-drop-down formControlName="flatId" [config]="flatIdConfig" [options]="parkingFlatOptions"
-                        placeholder="Select Flat" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
-                    </ui-drop-down>
+                    <div class="control-container" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                        <ui-drop-down formControlName="flatId" [config]="flatIdConfig" [options]="parkingFlatOptions"
+                            placeholder="Select Flat">
+                        </ui-drop-down>
+                        <div class="loading-spinner-overlay" *ngIf="isLoadingFlats">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
                     <div class="no-mobile no-tablet" [lgColumns]="3"></div>
                 </section>
 
