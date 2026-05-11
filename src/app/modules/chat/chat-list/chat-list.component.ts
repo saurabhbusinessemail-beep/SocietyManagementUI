@@ -250,17 +250,19 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
         // Sort group rooms by type priority
         const typePriority: Record<string, number> = {
-            'society_all': 1,
-            'society_managers_owners_tenants': 2,
-            'society_owners_tenants': 3,
-            'society_owners': 4,
-            'society_owners_managers': 5,
-            'building_all': 6,
-            'building_owners_admins': 7,
-            'flat_owner_members': 8,
-            'flat_owner_tenants': 9,
-            'flat_tenants': 10,
-            'society_security': 11
+            'society_all': 6,
+            'society_managers_owners_tenants': 7,
+            'society_owners_tenants': 8,
+            'society_owners': 9,
+            'society_owners_managers': 10,
+            'society_security': 11,
+
+            'building_all': 4,
+            'building_owners_admins': 5,
+
+            'flat_owner_members': 1,
+            'flat_owner_tenants': 2,
+            'flat_tenants': 3,
         };
 
         groupRooms.sort((a, b) => {
