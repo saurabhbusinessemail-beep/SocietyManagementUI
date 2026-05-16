@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiModule } from '../../core/ui/ui.module';
 import { UserMenuPageComponent } from './user-menu-page/user-menu-page.component';
 import { IconModule } from '../../core/icons/icon.module';
+import { TourModule } from '../../core/tour/tour.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { IconModule } from '../../core/icons/icon.module';
     FormsModule,
     ReactiveFormsModule,
     UiModule,
-    IconModule
+    IconModule,
+    TourModule
   ]
 })
 export class UserModule { }

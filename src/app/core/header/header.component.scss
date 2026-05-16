@@ -113,6 +113,53 @@
         }
     }
 
+    .header-tour-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        transition: all 0.2s ease;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        .no-mobile {
+            display: inline;
+        }
+
+        @include mobile {
+            padding: 8px;
+            border-radius: 50%;
+
+            .no-mobile {
+                display: none;
+            }
+            svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+
     .menu-icon {
         width: auto;
         height: 65px;

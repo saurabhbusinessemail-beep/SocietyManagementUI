@@ -31,6 +31,17 @@
             <button (click)="showApiCalls()" *ngIf="showDevButtons">APIs</button>
             <button (click)="showLogs()" *ngIf="showDevButtons">Logs</button>
             <button (click)="showStorage()" *ngIf="showDevButtons">Storage</button>
+            <ng-container *ngIf="tourService.tourAvailable$ | async">
+                <button
+                    *ngIf="!(tourService.state$ | async)?.isActive"
+                    class="header-tour-btn"
+                    (click)="tourService.triggerRetake()"
+                    title="Take the tour again"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span class="no-mobile">Take Tour</span>
+                </button>
+            </ng-container>
             <ui-user-icon [loggedInUserProfile]="loggedInUserProfile" *ngIf="loggedInUserProfile"
                 (needLogin)="needLogin.emit()">
             </ui-user-icon>

@@ -6,6 +6,7 @@ import { LocalStorageComponent } from '../storage/local-storage.component';
 import { WindowService } from '../../services/window.service';
 import { ApiTrackerComponent } from '../api-tracker/api-tracker.component';
 import { IMyProfile } from '../../interfaces';
+import { TourService } from '../tour/tour.service';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +33,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     public ccs: ConsoleCaptureService,
     private dialog: MatDialog,
-    public windowServic: WindowService
+    public windowServic: WindowService,
+    public tourService: TourService
   ) { }
 
   ngOnInit(): void {

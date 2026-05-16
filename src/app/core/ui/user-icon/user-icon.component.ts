@@ -92,7 +92,7 @@ export class UserIconComponent implements OnInit, OnDestroy {
   onDocClick(e: Event) {
     const target = e.target as HTMLElement;
     // close if clicked outside
-    if (!target.closest('.user-root')) { this.open = false; }
+    if (!target.closest('.user-root') && !target.closest('app-tour-overlay') && !target.closest('.cdk-overlay-container')) { this.open = false; }
   }
 
   logout() {

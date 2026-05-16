@@ -99,6 +99,7 @@ export class TourOverlayComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this._connectToService();
+    this.tourService.registerRetakeAction(() => this.retakeTour());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -259,21 +260,46 @@ export class TourOverlayComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _applyHighlight(step: TourStep): void {
-    const el = this._resolveElement(step.target);
+    let els: Element[] = [];
+    if (step.target) {
+      try {
+        if (step.targetAll) {
+          els = Array.from(document.querySelectorAll(step.target));
+        } else {
+          const el = document.querySelector(step.target);
+          if (el) els = [el];
+        }
+      } catch {}
+    }
+
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     this.svgViewBox = `0 0 ${vw} ${vh}`;
     const PAD = 10;
 
-    if (!el) {
+    if (els.length === 0) {
       this.spotlightRect = { x: vw / 2 - 1, y: vh / 2 - 1, width: 2, height: 2, rx: 1 };
       this.tooltipPositionClass = 'position-center';
       this.arrowPositionClass = 'arrow-none';
       this.tooltipStyle = {};
     } else {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      els[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       requestAnimationFrame(() => {
-        const rect = el.getBoundingClientRect();
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (const el of els) {
+          const r = el.getBoundingClientRect();
+          if (r.width === 0 && r.height === 0) continue;
+          if (r.left < minX) minX = r.left;
+          if (r.top < minY) minY = r.top;
+          if (r.right > maxX) maxX = r.right;
+          if (r.bottom > maxY) maxY = r.bottom;
+        }
+        if (minX === Infinity) {
+          minX = 0; minY = 0; maxX = 0; maxY = 0;
+        }
+
+        const rect = new DOMRect(minX, minY, maxX - minX, maxY - minY);
+        
         this.spotlightRect = {
           x: rect.left - PAD, y: rect.top - PAD,
           width: rect.width + PAD * 2, height: rect.height + PAD * 2, rx: 10
@@ -284,11 +310,6 @@ export class TourOverlayComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.cdr.markForCheck();
-  }
-
-  private _resolveElement(target: string): Element | null {
-    if (!target) return null;
-    try { return document.querySelector(target); } catch { return null; }
   }
 
   private _autoPosition(rect: DOMRect, vw: number, vh: number): TourStepPosition {
@@ -376,6 +397,18 @@ export class TourOverlayComponent implements OnInit, OnChanges, OnDestroy {
   // so we hook before that call.
   // Re-assign in template: (click)="onNextClick()"
   onNextClick(): void {
+    const currentStep = this.stepsArray[this.currentStepIndex];
+    if (currentStep?.stepId) {
+      this.tourService.markStepsSeen(this.tourConfig.tourKey, [currentStep.stepId]);
+    }
+
+    if (currentStep?.clickOnNext) {
+      const el = document.querySelector(currentStep.clickOnNext) as HTMLElement;
+      if (el) {
+        setTimeout(() => el.click(), 50);
+      }
+    }
+
     if (this.isLastStep) {
       this._onTourComplete();
     }
@@ -399,6 +432,7 @@ export class TourOverlayComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this._disconnect();
+    this.tourService.unregisterRetakeAction();
     if (this.isActive) this.tourService.endTour();
   }
 }

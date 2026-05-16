@@ -12,6 +12,7 @@ import { IDashboardApprovals } from '../../../interfaces';
 import { SocietyRoles } from '../../../types';
 import { USER_DASHBOARD_TOUR } from './user-dashboard.tour';
 import { TourConfig } from '../../../interfaces/tour.model';
+import { WindowService } from '../../../services/window.service';
 
 /**
  * All conditional step IDs – steps that depend on runtime data.
@@ -77,7 +78,8 @@ export class UserComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private dashboardService: DashboardService,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private windowService: WindowService
   ) { }
 
   ngOnInit(): void {
@@ -92,6 +94,17 @@ export class UserComponent implements OnInit, OnDestroy {
 
     this.loadSocieties();
     this.loadApprovals();
+
+    if (this.windowService.mode.value === 'mobile') {
+      this.tourExcludeStepIds.push(
+        'user-menu-info',
+        'user-menu-logout',
+        'menu-register-society',
+        'menu-request-demo',
+        'menu-profile-help',
+        'menu-themes'
+      );
+    }
   }
 
   loadApprovals() {

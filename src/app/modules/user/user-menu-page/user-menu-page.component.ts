@@ -7,10 +7,12 @@ import { MenuService } from '../../../services/menu.service';
 import { IconsService } from '../../../core/icons/icons.service';
 import { SocietyService } from '../../../services/society.service';
 import { ThemeService } from '../../../services/theme.service';
-import { Subscription, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Subscription, Subject, BehaviorSubject, combineLatest, timer } from 'rxjs';
+import { take, takeUntil, filter } from 'rxjs/operators';
 import { UserService } from '../../../services/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { USER_MENU_TOUR } from './user-menu-page.tour';
+
 
 @Component({
   selector: 'app-user-menu-page',
@@ -40,6 +42,10 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private subscription = new Subscription();
 
+  tourConfig = USER_MENU_TOUR;
+  tourReady$ = new Subject<void>();
+  tourExcludeStepIds: string[] = ['society-dropdown', 'menu-approvals', 'menu-dynamic-society-menus'];
+
   constructor(
     private loginService: LoginService,
     private router: Router,
@@ -60,6 +66,22 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
       })
     );
     this.loadProfilePicture();
+
+    // Wait for societies and pricing plan to load before triggering the tour
+    combineLatest([
+      timer(0, 200).pipe(filter(() => !this.isPricingPlanLoading), take(1)),
+      this.societyService.getAllSocieties()
+    ]).pipe(take(1)).subscribe(([_, societiesRes]) => {
+      if (societiesRes && societiesRes.data && societiesRes.data.length > 0) {
+        // Societies exist, remove them from the exclude list
+        this.tourExcludeStepIds = this.tourExcludeStepIds.filter(
+          id => !['society-dropdown', 'menu-approvals', 'menu-dynamic-society-menus'].includes(id)
+        );
+      }
+      setTimeout(() => {
+        this.tourReady$.next();
+      }, 400);
+    });
   }
 
   ngOnDestroy(): void {

@@ -14,6 +14,8 @@ export type TourStepPosition =
 export interface TourStep {
   /** CSS selector or element ID (prefixed with #) to spotlight */
   target: string;
+  /** If true, queries all matching elements and computes a bounding box encompassing all of them */
+  targetAll?: boolean;
   /** Tour step title */
   title: string;
   /** Tour step description */
@@ -23,8 +25,15 @@ export interface TourStep {
    * E.g. exclude the 'approvals-card' step when there are no approvals.
    */
   stepId?: string;
-  /** Position of the tooltip relative to the target element */
-  position?: TourStepPosition;
+  /** Position of the tooltip relative to the spotlight. */
+  position: TourStepPosition;
+
+  /** Optional CSS selector to click programmatically when "Next" is clicked */
+  clickOnNext?: string;
+
+  /** Optional text to display on the Next/Finish button for this specific step */
+  nextButtonText?: string;
+
   /** Extra offset in pixels from the target element */
   offset?: { x?: number; y?: number };
   /** Milliseconds to wait before trying to find element (for dynamic content) */

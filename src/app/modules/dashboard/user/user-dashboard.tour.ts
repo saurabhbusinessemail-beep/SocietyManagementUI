@@ -25,7 +25,7 @@ export const USER_DASHBOARD_TOUR: TourConfig = {
       title: '🏡 Join a Society',
       content:
         'Choose how you want to join – as a Flat Owner, Tenant, or Security personnel. Click any card to begin the registration process.',
-      position: 'bottom'
+      position: 'top'
     },
     {
       stepId: 'join-card',
@@ -33,7 +33,7 @@ export const USER_DASHBOARD_TOUR: TourConfig = {
       title: '🔑 Flat Owner',
       content:
         'Select this if you own a flat in a society. You\'ll be able to manage rent, maintenance and more.',
-      position: 'bottom'  // ← changed from 'right' to avoid tooltip hiding off-screen on mobile
+      position: 'bottom'
     },
     {
       stepId: 'societies-section',
@@ -41,7 +41,7 @@ export const USER_DASHBOARD_TOUR: TourConfig = {
       title: '🏢 Your Societies',
       content:
         'All the societies you are part of appear here as circular badges. Tap any society to open its dashboard.',
-      position: 'top'
+      position: 'bottom'
     },
     {
       // Shown only when hasAnyApprovals === true
@@ -61,6 +61,52 @@ export const USER_DASHBOARD_TOUR: TourConfig = {
         'Click any card to navigate directly to that item. Each card shows the type, status and a one-tap action.',
       position: 'bottom',
       waitForElement: 200
+    },
+    {
+      stepId: 'user-icon',
+      target: '.user-btn',
+      title: '👤 User Menu',
+      content: 'Access your profile, settings, and other options here.',
+      position: 'bottom-right',
+      clickOnNext: '.user-btn',
+      nextButtonText: 'Next →'
+    },
+    {
+      stepId: 'user-menu-info',
+      target: '.user-info',
+      title: 'Profile Information',
+      content: 'View your profile details and selected society.',
+      position: 'left',
+      waitForElement: 300
+    },
+    {
+      stepId: 'menu-register-society',
+      target: '.register-society-item',
+      title: 'Register Society',
+      content: 'Register a new society here. It will go for approval along with other details provided.',
+      position: 'left'
+    },
+    {
+      stepId: 'menu-request-demo',
+      target: '.request-demo-item',
+      title: 'Request Demo',
+      content: 'Want to see more features? Request a demo of the Gate My Society app.',
+      position: 'left'
+    },
+    {
+      stepId: 'menu-profile-help',
+      target: '.profile-help-item',
+      targetAll: true,
+      title: 'Profile & Help',
+      content: 'Manage your personal profile settings and get help or support if you need assistance.',
+      position: 'left'
+    },
+    {
+      stepId: 'menu-themes',
+      target: '.theme-switcher-item',
+      title: 'Themes',
+      content: 'Customize the look of your app by choosing your favorite color theme.',
+      position: 'left'
     }
   ]
 };

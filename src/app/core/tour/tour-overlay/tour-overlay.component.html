@@ -56,7 +56,7 @@
           Skip tour
         </button>
         <button class="tour-btn tour-btn-primary" (click)="onNextClick()">
-          {{ isLastStep ? 'Finish 🎉' : 'Next →' }}
+          {{ currentStep.nextButtonText ? currentStep.nextButtonText : (isLastStep ? 'Finish 🎉' : 'Next →') }}
         </button>
       </div>
     </div>
@@ -66,13 +66,3 @@
   </div>
 </ng-container>
 
-<!-- Floating "Retake Tour" button (shown when tour is not active) -->
-<button
-  *ngIf="showRetakeBubble && !isActive"
-  class="tour-retake-fab"
-  (click)="retakeTour()"
-  title="Take the tour again"
->
-  <span class="tour-retake-icon">?</span>
-  <span class="tour-retake-label">Take Tour</span>
-</button>

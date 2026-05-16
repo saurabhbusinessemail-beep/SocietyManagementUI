@@ -18,8 +18,27 @@ export class TourService {
 
   state$ = this._state$.asObservable();
 
+  public tourAvailable$ = new BehaviorSubject<boolean>(false);
+  private _retakeAction: (() => void) | null = null;
+
   get currentConfig(): TourConfig | null { return this._config; }
   get snapshot(): TourState { return this._state$.getValue(); }
+
+  registerRetakeAction(action: () => void) {
+    this._retakeAction = action;
+    this.tourAvailable$.next(true);
+  }
+
+  unregisterRetakeAction() {
+    this._retakeAction = null;
+    this.tourAvailable$.next(false);
+  }
+
+  triggerRetake() {
+    if (this._retakeAction) {
+      this._retakeAction();
+    }
+  }
 
   // ── Per-step seen tracking ─────────────────────────────────────────────────
 
