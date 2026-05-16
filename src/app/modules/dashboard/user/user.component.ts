@@ -1,13 +1,23 @@
 // user.component.ts
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ISociety } from '../../../interfaces';
-import { Subject, take } from 'rxjs';
+import { Subject, take, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { filter, map, shareReplay } from 'rxjs/operators';
 import { SocietyService } from '../../../services/society.service';
 import { DashboardService } from '../../../services/dashboard.service';
 import { LoginService } from '../../../services/login.service';
 import { Router } from '@angular/router';
 import { IDashboardApprovals } from '../../../interfaces';
 import { SocietyRoles } from '../../../types';
+import { USER_DASHBOARD_TOUR } from './user-dashboard.tour';
+import { TourConfig } from '../../../interfaces/tour.model';
+
+/**
+ * All conditional step IDs – steps that depend on runtime data.
+ * Initially ALL are excluded; each is removed once its data confirms presence.
+ */
+const CONDITIONAL_STEP_IDS = ['approvals-section', 'approval-card'];
 
 @Component({
   selector: 'app-user',
@@ -15,6 +25,27 @@ import { SocietyRoles } from '../../../types';
   styleUrl: './user.component.scss'
 })
 export class UserComponent implements OnInit, OnDestroy {
+
+  /** Base tour configuration. */
+  readonly tourConfig: TourConfig = USER_DASHBOARD_TOUR;
+
+  /**
+   * Starts with all conditional steps excluded.
+   * Shrinks reactively as each API call completes and reveals data.
+   * The overlay watches ngOnChanges for this and triggers mini-tours
+   * for steps that become available after the initial tour.
+   */
+  tourExcludeStepIds: string[] = [...CONDITIONAL_STEP_IDS];
+
+  /**
+   * Fires once when BOTH API calls complete (with or without data).
+   * Signals the overlay that it's safe to run the initial tour start flow.
+   */
+  tourReady$!: Observable<void>;
+
+  // Track when each load finishes
+  private _societiesLoaded$ = new BehaviorSubject<boolean>(false);
+  private _approvalsLoaded$ = new BehaviorSubject<boolean>(false);
 
   roles: { role: string; label: string; icon: string }[] = [
     {
@@ -50,6 +81,15 @@ export class UserComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // tourReady$ fires once after BOTH loads complete (success or error).
+    // At that moment tourExcludeStepIds is already updated by each load handler.
+    this.tourReady$ = combineLatest([this._societiesLoaded$, this._approvalsLoaded$]).pipe(
+      filter(([s, a]) => s && a),
+      take(1),
+      map(() => void 0),
+      shareReplay(1)
+    );
+
     this.loadSocieties();
     this.loadApprovals();
   }
@@ -61,19 +101,22 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           const data = response.data ?? {};
-
-          // Filter out seen gate entries for security
           if (data.gateEntries) {
             const seenIds = this.getSeenGateEntryIds();
             data.gateEntries = data.gateEntries.filter((ge: any) => !seenIds.includes(ge._id));
           }
-
           this.approvals = data;
           this.isApprovalsLoading = false;
+          // Unlock approval steps if data is present
+          if (this.hasAnyApprovals) {
+            this.tourExcludeStepIds = this.tourExcludeStepIds
+              .filter(id => !['approvals-section', 'approval-card'].includes(id));
+          }
+          this._approvalsLoaded$.next(true);
         },
         error: () => {
-          console.log('Error while getting approvals');
           this.isApprovalsLoading = false;
+          this._approvalsLoaded$.next(true);
         }
       });
   }
@@ -86,28 +129,29 @@ export class UserComponent implements OnInit, OnDestroy {
         next: response => {
           this.societies = response.data ?? [];
           this.isSocitiesLoading = false;
+          this._societiesLoaded$.next(true);
         },
         error: () => {
-          console.log('Error while getting societies');
           this.isSocitiesLoading = false;
+          // Mark done even on error so the tour isn't blocked forever
+          this._societiesLoaded$.next(true);
         }
       });
   }
 
-  navigateToJoin(role: string) {
-    this.router.navigate(['/join', role]);
-  }
+  navigateToJoin(role: string) { this.router.navigate(['/join', role]); }
+  navigateToAddSociety() { this.router.navigate(['society-public', 'add']); }
+  handleSocietyClick(society: ISociety) { this.societyService.handleSocietyClick(society); }
 
-  navigateToAddSociety() {
-    this.router.navigate(['society-public', 'add']);
-  }
-
-  handleSocietyClick(society: ISociety) {
-    this.societyService.handleSocietyClick(society);
+  get expectNamePopup(): boolean {
+    const user = this.loginService.getProfileFromStorage()?.user;
+    return !!(user && !user.name);
   }
 
   get hasAnyApprovals(): boolean {
-    return Object.keys(this.approvals).length > 0;
+    return Object.keys(this.approvals).some(
+      key => Array.isArray((this.approvals as any)[key]) && (this.approvals as any)[key].length > 0
+    );
   }
 
   handleApprovalClick(type: string, item: any) {
@@ -123,30 +167,23 @@ export class UserComponent implements OnInit, OnDestroy {
     switch (type) {
       case 'gateEntry':
         if (roles.includes('security')) {
-          if (item.status === 'approved') {
-            this.markGateEntryAsSeen(item._id);
-          }
+          if (item.status === 'approved') this.markGateEntryAsSeen(item._id);
           this.router.navigate(['/gateentry/dashboard', societyId]);
         } else {
-          // flat owner / tenant / member
           this.router.navigate(['/visitors', flatId || 'list', 'list']);
         }
         break;
       case 'society':
-        this.router.navigate(['/society/pendingApproval/societies']);
-        break;
+        this.router.navigate(['/society/pendingApproval/societies']); break;
       case 'join':
         const targetTab = item.requestType === 'Security' ? 'security' : 'flats';
-        this.router.navigate(['/society/pendingApproval', targetTab]);
-        break;
+        this.router.navigate(['/society/pendingApproval', targetTab]); break;
       case 'rent':
-        this.router.navigate(['/myflats/rent-list', flatId]);
-        break;
+        this.router.navigate(['/myflats/rent-list', flatId]); break;
       case 'maintenance':
         if (roles.some(r => ['societyadmin', 'manager'].includes(r))) {
           this.router.navigate(['/society', societyId, 'maintenance']);
         } else {
-          // For members, usually they see logs in their flat details
           this.router.navigate(['/myflats/list']);
         }
         break;
@@ -185,10 +222,8 @@ export class UserComponent implements OnInit, OnDestroy {
     const societyId = this.getObjectId(item.societyId);
     const profile = this.loginService.getProfileFromStorage();
     if (!profile) return 'visitor';
-
     const societyContext = profile.socities.find(s => s.societyId === societyId);
     const roles = societyContext?.societyRoles.map(r => r.name) || [];
-
     return roles.includes('security') ? 'security' : 'visitor';
   }
 
@@ -197,33 +232,18 @@ export class UserComponent implements OnInit, OnDestroy {
       const today = new Date().toDateString();
       const stored = localStorage.getItem('seen_gate_entries_data');
       if (!stored) return [];
-
       const data = JSON.parse(stored);
-      // If date is different (new day), clear IDs
-      if (data.date !== today) {
-        localStorage.removeItem('seen_gate_entries_data');
-        return [];
-      }
-
+      if (data.date !== today) { localStorage.removeItem('seen_gate_entries_data'); return []; }
       return data.ids || [];
-    } catch (e) {
-      return [];
-    }
+    } catch (e) { return []; }
   }
 
   private markGateEntryAsSeen(id: string) {
     const today = new Date().toDateString();
     const seenIds = this.getSeenGateEntryIds();
-
     if (!seenIds.includes(id)) {
       seenIds.push(id);
-      const data = {
-        date: today,
-        ids: seenIds
-      };
-      localStorage.setItem('seen_gate_entries_data', JSON.stringify(data));
-
-      // Immediately filter it out from current view
+      localStorage.setItem('seen_gate_entries_data', JSON.stringify({ date: today, ids: seenIds }));
       if (this.approvals.gateEntries) {
         this.approvals.gateEntries = this.approvals.gateEntries.filter(ge => ge._id !== id);
       }
@@ -233,5 +253,7 @@ export class UserComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this._societiesLoaded$.complete();
+    this._approvalsLoaded$.complete();
   }
 }
