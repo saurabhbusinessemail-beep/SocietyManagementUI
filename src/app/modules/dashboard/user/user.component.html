@@ -219,3 +219,16 @@
         </div>
     </div>
 </app-layout>
+
+<!-- ── Quick Tour ─────────────────────────────────────────────────────────────
+     tourReady$       → fires after both societies & approvals have loaded
+     excludeStepIds   → steps to skip because their data doesn't exist
+     showRetakeBubble → show the floating "Take Tour" FAB after the tour ends
+──────────────────────────────────────────────────────────────────────────── -->
+<app-tour-overlay
+  [tourConfig]="tourConfig"
+  [readyTrigger$]="tourReady$"
+  [excludeStepIds]="tourExcludeStepIds"
+  [expectDialogBeforeStart]="expectNamePopup"
+  [showRetakeBubble]="true">
+</app-tour-overlay>

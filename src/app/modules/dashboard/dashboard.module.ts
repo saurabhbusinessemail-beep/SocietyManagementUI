@@ -9,6 +9,7 @@ import { UiModule } from '../../core/ui/ui.module';
 import { DirectiveModule } from '../../directives/directive.module';
 import { UserComponent } from './user/user.component';
 import { IconModule } from '../../core/icons/icon.module';
+import { TourModule } from '../../core/tour/tour.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { IconModule } from '../../core/icons/icon.module';
     ReactiveFormsModule,
     UiModule,
     DirectiveModule,
-    IconModule
+    IconModule,
+    TourModule
   ]
 })
 export class DashboardModule { }

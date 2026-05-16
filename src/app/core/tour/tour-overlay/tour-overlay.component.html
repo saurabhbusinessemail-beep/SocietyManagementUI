@@ -1,0 +1,78 @@
+<!-- tour-overlay.component.html -->
+<ng-container *ngIf="isActive && currentStep">
+  <!-- Dark backdrop with spotlight cutout -->
+  <div class="tour-backdrop" (click)="onBackdropClick()">
+    <svg class="tour-spotlight" [attr.viewBox]="svgViewBox" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <mask id="tour-spotlight-mask">
+          <rect width="100%" height="100%" fill="white" />
+          <rect
+            [attr.x]="spotlightRect.x"
+            [attr.y]="spotlightRect.y"
+            [attr.width]="spotlightRect.width"
+            [attr.height]="spotlightRect.height"
+            [attr.rx]="spotlightRect.rx"
+            fill="black"
+          />
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="rgba(0,0,0,0.65)" mask="url(#tour-spotlight-mask)" />
+    </svg>
+  </div>
+
+  <!-- Tooltip bubble -->
+  <div
+    class="tour-tooltip"
+    [ngClass]="tooltipPositionClass"
+    [ngStyle]="tooltipStyle"
+    @tooltipAnimation
+  >
+    <!-- Header -->
+    <div class="tour-tooltip-header">
+      <div class="tour-step-indicator">
+        <span class="tour-step-dot" *ngFor="let s of stepsArray; let i = index"
+          [class.active]="i === currentStepIndex"
+          (click)="goToStep(i)">
+        </span>
+      </div>
+      <button class="tour-close-btn" (click)="skip()" title="Skip tour">
+        <span class="tour-close-icon">✕</span>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="tour-tooltip-body">
+      <h3 class="tour-step-title">{{ currentStep.title }}</h3>
+      <p class="tour-step-content">{{ currentStep.content }}</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="tour-tooltip-footer">
+      <button class="tour-btn tour-btn-secondary" *ngIf="currentStepIndex > 0" (click)="prev()">
+        ← Back
+      </button>
+      <div class="tour-footer-right">
+        <button class="tour-btn tour-btn-ghost" (click)="skip()">
+          Skip tour
+        </button>
+        <button class="tour-btn tour-btn-primary" (click)="onNextClick()">
+          {{ isLastStep ? 'Finish 🎉' : 'Next →' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Pointer arrow -->
+    <div class="tour-arrow" [ngClass]="arrowPositionClass"></div>
+  </div>
+</ng-container>
+
+<!-- Floating "Retake Tour" button (shown when tour is not active) -->
+<button
+  *ngIf="showRetakeBubble && !isActive"
+  class="tour-retake-fab"
+  (click)="retakeTour()"
+  title="Take the tour again"
+>
+  <span class="tour-retake-icon">?</span>
+  <span class="tour-retake-label">Take Tour</span>
+</button>
