@@ -8,12 +8,12 @@
         <div class="dropdown-header">
             <div class="user-avatar">
                 <img *ngIf="profilePictureUrl" [src]="profilePictureUrl" class="avatar-dropdown"
-                    [alt]="myProfile?.user?.name || 'User Profile'" />
+                    [alt]="myProfile?.user?.name || ('USER_MENU.MY_PROFILE' | translate)" />
                 <app-icon *ngIf="!profilePictureUrl" name="account" size="xl"></app-icon>
             </div>
             <div class="user-info">
-                <h3 class="user-name">{{ myProfile?.user?.name ?? 'No Name' }}</h3>
-                <p class="user-details">{{ myProfile?.user?.phoneNumber || 'No contact info' }}</p>
+                <h3 class="user-name">{{ myProfile?.user?.name ?? ('USER_MENU.NO_NAME' | translate) }}</h3>
+                <p class="user-details">{{ myProfile?.user?.phoneNumber || ('USER_MENU.NO_CONTACT' | translate) }}</p>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
                         <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
                         <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
                     </svg>
-                    <span>Register Society</span>
+                    <span>{{ 'USER_MENU.REGISTER_SOCIETY' | translate }}</span>
                 </button>
             </li>
 
@@ -44,7 +44,7 @@
                         <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
                         <rect x="2" y="6" width="14" height="12" rx="2"></rect>
                     </svg>
-                    <span>Request Demo</span>
+                    <span>{{ 'USER_MENU.REQUEST_DEMO' | translate }}</span>
                 </button>
             </li>
 
@@ -53,20 +53,20 @@
             <li class="menu-item profile-help-item" (click)="onProfileClick()">
                 <button class="menu-btn">
                     <app-icon name="account-circle" class="menu-icon" size="xl"></app-icon>
-                    <span>My Profile</span>
+                    <span>{{ 'USER_MENU.MY_PROFILE' | translate }}</span>
                 </button>
             </li>
             <li class="menu-item profile-help-item" (click)="onHelpClick()">
                 <button class="menu-btn">
                     <app-icon name="help" class="menu-icon" size="xl"></app-icon>
-                    <span>Help & Support</span>
+                    <span>{{ 'USER_MENU.HELP_SUPPORT' | translate }}</span>
                 </button>
             </li>
 
             <div class="dropdown-divider"></div>
 
             <li class="menu-item theme-switcher-item" (click)="$event.stopPropagation()">
-                <div class="theme-switcher-header">Theme</div>
+                <div class="theme-switcher-header">{{ 'USER_MENU.THEME' | translate }}</div>
                 <div class="theme-circles-container">
                     <div class="theme-circle" *ngFor="let theme of themeService.availableThemes"
                         [class.active]="(themeService.currentTheme | async) === theme.id"
@@ -78,16 +78,36 @@
 
             <div class="dropdown-divider"></div>
 
+            <!-- Language Switcher -->
+            <li class="menu-item language-switcher-item" (click)="$event.stopPropagation()">
+                <div class="lang-switcher-header">{{ 'LANGUAGE.SELECT_LANGUAGE' | translate }}</div>
+                <div class="lang-select-wrapper">
+                    <select
+                        #dropdownLangSelect
+                        [value]="currentLang"
+                        (change)="setLanguage(dropdownLangSelect.value)"
+                        class="lang-select-dropdown"
+                        id="dropdown-lang-select">
+                        <option *ngFor="let lang of languages" [value]="lang.code" [selected]="currentLang === lang.code">
+                            {{ lang.nativeLabel }} ({{ lang.label }})
+                        </option>
+                    </select>
+                    <span class="select-arrow">▼</span>
+                </div>
+            </li>
+
+            <div class="dropdown-divider"></div>
+
             <li class="menu-item logout-item" (click)="logout()">
                 <button class="menu-btn logout-btn">
                     <app-icon name="logout-icon" class="menu-icon" size="xl"></app-icon>
-                    <span>Logout</span>
+                    <span>{{ 'USER_MENU.LOGOUT' | translate }}</span>
                 </button>
             </li>
         </ul>
 
         <div class="dropdown-footer">
-            <ui-label [valueText]="'Version 1.0.0'" [config]="{id: 'version-label'}" class="version-text">
+            <ui-label [valueText]="('USER_MENU.VERSION' | translate) + ' 1.0.0'" [config]="{id: 'version-label'}" class="version-text">
             </ui-label>
         </div>
     </div>

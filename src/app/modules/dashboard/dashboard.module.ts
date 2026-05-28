@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { AdminComponent } from './admin/admin.component';
@@ -26,7 +27,8 @@ import { TourModule } from '../../core/tour/tour.module';
     UiModule,
     DirectiveModule,
     IconModule,
-    TourModule
+    TourModule,
+    TranslateModule.forChild()
   ]
 })
 export class DashboardModule { }

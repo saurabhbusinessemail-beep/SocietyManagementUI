@@ -1530,15 +1530,15 @@
 
         .doc-card {
             min-width: 160px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
+            background: $color-white;
+            border: 1px solid $color-border;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
             .doc-preview {
                 height: 120px;
-                background: #f1f5f9;
+                background: $color-cancel;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -1591,7 +1591,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 16px;
-            background: #f8fafc;
+            background: $color-light-gray;
             border-radius: 6px;
 
             .doc-info {
@@ -1602,6 +1602,7 @@
                 .doc-name {
                     font-weight: 600;
                     font-size: 14px;
+                    color: $color-black;
                 }
 
                 .doc-status-badge {
@@ -1624,13 +1625,13 @@
                     width: 28px;
                     height: 28px;
                     border-radius: 50%;
-                    border: 1px solid #e2e8f0;
-                    background: #fff;
+                    border: 1px solid $color-border;
+                    background: $color-white;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    color: #64748b;
+                    color: $color-note-gray;
                     transition: all 0.2s;
 
                     &:hover {

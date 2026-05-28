@@ -11,6 +11,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { WindowService } from '../../../services/window.service';
 import { ListBase } from '../../../directives/list-base.directive';
 import { UILabelValueType } from '../../../types';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-flat-list',
@@ -57,144 +58,24 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
   floorControl = new FormControl<string | null>(null);
 
   isComponentActive = new Subject<void>();
-  floorFilterConfig: IUIControlConfig = {
-    id: 'floor',
-    label: 'Floor',
-    placeholder: 'Select Floor',
-  };
-  societyNameConfig: IUIControlConfig = {
-    id: 'societyName',
-    label: 'Society Name'
-  };
-  buildingSelectorConfig: IUIControlConfig = {
-    id: 'building',
-    label: 'Building',
-    placeholder: 'Select Building',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Building is required',
-    }
-  };
-  addFlatTabsConfig: IUIControlConfig = {
-    id: 'settingsTab',
-    label: ''
-  };
-  flatNumberConfig = {
-    id: 'flatNumber',
-    label: 'Flat Number',
-    placeholder: 'Enter Flat Number',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Flat Number is required',
-    }
-  };
-  floorConfig = {
-    id: 'floor',
-    label: 'Floor',
-    placeholder: 'Enter To Floor',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'Floors is required',
-      min: 'Floor cannot be less than 1'
-    }
-  };
-  fromFloorConfig = {
-    id: 'fromFloor',
-    label: 'From Floors',
-    placeholder: 'Enter From Floor',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'Floors count is required',
-      min: 'Minimum 1 floor is required'
-    }
-  };
-  toFloorConfig = {
-    id: 'toFloor',
-    label: 'To Floors',
-    placeholder: 'Enter To Floors',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'Floors count is required',
-      min: 'Minimum 1 floor is required'
-    }
-  };
-  startFlatConfig = {
-    id: 'startFlat',
-    label: 'Start Flat Number',
-    placeholder: 'Enter Start flat unmber',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'Start Flat Number is required',
-      min: 'Start Flat Number cannot be less than 1'
-    }
-  };
-  endFlatConfig = {
-    id: 'endFlat',
-    label: 'End Flat Number',
-    placeholder: 'Enter End flat unmber',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'End Flat Number is required',
-      min: 'End Flat Number cannot be less than 1'
-    }
-  };
-  flatTypeSelectorConfig: IUIControlConfig = {
-    id: 'flatType',
-    label: 'Flat Type',
-    placeholder: 'Select Flat Type',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Flat Number is required',
-    }
-  };
-  appendFloorNumberConfig: IUIControlConfig = {
-    id: 'appendFloorNumber',
-    label: 'Append Floor Number',
-  };
-  pendingFlatssConfig: IUIControlConfig = {
-    id: 'pendingFlats',
-    label: 'Pending Flats To Add'
-  };
+  floorFilterConfig!: IUIControlConfig;
+  societyNameConfig!: IUIControlConfig;
+  buildingSelectorConfig!: IUIControlConfig;
+  addFlatTabsConfig!: IUIControlConfig;
+  flatNumberConfig!: any;
+  floorConfig!: any;
+  fromFloorConfig!: any;
+  toFloorConfig!: any;
+  startFlatConfig!: any;
+  endFlatConfig!: any;
+  flatTypeSelectorConfig!: IUIControlConfig;
+  appendFloorNumberConfig!: IUIControlConfig;
+  pendingFlatssConfig!: IUIControlConfig;
 
   selectedTab = 'addFlat';
-  tabsOptions: IUIDropdownOption[] = [
-    {
-      value: 'addFlat',
-      label: 'Add Flat'
-    },
-    {
-      value: 'autoGen',
-      label: 'Autogenerate Flats'
-    },
-  ];
-  appendFloorNumberOptions: IUIDropdownOption[] = [
-    { label: 'Append Floor Number with Flat Number ?', value: true }
-  ];
-  defaultFilter: IUIDropdownOption = {
-    label: 'All',
-    value: ''
-  }
+  tabsOptions: IUIDropdownOption[] = [];
+  appendFloorNumberOptions: IUIDropdownOption[] = [];
+  defaultFilter!: IUIDropdownOption;
 
   errorMessage: string = '';
 
@@ -268,10 +149,158 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
     private dialog: MatDialog,
     dialogService: DialogService,
     private windowService: WindowService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) { super(dialogService) }
 
+  initFormConfigs() {
+    this.floorFilterConfig = {
+      id: 'floor',
+      label: this.translate.instant('FLAT.FLOOR') || 'Floor',
+      placeholder: this.translate.instant('FLAT.SELECT_FLOOR') || 'Select Floor',
+    };
+    this.societyNameConfig = {
+      id: 'societyName',
+      label: this.translate.instant('SOCIETY.SOCIETY_NAME') || 'Society Name'
+    };
+    this.buildingSelectorConfig = {
+      id: 'building',
+      label: this.translate.instant('FLAT.BUILDING') || 'Building',
+      placeholder: this.translate.instant('FLAT.SELECT_BUILDING') || 'Select Building',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('BUILDING_LIST.BUILDING_NUMBER_REQUIRED') || 'Building is required',
+      }
+    };
+    this.addFlatTabsConfig = {
+      id: 'settingsTab',
+      label: ''
+    };
+    this.flatNumberConfig = {
+      id: 'flatNumber',
+      label: this.translate.instant('FLAT.FLAT_NUMBER') || 'Flat Number',
+      placeholder: this.translate.instant('FLAT.ENTER_FLOOR') || 'Enter Flat Number',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.FLAT_NUMBER_REQUIRED') || 'Flat Number is required',
+      }
+    };
+    this.floorConfig = {
+      id: 'floor',
+      label: this.translate.instant('FLAT.FLOOR') || 'Floor',
+      placeholder: this.translate.instant('FLAT.ENTER_FLOOR') || 'Enter Floor',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.FLOOR_REQUIRED') || 'Floors is required',
+        min: this.translate.instant('FLAT.FLOOR_MIN') || 'Floor cannot be less than 1'
+      }
+    };
+    this.fromFloorConfig = {
+      id: 'fromFloor',
+      label: this.translate.instant('FLAT.FROM_FLOOR') || 'From Floors',
+      placeholder: this.translate.instant('FLAT.FROM_FLOOR') || 'Enter From Floor',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.FROM_FLOOR_REQUIRED') || 'Floors count is required',
+        min: this.translate.instant('FLAT.FLOOR_MIN') || 'Minimum 1 floor is required'
+      }
+    };
+    this.toFloorConfig = {
+      id: 'toFloor',
+      label: this.translate.instant('FLAT.TO_FLOOR') || 'To Floors',
+      placeholder: this.translate.instant('FLAT.TO_FLOOR') || 'Enter To Floors',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.TO_FLOOR_REQUIRED') || 'Floors count is required',
+        min: this.translate.instant('FLAT.FLOOR_MIN') || 'Minimum 1 floor is required'
+      }
+    };
+    this.startFlatConfig = {
+      id: 'startFlat',
+      label: this.translate.instant('FLAT.START_FLAT') || 'Start Flat Number',
+      placeholder: this.translate.instant('FLAT.START_FLAT') || 'Enter Start flat number',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.START_FLAT_REQUIRED') || 'Start Flat Number is required',
+        min: this.translate.instant('FLAT.FLOOR_MIN') || 'Start Flat Number cannot be less than 1'
+      }
+    };
+    this.endFlatConfig = {
+      id: 'endFlat',
+      label: this.translate.instant('FLAT.END_FLAT') || 'End Flat Number',
+      placeholder: this.translate.instant('FLAT.END_FLAT') || 'Enter End flat number',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.END_FLAT_REQUIRED') || 'End Flat Number is required',
+        min: this.translate.instant('FLAT.FLOOR_MIN') || 'End Flat Number cannot be less than 1'
+      }
+    };
+    this.flatTypeSelectorConfig = {
+      id: 'flatType',
+      label: this.translate.instant('FLAT.FLAT_TYPE') || 'Flat Type',
+      placeholder: this.translate.instant('FLAT.SELECT_FLAT_TYPE') || 'Select Flat Type',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('FLAT.FLAT_TYPE_REQUIRED') || 'Flat Type is required',
+      }
+    };
+    this.appendFloorNumberConfig = {
+      id: 'appendFloorNumber',
+      label: this.translate.instant('FLAT.APPEND_FLOOR_NUMBER') || 'Append Floor Number',
+    };
+    this.pendingFlatssConfig = {
+      id: 'pendingFlats',
+      label: this.translate.instant('FLAT.PENDING_FLATS') || 'Pending Flats To Add'
+    };
+
+    this.tabsOptions = [
+      {
+        value: 'addFlat',
+        label: this.translate.instant('FLAT.ADD_FLAT') || 'Add Flat'
+      },
+      {
+        value: 'autoGen',
+        label: this.translate.instant('FLAT.AUTOGENERATE_FLATS') || 'Autogenerate Flats'
+      },
+    ];
+
+    this.appendFloorNumberOptions = [
+      { label: this.translate.instant('FLAT.APPEND_FLOOR_CONFIRM') || 'Append Floor Number with Flat Number ?', value: true }
+    ];
+
+    this.defaultFilter = {
+      label: this.translate.instant('COMMON.ALL') || 'All',
+      value: ''
+    };
+  }
+
   ngOnInit(): void {
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
+
     this.subscribeToChange();
 
     this.societyId = this.route.snapshot.paramMap.get('societyId')!;
@@ -547,7 +576,10 @@ export class FlatListComponent extends ListBase implements OnInit, OnDestroy {
   async deleteFlat(flat: IFlat) {
     if (!this.societyId) return;
 
-    if (!await this.dialogService.confirmDelete('Delete Flat', `Are you sure you want to delete flat ${flat.flatNumber} ?`)) return;
+    const title = this.translate.instant('FLAT.DELETE_TITLE') || 'Delete Flat';
+    const message = this.translate.instant('FLAT.DELETE_CONFIRM', { number: flat.flatNumber }) || `Are you sure you want to delete flat ${flat.flatNumber} ?`;
+
+    if (!await this.dialogService.confirmDelete(title, message)) return;
 
     this.societyService.deleteFlat(this.societyId, flat._id)
       .pipe(take(1))

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { MembersRoutingModule } from './members-routing.module';
 import { MembersListComponent } from './members-list/members-list.component';
@@ -28,7 +29,8 @@ import { PipeModule } from '../../pipes/pipes.module';
     ReactiveFormsModule,
     PipeModule,
     IconModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class MembersModule { }

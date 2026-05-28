@@ -1,9 +1,10 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true" pageTitle="Add Member" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" [pageTitle]="'MEMBERS.ADD_TITLE' | translate"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ui-form-layout>
 
         <ui-select2 [formControl]="flatControl" [config]="flatSearchConfig" [options]="flatOptions"
-            placeholder="Search Flat" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
+            [placeholder]="'PARKINGS.SELECT_FLAT' | translate" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
         </ui-select2>
 
         <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
@@ -22,9 +23,10 @@
         </ui-form-layout>
 
         <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
-            <ui-button type="cancel" label="Cancel" (clicked)="cancel()">
+            <ui-button type="cancel" [label]="'JOIN_AS.CANCEL' | translate" (clicked)="cancel()">
             </ui-button>
-            <ui-button [isSubmit]="true" label="Save" [disable]="flatControl.invalid || !selectedUser" (clicked)="save()">
+            <ui-button [isSubmit]="true" [label]="'JOIN_AS.SAVE' | translate" [disable]="flatControl.invalid || !selectedUser"
+                (clicked)="save()">
             </ui-button>
         </section>
 

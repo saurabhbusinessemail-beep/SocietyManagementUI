@@ -35,6 +35,8 @@
     "@capacitor/push-notifications": "^7.0.0",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@ng-select/ng-select": "^12.0.7",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "@zxing/browser": "^0.1.5",
     "angularx-qrcode": "^17.0.1",
     "rxjs": "~7.8.0",

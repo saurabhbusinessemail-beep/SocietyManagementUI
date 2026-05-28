@@ -9,6 +9,7 @@ import { WindowService } from '../../services/window.service';
 import { DatePipe } from '@angular/common';
 import { adminManagerRoles, ownerMemberTenanRoles } from '../../constants';
 import { DateControl, DropDownControl, SocietyRoles } from '../../types';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -79,8 +80,16 @@ export class FilterComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private router: Router,
     public windowService: WindowService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private translate: TranslateService
   ) { }
+
+  translateConfigs() {
+    this.societiesSearchConfig.label = this.translate.instant('COMMON.SOCIETY') || 'Society';
+    this.societiesSearchConfig.placeholder = this.translate.instant('COMMON.SEARCH_SOCIETY') || 'Search Society';
+    this.flatSearchConfig.label = this.translate.instant('COMMON.FLAT') || 'Flat';
+    this.flatSearchConfig.placeholder = this.translate.instant('COMMON.SEARCH_FLAT') || 'Search Flat';
+  }
 
   ngOnInit(): void {
     this.myProfile = this.loginService.getProfileFromStorage();
@@ -88,6 +97,11 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/');
       return;
     }
+
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.translateConfigs();
+    });
+    this.translateConfigs();
 
     this.subscribeToInterimFilterChanged();
 

@@ -2,7 +2,7 @@
 <div class="search-container">
     <div class="search-wrapper">
         <i class="material-icons search-icon">search</i>
-        <input type="text" class="search-input" placeholder="Search by society name, location, or admin..."
+        <input type="text" class="search-input" [placeholder]="'APPROVALS.SEARCH_SOCIETY_PLACEHOLDER' | translate"
             [formControl]="searchControl">
         <button class="clear-search" *ngIf="searchControl.value" (click)="clearSearch()">
             <i class="material-icons">close</i>
@@ -10,15 +10,15 @@
     </div>
     <div class="status-filter">
         <select [formControl]="statusControl" class="status-select">
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
+            <option value="pending">{{ 'APPROVALS.PENDING' | translate }}</option>
+            <option value="approved">{{ 'APPROVALS.APPROVED' | translate }}</option>
+            <option value="rejected">{{ 'APPROVALS.REJECTED' | translate }}</option>
         </select>
     </div>
 </div>
 
 <div class="society-table">
-    <ui-loading *ngIf="loading" message="Loading approvals..."></ui-loading>
+    <ui-loading *ngIf="loading" [message]="'APPROVALS.LOADING' | translate"></ui-loading>
 
     <ng-container *ngIf="!loading">
         <ng-container *ngIf="paginatedSocieties.length > 0; else noSocieties">
@@ -27,12 +27,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Society</th>
-                            <th>Location</th>
-                            <th>Buildings</th>
-                            <th>Submitted</th>
-                            <th *ngIf="!isAdmin">Status</th>
-                            <th *ngIf="isAdmin">Actions</th>
+                            <th>{{ 'APPROVALS.SOCIETY' | translate }}</th>
+                            <th>{{ 'APPROVALS.LOCATION' | translate }}</th>
+                            <th>{{ 'APPROVALS.BUILDINGS' | translate }}</th>
+                            <th>{{ 'APPROVALS.SUBMITTED' | translate }}</th>
+                            <th *ngIf="!isAdmin">{{ 'APPROVALS.STATUS' | translate }}</th>
+                            <th *ngIf="isAdmin">{{ 'APPROVALS.ACTIONS' | translate }}</th>
                         </tr>
                     </thead>
 
@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="text">
                                         <div class="name">{{ s.societyName }}</div>
-                                        <div class="society-type">Apartment Complex</div>
+                                        <div class="society-type">{{ 'APPROVALS.APARTMENT_COMPLEX' | translate }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -70,15 +70,15 @@
                                     <!-- Status badges for non-admin users -->
                                     <div class="status-badge approved" *ngIf="s.isApproved">
                                         <i class="material-icons status-icon">check_circle</i>
-                                        Approved
+                                        {{ 'APPROVALS.APPROVED_BADGE' | translate }}
                                     </div>
                                     <div class="status-badge rejected" *ngIf="s.isRejected">
                                         <i class="material-icons status-icon">cancel</i>
-                                        Rejected
+                                        {{ 'APPROVALS.REJECTED_BADGE' | translate }}
                                     </div>
                                     <div class="status-badge pending" *ngIf="!s.isApproved && !s.isRejected">
                                         <i class="material-icons status-icon">hourglass_empty</i>
-                                        Pending
+                                        {{ 'APPROVALS.PENDING_BADGE' | translate }}
                                     </div>
                                 </div>
                             </td>
@@ -88,11 +88,11 @@
 
                                     <button class="btn-approve" (click)="approve(s)">
                                         <i class="material-icons">check</i>
-                                        Approve
+                                        {{ 'APPROVALS.APPROVE' | translate }}
                                     </button>
                                     <button class="btn-reject" (click)="reject(s)">
                                         <i class="material-icons">close</i>
-                                        Reject
+                                        {{ 'APPROVALS.REJECT' | translate }}
                                     </button>
                                 </div>
                             </td>
@@ -128,7 +128,7 @@
                                 <i class="material-icons status-icon" *ngIf="s.isRejected">cancel</i>
                                 <i class="material-icons status-icon" *ngIf="!s.isApproved && !s.isRejected">hourglass_empty</i>
                                 <span class="status-text">
-                                    {{ s.isApproved ? 'Approved' : (s.isRejected ? 'Rejected' : 'Pending') }}
+                                    {{ s.isApproved ? ('APPROVALS.APPROVED_BADGE' | translate) : (s.isRejected ? ('APPROVALS.REJECTED_BADGE' | translate) : ('APPROVALS.PENDING_BADGE' | translate)) }}
                                 </span>
                             </div>
                             <div class="expand-icon" [ngClass]="{'inverted': expandedRow === i}">
@@ -140,11 +140,11 @@
                     <div class="mobile-body" *ngIf="expandedRow === i">
                         <div class="details-grid">
                             <div class="detail-item">
-                                <span class="detail-label">Total Buildings</span>
+                                <span class="detail-label">{{ 'APPROVALS.TOTAL_BUILDINGS' | translate }}</span>
                                 <strong class="detail-value">{{ s.numberOfBuildings }}</strong>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-label">Submitted On</span>
+                                <span class="detail-label">{{ 'APPROVALS.SUBMITTED_ON' | translate }}</span>
                                 <strong class="detail-value">{{ s.createdOn | date:'dd MMM yyyy' }}</strong>
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                                 <i class="material-icons status-icon" *ngIf="s.isRejected">cancel</i>
                                 <i class="material-icons status-icon" *ngIf="!s.isApproved && !s.isRejected">hourglass_empty</i>
                                 <span class="status-text">
-                                    Status: {{ s.isApproved ? 'Approved' : (s.isRejected ? 'Rejected' : 'Pending') }}
+                                    {{ 'APPROVALS.STATUS_LABEL' | translate }} {{ s.isApproved ? ('APPROVALS.APPROVED_BADGE' | translate) : (s.isRejected ? ('APPROVALS.REJECTED_BADGE' | translate) : ('APPROVALS.PENDING_BADGE' | translate)) }}
                                 </span>
                             </div>
                         </div>
@@ -169,11 +169,11 @@
                         <div class="mobile-actions" *ngIf="isAdmin">
                             <button class="btn-approve mobile" (click)="approve(s)">
                                 <i class="material-icons">check</i>
-                                Approve
+                                {{ 'APPROVALS.APPROVE' | translate }}
                             </button>
                             <button class="btn-reject mobile" (click)="reject(s)">
                                 <i class="material-icons">close</i>
-                                Reject
+                                {{ 'APPROVALS.REJECT' | translate }}
                             </button>
                         </div>
                     </div>
@@ -186,23 +186,23 @@
             <div class="pagination" *ngIf="totalPages > 1">
                 <button (click)="prevPage()" [disabled]="page === 1">
                     <i class="material-icons">chevron_left</i>
-                    Prev
+                    {{ 'APPROVALS.PREV' | translate }}
                 </button>
 
                 <span class="page-info">
-                    Page {{ page }} of {{ totalPages }}
+                    {{ 'APPROVALS.PAGE_OF' | translate:{page: page, totalPages: totalPages} }}
                 </span>
 
                 <button (click)="nextPage()" [disabled]="page === totalPages">
-                    Next
+                    {{ 'APPROVALS.NEXT' | translate }}
                     <i class="material-icons">chevron_right</i>
                 </button>
             </div>
         </ng-container>
 
         <ng-template #noSocieties>
-            <app-empty-records singular="society approval" plural="society approvals" [hideAddButton]="true"
-                [overrideTitle]="statusControl.value === 'pending' ? 'No society approvals are pending' : (statusControl.value === 'approved' ? 'No approved records found' : 'No rejected records found')"
+            <app-empty-records [singular]="'APPROVALS.SOCIETY' | translate" [plural]="'APPROVALS.SOCIETY_PLURAL' | translate" [hideAddButton]="true"
+                [overrideTitle]="statusControl.value === 'pending' ? ('APPROVALS.NO_PENDING_SOCIETY' | translate) : (statusControl.value === 'approved' ? ('APPROVALS.NO_APPROVED_SOCIETY' | translate) : ('APPROVALS.NO_REJECTED_SOCIETY' | translate))"
                 [hideMessage]="true">
                 <app-icon icon name="building" size="xxl"></app-icon>
             </app-empty-records>

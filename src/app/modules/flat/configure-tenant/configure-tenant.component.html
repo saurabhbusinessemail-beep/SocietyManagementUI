@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" [pageTitle]="'Configure Tenant'"
+<app-layout [hideMoreActions]="true" [pageTitle]="'TENANT_CONFIG.TITLE' | translate"
     [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
 
     <div class="configure-container" *ngIf="!loading; else loadingState">
@@ -14,8 +14,8 @@
                     </svg>
                 </div>
                 <div class="header-text">
-                    <h2>Tenant Occupancy Setting</h2>
-                    <p>Configure how tenants are allowed to be added to this flat.</p>
+                    <h2>{{ 'TENANT_CONFIG.HEADER' | translate }}</h2>
+                    <p>{{ 'TENANT_CONFIG.SUBHEADER' | translate }}</p>
                 </div>
             </div>
 
@@ -26,13 +26,12 @@
                         <div class="radio-inner" *ngIf="!isMultiTenantAllowed"></div>
                     </div>
                     <div class="option-content">
-                        <h3>One tenant at a time</h3>
-                        <p>Adding a new tenant will automatically move out the existing tenant or owner. This is the
-                            standard behavior.</p>
+                        <h3>{{ 'TENANT_CONFIG.SINGLE_TITLE' | translate }}</h3>
+                        <p>{{ 'TENANT_CONFIG.SINGLE_DESC' | translate }}</p>
                     </div>
                     <div class="badge-group">
-                        <div class="status-badge">Default</div>
-                        <div class="status-badge active" *ngIf="!originalIsMultiTenantAllowed">Active</div>
+                        <div class="status-badge">{{ 'TENANT_CONFIG.DEFAULT' | translate }}</div>
+                        <div class="status-badge active" *ngIf="!originalIsMultiTenantAllowed">{{ 'TENANT_CONFIG.ACTIVE' | translate }}</div>
                     </div>
                 </div>
 
@@ -42,16 +41,15 @@
                         <div class="radio-inner" *ngIf="isMultiTenantAllowed"></div>
                     </div>
                     <div class="option-content">
-                        <h3>Multi tenant at a time</h3>
-                        <p>Allows multiple tenants to reside simultaneously. Adding a new tenant will not move out other
-                            tenants. Manual move-out is required.</p>
+                        <h3>{{ 'TENANT_CONFIG.MULTI_TITLE' | translate }}</h3>
+                        <p>{{ 'TENANT_CONFIG.MULTI_DESC' | translate }}</p>
                     </div>
-                    <div class="status-badge active" *ngIf="originalIsMultiTenantAllowed">Active</div>
+                    <div class="status-badge active" *ngIf="originalIsMultiTenantAllowed">{{ 'TENANT_CONFIG.ACTIVE' | translate }}</div>
                 </div>
             </div>
 
             <div class="config-footer">
-                <ui-button [label]="saving ? 'Saving...' : 'Save Configuration'" [disable]="saving"
+                <ui-button [label]="saving ? ('TENANT_CONFIG.SAVING' | translate) : ('TENANT_CONFIG.SAVE_CONFIG' | translate)" [disable]="saving"
                     (clicked)="saveConfig()" size="default" type="primary">
                 </ui-button>
             </div>
@@ -65,14 +63,13 @@
                 <line x1="12" y1="16" x2="12" y2="12" />
                 <line x1="12" y1="8" x2="12.01" y2="8" />
             </svg>
-            <p>Note: Regardless of this setting, moving in as "Self" or setting the flat as "Vacant" will always move
-                out all active tenants.</p>
+            <p>{{ 'TENANT_CONFIG.NOTE' | translate }}</p>
         </div>
     </div>
 
     <ng-template #loadingState>
         <div class="loading-container">
-            <ui-loading message="Loading configuration..."></ui-loading>
+            <ui-loading [message]="'TENANT_CONFIG.LOADING' | translate"></ui-loading>
         </div>
     </ng-template>
 

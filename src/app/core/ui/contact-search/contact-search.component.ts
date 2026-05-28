@@ -4,6 +4,7 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, switchMap,
 import { ContactService } from './contact.service';
 import { IPhoneContactFlat, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { UIBaseFormControl } from '../../../directives';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -26,15 +27,16 @@ export class ContactSearchComponent extends UIBaseFormControl<IPhoneContactFlat 
   contacts: IPhoneContactFlat[] = [];
   filteredContacts: IUIDropdownOption[] = [];
 
-  constructor(private contactService: ContactService, @Optional() @Self() ngControl: NgControl) {
+  constructor(private contactService: ContactService, @Optional() @Self() ngControl: NgControl,
+    public translate: TranslateService) {
     super(ngControl);
   }
 
   ngOnInit(): void {
     let contactSearchConfig: IUIControlConfig = {
       id: 'contact',
-      label: 'Contact',
-      placeholder: 'Search Contact',
+      label: this.translate.instant('JOIN_AS.BY_CONTACT') || 'By Contact',
+      placeholder: this.translate.instant('JOIN_AS.BY_CONTACT') || 'Search Contact',
     };
 
     if (this.required) {

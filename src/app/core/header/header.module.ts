@@ -10,10 +10,13 @@ import { DirectiveModule } from '../../directives/directive.module';
 import { ApiTrackerModule } from '../api-tracker/api-tracker.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { NavbarMenuComponent } from './navbar-menu/navbar-menu.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [HeaderComponent, NavbarMenuComponent],
-  imports: [CommonModule, IconModule, MoreIconModule, UiModule, ConsoleModule, StorageModule, ApiTrackerModule, DirectiveModule, MatMenuModule],
+  imports: [CommonModule, IconModule, MoreIconModule, UiModule, ConsoleModule, StorageModule, ApiTrackerModule, DirectiveModule, MatMenuModule,
+    TranslateModule
+  ],
   exports: [HeaderComponent],
 })
 export class HeaderModule { }

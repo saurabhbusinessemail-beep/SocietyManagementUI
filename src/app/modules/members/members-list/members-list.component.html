@@ -1,7 +1,7 @@
-<app-layout pageTitle="Members" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [pageTitle]="'MEMBERS.TITLE' | translate" [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="openAddMember()">New Member</li>
+            <li class="page-menu" (click)="openAddMember()">{{ 'MEMBERS.ADD_MEMBER' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -21,7 +21,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="members.length === 0">
-                    <app-empty-records singular="members" plural="members" (addClicked)="openAddMember()"
+                    <app-empty-records [singular]="'MEMBERS.SINGULAR'" [plural]="'MEMBERS.PLURAL'" (addClicked)="openAddMember()"
                         [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="member" size="xxl"></app-icon>
                     </app-empty-records>
@@ -29,7 +29,7 @@
             </ng-container>
 
 
-            <ui-loading *ngIf="loadingMember" message="Loading members" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingMember" [message]="'MEMBERS.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 

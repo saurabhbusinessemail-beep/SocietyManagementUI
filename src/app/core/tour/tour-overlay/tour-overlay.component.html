@@ -35,28 +35,28 @@
           (click)="goToStep(i)">
         </span>
       </div>
-      <button class="tour-close-btn" (click)="skip()" title="Skip tour">
+      <button class="tour-close-btn" (click)="skip()" [title]="'TOUR.SKIP' | translate">
         <span class="tour-close-icon">✕</span>
       </button>
     </div>
 
     <!-- Content -->
     <div class="tour-tooltip-body">
-      <h3 class="tour-step-title">{{ currentStep.title }}</h3>
-      <p class="tour-step-content">{{ currentStep.content }}</p>
+      <h3 class="tour-step-title">{{ currentStep.title | translate }}</h3>
+      <p class="tour-step-content">{{ currentStep.content | translate }}</p>
     </div>
 
     <!-- Footer -->
     <div class="tour-tooltip-footer">
       <button class="tour-btn tour-btn-secondary" *ngIf="currentStepIndex > 0" (click)="prev()">
-        ← Back
+        ← {{ 'TOUR.BACK' | translate }}
       </button>
       <div class="tour-footer-right">
         <button class="tour-btn tour-btn-ghost" (click)="skip()">
-          Skip tour
+          {{ 'TOUR.SKIP' | translate }}
         </button>
         <button class="tour-btn tour-btn-primary" (click)="onNextClick()">
-          {{ currentStep.nextButtonText ? currentStep.nextButtonText : (isLastStep ? 'Finish 🎉' : 'Next →') }}
+          {{ currentStep.nextButtonText ? (currentStep.nextButtonText | translate) : (isLastStep ? (('TOUR.FINISH' | translate) + ' 🎉') : (('TOUR.NEXT' | translate) + ' →')) }}
         </button>
       </div>
     </div>
@@ -65,4 +65,9 @@
     <div class="tour-arrow" [ngClass]="arrowPositionClass"></div>
   </div>
 </ng-container>
+
+<button *ngIf="!isActive && showRetakeBubble" class="tour-retake-fab" (click)="retakeTour()">
+  <span class="tour-retake-icon">?</span>
+  <span class="tour-retake-label">{{ 'TOUR.TAKE_AGAIN' | translate }}</span>
+</button>
 

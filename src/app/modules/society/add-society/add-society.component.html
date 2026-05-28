@@ -1,4 +1,5 @@
-<app-layout pageTitle="Add Society" [hideMoreActions]="true" [showBackButton]="true" (needLogin)="loginService.simpleLogin()">
+<app-layout [pageTitle]="'SOCIETY.ADD_SOCIETY' | translate" [hideMoreActions]="true" [showBackButton]="true"
+    (needLogin)="loginService.simpleLogin()">
 
     <form [formGroup]="fb">
 
@@ -15,8 +16,7 @@
             <div class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
                 <ui-checklist [formControl]="isMultipleBuildings" [config]="multiBuildingConfig"
-                    [options]="multiBuildingOptions" [smColumns]="12"
-                    [mdColumns]="4" [lgColumns]="4">
+                    [options]="multiBuildingOptions" [smColumns]="12" [mdColumns]="4" [lgColumns]="4">
                 </ui-checklist>
 
 
@@ -25,19 +25,19 @@
                 </ui-text-box>
 
 
-                <ui-text-box formControlName="numberOfFlats" [config]="flatCountConfig" type="number"
-                    [smColumns]="12" [mdColumns]="4" [lgColumns]="2">
+                <ui-text-box formControlName="numberOfFlats" [config]="flatCountConfig" type="number" [smColumns]="12"
+                    [mdColumns]="4" [lgColumns]="2">
                 </ui-text-box>
             </div>
 
             <div class="flex ui-form-layout flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="8">
 
-                <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                <ui-button [label]="'APP.CANCEL' | translate" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
                     (clicked)="cancel()">
                 </ui-button>
 
 
-                <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                <ui-button [label]="'APP.SAVE' | translate" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
                     (clicked)="save()" [disable]="fb.invalid">
                 </ui-button>
             </div>

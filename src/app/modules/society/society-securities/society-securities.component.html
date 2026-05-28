@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!canAddSocietyManager" pageTitle="Securities"
+<app-layout [hideMoreActions]="!canAddSocietyManager" [pageTitle]="'SOCIETY.SECURITY_GUARDS' | translate"
     [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
 
     <ng-container moreActions>
@@ -6,13 +6,13 @@
         </ui-button> -->
 
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="openAddDialog()">Add Security</li>
+            <li class="page-menu" (click)="openAddDialog()">{{ 'SOCIETY.ADD_SECURITY' | translate }}</li>
         </ul>
     </ng-container>
 
     <ui-form-layout>
 
-        <ui-loading *ngIf="loading" message="Loading society managers" [smColumns]="12" [mdColumns]="12"
+        <ui-loading *ngIf="loading" [message]="'SOCIETY.LOADING_SECURITIES' | translate" [smColumns]="12" [mdColumns]="12"
             [lgColumns]="12">
         </ui-loading>
 
@@ -33,7 +33,11 @@
             </ng-container>
 
             <ng-container *ngIf="securities.length === 0">
-                <app-empty-records singular="security" plural="securities" [hideAddButton]="!canAddSocietyManager"
+                <app-empty-records
+                    [overrideTitle]="'SOCIETY.NO_SECURITIES' | translate"
+                    [overrideMessage]="'SOCIETY.NO_SECURITIES_DESC' | translate"
+                    [overrideButtonText]="'SOCIETY.ADD_SECURITY' | translate"
+                    [hideAddButton]="!canAddSocietyManager"
                     (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                     <app-icon icon name="security" size="xxl"></app-icon>
                 </app-empty-records>
@@ -47,11 +51,10 @@
 </app-layout>
 
 <ng-template #managerTemplate>
-    <app-add-edit-popup title="Add Security" (onClose)="closeDialog();">
+    <app-add-edit-popup [title]="'SOCIETY.ADD_SECURITY' | translate" (onClose)="closeDialog();">
 
         <ui-form-layout>
-            <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
-                helpText="Select current status" direction="horizontal" [options]="radioOptions" [smColumns]="12"
+            <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" direction="horizontal" [options]="radioOptions" [smColumns]="12"
                 [mdColumns]="12" [lgColumns]="12">
             </ui-radio-list>
 
@@ -77,12 +80,12 @@
         </ui-form-layout>
 
         <ng-container actions>
-            <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+            <ui-button [label]="'APP.CANCEL' | translate" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
                 (clicked)="closeDialog()">
             </ui-button>
 
 
-            <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+            <ui-button [label]="'APP.SAVE' | translate" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
                 [disable]="fb.invalid" (clicked)="addecurity()">
             </ui-button>
         </ng-container>

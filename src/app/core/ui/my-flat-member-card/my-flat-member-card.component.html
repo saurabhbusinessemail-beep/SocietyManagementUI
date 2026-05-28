@@ -4,43 +4,43 @@
         <input type="checkbox" [checked]="selected" (change)="toggleSelection($event)"
             (click)="$event.stopPropagation()">
     </div>
-
+ 
     <div class="card-container">
         <!-- Header: Title + Status Badge -->
         <div class="card-header">
             <div>
                 <h3 class="flat-title">{{ getFlatNumber() }}</h3>
-                <p class="scenario-label" *ngIf="isOwnerWithTenant">My flat is rented.</p>
-                <p class="scenario-label" *ngIf="member.isOwner && residingType === 'Self'">It's My Flat</p>
-                <p class="scenario-label" *ngIf="member.isOwner && residingType === 'Vacant'">Myflat is vaccant</p>
-                <p class="scenario-label" *ngIf="member.isMember && member.status === 'active'">I am a Flat Member</p>
-                <p class="scenario-label" *ngIf="member.isMember && member.status !== 'active'">I was a Flat Member</p>
-                <p class="scenario-label" *ngIf="member.isTenant && !isTenantOrMember && showTenantMessage">Renting this flat</p>
-                <p class="scenario-label" *ngIf="member.isTenantMember">Renting this flat</p>
+                <p class="scenario-label" *ngIf="isOwnerWithTenant">{{ 'FLAT.RENTED_SCENARIO' | translate }}</p>
+                <p class="scenario-label" *ngIf="member.isOwner && residingType === 'Self'">{{ 'FLAT.MY_FLAT_SCENARIO' | translate }}</p>
+                <p class="scenario-label" *ngIf="member.isOwner && residingType === 'Vacant'">{{ 'FLAT.VACANT_SCENARIO' | translate }}</p>
+                <p class="scenario-label" *ngIf="member.isMember && member.status === 'active'">{{ 'FLAT.MEMBER_SCENARIO' | translate }}</p>
+                <p class="scenario-label" *ngIf="member.isMember && member.status !== 'active'">{{ 'FLAT.PAST_MEMBER_SCENARIO' | translate }}</p>
+                <p class="scenario-label" *ngIf="member.isTenant && !isTenantOrMember && showTenantMessage">{{ 'FLAT.RENTING_SCENARIO' | translate }}</p>
+                <p class="scenario-label" *ngIf="member.isTenantMember">{{ 'FLAT.RENTING_SCENARIO' | translate }}</p>
             </div>
             <span class="status-badge" [ngClass]="statusBadgeClass">{{ statusBadgeText }}</span>
         </div>
-
+ 
         <!-- Context Messages -->
         <div class="context-message" *ngIf="showVacantMessage">
-            <p class="message vacant">This flat is currently vacant</p>
+            <p class="message vacant">{{ 'FLAT.VACANT_MSG' | translate }}</p>
         </div>
         <div class="context-message" *ngIf="showMemberMessage">
-            <p class="message self">Currently I am residing as a member in this flat</p>
+            <p class="message self">{{ 'FLAT.MEMBER_MSG' | translate }}</p>
         </div>
         <div class="context-message" *ngIf="showSelfMessage">
-            <p class="message self">Currently I am residing in this flat</p>
+            <p class="message self">{{ 'FLAT.RESIDING_MSG' | translate }}</p>
         </div>
         <div class="context-message" *ngIf="showTenantMessage">
-            <p class="message tenant">Currently I am residing in this flat</p>
+            <p class="message tenant">{{ 'FLAT.RESIDING_MSG' | translate }}</p>
         </div>
         <div class="context-message" *ngIf="showTenantExpiredMessage">
-            <p class="message expired">Owner has started living here. You are no longer living here.</p>
+            <p class="message expired">{{ 'FLAT.OWNER_RESIDING_MSG' | translate }}</p>
         </div>
         <div class="context-message" *ngIf="showOtherTenantMessage">
-            <p class="message expired">Another tenant is currently living in this flat.</p>
+            <p class="message expired">{{ 'FLAT.OTHER_TENANT_MSG' | translate }}</p>
         </div>
-
+ 
         <!-- Flat & Society Information (two columns) -->
         <div class="info-grid">
             <!-- Flat Information -->
@@ -54,12 +54,12 @@
                     </svg>
                 </div>
                 <div class="content">
-                    <p class="label">Flat Information</p>
-                    <p class="value">Floor {{ getFloor() }}<span *ngIf="getBuildingName()">, Building {{
+                    <p class="label">{{ 'FLAT.FLAT_INFO' | translate }}</p>
+                    <p class="value">{{ 'FLAT.FLOOR' | translate }} {{ getFloor() }}<span *ngIf="getBuildingName()">, {{ 'FLAT.BUILDING' | translate }} {{
                             getBuildingName() }}</span></p>
                 </div>
             </div>
-
+ 
             <!-- Society Information -->
             <div class="info-card society-info">
                 <div class="icon">
@@ -79,13 +79,13 @@
                     </svg>
                 </div>
                 <div class="content">
-                    <p class="label">Society Information</p>
+                    <p class="label">{{ 'FLAT.SOCIETY_INFO' | translate }}</p>
                     <p class="value">{{ getSocietyName() }}</p>
-                    <p class="extra">{{ getSocietyBuildingsCount() }} Buildings, {{ getSocietyFlatsCount() }} Flats</p>
+                    <p class="extra">{{ getSocietyBuildingsCount() }} {{ 'PLAN.BUILDINGS' | translate }}, {{ getSocietyFlatsCount() }} {{ 'PLAN.FLATS' | translate }}</p>
                 </div>
             </div>
         </div>
-
+ 
         <!-- Owner Information -->
         <div class="owner-section" *ngIf="showOwnerInfo">
             <div class="section-header">
@@ -94,7 +94,7 @@
                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
                         </svg></div>
-                    <h4>Owner Information</h4>
+                    <h4>{{ 'FLAT.OWNER_INFO' | translate }}</h4>
                 </div>
             </div>
             <div class="user-details">
@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-
+ 
         <!-- Tenant Information (hidden for previous tenants to protect privacy) -->
         <div class="tenant-section" *ngIf="showTenantInfo && tenants.length > 0">
             <div class="section-header" (click)="toggleExpand($event)">
@@ -120,7 +120,7 @@
                             <circle cx="12" cy="7" r="4" />
                         </svg>
                     </div>
-                    <h4>Tenant Information ({{ tenants.length }})</h4>
+                    <h4>{{ 'FLAT.TENANT_INFO' | translate }} ({{ tenants.length }})</h4>
                 </div>
                 <div class="expand-icon mobile-only" [class.expanded]="isExpanded">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -128,7 +128,7 @@
                     </svg>
                 </div>
             </div>
-
+ 
             <div class="tenant-list" [class.collapsed]="!isExpanded">
                 <div class="user-details" *ngFor="let tenant of tenants">
                     <ui-user-avatar [user]="tenant.userId" size="md"></ui-user-avatar>
@@ -148,24 +148,24 @@
                                 <rect x="3" y="4" width="18" height="18" rx="2" />
                                 <path d="M3 10h18" />
                             </svg>
-                            Lease: {{ tenant.leaseStart | date:'MMM yyyy' }} – {{ tenant.leaseEnd | date:'MMM yyyy' }}
+                            {{ 'FLAT.LEASE_PERIOD' | translate }}: {{ tenant.leaseStart | date:'MMM yyyy' }} – {{ tenant.leaseEnd | date:'MMM yyyy' }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+ 
         <!-- Lease details for the current user if they are a tenant (simple case) -->
         <div class="lease-card"
             *ngIf="member.isTenant && member.leaseStart && member.leaseEnd && !showTenantInfo && !isPreviousTenantWithOtherTenant">
             <div class="lease-header">
-                <span class="lease-title">Lease Period</span>
-                <span class="rent-amount" *ngIf="member.rentAmount">{{ member.rentAmount | currency:'INR' }}/mo</span>
+                <span class="lease-title">{{ 'FLAT.LEASE_PERIOD' | translate }}</span>
+                <span class="rent-amount" *ngIf="member.rentAmount">{{ member.rentAmount | currency:'INR' }}/{{ 'FLAT.PERIOD' | translate | lowercase }}</span>
             </div>
             <p class="lease-dates">{{ member.leaseStart | date:'yyyy-MM-dd' }} → {{ member.leaseEnd | date:'yyyy-MM-dd'
                 }}</p>
         </div>
-
+ 
         <!-- Plan card -->
         <div class="plan-card" *ngIf="plan">
             <div class="plan-header">
@@ -178,18 +178,18 @@
                 </div>
                 <div class="plan-meta">
                     <span class="plan-status" [ngClass]="plan.status">{{ plan.status }}</span>
-                    <span class="plan-price">{{ plan.price | currency:'INR' }}/year</span>
+                    <span class="plan-price">{{ plan.price | currency:'INR' }}/{{ 'PLAN.YEAR' | translate | lowercase }}</span>
                 </div>
             </div>
         </div>
-
+ 
         <!-- Documents section -->
         <div class="documents-section" *ngIf="getDocumentCount() > 0">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14 2 14 8 20 8" />
             </svg>
-            <span>{{ getDocumentCount() }} document{{ getDocumentCount() !== 1 ? 's' : '' }}</span>
+            <span>{{ getDocumentCount() }} {{ (getDocumentCount() !== 1 ? 'FLAT.DOCUMENTS' : 'FLAT.DOCUMENT') | translate }}</span>
             <div class="document-tags">
                 <span *ngFor="let doc of getDocumentList() | slice:0:3" class="document-tag"
                     [title]="getDocumentDisplayName(doc)">
@@ -198,11 +198,11 @@
                 <span *ngIf="getDocumentCount() > 3" class="document-tag">+{{ getDocumentCount() - 3 }}</span>
             </div>
         </div>
-
+ 
         <!-- Actions -->
         <div class="actions" *ngIf="showEdit || showDelete">
-            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">Edit</button>
-            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">Delete</button>
+            <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)">{{ 'APP.EDIT' | translate }}</button>
+            <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">{{ 'APP.DELETE' | translate }}</button>
         </div>
     </div>
 </div>

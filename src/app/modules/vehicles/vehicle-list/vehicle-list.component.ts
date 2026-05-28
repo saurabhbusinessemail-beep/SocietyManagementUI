@@ -11,6 +11,7 @@ import { DropDownControl } from '../../../types';
 import { VehicleTypeList } from '../../../constants';
 import { VehicleService } from '../../../services/vehicle.service';
 import { SocietyService } from '../../../services/society.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface IVehicleFilter {
   flatId?: string
@@ -35,53 +36,16 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
   isComponentActive = new Subject<void>();
   selectedFilterChanged = new BehaviorSubject<IVehicleFilter>({});
 
-  societiesSearchConfig: IUIControlConfig<DropDownControl> = {
-    id: 'societyId',
-    label: 'Society',
-    placeholder: 'Search Society',
-    formControl: new FormControl<DropDownControl>(undefined),
-    dropDownOptions: []
-  };
-  flatSearchConfig: IUIControlConfig<DropDownControl> = {
-    id: 'flatId',
-    label: 'Flat',
-    placeholder: 'Search Flat',
-    formControl: new FormControl<DropDownControl>(undefined),
-    dropDownOptions: []
-  };
-  vehicleNumberConfig = {
-    id: 'vehicleNumber',
-    label: 'Vehicle Number',
-    placeholder: 'Enter Vehicle Number',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(9) }
-    ],
-    errorMessages: {
-      required: 'Vehicle Number is required',
-      min: 'Vehicle Number cannot be less than 9 numbers'
-    }
-  };
-  vehicleTypeConfig: IUIControlConfig = {
-    id: 'vehicleType',
-    label: 'Vehicle Type',
-    placeholder: 'Select Vehicle Type',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Vehicle Type is required',
-    },
-    dropDownOptions: VehicleTypeList.map(vt => ({
-      label: vt.name,
-      value: vt.vehicleTypeId
-    } as IUIDropdownOption))
-  };
+  societyControl = new FormControl<DropDownControl>(undefined, [Validators.required]);
+  flatControl = new FormControl<DropDownControl>(undefined);
 
+  societiesSearchConfig!: IUIControlConfig<DropDownControl>;
+  flatSearchConfig!: IUIControlConfig<DropDownControl>;
+  vehicleNumberConfig!: any;
+  vehicleTypeConfig!: IUIControlConfig;
 
   fb = new FormGroup({
-    society: this.societiesSearchConfig.formControl ?? new FormControl<DropDownControl | null>(null, [Validators.required]),
-    flat: this.flatSearchConfig.formControl ?? new FormControl<DropDownControl>(undefined),
+    flat: this.flatControl,
     vehicleNumber: new FormControl<string | null>(null),
     vehicleType: new FormControl<'4W' | null>(null, Validators.required),
   });
@@ -95,13 +59,73 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
     dialogService: DialogService,
     private windowService: WindowService,
     private vehicleService: VehicleService,
-    public societyService: SocietyService
+    public societyService: SocietyService,
+    private translate: TranslateService
   ) {
     super(dialogService);
   }
 
+  initFormConfigs() {
+    this.societiesSearchConfig = {
+      id: 'societyId',
+      label: this.translate.instant('SOCIETY.TITLE') || 'Society',
+      placeholder: 'Search Society',
+      formControl: this.societyControl,
+      dropDownOptions: []
+    };
+
+    this.flatSearchConfig = {
+      id: 'flatId',
+      label: this.translate.instant('PARKINGS.FLAT') || 'Flat',
+      placeholder: this.translate.instant('PARKINGS.SELECT_FLAT') || 'Search Flat',
+      formControl: this.flatControl,
+      dropDownOptions: [],
+      validations: this.flatId ? [] : [
+        { name: 'required', validator: Validators.required }
+      ],
+      errorMessages: {
+        required: 'Flat is required'
+      }
+    };
+
+    this.vehicleNumberConfig = {
+      id: 'vehicleNumber',
+      label: this.translate.instant('VEHICLES.VEHICLE_NUMBER') || 'Vehicle Number',
+      placeholder: this.translate.instant('VEHICLES.ENTER_VEHICLE_NUMBER') || 'Enter Vehicle Number',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'minlength', validator: Validators.minLength(9) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('VEHICLES.VEHICLE_NUMBER_REQUIRED') || 'Vehicle Number is required',
+        minlength: this.translate.instant('VEHICLES.VEHICLE_NUMBER_MIN') || 'Vehicle Number cannot be less than 9 numbers'
+      }
+    };
+
+    this.vehicleTypeConfig = {
+      id: 'vehicleType',
+      label: this.translate.instant('VEHICLES.VEHICLE_TYPE') || 'Vehicle Type',
+      placeholder: this.translate.instant('VEHICLES.SELECT_VEHICLE_TYPE') || 'Select Vehicle Type',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('VEHICLES.VEHICLE_TYPE_REQUIRED') || 'Vehicle Type is required',
+      },
+      dropDownOptions: VehicleTypeList.map(vt => ({
+        label: this.translate.instant('VEHICLES.TYPE_' + vt.vehicleTypeId) || vt.name,
+        value: vt.vehicleTypeId
+      } as IUIDropdownOption))
+    };
+  }
+
   ngOnInit() {
     this.flatId = this.route.snapshot.paramMap.get('flatId')!;
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
+
     this.subscribeToFilterChanged();
   }
   handleFilterChange(selectedFilter: IVehicleFilter) {
@@ -197,8 +221,10 @@ export class VehicleListComponent extends ListBase implements OnInit, OnDestroy 
   }
 
   async deleteVehicle(vehicle: IVehicle) {
+    const title = this.translate.instant('VEHICLES.DELETE_TITLE') || 'Delete Vehicle';
+    const message = this.translate.instant('VEHICLES.DELETE_CONFIRM', { number: vehicle.vehicleNumber }) || `Are you sure you want to delete vehicle ${vehicle.vehicleNumber} ?`;
 
-    if (!await this.dialogService.confirmDelete('Delete Vehicle', `Are you sure you want to delete vehicle ${vehicle.vehicleNumber} ?`)) return;
+    if (!await this.dialogService.confirmDelete(title, message)) return;
 
     this.loadingVehicleAction[vehicle._id] = true;
     this.deleteOneRecord(vehicle._id)

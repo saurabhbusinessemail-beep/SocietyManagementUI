@@ -19,6 +19,7 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CountryService } from '../../../services/country.service';
 import { CurrencyService } from '../../../services/currency.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface IMaintenanceFilter {
   societyId?: string;
@@ -54,40 +55,13 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
 
   // Dropdown controls following announcement-list pattern
   monthControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  monthConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'month',
-    label: 'Month',
-    formControl: this.monthControl,
-    dropDownOptions: Array.from({ length: 12 }, (_, i) => ({
-      value: i + 1,
-      label: this.maintenanceService.getMonthFullName(i + 1)
-    }))
-  };
+  monthConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   yearControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  yearConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'year',
-    label: 'Year',
-    formControl: this.yearControl,
-    dropDownOptions: Array.from({ length: 5 }, (_, i) => {
-      const currentYear = new Date().getFullYear();
-      return { value: currentYear - i, label: (currentYear - i).toString() };
-    })
-  };
+  yearConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   statusFilterControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  statusFilterConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'statusFilter',
-    label: 'Status',
-    formControl: this.statusFilterControl,
-    dropDownOptions: [
-      { value: 'all', label: 'All' },
-      { value: 'approved', label: 'Paid' },
-      { value: 'pending_approval', label: 'Pending' },
-      { value: 'not_paid', label: 'Not Paid' },
-      { value: 'rejected', label: 'Rejected' }
-    ]
-  };
+  statusFilterConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   // Payment recording dialog
   @ViewChild('recordPaymentTemplate') recordPaymentTemplate!: TemplateRef<any>;
@@ -101,12 +75,9 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
 
   // Configs
   tabsConfig: IUIControlConfig = { id: 'reportTab', label: '' };
-  tabsOptions: IUIDropdownOption[] = [
-    { value: 'monthly', label: 'Monthly' },
-    { value: 'yearly', label: 'Yearly' }
-  ];
+  tabsOptions: IUIDropdownOption[] = [];
 
-  dateConfig: IUIControlConfig = { id: 'paidOn', label: 'Payment Date' };
+  dateConfig!: IUIControlConfig;
 
   get currentMonthLabel(): string {
     return this.monthControl.value?.label ?? this.maintenanceService.getMonthFullName(new Date().getMonth() + 1);
@@ -137,15 +108,15 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
   }
 
   get monthOptions(): IUIDropdownOption[] {
-    return this.monthConfig.dropDownOptions ?? [];
+    return this.monthConfig?.dropDownOptions ?? [];
   }
 
   get yearOptions(): IUIDropdownOption[] {
-    return this.yearConfig.dropDownOptions ?? [];
+    return this.yearConfig?.dropDownOptions ?? [];
   }
 
   get statusFilterOptions(): IUIDropdownOption[] {
-    return this.statusFilterConfig.dropDownOptions ?? [];
+    return this.statusFilterConfig?.dropDownOptions ?? [];
   }
 
   constructor(
@@ -158,10 +129,58 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private dialogService: DialogService,
     public countryService: CountryService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private translate: TranslateService
   ) { }
 
+  initFilterConfigs() {
+    this.monthConfig = {
+      id: 'month',
+      label: this.translate.instant('MAINTENANCE.MONTH') || 'Month',
+      formControl: this.monthControl,
+      dropDownOptions: Array.from({ length: 12 }, (_, i) => ({
+        value: i + 1,
+        label: this.translate.instant('MONTHS.' + (i + 1)) || this.maintenanceService.getMonthFullName(i + 1)
+      }))
+    };
+
+    this.yearConfig = {
+      id: 'year',
+      label: this.translate.instant('MAINTENANCE.YEAR') || 'Year',
+      formControl: this.yearControl,
+      dropDownOptions: Array.from({ length: 5 }, (_, i) => {
+        const currentYear = new Date().getFullYear();
+        return { value: currentYear - i, label: (currentYear - i).toString() };
+      })
+    };
+
+    this.statusFilterConfig = {
+      id: 'statusFilter',
+      label: this.translate.instant('COMMON.STATUS') || 'Status',
+      formControl: this.statusFilterControl,
+      dropDownOptions: [
+        { value: 'all', label: this.translate.instant('COMMON.ALL') || 'All' },
+        { value: 'approved', label: this.translate.instant('MAINTENANCE.PAID') || 'Paid' },
+        { value: 'pending_approval', label: this.translate.instant('MAINTENANCE.PENDING') || 'Pending' },
+        { value: 'not_paid', label: this.translate.instant('MAINTENANCE.NOT_PAID') || 'Not Paid' },
+        { value: 'rejected', label: this.translate.instant('MAINTENANCE.STATUS_REJECTED') || 'Rejected' }
+      ]
+    };
+
+    this.tabsOptions = [
+      { value: 'monthly', label: this.translate.instant('MAINTENANCE.MONTHLY') || 'Monthly' },
+      { value: 'yearly', label: this.translate.instant('MAINTENANCE.YEARLY') || 'Yearly' }
+    ];
+
+    this.dateConfig = { id: 'paidOn', label: this.translate.instant('MAINTENANCE.PAYMENT_DATE') || 'Payment Date' };
+  }
+
   ngOnInit(): void {
+    this.initFilterConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFilterConfigs();
+    });
+
     // Set defaults
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
@@ -345,12 +364,12 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
     if (!entry.payment) return;
 
     this.dialogService.showConfirmation({
-      message: 'Are you sure you want to reject this payment?',
+      message: this.translate.instant('COMMON.CONFIRM_REJECT_PAYMENT') || 'Are you sure you want to reject this payment?',
       showInput: true,
-      inputPlaceholder: 'Reason for rejection (e.g. Invalid screenshot, amount mismatch)',
+      inputPlaceholder: this.translate.instant('COMMON.REJECT_REASON_PLACEHOLDER') || 'Reason for rejection (e.g. Invalid screenshot, amount mismatch)',
       actionButtons: [
-        { label: 'Cancel', result: false, class: 'cancel', onClick: () => { } },
-        { label: 'Reject', result: true, class: 'error', onClick: () => { } }
+        { label: this.translate.instant('COMMON.CANCEL') || 'Cancel', result: false, class: 'cancel', onClick: () => { } },
+        { label: this.translate.instant('COMMON.REJECT') || 'Reject', result: true, class: 'error', onClick: () => { } }
       ]
     }, 30000).subscribe(result => {
       if (result && (typeof result === 'object' ? result.result : result)) {
@@ -387,7 +406,7 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res.success) {
           this.dialogService.showConfirmation({
-            message: 'Reminder sent successfully',
+            message: this.translate.instant('COMMON.REMINDER_SENT_SUCCESS') || 'Reminder sent successfully',
             icon: 'valid',
             actionButtons: []
           }, 1500);
@@ -401,13 +420,14 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
 
     const month = this.selectedFilter.month || (new Date().getMonth() + 1);
     const year = this.selectedFilter.year || new Date().getFullYear();
+    const translatedMonth = this.translate.instant('MONTHS.' + month) || this.maintenanceService.getMonthFullName(month);
 
     this.dialogService.showConfirmation({
-      message: `Send maintenance reminders to all pending flats for ${this.maintenanceService.getMonthFullName(month)} ${year}?`,
+      message: this.translate.instant('MAINTENANCE.REMIND_ALL_CONFIRM', { month: translatedMonth, year: year }) || `Send maintenance reminders to all pending flats for ${translatedMonth} ${year}?`,
       icon: 'notifications',
       actionButtons: [
-        { label: 'Cancel', result: false, class: 'cancel', onClick: () => { } },
-        { label: 'Send All', result: true, class: 'primary', onClick: () => { } }
+        { label: this.translate.instant('COMMON.CANCEL') || 'Cancel', result: false, class: 'cancel', onClick: () => { } },
+        { label: this.translate.instant('MAINTENANCE.SEND_ALL') || 'Send All', result: true, class: 'primary', onClick: () => { } }
       ]
     }, 10000).subscribe(confirm => {
       if (confirm) {
@@ -416,7 +436,7 @@ export class MaintenanceListComponent implements OnInit, OnDestroy {
           .subscribe(res => {
             if (res.success) {
               this.dialogService.showConfirmation({
-                message: 'All reminders sent successfully',
+                message: this.translate.instant('COMMON.ALL_REMINDERS_SENT_SUCCESS') || 'All reminders sent successfully',
                 icon: 'valid',
                 actionButtons: []
               }, 2000);

@@ -9,6 +9,7 @@ import { LoginService } from '../../../services/login.service';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { ActivatedRoute } from '@angular/router';
 import { PendingHttpService } from '../../../services/pending-http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-announcement',
@@ -32,144 +33,164 @@ export class AddAnnouncementComponent implements OnInit {
     expiryDate: new FormControl<Date>(new Date(new Date().setDate(new Date().getDate() + 1))),
   });
 
-  societySearchConfig: IUIControlConfig = {
-    id: 'society',
-    label: 'Society',
-    placeholder: 'Select Society',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Select any Society'
-    }
-  };
-  titleConfig: IUIControlConfig = {
-    id: 'title',
-    label: 'Title',
-    placeholder: 'Add Title',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Title is required'
-    }
-  };
-  contentConfig: IUIControlConfig = {
-    id: 'content',
-    label: 'Content',
-    placeholder: 'Add Content',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Content is required'
-    }
-  };
-  priorityConfig: IUIControlConfig = {
-    id: 'priority',
-    label: 'Priority',
-    placeholder: 'Select Priority',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Select any Priority'
-    },
-    dropDownOptions: [
-      {
-        label: AnnouncementPriorityTypesText.low.toString(),
-        value: AnnouncementPriorityTypes.low.toString()
-      },
-      {
-        label: AnnouncementPriorityTypesText.medium.toString(),
-        value: AnnouncementPriorityTypes.medium.toString()
-      },
-      {
-        label: AnnouncementPriorityTypesText.high.toString(),
-        value: AnnouncementPriorityTypes.high.toString()
-      },
-      {
-        label: AnnouncementPriorityTypesText.urgent.toString(),
-        value: AnnouncementPriorityTypes.urgent.toString()
-      }
-    ]
-  };
-  categoryConfig: IUIControlConfig = {
-    id: 'category',
-    label: 'Category',
-    placeholder: 'Select Category',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Select any Category'
-    },
-    dropDownOptions: [
-      {
-        label: AnnouncementCategoryTypesText.billing.toString(),
-        value: AnnouncementCategoryTypes.billing
-      },
-      {
-        label: AnnouncementCategoryTypesText.event.toString(),
-        value: AnnouncementCategoryTypes.event
-      },
-      {
-        label: AnnouncementCategoryTypesText.general.toString(),
-        value: AnnouncementCategoryTypes.general
-      },
-      {
-        label: AnnouncementCategoryTypesText.maintenance.toString(),
-        value: AnnouncementCategoryTypes.maintenance
-      },
-      {
-        label: AnnouncementCategoryTypesText.other.toString(),
-        value: AnnouncementCategoryTypes.other
-      },
-      {
-        label: AnnouncementCategoryTypesText.security.toString(),
-        value: AnnouncementCategoryTypes.security
-      },
-    ]
-  };
-  expiryDateConfig: IUIControlConfig = {
-    id: 'expiryDate',
-    label: 'Expiry Date',
-    placeholder: 'Add Expiry Date',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Expiry Date is required'
-    },
-  };
+  societySearchConfig!: IUIControlConfig;
+  titleConfig!: IUIControlConfig;
+  contentConfig!: IUIControlConfig;
+  priorityConfig!: IUIControlConfig;
+  categoryConfig!: IUIControlConfig;
+  expiryDateConfig!: IUIControlConfig;
 
   constructor(
     private location: Location,
     public societyService: SocietyService,
     private loginService: LoginService,
     private announcementService: AnnouncementService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) { }
 
+  initFormConfigs() {
+    this.societySearchConfig = {
+      id: 'society',
+      label: this.translate.instant('COMMON.SOCIETY') || 'Society',
+      placeholder: this.translate.instant('COMMON.SELECT_SOCIETY') || 'Select Society',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('COMMON.SELECT_SOCIETY') || 'Select any Society'
+      }
+    };
+
+    this.titleConfig = {
+      id: 'title',
+      label: this.translate.instant('ANNOUNCEMENTS.ANNOUNCEMENT_TITLE') || 'Title',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.ANNOUNCEMENT_TITLE') || 'Add Title',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('COMPLAINTS.TITLE_REQUIRED') || 'Title is required'
+      }
+    };
+
+    this.contentConfig = {
+      id: 'content',
+      label: this.translate.instant('ANNOUNCEMENTS.ANNOUNCEMENT_CONTENT') || 'Content',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.ANNOUNCEMENT_CONTENT') || 'Add Content',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('COMPLAINTS.DESCRIPTION_REQUIRED') || 'Content is required'
+      }
+    };
+
+    this.priorityConfig = {
+      id: 'priority',
+      label: this.translate.instant('ANNOUNCEMENTS.PRIORITY') || 'Priority',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.SELECT_PRIORITY') || 'Select Priority',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('ANNOUNCEMENTS.SELECT_PRIORITY') || 'Select any Priority'
+      },
+      dropDownOptions: [
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.low.toUpperCase()) || AnnouncementPriorityTypesText.low,
+          value: AnnouncementPriorityTypes.low.toString()
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.medium.toUpperCase()) || AnnouncementPriorityTypesText.medium,
+          value: AnnouncementPriorityTypes.medium.toString()
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.high.toUpperCase()) || AnnouncementPriorityTypesText.high,
+          value: AnnouncementPriorityTypes.high.toString()
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.urgent.toUpperCase()) || AnnouncementPriorityTypesText.urgent,
+          value: AnnouncementPriorityTypes.urgent.toString()
+        }
+      ]
+    };
+
+    this.categoryConfig = {
+      id: 'category',
+      label: this.translate.instant('ANNOUNCEMENTS.CATEGORY') || 'Category',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.SELECT_CATEGORY') || 'Select Category',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('ANNOUNCEMENTS.SELECT_CATEGORY') || 'Select any Category'
+      },
+      dropDownOptions: [
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_BILLING') || AnnouncementCategoryTypesText.billing.toString(),
+          value: AnnouncementCategoryTypes.billing
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_EVENT') || AnnouncementCategoryTypesText.event.toString(),
+          value: AnnouncementCategoryTypes.event
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_GENERAL') || AnnouncementCategoryTypesText.general.toString(),
+          value: AnnouncementCategoryTypes.general
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_MAINTENANCE') || AnnouncementCategoryTypesText.maintenance.toString(),
+          value: AnnouncementCategoryTypes.maintenance
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_OTHER') || AnnouncementCategoryTypesText.other.toString(),
+          value: AnnouncementCategoryTypes.other
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_SECURITY') || AnnouncementCategoryTypesText.security.toString(),
+          value: AnnouncementCategoryTypes.security
+        },
+      ]
+    };
+
+    this.expiryDateConfig = {
+      id: 'expiryDate',
+      label: this.translate.instant('ANNOUNCEMENTS.EXPIRY_DATE') || 'Expiry Date',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.ENTER_EXPIRY_DATE') || 'Add Expiry Date',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('ANNOUNCEMENTS.EXPIRY_DATE_REQUIRED') || 'Expiry Date is required'
+      },
+    };
+  }
+
   ngOnInit(): void {
+    this.initFormConfigs();
+    this.translate.onLangChange.subscribe(() => {
+      this.initFormConfigs();
+    });
+
     this.announcementId = this.route.snapshot.paramMap.get('id');
     this.loadSocities();
 

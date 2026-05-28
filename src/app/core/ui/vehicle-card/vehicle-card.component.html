@@ -14,10 +14,10 @@
         <div class="header-actions" *ngIf="showEdit || showDelete">
 
             <ng-container *ngIf="!actionInProgress">
-                <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)" title="Edit">
+                <button *ngIf="showEdit" class="edit-btn" (click)="onEdit($event)" [attr.title]="'APP.EDIT' | translate">
                     <span class="btn-icon">✏️</span>
                 </button>
-                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" title="Delete">
+                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" [attr.title]="'APP.DELETE' | translate">
                     <span class="btn-icon">🗑️</span>
                 </button>
             </ng-container>
@@ -31,13 +31,13 @@
     <div class="card-body">
         <div class="vehicle-details">
             <div class="detail-row">
-                <span class="label">Type</span>
+                <span class="label">{{ 'VEHICLES.VEHICLE_TYPE' | translate }}</span>
                 <span class="value type-value" [ngClass]="getVehicleTypeClass()">
-                    {{ vehicle.vehicleType }}
+                    {{ 'VEHICLES.TYPE_' + vehicle.vehicleType | translate }}
                 </span>
             </div>
             <div class="detail-row">
-                <span class="label">Flat ID</span>
+                <span class="label">{{ 'COMMON.FLAT' | translate }}</span>
                 <span class="value">{{ getFlatNumberDisplay() }}</span>
             </div>
         </div>
@@ -45,12 +45,12 @@
 
     <div class="card-footer">
         <div class="created-info">
-            <span class="label">Created</span>
+            <span class="label">{{ 'COMMON.CREATED' | translate }}</span>
             <span class="value">{{ vehicle.createdOn | date:'mediumDate' }}</span>
-            <span class="by" *ngIf="vehicle.createdByUserId"> by {{ getCreatedByDisplay() }}</span>
+            <span class="by" *ngIf="vehicle.createdByUserId"> {{ 'COMMON.BY' | translate }} {{ getCreatedByDisplay() }}</span>
         </div>
         <div class="modified-info" *ngIf="vehicle.modifiedOn">
-            <span class="label">Modified</span>
+            <span class="label">{{ 'COMMON.MODIFIED' | translate }}</span>
             <span class="value">{{ vehicle.modifiedOn | date:'mediumDate' }}</span>
         </div>
     </div>

@@ -10,6 +10,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../../../services/dialog.service';
 import { WindowService } from '../../../services/window.service';
 import { ListBase } from '../../../directives/list-base.directive';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-parkings-list',
@@ -48,61 +49,13 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
 
   errorMessage: string = '';
   isComponentActive = new Subject<void>();
-  societyNameConfig: IUIControlConfig = {
-    id: 'societyName',
-    label: 'Society Name'
-  };
-  buildingSelectorConfig: IUIControlConfig = {
-    id: 'building',
-    label: 'Building',
-    placeholder: 'Select Building',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Building is required',
-    }
-  };
-  parkingTypeSelectorConfig: IUIControlConfig = {
-    id: 'parkingType',
-    label: 'Parking Type',
-    placeholder: 'Select Parking Type',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Parking Type is required',
-    }
-  };
-  flatIdConfig: IUIControlConfig = {
-    id: 'flatId',
-    label: 'Flat',
-    placeholder: 'Select Flat',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Flat is required',
-    }
-  };
-  parkingNumberConfig = {
-    id: 'parkingNumber',
-    label: 'Parking Number',
-    placeholder: 'Enter Parking Number',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'minlength', validator: Validators.minLength(2) }
-    ],
-    errorMessages: {
-      required: 'Parking Number is required',
-      minlength: 'Minimum 2 characters required'
-    }
-  };
+  societyNameConfig!: IUIControlConfig;
+  buildingSelectorConfig!: IUIControlConfig;
+  parkingTypeSelectorConfig!: IUIControlConfig;
+  flatIdConfig!: IUIControlConfig;
+  parkingNumberConfig!: IUIControlConfig;
 
-  defaultFilter: IUIDropdownOption = {
-    label: 'All',
-    value: ''
-  }
+  defaultFilter!: IUIDropdownOption;
 
   get selectedParkingId(): string | undefined {
     return this.fb.get('_id')?.value ?? undefined;
@@ -172,10 +125,78 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
     private loginService: LoginService,
     private dialog: MatDialog,
     dialogService: DialogService,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private translate: TranslateService
   ) { super(dialogService) }
 
+  initFormConfigs() {
+    this.societyNameConfig = {
+      id: 'societyName',
+      label: this.translate.instant('PARKINGS.SOCIETY_NAME') || 'Society Name'
+    };
+
+    this.buildingSelectorConfig = {
+      id: 'building',
+      label: this.translate.instant('PARKINGS.BUILDING') || 'Building',
+      placeholder: this.translate.instant('PARKINGS.SELECT_BUILDING') || 'Select Building',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('PARKINGS.BUILDING_REQUIRED') || 'Building is required',
+      }
+    };
+
+    this.parkingTypeSelectorConfig = {
+      id: 'parkingType',
+      label: this.translate.instant('PARKINGS.PARKING_TYPE') || 'Parking Type',
+      placeholder: this.translate.instant('PARKINGS.SELECT_PARKING_TYPE') || 'Select Parking Type',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('PARKINGS.PARKING_TYPE_REQUIRED') || 'Parking Type is required',
+      }
+    };
+
+    this.flatIdConfig = {
+      id: 'flatId',
+      label: this.translate.instant('PARKINGS.FLAT') || 'Flat',
+      placeholder: this.translate.instant('PARKINGS.SELECT_FLAT') || 'Select Flat',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('PARKINGS.FLAT_REQUIRED') || 'Flat is required',
+      }
+    };
+
+    this.parkingNumberConfig = {
+      id: 'parkingNumber',
+      label: this.translate.instant('PARKINGS.PARKING_NUMBER') || 'Parking Number',
+      placeholder: this.translate.instant('PARKINGS.ENTER_PARKING_NUMBER') || 'Enter Parking Number',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'minlength', validator: Validators.minLength(2) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('PARKINGS.PARKING_NUMBER_REQUIRED') || 'Parking Number is required',
+        minlength: this.translate.instant('PARKINGS.PARKING_NUMBER_MIN') || 'Minimum 2 characters required'
+      }
+    };
+
+    this.defaultFilter = {
+      label: this.translate.instant('COMMON.ALL') || 'All',
+      value: ''
+    };
+  }
+
   ngOnInit(): void {
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
+
     this.subscribeToChange();
 
     this.societyId = this.route.snapshot.paramMap.get('societyId')!;
@@ -379,7 +400,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
     }
     const existingParkings = this.findExistingParkingNumber([payload]);
     if (existingParkings) {
-      this.errorMessage = `Parking ${existingParkings} already exists`;
+      this.errorMessage = this.translate.instant('PARKINGS.EXISTS_ERROR', { parkingNumber: existingParkings }) || `Parking ${existingParkings} already exists`;
       return;
     }
 
@@ -399,7 +420,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
 
     const parkingTypeName = VehicleTypes[parkingType];
 
-    if (!await this.dialogService.confirmToProceed(`Parkings will be created automatically for all pending flats which do not have ${parkingTypeName} parking yet`)) return;
+    if (!await this.dialogService.confirmToProceed(this.translate.instant('PARKINGS.CONFIRM_AUTO_GENERATE', { parkingType: parkingTypeName }) || `Parkings will be created automatically for all pending flats which do not have ${parkingTypeName} parking yet`)) return;
 
     // Find flats with pending parkings
     const getFlatId = (parking: IParking) => typeof parking.flatId === 'string' ? parking.flatId : parking.flatId?._id;
@@ -418,7 +439,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
 
     const existingParkings = this.findExistingParkingNumber(newParkings);
     if (existingParkings) {
-      this.errorMessage = `Parking ${existingParkings} already exists`;
+      this.errorMessage = this.translate.instant('PARKINGS.EXISTS_ERROR', { parkingNumber: existingParkings }) || `Parking ${existingParkings} already exists`;
       return;
     }
 
@@ -439,7 +460,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
 
     // check if new parking number already exists
     if (this.parkings.some(p => p._id !== formValue._id && p.parkingNumber === formValue.parkingNumber)) {
-      this.errorMessage = 'Parking number already exists';
+      this.errorMessage = this.translate.instant('PARKINGS.EXISTS_ERROR_GENERIC') || 'Parking number already exists';
       return;
     }
 
@@ -470,7 +491,7 @@ export class ParkingsListComponent extends ListBase implements OnInit, OnDestroy
   async deleteParking(parking: IParking) {
     if (!this.societyId) return;
 
-    if (!await this.dialogService.confirmDelete('Delete Parking', `Are you sure you want to delete Parking ${parking.parkingNumber} ?`)) return;
+    if (!await this.dialogService.confirmDelete(this.translate.instant('PARKINGS.DELETE_TITLE') || 'Delete Parking', this.translate.instant('PARKINGS.DELETE_CONFIRM', { parkingNumber: parking.parkingNumber }) || `Are you sure you want to delete Parking ${parking.parkingNumber} ?`)) return;
 
     this.societyService.deleteParking(this.societyId, parking._id)
       .pipe(take(1))

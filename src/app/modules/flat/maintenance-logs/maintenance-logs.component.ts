@@ -7,6 +7,7 @@ import { CountryService } from '../../../services/country.service';
 import { IMaintenanceLog, IMaintenanceLogsResponse, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { FormControl } from '@angular/forms';
 import { WindowService } from '../../../services/window.service';
+import { LangChangeEvent, TranslateService, TranslationChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-maintenance-logs',
@@ -25,55 +26,16 @@ export class MaintenanceLogsComponent implements OnInit, OnDestroy {
 
   // Filters — following announcement-list pattern exactly
   monthControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  monthConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'month',
-    label: 'Month',
-    placeholder: 'All Months',
-    formControl: this.monthControl,
-    dropDownOptions: Array.from({ length: 12 }, (_, i) => ({
-      value: i + 1,
-      label: this.maintenanceService.getMonthFullName(i + 1)
-    }))
-  };
+  monthConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   yearControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  yearConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'year',
-    label: 'Year',
-    placeholder: 'All Years',
-    formControl: this.yearControl,
-    dropDownOptions: Array.from({ length: 5 }, (_, i) => {
-      const currentYear = new Date().getFullYear();
-      return { value: currentYear - i, label: (currentYear - i).toString() };
-    })
-  };
+  yearConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   typeControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  typeConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'type',
-    label: 'Log Type',
-    placeholder: 'All Logs',
-    formControl: this.typeControl,
-    dropDownOptions: [
-      { value: 'all', label: 'All Logs' },
-      { value: 'payment', label: 'Payments Only' },
-      { value: 'reminder', label: 'Reminders Only' }
-    ]
-  };
+  typeConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   statusControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  statusConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'status',
-    label: 'Status',
-    placeholder: 'All Status',
-    formControl: this.statusControl,
-    dropDownOptions: [
-      { value: 'all', label: 'All Status' },
-      { value: 'approved', label: 'Paid' },
-      { value: 'pending_approval', label: 'Pending' },
-      { value: 'rejected', label: 'Rejected' }
-    ]
-  };
+  statusConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   // Store last filter values from app-filter
   private currentFilter: any = {};
@@ -83,14 +45,74 @@ export class MaintenanceLogsComponent implements OnInit, OnDestroy {
     public maintenanceService: MaintenanceService,
     private countryService: CountryService,
     private location: Location,
-    public windowService: WindowService
+    public windowService: WindowService,
+    private translate: TranslateService
   ) { }
 
   goBack(): void {
     this.location.back();
   }
 
+  initFilterConfigs() {
+    this.monthConfig = {
+      id: 'month',
+      label: this.translate.instant('MAINTENANCE.MONTH') || 'Month',
+      placeholder: this.translate.instant('MAINTENANCE.ALL_MONTHS') || 'All Months',
+      formControl: this.monthControl,
+      dropDownOptions: Array.from({ length: 12 }, (_, i) => ({
+        value: i + 1,
+        label: this.translate.instant('MONTHS.' + (i + 1)) || this.maintenanceService.getMonthFullName(i + 1)
+      }))
+    };
+
+    this.yearConfig = {
+      id: 'year',
+      label: this.translate.instant('MAINTENANCE.YEAR') || 'Year',
+      placeholder: this.translate.instant('MAINTENANCE.ALL_YEARS') || 'All Years',
+      formControl: this.yearControl,
+      dropDownOptions: Array.from({ length: 5 }, (_, i) => {
+        const currentYear = new Date().getFullYear();
+        return { value: currentYear - i, label: (currentYear - i).toString() };
+      })
+    };
+
+    this.typeConfig = {
+      id: 'type',
+      label: this.translate.instant('MAINTENANCE.LOG_TYPE') || 'Log Type',
+      placeholder: this.translate.instant('MAINTENANCE.LOG_TYPE_ALL') || 'All Logs',
+      formControl: this.typeControl,
+      dropDownOptions: [
+        { value: 'all', label: this.translate.instant('MAINTENANCE.LOG_TYPE_ALL') || 'All Logs' },
+        { value: 'payment', label: this.translate.instant('MAINTENANCE.LOG_TYPE_PAYMENTS') || 'Payments Only' },
+        { value: 'reminder', label: this.translate.instant('MAINTENANCE.LOG_TYPE_REMINDERS') || 'Reminders Only' }
+      ]
+    };
+
+    this.statusConfig = {
+      id: 'status',
+      label: this.translate.instant('MAINTENANCE.STATUS') || 'Status',
+      placeholder: this.translate.instant('MAINTENANCE.ALL_STATUS') || 'All Status',
+      formControl: this.statusControl,
+      dropDownOptions: [
+        { value: 'all', label: this.translate.instant('MAINTENANCE.ALL_STATUS') || 'All Status' },
+        { value: 'approved', label: this.translate.instant('MAINTENANCE.PAID') || 'Paid' },
+        { value: 'pending_approval', label: this.translate.instant('MAINTENANCE.PENDING') || 'Pending' },
+        { value: 'rejected', label: this.translate.instant('MAINTENANCE.STATUS_REJECTED') || 'Rejected' }
+      ]
+    };
+  }
+
   ngOnInit(): void {
+    this.initFilterConfigs();
+    // Re-init when language changes (user switches language)
+    this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe((_: LangChangeEvent) => {
+      this.initFilterConfigs();
+    });
+    // Re-init when translations first load (fixes key-only labels on initial page visit)
+    this.translate.onTranslationChange.pipe(takeUntil(this.destroy$)).subscribe((_: TranslationChangeEvent) => {
+      this.initFilterConfigs();
+    });
+
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.flatId = params['id'];
       this.societyId = this.route.snapshot.queryParams['societyId'] || '';

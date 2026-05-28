@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DemoRoutingModule } from './demo-routing.module';
 import { BookDemoComponent } from './book-demo/book-demo.component';
@@ -22,7 +23,8 @@ import { PipeModule } from '../../pipes/pipes.module';
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    PipeModule
+    PipeModule,
+    TranslateModule.forChild()
   ]
 })
 export class DemoModule { }

@@ -1,9 +1,9 @@
-<app-layout [hideMoreActions]="true" pageTitle="Join as {{ role | titlecase }}">
+<app-layout [hideMoreActions]="true" [pageTitle]="getPageTitle()">
 
     <form [formGroup]="fb" class="join-form">
         <ui-form-layout>
 
-            <ui-loading *ngIf="isSaving" message="Saving information" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="isSaving" [message]="'JOIN_AS.SAVING_INFO' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 
@@ -19,7 +19,7 @@
                     <div class="no-mobile no-tablet" [lgColumns]="3"></div>
                     <div class="control-container" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                         <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
-                            [options]="buildingOptions" placeholder="Select Building">
+                            [options]="buildingOptions" [placeholder]="'JOIN_AS.SELECT_BUILDING' | translate">
                         </ui-drop-down>
                         <div class="loading-spinner-overlay" *ngIf="isLoadingBuildings">
                             <div class="spinner"></div>
@@ -28,7 +28,7 @@
 
                     <div class="control-container" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                         <ui-drop-down formControlName="flatId" [config]="flatIdConfig" [options]="parkingFlatOptions"
-                            placeholder="Select Flat">
+                            [placeholder]="'JOIN_AS.SELECT_FLAT' | translate">
                         </ui-drop-down>
                         <div class="loading-spinner-overlay" *ngIf="isLoadingFlats">
                             <div class="spinner"></div>
@@ -44,7 +44,7 @@
                         [options]="residingTypeOptions" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                     </ui-radio-list>
 
-                    <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig" label="Status"
+                    <ui-radio-list [formControl]="radioFormControl" [config]="radioConfig"
                         direction="horizontal" [options]="radioOptions" *ngIf="isResidingTypeTenant" [smColumns]="12"
                         [mdColumns]="6" [lgColumns]="3">
                     </ui-radio-list>
@@ -95,10 +95,10 @@
 
                 <!-- Actions -->
                 <section class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="9">
-                    <ui-button label="Cancel" type="cancel" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
+                    <ui-button [label]="'JOIN_AS.CANCEL' | translate" type="cancel" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
                         (clicked)="cancel()">
                     </ui-button>
-                    <ui-button label="Save" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
+                    <ui-button [label]="'JOIN_AS.SAVE' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
                         (clicked)="save()">
                     </ui-button>
                 </section>

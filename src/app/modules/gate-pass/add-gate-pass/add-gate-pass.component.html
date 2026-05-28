@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true" pageTitle="Add Gate Pass"
+<app-layout [hideMoreActions]="true" [showBackButton]="true" [pageTitle]="'GATE_PASS.ADD_TITLE' | translate"
     [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <form [formGroup]="fb">
@@ -6,21 +6,21 @@
         <ui-form-layout>
 
             <ui-select2 formControlName="flat" [config]="flatSearchConfig" [options]="flatOptions"
-                placeholder="Search Flat" [smColumns]="12" [mdColumns]="4" [lgColumns]="4">
+                [placeholder]="'PARKINGS.SELECT_FLAT' | translate" [smColumns]="12" [mdColumns]="4" [lgColumns]="4">
             </ui-select2>
 
             <ui-date formControlName="expectedDate" [config]="expectedDateConfig" [smColumns]="12" [mdColumns]="4"
                 [lgColumns]="4">
             </ui-date>
 
-            <ui-text-box formControlName="remarks" [config]="{id: '', label: 'Remarks'}" [smColumns]="12"
+            <ui-text-box formControlName="remarks" [config]="{id: '', label: ('GATE_PASS.REMARKS' | translate)}" [smColumns]="12"
                 [mdColumns]="4" [lgColumns]="4">
             </ui-text-box>
 
             <div class="flex flex-space-between" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <ui-label [valueText]="getUsers.length" [config]="{id: '', label: 'Selected Users'}" [smColumns]="6"
+                <ui-label [valueText]="getUsers.length" [config]="{id: '', label: ('GATE_PASS.USERS' | translate)}" [smColumns]="6"
                     [mdColumns]="6" [lgColumns]="6">
-                </ui-label> 
+                </ui-label>
             </div>
 
             <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
@@ -37,7 +37,7 @@
                 </ui-user-search>
 
 
-                <ui-button label="Add" (clicked)="addUser()" [disable]="!selectedUser">
+                <ui-button [label]="'JOIN_AS.ADD' | translate" (clicked)="addUser()" [disable]="!selectedUser">
                 </ui-button>
 
             </ui-form-layout>
@@ -55,9 +55,9 @@
             </ui-card>
 
             <div class="flex flex-end flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <ui-button type="cancel" label="Cancel" (clicked)="cancel()">
+                <ui-button type="cancel" [label]="'JOIN_AS.CANCEL' | translate" (clicked)="cancel()">
                 </ui-button>
-                <ui-button label="Save" (clicked)="saveGatePass()" [disable]="fb.invalid">
+                <ui-button [label]="'JOIN_AS.SAVE' | translate" (clicked)="saveGatePass()" [disable]="fb.invalid">
                 </ui-button>
             </div>
 

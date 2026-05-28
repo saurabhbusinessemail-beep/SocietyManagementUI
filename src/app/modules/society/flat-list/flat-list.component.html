@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!canAddFlat" pageTitle="Flats" [subTitle]="societyService.selectedSocietyFilterValue?.label"
+<app-layout [hideMoreActions]="!canAddFlat" [pageTitle]="'FLAT.FLATS_LABEL' | translate" [subTitle]="societyService.selectedSocietyFilterValue?.label"
     [showBackButton]="true">
 
 
@@ -6,7 +6,7 @@
         <!-- <ui-button label="Add Flat" type="primary" (clicked)="openAddDialog()">
         </ui-button> -->
         <ul class="page-menu-list" *ngIf="canAddFlat">
-            <li class="page-menu" (click)="openAddDialog()">Add Flat</li>
+            <li class="page-menu" (click)="openAddDialog()">{{ 'FLAT.ADD_FLAT' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -14,25 +14,25 @@
         <ui-form-layout>
 
 
-            <ui-loading *ngIf="loadingSociety" message="Loading society information" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingSociety" [message]="'FLAT.LOADING_SOCIETY_INFO' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 
-            <ui-loading *ngIf="loadingSocietyBuildings" message="Loading society buildings" [smColumns]="12"
+            <ui-loading *ngIf="loadingSocietyBuildings" [message]="'FLAT.LOADING_BUILDINGS' | translate" [smColumns]="12"
                 [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
 
-            <ui-loading *ngIf="loadingBuilding" message="Loading building information" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingBuilding" [message]="'FLAT.LOADING_BUILDING_INFO' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 
-            <ui-loading *ngIf="loadingFlats" message="Loading flats" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <ui-loading *ngIf="loadingFlats" [message]="'FLAT.LOADING_FLATS' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
 
             <ng-container *ngIf="!loadingSociety && !loadingSocietyBuildings && !loadingBuilding && !loadingFlats">
 
-                <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
-                    <ui-label [valueText]="pendingFlatsToAdd" [config]="pendingFlatssConfig" direction="horizontal"
+                 <div [smColumns]="12" [mdColumns]="12" [lgColumns]="12" class="flex">
+                    <ui-label [valueText]="pendingFlatsToAdd" [config]="{ id: pendingFlatssConfig.id, label: ('FLAT.PENDING_FLATS' | translate) }" direction="horizontal"
                         [valueType]="pendingBuildingType" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                     </ui-label>
                 </div>
@@ -51,7 +51,7 @@
 
                 <!-- Building Drop Down -->
                 <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
-                    placeholder="Select Building" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
+                    [placeholder]="'FLAT.SELECT_BUILDING' | translate" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                 </ui-drop-down>
 
                 <!-- Floor -->
@@ -76,7 +76,10 @@
                 </ng-container>
 
                 <ng-container *ngIf="flats.length === 0">
-                    <app-empty-records singular="flat" plural="flats" [hideAddButton]="!canAddFlat"
+                    <app-empty-records
+                        [overrideTitle]="'FLAT.NO_FLATS' | translate"
+                        [overrideButtonText]="'FLAT.ADD_FLAT' | translate"
+                        [hideAddButton]="!canAddFlat"
                         (addClicked)="openAddDialog()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="home" size="xxl"></app-icon>
                     </app-empty-records>
@@ -91,7 +94,7 @@
 
 <ng-template #flatTemplate>
     <form [formGroup]="fb">
-        <app-add-edit-popup title="Add Flat" (onClose)="closeDialog();">
+        <app-add-edit-popup [title]="'FLAT.ADD_FLAT' | translate" (onClose)="closeDialog();">
             <ui-form-layout>
 
                 <!-- Society Control -->
@@ -106,7 +109,7 @@
 
                 <!-- Building Drop Down -->
                 <ui-drop-down formControlName="building" [config]="buildingSelectorConfig" [options]="buildingOptions"
-                    placeholder="Select Building" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
+                    [placeholder]="'FLAT.SELECT_BUILDING' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="6">
                 </ui-drop-down>
                 <!-- Append Floor Number checkbox -->
                 <ui-checklist class="flex-end" formControlName="appendFloorNumber" [config]="appendFloorNumberConfig"
@@ -139,7 +142,7 @@
                         </ui-text-box>
 
                         <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
-                            [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="6"
+                            [options]="flatTypeOptions" [placeholder]="'FLAT.SELECT_FLAT_TYPE' | translate" [smColumns]="12" [mdColumns]="6"
                             [lgColumns]="2">
                         </ui-drop-down>
 
@@ -155,7 +158,7 @@
                         </ui-text-box>
 
                         <ui-drop-down formControlName="flatType" [config]="flatTypeSelectorConfig"
-                            [options]="flatTypeOptions" placeholder="Select Flat Type" [smColumns]="12" [mdColumns]="4"
+                            [options]="flatTypeOptions" [placeholder]="'FLAT.SELECT_FLAT_TYPE' | translate" [smColumns]="12" [mdColumns]="4"
                             [lgColumns]="4">
                         </ui-drop-down>
 
@@ -172,9 +175,9 @@
             </ui-form-layout>
 
             <ng-container actions>
-                <ui-button [label]="'Cancel'" type="only-content" (clicked)="closeDialog();">
+                <ui-button [label]="'APP.CANCEL' | translate" type="only-content" (clicked)="closeDialog();">
                 </ui-button>
-                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
+                <ui-button [label]="'APP.ADD' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid"
                     (clicked)="addFlat()">
                 </ui-button>
             </ng-container>

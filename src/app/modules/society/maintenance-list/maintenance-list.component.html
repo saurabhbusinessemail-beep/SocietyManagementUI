@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" pageTitle="Maintenance"
+<app-layout [hideMoreActions]="true" [pageTitle]="'MAINTENANCE.TITLE' | translate"
     [subTitle]="societyService.selectedSocietyFilterValue?.label" [showBackButton]="true">
 
     <div class="flex-col full-h">
@@ -7,16 +7,16 @@
             (filterChanged)="onFilterChanged($any($event))">
 
             <ui-select2 [formControl]="monthControl" [config]="monthConfig"
-                [options]="monthConfig.dropDownOptions ?? []" placeholder="Select Month" [smColumns]="12"
+                [options]="monthConfig.dropDownOptions ?? []" [placeholder]="'MAINTENANCE.SELECT_MONTH' | translate" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="3" *ngIf="selectedTab === 'monthly'">
             </ui-select2>
 
             <ui-select2 [formControl]="yearControl" [config]="yearConfig" [options]="yearConfig.dropDownOptions ?? []"
-                placeholder="Select Year" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                [placeholder]="'MAINTENANCE.SELECT_YEAR' | translate" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
             </ui-select2>
 
             <ui-select2 [formControl]="statusFilterControl" [config]="statusFilterConfig"
-                [options]="statusFilterConfig.dropDownOptions ?? []" placeholder="Select Status" [smColumns]="12"
+                [options]="statusFilterConfig.dropDownOptions ?? []" [placeholder]="'MAINTENANCE.SELECT_STATUS' | translate" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="3" *ngIf="selectedTab === 'monthly'">
             </ui-select2>
         </app-filter>
@@ -29,7 +29,7 @@
             </ui-tabs>
 
             <!-- Loading -->
-            <ui-loading *ngIf="loadingReport" message="Loading maintenance report" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingReport" [message]="'MAINTENANCE.LOADING_REPORT' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 
@@ -50,7 +50,7 @@
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Paid</p>
+                                <p class="summary-label">{{ 'MAINTENANCE.PAID' | translate }}</p>
                                 <p class="summary-value">{{ paidCount }}</p>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Pending</p>
+                                <p class="summary-label">{{ 'MAINTENANCE.PENDING' | translate }}</p>
                                 <p class="summary-value">{{ pendingCount }}</p>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Not Paid</p>
+                                <p class="summary-label">{{ 'MAINTENANCE.NOT_PAID' | translate }}</p>
                                 <p class="summary-value">{{ notPaidCount }}</p>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Collected</p>
+                                <p class="summary-label">{{ 'MAINTENANCE.COLLECTED' | translate }}</p>
                                 <p class="summary-value">{{ totalCollected | formattedPrice }}</p>
                             </div>
                         </div>
@@ -112,8 +112,8 @@
                                 </svg>
                             </div>
                             <div class="summary-details">
-                                <p class="summary-label">Reminders</p>
-                                <p class="summary-value">Remind All</p>
+                                <p class="summary-label">{{ 'MAINTENANCE.REMINDERS' | translate }}</p>
+                                <p class="summary-value">{{ 'MAINTENANCE.REMIND_ALL' | translate }}</p>
                             </div>
                         </div>
                     </div>
@@ -138,13 +138,13 @@
 
                         <ng-container card-body>
                             <!-- Resident (Tenant or Owner who is primary) -->
-                            <ui-label [config]="{id: '', label: 'Resident'}" [valueText]="entry.memberName"
+                            <ui-label [config]="{id: '', label: ('MAINTENANCE.RESIDENT' | translate)}" [valueText]="entry.memberName"
                                 direction="vertical" valueType="info">
                             </ui-label>
 
                             <!-- Owner Section (New) -->
                             <div class="owner-mini-section" *ngIf="entry.owner && entry.memberType !== 'Owner'">
-                                <div class="mini-label">Owner</div>
+                                <div class="mini-label">{{ 'MAINTENANCE.OWNER' | translate }}</div>
                                 <div class="mini-details">
                                     <ui-user-avatar [user]="entry.owner.user" size="sm"></ui-user-avatar>
                                     <div class="mini-info">
@@ -153,21 +153,21 @@
                                 </div>
                             </div>
 
-                            <ui-label [config]="{id: '', label: 'Type'}" [valueText]="entry.memberType"
+                            <ui-label [config]="{id: '', label: ('MAINTENANCE.TYPE' | translate)}" [valueText]="entry.memberType"
                                 direction="vertical" valueType="info">
                             </ui-label>
 
-                            <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: 'Amount'}"
+                            <ui-label *ngIf="entry.payment?.amount" [config]="{id: '', label: ('MAINTENANCE.AMOUNT' | translate)}"
                                 [valueText]="entry.payment?.amount | formattedPrice" direction="vertical"
                                 valueType="info">
                             </ui-label>
 
-                            <ui-label *ngIf="entry.payment?.paidOn" [config]="{id: '', label: 'Paid On'}"
+                            <ui-label *ngIf="entry.payment?.paidOn" [config]="{id: '', label: ('MAINTENANCE.PAID_ON' | translate)}"
                                 [valueText]="(entry.payment?.paidOn | date:'mediumDate') || ''" direction="vertical"
                                 valueType="info">
                             </ui-label>
 
-                            <ui-label *ngIf="entry.lastReminderSent" [config]="{id: '', label: 'Last Reminder'}"
+                            <ui-label *ngIf="entry.lastReminderSent" [config]="{id: '', label: ('MAINTENANCE.LAST_REMINDER' | translate)}"
                                 [valueText]="(entry.lastReminderSent | date:'mediumDate') || ''" direction="vertical"
                                 valueType="info">
                             </ui-label>
@@ -177,16 +177,16 @@
                             <!-- Approve/Reject for pending payments -->
                             <ng-container *ngIf="entry.status === 'pending_approval'">
                                 <ng-container *ngIf="!approving && !rejecting">
-                                    <ui-button label="Approve" (clicked)="onApprove(entry)">
+                                    <ui-button [label]="'APP.APPROVE' | translate" (clicked)="onApprove(entry)">
                                     </ui-button>
-                                    <ui-button label="Reject" type="error" (clicked)="onReject(entry)">
+                                    <ui-button [label]="'APP.REJECT' | translate" type="error" (clicked)="onReject(entry)">
                                     </ui-button>
                                 </ng-container>
                                 <ng-container *ngIf="approving || rejecting">
-                                    <ui-loading *ngIf="approving" message="Approving" [smColumns]="12" [mdColumns]="12"
+                                    <ui-loading *ngIf="approving" [message]="'MAINTENANCE.APPROVING' | translate" [smColumns]="12" [mdColumns]="12"
                                         [lgColumns]="12">
                                     </ui-loading>
-                                    <ui-loading *ngIf="rejecting" message="Rejecting" [smColumns]="12" [mdColumns]="12"
+                                    <ui-loading *ngIf="rejecting" [message]="'MAINTENANCE.REJECTING' | translate" [smColumns]="12" [mdColumns]="12"
                                         [lgColumns]="12">
                                     </ui-loading>
                                 </ng-container>
@@ -194,9 +194,9 @@
 
                             <!-- Record Payment for unpaid flats -->
                             <ng-container *ngIf="entry.status === 'not_paid' || entry.status === 'rejected'">
-                                <ui-button label="Record Payment" (clicked)="openRecordPaymentDialog(entry)">
+                                <ui-button [label]="'FLAT.RECORD_PAYMENT' | translate" (clicked)="openRecordPaymentDialog(entry)">
                                 </ui-button>
-                                <ui-button label="Remind" type="only-content" (clicked)="onRemind(entry)">
+                                <ui-button [label]="'MAINTENANCE.REMIND' | translate" type="only-content" (clicked)="onRemind(entry)">
                                 </ui-button>
                             </ng-container>
 
@@ -209,7 +209,7 @@
 
                 <!-- Empty -->
                 <ng-container *ngIf="filteredEntries.length === 0 && monthlyReport">
-                    <app-empty-records singular="flat" plural="flats" overrideTitle="No maintenance records found"
+                    <app-empty-records singular="flat" plural="flats" [overrideTitle]="'MAINTENANCE.NO_RECORDS_FILTER' | translate"
                         [hideAddButton]="true" [hideMessage]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="home" size="xxl"></app-icon>
                     </app-empty-records>
@@ -219,25 +219,25 @@
             <!-- Yearly View -->
             <ng-container *ngIf="!loadingReport && selectedTab === 'yearly' && yearlyReport">
                 <ng-container *ngFor="let monthData of yearlyReport.months">
-                    <app-card-v2 [title]="maintenanceService.getMonthFullName(monthData.month)"
+                    <app-card-v2 [title]="'MONTHS.' + monthData.month | translate"
                         [status]="monthData.paidCount === monthData.totalFlats ? 'approved' : 'pending'"
                         [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
 
                         <ng-container card-body>
-                            <ui-label [config]="{id: '', label: 'Paid'}"
+                            <ui-label [config]="{id: '', label: ('MAINTENANCE.PAID' | translate)}"
                                 [valueText]="monthData.paidCount + ' / ' + monthData.totalFlats" direction="vertical"
                                 valueType="active">
                             </ui-label>
 
-                            <ui-label [config]="{id: '', label: 'Pending'}" [valueText]="monthData.pendingCount"
+                            <ui-label [config]="{id: '', label: ('MAINTENANCE.PENDING' | translate)}" [valueText]="monthData.pendingCount"
                                 direction="vertical" valueType="pending">
                             </ui-label>
 
-                            <ui-label [config]="{id: '', label: 'Not Paid'}" [valueText]="monthData.notPaidCount"
+                            <ui-label [config]="{id: '', label: ('MAINTENANCE.NOT_PAID' | translate)}" [valueText]="monthData.notPaidCount"
                                 direction="vertical" valueType="inactive">
                             </ui-label>
 
-                            <ui-label [config]="{id: '', label: 'Collected'}"
+                            <ui-label [config]="{id: '', label: ('MAINTENANCE.COLLECTED' | translate)}"
                                 [valueText]="monthData.totalCollected | formattedPrice" direction="vertical"
                                 valueType="info">
                             </ui-label>
@@ -253,28 +253,28 @@
 
 <!-- Record Payment Dialog -->
 <ng-template #recordPaymentTemplate>
-    <app-add-edit-popup title="Record Payment" (onClose)="closeDialog()">
+    <app-add-edit-popup [title]="'FLAT.RECORD_PAYMENT' | translate" (onClose)="closeDialog()">
         <ui-form-layout>
             <!-- Flat Info -->
-            <ui-label [valueText]="selectedEntry?.flatNumber ?? ''" [config]="{id: '', label: 'Flat'}"
+            <ui-label [valueText]="selectedEntry?.flatNumber ?? ''" [config]="{id: '', label: ('MAINTENANCE.FLAT_LABEL' | translate)}"
                 direction="horizontal" valueType="info" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-label>
 
-            <ui-label [valueText]="selectedEntry?.memberName ?? ''" [config]="{id: '', label: 'Resident'}"
+            <ui-label [valueText]="selectedEntry?.memberName ?? ''" [config]="{id: '', label: ('MAINTENANCE.RESIDENT' | translate)}"
                 direction="horizontal" valueType="info" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-label>
 
             <!-- Amount -->
-            <ui-drop-down [formControl]="paymentMonth" [config]="{id: 'paymentMonth', label: 'Month'}"
+            <ui-drop-down [formControl]="paymentMonth" [config]="{id: 'paymentMonth', label: ('MAINTENANCE.MONTH' | translate)}"
                 [options]="monthConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-drop-down>
 
-            <ui-drop-down [formControl]="paymentYear" [config]="{id: 'paymentYear', label: 'Year'}"
+            <ui-drop-down [formControl]="paymentYear" [config]="{id: 'paymentYear', label: ('MAINTENANCE.YEAR' | translate)}"
                 [options]="yearConfig.dropDownOptions ?? []" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="paymentAmount"
-                [config]="{id: 'amount', label: 'Amount (' + currencySymbol + ')', placeholder: 'Enter amount'}"
+                [config]="{id: 'amount', label: ('MAINTENANCE.AMOUNT' | translate) + ' (' + currencySymbol + ')', placeholder: ('MAINTENANCE.ENTER_AMOUNT' | translate)}"
                 [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
@@ -283,15 +283,15 @@
 
             <!-- Note -->
             <ui-text-box [formControl]="paymentNote"
-                [config]="{id: 'note', label: 'Note (Optional)', placeholder: 'Add a note'}" [smColumns]="12"
+                [config]="{id: 'note', label: ('MAINTENANCE.NOTE_OPTIONAL' | translate), placeholder: ('MAINTENANCE.ADD_NOTE' | translate)}" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
         </ui-form-layout>
 
         <ng-container actions>
-            <ui-button label="Cancel" type="only-content" (clicked)="closeDialog()">
+            <ui-button [label]="'APP.CANCEL' | translate" type="only-content" (clicked)="closeDialog()">
             </ui-button>
-            <ui-button label="Record Payment" [disable]="recordingPayment || !paymentAmount.value"
+            <ui-button [label]="'FLAT.RECORD_PAYMENT' | translate" [disable]="recordingPayment || !paymentAmount.value"
                 (clicked)="recordPayment()">
             </ui-button>
         </ng-container>

@@ -1,15 +1,15 @@
-<app-layout [hideMoreActions]="!canAddSociety" pageTitle="Societies" backButtonURL="/dashboard/user">
+<app-layout [hideMoreActions]="!canAddSociety" [pageTitle]="'SOCIETY.TITLE' | translate" backButtonURL="/dashboard/user">
 
   <ng-container moreActions>
 
     <ul class="page-menu-list" *ngIf="canAddSociety">
-      <li class="page-menu" routerLink="../add">Add Society</li>
+      <li class="page-menu" routerLink="../add">{{ 'SOCIETY.ADD_SOCIETY' | translate }}</li>
     </ul>
   </ng-container>
 
   <ui-form-layout>
     <!-- Loading indicator for plans -->
-    <ui-loading *ngIf="loadingSocieties" message="Loading societies" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+    <ui-loading *ngIf="loadingSocieties" [message]="'SOCIETY.LOADING_SOCIETIES' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
     </ui-loading>
 
     <ng-container *ngIf="!loadingSocieties">

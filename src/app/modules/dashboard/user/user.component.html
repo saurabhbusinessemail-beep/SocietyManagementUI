@@ -6,14 +6,13 @@
 
     <div class="user-container">
 
-        <!-- JOIN AS SECTION -->
-        <ui-form-layout title="JOIN AS" [showAsSection]="true" colorTheme="gradient-modern-ui">
+        <ui-form-layout [title]="'DASHBOARD.JOIN_AS' | translate" [showAsSection]="true" colorTheme="gradient-modern-ui">
             <div class="no-mobile no-tablet" [lgColumns]="3"></div>
 
             <ui-card *ngFor="let r of roles" [smColumns]="4" [mdColumns]="4" [lgColumns]="2"
                 (click)="navigateToJoin(r.role)">
                 <div card-main>
-                    <b>{{ r.label }}</b>
+                    <b>{{ (r.role === 'owner' ? 'DASHBOARD.ROLE_FLAT_OWNER' : (r.role === 'tenant' ? 'DASHBOARD.ROLE_TENANT' : 'DASHBOARD.ROLE_SECURITY')) | translate }}</b>
                 </div>
                 <div card-icon>
                     <app-icon [name]="r.icon" size="xxl"></app-icon>
@@ -24,7 +23,7 @@
         </ui-form-layout>
 
         <!-- SOCIETIES SECTION -->
-        <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
+        <ui-form-layout [title]="'DASHBOARD.SOCIETIES' | translate" [showAsSection]="true" colorTheme="gradient-light-airy"
             *ngIf="societies.length > 0" class="societies-section">
             <ng-container *ngFor="let s of societies">
                 <ui-circular-display [label]="s.societyName" [smColumns]="6" [mdColumns]="3" [lgColumns]="2"
@@ -33,7 +32,7 @@
             </ng-container>
         </ui-form-layout>
 
-        <ui-form-layout [title]="'Societies'" [showAsSection]="true" colorTheme="gradient-light-airy"
+        <ui-form-layout [title]="'DASHBOARD.SOCIETIES' | translate" [showAsSection]="true" colorTheme="gradient-light-airy"
             *ngIf="societies.length ===  0" class="societies-section">
             <div class="empty-societies-placeholder" *ngIf="!isSocitiesLoading" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
@@ -41,14 +40,14 @@
                     <div class="placeholder-icon">
                         <app-icon name="building" size="xl"></app-icon>
                     </div>
-                    <h3 class="placeholder-title">No Societies Yet</h3>
-                    <p class="placeholder-description">Get started by registering your society</p>
-                    <ui-button label="New Registration" type="primary" (clicked)="navigateToAddSociety()">
+                    <h3 class="placeholder-title">{{ 'DASHBOARD.NO_SOCIETIES_TITLE' | translate }}</h3>
+                    <p class="placeholder-description">{{ 'DASHBOARD.NO_SOCIETIES_DESC' | translate }}</p>
+                    <ui-button [label]="'DASHBOARD.NEW_REGISTRATION' | translate" type="primary" (clicked)="navigateToAddSociety()">
                     </ui-button>
                 </div>
             </div>
 
-            <ui-loading *ngIf="isSocitiesLoading" message="Loading Societies" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="isSocitiesLoading" [message]="'DASHBOARD.LOADING_SOCIETIES' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
         </ui-form-layout>
@@ -61,12 +60,12 @@
                         <app-icon name="notifications" size="xxl"></app-icon>
                     </div>
                     <div class="text-group">
-                        <h2>Pending Actions</h2>
-                        <p>Items requiring your immediate attention</p>
+                        <h2>{{ 'DASHBOARD.PENDING_ACTIONS' | translate }}</h2>
+                        <p>{{ 'DASHBOARD.PENDING_ACTIONS_DESC' | translate }}</p>
                     </div>
                 </div>
                 <div class="status-badge">
-                    Action Required
+                    {{ 'DASHBOARD.ACTION_REQUIRED' | translate }}
                 </div>
             </div>
 
@@ -87,12 +86,12 @@
                             <span class="title">{{ ge.visitorName }}</span>
                             <span class="subtitle">
                                 <span *ngIf="getBuildingNumber(ge.flatId)">{{ getBuildingNumber(ge.flatId) }}: </span>
-                                {{ getFlatNumber(ge.flatId) || 'Visitor' }}
+                                {{ getFlatNumber(ge.flatId) || ('DASHBOARD.VISITOR' | translate) }}
                             </span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">{{ ge.status === 'requested' ? 'Visitor' : 'Approved' }}</span>
-                            <span class="time">{{ ge.status === 'requested' ? 'Pending Approval' : (ge.modifiedOn |
+                            <span class="category-tag">{{ ge.status === 'requested' ? ('DASHBOARD.VISITOR' | translate) : ('DASHBOARD.APPROVED' | translate) }}</span>
+                            <span class="time">{{ ge.status === 'requested' ? ('DASHBOARD.PENDING_APPROVAL' | translate) : (ge.modifiedOn |
                                 date:'shortTime') }}</span>
                         </div>
                     </div>
@@ -112,11 +111,11 @@
                         </div>
                         <div class="card-body">
                             <span class="title">{{ s.societyName }}</span>
-                            <span class="subtitle">New Society Registration</span>
+                            <span class="subtitle">{{ 'DASHBOARD.NEW_SOCIETY_REG' | translate }}</span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">Registration</span>
-                            <span class="time">Verify Now</span>
+                            <span class="category-tag">{{ 'DASHBOARD.REGISTRATION' | translate }}</span>
+                            <span class="time">{{ 'DASHBOARD.VERIFY_NOW' | translate }}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -135,11 +134,11 @@
                         </div>
                         <div class="card-body">
                             <span class="title">{{ jr.requesterName }}</span>
-                            <span class="subtitle">Join: {{ jr.requestType }}</span>
+                            <span class="subtitle">{{ 'COMMON.JOIN' | translate }}: {{ jr.requestType }}</span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">Join Request</span>
-                            <span class="time">Review Profile</span>
+                            <span class="category-tag">{{ 'DASHBOARD.JOIN_REQUEST' | translate }}</span>
+                            <span class="time">{{ 'DASHBOARD.REVIEW_PROFILE' | translate }}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -157,13 +156,13 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <span class="title">Rent: {{ rp.month }}/{{ rp.year }}</span>
+                            <span class="title">{{ 'DASHBOARD.RENT' | translate }}: {{ rp.month }}/{{ rp.year }}</span>
                             <span class="subtitle">{{ rp.amount | currency:'INR':'symbol':'1.0-0' }} - {{
                                 getFlatNumber(rp.flatId) }}</span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">Rent</span>
-                            <span class="time">Approve Payment</span>
+                            <span class="category-tag">{{ 'DASHBOARD.RENT' | translate }}</span>
+                            <span class="time">{{ 'DASHBOARD.APPROVE_PAYMENT' | translate }}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -181,13 +180,13 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <span class="title">Maint: {{ mp.month }}/{{ mp.year }}</span>
+                            <span class="title">{{ 'DASHBOARD.MAINTENANCE' | translate }}: {{ mp.month }}/{{ mp.year }}</span>
                             <span class="subtitle">{{ mp.amount | currency:'INR':'symbol':'1.0-0' }} - {{
                                 getFlatNumber(mp.flatId) }}</span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">Maintenance</span>
-                            <span class="time">Check Receipt</span>
+                            <span class="category-tag">{{ 'DASHBOARD.MAINTENANCE' | translate }}</span>
+                            <span class="time">{{ 'DASHBOARD.CHECK_RECEIPT' | translate }}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -210,8 +209,8 @@
                                 }}</span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">Document</span>
-                            <span class="time">Verify Tenant</span>
+                            <span class="category-tag">{{ 'DASHBOARD.DOCUMENT' | translate }}</span>
+                            <span class="time">{{ 'DASHBOARD.VERIFY_TENANT' | translate }}</span>
                         </div>
                     </div>
                 </ng-container>
@@ -230,5 +229,5 @@
   [readyTrigger$]="tourReady$"
   [excludeStepIds]="tourExcludeStepIds"
   [expectDialogBeforeStart]="expectNamePopup"
-  [showRetakeBubble]="true">
+  [showRetakeBubble]="false">
 </app-tour-overlay>

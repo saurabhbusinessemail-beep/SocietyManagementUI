@@ -14,98 +14,92 @@ export const USER_DASHBOARD_TOUR: TourConfig = {
     {
       stepId: 'welcome',
       target: '.banner-container',
-      title: '👋 Welcome to Your Dashboard!',
-      content:
-        'This is your personal hub. From here you can join societies, manage your flats, and take care of pending actions.',
+      title: 'TOUR.USER_DASHBOARD.WELCOME_TITLE',
+      content: 'TOUR.USER_DASHBOARD.WELCOME_CONTENT',
       position: 'bottom'
     },
     {
       stepId: 'join-section',
       target: '.user-container ui-form-layout:first-child',
-      title: '🏡 Join a Society',
-      content:
-        'Choose how you want to join – as a Flat Owner, Tenant, or Security personnel. Click any card to begin the registration process.',
+      title: 'TOUR.USER_DASHBOARD.JOIN_SECTION_TITLE',
+      content: 'TOUR.USER_DASHBOARD.JOIN_SECTION_CONTENT',
       position: 'top'
     },
     {
       stepId: 'join-card',
       target: 'ui-card:first-of-type',
-      title: '🔑 Flat Owner',
-      content:
-        'Select this if you own a flat in a society. You\'ll be able to manage rent, maintenance and more.',
+      title: 'TOUR.USER_DASHBOARD.JOIN_CARD_TITLE',
+      content: 'TOUR.USER_DASHBOARD.JOIN_CARD_CONTENT',
       position: 'bottom'
     },
     {
       stepId: 'societies-section',
       target: '.societies-section',
-      title: '🏢 Your Societies',
-      content:
-        'All the societies you are part of appear here as circular badges. Tap any society to open its dashboard.',
+      title: 'TOUR.USER_DASHBOARD.SOCIETIES_SECTION_TITLE',
+      content: 'TOUR.USER_DASHBOARD.SOCIETIES_SECTION_CONTENT',
       position: 'bottom'
     },
     {
       // Shown only when hasAnyApprovals === true
       stepId: 'approvals-section',
       target: '.approvals-section',
-      title: '🔔 Pending Actions',
-      content:
-        'Any items that need your attention – gate entry approvals, join requests, rent or maintenance payments – are shown here with a premium card view.',
+      title: 'TOUR.USER_DASHBOARD.APPROVALS_SECTION_TITLE',
+      content: 'TOUR.USER_DASHBOARD.APPROVALS_SECTION_CONTENT',
       position: 'top'
     },
     {
       // Shown only when at least one approval card exists
       stepId: 'approval-card',
       target: '.approval-card-premium:first-of-type',
-      title: '📋 Approval Card',
-      content:
-        'Click any card to navigate directly to that item. Each card shows the type, status and a one-tap action.',
+      title: 'TOUR.USER_DASHBOARD.APPROVAL_CARD_TITLE',
+      content: 'TOUR.USER_DASHBOARD.APPROVAL_CARD_CONTENT',
       position: 'bottom',
       waitForElement: 200
     },
     {
       stepId: 'user-icon',
       target: '.user-btn',
-      title: '👤 User Menu',
-      content: 'Access your profile, settings, and other options here.',
+      title: 'TOUR.USER_DASHBOARD.USER_ICON_TITLE',
+      content: 'TOUR.USER_DASHBOARD.USER_ICON_CONTENT',
       position: 'bottom-right',
       clickOnNext: '.user-btn',
-      nextButtonText: 'Next →'
+      nextButtonText: 'TOUR.USER_DASHBOARD.USER_ICON_NEXT_BUTTON'
     },
     {
       stepId: 'user-menu-info',
       target: '.user-info',
-      title: 'Profile Information',
-      content: 'View your profile details and selected society.',
+      title: 'TOUR.USER_DASHBOARD.USER_MENU_INFO_TITLE',
+      content: 'TOUR.USER_DASHBOARD.USER_MENU_INFO_CONTENT',
       position: 'left',
       waitForElement: 300
     },
     {
       stepId: 'menu-register-society',
       target: '.register-society-item',
-      title: 'Register Society',
-      content: 'Register a new society here. It will go for approval along with other details provided.',
+      title: 'TOUR.USER_DASHBOARD.REGISTER_SOCIETY_TITLE',
+      content: 'TOUR.USER_DASHBOARD.REGISTER_SOCIETY_CONTENT',
       position: 'left'
     },
     {
       stepId: 'menu-request-demo',
       target: '.request-demo-item',
-      title: 'Request Demo',
-      content: 'Want to see more features? Request a demo of the Gate My Society app.',
+      title: 'TOUR.USER_DASHBOARD.REQUEST_DEMO_TITLE',
+      content: 'TOUR.USER_DASHBOARD.REQUEST_DEMO_CONTENT',
       position: 'left'
     },
     {
       stepId: 'menu-profile-help',
       target: '.profile-help-item',
       targetAll: true,
-      title: 'Profile & Help',
-      content: 'Manage your personal profile settings and get help or support if you need assistance.',
+      title: 'TOUR.USER_DASHBOARD.PROFILE_HELP_TITLE',
+      content: 'TOUR.USER_DASHBOARD.PROFILE_HELP_CONTENT',
       position: 'left'
     },
     {
       stepId: 'menu-themes',
       target: '.theme-switcher-item',
-      title: 'Themes',
-      content: 'Customize the look of your app by choosing your favorite color theme.',
+      title: 'TOUR.USER_DASHBOARD.THEMES_TITLE',
+      content: 'TOUR.USER_DASHBOARD.THEMES_CONTENT',
       position: 'left'
     }
   ]

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { JoinAsRoutingModule } from './join-as-routing.module';
 import { JoinAsComponent } from './join-as/join-as.component';
@@ -20,7 +21,8 @@ import { DirectiveModule } from '../../directives/directive.module';
     FormsModule,
     ReactiveFormsModule,
     UiModule,
-    DirectiveModule
+    DirectiveModule,
+    TranslateModule.forChild()
   ]
 })
 export class JoinAsModule { }

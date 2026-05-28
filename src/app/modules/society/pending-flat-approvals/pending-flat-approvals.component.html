@@ -1,7 +1,7 @@
 <div class="search-container">
     <div class="search-wrapper">
         <i class="material-icons search-icon">search</i>
-        <input type="text" class="search-input" placeholder="Search by flat number, requester..."
+        <input type="text" class="search-input" [placeholder]="'APPROVALS.SEARCH_FLAT_PLACEHOLDER' | translate"
             [formControl]="searchControl">
         <button class="clear-search" *ngIf="searchControl.value" (click)="clearSearch()">
             <i class="material-icons">close</i>
@@ -9,22 +9,22 @@
     </div>
     <div class="status-filter">
         <select [formControl]="statusControl" class="status-select">
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
+            <option value="pending">{{ 'APPROVALS.PENDING' | translate }}</option>
+            <option value="approved">{{ 'APPROVALS.APPROVED' | translate }}</option>
+            <option value="rejected">{{ 'APPROVALS.REJECTED' | translate }}</option>
         </select>
     </div>
     <div class="status-filter">
         <select [formControl]="viewFilterControl" class="status-select">
-            <option value="all">All</option>
-            <option value="my">My Requests</option>
-            <option value="approval">To Approve</option>
+            <option value="all">{{ 'APPROVALS.ALL' | translate }}</option>
+            <option value="my">{{ 'APPROVALS.MY_REQUESTS' | translate }}</option>
+            <option value="approval">{{ 'APPROVALS.TO_APPROVE' | translate }}</option>
         </select>
     </div>
 </div>
 
 <div class="society-table">
-    <ui-loading *ngIf="loading" message="Loading approvals..."></ui-loading>
+    <ui-loading *ngIf="loading" [message]="'APPROVALS.LOADING' | translate"></ui-loading>
 
     <ng-container *ngIf="!loading">
         <ng-container *ngIf="requests.length > 0; else noRequests">
@@ -33,12 +33,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Flat Number</th>
-                            <th>Society</th>
-                            <th>Requester</th>
-                            <th>Submitted</th>
-                            <th>Type</th>
-                            <th>Actions</th>
+                            <th>{{ 'APPROVALS.FLAT_NUMBER' | translate }}</th>
+                            <th>{{ 'APPROVALS.SOCIETY' | translate }}</th>
+                            <th>{{ 'APPROVALS.REQUESTER' | translate }}</th>
+                            <th>{{ 'APPROVALS.SUBMITTED' | translate }}</th>
+                            <th>{{ 'APPROVALS.TYPE' | translate }}</th>
+                            <th>{{ 'APPROVALS.ACTIONS' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,16 +50,16 @@
                                         <div class="number">{{ req.flatNumber || 'N/A' }}</div>
                                         <div class="type">
                                             <ng-container *ngIf="req.data.isOwner">
-                                                Owner
+                                                {{ 'APPROVALS.OWNER' | translate }}
                                             </ng-container>
                                             <ng-container *ngIf="req.data.isMember">
-                                                Member
+                                                {{ 'APPROVALS.MEMBER' | translate }}
                                             </ng-container>
                                             <ng-container *ngIf="req.data.isTenant">
-                                                Tenant
+                                                {{ 'APPROVALS.TENANT' | translate }}
                                             </ng-container>
                                             <ng-container *ngIf="req.data.isTenantMember">
-                                                Tenant member
+                                                {{ 'APPROVALS.TENANT_MEMBER' | translate }}
                                             </ng-container>
                                         </div>
                                     </div>
@@ -68,28 +68,28 @@
                             <td class="society-cell">{{ req.societyName || 'N/A' }}</td>
                             <td class="requester-cell">
                                 <div class="requester-info">
-                                    <div class="name">{{ req.requesterName || 'Unknown' }}</div>
+                                    <div class="name">{{ req.requesterName || ('APPROVALS.UNKNOWN' | translate) }}</div>
                                     <div class="contact">{{ req.requesterContact || '' }}</div>
                                 </div>
                             </td>
                             <td class="submitted">{{ req.createdAt | date:'dd MMM yyyy' }}</td>
                             <td>
                                 <span class="badge" [ngClass]="req.viewType">
-                                    {{ req.viewType === 'my' ? 'My Request' : 'Approval' }}
+                                    {{ req.viewType === 'my' ? ('APPROVALS.MY_REQUEST' | translate) : ('APPROVALS.APPROVAL' | translate) }}
                                 </span>
                             </td>
                             <td class="actions-cell">
                                 <div class="action-buttons">
                                     <button class="btn-approve" (click)="approve(req)"
                                         *ngIf="req.status === 'pending' && req.viewType === 'approval'">
-                                        <i class="material-icons">check</i> Approve
+                                        <i class="material-icons">check</i> {{ 'APPROVALS.APPROVE' | translate }}
                                     </button>
                                     <button class="btn-reject" (click)="reject(req)"
                                         *ngIf="req.status === 'pending' && req.viewType === 'approval'">
-                                        <i class="material-icons">close</i> Reject
+                                        <i class="material-icons">close</i> {{ 'APPROVALS.REJECT' | translate }}
                                     </button>
                                     <div class="status-badge" [ngClass]="req.status" *ngIf="req.status !== 'pending'">
-                                        {{ req.status | titlecase }}
+                                        {{ req.status === 'approved' ? ('APPROVALS.APPROVED' | translate) : (req.status === 'rejected' ? ('APPROVALS.REJECTED' | translate) : req.status) }}
                                     </div>
                                 </div>
                             </td>
@@ -115,7 +115,9 @@
                                 <i class="material-icons status-icon" *ngIf="req.status === 'rejected'">cancel</i>
                                 <i class="material-icons status-icon"
                                     *ngIf="req.status === 'pending'">hourglass_empty</i>
-                                <span class="status-text">{{ req.status | titlecase }}</span>
+                                <span class="status-text">
+                                    {{ req.status === 'approved' ? ('APPROVALS.APPROVED' | translate) : (req.status === 'rejected' ? ('APPROVALS.REJECTED' | translate) : ('APPROVALS.PENDING' | translate)) }}
+                                </span>
                             </div>
                             <div class="expand-icon" [ngClass]="{'inverted': expandedRow === i}">
                                 <app-icon name="arrow-down"></app-icon>
@@ -124,23 +126,23 @@
                     </div>
                     <div class="mobile-body" *ngIf="expandedRow === i">
                         <div class="details-grid">
-                            <div class="detail-item"><span class="detail-label">Requester</span><strong
+                            <div class="detail-item"><span class="detail-label">{{ 'APPROVALS.REQUESTER' | translate }}</span><strong
                                     class="detail-value">{{
-                                    req.requesterName || 'Unknown' }}</strong></div>
-                            <div class="detail-item"><span class="detail-label">Contact</span><strong
+                                    req.requesterName || ('APPROVALS.UNKNOWN' | translate) }}</strong></div>
+                            <div class="detail-item"><span class="detail-label">{{ 'APPROVALS.CONTACT' | translate }}</span><strong
                                     class="detail-value">{{
                                     req.requesterContact || '-' }}</strong></div>
-                            <div class="detail-item"><span class="detail-label">Request Date</span><strong
+                            <div class="detail-item"><span class="detail-label">{{ 'APPROVALS.REQUEST_DATE' | translate }}</span><strong
                                     class="detail-value">{{ req.createdAt | date:'dd MMM yyyy' }}</strong></div>
-                            <div class="detail-item"><span class="detail-label">Member Type</span><strong
+                            <div class="detail-item"><span class="detail-label">{{ 'APPROVALS.MEMBER_TYPE' | translate }}</span><strong
                                     class="detail-value">
-                                    {{ req.data.isOwner ? 'Owner' : (req.data.isTenant ? 'Tenant' : (req.data.isMember ?
-                                    'Member' : 'Tenant Member')) }}
+                                    {{ req.data.isOwner ? ('APPROVALS.OWNER' | translate) : (req.data.isTenant ? ('APPROVALS.TENANT' | translate) : (req.data.isMember ?
+                                    ('APPROVALS.MEMBER' | translate) : ('APPROVALS.TENANT_MEMBER' | translate))) }}
                                 </strong></div>
                         </div>
                         <div class="mobile-actions" *ngIf="req.status === 'pending' && req.viewType === 'approval'">
-                            <button class="btn-approve mobile" (click)="approve(req)">Approve</button>
-                            <button class="btn-reject mobile" (click)="reject(req)">Reject</button>
+                            <button class="btn-approve mobile" (click)="approve(req)">{{ 'APPROVALS.APPROVE' | translate }}</button>
+                            <button class="btn-reject mobile" (click)="reject(req)">{{ 'APPROVALS.REJECT' | translate }}</button>
                         </div>
                     </div>
                 </div>
@@ -149,21 +151,23 @@
             <!-- Pagination -->
             <div class="pagination" *ngIf="total > limit">
                 <button (click)="prevPage()" [disabled]="page === 1"><i class="material-icons">chevron_left</i>
-                    Prev</button>
-                <span class="page-info">Page {{ page }} of {{ Math.ceil(total/limit) }}</span>
-                <button (click)="nextPage()" [disabled]="page === Math.ceil(total/limit)">Next <i
+                    {{ 'APPROVALS.PREV' | translate }}</button>
+                <span class="page-info">{{ 'APPROVALS.PAGE_OF' | translate:{page: page, totalPages: Math.ceil(total/limit)} }}</span>
+                <button (click)="nextPage()" [disabled]="page === Math.ceil(total/limit)">{{ 'APPROVALS.NEXT' | translate }} <i
                         class="material-icons">chevron_right</i></button>
             </div>
         </ng-container>
 
         <ng-template #noRequests>
-            <app-empty-records [singular]="requestType === 'Security' ? 'security approval' : 'flat approval'"
-                [plural]="requestType === 'Security' ? 'security approvals' : 'flat approvals'" [hideAddButton]="true"
+            <app-empty-records 
+                [singular]="requestType === 'Security' ? ('APPROVALS.SECURITY' | translate) : ('APPROVALS.FLAT' | translate)"
+                [plural]="requestType === 'Security' ? ('APPROVALS.SECURITY_PLURAL' | translate) : ('APPROVALS.FLAT_PLURAL' | translate)" 
+                [hideAddButton]="true"
                 [overrideTitle]="statusControl.value === 'pending' 
-                    ? (requestType === 'Security' ? 'No security approvals are pending' : 'No flat approvals are pending')
+                    ? (requestType === 'Security' ? ('APPROVALS.NO_PENDING_SECURITY' | translate) : ('APPROVALS.NO_PENDING_FLAT' | translate))
                     : (statusControl.value === 'approved' 
-                        ? (requestType === 'Security' ? 'No records found for approved security' : 'No records found for approved flats')
-                        : 'No rejected records found')"
+                        ? (requestType === 'Security' ? ('APPROVALS.NO_APPROVED_SECURITY' | translate) : ('APPROVALS.NO_APPROVED_FLAT' | translate))
+                        : ('APPROVALS.NO_REJECTED_SOCIETY' | translate))"
                 [hideMessage]="true">
                 <app-icon icon [name]="requestType === 'Security' ? 'security' : 'home'" size="xxl"></app-icon>
             </app-empty-records>

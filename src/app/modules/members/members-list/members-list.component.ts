@@ -5,6 +5,7 @@ import { Subject, take } from 'rxjs';
 import { SocietyRoles } from '../../../types';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 interface IMemberFilter {
   societyId?: string, flatId?: string
@@ -25,7 +26,7 @@ export class MembersListComponent implements OnInit {
   loadingMemberAction: { [memberId: string]: boolean } = {};
 
   constructor(public societyService: SocietyService, private dialogService: DialogService,
-    private route: ActivatedRoute, private router: Router) { }
+    private route: ActivatedRoute, private router: Router, private translate: TranslateService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -54,9 +55,11 @@ export class MembersListComponent implements OnInit {
   }
 
   async deleteMember(member: IFlatMemberWithResidency) {
-    const forUser = !member.userId || typeof member.userId === 'string' ? undefined : ` ${member.userId.name ?? member.userId.phoneNumber}`
+    const forUser = !member.userId || typeof member.userId === 'string' ? '' : ` ${member.userId.name ?? member.userId.phoneNumber}`;
+    const title = this.translate.instant('MEMBERS.DELETE_TITLE') || 'Delete Flat Member';
+    const message = this.translate.instant('MEMBERS.DELETE_CONFIRM', { name: forUser }) || `Are you sure you want to delete flat member ${forUser}?`;
 
-    if (!await this.dialogService.confirmDelete('Delete Flat Member', `Are you sure you want to delete flat member ${forUser}?`)) return;
+    if (!await this.dialogService.confirmDelete(title, message)) return;
 
     this.loadingMemberAction[member._id] = true;
     this.societyService.deleteFlatMember(member._id)

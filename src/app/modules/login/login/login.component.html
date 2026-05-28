@@ -2,14 +2,27 @@
     [extendedMenuTemplate]="extendedMenuTemplate" (needLogin)="simpleLogin()"
     (menuItemClick)="handleMenuItemClick($event)">
 
-    <div class="first-div">
+    <div class="first-div" style="position: relative;">
+        <div class="landing-lang-switcher-select">
+            <select
+                #loginLangSelect
+                [value]="currentLang"
+                (change)="setLanguage(loginLangSelect.value)"
+                class="landing-lang-select"
+                id="login-lang-select">
+                <option *ngFor="let lang of languages" [value]="lang.code" [selected]="currentLang === lang.code">
+                    {{ lang.nativeLabel }}
+                </option>
+            </select>
+            <span class="select-arrow">▼</span>
+        </div>
+
         <h1 class="first-div-title">
-            Manage Your Society <span class="smarter"> Smarter </span>
+            {{ 'LOGIN.TITLE' | translate }} <span class="smarter"> {{ 'LOGIN.TITLE_HIGHLIGHT' | translate }} </span>
         </h1>
 
         <div class="first-div-description">
-            Streamline gate entries, manage residents & tenants, track complaints, and keep your community informed —
-            all from one powerful platform.
+            {{ 'LOGIN.DESCRIPTION' | translate }}
         </div>
 
         <div class="first-div-actions">
@@ -21,11 +34,11 @@
                     <path d="M15 12H3"></path>
                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                 </svg>
-                Login & Get Started
+                {{ 'LOGIN.GET_STARTED' | translate }}
             </button>
 
             <button class="explore-features" (click)="scrollToElement(featuresTemplate)">
-                Explore Features
+                {{ 'LOGIN.EXPLORE_FEATURES' | translate }}
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4"
                     aria-hidden="true">
@@ -45,7 +58,7 @@
                     </path>
                     <path d="m9 12 2 2 4-4"></path>
                 </svg>
-                Secure & Compliant
+                {{ 'LOGIN.SECURE_COMPLIANT' | translate }}
             </div>
 
             <div class="tag-container">
@@ -56,7 +69,7 @@
                         d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
                     </path>
                 </svg>
-                Real-time Updates
+                {{ 'LOGIN.REAL_TIME_UPDATES' | translate }}
             </div>
 
             <div class="tag-container">
@@ -68,7 +81,7 @@
                     <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                     <circle cx="9" cy="7" r="4"></circle>
                 </svg>
-                Multi-role Access
+                {{ 'LOGIN.MULTI_ROLE_ACCESS' | translate }}
             </div>
         </div>
     </div>
@@ -77,9 +90,8 @@
         [attr.name]="generateHref(PageSections.FEATURES)">
         <div class="feature-title-container" [appRestrictHeight]="800" [restrictEnabled]="enableShoeMoreFeature">
             <div class="feature-title">
-                <h2 class="main-title">Everything you need to run a perfect society</h2>
-                <p class="sub-title">Replace scattered spreadsheets and WhatsApp groups with a single, powerful platform
-                    designed for modern residential management.</p>
+                <h2 class="main-title">{{ 'LOGIN.FEATURES_TITLE' | translate }}</h2>
+                <p class="sub-title">{{ 'LOGIN.FEATURES_SUBTITLE' | translate }}</p>
             </div>
             <ui-form-layout>
                 <!-- Regular feature cards -->
@@ -99,8 +111,8 @@
 
                 <!-- Special "And much more" card -->
                 <div class="special-card" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-                    <h3 class="special-title">And much more</h3>
-                    <p class="special-description">Explore the full platform capabilities.</p>
+                    <h3 class="special-title">{{ 'LOGIN.AND_MORE' | translate }}</h3>
+                    <p class="special-description">{{ 'LOGIN.AND_MORE_DESC' | translate }}</p>
                     <div class="special-icon-wrapper">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -121,22 +133,22 @@
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number">{{ usageMetric?.societyCount ?? 0 }}+</div>
-                    <div class="stat-label">Societies Managed</div>
+                    <div class="stat-label">{{ 'LOGIN.STATS_SOCIETIES' | translate }}</div>
                 </div>
 
                 <div class="stat-item">
                     <div class="stat-number">{{ usageMetric?.flatsCount ?? 0 }}+</div>
-                    <div class="stat-label">Flats Registered</div>
+                    <div class="stat-label">{{ 'LOGIN.STATS_FLATS' | translate }}</div>
                 </div>
 
                 <div class="stat-item">
                     <div class="stat-number">{{ usageMetric?.membersCount }}+</div>
-                    <div class="stat-label">Happy Residents</div>
+                    <div class="stat-label">{{ 'LOGIN.STATS_RESIDENTS' | translate }}</div>
                 </div>
 
                 <div class="stat-item">
                     <div class="stat-number">99.9%</div>
-                    <div class="stat-label">Platform Uptime</div>
+                    <div class="stat-label">{{ 'LOGIN.STATS_UPTIME' | translate }}</div>
                 </div>
             </div>
         </div>
@@ -147,9 +159,8 @@
         <div class="container">
             <!-- Header Section -->
             <div class="header-wrapper">
-                <h2 class="section-title">Up and running in minutes</h2>
-                <p class="section-subtitle">We've streamlined the setup process so your committee can focus on what
-                    matters most.</p>
+                <h2 class="section-title">{{ 'LOGIN.HOW_IT_WORKS_TITLE' | translate }}</h2>
+                <p class="section-subtitle">{{ 'LOGIN.HOW_IT_WORKS_SUBTITLE' | translate }}</p>
             </div>
 
             <!-- Steps Section -->
@@ -184,11 +195,10 @@
         [attr.name]="generateHref(PageSections.JOINAS)">
         <!-- Header Section -->
         <div class="header-wrapper">
-            <span class="badge">Who is it for?</span>
-            <h2 class="section-title">One platform, Every role covered</h2>
+            <span class="badge">{{ 'LOGIN.WHO_IS_IT_FOR' | translate }}</span>
+            <h2 class="section-title">{{ 'LOGIN.ONE_PLATFORM' | translate }}</h2>
             <p class="section-description">
-                Whether you own a flat, rent one, or guard the gate — GateMySociety has a dedicated experience built
-                just for you.
+                {{ 'LOGIN.PLATFORM_DESC' | translate }}
             </p>
         </div>
 
@@ -230,7 +240,7 @@
 
                 <!-- Button -->
                 <button class="card-button" [ngClass]="card.buttonGradientClass" (click)="loginAndJoinAs(card.id)">
-                    <span>Get Started</span>
+                    <span>{{ 'LOGIN.GET_STARTED_BTN' | translate }}</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" class="button-arrow">
                         <path d="M5 12h14"></path>
@@ -251,23 +261,22 @@
         <!-- Content Container -->
         <div class="content-container">
             <!-- Text Content -->
-            <h2 class="cta-title">Ready to digitize your society?</h2>
+            <h2 class="cta-title">{{ 'LOGIN.CTA_TITLE' | translate }}</h2>
 
             <p class="cta-description">
-                Join hundreds of other residential complexes that trust GateMySociety for secure, transparent, and
-                effortless management.
+                {{ 'LOGIN.CTA_DESCRIPTION' | translate }}
             </p>
 
             <!-- Buttons Container -->
             <div class="buttons-wrapper">
                 <!-- Primary Button -->
                 <button class="btn btn-primary" (click)="gotoAddSociety()">
-                    Register Society Free
+                    {{ 'LOGIN.REGISTER_SOCIETY_FREE' | translate }}
                 </button>
 
                 <!-- Secondary Button -->
                 <button class="btn btn-secondary" (click)="gotoBookDemo()">
-                    Book a Demo
+                    {{ 'LOGIN.BOOK_DEMO' | translate }}
                 </button>
             </div>
         </div>
@@ -283,7 +292,7 @@
             <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
             <rect x="2" y="6" width="14" height="12" rx="2"></rect>
         </svg>
-        Demo Requests
+        {{ 'LOGIN.DEMO_REQUESTS' | translate }}
     </a>
 
     <a href="#" routerLink="/society-public/add" class="action-link register-link">
@@ -296,9 +305,26 @@
             <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
             <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
         </svg>
-        Register Society
+        {{ 'LOGIN.REGISTER_SOCIETY' | translate }}
     </a>
 
-    <button class="action-button login-button" (click)="simpleLogin()">Log in</button>
-    <!-- <button class="action-button get-started-button">Get Started</button> -->
+    <button class="action-button login-button" (click)="simpleLogin()">{{ 'LOGIN.LOG_IN' | translate }}</button>
+
+    <div class="extended-menu-divider"></div>
+
+    <div class="extended-menu-lang">
+        <div class="lang-select-wrapper">
+            <select
+                #mobileLoginLangSelect
+                [value]="currentLang"
+                (change)="setLanguage(mobileLoginLangSelect.value)"
+                class="lang-select-dropdown"
+                id="mobile-login-lang-select">
+                <option *ngFor="let lang of languages" [value]="lang.code" [selected]="currentLang === lang.code">
+                    {{ lang.nativeLabel }} ({{ lang.label }})
+                </option>
+            </select>
+            <span class="select-arrow">▼</span>
+        </div>
+    </div>
 </ng-template>

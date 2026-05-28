@@ -1,7 +1,7 @@
-<app-layout pageTitle="Tenant Management" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [pageTitle]="'TENANT.MANAGEMENT_TITLE' | translate" [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="openAddTenant()">New Tenant</li>
+            <li class="page-menu" (click)="openAddTenant()">{{ 'TENANT.NEW_TENANT' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -22,7 +22,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="tenants.length === 0">
-                    <app-empty-records singular="tenant" plural="tenants" (addClicked)="openAddTenant()"
+                    <app-empty-records [singular]="'NAV.TENANT' | translate" [plural]="'MENU.tenants' | translate" (addClicked)="openAddTenant()"
                         [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="tenant" size="xxl"></app-icon>
                     </app-empty-records>
@@ -30,7 +30,7 @@
 
             </ng-container>
 
-            <ui-loading *ngIf="loadingTenants" message="Loading tenants" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingTenants" [message]="'TENANT.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 

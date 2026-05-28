@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { UserRoutingModule } from './user-routing.module';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -24,7 +25,8 @@ import { TourModule } from '../../core/tour/tour.module';
     ReactiveFormsModule,
     UiModule,
     IconModule,
-    TourModule
+    TourModule,
+    TranslateModule.forChild()
   ]
 })
 export class UserModule { }

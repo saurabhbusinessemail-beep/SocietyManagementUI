@@ -11,6 +11,7 @@ export class EmptyRecordsComponent {
   @Input() plural = 'societies';
   @Input() overrideTitle?: string;
   @Input() overrideMessage?: string;
+  @Input() overrideButtonText?: string;
   @Input() hideAddButton = false;
   @Input() hideMessage = false;
   @Input() addRouterLink?: string;
@@ -19,22 +20,10 @@ export class EmptyRecordsComponent {
 
   get pascalCaseSingular() {
     return this.singular.split(' ').map(s => {
-      return  s[0].toUpperCase() + s.slice(1, s.length)
+      return  s[0] ? s[0].toUpperCase() + s.slice(1, s.length) : '';
     }).join(' ')
    
   } 
-
-  get title() {
-    return  this.overrideTitle ?? `No ${this.plural} added yet`;
-  }
-
-  get message() {
-    return this.overrideMessage ?? `You haven't added any ${this.singular} yet. Get started by adding your first ${this.singular}.`
-  }
-
-  get buttonText() {
-    return `Start adding ` + this.pascalCaseSingular;
-  }
 
   constructor(private router: Router) { }
 

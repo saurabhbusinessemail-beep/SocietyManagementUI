@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ChatRoutingModule } from './chat-routing.module';
@@ -32,7 +33,8 @@ import { MatButtonModule } from '@angular/material/button';
         PipeModule,
         IconModule,
         MatMenuModule,
-        MatButtonModule
+        MatButtonModule,
+        TranslateModule.forChild()
     ]
 })
 export class ChatModule {}

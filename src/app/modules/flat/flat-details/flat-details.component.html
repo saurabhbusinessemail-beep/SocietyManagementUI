@@ -14,7 +14,7 @@
                 <div class="owner-info">
                     <ui-user-avatar [user]="owner?.userId" [name]="ownerName" size="lg"></ui-user-avatar>
                     <div class="owner-text">
-                        <span class="owner-label">FLAT OWNER</span>
+                        <span class="owner-label">{{ 'FLAT.FLAT_OWNER' | translate }}</span>
                         <h3 class="owner-name">{{ ownerName }}</h3>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                         <path
                             d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                     </svg>
-                    <h2 class="card-title">Flat Information</h2>
+                    <h2 class="card-title">{{ 'FLAT.FLAT_INFO' | translate }}</h2>
                 </div>
                 <div class="header-right" *ngIf="!loadingFlatMember">
                     <!-- Residing Type Badges - Desktop -->
@@ -55,7 +55,7 @@
                                     d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
                                 <path d="m9 12 2 2 4-4" />
                             </svg>
-                            Self
+                            {{ 'FLAT.RESIDING_TYPE_SELF' | translate }}
                         </span>
                         <span class="residing-badge vacant" *ngIf="residingType === 'Vacant'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
@@ -67,7 +67,7 @@
                                 <path d="m6.49 12.85 11.02 6.3" />
                                 <path d="M17.51 12.85 6.5 19.15" />
                             </svg>
-                            Vacant
+                            {{ 'FLAT.RESIDING_TYPE_VACANT' | translate }}
                         </span>
                         <span class="residing-badge tenant" *ngIf="residingType === 'Tenant'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
@@ -77,7 +77,7 @@
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                                 <circle cx="9" cy="7" r="4" />
                             </svg>
-                            Tenant
+                            {{ 'FLAT.RESIDING_TYPE_TENANT' | translate }}
                         </span>
                     </div>
                     <!-- Mobile Badge -->
@@ -88,10 +88,10 @@
                                 d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
                             <path d="m9 12 2 2 4-4" />
                         </svg>
-                        Self
+                        {{ 'FLAT.RESIDING_TYPE_SELF' | translate }}
                     </span>
                     <button class="edit-button" (click)="handleChangeResidingTypeClick()" *ngIf="flatMember?.isOwner"
-                        title="Change Residing Type">
+                        [title]="'FLAT.CHANGE_RESIDING_TYPE' | translate">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -100,7 +100,7 @@
                         </svg>
                     </button>
                     <button class="edit-button config" (click)="handleConfigureTenantClick()"
-                        *ngIf="flatMember?.isOwner" title="Configure Tenant Settings">
+                        *ngIf="flatMember?.isOwner" [title]="'FLAT.CONFIGURE_TENANT_SETTINGS' | translate">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -123,7 +123,7 @@
                             <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
                             <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" />
                         </svg>
-                        SOCIETY
+                        {{ 'COMMON.SOCIETY' | translate }}
                     </div>
                     <p class="detail-value link-blue" *ngIf="!loadingFlatMember" (click)="handleSocietyClick()">{{
                         getSociety()?.societyName || '—' }}</p>
@@ -139,7 +139,7 @@
                             <line x1="10" x2="8" y1="3" y2="21" />
                             <line x1="16" x2="14" y1="3" y2="21" />
                         </svg>
-                        FLAT NUMBER
+                        {{ 'FLAT.FLAT_NUMBER' | translate }}
                     </div>
                     <p class="detail-value" *ngIf="!loadingFlatMember">{{ getflat()?.flatNumber || '—' }}</p>
                     <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
@@ -153,7 +153,7 @@
                             <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" />
                             <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />
                         </svg>
-                        FLOOR
+                        {{ 'FLAT.FLOOR' | translate }}
                     </div>
                     <p class="detail-value" *ngIf="!loadingFlatMember">{{ getflat()?.floor || '—' }}</p>
                     <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
@@ -166,7 +166,7 @@
                             <path
                                 d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                         </svg>
-                        FLAT TYPE
+                        {{ 'FLAT.FLAT_TYPE' | translate }}
                     </div>
                     <p class="detail-value" *ngIf="!loadingFlatMember">{{ getflat()?.flatType || '—' }}</p>
                     <ng-template [ngTemplateOutlet]="loadingFlatInfo" *ngIf="loadingFlatMember"></ng-template>
@@ -178,7 +178,7 @@
         <div class="chat-quick-access" *ngIf="getflat()">
             <button class="chat-goto-btn" (click)="gotoChat()">
                 <app-icon name="chat"></app-icon>
-                <span>Open Flat Chat</span>
+                <span>{{ 'USER_MENU.OPEN_CHAT' | translate }}</span>
                 <app-icon name="goto" class="arrow"></app-icon>
             </button>
         </div>
@@ -193,10 +193,10 @@
                     <h3 class="profile-name">{{ getDisplayName(flatMember) }}</h3>
                     <div class="profile-meta">
                         <span class="role-badge" [ngClass]="residingType.toLowerCase()">
-                            {{ residingType }}
+                            {{ ('FLAT.RESIDING_TYPE_' + residingType.toUpperCase()) | translate }}
                         </span>
                         <span class="status-badge" [ngClass]="flatMember.status">
-                            {{ flatMember.status }}
+                            {{ (flatMember.status ? ('COMMON.' + flatMember.status.toUpperCase() | translate) : '') }}
                         </span>
                     </div>
                 </div>
@@ -212,24 +212,24 @@
 
             <!-- Role Chips -->
             <div class="role-chips">
-                <span *ngIf="flatMember.isOwner" class="chip owner">Owner</span>
-                <span *ngIf="flatMember.isTenant" class="chip tenant">Tenant</span>
-                <span *ngIf="flatMember.isMember" class="chip member">Member</span>
-                <span *ngIf="flatMember.isTenantMember" class="chip tenant-member">Tenant Member</span>
+                <span *ngIf="flatMember.isOwner" class="chip owner">{{ 'FLAT.OWNER' | translate }}</span>
+                <span *ngIf="flatMember.isTenant" class="chip tenant">{{ 'FLAT.TENANT' | translate }}</span>
+                <span *ngIf="flatMember.isMember" class="chip member">{{ 'COMMON.MEMBER' | translate }}</span>
+                <span *ngIf="flatMember.isTenantMember" class="chip tenant-member">{{ 'FLAT.RESIDING_TYPE_TENANT_MEMBER' | translate }}</span>
             </div>
 
             <!-- Lease Details (if tenant) -->
             <div class="lease-details" *ngIf="flatMember.isTenant">
                 <div class="lease-item" *ngIf="flatMember.leaseStart">
-                    <span class="lease-label">Lease Start</span>
+                    <span class="lease-label">{{ 'FLAT.LEASE_START' | translate }}</span>
                     <span class="lease-value">{{ flatMember.leaseStart | date:'mediumDate' }}</span>
                 </div>
                 <div class="lease-item" *ngIf="flatMember.leaseEnd">
-                    <span class="lease-label">Lease End</span>
+                    <span class="lease-label">{{ 'FLAT.LEASE_END' | translate }}</span>
                     <span class="lease-value">{{ flatMember.leaseEnd | date:'mediumDate' }}</span>
                 </div>
                 <div class="lease-item" *ngIf="flatMember.rentAmount">
-                    <span class="lease-label">Rent</span>
+                    <span class="lease-label">{{ 'FLAT.RENT' | translate }}</span>
                     <span class="lease-value rent">{{ flatMember.rentAmount | formattedPrice }}</span>
                 </div>
             </div>
@@ -246,11 +246,11 @@
                         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                         <circle cx="9" cy="7" r="4" />
                     </svg>
-                    <h3 class="section-title">Residents</h3>
+                    <h3 class="section-title">{{ 'FLAT.RESIDENTS' | translate }}</h3>
                 </div>
                 <button class="manage-btn" (click)="manageResidents()" [disabled]="loadingOtherFlatMembers"
                     *ngIf="canManageFlat">
-                    Manage
+                    {{ 'APP.MANAGE' | translate }}
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
             </div>
@@ -264,10 +264,10 @@
                                     size="md"></ui-user-avatar>
                                 <div class="resident-details">
                                     <p class="resident-name">{{ getDisplayName(member) }}</p>
-                                    <span class="resident-role" *ngIf="member.isOwner">Owner</span>
-                                    <span class="resident-role" *ngIf="member.isTenant">Tenant</span>
+                                    <span class="resident-role" *ngIf="member.isOwner">{{ 'FLAT.OWNER' | translate }}</span>
+                                    <span class="resident-role" *ngIf="member.isTenant">{{ 'FLAT.TENANT' | translate }}</span>
                                     <span class="resident-role"
-                                        *ngIf="member.isMember && !member.isOwner && !member.isTenant">Member</span>
+                                        *ngIf="member.isMember && !member.isOwner && !member.isTenant">{{ 'COMMON.MEMBER' | translate }}</span>
                                 </div>
                             </div>
                             <div class="resident-contact">
@@ -282,7 +282,7 @@
                         </div>
                     </div>
                     <ng-template #noResidents>
-                        <div class="empty-state">No residents found.</div>
+                        <div class="empty-state">{{ 'FLAT.NO_RESIDENTS_FOUND' | translate }}</div>
                     </ng-template>
                 </ng-container>
 
@@ -296,10 +296,10 @@
                                 <path d="m6 6 12 12" />
                             </svg>
                         </div>
-                        <p>Your current plan does not support Resident management.</p>
+                        <p>{{ 'PLAN.NO_RESIDENT_MANAGEMENT' | translate }}</p>
                         <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
                             *ngIf="canManageFlat">
-                            Upgrade Plan
+                            {{ 'PLAN.UPGRADE_PLAN' | translate }}
                             <app-icon name="upgrade" size="sm"></app-icon>
                         </button>
                     </div>
@@ -307,7 +307,7 @@
 
             </ng-container>
             <div class="resident-list" *ngIf="loadingOtherFlatMembers">
-                <ui-loading message="Loading"></ui-loading>
+                <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
             </div>
         </div>
 
@@ -328,11 +328,11 @@
                                 <path d="M9 17h6" />
                                 <circle cx="17" cy="17" r="2" />
                             </svg>
-                            <h3 class="section-title">Vehicles</h3>
+                            <h3 class="section-title">{{ 'VEHICLES.TITLE' | translate }}</h3>
                         </div>
                         <button class="manage-btn" (click)="manageVehicles()" [disabled]="loadingVehicles"
                             *ngIf="canManageFlat">
-                            Manage
+                            {{ 'APP.MANAGE' | translate }}
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
@@ -346,7 +346,7 @@
                                 </div>
                             </div>
                             <ng-template #noVehicles>
-                                <div class="empty-state">No vehicles registered.</div>
+                                <div class="empty-state">{{ 'VEHICLES.NO_VEHICLES' | translate }}</div>
                             </ng-template>
                         </ng-container>
 
@@ -360,9 +360,9 @@
                                         <path d="m6 6 12 12" />
                                     </svg>
                                 </div>
-                                <p>Your current plan does not support Vehicle management.</p>
+                                <p>{{ 'PLAN.NO_VEHICLE_MANAGEMENT' | translate }}</p>
                                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
-                                    Upgrade Plan
+                                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
@@ -370,7 +370,7 @@
 
                     </ng-container>
                     <div class="vehicle-list" *ngIf="loadingVehicles">
-                        <ui-loading message="Loading"></ui-loading>
+                        <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
                     </div>
                 </div>
 
@@ -384,7 +384,7 @@
                                 <rect width="18" height="18" x="3" y="3" rx="2" />
                                 <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
                             </svg>
-                            <h3 class="section-title">Parking</h3>
+                            <h3 class="section-title">{{ 'PARKING.TITLE' | translate }}</h3>
                         </div>
                     </div>
                     <ng-container *ngIf="!loadingParkings">
@@ -397,7 +397,7 @@
                                 </div>
                             </div>
                             <ng-template #noParking>
-                                <div class="empty-state">No parking assigned.</div>
+                                <div class="empty-state">{{ 'PARKING.NO_PARKING' | translate }}</div>
                             </ng-template>
                         </ng-container>
 
@@ -411,9 +411,9 @@
                                         <path d="m6 6 12 12" />
                                     </svg>
                                 </div>
-                                <p>Your current plan does not support Parking management.</p>
+                                <p>{{ 'PLAN.NO_PARKING_MANAGEMENT' | translate }}</p>
                                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
-                                    Upgrade Plan
+                                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
@@ -422,7 +422,7 @@
 
                     </ng-container>
                     <div class="parking-list" *ngIf="loadingParkings">
-                        <ui-loading message="Loading"></ui-loading>
+                        <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
                     </div>
                 </div>
 
@@ -439,15 +439,15 @@
                                     <path d="M6 6h12v3h-4v9h-4V9H6V6z" />
                                 </svg>
                                 <h3 class="section-title">
-                                    Tenant
+                                    {{ 'FLAT.RESIDING_TYPE_TENANT' | translate }}
                                     <span class="occupancy-tag" [class.multi]="getflat()?.isMultiTenantAllowed">
-                                        {{ getflat()?.isMultiTenantAllowed ? 'Multi' : 'Single' }}
+                                        {{ getflat()?.isMultiTenantAllowed ? ('FLAT.MULTI' | translate) : ('FLAT.SINGLE' | translate) }}
                                     </span>
                                 </h3>
                             </div>
                             <button class="manage-btn" (click)="manageTenants()" [disabled]="loadingTenants"
                                 *ngIf="canManageFlat">
-                                Manage
+                                {{ 'APP.MANAGE' | translate }}
                                 <app-icon name="goto" size="md"></app-icon>
                             </button>
                         </div>
@@ -461,7 +461,7 @@
                                     </div>
                                 </div>
                                 <ng-template #notenant>
-                                    <div class="empty-state">No tenant present.</div>
+                                    <div class="empty-state">{{ 'FLAT.NO_TENANTS' | translate }}</div>
                                 </ng-template>
                             </ng-container>
 
@@ -476,10 +476,10 @@
                                             <path d="m6 6 12 12" />
                                         </svg>
                                     </div>
-                                    <p>Your current plan does not support Tenant management.</p>
+                                    <p>{{ 'PLAN.NO_TENANT_MANAGEMENT' | translate }}</p>
                                     <button class="upgrade-btn" (click)="gotoPlanUpgrade()"
                                         [disabled]="!canUpdateSociety" *ngIf="canManageFlat">
-                                        Upgrade Plan
+                                        {{ 'PLAN.UPGRADE_PLAN' | translate }}
                                         <app-icon name="upgrade" size="sm"></app-icon>
                                     </button>
                                 </div>
@@ -487,7 +487,7 @@
 
                         </ng-container>
                         <div class="parking-list" *ngIf="loadingTenants">
-                            <ui-loading message="Loading"></ui-loading>
+                            <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
                         </div>
                     </div>
                 </ng-container>
@@ -508,11 +508,11 @@
                                 <path d="M12 15h.01" />
                                 <path d="M12 7v4" />
                             </svg>
-                            <h3 class="section-title">Complaints</h3>
+                            <h3 class="section-title">{{ 'COMPLAINTS.TITLE' | translate }}</h3>
                         </div>
                         <button class="manage-btn" (click)="manageComplaints()" [disabled]="loadingComplaints"
                             *ngIf="canManageFlat">
-                            Manage
+                            {{ 'APP.MANAGE' | translate }}
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
@@ -538,7 +538,7 @@
                                 </div>
                             </div>
                             <ng-template #noComplaints>
-                                <div class="empty-state">No complaints filed.</div>
+                                <div class="empty-state">{{ 'COMPLAINTS.NO_COMPLAINTS' | translate }}</div>
                             </ng-template>
                         </ng-container>
 
@@ -553,9 +553,9 @@
                                         <path d="m6 6 12 12" />
                                     </svg>
                                 </div>
-                                <p>Your current plan does not support Complaints.</p>
+                                <p>{{ 'PLAN.NO_COMPLAINTS' | translate }}</p>
                                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
-                                    Upgrade Plan
+                                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
@@ -563,7 +563,7 @@
 
                     </ng-container>
                     <div class="complaint-list" *ngIf="loadingComplaints">
-                        <ui-loading message="Loading"></ui-loading>
+                        <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
                     </div>
                 </div>
 
@@ -582,11 +582,11 @@
                                 <path d="M14 12h.01" />
                                 <path d="M22 20h-3" />
                             </svg>
-                            <h3 class="section-title">Gate Entries</h3>
+                            <h3 class="section-title">{{ 'GATE_ENTRIES.TITLE' | translate }}</h3>
                         </div>
                         <button class="manage-btn" (click)="manageGateEntries()" [disabled]="laodingGateEntries"
                             *ngIf="canManageFlat">
-                            Manage
+                            {{ 'APP.MANAGE' | translate }}
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
@@ -596,7 +596,7 @@
                             <div class="gate-list" *ngIf="gateEntries.length; else noGateEntries">
                                 <div class="gate-item" *ngFor="let entry of gateEntries">
                                     <div class="gate-header">
-                                        <span class="visitor-name">{{ entry.visitorName || 'Visitor' }}</span>
+                                        <span class="visitor-name">{{ entry.visitorName || ('NAV.VISITOR' | translate) }}</span>
                                         <span class="gate-status" [ngClass]="entry.status">{{ entry.status |
                                             gateEntryStatus }}</span>
                                     </div>
@@ -624,7 +624,7 @@
                                 </div>
                             </div>
                             <ng-template #noGateEntries>
-                                <div class="empty-state">No gate entries found.</div>
+                                <div class="empty-state">{{ 'GATE_ENTRIES.NO_ENTRIES' | translate }}</div>
                             </ng-template>
                         </ng-container>
 
@@ -638,9 +638,9 @@
                                         <path d="m6 6 12 12" />
                                     </svg>
                                 </div>
-                                <p>Your current plan does not support Gate Entries.</p>
+                                <p>{{ 'PLAN.NO_GATE_ENTRIES' | translate }}</p>
                                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
-                                    Upgrade Plan
+                                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
@@ -648,7 +648,7 @@
 
                     </ng-container>
                     <div class="gate-list" *ngIf="laodingGateEntries">
-                        <ui-loading message="Loading"></ui-loading>
+                        <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
                     </div>
                 </div>
 
@@ -664,11 +664,11 @@
                                     d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
                                 <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
                             </svg>
-                            <h3 class="section-title">Gate Passes</h3>
+                            <h3 class="section-title">{{ 'GATE_PASSES.TITLE' | translate }}</h3>
                         </div>
                         <button class="manage-btn" (click)="manageGatePasses()" [disabled]="loadingGatePasses"
                             *ngIf="canManageFlat">
-                            Manage
+                            {{ 'APP.MANAGE' | translate }}
                             <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
@@ -688,7 +688,7 @@
                                             </svg>
                                         </div>
                                         <div class="gatepass-details">
-                                            <p class="gatepass-label">OTP</p>
+                                            <p class="gatepass-label">{{ 'GATE_PASSES.OTP' | translate }}</p>
                                             <p class="gatepass-otp">{{ pass.otp }}</p>
                                         </div>
                                     </div>
@@ -696,7 +696,7 @@
                                 </div>
                             </div>
                             <ng-template #noGatePasses>
-                                <div class="empty-state">No gate passes.</div>
+                                <div class="empty-state">{{ 'GATE_PASSES.NO_PASSES' | translate }}</div>
                             </ng-template>
                         </ng-container>
 
@@ -711,9 +711,9 @@
                                         <path d="m6 6 12 12" />
                                     </svg>
                                 </div>
-                                <p>Your current plan does not support Gate Passes.</p>
+                                <p>{{ 'PLAN.NO_GATE_PASSES' | translate }}</p>
                                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety">
-                                    Upgrade Plan
+                                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                                     <app-icon name="upgrade" size="sm"></app-icon>
                                 </button>
                             </div>
@@ -721,7 +721,7 @@
 
                     </ng-container>
                     <div class="gatepass-list" *ngIf="loadingGatePasses">
-                        <ui-loading message="Loading"></ui-loading>
+                        <ui-loading [message]="'APP.LOADING' | translate"></ui-loading>
                     </div>
                 </div>
             </div>
@@ -740,11 +740,11 @@
                         <line x1="16" y1="17" x2="8" y2="17"></line>
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
-                    <h3 class="section-title">Tenant Documents</h3>
+                    <h3 class="section-title">{{ 'FLAT.TENANT_DOCUMENTS' | translate }}</h3>
                 </div>
                 <button class="manage-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat"
                     [disabled]="!tenantManagementFeatureAvailable">
-                    Manage
+                    {{ 'APP.MANAGE' | translate }}
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
             </div>
@@ -758,23 +758,22 @@
                                 <div class="stat-badges">
                                     <span class="badge submitted" *ngIf="stat.submittedCount > 0">{{ stat.submittedCount
                                         }}
-                                        Submitted</span>
+                                        {{ 'FLAT.SUBMITTED' | translate }}</span>
                                     <span class="badge pending" *ngIf="stat.pendingApprovalCount > 0">{{
-                                        stat.pendingApprovalCount }} Pending</span>
-                                    <span class="badge empty" *ngIf="stat.submittedCount === 0">No Documents</span>
+                                        stat.pendingApprovalCount }} {{ 'FLAT.STATUS_PENDING' | translate }}</span>
+                                    <span class="badge empty" *ngIf="stat.submittedCount === 0">{{ 'FLAT.NO_DOCUMENTS' | translate }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="empty-state" *ngIf="tenantDocumentStats.length === 0">
-                            No active tenants for document tracking.
+                            {{ 'FLAT.NO_ACTIVE_TENANTS_DOCS' | translate }}
                         </div>
                     </div>
 
                     <!-- Shared List View for Owner -->
                     <div class="tenant-documents-list" *ngIf="tenantDocuments.length > 0"
                         style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-                        <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-secondary);">Recent Uploads
-                        </h4>
+                        <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-secondary);">{{ 'FLAT.RECENT_UPLOADS' | translate }}</h4>
                         <!-- Mobile Carousel View -->
                         <div class="mobile-carousel" *ngIf="isMobile">
                             <div class="carousel-track">
@@ -789,7 +788,7 @@
                                     </div>
                                     <div class="doc-footer">
                                         <span class="doc-name">{{ doc.documentName }}</span>
-                                        <span class="doc-status" [ngClass]="doc.status">{{ doc.status }}</span>
+                                        <span class="doc-status" [ngClass]="doc.status">{{ ('FLAT.STATUS_' + doc.status.toUpperCase()) | translate }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -800,10 +799,10 @@
                             <div class="doc-item" *ngFor="let doc of tenantDocuments">
                                 <div class="doc-info">
                                     <span class="doc-name">{{ doc.documentName }}</span>
-                                    <span class="doc-status-badge" [ngClass]="doc.status">{{ doc.status }}</span>
+                                    <span class="doc-status-badge" [ngClass]="doc.status">{{ ('FLAT.STATUS_' + doc.status.toUpperCase()) | translate }}</span>
                                 </div>
                                 <div class="doc-actions">
-                                    <button class="icon-btn" (click)="viewDocument(doc)" title="View">
+                                    <button class="icon-btn" (click)="viewDocument(doc)" [title]="'APP.VIEW' | translate">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -811,7 +810,7 @@
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
                                     </button>
-                                    <button class="icon-btn" (click)="downloadDocument(doc)" title="Download">
+                                    <button class="icon-btn" (click)="downloadDocument(doc)" [title]="'NAV.GATE_PASS' | translate">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -838,10 +837,10 @@
                         <path d="m6 6 12 12" />
                     </svg>
                 </div>
-                <p>Your current plan does not support Tenant Document management.</p>
+                <p>{{ 'PLAN.NO_TENANT_DOCUMENT_MANAGEMENT' | translate }}</p>
                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
                     *ngIf="canManageFlat">
-                    Upgrade Plan
+                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                     <app-icon name="upgrade" size="sm"></app-icon>
                 </button>
             </div>
@@ -866,11 +865,11 @@
                         <line x1="16" y1="17" x2="8" y2="17"></line>
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
-                    <h3 class="section-title">Your Documents</h3>
+                    <h3 class="section-title">{{ 'FLAT.YOUR_DOCUMENTS' | translate }}</h3>
                 </div>
                 <button class="manage-btn" (click)="manageTenantDocuments()" *ngIf="canManageFlat"
                     [disabled]="!tenantManagementFeatureAvailable">
-                    Manage
+                    {{ 'APP.MANAGE' | translate }}
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
             </div>
@@ -899,7 +898,7 @@
                                     </div>
                                     <div class="doc-footer">
                                         <span class="doc-name">{{ doc.documentName }}</span>
-                                        <span class="doc-status" [ngClass]="doc.status">{{ doc.status }}</span>
+                                        <span class="doc-status" [ngClass]="doc.status">{{ ('FLAT.STATUS_' + doc.status.toUpperCase()) | translate }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -910,12 +909,12 @@
                             <div class="doc-item" *ngFor="let doc of tenantDocuments">
                                 <div class="doc-info">
                                     <span class="doc-name">{{ doc.documentName }}</span>
-                                    <span class="doc-status-badge" [ngClass]="doc.status">{{ doc.status }}</span>
+                                    <span class="doc-status-badge" [ngClass]="doc.status">{{ ('FLAT.STATUS_' + doc.status.toUpperCase()) | translate }}</span>
                                 </div>
                                 <div class="doc-actions">
                                     <button class="icon-btn" (click)="viewDocument(doc)"
                                         *ngIf="doc.documentType && (doc.documentType.startsWith('image') || doc.documentType === 'pdf')"
-                                        title="View">
+                                        [title]="'APP.VIEW' | translate">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -923,7 +922,7 @@
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
                                     </button>
-                                    <button class="icon-btn" (click)="downloadDocument(doc)" title="Download">
+                                    <button class="icon-btn" (click)="downloadDocument(doc)" [title]="'NAV.GATE_PASS' | translate">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -932,7 +931,7 @@
                                             <line x1="12" y1="15" x2="12" y2="3"></line>
                                         </svg>
                                     </button>
-                                    <button class="icon-btn delete" (click)="deleteDocument(doc)" title="Delete"
+                                    <button class="icon-btn delete" (click)="deleteDocument(doc)" [title]="'APP.DELETE' | translate"
                                         *ngIf="doc.status === 'pending' || doc.status === 'rejected'">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -950,10 +949,9 @@
                         </div>
 
                         <div class="empty-state" *ngIf="tenantDocuments.length === 0">
-                            <p>No documents uploaded yet.</p>
+                            <p>{{ 'FLAT.NO_DOCUMENTS_UPLOADED' | translate }}</p>
                             <button class="upload-prompt-btn" (click)="manageTenantDocuments()"
-                                *ngIf="canManageFlat">Upload
-                                Document</button>
+                                *ngIf="canManageFlat">{{ 'FLAT.UPLOAD_DOCUMENT' | translate }}</button>
                         </div>
                     </div>
                 </ng-container>
@@ -965,7 +963,7 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="home"></app-icon>
-                    <h2 class="section-title">Maintenance</h2>
+                    <h2 class="section-title">{{ 'MAINTENANCE.TITLE' | translate }}</h2>
                 </div>
             </div>
 
@@ -981,7 +979,7 @@
                                 <div class="status-badge-maintenance"
                                     [class.approved]="currentMonthPayment.status === 'approved'"
                                     [class.pending]="currentMonthPayment.status === 'pending_approval'">
-                                    {{ getPaymentStatusText(currentMonthPayment.status) }}
+                                    {{ (currentMonthPayment.status === 'pending_approval' ? ('MAINTENANCE.STATUS_PENDING' | translate) : ('MAINTENANCE.STATUS_' + currentMonthPayment.status.toUpperCase() | translate)) }}
                                 </div>
                                 <span class="payment-amount">{{ currentMonthPayment.amount | formattedPrice }}</span>
                                 <span class="payment-date" *ngIf="currentMonthPayment.paidOn">
@@ -995,7 +993,7 @@
                             <div class="maintenance-rejected-info">
                                 <div class="rejection-card">
                                     <div class="rejection-header">
-                                        <div class="status-badge-maintenance rejected">Rejected</div>
+                                        <div class="status-badge-maintenance rejected">{{ 'MAINTENANCE.STATUS_REJECTED' | translate }}</div>
                                         <span class="payment-amount">{{ currentMonthPayment.amount | formattedPrice
                                             }}</span>
                                     </div>
@@ -1008,7 +1006,7 @@
                                             <path d="M12 16h.01" />
                                         </svg>
                                         <div class="reason-content">
-                                            <span class="reason-label">Reason:</span>
+                                            <span class="reason-label">{{ 'MAINTENANCE.REJECTION_REASON' | translate }}</span>
                                             <span class="reason-text">{{ currentMonthPayment.rejectionReason }}</span>
                                         </div>
                                     </div>
@@ -1022,7 +1020,7 @@
                                             <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
                                             <path d="M16 16h5v5" />
                                         </svg>
-                                        Pay Again
+                                        {{ 'MAINTENANCE.PAY_AGAIN' | translate }}
                                     </button>
                                 </div>
                             </div>
@@ -1031,7 +1029,7 @@
                         <!-- Case 3: Not Paid -->
                         <ng-container *ngIf="!currentMonthPayment">
                             <div class="maintenance-not-paid">
-                                <span class="status-badge-maintenance not-paid">Not Paid</span>
+                                <span class="status-badge-maintenance not-paid">{{ 'MAINTENANCE.NOT_PAID' | translate }}</span>
                                 <button class="pay-maintenance-btn" (click)="openPayMaintenanceDialog()"
                                     *ngIf="canManageFlat">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
@@ -1040,7 +1038,7 @@
                                         <rect width="20" height="14" x="2" y="5" rx="2" />
                                         <line x1="2" x2="22" y1="10" y2="10" />
                                     </svg>
-                                    Pay Maintenance
+                                    {{ 'MAINTENANCE.PAY_MAINTENANCE' | translate }}
                                 </button>
                             </div>
                         </ng-container>
@@ -1048,14 +1046,14 @@
 
                     <!-- History Action -->
                     <div class="maintenance-history-action">
-                        <ui-button label="View Detailed Payment History & Logs" type="cancel" (clicked)="viewHistory()">
+                        <ui-button [label]="'MAINTENANCE.VIEW_HISTORY' | translate" type="cancel" (clicked)="viewHistory()">
                             <app-icon name="goto" size="sm"></app-icon>
                         </ui-button>
                     </div>
                 </div>
             </ng-container>
 
-            <ui-loading *ngIf="loadingMaintenance" message="Loading maintenance">
+            <ui-loading *ngIf="loadingMaintenance" [message]="'MAINTENANCE.LOADING' | translate">
             </ui-loading>
         </div>
 
@@ -1064,11 +1062,11 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="account"></app-icon>
-                    <h2 class="section-title">Rent</h2>
+                    <h2 class="section-title">{{ 'FLAT.RENT' | translate }}</h2>
                 </div>
                 <button class="manage-btn" (click)="manageRent()" [disabled]="loadingRent"
                     *ngIf="canManageFlat && flatMember?.isOwner">
-                    Manage
+                    {{ 'APP.MANAGE' | translate }}
                     <app-icon name="goto" size="md"></app-icon>
                 </button>
             </div>
@@ -1079,25 +1077,25 @@
                     <ng-container *ngIf="flatMember?.isOwner && rentMonthlyReport">
                         <div class="rent-summary" style="display: flex; gap: 16px; flex-wrap: wrap;">
                             <div class="summary-stat">
-                                <span class="stat-label">Collected</span>
+                                <span class="stat-label">{{ 'MAINTENANCE.COLLECTED' | translate }}</span>
                                 <span class="stat-value success">{{ rentMonthlyReport.summary.totalCollected |
                                     formattedPrice }}</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Pending</span>
+                                <span class="stat-label">{{ 'MAINTENANCE.PENDING' | translate }}</span>
                                 <span class="stat-value warning">{{ rentMonthlyReport.summary.pendingAmount |
                                     formattedPrice }}</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Paid</span>
+                                <span class="stat-label">{{ 'MAINTENANCE.PAID' | translate }}</span>
                                 <span class="stat-value">{{ rentMonthlyReport.summary.paidCount }}</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Not Paid</span>
+                                <span class="stat-label">{{ 'MAINTENANCE.NOT_PAID' | translate }}</span>
                                 <span class="stat-value">{{ rentMonthlyReport.summary.notPaidCount }}</span>
                             </div>
                             <div class="summary-stat">
-                                <span class="stat-label">Pending Approval</span>
+                                <span class="stat-label">{{ 'NAV.PENDING_APPROVAL' | translate }}</span>
                                 <span class="stat-value">{{ rentMonthlyReport.summary.pendingApprovalCount }}</span>
                             </div>
                         </div>
@@ -1115,7 +1113,7 @@
                                     <div class="status-badge-maintenance"
                                         [class.approved]="currentRentMonthPayment.status === 'approved'"
                                         [class.pending]="currentRentMonthPayment.status === 'pending_approval'">
-                                        {{ rentService.getStatusDisplayText(currentRentMonthPayment.status) }}
+                                        {{ (currentRentMonthPayment.status === 'pending_approval' ? ('MAINTENANCE.STATUS_PENDING' | translate) : ('MAINTENANCE.STATUS_' + currentRentMonthPayment.status.toUpperCase() | translate)) }}
                                     </div>
                                     <span class="payment-amount">{{ currentRentMonthPayment.amount | formattedPrice
                                         }}</span>
@@ -1131,7 +1129,7 @@
                                 <div class="maintenance-rejected-info">
                                     <div class="rejection-card">
                                         <div class="rejection-header">
-                                            <div class="status-badge-maintenance rejected">Rejected</div>
+                                            <div class="status-badge-maintenance rejected">{{ 'MAINTENANCE.STATUS_REJECTED' | translate }}</div>
                                             <span class="payment-amount">{{ currentRentMonthPayment.amount |
                                                 formattedPrice }}</span>
                                         </div>
@@ -1144,7 +1142,7 @@
                                                 <path d="M12 16h.01" />
                                             </svg>
                                             <div class="reason-content">
-                                                <span class="reason-label">Reason:</span>
+                                                <span class="reason-label">{{ 'MAINTENANCE.REJECTION_REASON' | translate }}</span>
                                                 <span class="reason-text">{{ currentRentMonthPayment.rejectionReason
                                                     }}</span>
                                             </div>
@@ -1159,7 +1157,7 @@
                                                 <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
                                                 <path d="M16 16h5v5" />
                                             </svg>
-                                            Record Again
+                                            {{ 'FLAT.RECORD_AGAIN' | translate }}
                                         </button>
                                     </div>
                                 </div>
@@ -1168,7 +1166,7 @@
                             <!-- Case 3: Not Paid -->
                             <ng-container *ngIf="!currentRentMonthPayment">
                                 <div class="maintenance-not-paid">
-                                    <span class="status-badge-maintenance not-paid">Not Paid</span>
+                                    <span class="status-badge-maintenance not-paid">{{ 'MAINTENANCE.NOT_PAID' | translate }}</span>
                                     <button class="pay-maintenance-btn" (click)="openPayRentDialog()"
                                         *ngIf="canManageFlat">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -1177,7 +1175,7 @@
                                             <rect width="20" height="14" x="2" y="5" rx="2" />
                                             <line x1="2" x2="22" y1="10" y2="10" />
                                         </svg>
-                                        Record Rent Payment
+                                        {{ 'FLAT.RECORD_RENT_PAYMENT' | translate }}
                                     </button>
                                 </div>
                             </ng-container>
@@ -1186,7 +1184,7 @@
 
                     <!-- History Action -->
                     <div class="maintenance-history-action">
-                        <ui-button label="View Detailed Payment History & Logs" type="cancel"
+                        <ui-button [label]="'RENT.VIEW_HISTORY' | translate" type="cancel"
                             (clicked)="viewRentHistory()">
                             <app-icon name="goto" size="sm"></app-icon>
                         </ui-button>
@@ -1194,7 +1192,7 @@
                 </div>
             </ng-container>
 
-            <ui-loading *ngIf="loadingRent" message="Loading rent details">
+            <ui-loading *ngIf="loadingRent" [message]="'RENT.LOADING_DETAILS' | translate">
             </ui-loading>
         </div>
 
@@ -1205,7 +1203,7 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="home"></app-icon>
-                    <h2 class="section-title">Maintenance</h2>
+                    <h2 class="section-title">{{ 'MAINTENANCE.TITLE' | translate }}</h2>
                 </div>
             </div>
             <div class="unavailable-content">
@@ -1216,10 +1214,10 @@
                         <path d="m6 6 12 12" />
                     </svg>
                 </div>
-                <p>Your current plan does not support Maintenance management.</p>
+                <p>{{ 'PLAN.NO_MAINTENANCE_MANAGEMENT' | translate }}</p>
                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
                     *ngIf="canManageFlat">
-                    Upgrade Plan
+                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                     <app-icon name="upgrade" size="sm"></app-icon>
                 </button>
             </div>
@@ -1232,7 +1230,7 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <app-icon name="account"></app-icon>
-                    <h2 class="section-title">Rent</h2>
+                    <h2 class="section-title">{{ 'FLAT.RENT' | translate }}</h2>
                 </div>
             </div>
             <div class="unavailable-content">
@@ -1243,10 +1241,10 @@
                         <path d="m6 6 12 12" />
                     </svg>
                 </div>
-                <p>Your current plan does not support Rent Management.</p>
+                <p>{{ 'PLAN.NO_RENT_MANAGEMENT' | translate }}</p>
                 <button class="upgrade-btn" (click)="gotoPlanUpgrade()" [disabled]="!canUpdateSociety"
                     *ngIf="canManageFlat">
-                    Upgrade Plan
+                    {{ 'PLAN.UPGRADE_PLAN' | translate }}
                     <app-icon name="upgrade" size="sm"></app-icon>
                 </button>
             </div>
@@ -1254,8 +1252,8 @@
 
         <!-- Footer Meta -->
         <div class="footer-meta" *ngIf="flatMember">
-            <p>Created {{ flatMember.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
-                <span *ngIf="flatMember.modifiedOn"> • Modified {{ flatMember.modifiedOn | date:'medium' }}</span>
+            <p>{{ 'COMMON.CREATED' | translate }} {{ flatMember.createdOn | date:'medium' }} {{ 'COMMON.BY' | translate }} {{ getCreatedByDisplay() }}
+                <span *ngIf="flatMember.modifiedOn"> • {{ 'COMMON.MODIFIED' | translate }} {{ flatMember.modifiedOn | date:'medium' }}</span>
             </p>
         </div>
 
@@ -1264,7 +1262,7 @@
 
 <!-- Rent Pay Dialog -->
 <ng-template #rentPayTemplate>
-    <app-add-edit-popup title="Record Rent Payment" (onClose)="closeRentDialog()">
+    <app-add-edit-popup [title]="'RENT.RECORD_PAYMENT' | translate" (onClose)="closeRentDialog()">
         <ui-form-layout>
             <ui-drop-down [formControl]="rentMonth" [config]="monthConfig" [options]="monthOptions" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="6">
@@ -1275,24 +1273,24 @@
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="rentAmount"
-                [config]="{id: 'rentAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}"
+                [config]="{id: 'rentAmount', label: ('MAINTENANCE.AMOUNT' | translate) + ' (' + userCurrencySymbol + ')', placeholder: ('MAINTENANCE.ENTER_AMOUNT' | translate)}"
                 [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
-            <ui-date [formControl]="rentDate" [config]="{id: 'rentDate', label: 'Payment Date'}" [smColumns]="12"
+            <ui-date [formControl]="rentDate" [config]="{id: 'rentDate', label: ('RENT.PAYMENT_DATE' | translate)}" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="6">
             </ui-date>
 
             <ui-text-box [formControl]="rentNote"
-                [config]="{id: 'rentNote', label: 'Note (Optional)', placeholder: 'Add a note'}" [smColumns]="12"
+                [config]="{id: 'rentNote', label: ('MAINTENANCE.NOTE_OPTIONAL' | translate), placeholder: ('MAINTENANCE.ADD_NOTE' | translate)}" [smColumns]="12"
                 [mdColumns]="12" [lgColumns]="12">
             </ui-text-box>
         </ui-form-layout>
 
         <ng-container actions>
-            <ui-button label="Cancel" type="only-content" (clicked)="closeRentDialog()">
+            <ui-button [label]="'APP.CANCEL' | translate" type="only-content" (clicked)="closeRentDialog()">
             </ui-button>
-            <ui-button label="Submit Payment" [disable]="recordingRent || !rentAmount.value"
+            <ui-button [label]="'MAINTENANCE.SUBMIT_PAYMENT' | translate" [disable]="recordingRent || !rentAmount.value"
                 (clicked)="submitRentPayment()">
             </ui-button>
         </ng-container>
@@ -1303,7 +1301,7 @@
 <ng-template #confirmationTemplate>
     <div class="confirm-dialog">
         <div class="dialog-header">
-            <h2>Confirm</h2>
+            <h2>{{ 'APP.CONFIRM' | translate }}</h2>
             <button class="close-btn" (click)="cancelResidingTypeChange()">✕</button>
         </div>
         <div class="dialog-content">
@@ -1313,19 +1311,19 @@
             <p>{{ confirmationDialogData.note }}</p>
         </div>
         <div class="dialog-actions">
-            <button class="btn-cancel" (click)="cancelResidingTypeChange()">Cancel</button>
-            <button class="btn-self" *ngIf="confirmationDialogData.showSelf" (click)="handleSelfClick()">Self</button>
+            <button class="btn-cancel" (click)="cancelResidingTypeChange()">{{ 'APP.CANCEL' | translate }}</button>
+            <button class="btn-self" *ngIf="confirmationDialogData.showSelf" (click)="handleSelfClick()">{{ 'FLAT.RESIDING_TYPE_SELF' | translate }}</button>
             <button class="btn-tenant" *ngIf="confirmationDialogData.showTenant"
-                (click)="handleTenantClick()">Tenant</button>
+                (click)="handleTenantClick()">{{ 'FLAT.RESIDING_TYPE_TENANT' | translate }}</button>
             <button class="btn-vacant" *ngIf="confirmationDialogData.showVaccant"
-                (click)="handleVaccantClick()">Vacant</button>
+                (click)="handleVaccantClick()">{{ 'FLAT.RESIDING_TYPE_VACANT' | translate }}</button>
         </div>
     </div>
 </ng-template>
 
 <!-- Maintenance Pay Dialog -->
 <ng-template #maintenancePayTemplate>
-    <app-add-edit-popup title="Pay Maintenance" (onClose)="closeMaintenanceDialog()">
+    <app-add-edit-popup [title]="'MAINTENANCE.PAY_MAINTENANCE' | translate" (onClose)="closeMaintenanceDialog()">
         <ui-form-layout>
             <ui-drop-down [formControl]="maintenanceMonth" [config]="monthConfig" [options]="monthOptions"
                 [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
@@ -1336,41 +1334,41 @@
             </ui-drop-down>
 
             <ui-text-box type="number" [formControl]="maintenanceAmount"
-                [config]="{id: 'maintenanceAmount', label: 'Amount (' + userCurrencySymbol + ')', placeholder: 'Enter amount'}"
+                [config]="{id: 'maintenanceAmount', label: ('MAINTENANCE.AMOUNT' | translate) + ' (' + userCurrencySymbol + ')', placeholder: ('MAINTENANCE.ENTER_AMOUNT' | translate)}"
                 [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-text-box>
 
-            <ui-date [formControl]="maintenanceDate" [config]="{id: 'maintenanceDate', label: 'Payment Date'}"
+            <ui-date [formControl]="maintenanceDate" [config]="{id: 'maintenanceDate', label: ('MAINTENANCE.PAYMENT_DATE' | translate)}"
                 [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-date>
 
-            <ui-drop-down [formControl]="maintenancePaymentMethod" [config]="{id: 'payMethod', label: 'Payment Method'}"
+            <ui-drop-down [formControl]="maintenancePaymentMethod" [config]="{id: 'payMethod', label: ('MAINTENANCE.PAYMENT_METHOD' | translate)}"
                 [options]="[
-                    {value: '', label: 'Select'},
+                    {value: '', label: ('COMMON.SELECT' | translate)},
                     {value: 'upi', label: 'UPI'},
-                    {value: 'bank_transfer', label: 'Bank Transfer'},
-                    {value: 'cash', label: 'Cash'},
-                    {value: 'cheque', label: 'Cheque'},
-                    {value: 'other', label: 'Other'}
+                    {value: 'bank_transfer', label: ('MAINTENANCE.PAYMENT_METHOD_BANK' | translate)},
+                    {value: 'cash', label: ('MAINTENANCE.PAYMENT_METHOD_CASH' | translate)},
+                    {value: 'cheque', label: ('MAINTENANCE.PAYMENT_METHOD_CHEQUE' | translate)},
+                    {value: 'other', label: ('MAINTENANCE.PAYMENT_METHOD_OTHER' | translate)}
                 ]" [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
             </ui-drop-down>
 
             <ui-text-box [formControl]="maintenancePaymentDetails"
-                [config]="{id: 'payDetails', label: 'Payment Details (Optional)', placeholder: 'UPI ID / Account No. etc.'}"
+                [config]="{id: 'payDetails', label: ('MAINTENANCE.PAYMENT_DETAILS' | translate), placeholder: ('MAINTENANCE.PAYMENT_DETAILS_PLACEHOLDER' | translate)}"
                 [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
                 *ngIf="maintenancePaymentMethod.value && maintenancePaymentMethod.value !== 'cash'">
             </ui-text-box>
 
             <ui-text-box [formControl]="maintenanceNote"
-                [config]="{id: 'maintenanceNote', label: 'Note (Optional)', placeholder: 'Add a note'}" [smColumns]="12"
+                [config]="{id: 'maintenanceNote', label: ('MAINTENANCE.NOTE_OPTIONAL' | translate), placeholder: ('MAINTENANCE.ADD_NOTE' | translate)}" [smColumns]="12"
                 [mdColumns]="12" [lgColumns]="12">
             </ui-text-box>
         </ui-form-layout>
 
         <ng-container actions>
-            <ui-button label="Cancel" type="only-content" (clicked)="closeMaintenanceDialog()">
+            <ui-button [label]="'APP.CANCEL' | translate" type="only-content" (clicked)="closeMaintenanceDialog()">
             </ui-button>
-            <ui-button label="Submit Payment" [disable]="recordingMaintenance || !maintenanceAmount.value"
+            <ui-button [label]="'MAINTENANCE.SUBMIT_PAYMENT' | translate" [disable]="recordingMaintenance || !maintenanceAmount.value"
                 (clicked)="submitMaintenancePayment()">
             </ui-button>
         </ng-container>

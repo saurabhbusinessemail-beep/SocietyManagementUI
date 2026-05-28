@@ -1,11 +1,11 @@
-<app-layout pageTitle="Vehicles" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [pageTitle]="'VEHICLES.TITLE' | translate" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
         <!-- <ui-button label="New Vehicle" type="primary" (clicked)="openAddDialog()" [smColumns]="1" [mdColumns]="1"
             [lgColumns]="1">
         </ui-button> -->
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="openAddDialog()">New Vehicle</li>
+            <li class="page-menu" (click)="openAddDialog()">{{ 'VEHICLES.NEW_VEHICLE' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -29,7 +29,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="vehicles.length === 0">
-                    <app-empty-records singular="vehicle" plural="vehicles" (addClicked)="openAddDialog()" [smColumns]="12"
+                    <app-empty-records [singular]="'VEHICLES.SINGULAR'" [plural]="'VEHICLES.PLURAL'" (addClicked)="openAddDialog()" [smColumns]="12"
                         [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="vehicle" size="xxl"></app-icon>
                     </app-empty-records>
@@ -38,7 +38,7 @@
             </ng-container>
 
 
-            <ui-loading *ngIf="loadingVehicles" message="Loading vehicles" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingVehicles" [message]="'VEHICLES.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 
@@ -49,18 +49,18 @@
 
 <ng-template #vehicleTemplate>
     <form [formGroup]="fb">
-        <app-add-edit-popup title="Add Vehicle" (onClose)="closeDialog();">
+        <app-add-edit-popup [title]="'VEHICLES.ADD_VEHICLE' | translate" (onClose)="closeDialog();">
 
 
             <ng-container>
 
-                <ui-loading message="Saving Vehicle" *ngIf="savingVehicle"></ui-loading>
+                <ui-loading [message]="'APP.LOADING' | translate" *ngIf="savingVehicle"></ui-loading>
 
                 <ui-form-layout *ngIf="!savingVehicle">
 
 
                     <ui-drop-down formControlName="flat" [config]="flatSearchConfig"
-                        [options]="flatSearchConfig.dropDownOptions ?? []" placeholder="Select Flat" [smColumns]="12"
+                        [options]="flatSearchConfig.dropDownOptions ?? []" [placeholder]="'PARKINGS.SELECT_FLAT' | translate" [smColumns]="12"
                         [mdColumns]="6" [lgColumns]="3">
                     </ui-drop-down>
 
@@ -69,7 +69,7 @@
                     </ui-text-box>
 
                     <ui-drop-down formControlName="vehicleType" [config]="vehicleTypeConfig"
-                        [options]="vehicleTypeConfig.dropDownOptions ?? []" placeholder="Select Vehicle Type"
+                        [options]="vehicleTypeConfig.dropDownOptions ?? []" [placeholder]="'VEHICLES.SELECT_VEHICLE_TYPE' | translate"
                         [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                     </ui-drop-down>
 
@@ -78,9 +78,9 @@
             </ng-container>
 
             <ng-container actions>
-                <ui-button [label]="'Cancel'" type="cancel" (clicked)="closeDialog();">
+                <ui-button [label]="'APP.CANCEL' | translate" type="cancel" (clicked)="closeDialog();">
                 </ui-button>
-                <ui-button label="Add" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid || savingVehicle"
+                <ui-button [label]="'APP.ADD' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" [disable]="fb.invalid || savingVehicle"
                     (clicked)="saveVehicle()">
                 </ui-button>
             </ng-container>

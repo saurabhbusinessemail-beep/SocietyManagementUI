@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" pageTitle="Gate Entry Dashboard">
+<app-layout [hideMoreActions]="true" [pageTitle]="'SECURITY.PAGE_TITLE' | translate">
 
     <form [formGroup]="entryForm">
 
@@ -14,10 +14,10 @@
 
                         <div class="no-mobile no-tablet" [lgColumns]="2"></div>
                         <section class="flex flex-gap" [smColumns]="12" [mdColumns]="6" [lgColumns]="4">
-                            <ui-button label="Scan QR" type="only-content" (clicked)="scanQRCode()">
+                            <ui-button [label]="'SECURITY.SCAN_QR' | translate" type="only-content" (clicked)="scanQRCode()">
                                 <app-icon name="qr-code" size="md"></app-icon>
                             </ui-button>
-                            <ui-button label="Enter OTP" type="only-content" (clicked)="enterOTP()"
+                            <ui-button [label]="'SECURITY.ENTER_OTP' | translate" type="only-content" (clicked)="enterOTP()"
                                 [disable]="!isSocietySelected">
                             </ui-button>
                         </section>
@@ -86,10 +86,10 @@
                         <div class="no-mobile" [mdColumns]="3" [lgColumns]="4"></div>
                         <section class="flex flex-end flex-gap flex-wrap" [smColumns]="12" [mdColumns]="12"
                             [lgColumns]="10">
-                            <ui-button label="Request Approval" type="only-content" (clicked)="requestApproval()"
+                            <ui-button [label]="'SECURITY.REQUEST_APPROVAL' | translate" type="only-content" (clicked)="requestApproval()"
                                 [disable]="!isFlatSelected || !isSocietySelected || entryForm.invalid">
                             </ui-button>
-                            <ui-button label="Self Approve" type="only-content" (clicked)="selfApprove()"
+                            <ui-button [label]="'SECURITY.SELF_APPROVE' | translate" type="only-content" (clicked)="selfApprove()"
                                 [disable]="!isSocietySelected || entryForm.invalid">
                             </ui-button>
                         </section>
@@ -99,7 +99,7 @@
                     </ui-form-layout>
                     <br>
                     <ui-form-layout>
-                        <ui-loading *ngIf="loadingApprovals" message="Loading pending entries..."></ui-loading>
+                        <ui-loading *ngIf="loadingApprovals" [message]="'SECURITY.LOADING_PENDING_ENTRIES' | translate"></ui-loading>
 
                         <ng-container *ngIf="!loadingApprovals">
                             <ng-container *ngFor="let gateEntry of pendingApprovals">
@@ -112,7 +112,7 @@
 
                             <ng-container *ngIf="pendingApprovals.length === 0">
                                 <app-empty-records singular="security approval" plural="security approvals"
-                                    [hideAddButton]="true" overrideTitle="No pending security approvals found"
+                                    [hideAddButton]="true" [overrideTitle]="'SECURITY.NO_PENDING_APPROVALS' | translate"
                                     [hideMessage]="true" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                                     <app-icon icon name="security" size="xxl"></app-icon>
                                 </app-empty-records>
@@ -125,7 +125,7 @@
                     <br>
                     <br class="no-mobile">
                     <ui-form-layout>
-                        <ui-loading *ngIf="loadingExits" message="Loading pending exits..."></ui-loading>
+                        <ui-loading *ngIf="loadingExits" [message]="'SECURITY.LOADING_PENDING_EXITS' | translate"></ui-loading>
 
                         <ng-container *ngIf="!loadingExits">
                             <ng-container *ngFor="let gateEntry of pendingExits">
@@ -137,7 +137,7 @@
 
                             <ng-container *ngIf="pendingExits.length === 0">
                                 <app-empty-records singular="security exit" plural="security exits" [hideAddButton]="true"
-                                    overrideTitle="No active security personnel found" [hideMessage]="true"
+                                    [overrideTitle]="'SECURITY.NO_ACTIVE_SECURITY' | translate" [hideMessage]="true"
                                     [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                                     <app-icon icon name="security" size="xxl"></app-icon>
                                 </app-empty-records>

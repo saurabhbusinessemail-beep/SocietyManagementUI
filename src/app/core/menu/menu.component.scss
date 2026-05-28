@@ -168,5 +168,48 @@
                 color: $color-border-highlight;
             }
         }
+
+        .tablet-toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: $sp-xs 0;
+            margin-bottom: $sp-xs;
+            width: 100%;
+            transition: all 0.2s ease;
+
+            &.menu-expanded {
+                justify-content: flex-end;
+                padding-right: $sp-xs;
+            }
+
+            .menu-toggle-btn {
+                background: transparent;
+                border: none;
+                color: $color-header-text;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                transition: background-color 0.2s ease, transform 0.2s ease;
+                padding: 0;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.08);
+                    transform: scale(1.05);
+                }
+
+                &:active {
+                    transform: scale(0.95);
+                }
+
+                svg {
+                    stroke: currentColor;
+                }
+            }
+        }
     }
 }

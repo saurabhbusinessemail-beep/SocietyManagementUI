@@ -12,6 +12,7 @@ import { ListBase } from '../../../directives/list-base.directive';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WindowService } from '../../../services/window.service';
 import { NewUserService } from '../../../services/new-user.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -40,41 +41,12 @@ export class SocietySecuritiesComponent extends ListBase implements OnDestroy {
     jobEnd: new FormControl<Date | null>(null),
     salaryAmount: new FormControl<number | null>(null),
   });
-  radioConfig: IUIControlConfig = {
-    id: 'radio',
-    label: 'Radio',
-    placeholder: 'Search By',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Radio is required'
-    }
-  };
-  radioOptions: IUIDropdownOption[] = [
-    { label: 'By App User', value: 'user' },
-    { label: 'By Contact', value: 'contact' }
-  ];
+  radioConfig!: IUIControlConfig;
+  radioOptions: IUIDropdownOption[] = [];
 
-  jobStartConfig: IUIControlConfig = {
-    id: 'jobStart',
-    label: 'Job Start',
-    placeholder: 'Enter Job Start',
-    validations: [{ name: 'required', validator: Validators.required }],
-    errorMessages: { required: 'Job Start Date is required' }
-  };
-
-  jobEndConfig: IUIControlConfig = {
-    id: 'jobEnd',
-    label: 'Job End',
-    placeholder: 'Enter Job End'
-  };
-
-  salaryAmountConfig: IUIControlConfig = {
-    id: 'salaryAmount',
-    label: 'Salary Amount',
-    placeholder: 'Enter Salary Amount'
-  };
+  jobStartConfig!: IUIControlConfig;
+  jobEndConfig!: IUIControlConfig;
+  salaryAmountConfig!: IUIControlConfig;
 
   get jobStartFormControl() {
     return this.fb.get('jobStart') as FormControl<Date | null>;
@@ -114,11 +86,56 @@ export class SocietySecuritiesComponent extends ListBase implements OnDestroy {
     private windowService: WindowService,
     private dialog: MatDialog,
     private newUserService: NewUserService,
+    private translate: TranslateService
   ) { super(dialogService) }
+
+  initFormConfigs() {
+    this.radioConfig = {
+      id: 'radio',
+      label: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Radio',
+      placeholder: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Search By',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('JOIN_AS.SEARCH_BY_REQUIRED') || 'Radio is required'
+      }
+    };
+
+    this.radioOptions = [
+      { label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User', value: 'user' },
+      { label: this.translate.instant('JOIN_AS.BY_CONTACT') || 'By Contact', value: 'contact' }
+    ];
+
+    this.jobStartConfig = {
+      id: 'jobStart',
+      label: this.translate.instant('SECURITIES.JOB_START') || 'Job Start',
+      placeholder: this.translate.instant('SECURITIES.ENTER_JOB_START') || 'Enter Job Start',
+      validations: [{ name: 'required', validator: Validators.required }],
+      errorMessages: { required: this.translate.instant('SECURITIES.JOB_START_REQUIRED') || 'Job Start Date is required' }
+    };
+
+    this.jobEndConfig = {
+      id: 'jobEnd',
+      label: this.translate.instant('SECURITIES.JOB_END') || 'Job End',
+      placeholder: this.translate.instant('SECURITIES.ENTER_JOB_END') || 'Enter Job End'
+    };
+
+    this.salaryAmountConfig = {
+      id: 'salaryAmount',
+      label: this.translate.instant('SECURITIES.SALARY_AMOUNT') || 'Salary Amount',
+      placeholder: this.translate.instant('SECURITIES.ENTER_SALARY_AMOUNT') || 'Enter Salary Amount'
+    };
+  }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('societyId')!;
     if (!this.societyId) this.router.navigateByUrl('');
+
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
 
     this.loadSocietySecurities(this.societyId);
     this.subscribeToRadioChange();
@@ -252,7 +269,7 @@ export class SocietySecuritiesComponent extends ListBase implements OnDestroy {
   async removeSecurity(user: IUser) {
     if (!this.societyId) return;
 
-    if (!await this.dialogService.confirmDelete('Delete Security', `Are you sure you want to delete security ${user.name}?`)) return;
+    if (!await this.dialogService.confirmDelete(this.translate.instant('SECURITIES.DELETE_TITLE') || 'Remove Security', this.translate.instant('SECURITIES.DELETE_CONFIRM', { name: user.name }) || `Are you sure you want to remove ${user.name} from security?`)) return;
 
     this.societyService.deleteSocietySecurity(this.societyId, user._id)
       .pipe(take(1))

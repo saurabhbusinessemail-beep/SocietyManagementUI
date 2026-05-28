@@ -10,14 +10,14 @@
             </div>
             <div class="badge-container">
                 <span class="priority-badge" [ngClass]="priorityClass">
-                    {{ announcement.priority | titlecase }}
+                    {{ 'ANNOUNCEMENTS.PRIORITY_' + announcement.priority.toUpperCase() | translate }}
                     <span class="urgent-indicator" *ngIf="announcement.priority === 'urgent'">!</span>
                 </span>
                 <span class="category-badge" [ngClass]="categoryClass">
-                    {{ announcement.category | titlecase }}
+                    {{ 'ANNOUNCEMENTS.CAT_' + announcement.category.toUpperCase() | translate }}
                 </span>
                 <span class="status-chip" [ngClass]="statusClass">
-                    {{ announcement.status | titlecase }}
+                    {{ 'ANNOUNCEMENTS.STATUS_' + announcement.status.toUpperCase() | translate }}
                 </span>
             </div>
         </div>
@@ -30,7 +30,7 @@
             </span>
             <span class="expiry-date" *ngIf="announcement.expiryDate && !isExpired">
                 <app-icon name="expire" size="md"></app-icon>
-                Expires: {{ announcement.expiryDate | date:'mediumDate' }}
+                {{ 'ANNOUNCEMENTS.EXPIRES' | translate }}: {{ announcement.expiryDate | date:'mediumDate' }}
             </span>
             <span class="views-count" *ngIf="announcement.viewCount > 0">
                 <app-icon name="abacus" size="md"></app-icon>
@@ -60,15 +60,15 @@
         <!-- Attachments preview -->
         <div class="attachments-preview" *ngIf="announcement.attachments?.length">
             <app-icon name="attach_file" size="md"></app-icon>
-            <span>{{ announcement.attachments.length }} attachment(s)</span>
+            <span>{{ announcement.attachments.length }} {{ (announcement.attachments.length === 1 ? 'ANNOUNCEMENTS.ATTACHMENT_SINGULAR' : 'ANNOUNCEMENTS.ATTACHMENT_PLURAL') | translate }}</span>
         </div>
     </div>
 
     <!-- Footer -->
     <div class="card-footer">
         <div class="author-info">
-            <span class="label">Posted by</span>
-            <span class="author">{{ createdByUser?.name || 'Unknown' }}</span>
+            <span class="label">{{ 'ANNOUNCEMENTS.POSTED_BY' | translate }}</span>
+            <span class="author">{{ createdByUser?.name || ('APPROVALS.UNKNOWN' | translate) }}</span>
             <span class="created-date">{{ announcement.createdOn | date:'shortDate' }}</span>
             <span class="society" *ngIf="society && !isAdminView">
                 • {{ society.societyName }}
@@ -79,12 +79,12 @@
 
             <ng-container *ngIf="!actionInProgress">
                 <!-- Pin/Unpin Button - Admin/Manager only -->
-                <ui-button [label]="announcement.isPinned ? 'Unpin' : 'Pin'" type="only-content"
+                <ui-button [label]="(announcement.isPinned ? 'ANNOUNCEMENTS.UNPIN' : 'ANNOUNCEMENTS.PIN') | translate" type="only-content"
                     (clicked)="onPinClick()" *ngIf="isAdminView && announcement.status === 'published'">
                 </ui-button>
 
                 <!-- Edit Button - Show for draft or admin/manager -->
-                <ui-button label="Edit" type="only-content" (clicked)="onEditClick()"
+                <ui-button [label]="'ANNOUNCEMENTS.EDIT' | translate" type="only-content" (clicked)="onEditClick()"
                     *ngIf="isAdminView && announcement.status === 'draft'">
                 </ui-button>
 
@@ -103,12 +103,12 @@
     <!-- Expiry indicator -->
     <div class="expiry-badge" *ngIf="announcement.expiryDate && isExpired">
         <app-icon name="expire" size="md"></app-icon>
-        Expired {{ announcement.expiryDate | date:'mediumDate' }}
+        {{ 'ANNOUNCEMENTS.EXPIRED' | translate }} {{ announcement.expiryDate | date:'mediumDate' }}
     </div>
 
     <!-- Draft indicator -->
     <div class="draft-badge" *ngIf="announcement.status === 'draft'">
         <app-icon name="edit" size="md"></app-icon>
-        Draft
+        {{ 'ANNOUNCEMENTS.STATUS_DRAFT' | translate }}
     </div>
 </div>

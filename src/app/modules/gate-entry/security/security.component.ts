@@ -12,6 +12,7 @@ import { GateEntryService } from '../../../services/gate-entry.service';
 import { LoginService } from '../../../services/login.service';
 import { GateEntryPopupComponent } from '../../../core/ui/gate-entry-popup/gate-entry-popup.component';
 import { CountryService } from '../../../services/country.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-security',
@@ -28,91 +29,20 @@ export class SecurityComponent implements OnInit, OnDestroy {
   isLoadingFlats = false;
   openedGateEntryId?: string;
 
-  societyConfig: IUIControlConfig = {
-    id: 'society',
-    label: 'Society',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Society selection is required'
-    }
-  };
-  flatConfig: IUIControlConfig = {
-    id: 'flat',
-    label: 'Flat'
-  };
-  visitorNameConfig: IUIControlConfig = {
-    id: 'visitorName',
-    label: 'Visitor Name',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Visitor\'s name is required'
-    }
-  };
-  visitorCountryConfig: IUIControlConfig = {
-    id: 'visitorCountry',
-    label: 'Ext.',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Visitor\'s contact is required'
-    }
-  };
-  visitorContactConfig: IUIControlConfig = {
-    id: 'visitorContact',
-    label: 'Visitor Contact',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Visitor\'s contact is required'
-    }
-  };
-  vehicleNumberConfig: IUIControlConfig = {
-    id: 'vehicleNumber',
-    label: 'Vehicle Number'
-  };
-  purposeConfig: IUIControlConfig = {
-    id: 'purpose',
-    label: 'Purpose'
-  };
+  societyConfig!: IUIControlConfig;
+  flatConfig!: IUIControlConfig;
+  visitorNameConfig!: IUIControlConfig;
+  visitorCountryConfig!: IUIControlConfig;
+  visitorContactConfig!: IUIControlConfig;
+  vehicleNumberConfig!: IUIControlConfig;
+  purposeConfig!: IUIControlConfig;
 
-  otpValidConfig: IConfirmationPopupDataConfig = {
-    icon: 'valid',
-    message: 'Valid Pass',
-    actionButtons: []
-  };
-  otpInvalidConfig: IConfirmationPopupDataConfig = {
-    icon: 'invalid',
-    message: 'Invalid Pass',
-    actionButtons: []
-  };
+  otpValidConfig!: IConfirmationPopupDataConfig;
+  otpInvalidConfig!: IConfirmationPopupDataConfig;
 
   tabControl = new FormControl<string>('entry');
-  tabsConfig: IUIControlConfig = {
-    id: 'tab',
-    label: ''
-  };
-  tabsOptions: IUIDropdownOption[] = [
-    { value: 'entry', label: 'Entry' },
-    { value: 'exit', label: 'Exit' },
-  ];
+  tabsConfig!: IUIControlConfig;
+  tabsOptions: IUIDropdownOption[] = [];
 
   societyOptions: IUIDropdownOption[] = [];
   flatOptions: IUIDropdownOption[] = [];
@@ -144,10 +74,111 @@ export class SecurityComponent implements OnInit, OnDestroy {
     private gateEntryService: GateEntryService,
     private dialog: MatDialog,
     private dialogService: DialogService,
-    public countryService: CountryService
+    public countryService: CountryService,
+    private translate: TranslateService
   ) { }
 
+  initConfigs(): void {
+    this.societyConfig = {
+      id: 'society',
+      label: this.translate.instant('SECURITY.SOCIETY') || 'Society',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SECURITY.SOCIETY_REQUIRED') || 'Society selection is required'
+      }
+    };
+
+    this.flatConfig = {
+      id: 'flat',
+      label: this.translate.instant('SECURITY.FLAT') || 'Flat'
+    };
+
+    this.visitorNameConfig = {
+      id: 'visitorName',
+      label: this.translate.instant('SECURITY.VISITOR_NAME') || 'Visitor Name',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SECURITY.VISITOR_NAME_REQUIRED') || "Visitor's name is required"
+      }
+    };
+
+    this.visitorCountryConfig = {
+      id: 'visitorCountry',
+      label: this.translate.instant('SECURITY.EXT') || 'Ext.',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SECURITY.VISITOR_CONTACT_REQUIRED') || "Visitor's contact is required"
+      }
+    };
+
+    this.visitorContactConfig = {
+      id: 'visitorContact',
+      label: this.translate.instant('SECURITY.VISITOR_CONTACT') || 'Visitor Contact',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SECURITY.VISITOR_CONTACT_REQUIRED') || "Visitor's contact is required"
+      }
+    };
+
+    this.vehicleNumberConfig = {
+      id: 'vehicleNumber',
+      label: this.translate.instant('SECURITY.VEHICLE_NUMBER') || 'Vehicle Number'
+    };
+
+    this.purposeConfig = {
+      id: 'purpose',
+      label: this.translate.instant('SECURITY.PURPOSE') || 'Purpose'
+    };
+
+    this.otpValidConfig = {
+      icon: 'valid',
+      message: this.translate.instant('SECURITY.VALID_PASS') || 'Valid Pass',
+      actionButtons: []
+    };
+
+    this.otpInvalidConfig = {
+      icon: 'invalid',
+      message: this.translate.instant('SECURITY.INVALID_PASS') || 'Invalid Pass',
+      actionButtons: []
+    };
+
+    this.tabsConfig = {
+      id: 'tab',
+      label: ''
+    };
+
+    this.tabsOptions = [
+      { value: 'entry', label: this.translate.instant('SECURITY.ENTRY') || 'Entry' },
+      { value: 'exit', label: this.translate.instant('SECURITY.EXIT') || 'Exit' },
+    ];
+  }
+
   ngOnInit(): void {
+    this.initConfigs();
+    this.translate.onLangChange
+      .pipe(takeUntil(this.isComponentActive))
+      .subscribe(() => this.initConfigs());
+
     this.subscribeToApprovalResponse();
     this.subscribeToSocietyChange();
     this.loadSocities();

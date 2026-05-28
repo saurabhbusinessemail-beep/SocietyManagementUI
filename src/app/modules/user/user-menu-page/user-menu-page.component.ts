@@ -12,6 +12,7 @@ import { take, takeUntil, filter } from 'rxjs/operators';
 import { UserService } from '../../../services/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { USER_MENU_TOUR } from './user-menu-page.tour';
+import { TranslationService, SupportedLanguage, LanguageOption } from '../../../services/translation.service';
 
 
 @Component({
@@ -46,6 +47,18 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
   tourReady$ = new Subject<void>();
   tourExcludeStepIds: string[] = ['society-dropdown', 'menu-approvals', 'menu-dynamic-society-menus'];
 
+  get languages(): LanguageOption[] {
+    return this.translationService.languages;
+  }
+
+  get currentLang(): SupportedLanguage {
+    return this.translationService.currentLanguage;
+  }
+
+  setLanguage(lang: string): void {
+    this.translationService.setLanguage(lang as SupportedLanguage);
+  }
+
   constructor(
     private loginService: LoginService,
     private router: Router,
@@ -55,7 +68,8 @@ export class UserMenuPageComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     public themeService: ThemeService,
     private userService: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    public translationService: TranslationService
   ) { }
 
   ngOnInit(): void {

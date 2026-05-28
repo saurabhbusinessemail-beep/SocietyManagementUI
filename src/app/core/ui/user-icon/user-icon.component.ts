@@ -8,6 +8,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { UserService } from '../../../services/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslationService, SupportedLanguage, LanguageOption } from '../../../services/translation.service';
 
 @Component({
   selector: 'ui-user-icon',
@@ -27,6 +28,18 @@ export class UserIconComponent implements OnInit, OnDestroy {
     return this.loginService.getProfileFromStorage()
   }
 
+  get languages(): LanguageOption[] {
+    return this.translationService.languages;
+  }
+
+  get currentLang(): SupportedLanguage {
+    return this.translationService.currentLanguage;
+  }
+
+  setLanguage(lang: string): void {
+    this.translationService.setLanguage(lang as SupportedLanguage);
+  }
+
   constructor(
     private loginService: LoginService,
     private router: Router,
@@ -34,7 +47,8 @@ export class UserIconComponent implements OnInit, OnDestroy {
     private location: Location,
     public themeService: ThemeService,
     private userService: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    public translationService: TranslationService
   ) { }
 
   ngOnInit(): void {

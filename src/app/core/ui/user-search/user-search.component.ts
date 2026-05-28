@@ -4,6 +4,7 @@ import { Subject, debounceTime, distinctUntilChanged, filter, switchMap, takeUnt
 import { IUIControlConfig, IUIDropdownOption, IUser } from '../../../interfaces';
 import { UIBaseFormControl } from '../../../directives';
 import { UserService } from '../../../services/user.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ui-user-search',
@@ -18,22 +19,22 @@ export class UserSearchComponent extends UIBaseFormControl<IUser | undefined> im
 
   userSearchConfig: IUIControlConfig = {
     id: 'user',
-    label: 'User',
-    placeholder: 'Search User',
+    label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User',
+    placeholder: this.translate.instant('JOIN_AS.BY_APP_USER') || 'Search User',
   };
   userSearchControl = new FormControl<string | undefined>(undefined);
   users: IUser[] = [];
   filteredUsers: IUIDropdownOption[] = [];
 
-  constructor(private userService: UserService, @Optional() @Self() ngControl: NgControl) {
+  constructor(private userService: UserService, @Optional() @Self() ngControl: NgControl, public translate: TranslateService) {
     super(ngControl);
   }
 
   ngOnInit(): void {
     let userSearchConfig: IUIControlConfig = {
       id: 'user',
-      label: 'User',
-      placeholder: 'Search User',
+      label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User',
+      placeholder: this.translate.instant('JOIN_AS.BY_APP_USER') || 'Search User',
     };
 
     if (this.required) {

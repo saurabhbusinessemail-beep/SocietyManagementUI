@@ -1,10 +1,10 @@
-<app-layout [hideMoreActions]="!societyId" pageTitle="Flats" [subTitle]="society?.societyName">
+<app-layout [hideMoreActions]="!societyId" [pageTitle]="'FLAT.TITLE' | translate" [subTitle]="society?.societyName">
 
     <ng-container moreActions>
         <ul class="page-menu-list" *ngIf="societyId">
             <li class="page-menu" (click)="gotoChat()">
                 <span class="material-icons" style="font-size:1rem;vertical-align:middle;margin-right:4px">chat</span>
-                Open Chat
+                {{ 'SOCIETY.OPEN_CHAT' | translate }}
             </li>
         </ul>
     </ng-container>
@@ -12,11 +12,11 @@
     <ui-form-layout>
 
 
-        <ui-loading *ngIf="loadingSociety" message="Loading society information" [smColumns]="12" [mdColumns]="12"
+        <ui-loading *ngIf="loadingSociety" [message]="'FLAT.LOADING_SOCIETY_INFO' | translate" [smColumns]="12" [mdColumns]="12"
             [lgColumns]="12">
         </ui-loading>
 
-        <ui-loading *ngIf="loadingFlatMembers" message="Loading my flats" [smColumns]="12" [mdColumns]="12"
+        <ui-loading *ngIf="loadingFlatMembers" [message]="'FLAT.LOADING_MY_FLATS' | translate" [smColumns]="12" [mdColumns]="12"
             [lgColumns]="12">
         </ui-loading>
 

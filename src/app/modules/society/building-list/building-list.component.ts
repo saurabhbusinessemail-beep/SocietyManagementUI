@@ -11,6 +11,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WindowService } from '../../../services/window.service';
 import { DialogService } from '../../../services/dialog.service';
 import { ListBase } from '../../../directives/list-base.directive';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-building-list',
@@ -28,57 +29,14 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
 
   loading: boolean = false;
   isComponentActive = new Subject<void>();
-  buildingNumberConfig: IUIControlConfig = {
-    id: 'buildingNumber',
-    label: 'Building Number',
-    placeholder: 'Enter Building Name/Number',
-    validations: [
-      { name: 'required', validator: Validators.required }
-    ],
-    errorMessages: {
-      required: 'Building Number is required'
-    }
-  };
-  floorsConfig: IUIControlConfig = {
-    id: 'floors',
-    label: 'Floors',
-    placeholder: 'Enter Floors Count',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'Floors count is required',
-      min: 'There can be 1 or more floors'
-    }
-  };
-  needManagerConfig: IUIControlConfig = {
-    id: 'needManager',
-    label: 'Building Manager',
-  };
-  radioConfig: IUIControlConfig = {
-    id: 'radio',
-    label: 'Radio',
-    placeholder: 'Search By',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Radio is required'
-    }
-  };
-  pendingBuildingsConfig: IUIControlConfig = {
-    id: 'pendingBuildings',
-    label: 'Pending Buildings To Add'
-  };
+  buildingNumberConfig!: IUIControlConfig;
+  floorsConfig!: IUIControlConfig;
+  needManagerConfig!: IUIControlConfig;
+  radioConfig!: IUIControlConfig;
+  pendingBuildingsConfig!: IUIControlConfig;
 
-  needManagerOptions: IUIDropdownOption[] = [
-    { label: 'Need Separate Manager ?', value: true },
-  ];
-  radioOptions: IUIDropdownOption[] = [
-    { label: 'By App User', value: 'user' },
-    { label: 'By Contact', value: 'contact' }
-  ];
+  needManagerOptions: IUIDropdownOption[] = [];
+  radioOptions: IUIDropdownOption[] = [];
 
   userSearchFormControl = new FormControl<IUser | null>({ value: null, disabled: false });
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>(null);
@@ -147,12 +105,77 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
     private router: Router,
     private dialog: MatDialog,
     dialogService: DialogService,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private translate: TranslateService
   ) { super(dialogService) }
+
+  initFormConfigs() {
+    this.buildingNumberConfig = {
+      id: 'buildingNumber',
+      label: this.translate.instant('BUILDING_LIST.BUILDING_NUMBER') || 'Building Number',
+      placeholder: this.translate.instant('BUILDING_LIST.BUILDING_NUMBER_PLACEHOLDER') || 'Enter Building Name/Number',
+      validations: [
+        { name: 'required', validator: Validators.required }
+      ],
+      errorMessages: {
+        required: this.translate.instant('BUILDING_LIST.BUILDING_NUMBER_REQUIRED') || 'Building Number is required'
+      }
+    };
+
+    this.floorsConfig = {
+      id: 'floors',
+      label: this.translate.instant('BUILDING_LIST.FLOORS') || 'Floors',
+      placeholder: this.translate.instant('BUILDING_LIST.FLOORS_PLACEHOLDER') || 'Enter Floors Count',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('BUILDING_LIST.FLOORS_REQUIRED') || 'Floors count is required',
+        min: this.translate.instant('BUILDING_LIST.FLOORS_MIN') || 'There can be 1 or more floors'
+      }
+    };
+
+    this.needManagerConfig = {
+      id: 'needManager',
+      label: this.translate.instant('BUILDING_LIST.MANAGER') || 'Building Manager',
+    };
+
+    this.radioConfig = {
+      id: 'radio',
+      label: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Radio',
+      placeholder: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Search By',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('JOIN_AS.SEARCH_BY_REQUIRED') || 'Radio is required'
+      }
+    };
+
+    this.pendingBuildingsConfig = {
+      id: 'pendingBuildings',
+      label: this.translate.instant('BUILDING_LIST.PENDING_BUILDINGS') || 'Pending Buildings To Add'
+    };
+
+    this.needManagerOptions = [
+      { label: this.translate.instant('BUILDING_LIST.NEED_SEPARATE_MANAGER') || 'Need Separate Manager ?', value: true },
+    ];
+
+    this.radioOptions = [
+      { label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User', value: 'user' },
+      { label: this.translate.instant('JOIN_AS.BY_CONTACT') || 'By Contact', value: 'contact' }
+    ];
+  }
 
   ngOnInit(): void {
     this.societyId = this.route.snapshot.paramMap.get('societyId')!;
     if (!this.societyId) this.router.navigateByUrl('');
+
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
 
     this.subscribeToRadioChange()
     this.resetBuildingForm();
@@ -332,7 +355,10 @@ export class BuildingListComponent extends ListBase implements OnInit, OnDestroy
   async deleteBuilding(building: IBuilding) {
     if (!this.societyId) return;
 
-    if (!await this.dialogService.confirmDelete('Delete Building', `Are you sure you want to delete building ${building.buildingNumber}?`)) return;
+    const title = this.translate.instant('BUILDING_LIST.DELETE_TITLE') || 'Delete Building';
+    const message = this.translate.instant('BUILDING_LIST.DELETE_CONFIRM', { number: building.buildingNumber }) || `Are you sure you want to delete building ${building.buildingNumber}?`;
+
+    if (!await this.dialogService.confirmDelete(title, message)) return;
 
     this.societyService.deleteBuilding(this.societyId, building._id)
       .pipe(take(1))

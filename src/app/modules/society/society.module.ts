@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { SocietyRoutingModule } from './society-routing.module';
 import { SocietyListComponent } from './society-list/society-list.component';
@@ -59,7 +60,8 @@ import { FilterModule } from '../../core/filter/filter.module';
     PipeModule,
     MatDialogContent,
     MatTabsModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class SocietyModule { }

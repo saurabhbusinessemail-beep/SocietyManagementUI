@@ -1,23 +1,25 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true" pageTitle="Add Complaint" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" [pageTitle]="'COMPLAINTS.ADD_TITLE' | translate"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <form [formGroup]="fb" class="layout-container">
 
         <ui-form-layout>
 
             <ui-select2 formControlName="flat" [config]="flatSearchConfig" [options]="flatOptions"
-                placeholder="Search Flat" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
+                [placeholder]="'PARKINGS.SELECT_FLAT' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
             </ui-select2>
 
             <ui-text-box formControlName="title" [config]="titleConfig" [smColumns]="12" [mdColumns]="6"
                 [lgColumns]="4">
             </ui-text-box>
 
-            <ui-select2 formControlName="complaintType" [config]="complaintTypeTabsConfig" [options]="complaintTypeOptions"
-                placeholder="Select Complaint Type" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
+            <ui-select2 formControlName="complaintType" [config]="complaintTypeTabsConfig"
+                [options]="complaintTypeOptions" [placeholder]="'COMPLAINTS.SELECT_COMPLAINT_TYPE' | translate" [smColumns]="12" [mdColumns]="12"
+                [lgColumns]="4">
             </ui-select2>
 
             <ui-select2 formControlName="priority" [config]="priorityTabsConfig" [options]="priorityOptions"
-                placeholder="Search Priority" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
+                [placeholder]="'COMPLAINTS.SELECT_PRIORITY' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="4">
             </ui-select2>
 
             <ui-text-box formControlName="description" type="textarea" [config]="descriptionConfig" [rows]="10"
@@ -29,12 +31,12 @@
             </ui-label>
 
             <div class="flex ui-form-layout flex-end" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
-                <ui-button label="Cancel" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                <ui-button [label]="'JOIN_AS.CANCEL' | translate" type="cancel" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
                     (clicked)="cancel()">
                 </ui-button>
 
 
-                <ui-button label="Save" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
+                <ui-button [label]="'JOIN_AS.SAVE' | translate" type="primary" [smColumns]="6" [mdColumns]="2" [lgColumns]="2"
                     (clicked)="save()" [disable]="fb.invalid">
                 </ui-button>
             </div>

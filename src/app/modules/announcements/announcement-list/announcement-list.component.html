@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="hideMoreAction" pageTitle="Announcemnts"
+<app-layout [hideMoreActions]="hideMoreAction" [pageTitle]="'ANNOUNCEMENTS.TITLE' | translate"
     [subTitle]="societyService.selectedSocietyFilterValue?.label">
     <ng-container moreActions>
         <!-- <ui-button label="New Announcement" type="primary" routerLink="../add">
@@ -6,7 +6,7 @@
 
 
         <ul class="page-menu-list" *ngIf="!hideMoreAction">
-            <li class="page-menu" routerLink="../add">New Announcement</li>
+            <li class="page-menu" routerLink="../add">{{ 'ANNOUNCEMENTS.NEW_ANNOUNCEMENT' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -17,17 +17,17 @@
             [mdColumns]="12" [lgColumns]="12" (filterChanged)="loadAnnouncements($event)">
 
             <ui-select2 [formControl]="categoryControl" [config]="categoryConfig"
-                [options]="categoryConfig.dropDownOptions ?? []" placeholder="Select Category" [smColumns]="12"
+                [options]="categoryConfig.dropDownOptions ?? []" [placeholder]="'ANNOUNCEMENTS.SELECT_CATEGORY' | translate" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="3">
             </ui-select2>
 
             <ui-select2 [formControl]="priorityControl" [config]="priorityConfig"
-                [options]="priorityConfig.dropDownOptions ?? []" placeholder="Select Prority" [smColumns]="12"
+                [options]="priorityConfig.dropDownOptions ?? []" [placeholder]="'ANNOUNCEMENTS.SELECT_PRIORITY' | translate" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="3">
             </ui-select2>
 
             <ui-select2 [formControl]="statusControl" [config]="statusConfig"
-                [options]="statusConfig.dropDownOptions ?? []" placeholder="Select Prority" [smColumns]="12"
+                [options]="statusConfig.dropDownOptions ?? []" [placeholder]="'ANNOUNCEMENTS.SELECT_STATUS' | translate" [smColumns]="12"
                 [mdColumns]="6" [lgColumns]="3">
             </ui-select2>
 
@@ -53,7 +53,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="announcements.length === 0">
-                    <app-empty-records singular="announcement" plural="announcements" [hideAddButton]="hideMoreAction"
+                    <app-empty-records [singular]="'ANNOUNCEMENTS.SINGULAR'" [plural]="'ANNOUNCEMENTS.PLURAL'" [hideAddButton]="hideMoreAction"
                         addRouterLink="../add" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="announcement" size="xxl"></app-icon>
                     </app-empty-records>
@@ -62,7 +62,7 @@
             </ng-container>
 
 
-            <ui-loading *ngIf="loadingAnnouncements" message="Loading announcements" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingAnnouncements" [message]="'ANNOUNCEMENTS.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 

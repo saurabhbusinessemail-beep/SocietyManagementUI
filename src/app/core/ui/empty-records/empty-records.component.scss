@@ -42,8 +42,8 @@
 
     &__button {
         padding: 0.625rem 1.5rem; // px-6 py-2.5
-        background-color: $color-light-gray; // bg-primary-700
-        color: $color-white;
+        background-color: $color-dark-blue; // bg-primary-700
+        color: #ffffff; // keep text always white for readability on dark background
         font-size: 0.875rem; // text-sm
         font-weight: 600; // font-semibold
         border-radius: 0.5rem; // rounded-lg
@@ -51,12 +51,19 @@
         cursor: pointer;
         transition: all 0.15s ease-in-out; // transition-all duration-150
 
-        &:hover {
-            background-color: $color-dark-blue; // hover:bg-primary-600 (lighter)
+        &:hover:not(:disabled) {
+            background-color: $color-light-blue; // hover:bg-primary-600
         }
 
-        &:active {
+        &:active:not(:disabled) {
             transform: scale(0.95); // active:scale-95
+        }
+
+        &:disabled {
+            background-color: $color-disable-background;
+            color: $color-help-text;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
     }
 }

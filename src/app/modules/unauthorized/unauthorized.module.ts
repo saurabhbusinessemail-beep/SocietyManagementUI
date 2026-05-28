@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { UnauthorizedRoutingModule } from './unauthorized-routing.module';
 import { UnauthorizedComponent } from './unauthorized.component';
@@ -15,7 +16,8 @@ import { LogoutComponent } from './logout/logout.component';
   imports: [
     CommonModule,
     UnauthorizedRoutingModule,
-    LayoutModule
+    LayoutModule,
+    TranslateModule.forChild()
   ]
 })
 export class UnauthorizedModule { }

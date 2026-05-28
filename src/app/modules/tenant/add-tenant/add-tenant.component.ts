@@ -9,6 +9,7 @@ import { NewUserService } from '../../../services/new-user.service';
 import { DialogService } from '../../../services/dialog.service';
 import { ActivatedRoute } from '@angular/router';
 import { PendingHttpService } from '../../../services/pending-http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-tenant',
@@ -28,65 +29,18 @@ export class AddTenantComponent implements OnInit {
   contactSearchFormControl = new FormControl<IPhoneContactFlat | null>(null);
   radioFormControl = new FormControl<string>('user');
 
-  radioConfig: IUIControlConfig = {
-    id: 'radio',
-    label: 'Search',
-    placeholder: 'Search By',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Radio is required'
-    }
-  };
-  flatSearchConfig: IUIControlConfig = {
-    id: 'flat',
-    label: 'Flat',
-    placeholder: 'Select Flat',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Select any flat'
-    }
-  };
-  leaseStartConfig = {
-    id: 'leaseStart',
-    label: 'Lease Start',
-    placeholder: 'Enter Lease Start',
-    validations: [
-      {
-        name: 'required',
-        validator: Validators.required
-      }
-    ],
-    errorMessages: {
-      required: 'Lease start date is required'
-    }
-  };
-  leaseEndConfig = {
-    id: 'leaseEnd',
-    label: 'Lease End',
-    placeholder: 'Enter Lease End'
-  };
-  rentAmountConfig = {
-    id: 'rentAmount',
-    label: 'Rent Amount',
-    placeholder: 'Enter Rent Amount'
-  };
+  radioConfig!: IUIControlConfig;
+  flatSearchConfig!: IUIControlConfig;
+  leaseStartConfig!: any;
+  leaseEndConfig!: any;
+  rentAmountConfig!: any;
 
   societyId?: string;
   flatId?: string;
 
   flatMembers: IFlatMember[] = [];
   flatOptions: IUIDropdownOption[] = [];
-  radioOptions: IUIDropdownOption[] = [
-    { label: 'By App User', value: 'user' },
-    { label: 'By Contact', value: 'contact' }
-  ];
+  radioOptions: IUIDropdownOption[] = [];
 
 
   get showUserSearch(): boolean {
@@ -127,10 +81,77 @@ export class AddTenantComponent implements OnInit {
     public societyService: SocietyService,
     private newUserService: NewUserService,
     private dialogService: DialogService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) { }
 
+  initFormConfigs() {
+    this.radioConfig = {
+      id: 'radio',
+      label: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Search By',
+      placeholder: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Search By',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('JOIN_AS.SEARCH_BY_REQUIRED') || 'Search By is required'
+      }
+    };
+
+    this.flatSearchConfig = {
+      id: 'flat',
+      label: this.translate.instant('PARKINGS.FLAT') || 'Flat',
+      placeholder: this.translate.instant('PARKINGS.SELECT_FLAT') || 'Select Flat',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('PARKINGS.FLAT_REQUIRED') || 'Select any flat'
+      }
+    };
+
+    this.leaseStartConfig = {
+      id: 'leaseStart',
+      label: this.translate.instant('TENANT.LEASE_START') || 'Lease Start',
+      placeholder: this.translate.instant('TENANT.ENTER_LEASE_START') || 'Enter Lease Start',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required
+        }
+      ],
+      errorMessages: {
+        required: this.translate.instant('TENANT.LEASE_START_REQUIRED') || 'Lease start date is required'
+      }
+    };
+
+    this.leaseEndConfig = {
+      id: 'leaseEnd',
+      label: this.translate.instant('TENANT.LEASE_END') || 'Lease End',
+      placeholder: this.translate.instant('TENANT.ENTER_LEASE_END') || 'Enter Lease End'
+    };
+
+    this.rentAmountConfig = {
+      id: 'rentAmount',
+      label: this.translate.instant('TENANT.RENT_AMOUNT') || 'Rent Amount',
+      placeholder: this.translate.instant('TENANT.ENTER_RENT_AMOUNT') || 'Enter Rent Amount'
+    };
+
+    this.radioOptions = [
+      { label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User', value: 'user' },
+      { label: this.translate.instant('JOIN_AS.BY_CONTACT') || 'By Contact', value: 'contact' }
+    ];
+  }
+
   ngOnInit(): void {
+    this.initFormConfigs();
+    this.translate.onLangChange.subscribe(() => {
+      this.initFormConfigs();
+    });
+
     const societyId = this.societyService.selectedSocietyFilterValue?.value;
     this.societyId = this.route.snapshot.paramMap.get('societyId') ?? societyId;
     this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
@@ -181,7 +202,7 @@ export class AddTenantComponent implements OnInit {
     const isMultiTenantAllowed = flat?.isMultiTenantAllowed || false;
 
     if (!isMultiTenantAllowed && this.checkIfResidingStatusNeedsToChange(formValue.leaseStart, formValue.leaseEnd)) {
-      if (!await this.dialogService.confirmToProceed('You are adding a tenant with a lease start date of today or earlier – if the flat is currently occupied (by an owner or another tenant), the existing occupant(s) will be automatically vacated to make room for the new tenant; do you want to proceed?')) {
+      if (!await this.dialogService.confirmToProceed(this.translate.instant('TENANT.ADD_CONFIRM_VACATE') || 'You are adding a tenant with a lease start date of today or earlier – if the flat is currently occupied (by an owner or another tenant), the existing occupant(s) will be automatically vacated to make room for the new tenant; do you want to proceed?')) {
         return;
       }
     }

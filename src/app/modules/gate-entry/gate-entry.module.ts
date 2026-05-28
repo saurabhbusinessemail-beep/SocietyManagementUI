@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { GateEntryRoutingModule } from './gate-entry-routing.module';
 import { GateEntryListComponent } from './gate-entry-list/gate-entry-list.component';
@@ -35,7 +36,8 @@ import { GateEntryCardComponent } from './gate-entry-card/gate-entry-card.compon
     DirectiveModule,
     IconModule,
     ConfirmationPopupModule,
-    OTPPopupModule
+    OTPPopupModule,
+    TranslateModule.forChild()
   ]
 })
 export class GateEntryModule { }

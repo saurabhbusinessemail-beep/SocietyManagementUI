@@ -8,6 +8,7 @@ import { WindowService } from '../../../services/window.service';
 import { DialogService } from '../../../services/dialog.service';
 import { ITenantDocument, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenant-document-list',
@@ -19,6 +20,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
 
   // Data
   documents: ITenantDocument[] = [];
+  filteredDocuments: ITenantDocument[] = [];
   flatId: string = '';
   societyId: string = '';
   subtitle: string = '';
@@ -29,17 +31,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
 
   // Filters
   statusControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  statusConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'status',
-    label: 'Status',
-    formControl: this.statusControl,
-    dropDownOptions: [
-      { value: 'all', label: 'All' },
-      { value: 'pending', label: 'Pending' },
-      { value: 'approved', label: 'Approved' },
-      { value: 'rejected', label: 'Rejected' }
-    ]
-  };
+  statusConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,10 +40,35 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     public windowService: WindowService,
     private dialogService: DialogService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
+  initFilterConfigs() {
+    this.statusConfig = {
+      id: 'status',
+      label: this.translate.instant('TENANT_DOCS.STATUS') || 'Status',
+      formControl: this.statusControl,
+      dropDownOptions: [
+        { value: 'all', label: this.translate.instant('TENANT_DOCS.ALL') || 'All' },
+        { value: 'pending', label: this.translate.instant('TENANT_DOCS.PENDING') || 'Pending' },
+        { value: 'approved', label: this.translate.instant('TENANT_DOCS.APPROVED') || 'Approved' },
+        { value: 'rejected', label: this.translate.instant('TENANT_DOCS.REJECTED') || 'Rejected' }
+      ]
+    };
+    const val = this.statusControl.value;
+    if (val) {
+      const matched = (this.statusConfig.dropDownOptions || []).find(o => o.value === val.value);
+      if (matched) this.statusControl.setValue(matched, { emitEvent: false });
+    }
+  }
+
   ngOnInit(): void {
+    this.initFilterConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFilterConfigs();
+    });
+
     const allOption = this.statusConfig.dropDownOptions?.find(o => o.value === 'all');
     if (allOption) this.statusControl.setValue(allOption);
 
@@ -128,7 +145,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
         next: response => {
           this.processing = false;
           if (response.success) {
-            this.snackBar.open('Document approved', 'Close', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('TENANT_DOCS.APPROVED_MSG') || 'Document approved', 'Close', { duration: 3000 });
             this.loadDocuments();
           }
         },
@@ -138,12 +155,12 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
 
   rejectDocument(doc: ITenantDocument) {
     this.dialogService.showConfirmation({
-      message: 'Are you sure you want to reject this document?',
+      message: this.translate.instant('TENANT_DOCS.REJECT_CONFIRM') || 'Are you sure you want to reject this document?',
       showInput: true,
-      inputPlaceholder: 'Reason for rejection',
+      inputPlaceholder: this.translate.instant('TENANT_DOCS.REJECT_REASON') || 'Reason for rejection',
       actionButtons: [
-        { label: 'Cancel', result: false, class: 'cancel' },
-        { label: 'Reject', result: true, class: 'error' }
+        { label: this.translate.instant('COMMON.CANCEL') || 'Cancel', result: false, class: 'cancel' },
+        { label: this.translate.instant('TENANT_DOCS.REJECT_ACTION') || 'Reject', result: true, class: 'error' }
       ]
     }, 0).subscribe(result => {
       if (result && (typeof result === 'object' ? result.result : result)) {
@@ -155,7 +172,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
             next: response => {
               this.processing = false;
               if (response.success) {
-                this.snackBar.open('Document rejected', 'Close', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('TENANT_DOCS.REJECTED_MSG') || 'Document rejected', 'Close', { duration: 3000 });
                 this.loadDocuments();
               }
             },
@@ -174,7 +191,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: response => {
           if (response.success) {
-            this.snackBar.open('Reminder sent successfully', 'Close', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('TENANT_DOCS.REMINDER_SENT') || 'Reminder sent successfully', 'Close', { duration: 3000 });
           }
         }
       });
@@ -182,10 +199,10 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
 
   sendReminderToAll() {
     this.dialogService.showConfirmation({
-      message: 'Send document submission reminders to all active tenants of this flat?',
+      message: this.translate.instant('TENANT_DOCS.REMINDER_ALL_CONFIRM') || 'Send document submission reminders to all active tenants of this flat?',
       actionButtons: [
-        { label: 'Cancel', result: false, class: 'cancel' },
-        { label: 'Send All', result: true, class: 'primary' }
+        { label: this.translate.instant('COMMON.CANCEL') || 'Cancel', result: false, class: 'cancel' },
+        { label: this.translate.instant('TENANT_DOCS.SEND_REMINDER') || 'Send All', result: true, class: 'primary' }
       ]
     }).subscribe(confirmed => {
       if (confirmed) {
@@ -197,7 +214,7 @@ export class TenantDocumentListComponent implements OnInit, OnDestroy {
           .subscribe({
             next: response => {
               if (response.success) {
-                this.snackBar.open('Reminders sent to all tenants', 'Close', { duration: 3000 });
+                this.snackBar.open(this.translate.instant('TENANT_DOCS.REMINDER_ALL_SENT') || 'Reminders sent to all tenants', 'Close', { duration: 3000 });
               }
             }
           });

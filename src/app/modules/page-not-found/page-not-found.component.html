@@ -1,12 +1,12 @@
 <app-layout>
     <div class="not-found-container">
         <h1>404</h1>
-        <h2>Page Not Found</h2>
+        <h2>{{ 'COMMON.PAGE_NOT_FOUND' | translate }}</h2>
 
-        <p>The page you're looking for doesn't exist or has been moved.</p>
+        <p>{{ 'COMMON.PAGE_NOT_FOUND_DESC' | translate }}</p>
 
         <button routerLink="/" class="home-btn">
-            Go to Home
+            {{ 'COMMON.GO_HOME' | translate }}
         </button>
     </div>
-</app-layout>
+</app-layout>

@@ -7,6 +7,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ComplaintService } from '../../../services/complaint.service';
 import { PendingHttpService } from '../../../services/pending-http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-complaint',
@@ -28,78 +29,15 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
   errorMessage = '';
   isComponentActive = new Subject<void>();
 
-  titleConfig: IUIControlConfig = {
-    id: 'title',
-    label: 'Title',
-    placeholder: 'Enter Title',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'minlength', validator: Validators.minLength(3) }
-    ],
-    errorMessages: {
-      required: 'Title is required',
-      minlength: 'Minimum 3 characters required'
-    }
-  };
-  descriptionConfig: IUIControlConfig = {
-    id: 'description',
-    label: 'Description',
-    placeholder: 'Enter Description',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'minlength', validator: Validators.minLength(3) }
-    ],
-    errorMessages: {
-      required: 'Description is required',
-      minlength: 'Minimum 3 characters required'
-    }
-  };
-  priorityTabsConfig: IUIControlConfig = {
-    id: 'priority',
-    label: 'Priority'
-  };
-  complaintTypeTabsConfig: IUIControlConfig = {
-    id: 'complaintType',
-    label: 'Complaint Type'
-  };
-  flatSearchConfig: IUIControlConfig = {
-    id: 'flat',
-    label: 'Flat',
-    placeholder: 'Select Flat',
-  };
-  errorConfig: IUIControlConfig = {
-    id: 'error',
-    label: '',
-  };
+  titleConfig!: IUIControlConfig;
+  descriptionConfig!: IUIControlConfig;
+  priorityTabsConfig!: IUIControlConfig;
+  complaintTypeTabsConfig!: IUIControlConfig;
+  flatSearchConfig!: IUIControlConfig;
+  errorConfig!: IUIControlConfig;
 
-  priorityOptions: IUIDropdownOption[] = [
-    {
-      value: 'low',
-      label: 'Low'
-    },
-    {
-      value: 'medium',
-      label: 'Medium'
-    },
-    {
-      value: 'high',
-      label: 'High'
-    },
-    {
-      value: 'urgent',
-      label: 'Urgent'
-    }
-  ];
-  complaintTypeOptions: IUIDropdownOption[] = [
-    {
-      value: 'Private',
-      label: 'Private'
-    },
-    {
-      value: 'Public',
-      label: 'Public'
-    },
-  ];
+  priorityOptions: IUIDropdownOption[] = [];
+  complaintTypeOptions: IUIDropdownOption[] = [];
   flatOptions: IUIDropdownOption[] = [];
 
   fb = new FormGroup({
@@ -111,7 +49,95 @@ export class AddComplaintComponent implements OnInit, OnDestroy {
     status: new FormControl<string>('submitted'),
   });
 
+  initFormConfigs() {
+    this.titleConfig = {
+      id: 'title',
+      label: this.translate.instant('COMPLAINTS.TITLE_LABEL') || 'Title',
+      placeholder: this.translate.instant('COMPLAINTS.ENTER_TITLE') || 'Enter Title',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'minlength', validator: Validators.minLength(3) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('COMPLAINTS.TITLE_REQUIRED') || 'Title is required',
+        minlength: this.translate.instant('COMPLAINTS.TITLE_MIN') || 'Minimum 3 characters required'
+      }
+    };
+
+    this.descriptionConfig = {
+      id: 'description',
+      label: this.translate.instant('COMPLAINTS.DESCRIPTION') || 'Description',
+      placeholder: this.translate.instant('COMPLAINTS.ENTER_DESCRIPTION') || 'Enter Description',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'minlength', validator: Validators.minLength(3) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('COMPLAINTS.DESCRIPTION_REQUIRED') || 'Description is required',
+        minlength: this.translate.instant('COMPLAINTS.DESCRIPTION_MIN') || 'Minimum 3 characters required'
+      }
+    };
+
+    this.priorityTabsConfig = {
+      id: 'priority',
+      label: this.translate.instant('COMPLAINTS.PRIORITY') || 'Priority'
+    };
+
+    this.complaintTypeTabsConfig = {
+      id: 'complaintType',
+      label: this.translate.instant('COMPLAINTS.COMPLAINT_TYPE') || 'Complaint Type'
+    };
+
+    this.flatSearchConfig = {
+      id: 'flat',
+      label: this.translate.instant('PARKINGS.FLAT') || 'Flat',
+      placeholder: this.translate.instant('PARKINGS.SELECT_FLAT') || 'Select Flat',
+    };
+
+    this.errorConfig = {
+      id: 'error',
+      label: '',
+    };
+
+    this.priorityOptions = [
+      {
+        value: 'low',
+        label: this.translate.instant('COMPLAINTS.PRIORITY_LOW') || 'Low'
+      },
+      {
+        value: 'medium',
+        label: this.translate.instant('COMPLAINTS.PRIORITY_MEDIUM') || 'Medium'
+      },
+      {
+        value: 'high',
+        label: this.translate.instant('COMPLAINTS.PRIORITY_HIGH') || 'High'
+      },
+      {
+        value: 'urgent',
+        label: this.translate.instant('COMPLAINTS.PRIORITY_URGENT') || 'Urgent'
+      }
+    ];
+
+    this.complaintTypeOptions = [
+      {
+        value: 'Private',
+        label: this.translate.instant('COMPLAINTS.TYPE_PRIVATE') || 'Private'
+      },
+      {
+        value: 'Public',
+        label: this.translate.instant('COMPLAINTS.TYPE_PUBLIC') || 'Public'
+      },
+    ];
+  }
+
+  constructor(private translate: TranslateService) {}
+
   ngOnInit(): void {
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
+
     this.societyId = this.route.snapshot.paramMap.get('societyId') ?? undefined;
     this.flatId = this.route.snapshot.paramMap.get('flatId') ?? undefined;
 

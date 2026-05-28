@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ComplaintRoutingModule } from './complaint-routing.module';
 import { ComplaintListComponent } from './complaint-list/complaint-list.component';
@@ -30,7 +31,8 @@ import { FilterModule } from '../../core/filter/filter.module';
     ReactiveFormsModule,
     PipeModule,
     IconModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class ComplaintModule { }

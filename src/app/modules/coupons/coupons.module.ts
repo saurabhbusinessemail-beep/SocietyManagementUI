@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { CouponsRoutingModule } from './coupons-routing.module';
 import { CouponsListComponent } from './coupons-list/coupons-list.component';
@@ -16,7 +17,8 @@ import { LayoutModule } from '../../core/layout/layout.module';
     CouponsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    LayoutModule
+    LayoutModule,
+    TranslateModule.forChild()
   ]
 })
 export class CouponsModule { }

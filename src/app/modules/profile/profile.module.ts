@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileComponent } from './profile.component';
@@ -15,7 +16,8 @@ import { UiModule } from '../../core/ui/ui.module';
     CommonModule,
     ProfileRoutingModule,
     UiModule,
-    LayoutModule
+    LayoutModule,
+    TranslateModule.forChild()
   ]
 })
 export class ProfileModule { }

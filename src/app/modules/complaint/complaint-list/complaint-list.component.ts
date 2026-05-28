@@ -3,11 +3,12 @@ import { IComplaint, IFlat, IMyProfile, ISociety, ISocietyRole, IUIControlConfig
 import { LoginService } from '../../../services/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { Subject, take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ComplaintService } from '../../../services/complaint.service';
 import { adminManagerRoles } from '../../../constants';
 import { SocietyService } from '../../../services/society.service';
 import { DialogService } from '../../../services/dialog.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface IComplaintFilter {
   societyId?: string, flatId?: string, complaintType?: string
@@ -25,21 +26,6 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
   myProfile?: IMyProfile;
   societyOptions: IUIDropdownOption[] = [];
   flatOptions: IUIDropdownOption[] = [];
-  complaintTypeOptions: IUIDropdownOption[] = [
-    {
-      label: 'All',
-      value: undefined
-    },
-    {
-      label: 'Private',
-      value: 'Private'
-    },
-    {
-      label: 'Public',
-      value: 'Public'
-    }
-  ];
-
   selectedFIlter: IComplaintFilter = {};
   isFlatMember: boolean = false;
   routeFlatId?: string;
@@ -49,14 +35,8 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
 
   protected isComponentActive = new Subject<void>();
 
-  complaintTypeControl = new FormControl<IUIDropdownOption | undefined | null>(this.complaintTypeOptions[0]);
-
-  complaintTypeConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'complaintType',
-    label: 'Complaint Type',
-    formControl: this.complaintTypeControl,
-    dropDownOptions: this.complaintTypeOptions
-  };
+  complaintTypeControl = new FormControl<IUIDropdownOption | undefined | null>(undefined);
+  complaintTypeConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   constructor(
     private loginService: LoginService,
@@ -64,10 +44,40 @@ export class ComplaintListComponent implements OnInit, OnDestroy {
     private complaintService: ComplaintService,
     public societyService: SocietyService,
     private route: ActivatedRoute,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private translate: TranslateService
   ) { }
 
+  initFilterConfigs() {
+    this.complaintTypeConfig = {
+      id: 'complaintType',
+      label: this.translate.instant('COMPLAINTS.COMPLAINT_TYPE') || 'Complaint Type',
+      formControl: this.complaintTypeControl,
+      dropDownOptions: [
+        {
+          label: this.translate.instant('COMMON.ALL') || 'All',
+          value: undefined
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.TYPE_PRIVATE') || 'Private',
+          value: 'Private'
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.TYPE_PUBLIC') || 'Public',
+          value: 'Public'
+        }
+      ]
+    };
+  }
+
   ngOnInit(): void {
+    this.initFilterConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFilterConfigs();
+    });
+
+    this.complaintTypeControl.setValue(this.complaintTypeConfig.dropDownOptions?.[0]);
+
     this.myProfile = this.loginService.getProfileFromStorage();
     if (!this.myProfile) {
       this.router.navigateByUrl('/');

@@ -10,6 +10,7 @@ import { NewUserService } from '../../../services/new-user.service';
 import { SocietyService } from '../../../services/society.service';
 import { SocietyRoles } from '../../../types';
 import { PendingHttpService } from '../../../services/pending-http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-join-as',
@@ -50,77 +51,16 @@ export class JoinAsComponent implements OnInit, OnDestroy {
   buildings: IBuilding[] = [];
   flats: IFlat[] = [];
 
-  buildingSelectorConfig: IUIControlConfig = {
-    id: 'building',
-    label: 'Building',
-    placeholder: 'Select Building',
-    validations: [{ name: 'required', validator: Validators.required }],
-    errorMessages: { required: 'Building is required' }
-  };
-
-  flatIdConfig: IUIControlConfig = {
-    id: 'flatId',
-    label: 'Flat',
-    placeholder: 'Select Flat',
-    validations: [{ name: 'required', validator: Validators.required }],
-    errorMessages: { required: 'Flat is required' }
-  };
-
-  residingTypeConfig: IUIControlConfig = {
-    id: 'residingType',
-    label: 'Residing Type',
-    validations: [{ name: 'required', validator: Validators.required }],
-    errorMessages: { required: 'Residing Type is required' }
-  };
-
-  leaseStartConfig = {
-    id: 'leaseStart',
-    label: 'Lease Start',
-    placeholder: 'Enter Lease Start'
-  };
-
-  leaseEndConfig = {
-    id: 'leaseEnd',
-    label: 'Lease End',
-    placeholder: 'Enter Lease End'
-  };
-
-  rentAmountConfig = {
-    id: 'rentAmount',
-    label: 'Rent Amount',
-    placeholder: 'Enter Rent Amount'
-  };
-
-  radioConfig: IUIControlConfig = {
-    id: 'radio',
-    label: 'Search Tenant',
-    placeholder: 'Search By'
-  };
-
-  radioOptions: IUIDropdownOption[] = [
-    { label: 'By App User', value: 'user' },
-    { label: 'By Contact', value: 'contact' }
-  ];
-
-  jobStartConfig: IUIControlConfig = {
-    id: 'jobStart',
-    label: 'Job Start',
-    placeholder: 'Enter Job Start',
-    validations: [{ name: 'required', validator: Validators.required }],
-    errorMessages: { required: 'Job Start Date is required' }
-  };
-
-  jobEndConfig: IUIControlConfig = {
-    id: 'jobEnd',
-    label: 'Job End',
-    placeholder: 'Enter Job End'
-  };
-
-  salaryAmountConfig: IUIControlConfig = {
-    id: 'salaryAmount',
-    label: 'Salary Amount',
-    placeholder: 'Enter Salary Amount'
-  };
+  buildingSelectorConfig!: IUIControlConfig;
+  flatIdConfig!: IUIControlConfig;
+  residingTypeConfig!: IUIControlConfig;
+  leaseStartConfig!: any;
+  leaseEndConfig!: any;
+  rentAmountConfig!: any;
+  radioConfig!: IUIControlConfig;
+  jobStartConfig!: IUIControlConfig;
+  jobEndConfig!: IUIControlConfig;
+  salaryAmountConfig!: IUIControlConfig;
 
   private destroy$ = new Subject<void>();
 
@@ -149,7 +89,17 @@ export class JoinAsComponent implements OnInit, OnDestroy {
   }
 
   get residingTypeOptions(): IUIDropdownOption[] {
-    return [{ label: ResidingTypes.Self, value: ResidingTypes.Self }, { label: ResidingTypes.Vacant, value: ResidingTypes.Vacant }];
+    return [
+      { label: this.translate.instant('JOIN_AS.RESIDING_SELF') || ResidingTypes.Self, value: ResidingTypes.Self },
+      { label: this.translate.instant('JOIN_AS.RESIDING_VACANT') || ResidingTypes.Vacant, value: ResidingTypes.Vacant }
+    ];
+  }
+
+  get radioOptions(): IUIDropdownOption[] {
+    return [
+      { label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User', value: 'user' },
+      { label: this.translate.instant('JOIN_AS.BY_CONTACT') || 'By Contact', value: 'contact' }
+    ];
   }
 
   get parkingFlatOptions(): IUIDropdownOption<string>[] {
@@ -166,10 +116,98 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private loginService: LoginService,
     private newUserService: NewUserService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private translate: TranslateService
   ) { }
 
+  translateConfigs(): void {
+    this.buildingSelectorConfig = {
+      id: 'building',
+      label: this.translate.instant('JOIN_AS.BUILDING') || 'Building',
+      placeholder: this.translate.instant('JOIN_AS.SELECT_BUILDING') || 'Select Building',
+      validations: [{ name: 'required', validator: Validators.required }],
+      errorMessages: { required: this.translate.instant('JOIN_AS.BUILDING_REQUIRED') || 'Building is required' }
+    };
+
+    this.flatIdConfig = {
+      id: 'flatId',
+      label: this.translate.instant('JOIN_AS.FLAT') || 'Flat',
+      placeholder: this.translate.instant('JOIN_AS.SELECT_FLAT') || 'Select Flat',
+      validations: [{ name: 'required', validator: Validators.required }],
+      errorMessages: { required: this.translate.instant('JOIN_AS.FLAT_REQUIRED') || 'Flat is required' }
+    };
+
+    this.residingTypeConfig = {
+      id: 'residingType',
+      label: this.translate.instant('JOIN_AS.RESIDING_TYPE') || 'Residing Type',
+      validations: [{ name: 'required', validator: Validators.required }],
+      errorMessages: { required: this.translate.instant('JOIN_AS.RESIDING_TYPE_REQUIRED') || 'Residing Type is required' }
+    };
+
+    this.leaseStartConfig = {
+      id: 'leaseStart',
+      label: this.translate.instant('JOIN_AS.LEASE_START') || 'Lease Start',
+      placeholder: this.translate.instant('JOIN_AS.ENTER_LEASE_START') || 'Enter Lease Start'
+    };
+
+    this.leaseEndConfig = {
+      id: 'leaseEnd',
+      label: this.translate.instant('JOIN_AS.LEASE_END') || 'Lease End',
+      placeholder: this.translate.instant('JOIN_AS.ENTER_LEASE_END') || 'Enter Lease End'
+    };
+
+    this.rentAmountConfig = {
+      id: 'rentAmount',
+      label: this.translate.instant('JOIN_AS.RENT_AMOUNT') || 'Rent Amount',
+      placeholder: this.translate.instant('JOIN_AS.ENTER_RENT_AMOUNT') || 'Enter Rent Amount'
+    };
+
+    this.radioConfig = {
+      id: 'radio',
+      label: this.translate.instant('JOIN_AS.SEARCH_TENANT') || 'Search Tenant',
+      placeholder: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Search By'
+    };
+
+    this.jobStartConfig = {
+      id: 'jobStart',
+      label: this.translate.instant('JOIN_AS.JOB_START') || 'Job Start',
+      placeholder: this.translate.instant('JOIN_AS.ENTER_JOB_START') || 'Enter Job Start',
+      validations: [{ name: 'required', validator: Validators.required }],
+      errorMessages: { required: this.translate.instant('JOIN_AS.JOB_START_REQUIRED') || 'Job Start Date is required' }
+    };
+
+    this.jobEndConfig = {
+      id: 'jobEnd',
+      label: this.translate.instant('JOIN_AS.JOB_END') || 'Job End',
+      placeholder: this.translate.instant('JOIN_AS.ENTER_JOB_END') || 'Enter Job End'
+    };
+
+    this.salaryAmountConfig = {
+      id: 'salaryAmount',
+      label: this.translate.instant('JOIN_AS.SALARY_AMOUNT') || 'Salary Amount',
+      placeholder: this.translate.instant('JOIN_AS.ENTER_SALARY_AMOUNT') || 'Enter Salary Amount'
+    };
+  }
+
+  getPageTitle(): string {
+    if (this.isOwner) {
+      return this.translate.instant('JOIN_AS.PAGE_TITLE_OWNER') || 'Join as Owner';
+    }
+    if (this.isTenant) {
+      return this.translate.instant('JOIN_AS.PAGE_TITLE_TENANT') || 'Join as Tenant';
+    }
+    if (this.isSecurity) {
+      return this.translate.instant('JOIN_AS.PAGE_TITLE_SECURITY') || 'Join as Security';
+    }
+    return '';
+  }
+
   ngOnInit(): void {
+    this.translateConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.translateConfigs();
+    });
+
     this.route.params.pipe(take(1)).subscribe(params => {
       const role = params['role'];
       if ([SocietyRoles.owner, SocietyRoles.tenant, SocietyRoles.security].includes(role)) {
@@ -376,7 +414,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
       this.saveTenant();
     }
 
-    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Owner...' });
+    this.pendingHttpService.addRequest('join-as', { message: this.translate.instant('JOIN_AS.JOINING_OWNER') || 'Joining as Owner...' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
@@ -398,7 +436,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     if (!payload) return;
 
     this.isSaving = true;
-    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Tenant...' });
+    this.pendingHttpService.addRequest('join-as', { message: this.translate.instant('JOIN_AS.JOINING_TENANT') || 'Joining as Tenant...' });
     this.newUserService.newFlatMember(payload)
       .pipe(take(1))
       .subscribe({
@@ -419,7 +457,7 @@ export class JoinAsComponent implements OnInit, OnDestroy {
     if (!payload) return;
 
     this.isSaving = true;
-    this.pendingHttpService.addRequest('join-as', { message: 'Joining as Security...' });
+    this.pendingHttpService.addRequest('join-as', { message: this.translate.instant('JOIN_AS.JOINING_SECURITY') || 'Joining as Security...' });
     this.newUserService.newSecurity(payload)
       .pipe(take(1))
       .subscribe({

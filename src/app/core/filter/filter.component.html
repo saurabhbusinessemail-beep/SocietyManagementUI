@@ -37,7 +37,7 @@
 
     </ng-container>
 
-    <ui-loading *ngIf="loadingSocities || loadingMyFlats || loadingSocietyFlats" message="Loading Filters"
+    <ui-loading *ngIf="loadingSocities || loadingMyFlats || loadingSocietyFlats" [message]="'COMMON.LOADING_FILTERS' | translate"
         [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
     </ui-loading>
 

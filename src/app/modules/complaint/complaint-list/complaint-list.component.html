@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="!isFlatMember" pageTitle="Complaints"
+<app-layout [hideMoreActions]="!isFlatMember" [pageTitle]="'COMPLAINTS.TITLE' | translate"
     [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
@@ -7,7 +7,7 @@
         </ui-button> -->
 
         <ul class="page-menu-list" *ngIf="isFlatMember">
-            <li class="page-menu" (click)="openAddComplaint()">New Complaint</li>
+            <li class="page-menu" (click)="openAddComplaint()">{{ 'COMPLAINTS.NEW_COMPLAINT' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -40,7 +40,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="complaints.length === 0">
-                    <app-empty-records singular="complaint" plural="complaints" [hideAddButton]="!isFlatMember"
+                    <app-empty-records [singular]="'COMPLAINTS.SINGULAR'" [plural]="'COMPLAINTS.PLURAL'" [hideAddButton]="!isFlatMember"
                         (addClicked)="openAddComplaint()" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="complaint" size="xxl"></app-icon>
                     </app-empty-records>
@@ -49,11 +49,12 @@
             </ng-container>
 
 
-            <ui-loading *ngIf="loadingComplaints" message="Loading complaints" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingComplaints" [message]="'COMPLAINTS.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 
         </ui-form-layout>
     </div>
+
 
 </app-layout>

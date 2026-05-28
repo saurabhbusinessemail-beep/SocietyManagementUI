@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { TextBoxComponent } from './text-box/text-box.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropDownComponent } from './drop-down/drop-down.component';
@@ -93,7 +94,8 @@ import { DocumentViewerComponent } from './document-viewer/document-viewer.compo
     CommonModule, FormsModule, ReactiveFormsModule, IconModule, MatRippleModule,
     DirectiveModule, MatDatepickerModule, MatNativeDateModule,
     FormsModule, NgSelectModule,
-    PipeModule
+    PipeModule,
+    TranslateModule.forChild()
 ],
   exports: [TextBoxComponent,
     DropDownComponent,

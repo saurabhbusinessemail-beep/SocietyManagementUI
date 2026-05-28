@@ -1,4 +1,4 @@
-<app-layout [hideMoreActions]="true" pageTitle="Visitors" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [hideMoreActions]="true" [pageTitle]="'VISITOR.TITLE' | translate" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
 
     <div class="flex-col full-h">
@@ -31,34 +31,34 @@
                         <ng-container card-body>
 
                             <!-- Contact -->
-                            <ui-label [config]="{id: '', label: 'Contact'}" [valueText]="gateEntry.visitorContact"
+                            <ui-label [config]="{id: '', label: ('VISITOR.CONTACT' | translate)}" [valueText]="gateEntry.visitorContact"
                                 direction="vertical" valueType="info">
                             </ui-label>
 
                             <!-- Purpose -->
-                            <ui-label [config]="{id: '', label: 'Purpose'}" [valueText]="gateEntry.purpose"
+                            <ui-label [config]="{id: '', label: ('VISITOR.PURPOSE' | translate)}" [valueText]="gateEntry.purpose"
                                 direction="vertical" valueType="info">
                             </ui-label>
 
                             <!-- Time -->
-                            <ui-label [config]="{id: '', label: 'Time'}" [valueText]="formatTime(gateEntry.createdOn)"
+                            <ui-label [config]="{id: '', label: ('VISITOR.TIME' | translate)}" [valueText]="formatTime(gateEntry.createdOn)"
                                 direction="vertical" valueType="info">
                             </ui-label>
                         </ng-container>
 
                         <ng-container card-actions *ngIf="gateEntry.status === 'requested'">
                             <ng-container *ngIf="!approving && !rejecting">
-                                <ui-button label="Approve" (clicked)="onApprove(gateEntry)">
+                                <ui-button [label]="'APP.APPROVE' | translate" (clicked)="onApprove(gateEntry)">
                                 </ui-button>
-                                <ui-button label="Reject" type="error" (clicked)="onReject(gateEntry)">
+                                <ui-button [label]="'APP.REJECT' | translate" type="error" (clicked)="onReject(gateEntry)">
                                 </ui-button>
                             </ng-container>
 
                             <ng-container *ngIf="approving || rejecting">
-                                <ui-loading *ngIf="approving" message="Approving"
+                                <ui-loading *ngIf="approving" [message]="'MAINTENANCE.APPROVING' | translate"
                                     [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                                 </ui-loading>
-                                <ui-loading *ngIf="rejecting" message="Rejecting"
+                                <ui-loading *ngIf="rejecting" [message]="'MAINTENANCE.REJECTING' | translate"
                                     [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                                 </ui-loading>
                             </ng-container>
@@ -71,7 +71,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="gateEntries.length === 0">
-                    <app-empty-records singular="visitor" plural="visitors" overrideTitle="Nobody has visited you yet" [hideAddButton]="true" [hideMessage]="true"
+                    <app-empty-records singular="visitor" plural="visitors" [overrideTitle]="'VISITOR.NO_VISITORS' | translate" [hideAddButton]="true" [hideMessage]="true"
                         [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="visitor" size="xxl"></app-icon>
                     </app-empty-records>
@@ -79,7 +79,7 @@
 
             </ng-container>
 
-            <ui-loading *ngIf="loadingGateEntries" message="Loading visitor's list" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingGateEntries" [message]="'VISITOR.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 

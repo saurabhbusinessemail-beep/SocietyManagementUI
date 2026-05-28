@@ -1,26 +1,26 @@
-<app-layout pageTitle="Plan History" [showBackButton]="true" [hideMoreActions]="true"
+<app-layout [pageTitle]="'PLAN.PLAN_HISTORY' | translate" [showBackButton]="true" [hideMoreActions]="true"
     (needLogin)="loginService.simpleLogin()">
-
+ 
     <div class="history-container">
-
+ 
         <!-- Not Logged In -->
         <div class="login-message" *ngIf="!myProfile">
-            <p>Please login to view plan history</p>
-            <button class="btn btn-primary" (click)="loginService.simpleLogin()">Login</button>
+            <p>{{ 'PLAN.PLEASE_LOGIN' | translate }}</p>
+            <button class="btn btn-primary" (click)="loginService.simpleLogin()">{{ 'APP.LOGIN' | translate }}</button>
         </div>
-
+ 
         <!-- Loading State -->
         <div class="loading-state" *ngIf="myProfile && isLoading">
             <div class="spinner"></div>
-            <p>Loading plan history...</p>
+            <p>{{ 'PLAN.LOADING_DETAILS' | translate }}</p>
         </div>
-
+ 
         <!-- Error State -->
         <div class="error-state" *ngIf="myProfile && error && !isLoading">
             <p>{{ error }}</p>
-            <button class="btn btn-primary" (click)="loadHistory()">Retry</button>
+            <button class="btn btn-primary" (click)="loadHistory()">{{ 'APP.RETRY' | translate }}</button>
         </div>
-
+ 
         <!-- History List -->
         <div class="history-content" *ngIf="myProfile && !isLoading && !error">
             <div class="history-list" *ngIf="plans.length > 0">
@@ -34,67 +34,67 @@
                         <div class="plan-info">
                             <h3>{{ plan.planName }}</h3>
                             <span class="plan-status" [class.active]="plan.isActive">
-                                {{ plan.isActive ? 'Active' : 'Inactive' }}
+                                {{ (plan.isActive ? 'PLAN.ACTIVE' : 'PLAN.INACTIVE') | translate }}
                             </span>
                         </div>
                     </div>
-
+ 
                     <div class="card-body">
                         <div class="plan-meta">
                             <div class="meta-item">
-                                <span class="label">Price:</span>
-                                <span class="value">{{ getCurrentPriceNumber(plan) | formattedPrice }}/flat</span>
+                                <span class="label">{{ 'PLAN.PRICE' | translate }}:</span>
+                                <span class="value">{{ getCurrentPriceNumber(plan) | formattedPrice }}/{{ 'FLAT.FLAT_NUMBER' | translate | lowercase }}</span>
                             </div>
                             <div class="meta-item">
-                                <span class="label">Period:</span>
+                                <span class="label">{{ 'PLAN.PERIOD' | translate }}:</span>
                                 <span class="value">{{ plan.period || 'Yearly' }}</span>
                             </div>
                             <div class="meta-item">
-                                <span class="label">Started:</span>
+                                <span class="label">{{ 'PLAN.STARTED' | translate }}:</span>
                                 <span class="value">{{ plan.startDate | date:'mediumDate' }}</span>
                             </div>
                             <div class="meta-item" *ngIf="plan.endDate">
-                                <span class="label">Ended:</span>
+                                <span class="label">{{ 'PLAN.ENDS' | translate }}:</span>
                                 <span class="value">{{ plan.endDate | date:'mediumDate' }}</span>
                             </div>
                             <div class="meta-item">
-                                <span class="label">Amount Paid:</span>
+                                <span class="label">{{ 'PLAN.AMOUNT_PAID' | translate }}:</span>
                                 <span class="value paid">{{ (plan.finalAmount ?? 0) | formattedPrice }}</span>
                             </div>
                             <div class="meta-item">
-                                <span class="label">Payment:</span>
+                                <span class="label">{{ 'PLAN.PAYMENT' | translate }}:</span>
                                 <span class="value payment-status" [class]="getPaymentStatusClass(plan.paymentStatus)">
                                     {{ plan.paymentStatus | titlecase }}
                                 </span>
                             </div>
                         </div>
-
+ 
                         <div class="feature-count">
-                            Features: {{ plan.featureCount }}
+                            {{ 'PLAN.FEATURES' | translate }}: {{ plan.featureCount }}
                         </div>
-
+ 
                         <div class="plan-notes" *ngIf="plan.notes">
                             <p>{{ plan.notes }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Empty State -->
             <div class="empty-state" *ngIf="plans.length === 0">
-                <p>No plan history found</p>
+                <p>{{ 'PLAN.NO_HISTORY' | translate }}</p>
             </div>
-
+ 
             <!-- Pagination -->
             <div class="pagination" *ngIf="pagination.pages > 1">
                 <button class="btn btn-secondary" [disabled]="currentPage === 1"
                     (click)="onPageChange(currentPage - 1)">
-                    Previous
+                    {{ 'APP.PREVIOUS' | translate }}
                 </button>
                 <span class="page-info">Page {{ currentPage }} of {{ pagination.pages }}</span>
                 <button class="btn btn-secondary" [disabled]="currentPage === pagination.pages"
                     (click)="onPageChange(currentPage + 1)">
-                    Next
+                    {{ 'APP.NEXT' | translate }}
                 </button>
             </div>
         </div>

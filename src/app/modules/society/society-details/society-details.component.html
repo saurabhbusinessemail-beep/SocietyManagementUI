@@ -1,9 +1,9 @@
-<app-layout [showBackButton]="true" [pageTitle]="society?.societyName || 'Society'" backButtonURL="/society/list">
+<app-layout [showBackButton]="true" [pageTitle]="society?.societyName || ('SOCIETY.TITLE' | translate)" backButtonURL="/society/list">
 
     <ng-container moreActions>
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="gotoEditSociety()">Edit Society</li>
-            <li class="page-menu" (click)="gotoPlanEdit()">Current Plan</li>
+            <li class="page-menu" (click)="gotoEditSociety()">{{ 'SOCIETY.EDIT_SOCIETY' | translate }}</li>
+            <li class="page-menu" (click)="gotoPlanEdit()">{{ 'SOCIETY.CURRENT_PLAN' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -18,22 +18,22 @@
                     <ng-container *ngIf="!loadingPlan && currentPlan">
                         <span class="plan-badge-primary">
                             <span class="plan-dot"></span>
-                            Plan: {{ currentPlan.planName || 'No Plan' }}
+                            {{ 'SOCIETY.PLAN_LABEL' | translate }}: {{ currentPlan.planName || ('SOCIETY.NO_PLAN' | translate) }}
                         </span>
                         <span class="plan-duration-badge" *ngIf="currentPlan.selectedDuration">
                             <app-icon name="calendar"></app-icon>
-                            {{ getPlanRemainingDays() }} day{{ getPlanRemainingDays() > 1 ? 's' : '' }} left
+                            {{ getPlanRemainingDays() }} {{ (getPlanRemainingDays() > 1 ? 'SOCIETY.DAYS_LEFT' : 'SOCIETY.DAY_LEFT') | translate }}
                         </span>
                     </ng-container>
 
-                    <ui-loading *ngIf="loadingPlan" message="Loading plan">
+                    <ui-loading *ngIf="loadingPlan" [message]="'SOCIETY.LOADING_PLAN' | translate">
                     </ui-loading>
                 </div>
                 
                 <div class="chat-quick-access" *ngIf="society">
                     <button class="chat-goto-btn-header" (click)="gotoChat()">
                         <app-icon name="chat" size="sm"></app-icon>
-                        <span class="no-mobile">Open Chat</span>
+                        <span class="no-mobile">{{ 'SOCIETY.OPEN_CHAT' | translate }}</span>
                     </button>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                         <app-icon name="building"></app-icon>
                     </div>
                     <div class="stat-details">
-                        <p class="stat-label">Buildings</p>
+                        <p class="stat-label">{{ 'SOCIETY.BUILDINGS' | translate }}</p>
                         <p class="stat-value">
                             <ng-container *ngIf="!loadingBuildings">
                                 {{ addedBuildings }}
@@ -69,7 +69,7 @@
                         <app-icon name="home"></app-icon>
                     </div>
                     <div class="stat-details">
-                        <p class="stat-label">Flats</p>
+                        <p class="stat-label">{{ 'SOCIETY.FLAT_LIST' | translate }}</p>
                         <p class="stat-value">
                             <ng-container *ngIf="!loadingFlats">
                                 {{ addedFlats }}
@@ -89,11 +89,11 @@
                     <div class="card-header">
                         <div class="card-title-wrapper">
                             <app-icon name="admin" class="card-icon card-icon--amber"></app-icon>
-                            <h2 class="card-title">Admins</h2>
+                            <h2 class="card-title">{{ 'SOCIETY.ADMINS' | translate }}</h2>
                         </div>
                         <button class="manage-button" (click)="gotoSocietyAdmins()" *ngIf="canViewAdmin"
                             [disabled]="loadingSociety">
-                            Manage <app-icon name="goto" size="md"></app-icon>
+                            {{ 'APP.MANAGE' | translate }} <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
                     <div class="card-content">
@@ -109,12 +109,12 @@
                                     <div class="empty-icon">
                                         <app-icon name="user-icon"></app-icon>
                                     </div>
-                                    <span>No admins added</span>
+                                    <span>{{ 'SOCIETY.NO_ADMINS' | translate }}</span>
                                 </div>
                             </ng-template>
                         </ng-container>
 
-                        <ui-loading *ngIf="loadingSociety" message="Loading">
+                        <ui-loading *ngIf="loadingSociety" [message]="'APP.LOADING_SHORT' | translate">
                         </ui-loading>
                     </div>
                 </div>
@@ -124,11 +124,11 @@
                     <div class="card-header">
                         <div class="card-title-wrapper">
                             <app-icon name="secretary" class="card-icon card-icon--green"></app-icon>
-                            <h2 class="card-title">Secretaries</h2>
+                            <h2 class="card-title">{{ 'SOCIETY.SECRETARIES' | translate }}</h2>
                         </div>
                         <button class="manage-button" (click)="gotoSocietyManageers()" *ngIf="canViewManager"
                             [disabled]="loadingSociety">
-                            Manage <app-icon name="goto" size="md"></app-icon>
+                            {{ 'APP.MANAGE' | translate }} <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
                     <div class="card-content">
@@ -137,9 +137,6 @@
                                 <div class="user-chip" *ngFor="let s of managerIds">
                                     <ui-user-avatar [user]="s" size="sm"></ui-user-avatar>
                                     <span>{{ s.name ?? '' }} {{ s.phoneNumber }}</span>
-                                    <!-- <button class="remove-chip" *ngIf="canDeleteManager" (click)="removeSecretary(s)">
-                                    <app-icon name="delete"></app-icon>
-                                </button> -->
                                 </div>
                             </div>
                             <ng-template #noSecretaries>
@@ -147,11 +144,11 @@
                                     <div class="empty-icon">
                                         <app-icon name="user-icon"></app-icon>
                                     </div>
-                                    <span>No secretaries added</span>
+                                    <span>{{ 'SOCIETY.NO_SECRETARIES' | translate }}</span>
                                 </div>
                             </ng-template>
                         </ng-container>
-                        <ui-loading *ngIf="loadingSociety" message="Loading">
+                        <ui-loading *ngIf="loadingSociety" [message]="'APP.LOADING_SHORT' | translate">
                         </ui-loading>
                     </div>
                 </div>
@@ -161,11 +158,11 @@
                     <div class="card-header">
                         <div class="card-title-wrapper">
                             <app-icon name="security" class="card-icon card-icon--indigo"></app-icon>
-                            <h2 class="card-title">Security Guards</h2>
+                            <h2 class="card-title">{{ 'SOCIETY.SECURITY_GUARDS' | translate }}</h2>
                         </div>
                         <button class="manage-button" (click)="gotoSocietySecurities()" *ngIf="canViewManager"
                             [disabled]="false">
-                            Manage <app-icon name="goto" size="md"></app-icon>
+                            {{ 'APP.MANAGE' | translate }} <app-icon name="goto" size="md"></app-icon>
                         </button>
                     </div>
                     <div class="card-content">
@@ -181,11 +178,11 @@
                                     <div class="empty-icon">
                                         <app-icon name="user-icon"></app-icon>
                                     </div>
-                                    <span>No securities added</span>
+                                    <span>{{ 'SOCIETY.NO_SECURITIES' | translate }}</span>
                                 </div>
                             </ng-template>
                         </ng-container>
-                        <ui-loading *ngIf="loadingSecurities" message="Loading">
+                        <ui-loading *ngIf="loadingSecurities" [message]="'APP.LOADING_SHORT' | translate">
                         </ui-loading>
                     </div>
                 </div>
@@ -201,7 +198,7 @@
                             <app-icon name="home" complaint></app-icon>
                         </div>
                         <div class="action-text">
-                            <p class="action-label">BUILDINGS</p>
+                            <p class="action-label">{{ 'SOCIETY.BUILDINGS' | translate }}</p>
                             <p class="action-value">
                                 <ng-container *ngIf="!loadingBuildings">
                                     {{ society && society.numberOfBuildings > 1 ? addedBuildings : 1 }}
@@ -210,14 +207,14 @@
                                     </span>
                                 </ng-container>
 
-                                <ui-loading *ngIf="loadingBuildings" message="Loading">
+                                <ui-loading *ngIf="loadingBuildings" [message]="'APP.LOADING_SHORT' | translate">
                                 </ui-loading>
                             </p>
                         </div>
                     </div>
                     <button class="action-button" (click)="gotoBuildingManager()"
                         [disabled]="loadingBuildings || !canViewBuildings || (society?.numberOfBuildings ?? 0) <= 1">
-                        Manage <app-icon name="goto" size="md"></app-icon>
+                        {{ 'APP.MANAGE' | translate }} <app-icon name="goto" size="md"></app-icon>
                     </button>
                 </div>
 
@@ -228,7 +225,7 @@
                             <app-icon name="building"></app-icon>
                         </div>
                         <div class="action-text">
-                            <p class="action-label">FLATS</p>
+                            <p class="action-label">{{ 'SOCIETY.FLAT_LIST' | translate }}</p>
                             <p class="action-value">
                                 <ng-container *ngIf="!loadingFlats">
                                     {{addedFlats }}
@@ -237,14 +234,14 @@
                                     </span>
                                 </ng-container>
 
-                                <ui-loading *ngIf="loadingFlats" message="Loading">
+                                <ui-loading *ngIf="loadingFlats" [message]="'APP.LOADING_SHORT' | translate">
                                 </ui-loading>
                             </p>
                         </div>
                     </div>
                     <button class="action-button" (click)="gotoFlatManager()"
                         [disabled]="loadingFlats || !canViewFlats">
-                        Manage <app-icon name="goto" size="md"></app-icon>
+                        {{ 'APP.MANAGE' | translate }} <app-icon name="goto" size="md"></app-icon>
                     </button>
                 </div>
             </div>
@@ -255,18 +252,18 @@
                 <div class="feature-card" [class.feature-card--locked]="!parkingFeatureAvailable && !loadingParkings">
                     <div class="feature-header">
                         <app-icon name="vehicle" class="feature-icon feature-icon--purple"></app-icon>
-                        <h2 class="feature-title">Parkings</h2>
+                        <h2 class="feature-title">{{ 'SOCIETY.PARKINGS' | translate }}</h2>
                     </div>
                     <ng-container *ngIf="!loadingParkings">
 
                         <div class="feature-stats" *ngIf="parkingFeatureAvailable; else parkingLocked">
                             <ng-container *ngIf="parkings.length > 0; else noParkings">
                                 <div class="stat-badge stat-badge--success">
-                                    Added: {{ parkings.length }}
+                                    {{ 'SOCIETY.ADDED' | translate }}: {{ parkings.length }}
                                 </div>
                             </ng-container>
                             <ng-template #noParkings>
-                                <div class="stat-badge stat-badge--neutral">No parkings data</div>
+                                <div class="stat-badge stat-badge--neutral">{{ 'SOCIETY.NO_PARKINGS_DATA' | translate }}</div>
                             </ng-template>
                         </div>
                         <ng-template #parkingLocked>
@@ -274,18 +271,18 @@
                                 <div class="locked-icon-wrapper">
                                     <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
                                 </div>
-                                <p class="locked-message">Your current plan does not support the Parking feature.</p>
+                                <p class="locked-message">{{ 'SOCIETY.LOCKED_PARKING' | translate }}</p>
                                 <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
-                                    Upgrade Plan <app-icon name="upgrade"></app-icon>
+                                    {{ 'SOCIETY.UPGRADE_PLAN' | translate }} <app-icon name="upgrade"></app-icon>
                                 </button>
                             </div>
                         </ng-template>
                     </ng-container>
-                    <ui-loading *ngIf="loadingParkings" message="Loading">
+                    <ui-loading *ngIf="loadingParkings" [message]="'APP.LOADING_SHORT' | translate">
                     </ui-loading>
                     <button class="feature-manage-btn" (click)="gotoParkingManager()" [disabled]="loadingParkings"
                         *ngIf="canUpdateSociety && canViewParkings">
-                        Manage
+                        {{ 'APP.MANAGE' | translate }}
                     </button>
                 </div>
 
@@ -294,21 +291,21 @@
                     [class.feature-card--locked]="!complaintsFeatureAvailable && !loadingComplaints">
                     <div class="feature-header">
                         <app-icon name="complaint" class="feature-icon feature-icon--red"></app-icon>
-                        <h2 class="feature-title">Complaints</h2>
+                        <h2 class="feature-title">{{ 'COMPLAINTS.TITLE' | translate }}</h2>
                     </div>
                     <ng-container *ngIf="!loadingComplaints">
 
                         <div class="feature-stats" *ngIf="complaintsFeatureAvailable; else complaintsLocked">
                             <ng-container *ngIf="complaints; else noComplaints">
                                 <div class="stat-badge stat-badge--warning">
-                                    Pending: {{ complaints.pending }}
+                                    {{ 'SOCIETY.PENDING_LABEL' | translate }}: {{ complaints.pending }}
                                 </div>
                                 <div class="stat-badge stat-badge--success">
-                                    Completed: {{ complaints.completed }}
+                                    {{ 'SOCIETY.COMPLETED_LABEL' | translate }}: {{ complaints.completed }}
                                 </div>
                             </ng-container>
                             <ng-template #noComplaints>
-                                <div class="stat-badge stat-badge--neutral">No complaints data</div>
+                                <div class="stat-badge stat-badge--neutral">{{ 'SOCIETY.NO_COMPLAINTS_DATA' | translate }}</div>
                             </ng-template>
                         </div>
 
@@ -317,19 +314,19 @@
                                 <div class="locked-icon-wrapper">
                                     <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
                                 </div>
-                                <p class="locked-message">Your current plan does not support the Complaints feature.</p>
+                                <p class="locked-message">{{ 'SOCIETY.LOCKED_COMPLAINTS' | translate }}</p>
                                 <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
-                                    Upgrade Plan <app-icon name="upgrade"></app-icon>
+                                    {{ 'SOCIETY.UPGRADE_PLAN' | translate }} <app-icon name="upgrade"></app-icon>
                                 </button>
                             </div>
                         </ng-template>
 
                     </ng-container>
-                    <ui-loading *ngIf="loadingComplaints" message="Loading">
+                    <ui-loading *ngIf="loadingComplaints" [message]="'APP.LOADING_SHORT' | translate">
                     </ui-loading>
                     <button class="feature-manage-btn" (click)="gotoComplaints()" [disabled]="loadingComplaints"
                         *ngIf="canUpdateSociety">
-                        Manage
+                        {{ 'APP.MANAGE' | translate }}
                     </button>
                 </div>
 
@@ -338,21 +335,21 @@
                     [class.feature-card--locked]="!maintenanceFeatureAvailable && !loadingMaintenance">
                     <div class="feature-header">
                         <app-icon name="home" class="feature-icon feature-icon--indigo"></app-icon>
-                        <h2 class="feature-title">Maintenance</h2>
+                        <h2 class="feature-title">{{ 'MAINTENANCE.TITLE' | translate }}</h2>
                     </div>
                     <ng-container *ngIf="!loadingMaintenance">
 
                         <div class="feature-stats" *ngIf="maintenanceFeatureAvailable; else maintenanceLocked">
                             <ng-container *ngIf="maintenanceSummary; else noMaintenance">
                                 <div class="stat-badge stat-badge--success">
-                                    Paid: {{ maintenanceSummary.paidCount }}
+                                    {{ 'SOCIETY.PAID_LABEL' | translate }}: {{ maintenanceSummary.paidCount }}
                                 </div>
                                 <div class="stat-badge stat-badge--warning">
-                                    Pending: {{ maintenanceSummary.pendingCount }}
+                                    {{ 'SOCIETY.PENDING_LABEL' | translate }}: {{ maintenanceSummary.pendingCount }}
                                 </div>
                             </ng-container>
                             <ng-template #noMaintenance>
-                                <div class="stat-badge stat-badge--neutral">No maintenance data</div>
+                                <div class="stat-badge stat-badge--neutral">{{ 'SOCIETY.NO_MAINTENANCE_DATA' | translate }}</div>
                             </ng-template>
                         </div>
 
@@ -361,20 +358,19 @@
                                 <div class="locked-icon-wrapper">
                                     <app-icon name="lock" size="xxl" class="locked-icon"></app-icon>
                                 </div>
-                                <p class="locked-message">Your current plan does not support the Maintenance feature.
-                                </p>
+                                <p class="locked-message">{{ 'SOCIETY.LOCKED_MAINTENANCE' | translate }}</p>
                                 <button class="upgrade-button" (click)="gotoPlanEdit()" *ngIf="canUpdateSociety">
-                                    Upgrade Plan <app-icon name="upgrade"></app-icon>
+                                    {{ 'SOCIETY.UPGRADE_PLAN' | translate }} <app-icon name="upgrade"></app-icon>
                                 </button>
                             </div>
                         </ng-template>
 
                     </ng-container>
-                    <ui-loading *ngIf="loadingMaintenance" message="Loading">
+                    <ui-loading *ngIf="loadingMaintenance" [message]="'APP.LOADING_SHORT' | translate">
                     </ui-loading>
                     <button class="feature-manage-btn" (click)="gotoMaintenance()" [disabled]="loadingMaintenance"
                         *ngIf="canUpdateSociety && maintenanceFeatureAvailable">
-                        Manage
+                        {{ 'APP.MANAGE' | translate }}
                     </button>
                 </div>
             </div>

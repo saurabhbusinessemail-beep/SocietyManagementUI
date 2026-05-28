@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IAnnouncement, IAnnouncementFilters, IMyProfile, IUIControlConfig, IUIDropdownOption } from '../../../interfaces';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { FormControl } from '@angular/forms';
-import { filter, take } from 'rxjs';
+import { filter, take, Subject, takeUntil } from 'rxjs';
 import { AnnouncementCategoryTypesText, AnnouncementCategoryTypes, AnnouncementPriorityTypes, AnnouncementPriorityTypesText, AnnouncementStatusTypes, AnnouncementStatusTypesText, adminManagerRoles } from '../../../constants';
 import { LoginService } from '../../../services/login.service';
 import { SocietyRoles } from '../../../types';
 import { Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-announcement-list',
   templateUrl: './announcement-list.component.html',
   styleUrl: './announcement-list.component.scss'
 })
-export class AnnouncementListComponent implements OnInit {
-
+export class AnnouncementListComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   myProfile: IMyProfile | undefined;
   societyRole?: 'admin' | SocietyRoles;
@@ -26,104 +27,16 @@ export class AnnouncementListComponent implements OnInit {
   loadingAnnouncementAction: { [annoucementId: string]: boolean } = {};
 
   categoryControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  categoryConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'category',
-    label: 'Category',
-    placeholder: 'Select Category',
-    formControl: this.categoryControl,
-    dropDownOptions: [
-      {
-        label: AnnouncementCategoryTypesText.billing.toString(),
-        value: AnnouncementCategoryTypes.billing
-      },
-      {
-        label: AnnouncementCategoryTypesText.event.toString(),
-        value: AnnouncementCategoryTypes.event
-      },
-      {
-        label: AnnouncementCategoryTypesText.general.toString(),
-        value: AnnouncementCategoryTypes.general
-      },
-      {
-        label: AnnouncementCategoryTypesText.maintenance.toString(),
-        value: AnnouncementCategoryTypes.maintenance
-      },
-      {
-        label: AnnouncementCategoryTypesText.other.toString(),
-        value: AnnouncementCategoryTypes.other
-      },
-      {
-        label: AnnouncementCategoryTypesText.security.toString(),
-        value: AnnouncementCategoryTypes.security
-      },
-    ]
-  };
+  categoryConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   priorityControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  priorityConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'priority',
-    label: 'Priority',
-    placeholder: 'Select Priority',
-    formControl: this.priorityControl,
-    dropDownOptions: [
-      {
-        label: AnnouncementPriorityTypesText.low.toString(),
-        value: AnnouncementPriorityTypes.low.toString()
-      },
-      {
-        label: AnnouncementPriorityTypesText.medium.toString(),
-        value: AnnouncementPriorityTypes.medium.toString()
-      },
-      {
-        label: AnnouncementPriorityTypesText.high.toString(),
-        value: AnnouncementPriorityTypes.high.toString()
-      },
-      {
-        label: AnnouncementPriorityTypesText.urgent.toString(),
-        value: AnnouncementPriorityTypes.urgent.toString()
-      }
-    ]
-  };
+  priorityConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   statusControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  statusConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'status',
-    label: 'Status',
-    placeholder: 'Select Status',
-    formControl: this.statusControl,
-    dropDownOptions: [
-      {
-        label: AnnouncementStatusTypesText.draft.toString(),
-        value: AnnouncementStatusTypes.draft.toString()
-      },
-      {
-        label: AnnouncementStatusTypesText.published.toString(),
-        value: AnnouncementStatusTypes.published.toString()
-      },
-      {
-        label: AnnouncementStatusTypesText.archived.toString(),
-        value: AnnouncementStatusTypes.archived.toString()
-      },
-    ]
-  };
-
+  statusConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   isPinnedControl = new FormControl<IUIDropdownOption | undefined>(undefined);
-  isPinnedConfig: IUIControlConfig<IUIDropdownOption | undefined | null> = {
-    id: 'isPinned',
-    label: 'Pinned',
-    formControl: this.isPinnedControl,
-    dropDownOptions: [
-      {
-        label: 'Pinned',
-        value: true
-      },
-      {
-        label: 'Unpinned',
-        value: false
-      },
-    ]
-  };
+  isPinnedConfig!: IUIControlConfig<IUIDropdownOption | undefined | null>;
 
   get hideMoreAction(): boolean {
     return this.societyRole === SocietyRoles.member;
@@ -133,11 +46,119 @@ export class AnnouncementListComponent implements OnInit {
     private announcementService: AnnouncementService,
     private loginService: LoginService,
     private router: Router,
-    public societyService: SocietyService
+    public societyService: SocietyService,
+    private translate: TranslateService
   ) { }
 
+  initFilterConfigs() {
+    this.categoryConfig = {
+      id: 'category',
+      label: this.translate.instant('ANNOUNCEMENTS.CATEGORY') || 'Category',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.SELECT_CATEGORY') || 'Select Category',
+      formControl: this.categoryControl,
+      dropDownOptions: [
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_BILLING') || 'Billing',
+          value: AnnouncementCategoryTypes.billing
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_EVENT') || 'Event',
+          value: AnnouncementCategoryTypes.event
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_GENERAL') || 'General',
+          value: AnnouncementCategoryTypes.general
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_MAINTENANCE') || 'Maintenance',
+          value: AnnouncementCategoryTypes.maintenance
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_OTHER') || 'Other',
+          value: AnnouncementCategoryTypes.other
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.CAT_SECURITY') || 'Security',
+          value: AnnouncementCategoryTypes.security
+        },
+      ]
+    };
+
+    this.priorityConfig = {
+      id: 'priority',
+      label: this.translate.instant('ANNOUNCEMENTS.PRIORITY') || 'Priority',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.SELECT_PRIORITY') || 'Select Priority',
+      formControl: this.priorityControl,
+      dropDownOptions: [
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.low.toUpperCase()) || AnnouncementPriorityTypesText.low,
+          value: AnnouncementPriorityTypes.low.toString()
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.medium.toUpperCase()) || AnnouncementPriorityTypesText.medium,
+          value: AnnouncementPriorityTypes.medium.toString()
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.high.toUpperCase()) || AnnouncementPriorityTypesText.high,
+          value: AnnouncementPriorityTypes.high.toString()
+        },
+        {
+          label: this.translate.instant('COMPLAINTS.PRIORITY_' + AnnouncementPriorityTypes.urgent.toUpperCase()) || AnnouncementPriorityTypesText.urgent,
+          value: AnnouncementPriorityTypes.urgent.toString()
+        }
+      ]
+    };
+
+    this.statusConfig = {
+      id: 'status',
+      label: this.translate.instant('COMMON.STATUS') || 'Status',
+      placeholder: this.translate.instant('ANNOUNCEMENTS.SELECT_STATUS') || 'Select Status',
+      formControl: this.statusControl,
+      dropDownOptions: [
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.STATUS_DRAFT') || 'Draft',
+          value: AnnouncementStatusTypes.draft.toString()
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.STATUS_PUBLISHED') || 'Published',
+          value: AnnouncementStatusTypes.published.toString()
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.STATUS_ARCHIVED') || 'Archived',
+          value: AnnouncementStatusTypes.archived.toString()
+        },
+      ]
+    };
+
+    this.isPinnedConfig = {
+      id: 'isPinned',
+      label: this.translate.instant('ANNOUNCEMENTS.PINNED') || 'Pinned',
+      formControl: this.isPinnedControl,
+      dropDownOptions: [
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.PINNED') || 'Pinned',
+          value: true
+        },
+        {
+          label: this.translate.instant('ANNOUNCEMENTS.UNPINNED') || 'Unpinned',
+          value: false
+        },
+      ]
+    };
+  }
+
   ngOnInit(): void {
+    this.initFilterConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.initFilterConfigs();
+    });
+
     this.myProfile = this.loginService.getProfileFromStorage();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadAnnouncements(selectedFIlter: IAnnouncementFilters) {

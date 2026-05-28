@@ -7,6 +7,7 @@ import { UiModule } from '../ui/ui.module';
 import { LayoutModule } from '../layout/layout.module';
 import { IconModule } from '../icons/icon.module';
 import { PipeModule } from '../../pipes/pipes.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -22,7 +23,8 @@ import { PipeModule } from '../../pipes/pipes.module';
     UiModule,
     LayoutModule,
     IconModule,
-    PipeModule
+    PipeModule,
+    TranslateModule
   ],
   exports: [FilterComponent]
 })

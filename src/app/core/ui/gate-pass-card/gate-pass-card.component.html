@@ -8,17 +8,17 @@
                 OTP: <strong>{{ gatePass.otp }}</strong>
             </div>
             <span class="assigned-badge" *ngIf="gatePass.isAssignedBySociety">
-                Assigned by Society
+                {{ 'GATE_PASS.ASSIGNED_BY_SOCIETY' | translate }}
             </span>
         </div>
         <div class="header-actions">
             <ng-container *ngIf="!actionInProgress">
 
-                <button class="qr-btn" (click)="onShowQR($event)" title="Show QR">
-                    <span class="qr-icon">📱</span> QR
+                <button class="qr-btn" (click)="onShowQR($event)" [attr.title]="'GATE_PASS.SHOW_QR' | translate">
+                    <span class="qr-icon">📱</span> {{ 'GATE_PASS.QR' | translate }}
                 </button>
-                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" title="Delete">
-                    <span class="delete-icon">🗑️</span> Delete
+                <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)" [attr.title]="'GATE_PASS.DELETE' | translate">
+                    <span class="delete-icon">🗑️</span> {{ 'GATE_PASS.DELETE' | translate }}
                 </button>
 
             </ng-container>
@@ -32,23 +32,23 @@
     <div class="card-body">
         <div class="details-grid">
             <div class="detail-item">
-                <span class="label">Flat</span>
+                <span class="label">{{ 'COMMON.FLAT' | translate }}</span>
                 <span class="value">{{ getFlatDisplay() }}</span>
             </div>
             <div class="detail-item">
-                <span class="label">Society</span>
+                <span class="label">{{ 'COMMON.SOCIETY' | translate }}</span>
                 <span class="value">{{ getSocietyDisplay() }}</span>
             </div>
             <div class="detail-item">
-                <span class="label">User</span>
+                <span class="label">{{ 'GATE_PASS.USER' | translate }}</span>
                 <span class="value">{{ getUserDisplay() }}</span>
             </div>
             <div class="detail-item">
-                <span class="label">Expected Date</span>
+                <span class="label">{{ 'GATE_PASS.EXPECTED_DATE' | translate }}</span>
                 <span class="value">{{ gatePass.expectedDate | date:'mediumDate' }}</span>
             </div>
             <div class="detail-item full-width" *ngIf="gatePass.remarks">
-                <span class="label">Remarks</span>
+                <span class="label">{{ 'GATE_PASS.REMARKS' | translate }}</span>
                 <span class="value">{{ gatePass.remarks }}</span>
             </div>
         </div>
@@ -56,11 +56,11 @@
 
     <div class="card-footer">
         <span class="created-info">
-            <span class="label">Created</span>
-            {{ gatePass.createdOn | date:'medium' }} by {{ getCreatedByDisplay() }}
+            <span class="label">{{ 'GATE_PASS.CREATED' | translate }}</span>
+            {{ gatePass.createdOn | date:'medium' }} {{ 'COMMON.BY' | translate }} {{ getCreatedByDisplay() }}
         </span>
         <span class="modified-info" *ngIf="gatePass.modifiedOn">
-            • Modified {{ gatePass.modifiedOn | date:'medium' }}
+            • {{ 'GATE_PASS.MODIFIED' | translate }} {{ gatePass.modifiedOn | date:'medium' }}
         </span>
     </div>
 </div>

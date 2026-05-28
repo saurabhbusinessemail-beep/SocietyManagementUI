@@ -1,11 +1,11 @@
-<app-layout [hideMoreActions]="true" pageTitle="My Profile">
+<app-layout [hideMoreActions]="true" [pageTitle]="'PROFILE.TITLE' | translate">
     <div class="profile-container">
 
         <!-- Error State -->
         <div class="error-state" *ngIf="error && !isLoading">
             <span class="error-icon">!</span>
             <p>{{ error }}</p>
-            <button class="btn-retry" (click)="loadProfile()">Try Again</button>
+            <button class="btn-retry" (click)="loadProfile()">{{ 'PROFILE.TRY_AGAIN' | translate }}</button>
         </div>
 
         <!-- Profile Content -->
@@ -18,7 +18,7 @@
                     <!-- Edit Button Overlay -->
                     <button class="avatar-edit-btn" (click)="triggerFileInput()">
                         <span class="edit-icon">✎</span>
-                        <span class="edit-text">Change Photo</span>
+                        <span class="edit-text">{{ 'PROFILE.CHANGE_PHOTO' | translate }}</span>
                     </button>
 
                     <div class="uploading-overlay" *ngIf="isUploading">
@@ -30,7 +30,7 @@
                         (change)="onFileSelected($event)">
                 </div>
                 <div class="header-info">
-                    <h2 class="user-name">{{ user.name || 'Update Your Name' }}</h2>
+                    <h2 class="user-name">{{ user.name || ('PROFILE.UPDATE_NAME_HINT' | translate) }}</h2>
                     <p class="user-email">{{ user.email }}</p>
                     <p class="user-phone">{{ user.phoneNumber }}</p>
                     <div class="user-badges">
@@ -45,34 +45,34 @@
             <!-- Profile Details Card -->
             <div class="profile-card">
                 <div class="card-header">
-                    <h3 class="card-title">Personal Information</h3>
+                    <h3 class="card-title">{{ 'PROFILE.PERSONAL_INFO' | translate }}</h3>
                     <button class="btn-edit" (click)="openEditNameDialog()">
                         <span class="edit-icon">✎</span>
-                        Edit Name
+                        {{ 'PROFILE.EDIT_NAME' | translate }}
                     </button>
                 </div>
 
                 <div class="card-body">
                     <div class="info-row">
-                        <div class="info-label">Full Name</div>
+                        <div class="info-label">{{ 'PROFILE.FULL_NAME' | translate }}</div>
                         <div class="info-value">
-                            {{ user.name || 'Not set' }}
-                            <span class="info-hint" *ngIf="!user.name">(Click edit to add your name)</span>
+                            {{ user.name || ('APP.NOT_SET' | translate) }}
+                            <span class="info-hint" *ngIf="!user.name">{{ 'PROFILE.CLICK_EDIT_HINT' | translate }}</span>
                         </div>
                     </div>
 
                     <div class="info-row">
-                        <div class="info-label">Email Address</div>
+                        <div class="info-label">{{ 'PROFILE.EMAIL_ADDRESS' | translate }}</div>
                         <div class="info-value">{{ user.email }}</div>
                     </div>
 
                     <div class="info-row">
-                        <div class="info-label">Phone Number</div>
-                        <div class="info-value">{{ user.phoneNumber || 'Not provided' }}</div>
+                        <div class="info-label">{{ 'PROFILE.PHONE_NUMBER' | translate }}</div>
+                        <div class="info-value">{{ user.phoneNumber || ('APP.NOT_PROVIDED' | translate) }}</div>
                     </div>
 
                     <div class="info-row">
-                        <div class="info-label">User ID</div>
+                        <div class="info-label">{{ 'PROFILE.USER_ID' | translate }}</div>
                         <div class="info-value">{{ user._id }}</div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
             <!-- Societies Card -->
             <div class="profile-card" *ngIf="profile?.socities?.length">
                 <div class="card-header">
-                    <h3 class="card-title">My Societies</h3>
+                    <h3 class="card-title">{{ 'PROFILE.MY_SOCIETIES' | translate }}</h3>
                 </div>
 
                 <div class="card-body">
@@ -103,7 +103,7 @@
             <!-- Menu Access Card -->
             <div class="profile-card" *ngIf="profile?.allMenus?.length">
                 <div class="card-header">
-                    <h3 class="card-title">Menu Access</h3>
+                    <h3 class="card-title">{{ 'PROFILE.MENU_ACCESS' | translate }}</h3>
                 </div>
 
                 <div class="card-body">

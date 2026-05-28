@@ -5,13 +5,13 @@
     <div class="card-header">
         <div class="name-section">
             <h3>{{ memberUser?.name }}</h3>
-            <span class="role-chip" *ngIf="member.isOwner">Owner</span>
-            <span class="role-chip tenant" *ngIf="member.isTenant">Tenant</span>
-            <span class="role-chip member" *ngIf="member.isMember || member.isTenantMember">Member</span>
+            <span class="role-chip" *ngIf="member.isOwner">{{ 'COMMON.OWNER' | translate }}</span>
+            <span class="role-chip tenant" *ngIf="member.isTenant">{{ 'COMMON.TENANT' | translate }}</span>
+            <span class="role-chip member" *ngIf="member.isMember || member.isTenantMember">{{ 'COMMON.MEMBER' | translate }}</span>
         </div>
 
         <span class="status-chip" [ngClass]="statusClass">
-            {{ member.status | titlecase }}
+            {{ 'COMMON.' + member.status.toUpperCase() | translate }}
         </span>
 
     </div>
@@ -20,34 +20,34 @@
     <div class="card-body">
 
         <div class="info-row">
-            <label>Contact</label>
+            <label>{{ 'COMMON.CONTACT' | translate }}</label>
             <span>{{ memberUser?.phoneNumber }}</span>
         </div>
 
         <div class="info-row">
-            <label>Residing</label>
-            <span>{{ residingType }}</span>
+            <label>{{ 'FLAT.RESIDING' | translate }}</label>
+            <span>{{ 'FLAT.RESIDING_TYPE_' + residingType.toUpperCase().replace(' ', '_') | translate }}</span>
         </div>
 
         <div class="info-row" *ngIf="flat">
-            <label>Flat</label>
-            <span>{{ flat.flatNumber }} (Floor {{ flat.floor }})</span>
+            <label>{{ 'COMMON.FLAT' | translate }}</label>
+            <span>{{ flat.flatNumber }} ({{ 'FLAT.FLOOR' | translate }} {{ flat.floor }})</span>
         </div>
 
         <!-- OWNER VIEW -->
         <ng-container *ngIf="!isAdminView || member.isTenant">
             <div class="info-row" *ngIf="member.isTenant">
-                <label>Lease Period</label>
+                <label>{{ 'FLAT.LEASE_PERIOD' | translate }}</label>
                 <span>
                     {{ member.leaseStart | date:'mediumDate' }} –
                     <ng-container *ngIf="member.leaseEnd"> {{ member.leaseEnd | date:'mediumDate' }} </ng-container>
-                    <ng-container *ngIf="!member.leaseEnd"> Today </ng-container>
+                    <ng-container *ngIf="!member.leaseEnd"> {{ 'COMMON.TODAY' | translate }} </ng-container>
 
                 </span>
             </div>
 
             <div class="info-row" *ngIf="member.rentAmount">
-                <label>Rent</label>
+                <label>{{ 'FLAT.RENT' | translate }}</label>
                 <span>{{ member.rentAmount | formattedPrice }}</span>
             </div>
 
@@ -57,7 +57,7 @@
         <ng-container *ngIf="isAdminView">
 
             <div class="info-row" *ngIf="society">
-                <label>Society</label>
+                <label>{{ 'COMMON.SOCIETY' | translate }}</label>
                 <span>{{ society.societyName }}</span>
             </div>
 
@@ -68,9 +68,9 @@
 
     <div class="flex flex-end flex-gap footer-row">
         <ng-container *ngIf="!actionInProgress">
-            <ui-button label="Move In" type="only-content" (clicked)="onMoveInClick()" *ngIf="showMoveIn">
+            <ui-button [label]="'FLAT.MOVE_IN' | translate" type="only-content" (clicked)="onMoveInClick()" *ngIf="showMoveIn">
             </ui-button>
-            <ui-button label="Mouve Out" type="only-content" (clicked)="onMouveOutClick()" *ngIf="showMoveOut">
+            <ui-button [label]="'FLAT.MOVE_OUT' | translate" type="only-content" (clicked)="onMouveOutClick()" *ngIf="showMoveOut">
             </ui-button>
             <app-icon name="delete" class="error" size="xl" *ngIf="showDelete" (click)="onDeleteClick()"></app-icon>
         </ng-container>
@@ -87,9 +87,9 @@
         </ui-date>
 
         <div class="action">
-            <ui-button label="Cancel" type="only-content" (clicked)="cancel()">
+            <ui-button [label]="'COMMON.CANCEL' | translate" type="only-content" (clicked)="cancel()">
             </ui-button>
-            <ui-button label="Moveout" type="primary" (clicked)="moveOut()">
+            <ui-button [label]="'FLAT.MOVE_OUT' | translate" type="primary" (clicked)="moveOut()">
             </ui-button>
         </div>
     </div>

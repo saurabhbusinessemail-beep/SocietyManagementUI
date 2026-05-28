@@ -3,12 +3,12 @@
         <div class="dropdown-content">
             <div class="dropdown-header">
                 <div class="user-avatar">
-                    <img *ngIf="profilePictureUrl" [src]="profilePictureUrl" class="avatar-dropdown" [alt]="myProfile?.user?.name || 'User Profile'" />
+                    <img *ngIf="profilePictureUrl" [src]="profilePictureUrl" class="avatar-dropdown" [alt]="myProfile?.user?.name || ('USER_MENU.MY_PROFILE' | translate)" />
                     <app-icon *ngIf="!profilePictureUrl" name="account" size="lg"></app-icon>
                 </div>
                 <div class="user-info">
-                    <h3 class="user-name">{{ myProfile?.user?.name ?? 'No Name' }}</h3>
-                    <p class="user-details">{{ myProfile?.user?.phoneNumber || 'No contact info' }}</p>
+                    <h3 class="user-name">{{ myProfile?.user?.name ?? ('USER_MENU.NO_NAME' | translate) }}</h3>
+                    <p class="user-details">{{ myProfile?.user?.phoneNumber || ('USER_MENU.NO_CONTACT' | translate) }}</p>
                 </div>
                 <div class="edit-profile">
                     <app-icon name="edit" (click)="onProfileClick()"></app-icon>
@@ -18,18 +18,18 @@
             <!-- Society dropdown -->
             <ng-container *ngIf="!loading">
                 <div class="society-selector">
-                    <div class="selector-label">Selected Society</div>
+                    <div class="selector-label">{{ 'USER_MENU.SELECTED_SOCIETY' | translate }}</div>
                     <div class="selector-wrapper" (click)="toggleDropdown()">
                         <button class="selector-button" [class.opened]="showDropdown">
                             <span class="selected-text">
-                                {{ selectedSociety?.label || 'Select a society' }}
+                                {{ selectedSociety?.label || ('USER_MENU.SELECT_SOCIETY' | translate) }}
                             </span>
                             <app-icon name="down-arrow" class="chevron" [class.rotate]="showDropdown"></app-icon>
                         </button>
                     </div>
                     <div class="options-list" *ngIf="showDropdown">
                         <div class="option-item" *ngFor="let opt of societyOptions"
-                            (click)="selectSociety(opt); $event.stopPropagation()">
+                             (click)="selectSociety(opt); $event.stopPropagation()">
                             {{ opt.label }}
                         </div>
                     </div>
@@ -43,42 +43,42 @@
                                 <li class="menu-item" [attr.data-menu]="menu.menuName">
                                     <button class="menu-btn" (click)="onMenuClick(menu)">
                                         <app-icon [name]="menu.icon ?? ''" size="xl"></app-icon>
-                                        <span>{{ menu.menuName }}</span>
+                                        <span>{{ 'MENU.' + menu.menuId | translate }}</span>
                                     </button>
                                 </li>
                             </ng-container>
                             <div class="dropdown-divider"></div>
                         </ng-container>
                     </ng-container>
-                    <ui-loading message="Loading Menu" *ngIf="isPricingPlanLoading">
+                    <ui-loading [message]="'USER_MENU.LOADING_MENU' | translate" *ngIf="isPricingPlanLoading">
                     </ui-loading>
 
                     <li class="menu-item register-society-item">
                         <button class="menu-btn" (click)="onRegisterSocietyClick()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="action-icon" aria-hidden="true">
-                                <path d="M10 12h4"></path>
-                                <path d="M10 8h4"></path>
-                                <path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
-                                <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
-                                </path>
-                                <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="action-icon" aria-hidden="true">
+                                 <path d="M10 12h4"></path>
+                                 <path d="M10 8h4"></path>
+                                 <path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
+                                 <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                                 </path>
+                                 <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
                             </svg>
-                            <span>Register Society</span>
+                            <span>{{ 'USER_MENU.REGISTER_SOCIETY' | translate }}</span>
                         </button>
                     </li>
 
                     <li class="menu-item request-demo-item">
                         <button class="menu-btn" (click)="onDemoClick()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="action-icon" aria-hidden="true">
-                                <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5">
-                                </path>
-                                <rect x="2" y="6" width="14" height="12" rx="2"></rect>
+                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="action-icon" aria-hidden="true">
+                                 <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5">
+                                 </path>
+                                 <rect x="2" y="6" width="14" height="12" rx="2"></rect>
                             </svg>
-                            <span>Request Demo</span>
+                            <span>{{ 'USER_MENU.REQUEST_DEMO' | translate }}</span>
                         </button>
                     </li>
 
@@ -87,20 +87,20 @@
                     <li class="menu-item profile-help-item" (click)="onProfileClick()">
                         <button class="menu-btn">
                             <app-icon name="account-circle" class="menu-icon" size="xl"></app-icon>
-                            <span>My Profile</span>
+                            <span>{{ 'USER_MENU.MY_PROFILE' | translate }}</span>
                         </button>
                     </li>
                     <li class="menu-item profile-help-item" (click)="onHelpClick()">
                         <button class="menu-btn">
                             <app-icon name="help" class="menu-icon" size="xl"></app-icon>
-                            <span>Help & Support</span>
+                            <span>{{ 'USER_MENU.HELP_SUPPORT' | translate }}</span>
                         </button>
                     </li>
 
                     <div class="dropdown-divider"></div>
 
                     <li class="menu-item theme-switcher-item">
-                        <div class="theme-switcher-header">Theme</div>
+                        <div class="theme-switcher-header">{{ 'USER_MENU.THEME' | translate }}</div>
                         <div class="theme-circles-container">
                             <div class="theme-circle" *ngFor="let theme of themeService.availableThemes"
                                  [class.active]="(themeService.currentTheme | async) === theme.id"
@@ -114,19 +114,39 @@
 
                     <div class="dropdown-divider"></div>
 
+                    <!-- Language Switcher -->
+                    <li class="menu-item language-switcher-item">
+                        <div class="lang-switcher-header">{{ 'LANGUAGE.SELECT_LANGUAGE' | translate }}</div>
+                        <div class="lang-select-wrapper">
+                            <select
+                                #menuLangSelect
+                                [value]="currentLang"
+                                (change)="setLanguage(menuLangSelect.value)"
+                                class="lang-select-dropdown"
+                                id="menu-lang-select">
+                                <option *ngFor="let lang of languages" [value]="lang.code" [selected]="currentLang === lang.code">
+                                    {{ lang.nativeLabel }} ({{ lang.label }})
+                                </option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                    </li>
+
+                    <div class="dropdown-divider"></div>
+
                     <li class="menu-item logout-item" (click)="logout()">
                         <button class="menu-btn logout-btn">
                             <app-icon name="logout-icon" class="menu-icon" size="xl"></app-icon>
-                            <span>Logout</span>
+                            <span>{{ 'USER_MENU.LOGOUT' | translate }}</span>
                         </button>
                     </li>
                 </ul>
             </ng-container>
-            <ui-loading message="Loading Societies" *ngIf="loading">
+            <ui-loading [message]="'USER_MENU.LOADING_SOCIETIES' | translate" *ngIf="loading">
             </ui-loading>
 
             <div class="dropdown-footer">
-                <ui-label [valueText]="'Version 1.0.0'" [config]="{id: 'version-label'}"
+                <ui-label [valueText]="('USER_MENU.VERSION' | translate) + ' 1.0.0'" [config]="{id: 'version-label'}"
                     class="version-text"></ui-label>
             </div>
         </div>

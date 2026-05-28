@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../../services/login.service';
 import { IPricingPlan, IUsageMetric } from '../../../interfaces';
 import { MiscService } from '../../../services/misc.service';
+import { TranslationService, SupportedLanguage, LanguageOption } from '../../../services/translation.service';
 
 interface IFeatures {
   iconName: string;
@@ -260,11 +261,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.windowService.mode.value !== 'desktop';
   }
 
+  get languages(): LanguageOption[] {
+    return this.translationService.languages;
+  }
+
+  get currentLang(): SupportedLanguage {
+    return this.translationService.currentLanguage;
+  }
+
+  setLanguage(lang: string): void {
+    this.translationService.setLanguage(lang as SupportedLanguage);
+  }
+
   constructor(
     private loginService: LoginService,
     private windowService: WindowService,
     private router: Router,
-    private miscService: MiscService
+    private miscService: MiscService,
+    private translationService: TranslationService
   ) { }
 
   ngOnInit(): void {

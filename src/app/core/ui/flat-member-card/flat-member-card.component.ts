@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { IFlat, IFlatMember, IFlatMemberWithResidency, ISociety, IUIControlConfig, IUser } from '../../../interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { SocietyRoles } from '../../../types';
 import { ResidingTypes } from '../../../constants';
 
@@ -10,7 +11,7 @@ import { ResidingTypes } from '../../../constants';
   templateUrl: './flat-member-card.component.html',
   styleUrl: './flat-member-card.component.scss'
 })
-export class FlatMemberCardComponent {
+export class FlatMemberCardComponent implements OnInit {
 
   @Input() member!: IFlatMemberWithResidency;
   @Input() viewerRole: 'admin' | SocietyRoles.manager | SocietyRoles.owner | SocietyRoles.tenant | SocietyRoles.member = SocietyRoles.owner;
@@ -99,7 +100,25 @@ export class FlatMemberCardComponent {
     return isInFuture && this.viewerRole === 'owner' && this.member.status === 'active' // && this.member.residingType !== ResidingTypes.Tenant
   }
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private translate: TranslateService
+  ) { }
+
+  ngOnInit(): void {
+    this.updateConfigLabels();
+    this.translate.onLangChange.subscribe(() => {
+      this.updateConfigLabels();
+    });
+  }
+
+  private updateConfigLabels(): void {
+    this.leaseEndConfig.label = this.translate.instant('FLAT.LEASE_END');
+    this.leaseEndConfig.placeholder = this.translate.instant('FLAT.ENTER_LEASE_END');
+    if (this.leaseEndConfig.errorMessages) {
+      this.leaseEndConfig.errorMessages['required'] = this.translate.instant('FLAT.SELECT_DATE');
+    }
+  }
 
   onDeleteClick(): void {
     this.deleteMember.emit(this.member);

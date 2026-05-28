@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { FlatRoutingModule } from './flat-routing.module';
 import { MyFlatListComponent } from './my-flat-list/my-flat-list.component';
@@ -40,7 +41,8 @@ import { TenantDocumentManagerComponent } from './tenant-document-manager/tenant
     DirectiveModule,
     PipeModule,
     ReactiveFormsModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class FlatModule { }

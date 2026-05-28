@@ -13,13 +13,13 @@
                 <div class="badges">
                     <!-- Priority badge -->
                     <span class="priority-badge" [ngClass]="getPriorityClass()">
-                        {{ complaint.priority | complaintPriority }}
+                        {{ ('COMPLAINTS.PRIORITY_' + complaint.priority.toUpperCase()) | translate }}
                     </span>
 
                     <!-- Status badge with icon -->
                     <span class="status-badge" [ngClass]="getStatusClass()">
                         <app-icon [name]="getStatusIcon()" size="sm"></app-icon>
-                        <span>{{ complaint.status | complaintStatus }}</span>
+                        <span>{{ ('COMPLAINTS.STATUS_' + complaint.status.toUpperCase()) | translate }}</span>
                     </span>
 
                     <!-- Type badge -->
@@ -31,10 +31,10 @@
 
             <!-- Edit button (header actions) -->
             <div class="header-actions" *ngIf="showEdit && !actionInProgress">
-                <button class="edit-btn" (click)="onEdit($event)">Edit</button>
+                <button class="edit-btn" (click)="onEdit($event)">{{ 'COMMON.EDIT' | translate }}</button>
             </div>
             <div class="header-actions" *ngIf="actionInProgress">
-                <ui-loading message="Completing action" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+                <ui-loading [message]="'COMPLAINTS.COMPLETING_ACTION' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                 </ui-loading>
             </div>
         </div>
@@ -45,16 +45,16 @@
         <!-- Flat / Society / Assigned to (styled as compact grid) -->
         <div class="details-grid">
             <div class="detail-item">
-                <span class="label">Flat</span>
+                <span class="label">{{ 'NAV.FLAT' | translate }}</span>
                 <span class="value">{{ getFlatDisplay() }}</span>
             </div>
             <div class="detail-item" *ngIf="complaint.societyId">
-                <span class="label">Society</span>
+                <span class="label">{{ 'SOCIETY.TITLE' | translate }}</span>
                 <span class="value">{{ getSocietyDisplay() }}</span>
             </div>
             <div class="detail-item" *ngIf="complaint.assignedTo">
-                <span class="label">Assigned To</span>
-                <span class="value">{{ getAssignedToDisplay() }}</span>
+                <span class="label">{{ 'COMPLAINTS.ASSIGNED_TO' | translate }}</span>
+                <span class="value">{{ getAssignedToDisplay() === 'Unassigned' ? ('COMPLAINTS.UNASSIGNED' | translate) : getAssignedToDisplay() }}</span>
             </div>
         </div>
 
@@ -64,12 +64,12 @@
         <!-- Created / Modified info (two-column grid) -->
         <div class="meta-grid">
             <div class="meta-item">
-                <span class="meta-label">Created by:</span>
+                <span class="meta-label">{{ 'COMPLAINTS.CREATED_BY' | translate }}</span>
                 {{ getCreatedByDisplay() }}
                 <span class="meta-date">• {{ complaint.createdOn | date:'MMM d, yyyy h:mm a' }}</span>
             </div>
             <div class="meta-item" *ngIf="complaint.modifiedOn">
-                <span class="meta-label">Last modified by:</span>
+                <span class="meta-label">{{ 'COMPLAINTS.LAST_MODIFIED_BY' | translate }}</span>
                 {{ getLastModifiedByDisplay() }}
                 <span class="meta-date">• {{ complaint.modifiedOn | date:'MMM d, yyyy h:mm a' }}</span>
             </div>
@@ -81,41 +81,41 @@
             <!-- Status change buttons (gradient styles) -->
             <button *ngIf="canApprove" class="action-btn action-approve" (click)="onChangeStatus('approved', $event)">
                 <app-icon name="approve" size="sm"></app-icon>
-                <span>Approve</span>
+                <span>{{ 'COMPLAINTS.APPROVE' | translate }}</span>
             </button>
 
             <button *ngIf="canReject" class="action-btn action-reject" (click)="onChangeStatus('rejected', $event)">
                 <app-icon name="clear" size="sm"></app-icon>
-                <span>Reject</span>
+                <span>{{ 'COMPLAINTS.REJECT' | translate }}</span>
             </button>
 
             <button *ngIf="canMoveToProgress" class="action-btn action-progress"
                 (click)="onChangeStatus('in_progress', $event)">
                 <app-icon name="in-progress" size="sm"></app-icon>
-                <span>Move To Progress</span>
+                <span>{{ 'COMPLAINTS.MOVE_TO_PROGRESS' | translate }}</span>
             </button>
 
             <button *ngIf="canMarkResolved" class="action-btn action-resolved"
                 (click)="onChangeStatus('resolved', $event)">
                 <app-icon name="resolved" size="sm"></app-icon>
-                <span>Mark Resolved</span>
+                <span>{{ 'COMPLAINTS.MARK_RESOLVED' | translate }}</span>
             </button>
 
             <button *ngIf="canClose" class="action-btn action-close" (click)="onChangeStatus('closed', $event)">
                 <app-icon name="close" size="sm"></app-icon>
-                <span>Close</span>
+                <span>{{ 'COMPLAINTS.CLOSE' | translate }}</span>
             </button>
 
             <!-- Delete button (right-aligned, red outline style) -->
             <button *ngIf="showDelete" class="delete-btn" (click)="onDelete($event)">
                 <app-icon name="delete" size="sm"></app-icon>
-                <span>Delete</span>
+                <span>{{ 'COMMON.DELETE' | translate }}</span>
             </button>
         </div>
 
         <!-- Loading state for actions -->
         <div class="action-row" *ngIf="actionInProgress">
-            <ui-loading message="Completing action" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <ui-loading [message]="'COMPLAINTS.COMPLETING_ACTION' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
         </div>
     </div>

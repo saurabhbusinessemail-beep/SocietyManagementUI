@@ -1,9 +1,9 @@
-<app-layout pageTitle="Gate Pass" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [pageTitle]="'GATE_PASSES.TITLE' | translate" [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <ng-container moreActions>
 
         <ul class="page-menu-list">
-            <li class="page-menu" (click)="openAddGatePass()">New Pass</li>
+            <li class="page-menu" (click)="openAddGatePass()">{{ 'GATE_PASSES.NEW_PASS' | translate }}</li>
         </ul>
     </ng-container>
 
@@ -25,7 +25,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="gatepasses.length === 0">
-                    <app-empty-records singular="gate pass" plural="gate passes" (addClicked)="openAddGatePass()"
+                    <app-empty-records [singular]="'NAV.GATE_PASS' | translate" [plural]="'GATE_PASSES.TITLE' | translate" (addClicked)="openAddGatePass()"
                         [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                         <app-icon icon name="gatepass" size="xxl"></app-icon>
                     </app-empty-records>
@@ -34,7 +34,7 @@
             </ng-container>
 
 
-            <ui-loading *ngIf="loadingGatePasses" message="Loading gate passes" [smColumns]="12" [mdColumns]="12"
+            <ui-loading *ngIf="loadingGatePasses" [message]="'GATE_PASSES.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
             </ui-loading>
 

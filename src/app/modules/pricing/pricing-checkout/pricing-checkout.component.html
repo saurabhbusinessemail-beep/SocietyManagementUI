@@ -1,65 +1,65 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true" pageTitle="Order Summary" (needLogin)="triggerLogin()">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" [pageTitle]="'PLAN.ORDER_SUMMARY' | translate" (needLogin)="triggerLogin()">
     <div class="checkout-container">
-
+ 
         <!-- Success Message (after purchase) -->
         <div class="success-message" *ngIf="purchaseComplete">
             <div class="success-icon">✓</div>
-            <h2>Purchase Successful!</h2>
-            <p>Your plan has been activated successfully.</p>
-            <button class="btn btn-primary" [routerLink]="['/society', societyId, 'details']">Go to Dashboard</button>
+            <h2>{{ 'PLAN.PURCHASE_SUCCESSFUL' | translate }}</h2>
+            <p>{{ 'PLAN.ACTIVATED_SUCCESSFULLY' | translate }}</p>
+            <button class="btn btn-primary" [routerLink]="['/society', societyId, 'details']">{{ 'PLAN.GO_TO_DASHBOARD' | translate }}</button>
         </div>
-
+ 
         <!-- Checkout Content (single page) -->
         <div class="checkout-content" *ngIf="!purchaseComplete">
-
+ 
             <!-- Order Summary Section (same as old Step 1) -->
             <div class="order-summary-section">
-                <h2 class="section-title">Order Summary</h2>
-
+                <h2 class="section-title">{{ 'PLAN.ORDER_SUMMARY' | translate }}</h2>
+ 
                 <!-- Society Details -->
                 <div class="summary-section">
                     <div class="plan-header">
-                        <h3>Society Details</h3>
+                        <h3>{{ 'PLAN.SOCIETY_DETAILS' | translate }}</h3>
                         <ng-container *ngIf="myProfile">
                             <button class="btn-link" (click)="getSociety()" *ngIf="!societyDetails">
-                                Select Society
+                                {{ 'PLAN.SELECT_SOCIETY' | translate }}
                             </button>
                             <button class="btn-link" (click)="getSociety()"
                                 *ngIf="societyDetails && !paramHasSocietyId">
-                                Change Society
+                                {{ 'PLAN.CHANGE_SOCIETY' | translate }}
                             </button>
                         </ng-container>
                     </div>
-
+ 
                     <!-- Not Logged In -->
                     <div class="society-info login-required" *ngIf="!myProfile">
-                        <p>Login to select a society</p>
-                        <button class="btn btn-primary btn-sm" (click)="triggerLogin()">Login</button>
+                        <p>{{ 'PLAN.LOGIN_TO_SELECT' | translate }}</p>
+                        <button class="btn btn-primary btn-sm" (click)="triggerLogin()">{{ 'APP.LOGIN' | translate }}</button>
                     </div>
-
+ 
                     <!-- Loading State -->
                     <div class="society-info loading" *ngIf="myProfile && societyLoading">
-                        <p>Loading society details...</p>
+                        <p>{{ 'PLAN.LOADING_SOCIETY_DETAILS' | translate }}</p>
                     </div>
-
+ 
                     <!-- Society Details Available -->
                     <div class="society-info" *ngIf="myProfile && societyDetails && !societyLoading">
-                        <p><strong>Name:</strong> {{ societyDetails.societyName }}</p>
-                        <p><strong>Buildings:</strong> {{ societyDetails.numberOfBuildings }}</p>
-                        <p><strong>Flats:</strong> {{ societyDetails.numberOfFlats }}</p>
+                        <p><strong>{{ 'PLAN.NAME' | translate }}:</strong> {{ societyDetails.societyName }}</p>
+                        <p><strong>{{ 'PLAN.BUILDINGS' | translate }}:</strong> {{ societyDetails.numberOfBuildings }}</p>
+                        <p><strong>{{ 'PLAN.FLATS' | translate }}:</strong> {{ societyDetails.numberOfFlats }}</p>
                     </div>
-
+ 
                     <!-- No Society Selected (Logged In) -->
                     <div class="society-info no-society" *ngIf="myProfile && !societyDetails && !societyLoading">
-                        <p>No society selected. Please select a society to continue.</p>
+                        <p>{{ 'PLAN.NO_SOCIETY_SELECTED' | translate }}</p>
                     </div>
                 </div>
-
+ 
                 <!-- Selected Plan -->
                 <div class="summary-section" *ngIf="selectedPlan">
                     <div class="plan-header">
-                        <h3>Selected Plan</h3>
-                        <button class="btn-link" (click)="changePlan()">Change Plan</button>
+                        <h3>{{ 'PLAN.SELECTED_PLAN' | translate }}</h3>
+                        <button class="btn-link" (click)="changePlan()">{{ 'PLAN.CHANGE_PLAN' | translate }}</button>
                     </div>
                     <div class="plan-details">
                         <div class="plan-icon" [style.background-color]="selectedPlan.colors.light">
@@ -67,55 +67,54 @@
                                 [style.color]="selectedPlan.colors.primary"></span>
                         </div>
                         <div class="plan-info">
-                            <h4>{{ selectedPlan.name }} Plan</h4>
-                            <p class="plan-price">{{ +selectedPlan.price | formattedPrice }}/flat per month</p>
-                            <p class="plan-billed">Billed annually</p>
+                            <h4>{{ 'PLAN.PLAN_NAME' | translate: { name: selectedPlan.name } }}</h4>
+                            <p class="plan-price">{{ +selectedPlan.price | formattedPrice }}/{{ 'FLAT.FLAT_NUMBER' | translate | lowercase }} {{ 'PLAN.PERIOD' | translate | lowercase }}</p>
+                            <p class="plan-billed">{{ 'PLAN.PAYMENT' | translate }} {{ 'PLAN.YEAR' | translate | lowercase }}</p>
                         </div>
                     </div>
-
+ 
                     <!-- Duration Selection (for paid plans) -->
                     <div class="summary-section"
                         *ngIf="selectedPlan && selectedPlan.price !== 'Free' && showDurationSelector && !isLoadingDurations">
-                        <h3>Select Duration</h3>
+                        <h3>{{ 'PLAN.SELECT_DURATION' | translate }}</h3>
                         <div class="duration-selector">
                             <!-- Month Options -->
                             <div class="duration-group"
                                 *ngIf="availableDurations && availableDurations.data.durations.months?.length">
-                                <label class="duration-group-label">Months</label>
+                                <label class="duration-group-label">{{ 'PLAN.MONTHS' | translate }}</label>
                                 <div class="duration-options">
                                     <div *ngFor="let duration of availableDurations && availableDurations.data.durations.months"
                                         class="duration-option"
                                         [class.selected]="selectedDurationUnit === 'months' && selectedDurationValue === duration.value"
                                         (click)="selectedDurationUnit = 'months'; selectedDurationValue = duration.value; onDurationChange()">
-                                        <div class="duration-value">{{ duration.value }} Month{{ duration.value > 1
-                                            ? 's' : '' }}</div>
+                                        <div class="duration-value">{{ duration.value }} {{ (duration.value > 1 ? 'PLAN.MONTHS' : 'PLAN.MONTH') | translate }}</div>
                                         <div class="duration-price">
                                             <span class="original-price" *ngIf="duration.discount > 0">
                                                 {{ duration.baseAmount | formattedPrice }}
                                             </span>
                                             <span class="final-price">
                                                 {{ duration.finalAmount | formattedPrice }}</span>
-                                            <span class="discount-badge" *ngIf="duration.discount > 0">Save {{
-                                                duration.discount }}%</span>
+                                            <span class="discount-badge" *ngIf="duration.discount > 0">
+                                                {{ 'PLAN.SAVE_PERCENT' | translate: { percent: duration.discount } }}
+                                            </span>
                                         </div>
                                         <div class="duration-savings" *ngIf="duration.savings">
-                                            Save {{ duration.savings | formattedPrice }}
+                                            {{ 'PLAN.SAVE_PERCENT' | translate: { percent: (duration.savings | formattedPrice) } }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+ 
                             <!-- Year Options -->
                             <div class="duration-group"
                                 *ngIf="availableDurations && availableDurations.data.durations.years.length">
-                                <label class="duration-group-label">Years</label>
+                                <label class="duration-group-label">{{ 'PLAN.YEARS' | translate }}</label>
                                 <div class="duration-options">
                                     <div *ngFor="let duration of (availableDurations?.data?.durations?.years ?? [])"
                                         class="duration-option"
                                         [class.selected]="selectedDurationUnit === 'years' && selectedDurationValue === duration.value"
                                         (click)="selectedDurationUnit = 'years'; selectedDurationValue = duration.value; onDurationChange()">
-                                        <div class="duration-value">{{ duration.value }} Year{{ duration.value > 1 ?
-                                            's' : '' }}</div>
+                                        <div class="duration-value">{{ duration.value }} {{ (duration.value > 1 ? 'PLAN.YEARS' : 'PLAN.YEAR') | translate }}</div>
                                         <div class="duration-price">
                                             <span class="original-price" *ngIf="duration.discount > 0">
                                                 {{ duration.baseAmount | formattedPrice }}
@@ -124,54 +123,54 @@
                                                 {{ duration.finalAmount | formattedPrice }}
                                             </span>
                                             <span class="discount-badge" *ngIf="duration.discount > 0">
-                                                Save {{ duration.discount }}%
+                                                {{ 'PLAN.SAVE_PERCENT' | translate: { percent: duration.discount } }}
                                             </span>
                                         </div>
                                         <div class="duration-monthly" *ngIf="duration.monthlyEquivalent">
-                                            ~ {{ duration.monthlyEquivalent | formattedPrice }}/month
+                                            ~ {{ duration.monthlyEquivalent | formattedPrice }}/{{ 'PLAN.MONTH' | translate | lowercase }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+ 
                     <!-- Loading state for durations -->
                     <div class="summary-section" *ngIf="isLoadingDurations">
-                        <h3>Loading available durations...</h3>
+                        <h3>{{ 'PLAN.LOADING_DURATIONS' | translate }}</h3>
                         <div class="loading-spinner"></div>
                     </div>
                 </div>
-
+ 
                 <!-- Change Plan Summary -->
                 <div class="summary-section change-plan-summary"
                     *ngIf="isChangePlan && changePlanCalculation && changePlanCalculation.currentPlan">
-                    <h3>Plan Change Summary</h3>
+                    <h3>{{ 'PLAN.PLAN_CHANGE_SUMMARY' | translate }}</h3>
                     <div class="change-plan-details">
                         <div class="plan-comparison">
                             <div class="current-plan">
-                                <span class="label">Current Plan:</span>
+                                <span class="label">{{ 'PLAN.CURRENT_PLAN_LABEL' | translate }}:</span>
                                 <span class="value">{{ changePlanCalculation.currentPlan.name }}</span>
                                 <span class="sub-value">({{ +changePlanCalculation.currentPlan.price | formattedPrice
-                                    }}/flat)</span>
+                                    }}/{{ 'FLAT.FLAT_NUMBER' | translate | lowercase }})</span>
                             </div>
                             <div class="arrow">→</div>
                             <div class="new-plan">
-                                <span class="label">New Plan:</span>
+                                <span class="label">{{ 'PLAN.NEW_PLAN_LABEL' | translate }}:</span>
                                 <span class="value">{{ changePlanCalculation.newPlan.name }}</span>
                                 <span class="sub-value">({{ +changePlanCalculation.newPlan.price | formattedPrice
-                                    }}/flat)</span>
+                                    }}/{{ 'FLAT.FLAT_NUMBER' | translate | lowercase }})</span>
                             </div>
                         </div>
-
+ 
                         <div class="calculation-details">
                             <div class="detail-row">
-                                <span>Remaining value from current plan:</span>
+                                <span>{{ 'PLAN.REMAINING_VALUE' | translate }}:</span>
                                 <span>{{ changePlanCalculation.calculation.remainingValue |formattedPrice
                                     }}</span>
                             </div>
                             <div class="detail-row">
-                                <span>New plan value:</span>
+                                <span>{{ 'PLAN.NEW_PLAN_VALUE' | translate }}:</span>
                                 <span>{{ changePlanCalculation.calculation.newPlanValue | formattedPrice }}</span>
                             </div>
                             <div class="detail-row total">
@@ -180,13 +179,14 @@
                                     {{ changePlanCalculation.calculation.amountToPay | formattedPrice }}
                                 </span>
                             </div>
+ 
                         </div>
                     </div>
                 </div>
-
+ 
                 <!-- Included Features -->
                 <div class="summary-section" *ngIf="selectedPlan">
-                    <h3>Included Features</h3>
+                    <h3>{{ 'PLAN.FEATURES' | translate }}</h3>
                     <div class="features-list">
                         <ng-container *ngFor="let feature of selectedPlan.features">
                             <div class="feature-item" *ngIf="feature.included">
@@ -199,23 +199,23 @@
                         </ng-container>
                     </div>
                 </div>
-
+ 
                 <!-- Coupon Section -->
                 <div class="summary-section">
-                    <h3>Apply Coupon</h3>
+                    <h3>{{ 'PLAN.APPLY_COUPON' | translate }}</h3>
                     <div class="coupon-form">
                         <form [formGroup]="couponForm">
-
-                            <ui-loading *ngIf="validatingCoupon" message="Validating Coupon">
+ 
+                            <ui-loading *ngIf="validatingCoupon" [message]="'PLAN.VALIDATING_COUPON' | translate">
                             </ui-loading>
-
+ 
                             <div class="coupon-input-group" *ngIf="!validatingCoupon">
-                                <input type="text" formControlName="couponCode" placeholder="Enter coupon code">
+                                <input type="text" formControlName="couponCode" [placeholder]="'PLAN.ENTER_COUPON_CODE' | translate">
                                 <div class="coupon-actions">
                                     <button type="button" class="btn btn-secondary" (click)="applyCoupon()"
-                                        *ngIf="!showRemoveCoupon" [disabled]="isCouponApplied">Apply</button>
+                                        *ngIf="!showRemoveCoupon" [disabled]="isCouponApplied">{{ 'APP.APPLY' | translate }}</button>
                                     <button type="button" class="btn btn-remove" (click)="removeCoupon()"
-                                        *ngIf="showRemoveCoupon">Remove</button>
+                                        *ngIf="showRemoveCoupon">{{ 'COMMON.CLEAR' | translate }}</button>
                                 </div>
                             </div>
                         </form>
@@ -225,17 +225,17 @@
                         </p>
                     </div>
                 </div>
-
+ 
                 <div class="price-summary">
-
-                    <ui-loading *ngIf="calculatingChange" message="Calculating price change">
+ 
+                    <ui-loading *ngIf="calculatingChange" [message]="'PLAN.CALCULATING_PRICE_CHANGE' | translate">
                     </ui-loading>
-
+ 
                     <ng-container *ngIf="!calculatingChange">
-
+ 
                         <div class="price-row">
-                            <span>Total</span>
-                            <span class="tentative-badge" *ngIf="!societyDetails">Tentative*</span>
+                            <span>{{ 'PLAN.TOTAL' | translate }}</span>
+                            <span class="tentative-badge" *ngIf="!societyDetails">{{ 'PLAN.TENTATIVE' | translate }}</span>
                             <div class="price-details" *ngIf="isCouponApplied && discountAmount > 0">
                                 <span class="original-price">{{ originalPrice | formattedPrice }}</span>
                                 <span class="discount-badge">-{{ discountPercentage | formattedPrice }}%</span>
@@ -246,47 +246,47 @@
                         </div>
                         <p class="price-note"
                             *ngIf="isCouponApplied && isChangePlan && changePlanCalculation?.calculation?.couponCode">
-                            Coupon {{ changePlanCalculation?.calculation?.couponCode }} applied
+                            {{ 'PLAN.COUPON_APPLIED' | translate: { code: changePlanCalculation?.calculation?.couponCode } }}
                         </p>
                         <p class="price-note" *ngIf="!societyDetails">
-                            *Based on estimated 10 flats. Final price will be calculated after society selection.
+                            {{ 'PLAN.COUPON_NOTE' | translate }}
                         </p>
                         <p class="price-note" *ngIf="totalPrice === 0 && societyDetails">
-                            Your payment will be {{0 | formattedPrice}}. Click Complete Purchase to finish.
+                            {{ 'PLAN.ZERO_PAYMENT_NOTE' | translate: { amount: (0 | formattedPrice) } }}
                         </p>
-
+ 
                     </ng-container>
                 </div>
             </div>
-
+ 
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <button class="btn btn-secondary" (click)="cancel()">
-                    Cancel
+                    {{ 'APP.CANCEL' | translate }}
                 </button>
                 <button class="btn btn-primary" (click)="processPayment()"
                     [disabled]="!isCheckoutValid() || isProcessing || calculatingChange || validatingCoupon">
-                    <span *ngIf="!isProcessing">{{ totalPrice === 0 ? 'Complete Purchase' : 'Pay Now' }}</span>
-                    <span *ngIf="isProcessing">Processing...</span>
+                    <span *ngIf="!isProcessing">{{ totalPrice === 0 ? ('PLAN.COMPLETE_PURCHASE' | translate) : ('PLAN.PAY_NOW' | translate) }}</span>
+                    <span *ngIf="isProcessing">{{ 'PLAN.PROCESSING' | translate }}</span>
                 </button>
             </div>
         </div>
     </div>
 </app-layout>
-
+ 
 <div class="custom-modal view-modal" *ngIf="showSocietySelectModal">
     <div class="modal-overlay" (click)="closeModal()"></div>
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Booking Details</h3>
+            <h3>{{ 'PLAN.BOOKING_DETAILS' | translate }}</h3>
             <button class="close-btn" (click)="closeModal()">×</button>
         </div>
         <div class="modal-body">
             <ui-society-search (selectionChange)="onSocietySelected($event)"></ui-society-search>
         </div>
         <div class="modal-footer">
-            <button class="cancel-btn" (click)="closeModal()">Cancel</button>
-            <button class="confirm-btn" (click)="confirmSelectedSociety()">Select</button>
+            <button class="cancel-btn" (click)="closeModal()">{{ 'APP.CANCEL' | translate }}</button>
+            <button class="confirm-btn" (click)="confirmSelectedSociety()">{{ 'APP.CONFIRM' | translate }}</button>
         </div>
     </div>
 </div>

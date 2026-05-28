@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementsRoutingModule } from './announcements-routing.module';
 import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
@@ -30,7 +31,8 @@ import { AnnouncementDetailsComponent } from './announcement-details/announcemen
     ReactiveFormsModule,
     PipeModule,
     IconModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class AnnouncementsModule { }

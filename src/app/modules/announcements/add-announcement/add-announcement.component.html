@@ -1,4 +1,5 @@
-<app-layout [hideMoreActions]="true" [showBackButton]="true" pageTitle="Add Announcement" [subTitle]="societyService.selectedSocietyFilterValue?.label">
+<app-layout [hideMoreActions]="true" [showBackButton]="true" [pageTitle]="(announcementId ? 'ANNOUNCEMENTS.EDIT_TITLE' : 'ANNOUNCEMENTS.ADD_TITLE') | translate"
+    [subTitle]="societyService.selectedSocietyFilterValue?.label">
 
     <form [formGroup]="fb">
         <ui-form-layout>
@@ -28,11 +29,11 @@
             </ui-text-box>
 
             <section [smColumns]="12" [mdColumns]="12" [lgColumns]="10" class="flex flex-end flex-gap">
-                <ui-button type="only-content" label="Save Draft" (clicked)="saveDraft()" [disable]="fb.invalid">
+                <ui-button type="only-content" [label]="'ANNOUNCEMENTS.SAVE_DRAFT' | translate" (clicked)="saveDraft()" [disable]="fb.invalid">
                 </ui-button>
-                <ui-button type="cancel" label="Cancel" (clicked)="cancel()">
+                <ui-button type="cancel" [label]="'JOIN_AS.CANCEL' | translate" (clicked)="cancel()">
                 </ui-button>
-                <ui-button [isSubmit]="true" label="Publish" [disable]="fb.invalid" (clicked)="publish()">
+                <ui-button [isSubmit]="true" [label]="'ANNOUNCEMENTS.PUBLISH' | translate" [disable]="fb.invalid" (clicked)="publish()">
                 </ui-button>
             </section>
 

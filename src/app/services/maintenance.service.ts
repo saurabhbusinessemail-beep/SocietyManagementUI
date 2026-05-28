@@ -12,6 +12,7 @@ import {
   IMaintenanceLogsResponse
 } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class MaintenanceService {
 
   private baseUrl = `${environment.apiBaseUrl}/maintenance`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private translate: TranslateService) { }
 
   /**
    * Record a new maintenance payment
@@ -235,10 +236,10 @@ export class MaintenanceService {
    */
   getStatusDisplayText(status: string): string {
     switch (status) {
-      case 'approved': return 'Paid';
-      case 'rejected': return 'Rejected';
-      case 'pending_approval': return 'Pending Approval';
-      case 'not_paid': return 'Not Paid';
+      case 'approved': return this.translate.instant('MAINTENANCE.PAID') || 'Paid';
+      case 'rejected': return this.translate.instant('MAINTENANCE.STATUS_REJECTED') || 'Rejected';
+      case 'pending_approval': return this.translate.instant('MAINTENANCE.PENDING') || 'Pending Approval';
+      case 'not_paid': return this.translate.instant('MAINTENANCE.NOT_PAID') || 'Not Paid';
       default: return status;
     }
   }

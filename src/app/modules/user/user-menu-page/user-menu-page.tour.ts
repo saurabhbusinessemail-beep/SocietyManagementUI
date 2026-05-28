@@ -7,22 +7,22 @@ export const USER_MENU_TOUR: TourConfig = {
     {
       stepId: 'profile-info',
       target: '.dropdown-header',
-      title: 'Profile Information',
-      content: 'Here you can view your profile picture, name, and contact information. Click the edit icon to update your details.',
+      title: 'TOUR.USER_MENU.PROFILE_INFO_TITLE',
+      content: 'TOUR.USER_MENU.PROFILE_INFO_CONTENT',
       position: 'bottom'
     },
     {
       stepId: 'society-dropdown',
       target: '.society-selector',
-      title: 'Society Selection',
-      content: 'This dropdown lets you switch between societies. Some menus below depend on the selected society and its privileges according to the selected pricing plan.',
+      title: 'TOUR.USER_MENU.SOCIETY_DROPDOWN_TITLE',
+      content: 'TOUR.USER_MENU.SOCIETY_DROPDOWN_CONTENT',
       position: 'bottom'
     },
     {
       stepId: 'menu-dashboard',
       target: 'li[data-menu="Dashboard"]',
-      title: 'Dashboard',
-      content: 'Access the dashboard for quick access and overview of your account.',
+      title: 'TOUR.USER_MENU.DASHBOARD_TITLE',
+      content: 'TOUR.USER_MENU.DASHBOARD_CONTENT',
       position: 'bottom',
       waitForElement: 200
     },
@@ -30,46 +30,46 @@ export const USER_MENU_TOUR: TourConfig = {
       stepId: 'menu-dynamic-society-menus',
       target: 'li.menu-item[data-menu]:not([data-menu="Dashboard"]):not([data-menu="Pending Approval"])',
       targetAll: true,
-      title: 'Society Menus',
-      content: 'These menus are available based on the society you have selected and your privileges.',
+      title: 'TOUR.USER_MENU.SOCIETY_MENUS_TITLE',
+      content: 'TOUR.USER_MENU.SOCIETY_MENUS_CONTENT',
       position: 'top',
       waitForElement: 200
     },
     {
       stepId: 'menu-approvals',
       target: 'li[data-menu="Pending Approval"]',
-      title: 'Pending Approvals',
-      content: 'View and manage approvals for gate entries, joining requests, and more for the selected society.',
+      title: 'TOUR.USER_MENU.PENDING_APPROVALS_TITLE',
+      content: 'TOUR.USER_MENU.PENDING_APPROVALS_CONTENT',
       position: 'top',
       waitForElement: 200
     },
     {
       stepId: 'menu-register-society',
       target: '.register-society-item',
-      title: 'Register Society',
-      content: 'Register a new society here. It will go for approval along with other details provided.',
+      title: 'TOUR.USER_MENU.REGISTER_SOCIETY_TITLE',
+      content: 'TOUR.USER_MENU.REGISTER_SOCIETY_CONTENT',
       position: 'top'
     },
     {
       stepId: 'menu-request-demo',
       target: '.request-demo-item',
-      title: 'Request Demo',
-      content: 'Want to see more features? Request a demo of the Gate My Society app.',
+      title: 'TOUR.USER_MENU.REQUEST_DEMO_TITLE',
+      content: 'TOUR.USER_MENU.REQUEST_DEMO_CONTENT',
       position: 'top'
     },
     {
       stepId: 'menu-profile-help',
       target: '.profile-help-item',
       targetAll: true,
-      title: 'Profile & Help',
-      content: 'Manage your personal profile settings and get help or support if you need assistance.',
+      title: 'TOUR.USER_MENU.PROFILE_HELP_TITLE',
+      content: 'TOUR.USER_MENU.PROFILE_HELP_CONTENT',
       position: 'top'
     },
     {
       stepId: 'menu-themes',
       target: '.theme-switcher-item',
-      title: 'Themes',
-      content: 'Customize the look of your app by choosing your favorite color theme.',
+      title: 'TOUR.USER_MENU.THEMES_TITLE',
+      content: 'TOUR.USER_MENU.THEMES_CONTENT',
       position: 'top'
     }
   ]

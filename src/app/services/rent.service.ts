@@ -11,6 +11,7 @@ import {
   IRentLogsResponse
 } from '../interfaces';
 import { Cacheable, InvalidateCache } from '../decorators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class RentService {
 
   private baseUrl = `${environment.apiBaseUrl}/rent`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private translate: TranslateService) { }
 
   /**
    * Record a new rent payment
@@ -211,10 +212,10 @@ export class RentService {
    */
   getStatusDisplayText(status: string): string {
     switch (status) {
-      case 'approved': return 'Paid';
-      case 'rejected': return 'Rejected';
-      case 'pending_approval': return 'Pending Approval';
-      case 'not_paid': return 'Not Paid';
+      case 'approved': return this.translate.instant('RENT.PAID') || 'Paid';
+      case 'rejected': return this.translate.instant('RENT.STATUS_REJECTED') || 'Rejected';
+      case 'pending_approval': return this.translate.instant('RENT.PENDING') || 'Pending Approval';
+      case 'not_paid': return this.translate.instant('RENT.NOT_PAID') || 'Not Paid';
       default: return status;
     }
   }

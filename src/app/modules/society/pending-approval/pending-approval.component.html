@@ -1,8 +1,8 @@
-<app-layout [hideMoreActions]="isAdmin" pageTitle="Pending Approvals">
+<app-layout [hideMoreActions]="isAdmin" [pageTitle]="'APPROVALS.PAGE_TITLE' | translate">
 
     <ng-container moreActions>
         <ul class="page-menu-list" *ngIf="!isAdmin">
-            <li class="page-menu" (click)="gotoAddSociety()">New Request</li>
+            <li class="page-menu" (click)="gotoAddSociety()">{{ 'APPROVALS.NEW_SOCIETY' | translate }}</li>
         </ul>
     </ng-container>
 

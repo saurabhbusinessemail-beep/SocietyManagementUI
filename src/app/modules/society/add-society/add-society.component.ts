@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocietyService } from '../../../services/society.service';
 import { LoginService } from '../../../services/login.service';
 import { PendingHttpService } from '../../../services/pending-http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-society',
@@ -29,70 +30,17 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
   myProfile?: IMyProfile;
 
   isMultipleBuildings = new FormControl<boolean[]>([]);
-  multiBuildingConfig: IUIControlConfig = {
-    id: 'isMultipleBuildings',
-    label: 'More than 1 building?',
-    helpText: 'Check this if this society has multiple buildings.'
-  };
-  multiBuildingOptions: IUIDropdownOption[] = [
-    { label: 'Yes', value: true },
-  ];
+  multiBuildingConfig!: IUIControlConfig;
+  multiBuildingOptions!: IUIDropdownOption[];
 
   isComponentActive = new Subject<void>();
 
   countryList: IUIDropdownOption[] = countries.map(c => ({ label: c.countryName, value: c.countryCode }));
 
-  locationSearchConfig: IUIControlConfig = {
-    id: 'location',
-    label: 'Location',
-    placeholder: 'Search Location',
-    validations: [
-      { name: 'required', validator: Validators.required },
-    ],
-    errorMessages: {
-      required: 'Location is required'
-    }
-  };
-  societyNameConfig = {
-    id: 'societyName',
-    label: 'Society Name',
-    placeholder: 'Enter Society Name',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'minlength', validator: Validators.minLength(3) }
-    ],
-    errorMessages: {
-      required: 'Society Name is required',
-      minlength: 'Minimum 3 characters required'
-    }
-  };
-  buildingCountConfig = {
-    id: 'numberOfBuildings',
-    label: 'Buildings Count',
-    placeholder: 'Enter Count Of Buildings',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(2) }
-    ],
-    errorMessages: {
-      required: 'Building count is required',
-      min: 'Value cannot be less than 2.'
-    }
-  };
-
-  flatCountConfig = {
-    id: 'numberOfFlats',
-    label: 'Flats Count',
-    placeholder: 'Enter Count Of Flats',
-    validations: [
-      { name: 'required', validator: Validators.required },
-      { name: 'min', validator: Validators.min(1) }
-    ],
-    errorMessages: {
-      required: 'Flat count is required',
-      min: 'Value cannot be less than 1.'
-    }
-  };
+  locationSearchConfig!: IUIControlConfig;
+  societyNameConfig!: any;
+  buildingCountConfig!: any;
+  flatCountConfig!: any;
 
   errorMessage = '';
 
@@ -102,9 +50,81 @@ export class AddSocietyComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private location: Location,
     public loginService: LoginService,
+    private translate: TranslateService
   ) { }
 
+  initFormConfigs() {
+    this.multiBuildingConfig = {
+      id: 'isMultipleBuildings',
+      label: this.translate.instant('SOCIETY.MORE_THAN_ONE_BUILDING') || 'More than 1 building?',
+      helpText: this.translate.instant('SOCIETY.HELP_MULTIPLE_BUILDINGS') || 'Check this if this society has multiple buildings.'
+    };
+
+    this.multiBuildingOptions = [
+      { label: this.translate.instant('SOCIETY.YES') || 'Yes', value: true },
+    ];
+
+    this.locationSearchConfig = {
+      id: 'location',
+      label: this.translate.instant('SOCIETY.LOCATION') || 'Location',
+      placeholder: this.translate.instant('SOCIETY.SEARCH_LOCATION') || 'Search Location',
+      validations: [
+        { name: 'required', validator: Validators.required },
+      ],
+      errorMessages: {
+        required: this.translate.instant('SOCIETY.LOCATION_REQUIRED') || 'Location is required'
+      }
+    };
+
+    this.societyNameConfig = {
+      id: 'societyName',
+      label: this.translate.instant('SOCIETY.SOCIETY_NAME') || 'Society Name',
+      placeholder: this.translate.instant('SOCIETY.ENTER_SOCIETY_NAME') || 'Enter Society Name',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'minlength', validator: Validators.minLength(3) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SOCIETY.SOCIETY_NAME_REQUIRED') || 'Society Name is required',
+        minlength: this.translate.instant('SOCIETY.MIN_3_CHARS') || 'Minimum 3 characters required'
+      }
+    };
+
+    this.buildingCountConfig = {
+      id: 'numberOfBuildings',
+      label: this.translate.instant('SOCIETY.BUILDINGS_COUNT') || 'Buildings Count',
+      placeholder: this.translate.instant('SOCIETY.ENTER_BUILDINGS_COUNT') || 'Enter Count Of Buildings',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(2) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SOCIETY.BUILDINGS_COUNT_REQUIRED') || 'Building count is required',
+        min: this.translate.instant('SOCIETY.MIN_VAL_2') || 'Value cannot be less than 2.'
+      }
+    };
+
+    this.flatCountConfig = {
+      id: 'numberOfFlats',
+      label: this.translate.instant('SOCIETY.FLATS_COUNT') || 'Flats Count',
+      placeholder: this.translate.instant('SOCIETY.ENTER_FLATS_COUNT') || 'Enter Count Of Flats',
+      validations: [
+        { name: 'required', validator: Validators.required },
+        { name: 'min', validator: Validators.min(1) }
+      ],
+      errorMessages: {
+        required: this.translate.instant('SOCIETY.FLATS_COUNT_REQUIRED') || 'Flat count is required',
+        min: this.translate.instant('SOCIETY.MIN_VAL_1') || 'Value cannot be less than 1.'
+      }
+    };
+  }
+
   ngOnInit() {
+    this.initFormConfigs();
+    this.translate.onLangChange.pipe(takeUntil(this.isComponentActive)).subscribe(() => {
+      this.initFormConfigs();
+    });
+
     this.myProfile = this.loginService.getProfileFromStorage();
 
     this.isMultipleBuildings.valueChanges

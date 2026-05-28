@@ -11,6 +11,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { ListBase } from '../../../directives/list-base.directive';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WindowService } from '../../../services/window.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -39,18 +40,18 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
   });
   radioConfig: IUIControlConfig = {
     id: 'radio',
-    label: 'Radio',
-    placeholder: 'Search By',
+    label: '',
+    placeholder: this.translate.instant('JOIN_AS.SEARCH_BY') || 'Search By',
     validations: [
       { name: 'required', validator: Validators.required },
     ],
     errorMessages: {
-      required: 'Radio is required'
+      required: 'It is required'
     }
   };
   radioOptions: IUIDropdownOption[] = [
-    { label: 'By App User', value: 'user' },
-    { label: 'By Contact', value: 'contact' }
+    { label: this.translate.instant('JOIN_AS.BY_APP_USER') || 'By App User', value: 'user' },
+    { label: this.translate.instant('JOIN_AS.BY_CONTACT') || 'By Contact', value: 'contact' }
   ];
 
   get showUserSearch(): boolean {
@@ -78,6 +79,7 @@ export class SocietyManagersComponent extends ListBase implements OnDestroy {
     dialogService: DialogService,
     private windowService: WindowService,
     private dialog: MatDialog,
+    public translate: TranslateService
   ) { super(dialogService) }
 
   ngOnInit(): void {

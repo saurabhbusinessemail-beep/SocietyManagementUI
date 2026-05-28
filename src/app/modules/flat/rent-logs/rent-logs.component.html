@@ -1,51 +1,51 @@
-<app-layout [hideMoreActions]="true" pageTitle="Rent History & Logs"
+<app-layout [hideMoreActions]="true" [pageTitle]="'RENT_LOGS.TITLE' | translate"
     [subTitle]="flat ? flat.flatNumber + (flat.buildingNumber ? ' (' + flat.buildingNumber + ')' : '') + ' • ' + flat.societyName : ''"
     [showBackButton]="true">
 
     <div class="logs-container">
 
-        <div class="logs-header">
+         <div class="logs-header">
 
-            <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true"
+             <app-filter [hideSocietySearch]="true" [hideFlatSearch]="true"
                 [dropDownControlConfigs]="[monthConfig, yearConfig, typeConfig, statusConfig]"
                 (filterChanged)="handleFilterChanged($event)">
 
-                <ui-select2 [formControl]="monthControl" [config]="monthConfig"
-                    [options]="monthConfig.dropDownOptions ?? []" placeholder="All Months" [smColumns]="12"
+                 <ui-select2 [formControl]="monthControl" [config]="monthConfig"
+                    [options]="monthConfig.dropDownOptions ?? []" [placeholder]="'RENT_LOGS.ALL_MONTHS' | translate" [smColumns]="12"
                     [mdColumns]="6" [lgColumns]="3">
                 </ui-select2>
 
-                <ui-select2 [formControl]="yearControl" [config]="yearConfig"
-                    [options]="yearConfig.dropDownOptions ?? []" placeholder="All Years" [smColumns]="12"
+                 <ui-select2 [formControl]="yearControl" [config]="yearConfig"
+                    [options]="yearConfig.dropDownOptions ?? []" [placeholder]="'RENT_LOGS.ALL_YEARS' | translate" [smColumns]="12"
                     [mdColumns]="6" [lgColumns]="3">
                 </ui-select2>
 
-                <ui-select2 [formControl]="typeControl" [config]="typeConfig"
-                    [options]="typeConfig.dropDownOptions ?? []" placeholder="All Logs" [smColumns]="12" [mdColumns]="6"
+                 <ui-select2 [formControl]="typeControl" [config]="typeConfig"
+                    [options]="typeConfig.dropDownOptions ?? []" [placeholder]="'RENT_LOGS.ALL_LOGS' | translate" [smColumns]="12" [mdColumns]="6"
                     [lgColumns]="3">
                 </ui-select2>
 
-                <ui-select2 [formControl]="statusControl" [config]="statusConfig"
-                    [options]="statusConfig.dropDownOptions ?? []" placeholder="All Status" [smColumns]="12"
+                 <ui-select2 [formControl]="statusControl" [config]="statusConfig"
+                    [options]="statusConfig.dropDownOptions ?? []" [placeholder]="'RENT_LOGS.ALL_STATUS' | translate" [smColumns]="12"
                     [mdColumns]="6" [lgColumns]="3">
                 </ui-select2>
             </app-filter>
         </div>
 
-        <div class="logs-content" *ngIf="!loading; else loadingState">
+         <div class="logs-content" *ngIf="!loading; else loadingState">
             <div class="empty-state" *ngIf="filteredLogs.length === 0">
                 <app-icon name="help" size="xxxl"></app-icon>
-                <p>No records found for the selected filters.</p>
+                <p>{{ 'MAINTENANCE.NO_RECORDS_FILTER' | translate }}</p>
             </div>
 
-            <div class="log-timeline">
+             <div class="log-timeline">
                 <div class="log-entry" *ngFor="let log of filteredLogs" [ngClass]="log.logType">
                     <div class="entry-date-marker">
                         <span class="marker-date">{{ log.date | date:'dd MMM yyyy' }}</span>
                         <span class="marker-time">{{ log.date | date:'hh:mm a' }}</span>
                     </div>
 
-                    <div class="entry-card"
+                     <div class="entry-card"
                         [ngClass]="{'payment-card': log.logType === 'payment', 'reminder-card': log.logType === 'reminder'}">
                         <div class="card-icon">
                             <svg *ngIf="log.logType === 'payment'" xmlns="http://www.w3.org/2000/svg" width="20"
@@ -63,21 +63,21 @@
                             </svg>
                         </div>
 
-                        <div class="card-main">
+                         <div class="card-main">
                             <div class="card-header">
-                                <span class="log-month-year">{{ getMonthName(log.month) }} {{ log.year }}</span>
+                                <span class="log-month-year">{{ 'MONTHS.' + log.month | translate }} {{ log.year }}</span>
                                 <span *ngIf="log.logType === 'payment'" class="status-badge"
                                     [ngClass]="getStatusColor(log.status!)">
                                     {{ getStatusText(log.status!) }}
                                 </span>
                             </div>
 
-                            <div class="card-body">
+                             <div class="card-body">
                                 <!-- Payment Specific -->
                                 <ng-container *ngIf="log.logType === 'payment'">
                                     <div class="amount-display">{{ log.amount | formattedPrice }}</div>
                                     <div class="recorded-info" *ngIf="log.recordedBy">
-                                        Recorded by <strong>{{ log.recordedBy.name }}</strong>
+                                        {{ 'MAINTENANCE.RECORDED_BY' | translate }} <strong>{{ log.recordedBy.name }}</strong>
                                     </div>
                                     <div class="rejection-message"
                                         *ngIf="log.status === 'rejected' && log.rejectionReason">
@@ -86,18 +86,18 @@
                                     </div>
                                 </ng-container>
 
-                                <!-- Reminder Specific -->
+                                 <!-- Reminder Specific -->
                                 <ng-container *ngIf="log.logType === 'reminder'">
                                     <div class="reminder-text">
-                                        Rent reminder sent to member via <strong>{{ log.type }}</strong>.
+                                        {{ 'RENT_LOGS.REMINDER_SENT' | translate }} <strong>{{ log.type }}</strong>.
                                     </div>
                                     <div class="sent-info" *ngIf="log.sentBy">
-                                        Sent by <strong>{{ log.sentBy.name }}</strong>
+                                        {{ 'MAINTENANCE.SENT_BY' | translate }} <strong>{{ log.sentBy.name }}</strong>
                                     </div>
                                 </ng-container>
 
-                                <div class="note-info" *ngIf="log.note">
-                                    <span class="note-label">Note:</span> {{ log.note }}
+                                 <div class="note-info" *ngIf="log.note">
+                                    <span class="note-label">{{ 'MAINTENANCE.NOTE' | translate }}:</span> {{ log.note }}
                                 </div>
                             </div>
                         </div>
@@ -106,9 +106,9 @@
             </div>
         </div>
 
-        <ng-template #loadingState>
+         <ng-template #loadingState>
             <div class="loading-state">
-                <ui-loading message="Fetching rent history logs..."></ui-loading>
+                <ui-loading [message]="'RENT_LOGS.LOADING' | translate"></ui-loading>
             </div>
         </ng-template>
     </div>

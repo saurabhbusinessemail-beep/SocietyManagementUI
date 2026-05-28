@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { TenantRoutingModule } from './tenant-routing.module';
 import { TenantListComponent } from './tenant-list/tenant-list.component';
@@ -26,7 +27,8 @@ import { DirectiveModule } from '../../directives/directive.module';
     IconModule,
     FormsModule,
     ReactiveFormsModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class TenantModule { }

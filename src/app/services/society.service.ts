@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ownerMemberTenanRoles, securityRoles } from '../constants';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionListPopupComponent } from '../core/selection-list-popup/selection-list-popup.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
@@ -58,7 +59,8 @@ export class SocietyService {
         private router: Router,
         private paginationService: PaginationService,
         private loginService: LoginService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private translate: TranslateService
     ) { }
 
     setSocities(socities: ISociety[]) {
@@ -123,27 +125,21 @@ export class SocietyService {
 
         if (hasManagerialRole) {
             options.push({
-                label: 'Society Details',
+                label: this.translate.instant('POPUP.SOCIETY_DETAILS') || 'Society Details',
                 value: `/society/${society._id}/details`
             });
-            // this.router.navigate(['/society', society._id, 'details']);
-
         }
         if (hasNonManagerialRole) {
             options.push({
-                label: `Flats from ${society.societyName}`,
+                label: this.translate.instant('POPUP.FLATS_FROM', { societyName: society.societyName }) || `Flats from ${society.societyName}`,
                 value: `/myflats/${society._id}/list`
             });
-            // this.router.navigate(['/myflats', society._id, 'list']);
-
         }
         if (hasSecurityRole) {
             options.push({
-                label: `Gate entry for ${society.societyName}`,
+                label: this.translate.instant('POPUP.GATE_ENTRY_FOR', { societyName: society.societyName }) || `Gate entry for ${society.societyName}`,
                 value: `/gateentry/dashboard/${society._id}`
             });
-            // this.router.navigate(['gateentry/dashboard', society._id]);
-
         }
 
         if (options.length === 0) return;

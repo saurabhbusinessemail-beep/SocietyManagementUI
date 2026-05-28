@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { PricingRoutingModule } from './pricing-routing.module';
 import { PricingCheckoutComponent } from './pricing-checkout/pricing-checkout.component';
@@ -24,7 +25,8 @@ import { PipeModule } from "../../pipes/pipes.module";
     LayoutModule,
     PricingDetailModule,
     UiModule,
-    PipeModule
+    PipeModule,
+    TranslateModule.forChild()
 ]
 })
 export class PricingModule { }

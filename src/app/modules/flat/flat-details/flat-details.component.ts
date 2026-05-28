@@ -37,6 +37,7 @@ import { CurrencyService } from '../../../services/currency.service';
 import { TenantDocumentService } from '../../../services/tenant-document.service';
 import { ITenantDocument, ITenantDocumentStats } from '../../../interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-flat-details',
@@ -286,7 +287,8 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
     public countryService: CountryService,
     private currencyService: CurrencyService,
     private tenantDocumentService: TenantDocumentService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -688,21 +690,22 @@ export class FlatDetailsComponent implements OnInit, OnDestroy {
 
     switch (this.residingType) {
       case ResidingTypes.Self:
-        this.confirmationDialogData.message = 'You are currently residing in this flat. You can either set it as vaccant or add a tenant.';
-        this.confirmationDialogData.note = 'All current flat members will be deactivated.';
+        this.confirmationDialogData.message = this.translate.instant('FLAT.CONFIRM_SELF_MSG');
+        this.confirmationDialogData.note = this.translate.instant('FLAT.CONFIRM_DEACTIVATE_NOTE');
         this.confirmationDialogData.showSelf = false;
         this.confirmationDialogData.showTenant = true;
         this.confirmationDialogData.showVaccant = true;
         break;
       case ResidingTypes.Tenant:
-        this.confirmationDialogData.message = 'You can either set the flat as vaccant or reside yourself. The current tenant will be moved out if you proceed';
-        this.confirmationDialogData.note = 'All current flat members will be deactivated.';
+        this.confirmationDialogData.message = this.translate.instant('FLAT.CONFIRM_TENANT_MSG');
+        this.confirmationDialogData.note = this.translate.instant('FLAT.CONFIRM_DEACTIVATE_NOTE');
         this.confirmationDialogData.showSelf = true;
         this.confirmationDialogData.showTenant = false;
         this.confirmationDialogData.showVaccant = true;
         break;
       case ResidingTypes.Vacant:
-        this.confirmationDialogData.message = 'Currently no one is residing in your flat. You can either reside yourself or add a tenant.';
+        this.confirmationDialogData.message = this.translate.instant('FLAT.CONFIRM_VACANT_MSG');
+        this.confirmationDialogData.note = '';
         this.confirmationDialogData.showSelf = true;
         this.confirmationDialogData.showTenant = true;
         this.confirmationDialogData.showVaccant = false;

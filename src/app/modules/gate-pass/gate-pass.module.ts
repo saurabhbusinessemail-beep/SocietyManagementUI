@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { GatePassRoutingModule } from './gate-pass-routing.module';
 import { GatePassListComponent } from './gate-pass-list/gate-pass-list.component';
@@ -28,7 +29,8 @@ import { FilterModule } from '../../core/filter/filter.module';
     DirectiveModule,
     IconModule,
     QRViewerModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
 ]
 })
 export class GatePassModule { }

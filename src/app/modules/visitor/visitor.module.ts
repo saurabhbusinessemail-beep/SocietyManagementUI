@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { VisitorRoutingModule } from './visitor-routing.module';
 import { VisitorListComponent } from './visitor-list/visitor-list.component';
@@ -24,7 +25,8 @@ import { FilterModule } from '../../core/filter/filter.module';
     IconModule,
     FormsModule,
     ReactiveFormsModule,
-    FilterModule
+    FilterModule,
+    TranslateModule.forChild()
   ]
 })
 export class VisitorModule { }
