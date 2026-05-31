@@ -59,11 +59,11 @@ export class UserComponent implements OnInit, OnDestroy {
       label: 'Tenant',
       icon: 'tenant'
     },
-    {
-      role: SocietyRoles.security,
-      label: 'Security',
-      icon: 'security'
-    }
+    // {
+    //   role: SocietyRoles.security,
+    //   label: 'Security',
+    //   icon: 'security'
+    // }
   ];
 
   isSocitiesLoading = false;

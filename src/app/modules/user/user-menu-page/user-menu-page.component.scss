@@ -73,6 +73,7 @@
                 app-icon {
                     ::ng-deep .app-icon {
                         color: $color-dark-blue;
+
                         svg {
                             fill: currentColor;
                             stroke: currentColor;
@@ -124,17 +125,17 @@
                 app-icon {
                     cursor: pointer;
                     display: inline-block;
-                    
+
                     ::ng-deep .app-icon {
                         color: $color-dark-blue;
                         transition: transform 0.2s ease, color 0.2s ease;
-                        
+
                         svg {
                             fill: currentColor;
                             stroke: currentColor;
                         }
                     }
-                    
+
                     &:hover {
                         ::ng-deep .app-icon {
                             transform: scale(1.1);
@@ -326,11 +327,12 @@
                         gap: $sp;
                         overflow-x: auto;
                         padding-bottom: $sp-xs;
-                        
+
                         /* Hide scrollbar for a cleaner look */
                         &::-webkit-scrollbar {
                             height: 4px;
                         }
+
                         &::-webkit-scrollbar-thumb {
                             background: $color-border;
                             border-radius: 4px;
@@ -343,14 +345,15 @@
                             border: 2px solid transparent;
                             cursor: pointer;
                             flex-shrink: 0;
+                            margin: 6px;
                             transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-                            &:hover {
-                                transform: scale(1.1);
-                            }
 
                             &.active {
                                 box-shadow: 0 0 0 2px $color-white, 0 0 0 4px $color-border-highlight;
+                                transform: scale(1.1);
+                            }
+
+                            &:hover {
                                 transform: scale(1.1);
                             }
                         }

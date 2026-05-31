@@ -166,17 +166,26 @@
 
     &.status-approved {
         border-left: 4px solid var(--status-approved);
-        .category-tag { color: var(--status-approved); }
+
+        .category-tag {
+            color: var(--status-approved);
+        }
     }
 
     &.status-rejected {
         border-left: 4px solid var(--status-rejected);
-        .category-tag { color: var(--status-rejected); }
+
+        .category-tag {
+            color: var(--status-rejected);
+        }
     }
 
     &.status-requested {
         border-left: 4px solid var(--status-pending);
-        .category-tag { color: var(--status-pending); }
+
+        .category-tag {
+            color: var(--status-pending);
+        }
     }
 
     .card-top {
@@ -262,6 +271,8 @@
         padding-top: $sp-md;
         border-top: 1px solid var(--color-border);
         display: flex;
+        flex-direction: column;
+        gap: $sp-sm;
         align-items: center;
         justify-content: space-between;
 

@@ -15,7 +15,8 @@
         align-items: center;
         justify-content: center;
 
-        &:hover, &.userMenuRouteLoaded {
+        &:hover,
+        &.userMenuRouteLoaded {
             background: rgba(var(--color-header-text-rgb), 0.1);
 
             app-icon {
@@ -36,7 +37,8 @@
             color: $color-header-text;
         }
 
-        .avatar-header, .avatar-icon {
+        .avatar-header,
+        .avatar-icon {
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -220,11 +222,12 @@
                     gap: $sp;
                     overflow-x: auto;
                     padding-bottom: $sp-xs;
-                    
+
                     /* Hide scrollbar for a cleaner look */
                     &::-webkit-scrollbar {
                         height: 4px;
                     }
+
                     &::-webkit-scrollbar-thumb {
                         background: $color-border;
                         border-radius: 4px;
@@ -237,15 +240,16 @@
                         border: 2px solid transparent;
                         cursor: pointer;
                         flex-shrink: 0;
+                        margin: 6px;
                         transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-                        &:hover {
-                            transform: scale(1.1);
-                        }
 
                         &.active {
                             box-shadow: 0 0 0 2px $color-white, 0 0 0 4px $color-border-highlight;
                             transform: scale(1.1);
+                        }
+
+                        &:hover {
+                            transform: scale(1);
                         }
                     }
                 }

@@ -6,13 +6,15 @@
 
     <div class="user-container">
 
-        <ui-form-layout [title]="'DASHBOARD.JOIN_AS' | translate" [showAsSection]="true" colorTheme="gradient-modern-ui">
-            <div class="no-mobile no-tablet" [lgColumns]="3"></div>
+        <ui-form-layout [title]="'DASHBOARD.JOIN_AS' | translate" [showAsSection]="true"
+            colorTheme="gradient-modern-ui">
+            <!-- <div class="no-mobile no-tablet" [lgColumns]="3"></div> -->
 
-            <ui-card *ngFor="let r of roles" [smColumns]="4" [mdColumns]="4" [lgColumns]="2"
+            <ui-card *ngFor="let r of roles" [smColumns]="6" [mdColumns]="6" [lgColumns]="6"
                 (click)="navigateToJoin(r.role)">
                 <div card-main>
-                    <b>{{ (r.role === 'owner' ? 'DASHBOARD.ROLE_FLAT_OWNER' : (r.role === 'tenant' ? 'DASHBOARD.ROLE_TENANT' : 'DASHBOARD.ROLE_SECURITY')) | translate }}</b>
+                    <b>{{ (r.role === 'owner' ? 'DASHBOARD.ROLE_FLAT_OWNER' : (r.role === 'tenant' ?
+                        'DASHBOARD.ROLE_TENANT' : 'DASHBOARD.ROLE_SECURITY')) | translate }}</b>
                 </div>
                 <div card-icon>
                     <app-icon [name]="r.icon" size="xxl"></app-icon>
@@ -23,8 +25,8 @@
         </ui-form-layout>
 
         <!-- SOCIETIES SECTION -->
-        <ui-form-layout [title]="'DASHBOARD.SOCIETIES' | translate" [showAsSection]="true" colorTheme="gradient-light-airy"
-            *ngIf="societies.length > 0" class="societies-section">
+        <ui-form-layout [title]="'DASHBOARD.SOCIETIES' | translate" [showAsSection]="true"
+            colorTheme="gradient-light-airy" *ngIf="societies.length > 0" class="societies-section">
             <ng-container *ngFor="let s of societies">
                 <ui-circular-display [label]="s.societyName" [smColumns]="6" [mdColumns]="3" [lgColumns]="2"
                     (onClicked)="handleSocietyClick(s)" class="link-blue">
@@ -32,8 +34,8 @@
             </ng-container>
         </ui-form-layout>
 
-        <ui-form-layout [title]="'DASHBOARD.SOCIETIES' | translate" [showAsSection]="true" colorTheme="gradient-light-airy"
-            *ngIf="societies.length ===  0" class="societies-section">
+        <ui-form-layout [title]="'DASHBOARD.SOCIETIES' | translate" [showAsSection]="true"
+            colorTheme="gradient-light-airy" *ngIf="societies.length ===  0" class="societies-section">
             <div class="empty-societies-placeholder" *ngIf="!isSocitiesLoading" [smColumns]="12" [mdColumns]="12"
                 [lgColumns]="12">
                 <div class="placeholder-content">
@@ -42,13 +44,14 @@
                     </div>
                     <h3 class="placeholder-title">{{ 'DASHBOARD.NO_SOCIETIES_TITLE' | translate }}</h3>
                     <p class="placeholder-description">{{ 'DASHBOARD.NO_SOCIETIES_DESC' | translate }}</p>
-                    <ui-button [label]="'DASHBOARD.NEW_REGISTRATION' | translate" type="primary" (clicked)="navigateToAddSociety()">
+                    <ui-button [label]="'DASHBOARD.NEW_REGISTRATION' | translate" type="primary"
+                        (clicked)="navigateToAddSociety()">
                     </ui-button>
                 </div>
             </div>
 
-            <ui-loading *ngIf="isSocitiesLoading" [message]="'DASHBOARD.LOADING_SOCIETIES' | translate" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="12">
+            <ui-loading *ngIf="isSocitiesLoading" [message]="'DASHBOARD.LOADING_SOCIETIES' | translate" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
         </ui-form-layout>
 
@@ -90,8 +93,10 @@
                             </span>
                         </div>
                         <div class="card-footer">
-                            <span class="category-tag">{{ ge.status === 'requested' ? ('DASHBOARD.VISITOR' | translate) : ('DASHBOARD.APPROVED' | translate) }}</span>
-                            <span class="time">{{ ge.status === 'requested' ? ('DASHBOARD.PENDING_APPROVAL' | translate) : (ge.modifiedOn |
+                            <span class="category-tag">{{ ge.status === 'requested' ? ('DASHBOARD.VISITOR' | translate)
+                                : ('DASHBOARD.APPROVED' | translate) }}</span>
+                            <span class="time">{{ ge.status === 'requested' ? ('DASHBOARD.PENDING_APPROVAL' | translate)
+                                : (ge.modifiedOn |
                                 date:'shortTime') }}</span>
                         </div>
                     </div>
@@ -180,7 +185,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <span class="title">{{ 'DASHBOARD.MAINTENANCE' | translate }}: {{ mp.month }}/{{ mp.year }}</span>
+                            <span class="title">{{ 'DASHBOARD.MAINTENANCE' | translate }}: {{ mp.month }}/{{ mp.year
+                                }}</span>
                             <span class="subtitle">{{ mp.amount | currency:'INR':'symbol':'1.0-0' }} - {{
                                 getFlatNumber(mp.flatId) }}</span>
                         </div>
@@ -224,10 +230,6 @@
      excludeStepIds   → steps to skip because their data doesn't exist
      showRetakeBubble → show the floating "Take Tour" FAB after the tour ends
 ──────────────────────────────────────────────────────────────────────────── -->
-<app-tour-overlay
-  [tourConfig]="tourConfig"
-  [readyTrigger$]="tourReady$"
-  [excludeStepIds]="tourExcludeStepIds"
-  [expectDialogBeforeStart]="expectNamePopup"
-  [showRetakeBubble]="false">
+<app-tour-overlay [tourConfig]="tourConfig" [readyTrigger$]="tourReady$" [excludeStepIds]="tourExcludeStepIds"
+    [expectDialogBeforeStart]="expectNamePopup" [showRetakeBubble]="false">
 </app-tour-overlay>
