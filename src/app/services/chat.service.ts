@@ -10,6 +10,8 @@ import {
     IBEResponseFormat,
     IPagedResponse
 } from '../interfaces';
+import { Cacheable, InvalidateCache } from '../decorators';
+import { GLOBAL_CACHE } from './cache.service';
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +41,16 @@ export class ChatService {
         this.chatRoomMessagesMap[roomId] = messages;
     }
 
+    /**
+     * Clears all cached chat room lists.
+     * Call this from other services (e.g. SocietyService) after flat or
+     * society-membership mutations that would change chat room visibility.
+     */
+    clearChatRoomsCache(): void {
+        GLOBAL_CACHE.clear('ChatService.getChatRooms*');
+        GLOBAL_CACHE.clear('ChatService.getRoomById*');
+    }
+
     // ─── Rooms ────────────────────────────────────────────────────────────────
 
     /**
@@ -47,6 +59,13 @@ export class ChatService {
      * @param flatId Optional filter to a specific flat
      * @param type Optional filter by room type
      */
+    @Cacheable({
+        group: 'chatRooms',
+        keyGenerator: (methodName: string, args: any[]) => {
+            const [filters = {}] = args;
+            return `${methodName}_${filters.societyId || 'all'}_${filters.flatId || 'all'}_${filters.type || 'all'}`;
+        }
+    })
     getChatRooms(filters: { societyId?: string; flatId?: string; type?: string } = {}): Observable<IBEResponseFormat<IChatRoom[]>> {
         let params = new HttpParams();
         if (filters.societyId) params = params.set('societyId', filters.societyId);
@@ -59,6 +78,10 @@ export class ChatService {
     /**
      * Get details for a single chat room.
      */
+    @Cacheable({
+        paramIndices: [0],
+        group: 'chatRooms'
+    })
     getRoomById(roomId: string): Observable<IBEResponseFormat<IChatRoom>> {
         return this.http.get<IBEResponseFormat<IChatRoom>>(`${this.apiUrl}/rooms/${roomId}`);
     }

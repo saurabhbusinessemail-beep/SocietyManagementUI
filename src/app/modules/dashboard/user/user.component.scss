@@ -282,6 +282,31 @@
             font-weight: 600;
         }
 
+        .gate-time-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .gate-time-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .gate-time-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+            color: var(--color-note-gray);
+        }
+
         .category-tag {
             font-size: 10px;
             font-weight: 700;

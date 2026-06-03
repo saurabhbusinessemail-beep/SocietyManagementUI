@@ -600,14 +600,28 @@
                                         <span class="gate-status" [ngClass]="entry.status">{{ entry.status |
                                             gateEntryStatus }}</span>
                                     </div>
-                                    <div class="gate-details" *ngIf="entry.entryTime">
+                                    <div class="gate-details" *ngIf="entry.createdOn || entry.entryTime">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <circle cx="12" cy="12" r="10" />
                                             <polyline points="12 6 12 12 16 14" />
                                         </svg>
-                                        <span>{{ entry.entryTime | date:'short' }}</span>
+                                        <!-- Show only one time when createdOn === entryTime (or entryTime absent) -->
+                                        <ng-container *ngIf="!entry.entryTime || !entry.createdOn || (entry.entryTime | date:'yyyyMMddHHmm') === (entry.createdOn | date:'yyyyMMddHHmm'); else dualTimes">
+                                            <span>{{ (entry.entryTime || entry.createdOn) | date:'dd MMM yyyy, h:mm a' }}</span>
+                                        </ng-container>
+                                        <!-- Show both times when they differ -->
+                                        <ng-template #dualTimes>
+                                            <span class="gate-time-group">
+                                                <span class="gate-time-label">{{ 'GATE_ENTRY.STATUS_REQUESTED' | translate }}:</span>
+                                                <span>{{ entry.createdOn | date:'dd MMM yyyy, h:mm a' }}</span>
+                                            </span>
+                                            <span class="gate-time-group">
+                                                <span class="gate-time-label">{{ 'GATE_ENTRY.ENTRY_TIME' | translate }}:</span>
+                                                <span>{{ entry.entryTime | date:'dd MMM yyyy, h:mm a' }}</span>
+                                            </span>
+                                        </ng-template>
                                         <span *ngIf="entry.vehicleNumber">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

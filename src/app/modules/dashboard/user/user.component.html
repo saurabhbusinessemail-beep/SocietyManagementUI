@@ -95,9 +95,21 @@
                         <div class="card-footer">
                             <span class="category-tag">{{ ge.status === 'requested' ? ('DASHBOARD.VISITOR' | translate)
                                 : ('DASHBOARD.APPROVED' | translate) }}</span>
-                            <span class="time">{{ ge.status === 'requested' ? ('DASHBOARD.PENDING_APPROVAL' | translate)
-                                : (ge.modifiedOn |
-                                date:'shortTime') }}</span>
+                            <div class="time gate-time-container">
+                                <ng-container *ngIf="!ge.entryTime || !ge.createdOn || (ge.entryTime | date:'yyyyMMddHHmm') === (ge.createdOn | date:'yyyyMMddHHmm'); else dualTimes">
+                                    <span>{{ (ge.entryTime || ge.createdOn) | date:'dd MMM yyyy, h:mm a' }}</span>
+                                </ng-container>
+                                <ng-template #dualTimes>
+                                    <div class="gate-time-row">
+                                        <span class="gate-time-label">{{ 'GATE_ENTRY.STATUS_REQUESTED' | translate }}: </span>
+                                        <span>{{ ge.createdOn | date:'dd MMM yyyy, h:mm a' }}</span>
+                                    </div>
+                                    <div class="gate-time-row">
+                                        <span class="gate-time-label">{{ 'GATE_ENTRY.ENTRY_TIME' | translate }}: </span>
+                                        <span>{{ ge.entryTime | date:'dd MMM yyyy, h:mm a' }}</span>
+                                    </div>
+                                </ng-template>
+                            </div>
                         </div>
                     </div>
                 </ng-container>

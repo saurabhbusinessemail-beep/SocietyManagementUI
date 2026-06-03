@@ -12,6 +12,7 @@ import { ownerMemberTenanRoles, securityRoles } from '../constants';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionListPopupComponent } from '../core/selection-list-popup/selection-list-popup.component';
 import { TranslateService } from '@ngx-translate/core';
+import { ChatService } from './chat.service';
 
 @Injectable({
     providedIn: 'root'
@@ -60,7 +61,8 @@ export class SocietyService {
         private paginationService: PaginationService,
         private loginService: LoginService,
         private dialog: MatDialog,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private chatService: ChatService
     ) { }
 
     setSocities(socities: ISociety[]) {
@@ -173,7 +175,9 @@ export class SocietyService {
         groups: ['societies']
     })
     createSociety(payload: any): Observable<ISociety> {
-        return this.http.post<ISociety>(this.baseUrl, payload);
+        return this.http.post<ISociety>(this.baseUrl, payload).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     /* Create society For Approval */
@@ -305,7 +309,9 @@ export class SocietyService {
         groups: ['societies']
     })
     updateSociety(id: string, payload: any): Observable<ISociety> {
-        return this.http.put<ISociety>(`${this.baseUrl}/${id}`, payload);
+        return this.http.put<ISociety>(`${this.baseUrl}/${id}`, payload).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     /* Delete society */
@@ -367,7 +373,9 @@ export class SocietyService {
         groups: ['societies']
     })
     newManager(societyId: string, payload: any): Observable<IBEResponseFormat> {
-        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers`, payload);
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers`, payload).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     @InvalidateCache({
@@ -379,7 +387,9 @@ export class SocietyService {
         groups: ['societies']
     })
     deleteManager(societyId: string, managerId: string): Observable<IBEResponseFormat> {
-        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers/${managerId}`);
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/managers/${managerId}`).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
 
@@ -393,7 +403,9 @@ export class SocietyService {
         groups: ['societies']
     })
     newSocietyAdmin(societyId: string, payload: any): Observable<IBEResponseFormat> {
-        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts`, payload);
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts`, payload).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     @InvalidateCache({
@@ -405,7 +417,9 @@ export class SocietyService {
         groups: ['societies']
     })
     deleteSocietyAdmin(societyId: string, adminId: string): Observable<IBEResponseFormat> {
-        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts/${adminId}`);
+        return this.http.delete<IBEResponseFormat>(`${this.baseUrl}/${societyId}/adminContacts/${adminId}`).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
 
@@ -571,7 +585,9 @@ export class SocietyService {
         groups: ['flats', 'flatMembers']
     })
     newFlat(societyId: string, payload: any) {
-        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats`, payload);
+        return this.http.post<IBEResponseFormat>(`${this.baseUrl}/${societyId}/flats`, payload).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     // Add Flats in bulk
@@ -624,7 +640,9 @@ export class SocietyService {
         groups: ['flats', 'flatMembers']
     })
     updateFlat(flatId: string, payload: any): Observable<IBEResponseFormat<IFlat>> {
-        return this.http.patch<IBEResponseFormat<IFlat>>(`${this.flatsBaseUrl}/update/${flatId}`, payload);
+        return this.http.patch<IBEResponseFormat<IFlat>>(`${this.flatsBaseUrl}/update/${flatId}`, payload).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     // Get my flats as a owner/tenant/member
@@ -711,7 +729,9 @@ export class SocietyService {
         groups: ['flatMembers']
     })
     deleteFlatMember(flatMemberId: string) {
-        return this.http.delete<IBEResponseFormat>(`${this.flatsBaseUrl}/deleteFlatMember/${flatMemberId}`);
+        return this.http.delete<IBEResponseFormat>(`${this.flatsBaseUrl}/deleteFlatMember/${flatMemberId}`).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     @InvalidateCache({
@@ -725,7 +745,9 @@ export class SocietyService {
         groups: ['flatMembers']
     })
     moveOutTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
-        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveOutTenant/${flatMemberId}`, { endDate });
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveOutTenant/${flatMemberId}`, { endDate }).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     @InvalidateCache({
@@ -739,7 +761,9 @@ export class SocietyService {
         groups: ['flatMembers']
     })
     moveInTenant(flatMemberId: string, endDate?: Date): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
-        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveInTenant/${flatMemberId}`, { endDate });
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveInTenant/${flatMemberId}`, { endDate }).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     @InvalidateCache({
@@ -753,7 +777,9 @@ export class SocietyService {
         groups: ['flatMembers']
     })
     moveOutOwner(flatMemberId: string): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
-        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveOutOwner/${flatMemberId}`, {});
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveOutOwner/${flatMemberId}`, {}).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     @InvalidateCache({
@@ -767,7 +793,9 @@ export class SocietyService {
         groups: ['flatMembers']
     })
     moveInSelf(flatMemberId: string): Observable<IBEResponseFormat<IFlatMemberWithResidency>> {
-        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveInSelf/${flatMemberId}`, {});
+        return this.http.patch<IBEResponseFormat<IFlatMemberWithResidency>>(`${this.flatsBaseUrl}/moveInSelf/${flatMemberId}`, {}).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
 

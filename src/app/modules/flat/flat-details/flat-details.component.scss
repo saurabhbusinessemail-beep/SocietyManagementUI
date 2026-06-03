@@ -966,9 +966,24 @@
                 gap: $sp-md;
                 font-size: $font-size-xs;
                 color: $color-help-text;
+                flex-wrap: wrap;
 
                 svg {
                     stroke: $color-help-text;
+                }
+
+                .gate-time-group {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+
+                .gate-time-label {
+                    font-weight: 700;
+                    color: $color-help-text;
+                    text-transform: uppercase;
+                    font-size: 9px;
+                    letter-spacing: 0.5px;
                 }
             }
         }

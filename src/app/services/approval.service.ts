@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { PaginationService } from './pagination.service';
 import { IBEResponseFormat, IPagedResponse } from '../interfaces';
 import { IApprovalRequest, IApprovalQueryParams } from '../interfaces/approval-request.interface';
+import { ChatService } from './chat.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,8 @@ export class ApprovalService {
 
     constructor(
         private http: HttpClient,
-        private paginationService: PaginationService
+        private paginationService: PaginationService,
+        private chatService: ChatService
     ) { }
 
     getMyRequests(params: IApprovalQueryParams = {}): Observable<IPagedResponse<IApprovalRequest>> {
@@ -40,11 +42,15 @@ export class ApprovalService {
     }
 
     approveRequest(requestId: string): Observable<IBEResponseFormat<{ approvalRequest: IApprovalRequest; createdRecord: any }>> {
-        return this.http.post<IBEResponseFormat<any>>(`${this.baseUrl}/${requestId}/approve`, {});
+        return this.http.post<IBEResponseFormat<any>>(`${this.baseUrl}/${requestId}/approve`, {}).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     rejectRequest(requestId: string, reason?: string): Observable<IBEResponseFormat<IApprovalRequest>> {
-        return this.http.post<IBEResponseFormat<IApprovalRequest>>(`${this.baseUrl}/${requestId}/reject`, { reason });
+        return this.http.post<IBEResponseFormat<IApprovalRequest>>(`${this.baseUrl}/${requestId}/reject`, { reason }).pipe(
+            tap(() => this.chatService.clearChatRoomsCache())
+        );
     }
 
     // ---------- Helper methods ----------
