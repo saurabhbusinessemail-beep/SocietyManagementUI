@@ -1,4 +1,5 @@
-<app-layout [hideMoreActions]="!canAddParking" [pageTitle]="'PARKINGS.TITLE' | translate" [subTitle]="pageSubTitle" [showBackButton]="true">
+<app-layout [hideMoreActions]="!canAddParking" [pageTitle]="'PARKINGS.TITLE' | translate" [subTitle]="pageSubTitle"
+    [showBackButton]="true">
 
     <ng-container moreActions>
         <!-- <ui-button label="Add Parking" type="primary" (clicked)="openAddDialog()">
@@ -13,26 +14,28 @@
         <ui-form-layout>
 
 
-            <ui-loading *ngIf="loadingSociety" [message]="'SOCIETY.LOADING_INFO' | translate" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="12">
-            </ui-loading>
-
-            <ui-loading *ngIf="loadingSocietyBuildings" [message]="'BUILDING_LIST.LOADING' | translate" [smColumns]="12"
+            <ui-loading *ngIf="loadingSociety" [message]="'SOCIETY.LOADING_INFO' | translate" [smColumns]="12"
                 [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
 
-            <ui-loading *ngIf="loadingBuilding" [message]="'SOCIETY.LOADING_INFO' | translate" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="12">
+            <ui-loading *ngIf="loadingSocietyBuildings" [message]="'COMMON.LOADING_FILTERS' | translate"
+                [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
 
-            <ui-loading *ngIf="loadingFlats" [message]="'FLATS.LOADING' | translate" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
+            <ui-loading *ngIf="loadingBuilding" [message]="'COMMON.LOADING_FILTERS' | translate" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
 
-            <ui-loading *ngIf="loadingParkings" [message]="'PARKINGS.LOADING' | translate" [smColumns]="12" [mdColumns]="12"
-                [lgColumns]="12">
+            <ui-loading *ngIf="loadingFlats" [message]="'COMMON.LOADING_FILTERS' | translate" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
             </ui-loading>
 
-            <ng-container *ngIf="!loadingSociety && !loadingSocietyBuildings && !loadingBuilding && !loadingFlats && !loadingParkings">
+            <ui-loading *ngIf="loadingParkings" [message]="'COMMON.LOADING_FILTERS' | translate" [smColumns]="12"
+                [mdColumns]="12" [lgColumns]="12">
+            </ui-loading>
+
+            <ng-container
+                *ngIf="!loadingSociety && !loadingSocietyBuildings && !loadingBuilding && !loadingFlats && !loadingParkings">
                 <div class="flex flex-gap" [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
 
                     <div class="flex-auto flex flex-gap">
@@ -48,8 +51,8 @@
                 <!-- Building Drop Down -->
                 <ui-form-layout [smColumns]="12" [mdColumns]="12" [lgColumns]="12">
                     <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
-                        [options]="buildingOptions" [placeholder]="'PARKINGS.SELECT_BUILDING' | translate" [smColumns]="12" [mdColumns]="6"
-                        [lgColumns]="6">
+                        [options]="buildingOptions" [placeholder]="'PARKINGS.SELECT_BUILDING' | translate"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="6">
                     </ui-drop-down>
                 </ui-form-layout>
 
@@ -86,7 +89,8 @@
 <ng-template #parkingTemplate>
 
     <form [formGroup]="fb">
-        <app-add-edit-popup [title]="(selectedParkingId ? 'PARKINGS.EDIT_PARKING' : 'PARKINGS.ADD_PARKING') | translate" (onClose)="closeDialog();">
+        <app-add-edit-popup [title]="(selectedParkingId ? 'PARKINGS.EDIT_PARKING' : 'PARKINGS.ADD_PARKING') | translate"
+            (onClose)="closeDialog();">
 
             <ui-form-layout>
                 <ui-society-search formControlName="society" [smColumns]="12" [mdColumns]="12" [lgColumns]="12"
@@ -100,19 +104,20 @@
                 <section class="ui-form-layout" [smColumns]="12" [mdColumns]="12" [lgColumns]="12" #target>
 
                     <ui-drop-down formControlName="building" [config]="buildingSelectorConfig"
-                        [options]="buildingOptions" [placeholder]="'PARKINGS.SELECT_BUILDING' | translate" [smColumns]="12" [mdColumns]="6"
-                        [lgColumns]="3">
+                        [options]="buildingOptions" [placeholder]="'PARKINGS.SELECT_BUILDING' | translate"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                     </ui-drop-down>
 
 
                     <ui-drop-down formControlName="parkingType" [config]="parkingTypeSelectorConfig"
-                        [options]="parkingTypeOptions" [placeholder]="'PARKINGS.SELECT_PARKING_TYPE' | translate" [smColumns]="12"
-                        [mdColumns]="6" [lgColumns]="3">
+                        [options]="parkingTypeOptions" [placeholder]="'PARKINGS.SELECT_PARKING_TYPE' | translate"
+                        [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
                     </ui-drop-down>
 
 
                     <ui-drop-down formControlName="flatId" [config]="flatIdConfig" [options]="parkingFlatOptions"
-                        [placeholder]="'PARKINGS.SELECT_FLAT' | translate" [smColumns]="12" [mdColumns]="6" [lgColumns]="3">
+                        [placeholder]="'PARKINGS.SELECT_FLAT' | translate" [smColumns]="12" [mdColumns]="6"
+                        [lgColumns]="3">
                     </ui-drop-down>
 
                     <ui-text-box formControlName="parkingNumber" [config]="parkingNumberConfig" [smColumns]="12"
@@ -129,20 +134,21 @@
 
             <ng-container actions>
 
-                <ui-button [label]="'PARKINGS.AUTO_GENERATE' | translate" type="only-content" (clicked)="generateParking()"
+                <ui-button [label]="'PARKINGS.AUTO_GENERATE' | translate" type="only-content"
+                    (clicked)="generateParking()"
                     *ngIf="selectedParkingType && ((selectedBuildingId && (society?.numberOfBuildings ?? 0) > 1) || (society?.numberOfBuildings ?? 0) === 1)">
                 </ui-button>
 
-                <ui-button [label]="'JOIN_AS.CANCEL' | translate" type="only-content" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
-                    (clicked)="closeDialog()">
+                <ui-button [label]="'JOIN_AS.CANCEL' | translate" type="only-content" [smColumns]="12" [mdColumns]="2"
+                    [lgColumns]="2" (clicked)="closeDialog()">
                 </ui-button>
 
-                <ui-button [label]="'JOIN_AS.SAVE' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" *ngIf="selectedParkingId"
-                    [disable]="fb.invalid" (clicked)="updateParking()">
+                <ui-button [label]="'JOIN_AS.SAVE' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
+                    *ngIf="selectedParkingId" [disable]="fb.invalid" (clicked)="updateParking()">
                 </ui-button>
 
-                <ui-button [label]="'JOIN_AS.ADD' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2" *ngIf="!selectedParkingId"
-                    [disable]="fb.invalid" (clicked)="addParking()">
+                <ui-button [label]="'JOIN_AS.ADD' | translate" [smColumns]="12" [mdColumns]="2" [lgColumns]="2"
+                    *ngIf="!selectedParkingId" [disable]="fb.invalid" (clicked)="addParking()">
                 </ui-button>
 
             </ng-container>

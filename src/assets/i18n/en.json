@@ -189,6 +189,7 @@
     "INFO": "Information",
     "JOIN": "Join",
     "LOADING_DATA": "Loading data",
+    "LOADING_FILTERS": "Loading filters...",
     "MEMBER": "Member",
     "MODIFIED": "Modified",
     "MULTI_SELECT": "Multi Select",

@@ -199,6 +199,7 @@
     "INFO": "जानकारी",
     "JOIN": "जुड़ें",
     "LOADING_DATA": "डेटा लोड हो रहा है",
+    "LOADING_FILTERS": "फ़िल्टर लोड हो रहे हैं...",
     "MEMBER": "सदस्य",
     "MODIFIED": "संशोधित",
     "MULTI_SELECT": "बहु-चयन",
